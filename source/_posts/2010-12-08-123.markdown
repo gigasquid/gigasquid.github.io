@@ -1,0 +1,168 @@
+---
+author: gigasquid
+comments: false
+date: 2010-12-08 04:06:50+00:00
+layout: post
+slug: '123'
+title: Mutually Recursive Zombies on a Trampoline
+wordpress_id: 123
+categories:
+- All
+- Clojure
+---
+
+It's late at night.  The kids are all tucked snuggly in their beds and I am ready to explore mutual recursion on my own in Clojure after doing some reading of [Programming Clojure](http://pragprog.com/titles/shcloj/programming-clojure).  What better subject to explore them with then zombies?  In this example we have two zombies – zombie1 and zombie2.   Let's represent each zombie as a sequence:
+
+
+    
+    
+    (def zombie1 '("z1_head", "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg"))
+    
+    (def zombie2 '("z2_head", "z2_r_arm" "z2_l_arm" "z2_torso" "z2_r_leg" "z2_l_leg"))
+    
+
+
+
+zombie1 is ready to take a bite of zombie2's left leg, since it is nice and tasty there at the end.  Once zombie1 takes a bite, the body part will be added to its own sequence – but in the second position, so that the head is always first and ready to take another bite.  So, if zombie2 just stood still and let itself be eaten, after one bite, zombie1 would look like this
+
+(z1_head,   z2_l_leg,   z1_r_arm,   z1_l_arm,   z1_torso,   z1_r_leg,   z1_l_leg)
+
+But zombie2 is not just going to sit around and let itself be eaten, it is hungry too!  So it looks at zombie1's left leg hanging off there at the end and takes a bite whenever zombie1 takes a bite.
+
+Let's define the functions.  Because they will be mutually recursive and call each, we need to declare the vars first:
+
+
+    
+    
+    (declare zombie1_eats zombie2_eats)
+    
+
+
+
+Now let's define the zombie functions.  The zombie1_eats function will take 3 arguments, the first is the list that represents the eater (zombie1), the next is the list that represents the food (zombie2), and the last is the number of bites that zombie1 takes.  The function will return the list that represents zombie1.
+
+    
+    
+    (defn zombie1_eats [eater,food,bites]
+      (if (= 0 bites) eater
+        (if (= 0 (count food)) eater
+          (zombie2_eats
+            (drop-last food)
+            (cons (first eater) (cons (last food) (rest eater)) )
+             bites))))
+    
+    (defn zombie2_eats [eater, food bites]
+      (if (= 0 bites) eater
+        (if (= 0 (count food)) eater
+          (zombie1_eats
+            (drop-last food)
+            (cons (first eater) (cons (last food) (rest eater)) )
+             (dec bites)))))
+    
+
+
+After 0 bites:
+
+
+    
+    
+    user=> (zombie1_eats zombie1 zombie2 0)
+    ("z1_head" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg")
+    
+
+
+After 1 bite
+
+    
+    
+    user=> (zombie1_eats zombie1 zombie2 1)
+    ("z1_head" "z2_l_leg" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg")
+    
+
+
+
+After 7 bites
+
+    
+    
+    (user=> (zombie1_eats zombie1 zombie2 7)
+    ("z1_head" "z1_r_leg" "z1_l_leg" "z2_r_arm" "z2_l_arm" "z2_torso")
+    
+
+
+
+After 1007 bites
+
+    
+    
+    user=> (zombie1_eats zombie1 zombie2 1007)
+    ("z1_head" "z1_r_leg" "z1_l_leg" "z2_r_arm" "z2_l_arm" "z2_torso")
+    
+
+
+
+After 5000 bites
+
+    
+    
+    user=> (zombie1_eats zombie1 zombie2 5000)
+    java.lang.StackOverflowError (NO_SOURCE_FILE:0)
+    
+
+
+Whoops we blew the stack!  Don't worry – put those zombies on a trampoline!
+
+Clojure provides a function for optimizing mutual recursion.  The only thing that we need to do is to modify our zombie functions with a “#” to introduce an anonymous function.  Our new zombie methods are:
+
+
+    
+    
+    (defn zombie1_eats [eater,food,bites]
+      (if (= 0 bites) eater
+        (if (= 0 (count food)) eater
+          #(zombie2_eats
+            (drop-last food)
+            (cons (first eater) (cons (last food) (rest eater)) )
+             bites))))
+    
+    (defn zombie2_eats [eater, food bites]
+      (if (= 0 bites) eater
+        (if (= 0 (count food)) eater
+          #(zombie1_eats
+            (drop-last food)
+            (cons (first eater) (cons (last food) (rest eater)) )
+             (dec bites)))))
+    
+    
+
+
+
+Now lets try again:
+
+    
+    
+    user=> (trampoline zombie1_eats zombie1 zombie2 5000)
+    ("z1_head" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg")
+    
+
+
+No problem.  Even bigger... 
+
+
+    
+    
+     (trampoline zombie1_eats zombie1 zombie2 50004)
+    ("z1_head" "z2_l_arm" "z2_torso" "z2_r_leg" "z2_l_leg" "z1_r_arm")
+    
+
+
+There are other techniques to solve this as well in Clojure.  In Stuart Holloway's book, he mentions converting to self-recursion, replacing recursion with laziness and shortcutting recursion with [ memoization](http://en.wikipedia.org/wiki/Memoization). 
+
+But for me, there is nothing more enjoyable than putting those zombies on a trampoline!
+
+
+
+
+
+
+

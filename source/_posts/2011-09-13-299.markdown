@@ -1,0 +1,85 @@
+---
+author: gigasquid
+comments: false
+date: 2011-09-13 02:17:52+00:00
+layout: post
+slug: '299'
+title: Sunday in the Park with George and Clojure
+wordpress_id: 299
+categories:
+- All
+- Clojure
+---
+
+#  
+
+
+[caption id="attachment_301" align="alignnone" width="300" caption="Sunday Afternoon on the Island of La Grande Jatte painted by Georges-Pierre Seurat in 1884 – 1886."][![Sunday Afternoon on the Island of La Grande Jatte painted by Georges-Pierre Seurat in 1884 – 1886.](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/09/Georges_Seurat_-_Un_dimanche_après-midi_à_lÎle_de_la_Grande_Jatte-300x200.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/09/Georges_Seurat_-_Un_dimanche_après-midi_à_lÎle_de_la_Grande_Jatte.jpg)[/caption]
+
+
+
+White: a Blank Page or Canvas.
+
+As I spent a pleasant Sunday outside doing yard work, songs from one of my favorite musicals, [“Sunday in the Park with George”](http://en.wikipedia.org/wiki/Sunday_in_the_Park_with_George), came to mind. While the songs were playing in my head, my thoughts again drifted to one of my favorite programming languages, Clojure. To my surprise, I was struck by similarities between the musical, which is about the artist Geroges Seuret and his creation of one of his famous painting, and that of the functional JVM language of Clojure. Granted, musicals, art and programming languages don't generally get discussed together, but please humor me and let me elaborate. Following the thread of my inspiration, I will be using the first few opening lines from the musical as my headings and guides for my discussion.
+
+Let's start with the broad subjects of Art and Software. They are both created. We use our tools, palettes and techniques to create representations of the world. The visual artist portrays this representation in paints and on canvas, while the software developer uses programming languages and computers.
+
+Looking back in time, we see that there are many different styles of painting that have developed over time. From flat, idealized Byzantine Art to that of the incredible realistic detail of Renaissance Dutch portrait masters. These styles were a reflection of not only the techniques and materials of the time, but also an outlook on the world and the way the artist represented it. Likewise, software styles also have differed over time. From the procedural BASIC language to the current dominant style of Object Oriented programming, the styles are a reflection of not only the technology available to us, but in the way that we model real world concepts and processes into the digital space.
+
+
+## The Challenge: Bring Order to the Whole.
+
+
+
+
+Georges Seuret was interested in the optic effect when two small points of different color placed close to one another, would seem to create a third new and luminous color when viewed at a distance. He innovated a technique called pointillism, and created a whole painting composed of tiny dots of color. The striking effect of this can be seen in his famous, large scale painting titled "A Sunday Afternoon on the Island of La Grande Jatte”.
+
+
+
+In his use of pointillism, Seuret turned to simplicity to create order and achieve complexity. By breaking the painting down into the essence of dots of colors, he opened the way for a sort of parallelism in color viewing by the user, which ended up giving the viewer a perception of richer colors. This very technique, enhanced by todays technology is of course the basis of our incredible RGB viewing in our televisions and monitors.
+
+
+
+Let's turn to Clojure. Clojure is a functional language that is interested with concurrency. It also turns to simplicity to achieve complexity. By breaking things down and simplifying to more pure functions with immutable data structures, it make the complex problem of parallel programming possible. This is something that is very hard in the Object Oriented world view programming model. In my opinion, Clojure's approach to concurrent complexity with simplicity is an important innovation to our world of software, just as pointillism was to the world of art. To better explain, let's walk though some of the language features.
+
+
+
+
+## Through Design
+
+
+Rich Hickey designed Clojure as a general-purpose language. He wanted it to combine some of best parts of a scripting language – the approachability and interactive development with a REPL – with an infrastructure that would be fast, robust and support multithreaded programming.
+
+
+## Composition
+
+
+The language itself is a LISP. It gains the benefits of the simplicity of syntax of the code as data as well as having the power of Macros that allows one to customize the language. The beauty of this simplicity and conciseness allows one to focuses more on the code that matters.
+
+
+## Tension
+
+
+Pure functions and immutable state is great, but to most things you will need some sort of state. Clojure also provides ways to use mutable state and still support correct multithreaded designs. It uses Software Transaction Memory System and Agents to achieve this. This use of mutable state in a controlled and isolated way, allows clean, efficient and concurrent programming.
+
+
+## Balance
+
+
+Clojure embraces the JVM as it's platform. This pragmatic approach gives not only gives the language a scalable, proven run time environment, it also gives it the advantage of accessing Java's many mature libraries through wrapper free interoperability.
+
+
+## Light
+
+
+Clojure language is a joy to learn. Being concise and a LISP, is very regular in it's syntax. There are only a few key data structures and forms to learn to really get started.
+
+
+## and Harmony.
+
+
+Clojure has an awesome community. The level of enthusiasm and innovation among the Clojure open source developers is inspiring. Every day seems to bring a new development or contribution. There is ClojureScript for JavaScript development, Noir for web development, Logic programming just to name a few.
+
+In summary, innovation in art and technology can come through a quest for simplification. This very act of simplification, then allows for breakthroughs in complexity. Both Seuret and Hickey have shared in this vision in both their art and software.
+
+Finally, I highly recommend watching “Sunday in the Park with George” if you haven't seen it yet. I also highly recommend looking at Clojure too. In fact, you might want to try some [Clojure Koans](https://github.com/functional-koans/clojure-koans) before watching the show. You might enjoy it from a different perspective...
