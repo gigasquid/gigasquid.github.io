@@ -49,7 +49,7 @@ Babar is an experimental language that uses these Speech Acts to communicate. It
 
 The language uses basic Clojure datatypes and makes the parens optional in most cases to make the expressions look more like syntactically sugared speech acts.
 
-    
+{% codeblock lang:clojure %} 
     1     ;=> 1
     2.3   ;=> 2.3
     -3.4  ;=> 3.4
@@ -64,23 +64,23 @@ The language uses basic Clojure datatypes and makes the parens optional in most 
     dog ;=> 16
     def cat 18
     cat ;=> 18
-
+{% endcodeblock %}
 
 
 
 
 Vectors are a bit interesting in the respect that you don't need to input the square brackets. If you just put in space delimited items, it will automatically construct a vector for you.
 
-    
+```clojure    
     1 2 3 4 ;=> [1 2 3 4]
-
+````
 
 
 
 
 You can create anonymous functions with the fn [x] syntax from clojure. And call them with surrounding parens. You can call regular functions by the () notation or the shorthand :.
 
-    
+```clojure    
     fn [x] + x 1 ;=> fn
     (fn [x] + x 1) ;=> fn
     ((fn [x] + x 1) 3) ;=> 4
@@ -89,7 +89,7 @@ You can create anonymous functions with the fn [x] syntax from clojure. And call
     
     defn dog [] "woof"
     dog: ;=> "woof"
-
+````
 
 
 
@@ -103,7 +103,7 @@ To see the complete documentation - please visit the [Github repo](https://githu
 Now that we have the basics. Let's look at example of running a program with speech acts.
 This one speaks its beliefs and has assertions, a request, and queries.
 
-    
+```clojure    
     speak-config true.
     assert sunny false.
     convince #nice-day "It is a nice day." fn [] = sunny true.
@@ -111,7 +111,7 @@ This one speaks its beliefs and has assertions, a request, and queries.
     query request-is-done *open-window?
     assert sunny true.
     query request-is-done *open-window?
-
+````
 
 
 [video](http://www.youtube.com/watch?v=bt2iYsVyCOM)
@@ -121,7 +121,7 @@ This one speaks its beliefs and has assertions, a request, and queries.
 
 Here is another one that shows using a request until a belief is held.
 
-    
+```clojure    
     speak-config true.
     
     assert counter atom 1.
@@ -129,7 +129,7 @@ Here is another one that shows using a request until a belief is held.
     request *count-up until #done fn [] swap! counter inc.
     sleep 25.
     query request-value *count-up?
-
+````
 
 [video](http://www.youtube.com/watch?v=aT8MK0w71LM)
 
@@ -138,7 +138,7 @@ Here is another one that shows using a request until a belief is held.
 
 Here the REPL asks you a question if you give it an undeclared var
 
-    
+```clojure
     speak-config true.
     ask-config true.
     
@@ -148,7 +148,7 @@ Here the REPL asks you a question if you give it an undeclared var
     sleep 10.
     query request-is-done *task1?
     query request-value *task1?
-
+````
 
 [video](https://www.youtube.com/watch?v=nmi_fafmjsg)
 
@@ -162,7 +162,7 @@ Here the REPL asks you a question if you give it an undeclared var
 Since the language is aimed at communincating with machines. It is only natural that I use it to talk to the AR Drone.
 Here is a program that has the drone take off, get to a cruising altitude, and land - all using speech acts (and the [clj-drone library](https://github.com/gigasquid/clj-drone)).
 
-    
+```clojure    
     speak-config true.
     
     import "clj-drone.core".
@@ -186,7 +186,7 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
     convince #done "Whee! I am done." fn [] and (navdata-equal :control-state :landed)
                                                 query request-is-done *land.
     request *end-navstream when #done fn [] (end-navstream).
-
+````
 
 [video](http://www.youtube.com/watch?v=CIzR8jD2d3c)
 

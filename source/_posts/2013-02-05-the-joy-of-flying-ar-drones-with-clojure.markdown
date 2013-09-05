@@ -20,7 +20,7 @@ Ever since I found out that you could program and control your[![](http://gigasq
 
 
 
-    
+```clojure    
     (ns clj-drone.example.simple
       (:require [clj-drone.core :refer :all]))
     
@@ -30,7 +30,7 @@ Ever since I found out that you could program and control your[![](http://gigasq
     (drone :take-off)
     (Thread/sleep 10000)
     (drone :land)
-
+````
 
 Here is a video of executing the entire program in nrepl/ emacs
 
@@ -43,7 +43,7 @@ http://www.youtube.com/watch?v=IjKDZVUk1M8
 
 Running the program all at once to control the drone is fun. But, I prefer to have more control over it in flight. I find being able to execute commands with keystrokes in emacs, the best way to do it. Here is a short video demonstrating control via the REPL. (Note: I am just doing simple take off / up and landings because of the constraints of flying indoors in my kitchen. There are many more moves you can do if you have more space.)
 
-    
+```clojure    
     (ns clj-drone.example.moves
       (:require [clj-drone.core :refer :all]))
     
@@ -55,7 +55,7 @@ Running the program all at once to control the drone is fun. But, I prefer to ha
     (drone-do-for 3.75 :fly 0.2 0 0 0.5) ; sprial
     (drone :hover)
     (drone :land)
-
+````
 
 
 http://www.youtube.com/watch?v=kNLx5X49Lig
@@ -67,7 +67,7 @@ http://www.youtube.com/watch?v=kNLx5X49Lig
 
 You can also hook into the navigation feed. There are many drone states and properties to look at. There is a list of all the ones currently available on the [github project site](https://github.com/gigasquid/clj-drone). There are also many more, including targeting information, that have yet to be added. There is a logging function that will pair down the navigation properties that you are interested in. The navigation data map as an atom, so it can be de-referenced anywhere in your program. Here is a short video of what the navigation logging data looks like when it is turned on.
 
-    
+```clojure    
     (ns clj-drone.example.nav-test
       (:require [clj-drone.core :refer :all]
                 [clj-drone.navdata :refer :all]))
@@ -81,7 +81,7 @@ You can also hook into the navigation feed. There are many drone states and prop
     (drone :take-off)
     (drone :land)
     (end-navstream)
-
+````
 
 
 http://www.youtube.com/watch?v=peQTVvsayrA
