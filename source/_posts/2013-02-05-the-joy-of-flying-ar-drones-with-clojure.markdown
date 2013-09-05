@@ -34,7 +34,7 @@ Ever since I found out that you could program and control your[![](http://gigasq
 
 Here is a video of executing the entire program in nrepl/ emacs
 
-http://www.youtube.com/watch?v=IjKDZVUk1M8
+{% youtube IjKDZVUk1M8 %}
 
 
 
@@ -58,7 +58,7 @@ Running the program all at once to control the drone is fun. But, I prefer to ha
 ````
 
 
-http://www.youtube.com/watch?v=kNLx5X49Lig
+{% youtube kNLx5X49Lig %}
 
 
 
@@ -84,7 +84,7 @@ You can also hook into the navigation feed. There are many drone states and prop
 ````
 
 
-http://www.youtube.com/watch?v=peQTVvsayrA
+{% youtube peQTVvsayrA %}
 
 
 
@@ -94,7 +94,7 @@ http://www.youtube.com/watch?v=peQTVvsayrA
 Inspired by reading John McCarthy's paper on [Ascribing Mental Qualities to Machines](http://www-formal.stanford.edu/jmc/ascribing/ascribing.html), the drone can also auto-pilot itself based on goals and beliefs about its streaming navigation data. You define belief-actions and then goals. Finally, you set a vector of the current goals for the drone to process. You can see an example here of the AR drone having three goals: Take off, Get to a cruising altitude, and then land. It does it solely by inspecting and acting on the streaming navigation data.
 Code for the program is here: [https://github.com/gigasquid/clj-drone/blob/master/examples/nav_goals.clj](https://github.com/gigasquid/clj-drone/blob/master/examples/nav_goals.clj)
 
-http://www.youtube.com/watch?v=ujqeKFT8HdQ
+{% youtube ujqeKFT8HdQ %}
 
 
 

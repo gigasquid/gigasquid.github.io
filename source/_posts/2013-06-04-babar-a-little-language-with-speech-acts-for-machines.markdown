@@ -114,7 +114,7 @@ This one speaks its beliefs and has assertions, a request, and queries.
 ````
 
 
-[video](http://www.youtube.com/watch?v=bt2iYsVyCOM)
+{% youtube bt2iYsVyCOM %}
 
 
 
@@ -131,7 +131,7 @@ Here is another one that shows using a request until a belief is held.
     query request-value *count-up?
 ````
 
-[video](http://www.youtube.com/watch?v=aT8MK0w71LM)
+{% youtube aT8MK0w71LM %}
 
 
 
@@ -150,7 +150,7 @@ Here the REPL asks you a question if you give it an undeclared var
     query request-value *task1?
 ````
 
-[video](https://www.youtube.com/watch?v=nmi_fafmjsg)
+{% youtube nmi_fafmjsg %}
 
 
 ## Autonomous AR Drone Flight with Babar REPL
@@ -188,7 +188,7 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
     request *end-navstream when #done fn [] (end-navstream).
 ````
 
-[video](http://www.youtube.com/watch?v=CIzR8jD2d3c)
+{% youtube CIzR8jD2d3c %}
 
 
 
