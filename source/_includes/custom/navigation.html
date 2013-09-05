@@ -4,13 +4,4 @@
 	<li id="ajax"><a href="{{ root_url }}/about/index.html">About</a></li>
 	<li id="ajax"><a href="{{ root_url }}/blog/archives/index.html">Archives</a></li>
     <li><a href="{{ root_url }}/atom.xml">RSS</a></li>
-    {% if site.simple_search %}
-    <li>
-    <div id="dark">
-        <form method="get" action="{{ root_url }}/search.html" id="search">
-            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
-        </form>
-    </div>
-    </li>
-    {% endif %}    
 </ul>
