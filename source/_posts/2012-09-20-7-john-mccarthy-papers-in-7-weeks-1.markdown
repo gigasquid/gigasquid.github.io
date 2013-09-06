@@ -11,7 +11,7 @@ categories:
 - John McCarthy Papers
 ---
 
-[caption id="" align="alignnone" width="320"]![http://www.flickr.com/photos/midnightcomm/447335691/sizes/n/in/photostream/](http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg) http://www.flickr.com/photos/midnightcomm/447335691/[/caption]
+{% img http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg %}
 
 
 ## Ascribing Mental Qualities to Machines or How My Thermostat has Beliefs and Goals
