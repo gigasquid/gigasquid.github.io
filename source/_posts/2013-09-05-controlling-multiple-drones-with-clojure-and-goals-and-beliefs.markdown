@@ -91,7 +91,7 @@ sending simple commands:
 ## Bring on Multiple Drones interacting with Goals and Beliefs
 
 The clj-drone library implements goals and beliefs from [John
-McCarthy's work](http://localhost:4000/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/).
+McCarthy's work](http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/).
 The way this works is that the navigation data being constantly sent
 to our computer for processing.  Everytime we get a navigation packet
 that ends up looking something like this, (but with lots more data):
