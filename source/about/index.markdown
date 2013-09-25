@@ -2,12 +2,11 @@
 layout: page
 title: "about"
 date: 2013-06-05 13:53
-comments: true
 sharing: true
 footer: true
 ---
 
-[![Carin Meier](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/05/carinAvatarMay-300x275.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/05/carinAvatarMay.jpg)
+{% img http://farm8.staticflickr.com/7338/9925531405_ac51ee4d06_n.jpg %}
 
 I started off as a professional ballet dancer, studied Physics in college, and ended up as a Software Developer.
 
