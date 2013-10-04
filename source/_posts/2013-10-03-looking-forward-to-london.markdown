@@ -22,7 +22,7 @@ things:
 
 As you know, I also adore Clojure. So I am absolutely thrilled to combine the two.
 
-## Clojure Exchange
+## Clojure eXchange
 
 I will be speaking at the
 [Clojure eXchange conference](http://skillsmatter.com/event/java-jee/clojure-exchange-2013)
