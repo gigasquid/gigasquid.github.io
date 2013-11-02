@@ -20,4 +20,3 @@ Lately, I have been working on the awesome open source project [4Clojure.com](ht
 The Github source has been added to the main project at Ace [https://github.com/ajaxorg/ace](https://github.com/ajaxorg/ace)
 You can see it in action on the 4Clojure.com site here: [http://www.4clojure.com/problem/14](http://www.4clojure.com/problem/14)
 
-[![Ace Clojure Mode](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/05/ace-clojure-mode1.png)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/05/ace-clojure-mode1.png)

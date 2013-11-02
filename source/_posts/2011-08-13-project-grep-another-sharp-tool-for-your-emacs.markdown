@@ -22,4 +22,4 @@ Create an empty .emacs-project file in your directory
 
 **To use:** meta-x project-grep
 
-[caption id="attachment_251" align="alignleft" width="300" caption="Project-grep"][![Project-grep](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/08/Screen-Shot-2011-08-13-at-2.03.31-PM1-300x168.png)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/08/Screen-Shot-2011-08-13-at-2.03.31-PM1.png)[/caption]
+

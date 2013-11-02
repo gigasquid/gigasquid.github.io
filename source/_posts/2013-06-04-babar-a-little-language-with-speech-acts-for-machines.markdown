@@ -14,6 +14,7 @@ categories:
 ---
 
 [![Babar Books](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2013/06/babarbooks2-237x300.jpeg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2013/06/babarbooks2.jpeg)
+{% img http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg %}
 
 
 ## Preface: A Gentle Obsession

@@ -11,7 +11,8 @@ categories:
 - Development
 ---
 
-[![toaster](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2012/04/toaster-292x300.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2012/04/toaster.jpg)
+
+{% img left http://farm4.staticflickr.com/3767/9925846584_3bf93b2cca.jpg %}
 
 I have had my Dualit Toaster for close to 19 years now. It has never broken down. It has reliably toasted my bread every morning with the mere turn of a dial.
 

@@ -14,6 +14,7 @@ categories:
 Long ago,  I worked for a couple years as a professional ballet dancer with a small company. Reflecting on this, I have an interesting perspective of working in field were woman are the majority and also one where women are in the minority. I thought I would dedicate this post a few observations of similarities between men in ballet and women in software development.
 
 **Men in Ballet**
+{% img  http://farm4.staticflickr.com/3786/9925846994_2673f8183c_o.jpg%}
 
 [caption id="attachment_263" align="alignleft" width="150" caption="http://www.cballet.org/about/dancers/principal/amador"][![Cervilio Amador from the Cincinnati Ballet](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/08/cervilioAmador1-150x150.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/08/cervilioAmador1.jpg)[/caption]
 

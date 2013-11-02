@@ -11,7 +11,8 @@ categories:
 - Clojure
 ---
 
-[![](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2012/08/roomba-e1344539527463-224x300.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2012/08/roomba.jpg)
+
+{% img http://farm3.staticflickr.com/2826/9925780955_4a32b8dc8a_o.jpg %}
 One of the things that I love about Clojure is that it can go anywhere that Java can.  That is why, when I found out that the Roomba already had a [Java library](http://hackingroomba.com/code/roombacomm/) written for it - I was excited to be able to hook it up to my Emacs / Swank and be able to control it from my editor.
 
 It is great fun!  If you have a Roomba at home and you want to play along...

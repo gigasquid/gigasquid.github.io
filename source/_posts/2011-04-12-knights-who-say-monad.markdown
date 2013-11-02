@@ -11,6 +11,6 @@ categories:
 - Clojure
 ---
 
-[caption id="attachment_172" align="alignleft" width="360" caption="In the Functional Forest...."][![Knights Who Say Monad](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/04/KnightsWhoSayMonad.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/04/KnightsWhoSayMonad.jpg)[/caption]
+{% img http://farm6.staticflickr.com/5539/9925781235_e80904a961_o.jpg %}
 
-_(*Sketch By My Awesome Husband)_
+(*Sketch By My Awesome Husband)

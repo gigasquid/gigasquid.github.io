@@ -13,7 +13,9 @@ categories:
 
 Clojure is fun.  Flying [AR Parrot Drones](http://ardrone2.parrot.com/usa/) are fun.  Put them together and there is pure joy.
 
-Ever since I found out that you could program and control your[![](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2013/02/drone-e1360035448767-225x300.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2013/02/drone.jpg) drone over UDP, I couldn't wait to try it out in Clojure.  I had dreams of controlling it with my Emacs REPL.  That dream came true and it has been a true joy to fly in a function language. This blog post shows some of the features that the [clj-drone project](https://github.com/gigasquid) has so far.  There is still a bit of work to go to make it complete.  But, I wanted to share and hopefully encourage others to start playing with it too.
+{% img http://farm8.staticflickr.com/7441/9925804126_e4707c8b72_o.jpg %}
+
+Ever since I found out that you could program and control your drone over UDP, I couldn't wait to try it out in Clojure.  I had dreams of controlling it with my Emacs REPL.  That dream came true and it has been a true joy to fly in a function language. This blog post shows some of the features that the [clj-drone project](https://github.com/gigasquid) has so far.  There is still a bit of work to go to make it complete.  But, I wanted to share and hopefully encourage others to start playing with it too.
 
 
 ## The Simple Take-off and Landing

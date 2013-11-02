@@ -54,7 +54,6 @@ Starting up a coworking space is all about building community. The very act of b
 ## An Excuse for a Biscuit Tasting
 
 
-[![biscuits](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2013/03/biscuits-225x300.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2013/03/biscuits.jpg)
 
 One of the fun perks of running a coworks is you get to have Open Houses and other excuses to eat biscuits. When I say "biscuits", I mean biscuits in the British form, that translates into American as "delicious cookies". So if you are in Cincinnati, sign up for the [Open House of Locolo](http://lovelandcolo.wordpress.com/). Where you can not only see the space and meet awesome people, but also rate various cookies on important factors such as dunkablility and crunchiness.
 

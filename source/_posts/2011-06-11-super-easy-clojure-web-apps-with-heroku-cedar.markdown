@@ -50,7 +50,6 @@ You can check out  my sample Twitter Heroku app here:
 [http://ring-twitter-common.herokuapp.com/](http://ring-twitter-common.herokuapp.com/)
 
 But wait, you say... wouldn't it be awesome if you could just write your Clojure app and say lein deploy and have it all work? Wouldn't it be super awesome if there was some command to generate a skeleton for your Compojure app? The solution is actually in the planning stages by James Reeves (weavejester)!  Hooray!
-[![](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/06/leingroupentry4-300x175.png)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/06/leingroupentry4.png)
 
 
 
