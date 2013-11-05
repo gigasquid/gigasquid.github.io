@@ -27,7 +27,7 @@ us farther in the future.
 
 Since everyone has their own experience synthesizing the world around
 them, there are many differing opinions on what we should continue to
-embrace and what we technologies and practices we should reach for.  I
+embrace and what we technologies and practices should reach for.  I
 humbly offer my thoughts on this based from my own perspective.
 
 ## Embrace: Agile Feedback
