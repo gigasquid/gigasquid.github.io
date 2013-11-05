@@ -11,6 +11,7 @@ categories:
 - Clojure
 - Development
 - John McCarthy Papers
+- Language
 ---
 
 {% img http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg %}
