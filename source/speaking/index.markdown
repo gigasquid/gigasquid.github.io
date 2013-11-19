@@ -10,12 +10,14 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
-* [Clojure Conj 2013](http://clojure-conj.org/): Learning to talk to
-  machines with speech acts - a shipwreck adventure
+
+* [Code Mesh 2013](http://codemesh.io/): The Joy of Flying Robots with Clojure
 * [Clojure Exchange 2013](http://skillsmatter.com/event/java-jee/clojure-exchange-2013): Learning to talk to machines with speech acts - a shipwreck adventure
 
 ## Past Talks
 
+* [Clojure Conj 2013](http://clojure-conj.org/): Learning to talk to
+  machines with speech acts - a shipwreck adventure
 * OSCON 2013 Keynote: The Joy of Flying Robots with Clojure
 {% youtube Ty9QDqV-_Ak %}
 * Lambda Jam 2013: [The Joy of Flying Robots with Clojure](http://www.infoq.com/presentations/clojure-robots)
