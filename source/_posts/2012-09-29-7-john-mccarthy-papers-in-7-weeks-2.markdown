@@ -13,7 +13,7 @@ categories:
 
 Well, life threw me for a bit of a loop and delayed my post on my second paper. So I am going to consider this a "weekish" period of time and just continue on.
 
-I read [ Towards a Mathematical Science of Computation](http://www-formal.stanford.edu/jmc/towards/towards.html).  It is quite a meaty paper and was certainly a lot to digest.  Here are some highlights that I gleaned from it.
+I read [ Towards a Mathematical Science of Computation](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/towards/towards.html).  It is quite a meaty paper and was certainly a lot to digest.  Here are some highlights that I gleaned from it.
 
 
 

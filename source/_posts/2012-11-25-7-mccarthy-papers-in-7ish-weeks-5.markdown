@@ -14,7 +14,7 @@ categories:
 
 {% img http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png %}
 
-This holiday edition blog post covers two McCarthy papers instead of just one.  We will be talking about [Free Will - Even for Robots](http://www-formal.stanford.edu/jmc/freewill.pdf) and the companion paper [Simple Deterministic Free Will](http://www-formal.stanford.edu/jmc/freewill2.pdf).
+This holiday edition blog post covers two McCarthy papers instead of just one.  We will be talking about [Free Will - Even for Robots](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/freewill.pdf) and the companion paper [Simple Deterministic Free Will](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/freewill2.pdf).
 
 
 ## In which we deftly sidestep the philosophers

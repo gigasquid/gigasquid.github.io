@@ -11,6 +11,6 @@ categories:
 - John McCarthy Papers
 ---
 
-Saving the best for last.  [Elephant 2000](http://www-formal.stanford.edu/jmc/elephant/elephant.html)
+Saving the best for last.  [Elephant 2000](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/elephant/elephant.html)
 
 To be continued....

@@ -17,7 +17,7 @@ categories:
 ## Ascribing Mental Qualities to Machines or How My Thermostat has Beliefs and Goals
 
 
-After reading John McCarthy's paper this week [Ascribing Mental Qualities to Machines](http://www-formal.stanford.edu/jmc/ascribing.html), I can honestly say that it has changed the way I think about programs and most certainly thermostats. For you see, I realize now that my thermostat has beliefs and goals. No, it does not have beliefs about what the weather is going to be tomorrow, or when the next George R.R. Martin book is going to come out. But it does have beliefs. It has three of them to be exact:
+After reading John McCarthy's paper this week [Ascribing Mental Qualities to Machines](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/), I can honestly say that it has changed the way I think about programs and most certainly thermostats. For you see, I realize now that my thermostat has beliefs and goals. No, it does not have beliefs about what the weather is going to be tomorrow, or when the next George R.R. Martin book is going to come out. But it does have beliefs. It has three of them to be exact:
 
 
 

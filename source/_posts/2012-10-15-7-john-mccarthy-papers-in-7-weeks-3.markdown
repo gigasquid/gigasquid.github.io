@@ -15,7 +15,7 @@ categories:
 
 I have realized that it generally takes me more than a week to read a paper, reflect on it, experiment, and finally blog about it. But, since I made up the rules of the project in the first place,  I am not going to dwell on the time frame and just move forward with the next paper.
 
-When I picked the paper [First Order Theories of Individual Concepts and Propositions](http://www-formal.stanford.edu/jmc/concepts/concepts.html), I thought to myself that it would be a rather narrow, more self contained paper than the first two broad papers that I read. However, the connections that it drew to current technologies caught me by surprise.
+When I picked the paper [First Order Theories of Individual Concepts and Propositions](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/concepts/concepts.html), I thought to myself that it would be a rather narrow, more self contained paper than the first two broad papers that I read. However, the connections that it drew to current technologies caught me by surprise.
 
 The main point of the paper is how to formalize language statements, including concepts, so that a computer can apply mathematical rules and logic to them. McCarthy had mentioned concepts and thoughts in his "Ascribing Mental Qualities" paper, where he says:
 

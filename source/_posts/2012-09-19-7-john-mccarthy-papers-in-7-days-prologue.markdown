@@ -13,7 +13,7 @@ categories:
 - John McCarthy Papers
 ---
 
-In the spirit of [Seven Languages in Seven Weeks](http://pragprog.com/book/btlang/seven-languages-in-seven-weeks), I have decided to embark on a quest. But instead of focusing on expanding my mindset with different programming languages, I am focusing on trying to get into the mindset of [John McCarthy](http://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist)), father of LISP and AI, by reading and thinking about seven of his [papers](http://www-formal.stanford.edu/jmc/).
+In the spirit of [Seven Languages in Seven Weeks](http://pragprog.com/book/btlang/seven-languages-in-seven-weeks), I have decided to embark on a quest. But instead of focusing on expanding my mindset with different programming languages, I am focusing on trying to get into the mindset of [John McCarthy](http://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist)), father of LISP and AI, by reading and thinking about seven of his [papers](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/).
 
 
 ### Why?
@@ -54,4 +54,4 @@ When we are presented with a problem, more often then not, the answer comes to u
 
 Serendipity moves in mysterious ways.  By sharing your travels and thoughts, who knows what might spark in someone else's mind...
 
-So I encourage you to join along.  Pick a [paper]( http://www-formal.stanford.edu/jmc/) that appeals to you and read it this week. Think about it, talk to your co-workers about it, maybe write about it, or even code from it.  But most importantly, slow down and take a moment to peek outside your box.
+So I encourage you to join along.  Pick a [paper](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/) that appeals to you and read it this week. Think about it, talk to your co-workers about it, maybe write about it, or even code from it.  But most importantly, slow down and take a moment to peek outside your box.

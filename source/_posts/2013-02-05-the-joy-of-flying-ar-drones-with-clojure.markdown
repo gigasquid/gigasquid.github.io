@@ -93,7 +93,7 @@ You can also hook into the navigation feed. There are many drone states and prop
 ## Auto-piloting with goals and beliefs
 
 
-Inspired by reading John McCarthy's paper on [Ascribing Mental Qualities to Machines](http://www-formal.stanford.edu/jmc/ascribing/ascribing.html), the drone can also auto-pilot itself based on goals and beliefs about its streaming navigation data. You define belief-actions and then goals. Finally, you set a vector of the current goals for the drone to process. You can see an example here of the AR drone having three goals: Take off, Get to a cruising altitude, and then land. It does it solely by inspecting and acting on the streaming navigation data.
+Inspired by reading John McCarthy's paper on [Ascribing Mental Qualities to Machines](http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/ascribing/ascribing.html), the drone can also auto-pilot itself based on goals and beliefs about its streaming navigation data. You define belief-actions and then goals. Finally, you set a vector of the current goals for the drone to process. You can see an example here of the AR drone having three goals: Take off, Get to a cruising altitude, and then land. It does it solely by inspecting and acting on the streaming navigation data.
 Code for the program is here: [https://github.com/gigasquid/clj-drone/blob/master/examples/nav_goals.clj](https://github.com/gigasquid/clj-drone/blob/master/examples/nav_goals.clj)
 
 {% youtube ujqeKFT8HdQ %}
