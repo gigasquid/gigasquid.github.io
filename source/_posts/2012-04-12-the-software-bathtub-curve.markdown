@@ -68,8 +68,6 @@ How do the manufacturers know, with such accuracy, when the product is going to 
 
 
 
-[![bathubcurve](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2012/04/bathubcurve-300x199.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2012/04/bathubcurve.jpg)
-
 
 With software, we don't talk about failures so much. We do talk about bugs, but even that is a bit misleading because it doesn't take into account the need to accommodate features and evolving changes. So let's talk about “issues” instead that can be broad enough to accommodate traditional bugs, gaps of functional needs, and performance related items.
 

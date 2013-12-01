@@ -13,10 +13,7 @@ categories:
 
 #  
 
-{% img http://farm3.staticflickr.com/2843/9925803956_c92c63045e_o.jpg %}
-
-[caption id="attachment_301" align="alignnone" width="300" caption="Sunday Afternoon on the Island of La Grande Jatte painted by Georges-Pierre Seurat in 1884 – 1886."][![Sunday Afternoon on the Island of La Grande Jatte painted by Georges-Pierre Seurat in 1884 – 1886.](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/09/Georges_Seurat_-_Un_dimanche_après-midi_à_lÎle_de_la_Grande_Jatte-300x200.jpg)](http://gigasquidsoftware.com/wordpress/wp-content/uploads/2011/09/Georges_Seurat_-_Un_dimanche_après-midi_à_lÎle_de_la_Grande_Jatte.jpg)[/caption]
-
+{% img left  http://farm3.staticflickr.com/2843/9925803956_c92c63045e_o.jpg %}
 
 
 White: a Blank Page or Canvas.

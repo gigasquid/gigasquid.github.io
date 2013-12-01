@@ -19,7 +19,7 @@ Fist let's look at the kind of AI that McCarthy is describing in paper. He talks
 
 
 
-  1. The computer program has its "beliefs" completely defined by its internal state.  If you are confused by the term "beliefs", it refers to [ascribing mental qualities to machines](http://gigasquidsoftware.com/wordpress/?p=477).  In his famous example, a thermostat has three beliefs: the room is too hot, the room is too cold, and the room is just right. 
+  1. The computer program has its "beliefs" completely defined by its internal state.  If you are confused by the term "beliefs", it refers to [ascribing mental qualities to machines](http://gigasquidsoftware.com/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/).  In his famous example, a thermostat has three beliefs: the room is too hot, the room is too cold, and the room is just right. 
 
 
   2. The programs express their beliefs in sentences in machine memory.  However, they do not use ordinary logic.  They use other methods like rules and procedures.

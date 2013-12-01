@@ -65,7 +65,7 @@ It has three beliefs to be precise. It believes that no one is going to win, or 
         :noone "No one is going to win."})
 
 
-McCarthy thinks that [ascribing programs beliefs can be useful](http://gigasquidsoftware.com/wordpress/?p=477). One of the reasons is that it helps us as humans, reason and debug our programs. I definitely saw the value of this when I was trying to debug my tic tac toe game. After it failed to block my winning move, I could see what its false belief was - ah - it thought that "No one is going to win". I wrote another failing unit test to fix its bad belief.
+McCarthy thinks that [ascribing programs beliefs can be useful](http://gigasquidsoftware.com/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/). One of the reasons is that it helps us as humans, reason and debug our programs. I definitely saw the value of this when I was trying to debug my tic tac toe game. After it failed to block my winning move, I could see what its false belief was - ah - it thought that "No one is going to win". I wrote another failing unit test to fix its bad belief.
 
 
 ## My Tic Tac Toe Program Looks to See What Its Possible Actions and Preferences Are

@@ -21,7 +21,7 @@ It is great fun!  If you have a Roomba at home and you want to play along...
 
   
   1. 
-    Read [Setting up and Configuring Bluetooth and Roomba part from this post](http://gigasquidsoftware.com/wordpress/?p=441).
+    Read [Setting up and Configuring Bluetooth and Roomba part from this post](http://gigasquidsoftware.com/blog/2012/08/02/talking-to-your-roomba-via-bluetooth-and-roombacom/).
    
   2. Checkout the sample project [clj-roomba](https://github.com/gigasquid/clj-roomba) from github.
 
