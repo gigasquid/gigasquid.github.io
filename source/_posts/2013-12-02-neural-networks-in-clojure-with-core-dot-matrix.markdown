@@ -122,6 +122,7 @@ will define both here.
       (mapv #(reduce + %)
        (* inputs (transpose strengths)))))
 ```
+Note how nice core.matrix works on multipling vectors <3.
 
 So now if we calculate the hidden neuron values from the input [1 0],
 we get:
@@ -135,5 +136,317 @@ Let's just remember those hidden neuron values for our next step
 
 ```clojure
 (def new-hidden-neurons
-  [0.11942729853438588 0.197375320224904 0.12927258360605834])
+  (layer-activation input-neurons input-hidden-strengths))
 ```
+
+Now we do the same thing to calculate the output values
+
+```clojure
+(layer-activation new-hidden-neurons hidden-output-strengths)
+;=>  [0.02315019005321053 0.027608061500083565]
+
+(def new-output-neurons
+  (layer-activation new-hidden-neurons hidden-output-strengths))
+```
+
+Alright!  We have our answer
+[0.02315019005321053 0.027608061500083565].
+Notice that the values are pretty much the same.  This is because we
+haven't trained our network to do anything yet.
+
+## Backwards Propogation
+
+To train our network, we have to let it know what the answer,(or
+target), should be, so we can calculate the errors and finally update
+our connection strengths. For this simple example, let's just inverse
+the data - so given an input of [1 0] should give us an output of
+[0 1].
+
+```clojure
+(def targets [0 1])
+````
+
+### Calculate the errors of the output layer
+
+The first errors that we need to calculate are the ones for the output
+layer.  This is found by subtracting the target value form the actual
+value and then multiplying by the gradient/ derivative of the
+activation function
+
+```clojure
+(defn output-deltas [targets outputs]
+  "measures the delta errors for the output layer (Desired value – actual value) and multiplying it by the gradient of the activation function"
+  (* (mapv dactivation-fn outputs)
+     (- targets outputs)))
+ 
+(output-deltas targets new-output-neurons)
+;=> [-0.023137783141771645 0.9716507764442904]
+````
+
+Great let's remember this output deltas for later
+
+```clojure
+(def odeltas (output-deltas targets new-output-neurons))
+```
+### Calculate the errors of the hidden layer
+
+The errors of the hidden layer are based off the deltas that we just
+found from the output layer.  In fact, for each hidden neuron, the
+error delta is the gradient of the activation function multiplied by
+the weighted sum of the ouput deltas of connected ouput neurons and
+it's connection strength.  This should remind you of the forward
+propogation of the inputs - but this time we are doing it backwards
+with the error deltas.
+
+```clojure
+(defn hlayer-deltas [odeltas neurons strengths]
+  (* (mapv dactivation-fn neurons)
+     (mapv #(reduce + %)
+           (* odeltas strengths))))
+ 
+(hlayer-deltas
+    odeltas
+    new-hidden-neurons
+    hidden-output-strengths)
+;=>  [0.14982559238071416 0.027569216735265096 0.018880751432503236]
+```
+
+Great let's remember the hidden layer error deltas for later
+
+```clojure
+(def hdeltas (hlayer-deltas
+              odeltas
+              new-hidden-neurons
+              hidden-output-strengths))
+```
+
+## Updating the connection strengths
+
+Great!  We have all the error deltas, now we are ready to go ahead and
+update the connection strengths.  In general this is the same process
+for both the hidden-output connections and the input-hidden
+connections.
+
+  * weight-change = error-delta * neuron-value
+  * new-weight = weight + learning rate * weight-change
+
+The learning rate controls how fast the weigths and errors should be
+adjusted.  It the learning rate is too high, then there is the danger
+that it will converge to fit the solution too fast and not find the
+best solution.  If the learning rate is too low, it may never actually
+converge to the right solution given the training data that it is
+using. For this example, let's use a training rate of 0.2
+
+```clojure
+(defn update-strengths [deltas neurons strengths lrate]
+  (+ strengths (* lrate
+                  (mapv #(* deltas %) neurons))))
+```
+
+### Update the hidden-output strengths
+Updating this layer we are going to look at
+
+* weight-change = odelta * hidden value
+* new-weight = weight + (learning rate * weight-change)
+
+```clojure
+(update-strengths
+       odeltas
+       new-hidden-neurons
+       hidden-output-strengths
+       learning-rate)
+;=> [[0.14944734341306073 0.18320832546991603]
+    [0.019086634528619688 0.06835597662949369]
+    [0.009401783798869296 0.04512156124675721]]
+```
+
+Of course, let's remember these values too
+
+```clojure
+(def new-hidden-output-strengths
+  (update-strengths
+       odeltas
+       new-hidden-neurons
+       hidden-output-strengths
+       learning-rate))
+```
+
+## Update the input-hidden strengths
+
+We are going to do the same thing with the input-hidden strengths too.
+
+* weight-change = hdelta * input value
+* new-weight = weight + (learning rate * weight-change)
+
+```clojure
+ (update-strengths
+           hdeltas
+           input-neurons
+           input-hidden-strengths
+           learning-rate)
+;=>  [[0.14996511847614283 0.20551384334705303 0.13377615028650064]
+           [0.01 0.02 0.03]]
+```
+
+These are our new strengths
+
+```clojure
+(def new-input-hidden-strengths
+  (update-strengths
+       hdeltas
+       input-neurons
+       input-hidden-strengths
+       learning-rate))
+```
+
+## Putting the pieces together
+
+We have done it!  In our simple example we have:
+
+* Forward propogated the input to get the output
+* Calculated the errors from the target through backpropogation
+* Updated the connection strengths/ weights
+
+We just need to put all the pieces together. We'll do this with the
+values that we got earlier to make sure it is all working.
+
+### Construct a network representation
+
+It would be nice if we could represent an entire neural network in a
+data structure.  That way the whole tranformation of feeding forward
+and tranining the network could give us a new network back.
+So lets define the data structure as
+[input-neurons input-hidden-strengths hidden-neurons hidden-output-strengths output-neurons].
+
+We will start off with all the values of the neurons being zero.
+
+```clojure
+(def nn [ [0 0] input-hidden-strengths hidden-neurons
+hidden-output-strengths [0 0]])
+```
+
+### Generalized feed forward
+Now we can make a feed forward function that takes this network and
+constructs a new network based on input values and the
+layer-activation function that we defined earlier.
+
+```clojure
+(defn feed-forward [input network]
+  (let [[in i-h-strengths h h-o-strengths out] network
+        new-h (layer-activation input i-h-strengths)
+        new-o (layer-activation new-h h-o-strengths)]
+    [input i-h-strengths new-h h-o-strengths new-o]))
+```
+
+This should match up with the values that we got earlier when we were
+just working on the individual pieces.
+
+```clojure
+(testing "feed forward"
+  (is (== [input-neurons input-hidden-strengths new-hidden-neurons hidden-output-strengths new-output-neurons]
+          (feed-forward [1 0] nn))))
+````
+
+### Generalized update weights / connection strengths
+
+We can make a simliar update-weights function that calculate the
+errors and returns back a new network with the updated weights
+
+```clojure
+(defn update-weights [network target learning-rate]
+  (let [[ in i-h-strengths h h-o-strengths out] network
+        o-deltas (output-deltas target out)
+        h-deltas (hlayer-deltas o-deltas h h-o-strengths)
+        n-h-o-strengths (update-strengths
+                         o-deltas
+                         h
+                         h-o-strengths
+                         learning-rate)
+        n-i-h-strengths (update-strengths
+                         h-deltas
+                         in
+                         i-h-strengths
+                         learning-rate)]
+    [in n-i-h-strengths h n-h-o-strengths out]))
+```
+
+This too should match up with the pieces from the earlier examples.
+
+```clojure
+(testing "update-weights"
+  (is ( == [input-neurons
+            new-input-hidden-strengths
+            new-hidden-neurons
+            new-hidden-output-strengths
+            new-output-neurons]
+           (update-weights (feed-forward [1 0] nn) [0 1] 0.2))))
+```
+
+### Generalized train network
+
+Now we can make a function that takes input and a target and feeds the
+input forward and then updates the weights.
+
+```clojure
+(defn train-network [network input target learning-rate]
+  (update-weights (feed-forward input network) target learning-rate))
+ 
+(testing "train-network"
+  (is (== [input-neurons
+            new-input-hidden-strengths
+            new-hidden-neurons
+            new-hidden-output-strengths
+           new-output-neurons]
+          (train-network nn [1 0] [0 1] 0.2))))
+```
+
+## Try it out!
+
+We are ready to try it out!  Let's train our network on a few examples
+of inversing the data
+
+```clojure
+(def n1 (-> nn
+     (train-network [1 0] [0 1] 0.5)
+     (train-network [0.5 0] [0 0.5] 0.5)
+     (train-network [0.25 0] [0 0.25] 0.5)
+     ))
+```
+
+We'll also make a helper function that just returns the output
+neurons for the feed-forward function.
+
+```clojure
+(defn ff [input network]
+  (last (feed-forward input network)))
+```
+
+Let's look at the results of the untrained and the trained networks
+
+```clojure
+;;untrained
+(ff [1 0] nn) ;=> [0.02315019005321053 0.027608061500083565]
+;;trained
+(ff [1 0] n1) ;=> [0.03765676393050254 0.10552175312900794]
+```
+
+Whoa!  The trained example isn't perfect, but we can see that it is
+getting closer to the right answer.  It is learning!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
