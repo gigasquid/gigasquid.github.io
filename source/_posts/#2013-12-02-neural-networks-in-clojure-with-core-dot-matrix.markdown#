@@ -521,6 +521,8 @@ Now we can construct our network from scratch and train it.
 (ff [1 0] n4) ;=> [-4.954958580800465E-4 0.8160149309699489]
 ```
 
+And that's it.  We have constucted a neural new
+
 
 
 
