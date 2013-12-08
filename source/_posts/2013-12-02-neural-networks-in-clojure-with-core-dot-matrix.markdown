@@ -13,20 +13,20 @@ After having spent some time recently looking at top-down AI, I
 thought I would spend some time looking at bottom's up AI, machine
 learning and neural networks.
 
-I was pleasantly introduced to @mikea's core.matrix at Clojure Conj
+I was pleasantly introduced to [@mikea's](https://twitter.com/mikera) [core.matrix](https://github.com/mikera/core.matrix) at Clojure Conj
 this year and wanted to try making my own neural network using the
-libray. The purpose of this blog is to share my learnings along the
+library. The purpose of this blog is to share my learnings along the
 way.
 
 ## What is a neural network?
 A neural network is an approach to machine learning that involves
 simulating, (in an idealized way), the way our brains work on a
-biologal level.  There a three layers to neural network, the input
+biological level.  There a three layers to neural network: the input
 layer, the hidden layers, and the output layer.  Each layer consists
-of neurons that have a value.  Each neuron in a layer is connected to
-the neuron in the next layer by a connection strength. Inputs between
-the value of 0 and 1 are "fed" through the input layer.  The values
-are then "fed forward" to the hidden layer neurons though an algorithim that
+of neurons that have a value.  In each layer, each neuron is connected to
+the neuron in the next layer by a connection strength. To get data
+into the neural network, you assign values to the input layer, (values
+between 0 and 1). These values are then "fed forward" to the hidden layer neurons though an algorithm that
 relies on the input values and the connection strengths. The values
 are finally "fed forward" in a similar fashion to the output layer.
 The "learning" portion of the neural network comes from "training" the
@@ -47,7 +47,7 @@ just by exposing it to data.
 
 ## Start Small
 I wanted to start with a very small network so that I could understand
-the algorithims and actually do the maths for the tests along the way.
+the algorithms and actually do the maths for the tests along the way.
 The network configuration I chose is one with 1 hidden layer.  The
 input layer has 2 neurons, the hidden layer has 3 neurons and the
 output layer has 2 neurons.
@@ -104,7 +104,7 @@ Alright, we have values in the input neuron layer, let's feed them
 forward through the network. The new value of neuron in the hidden
 layer is the sum of all the inputs of it's connections multiplied by
 the connection strength.  The neuron can also have it's own threshold,
-(meaning you would subtact the threshold from the sum of inputs), but
+(meaning you would subtract the threshold from the sum of inputs), but
 to keep things a simple as possible in this example, the threshold is
 0 - so we will ignore it.  The sum is then feed into an activation
 function, that has an output in the range of -1 to 1.  The activation
@@ -117,7 +117,7 @@ will define both here.
 (def dactivation-fn (fn [y] (- 1.0 (* y y))))
 
 (defn layer-activation [inputs strengths]
-  "forward propogate the input of a layer"
+  "forward propagate the input of a layer"
   (mapv activation-fn
       (mapv #(reduce + %)
        (* inputs (transpose strengths)))))
@@ -154,7 +154,7 @@ Alright!  We have our answer
 Notice that the values are pretty much the same.  This is because we
 haven't trained our network to do anything yet.
 
-## Backwards Propogation
+## Backwards Propagation
 
 To train our network, we have to let it know what the answer,(or
 target), should be, so we can calculate the errors and finally update
@@ -313,8 +313,8 @@ values that we got earlier to make sure it is all working.
 ### Construct a network representation
 
 It would be nice if we could represent an entire neural network in a
-data structure.  That way the whole tranformation of feeding forward
-and tranining the network could give us a new network back.
+data structure.  That way the whole transformation of feeding forward
+and training the network could give us a new network back.
 So lets define the data structure as
 [input-neurons input-hidden-strengths hidden-neurons hidden-output-strengths output-neurons].
 
@@ -349,7 +349,7 @@ just working on the individual pieces.
 
 ### Generalized update weights / connection strengths
 
-We can make a simliar update-weights function that calculate the
+We can make a similiar update-weights function that calculate the
 errors and returns back a new network with the updated weights
 
 ```clojure
@@ -520,6 +520,28 @@ Now we can construct our network from scratch and train it.
 (def n5 (train-data tnn (repeatedly 1000 inverse-data) 0.2))
 (ff [1 0] n4) ;=> [-4.954958580800465E-4 0.8160149309699489]
 ```
+
+And that's it.  We have constucted a neural network with core.matrix
+
+
+## Want more?
+
+I put together a github library based on the neural network code in
+the posts.  It is called [K9](https://github.com/gigasquid/k9), named
+after Dr. Who's best dog friend.  You can find the examples we have
+gone through in the tests.  There is also an example program using it
+in the examples directory.  It learns what colors are based on thier
+RGB value.
+
+There are a couple web resources I would recommend if you want to look
+farther as well.
+
+* [Basic Network Tutorial](http://takinginitiative.wordpress.com/2008/04/03/basic-neural-network-tutorial-theory/)
+*  [Mike Anderson's Clojure Conj talk on Neural Networks](http://www.youtube.com/watch?v=QJ1qgCr09j8&feature=player_embedded)
+
+
+Go forth and create Neural Networks!
+
 
 
 
