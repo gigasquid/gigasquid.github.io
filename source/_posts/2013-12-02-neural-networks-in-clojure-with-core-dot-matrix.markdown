@@ -220,7 +220,7 @@ Great let's remember the hidden layer error deltas for later
               hidden-output-strengths))
 ```
 
-## Updating the connection strengths
+### Updating the connection strengths
 
 Great!  We have all the error deltas, now we are ready to go ahead and
 update the connection strengths.  In general this is the same process
@@ -271,7 +271,7 @@ Of course, let's remember these values too
        learning-rate))
 ```
 
-## Update the input-hidden strengths
+### Update the input-hidden strengths
 
 We are going to do the same thing with the input-hidden strengths too.
 
