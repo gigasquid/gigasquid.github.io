@@ -71,19 +71,19 @@ In this example we have:
 * Hidden Neurons: neuron1 neuron2 neuron3
 * Output Neurons: neuronC neuronD
 * Connections between the Input and Hidden Layers
-  ** neuronA-neuron1
-  ** neuronA-neuron2
-  ** neuronA-neuron3
-  ** neuronB-neuron1
-  ** neuronB-neuron2
-  ** neuronB-neuron3
+    * neuronA-neuron1
+    * neuronA-neuron2
+    * neuronA-neuron3
+    * neuronB-neuron1
+    * neuronB-neuron2
+    * neuronB-neuron3
 * Connections betwen the Hidden and Output Layers
-  ** neuron1-nerounC
-  ** neuron1-nerounD
-  ** neuron2-nerounC
-  ** neuron2-nerounD
-  ** neuron3-nerounC
-  ** neuron3-nerounD
+    * neuron1-nerounC
+    * neuron1-nerounD
+    * neuron2-nerounC
+    * neuron2-nerounD
+    * neuron3-nerounC
+    * neuron3-nerounD
 
 To give us a concrete example to work with, let's actually assign all
 our neurons and connection strengths to some real values.
@@ -195,7 +195,7 @@ found from the output layer.  In fact, for each hidden neuron, the
 error delta is the gradient of the activation function multiplied by
 the weighted sum of the ouput deltas of connected ouput neurons and
 it's connection strength.  This should remind you of the forward
-propogation of the inputs - but this time we are doing it backwards
+propagation of the inputs - but this time we are doing it backwards
 with the error deltas.
 
 ```clojure
@@ -303,7 +303,7 @@ These are our new strengths
 
 We have done it!  In our simple example we have:
 
-* Forward propogated the input to get the output
+* Forward propagated the input to get the output
 * Calculated the errors from the target through backpropogation
 * Updated the connection strengths/ weights
 
