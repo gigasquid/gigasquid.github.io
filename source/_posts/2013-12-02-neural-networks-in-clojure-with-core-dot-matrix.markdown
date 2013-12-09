@@ -102,8 +102,8 @@ our neurons and connection strengths to some real values.
 
 Alright, we have values in the input neuron layer, let's feed them
 forward through the network. The new value of neuron in the hidden
-layer is the sum of all the inputs of it's connections multiplied by
-the connection strength.  The neuron can also have it's own threshold,
+layer is the sum of all the inputs of its connections multiplied by
+the connection strength.  The neuron can also have its own threshold,
 (meaning you would subtract the threshold from the sum of inputs), but
 to keep things a simple as possible in this example, the threshold is
 0 - so we will ignore it.  The sum is then feed into an activation
