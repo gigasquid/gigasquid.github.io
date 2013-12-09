@@ -21,7 +21,7 @@ way.
 ## What is a neural network?
 A neural network is an approach to machine learning that involves
 simulating, (in an idealized way), the way our brains work on a
-biological level.  There a three layers to neural network: the input
+biological level.  There are three layers to neural network: the input
 layer, the hidden layers, and the output layer.  Each layer consists
 of neurons that have a value.  In each layer, each neuron is connected to
 the neuron in the next layer by a connection strength. To get data
