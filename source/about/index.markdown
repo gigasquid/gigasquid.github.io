@@ -20,6 +20,6 @@ When I am left to daydream, I think of the dynamics of flocks of birds, what the
 * I work for [Neo](http://www.neo.com/)
 * I have a [Github](https://github.com/gigasquid)
 * and a [Linked In Page](http://www.linkedin.com/in/carinmeier)
-* and a [Twitter Account](http://twitter.com/#!/carinmeier)
+* and a [Twitter Account](http://twitter.com/#!/gigasquid)
 
 Want to chat? [Email me](mailto:carinmeier@gmail.com)
