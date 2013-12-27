@@ -41,7 +41,7 @@ comparable to the Mac Air.
 
 {% img  http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg %}
 
-## Hope on the Bus, Gus
+## Hop on the Bus, Gus
 
 It took my about a day to set up all my programs that I use on a daily
 basis.
