@@ -73,7 +73,9 @@ Mail.  You simply put in your email and password.  Ubuntu keeps a
 configuration list of commonly used email providers.  It automagically
 figured out the correct domains and ports to use. On the downside, it
 doesn't do anything magic with your contacts. So you are on your own
-there.
+there.  I also just found out about
+[Geary](http://www.omgubuntu.co.uk/2013/10/geary-0-4-released-with-new-look-new-features),
+which looks pretty sweet.
 
 #### Password Management - 1 Password Anywhere + Dropbox / LastPass
 There is not a linux client for 1Password. I can still use it by using
@@ -95,6 +97,18 @@ things you need.
 [Byobu Terminal](http://byobu.co/) comes already installed in Ubuntu. I have been taking
 it for a test drive and really like some of the features of easily
 adding new tabs, splitting screens and re-attaching to sessions.
+
+#### Evernote/ Everpad
+With
+[Everpad](http://www.omgubuntu.co.uk/2012/09/use-evernote-in-ubuntu-with-everpad),
+I can still use all my evernote stuff too.
+
+#### Presentations -
+I have used Keynote heavily on the Mac.  For existing presentations, I
+can convert them to ppt format and then modify or run in LibreOffice
+Impress. Most likely with all my new presentations, I will just use a
+JavaScript framework like [reveal.js](http://lab.hakim.se/reveal-js/#/)
+
 
 #### Communication - Hipchat / Skype/ Google Hangouts / Campfire
 We use Hipchat for messaging at work.  Hipchat has a linux client
