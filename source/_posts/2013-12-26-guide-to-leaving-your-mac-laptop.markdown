@@ -103,7 +103,7 @@ With
 [Everpad](http://www.omgubuntu.co.uk/2012/09/use-evernote-in-ubuntu-with-everpad),
 I can still use all my evernote stuff too.
 
-#### Presentations -
+#### Presentations - LibreOffice / Reveal.js
 I have used Keynote heavily on the Mac.  For existing presentations, I
 can convert them to ppt format and then modify or run in LibreOffice
 Impress. Most likely with all my new presentations, I will just use a
