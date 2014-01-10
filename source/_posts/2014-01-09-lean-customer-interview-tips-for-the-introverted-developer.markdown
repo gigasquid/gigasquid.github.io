@@ -70,6 +70,9 @@ much they would pay for it.
 Memory is a fleeting thing.  Try to record the results of your
 conversation right away.  Take the notepad from your pocket and go to
 a corner or table and note everything down, before you forgot it all.
+Also try to write down what the person said, not just your
+interpretation. If someone is helping you interview, you can have one
+person be a scribe, while one person talks.
 
 ### Tip #5 - Give Gifts
 If you have any funding available for this endeavor, you can get a
