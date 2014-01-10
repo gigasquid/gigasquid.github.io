@@ -94,4 +94,6 @@ We could move on to testing and validating another idea that could be a viable b
 
 Build things that matter.  Build well. Build the right things.
 
+##### Thanks to Scott Burwinkel for helping review this post for me - you rock
+
 
