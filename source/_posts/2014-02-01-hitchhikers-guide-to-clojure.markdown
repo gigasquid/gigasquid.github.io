@@ -10,7 +10,7 @@ categories:
 {% img http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg %}
 
 _The following is a cautionary example of the unpredictable
-combination of Clojure, marathon viewing of the BBC's series "The
+combination of Clojure, a marathon viewing of the BBC's series "The
 Hitchhiker's Guide to the Galaxy", and a questionable amount of
 cheese._
 
@@ -123,21 +123,22 @@ The whole thing of having to have a function in front of the nut in
 the pistachio has invited much heated debate on the suitability of
 pistachios being held up as the paragon of an s-expression.  But
 critics have failed to explain the corroborating evidence of red
-pistachio nuts or find a more suitable nut.
+pistachio nuts, or find a more suitable nut.
 
 Amy's time traveling friend, Frank, is due to appear on the scene
 momentarily to reveal that the whole world is really made of Clojure
-[Datomic](http://www.datomic.com/) datoms.  Furthermore a transaction
+[Datomic](http://www.datomic.com/) datoms.  Furthermore, a transaction
 is going to be evaluated soon, which will retract all the facts on
 EVERYTHING. The practical effect of this will be that nothing will
 have an attributes. A world without any attributes at all would be
-quite boring and for all purposes, be non-existent. Luckily for Amy, Frank is a Datomic Time
+quite boring and, for all purposes, be non-existent. Luckily for Amy, Frank is a Datomic Time
 Traveller and has a hand-held "evaluator" which will save them. Also
-luckily for the readers, you will be spared dialog, since the author
+luckily, the readers will be spared dialog, since the author
 can never figure out where to put the punctuation and is really
 rubbish at it.  Only one phrase will be illustrated.  This is the
 rather important one, having been uttered by Amy after it was explained to her
-that she and the world around her was entirely created by Clojure:
+that she, and the entire world around her, was entirely composed of
+Clojure:
 
 "Isn't that the language with a lot of parens?"
 
