@@ -115,15 +115,14 @@ the first slot._
 
 ```clojure
 ("nut1")
-;;=> ClassCastException java.lang.String cannot be cast to
-clojure.lang.IFn
+;;=> ClassCastException java.lang.String cannot be cast to clojure.lang.IFn
 ```
 
-The whole thing of having to have a function in front of the nut in
+_The whole thing of having to have a function in front of the nut in
 the pistachio has invited much heated debate on the suitability of
 pistachios being held up as the paragon of an s-expression.  But
 critics have failed to explain the corroborating evidence of red
-pistachio nuts, or find a more suitable nut.
+pistachio nuts, or find a more suitable nut._
 
 Amy's time traveling friend, Frank, is due to appear on the scene
 momentarily to reveal that the whole world is really made of Clojure
