@@ -30,7 +30,7 @@ very large letters: **Don't Worry About the Parens**.
 
 To tell the story of the book, it is best to tell the story of two
 people whose lives were affected by it: Amy Denn, one of the last
-remaining [Pascal](http://en.wikipedia.org/wiki/Pascal_(programming_language) developers in Cincinnnati, and Frank Pecan, a time
+remaining [Pascal](http://en.wikipedia.org/wiki/Pascal_(programming_language) developers in Cincinnati, and Frank Pecan, a time
 traveler, guidebook reseacher, and friend of Amy.
 
 Amy, at this moment, was completely unaware of the chronological
