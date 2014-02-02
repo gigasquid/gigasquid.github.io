@@ -30,7 +30,7 @@ very large letters: **Don't Worry About the Parens**.
 
 To tell the story of the book, it is best to tell the story of two
 people whose lives were affected by it: Amy Denn, one of the last
-remaining [Pascal](http://en.wikipedia.org/wiki/Pascal_(programming_language)) developers in Cincinnnati, and Frank Pecan, a time
+remaining [Pascal](http://en.wikipedia.org/wiki/Pascal_(programming_language) developers in Cincinnnati, and Frank Pecan, a time
 traveler, guidebook reseacher, and friend of Amy.
 
 Amy, at this moment, was completely unaware of the chronological
@@ -57,7 +57,7 @@ s-expression is recursively composed of s-expressions or an atom.
 In the case of the humble pistachio, the atom is the nut inside. The
 atom simply evaluates to itself.  This is best seen is an example
 where the following expressions are evaluated in the Clojure
-[REPL](http://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop)_
+[REPL](http://tryclj.com/)_
 
 ```clojure
 "hi" ;;=> "hi"
@@ -84,7 +84,7 @@ _Considering the pistachio again, we can think of the nut in the shell
 as an s-expression, (providing we also imagine an operator or function
 right in front of the nut)._
 
-_Here we define a function that will turn the nut red. By appending the
+_Here we define a function that will turn the nut red, by appending the
 string "red" to the nut-name._
 
 ```clojure
@@ -128,7 +128,7 @@ pistachio nuts or find a more suitable nut.
 Amy's time traveling friend, Frank, is due to appear on the scene
 momentarily to reveal that the whole world is really made of Clojure
 [Datomic](http://www.datomic.com/) datoms.  Furthermore a transaction
-is going to be evaluated which will retract all the facts on
+is going to be evaluated soon, which will retract all the facts on
 EVERYTHING. The practical effect of this will be that nothing will
 have an attributes. A world without any attributes at all would be
 quite boring and for all purposes, be non-existent. Luckily for Amy, Frank is a Datomic Time
@@ -147,7 +147,7 @@ Parens."**, and turned to the first page.
 
 *"There is absolutely no need to worry about the parens. It is known
  today that the first really important discovery of humankind was not
- fire,but [Paredit](http://www.emacswiki.org/emacs/ParEdit).  Paredit
+ fire, but [Paredit](http://www.emacswiki.org/emacs/ParEdit).  Paredit
  mode magically acts to insert and balance the right parens to the
  point where they actually can no longer be seen.  This is evident by
  just looking around you. The world is made of Clojure and there are
