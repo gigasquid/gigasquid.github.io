@@ -10,7 +10,7 @@ categories:
 ---
 
 Amy and Frank were hurtled quite rapidly through time and space after
-attaching themselves to a transaction hurtling through the
+attaching themselves to a transaction headed through the
 [Datomic Transactor](http://docs.datomic.com/transactions.html). From
 there things slowed down a bit, then took a sharp left and
 ricocheted off again with incredible speed until they landed in another
@@ -67,6 +67,12 @@ the days before passing it to the recursive function._
 
 _The result of which was severely overwatered tomatoes._
 ```clojure
+(defn rain [days]
+  (when (pos? days)
+    (println (str "Rain: " days))
+    (rain days)))
+ 
+(rain 5)
 ;;  Rain: 5
 ;;  Rain: 5
 ;;  Rain: 5
@@ -82,15 +88,15 @@ _It is interesting to note that he could he written the same function with a
 (defn rain [days]
   (when (pos? days)
     (println (str "Rain: " days))
-    (recur (dec days))))
+    (recur days)))
    
 (rain 5)
 ;;Output
 ;;  Rain: 5
-;;  Rain: 4
-;;  Rain: 3
-;;  Rain: 2
-;;  Rain: 1
+;;  Rain: 5
+;;  Rain: 5
+;;  Rain: 5
+;;  Rain: 5
 ```
 
 _That would have had the nice effect of not consuming the stack, (which
@@ -140,8 +146,11 @@ required to stick to the safer, higher level abstractions like
 [map](http://clojuredocs.org/clojure_core/clojure.core/map), or
 [reduce](http://clojuredocs.org/clojure_core/clojure.core/reduce)._
 
-Frank, still busily rumaging through his pack, finally found what he
-was looking for. He hand emerging triumphantly with a fistful of mini-marshmallows.
+Amy was still watching Frank busily rumaging through his pack in the
+office. Finally
+he found what he
+was looking for, his hand emerging triumphantly with a fistful of
+mini-marshmallows.
 
 
 "Got it. Come on, let's go! Someone is trying to destroy the world and
