@@ -29,7 +29,7 @@ with the pistachios in her pocket and finally said,
 Frank, who was busily hunting through his blue zippered pack around
 his waist, looked up briefly.
 
-"Well, we better get out of here than, I only have a blue fanny pack."
+"Well, we better get out of here then, I only have a blue fanny pack."
 
 {% img http://img.rakuten.com/PIC/37504308/0/1/500/37504308.jpg %}
 
@@ -147,7 +147,7 @@ required to stick to the safer, higher level abstractions like
 [reduce](http://clojuredocs.org/clojure_core/clojure.core/reduce)._
 
 Amy was still watching Frank busily rumaging through his pack in the
-office. Finally
+office . Finally
 he found what he
 was looking for, his hand emerging triumphantly with a fistful of
 mini-marshmallows.
