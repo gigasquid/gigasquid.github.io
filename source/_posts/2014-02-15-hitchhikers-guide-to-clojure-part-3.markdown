@@ -17,25 +17,27 @@ the front door.
 
 "Oh good, we can take your car", said Frank.
 
-Amy recovered quickly from the shock of seeing what her hair really
-looked like from behind and asked, "How can we get to the car, the door is locked, and I
-can't go back up to the office and meet myself."
+Amy took a second to recover from the shock of seeing what her hair really
+looked like from behind and then asked, "How can we get to the car?  The door is locked, and we
+can't go back up to the office. I would meet myself."
 
 Frank smiled, pulled out the _Hitchhiker's Guide to Clojure_ and
 pulled up a page with the heading _Locked Doors and Other Small
 Bothers_.
 
-One of the reasons for the surprising success of _The Hitchhiker's Guide
-to Clojure_ is helpful advice of on an assortment of practical
-matters.
-
 {% img http://farm4.staticflickr.com/3346/3191331375_a773bff1b7_n.jpg %}
 
+
+
+_One of the reasons for the surprising success of **The Hitchhiker's Guide
+to Clojure** is helpful advice of on an assortment of practical
+matters._
+
 _Locked doors are a common nuisance in modern times.  Fortunately,
-Clojure provides a very handy function for such occasions - *fnil*.
+Clojure provides a very handy function for such occasions [fnil](http://clojuredocs.org/clojure_core/1.2.0/clojure.core/fnil).
 This commonly overlooked function, takes an existing function and
 returns a new function that allows you to specify a default
-for a nil parameter. For example, take this locked door function:_
+for a nil parameter. For example, take this locked door:_
 
 
 ```clojure
@@ -46,8 +48,8 @@ for a nil parameter. For example, take this locked door function:_
 (locked-door nil) ;=> "nope - staying shut"
 ```
 
-Simply apply the *fnil* and what you really want to happen when you
-don't have the key, and you will be on your way.
+_Don't worry, simply apply the fnil and what you really want to happen when you
+don't have the key, and you will be on your way._
 
 ```clojure
 (def this-door (fnil locked-door :another-key-that-works))
@@ -59,14 +61,15 @@ don't have the key, and you will be on your way.
 They unlocked the door and headed for Amy's car.  She couldn't decide
 whether she was surprised or not to find her keys in her pocket, so
 she gave up and just got in instead.  After a short drive, they
-arrived at the zoo and managed to navigate their way through various
+arrived at the zoo and navigated their way through various
 school groups and arrive at the Aquarium.
 
 Amy at this point, having prided herself on her adaptable nature, was
-still having trouble processing the latest events that had her
-discover that not only that world was made of Clojure, but it was also
-about to be destroyed in a short future from which she has traveled
-back in time.  Her rational brain, which was currently working way too hard, was
+still having trouble processing the latest events. She had
+discovered that Frank was a Datomic time traveller,  the  world was
+made of Clojure, and it was also about to be destroyed in a short
+future that she just came from.  Her rational brain, (which was
+currently working way too hard), was quite
 relieved to be distracted by the sight of two really adorable otters.  They were floating
 contentedly around the pool, occasionally stopping to crack an Abalone
 shell on their fuzzy tummies.
@@ -74,7 +77,7 @@ shell on their fuzzy tummies.
 {% img http://cdn.zmescience.com/wp-content/uploads/2012/09/sea-otters.jpg %}
 
 Her rational brain, after having a nice breather, finally re-asserted
-itself and made Amy ask:
+itself and made Amy ask Frank:
 
 "Why are we here?"
 
