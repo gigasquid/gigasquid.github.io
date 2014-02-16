@@ -6,6 +6,7 @@ comments: true
 categories:
 - All
 - Clojure
+- Hitchhiker's Guide to Clojure
 ---
 {% img http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg %}
 
