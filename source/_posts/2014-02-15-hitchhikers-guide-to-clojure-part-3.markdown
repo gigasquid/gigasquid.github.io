@@ -9,17 +9,18 @@ categories:
 - Hitchhiker's Guide to Clojure
 ---
 
-Amy and Frank ran down the stairs of her work, but came to an
-unexpected stop at the side door to the parking lot.  It was locked.  As
+Amy and Frank fled down the stairs from her office and met an
+unexpected obstacle to their exit, a locked door.  As
 they peered out the window, they saw yesterday's Amy pull up in the
-parking space, get out and retrieve her laptop, and start to head in
+parking space, get out, retrieve her laptop, and start to head in
 the front door.
 
 "Oh good, we can take your car", said Frank.
 
 Amy took a second to recover from the shock of seeing what her hair really
-looked like from behind and then asked, "How can we get to the car?  The door is locked, and we
-can't go back up to the office. I would meet myself."
+looked like from behind and then asked, "But, how can we get to it?
+The door is locked, and we
+can't go back up to the office... I would meet myself."
 
 Frank smiled, pulled out the _Hitchhiker's Guide to Clojure_ and
 pulled up a page with the heading _Locked Doors and Other Small
@@ -34,7 +35,7 @@ to Clojure** is helpful advice of on an assortment of practical
 matters._
 
 _Locked doors are a common nuisance in modern times.  Fortunately,
-Clojure provides a very handy function for such occasions [fnil](http://clojuredocs.org/clojure_core/1.2.0/clojure.core/fnil).
+Clojure provides a very handy function for such occasions, [fnil](http://clojuredocs.org/clojure_core/1.2.0/clojure.core/fnil).
 This commonly overlooked function, takes an existing function and
 returns a new function that allows you to specify a default
 for a nil parameter. For example, take this locked door:_
@@ -48,8 +49,8 @@ for a nil parameter. For example, take this locked door:_
 (locked-door nil) ;=> "nope - staying shut"
 ```
 
-_Don't worry, simply apply the fnil and what you really want to happen when you
-don't have the key, and you will be on your way._
+_In this case, the simple application of fnil will help remove this
+pesky obstacle._
 
 ```clojure
 (def this-door (fnil locked-door :another-key-that-works))
@@ -57,6 +58,10 @@ don't have the key, and you will be on your way._
 (this-door :key) ;=> "open"
 (this-door nil) ;=> open
 ```
+
+_Please be advised, that some doors are locked for a good reason. It
+is left to the user's discretion. But it is highly recommended in Norway's
+moose regions, to think twice._
 
 They unlocked the door and headed for Amy's car.  She couldn't decide
 whether she was surprised or not to find her keys in her pocket, so
@@ -87,7 +92,7 @@ He went on to explain that otters are tasked with the important job of
 keeping a close watch on human civilization and making critical, minor
 adjustments to keep things on an even track.  All those nature videos
 of otters cracking shells with rocks?  They are really evaluating
-crucial Clojure expressions to our way of life. Most of the time, they
+Clojure expressions crucial to our way of life. Most of the time, they
 prefer to do their work remote.  They find floating on their backs in
 the peaceful waters the most productive work environment.  However,
 sometimes they will construct zoos or aquariums, when their work
@@ -97,29 +102,31 @@ one of their agents was inadvertently
 [exposed](https://i.chzbgr.com/maxW500/6003866624/h0B1E03BF/) and
 required a few extra Abalone shells to straighten out.
 
-Frank then opened his pack and handed his evaluator to Amy to hold
+Frank opened his pack and handed his evaluator to Amy to hold
 while fished out four mini-marshmallows.  He gave two to Amy and then
 proceeded to put one in his ear and the other in his mouth.  More
 remarkably still, he appeared to be speaking with the otters.
 
 _Mini-marshmallows are the best way to create portable Clojure
 [core.async](https://github.com/clojure/core.async) channels that
-won't melt in your hands.
+won't melt in your hands._
 
-To construct a channel simply use *chan*
+_To construct a channel simply use *chan*_
 
 ```clojure
 (def talk-to-otters-chan (chan))
 ```
 
-Channels by default are unbuffered, which keeps them at the
-mini-marshmallow size.  It requires a rendezvous of someone to talk to
-the otters and the otters to listen. In fact if we try to talk to
-an otter - it would block the main thread until the otter got
-around to listening.  This would be very boring for the talker if the
+_Channels by default are unbuffered, which keeps them at the
+mini-marshmallow size.  It requires a rendezvous of a channel producer
+and consumer to communicate.  In the case of otters, someone to talk to
+the otters and the otters, themselves, to listen. Be advised that with
+a regular blocking put **>!!**, the main thread will be blocked.
+That is, if you try to speak to the otter, you will be stuck there
+until it gets around to listening. This isn't the best case for the talker if the
 otter was busy, so one approach would be to use a
 [future](http://clojuredocs.org/clojure_core/clojure.core/future) to
-talk to the otter with a blocking put *>!!*.
+talk to the otter with a blocking put *>!!*._
 
 ```clojure
 (future (>!! talk-to-otters-chan "Hello otters.")) ;=>#<Future@3c371c41: :pending>
@@ -138,10 +145,10 @@ the marshmallow.
 (<!! talk-to-otters-chan) ;=> "Do you know anything about the world ending?"
 ```
 
-The best way to conserve space and time is to use asynchronous
-communication with *go* blocks that wont' block our threads. Inside
-these go blocks we can use regular non-blocking puts *>!* and gets
-*<!*.
+_The best way to conserve space and time is to use asynchronous
+communication with *go* blocks that wont' block the threads. Inside
+these go blocks one can use regular non-blocking puts **>!** and gets
+**<!**._
 
 ```clojure
 (def talk-to-otters-chan (chan))
@@ -157,9 +164,9 @@ Do you know anything about the world ending?
 Also, you are really fuzzy and cute.
 ```
 
-This compact, lightweight, and asynchronus method of communication is
+_This compact, lightweight, and asynchronous method of communication is
 well suited to conversations and messaging of all sorts, including
-conversing with otters.
+conversing with human, animals, and other Clojure-based life forms._
 
 ```clojure
 (def talk-chan (chan))
