@@ -6,6 +6,8 @@ comments: true
 categories: 
 ---
 
+{% img https://newcontext-production.s3.amazonaws.com/portrait/jim-weirich/medium_78048abb24eadb2017034c5ee10826f9.jpg %}
+
 You don't really understand how important someone is in your life
 until they are suddenly gone. I have had the honor and privilege of
 working, playing, and laughing alongside Jim Weirich for the last few
@@ -14,38 +16,39 @@ years.  He was an amazing man.  I miss him dearly.
 ##Think##
 Jim taught us how to think about computer programming. I once had a
 Physics professor tell me not to worry so
-much about the formulas and math. The most important thing he wanted
-to teach me was how to **think**, and everything thing after that would
-naturally fall into place.  Jim embodied that that philosophy for
+much about the formulas and math. The most important thing was how to
+**think**.
+Everything thing after that would
+naturally fall into place.  Jim embodied that philosophy for
 programming.  The languages and algorithms poured almost
-effortlessly from his masterful fingers.  He knew how to think about
-the problem, observe from a multitude of angles, and bring his
-experience, creativity, and humility to bear on it and shape it into
+effortlessly from his masterful fingers.  He knew how to **think** about
+the problem, observe from a multitude of angles.  Finally, bringing his
+experience, creativity, and humility to bear on it, he would shape it into
 a beautiful piece of code.
 
 ##Make##
 Jim showed us how to make. He was a master craftsman and a maker. The
 care and joy that infused his work was inspiring.  He loved the
-process of Test Driven Development. Green tests were a always a
+process of Test Driven Development. Green tests were always a
 celebration. The surprise of beautiful code emerging from a
-refactoring was a treating as a gift.  He is best known for his
+refactoring was treated as a gift.  He is best known for his
 [Rake](https://github.com/jimweirich/rake) build tool, but his testing
 library [rspec-given](https://github.com/jimweirich/rspec-given) is
-one that reminds me most of him and the way that he loved to create code.
+one that reminds me most of him and the way that he loved to craft code.
 
 ##Care##
 Jim showed us how to care.  Jim cared deeply about each and every
 person.  While flying his drone in the office hallway, he would wave
 down a passing building maintenance worker and ask if they wanted to
 fly it.  Over the course of the next few minutes, Jim would put them
-completely at ease and chat happily with them. . He was like that to
+completely at ease and chat happily with them.  He was like that to
 **everyone**.  In the few days after
 his passing, many building workers, and people from other offices, that
 I only ever nodded at in passing, stopped by to give their sincere
 condolences his loss. He is without a doubt, the kindest person I have
 ever known.  He took great joy in his faith and in his family.  He
 would talk about his family all the time and how much they enjoyed
-each others company.  He is without a doubt, one of the richest men I have ever known.
+each others company.  He is without a doubt, one of the personally richest men I have ever known.
 
 
 ##Share##
@@ -69,7 +72,7 @@ micro-quadcopters like the
 We had plans to make all our Spheros, Roombas, big drones, and little
 drones dance to live coded music. We were both auditing on
 [Autonomous Mobile Robots](https://www.edx.org/course/ethx/ethx-amrx-autonomous-mobile-robots-1342)
-to see what we could learn to help us with our robot quests.
+to see what we could learn to help us with our robot dreams.
 
 
 I miss him dearly.  I will cherish my memories of him and I am so
