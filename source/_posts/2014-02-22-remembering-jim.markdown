@@ -61,7 +61,7 @@ countless others were drawn to Ruby and the Ruby community.
 
 
 ##Dream##
-Jim dreamed with us.  Jim was a creative. He was also a singer, song
+Jim dreamed with us.  He was a creative. He was also a singer, song
 writer, musician, and artist.  He brought that creative spirit,
 curiosity, and love of learning to the technical world. I will cherish
 our lunches spent together flying our AR Drones, sometimes crashing
