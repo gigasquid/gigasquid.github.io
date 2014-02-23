@@ -68,7 +68,7 @@ our lunches spent together flying our AR Drones, sometimes crashing
 them into walls and each other, while trying to find creative ways of
 controlling them with code.  He was just lately exploring with the
 micro-quadcopters like the
-[crazyflie](http://www.bitcraze.se/crazyflie/).
+[Proto-X](http://www.amazon.com/Estes-4606-Proto-Quadcopter-Black/dp/B00G924W98).
 We had plans to make all our Spheros, Roombas, big drones, and little
 drones dance to live coded music. We were both auditing on
 [Autonomous Mobile Robots](https://www.edx.org/course/ethx/ethx-amrx-autonomous-mobile-robots-1342)
