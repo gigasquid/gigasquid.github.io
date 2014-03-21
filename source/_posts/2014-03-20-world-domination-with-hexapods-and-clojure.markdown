@@ -22,7 +22,7 @@ content with city, state, or single country domination, other editors
 that support Clojure are also fine.
 
 
-## Connect the XBee to your computera
+## Connect the XBee to your computer
 
 First, we need to get the computer to talk to the hexapod wirelessly.
 We can do this with a [USB to Serial adapter](http://www.trossenrobotics.com/uartsbee)
