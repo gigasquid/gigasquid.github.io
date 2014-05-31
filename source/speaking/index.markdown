@@ -10,10 +10,12 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
+* [Strange Loop 2014](https://thestrangeloop.com/): Our Shared Joy of Programming
 
 
 ## Past Talks
-
+* [Solid Con 2014](https://www.youtube.com/watch?v=sHK4v5MimJs) Real
+  Time Robot Dance Party
 * [Code Mesh 2013](http://codemesh.io/): The Joy of Flying Robots with Clojure
 * [Clojure Exchange 2013](http://skillsmatter.com/event/java-jee/clojure-exchange-2013): Learning to talk to machines with speech acts - a shipwreck adventure
 * [Clojure Conj 2013](http://clojure-conj.org/): Learning to talk to
