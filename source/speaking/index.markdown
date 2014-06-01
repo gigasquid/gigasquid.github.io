@@ -14,8 +14,7 @@ be Clojure, Robots, and AI lately.
 
 
 ## Past Talks
-* [Solid Con 2014](https://www.youtube.com/watch?v=sHK4v5MimJs) Real
-  Time Robot Dance Party
+* Solid Con 2014 Keynote: Real Time Robot Dance Party {% youtube sHK4v5MimJs %}
 * [Code Mesh 2013](http://codemesh.io/): The Joy of Flying Robots with Clojure
 * [Clojure Exchange 2013](http://skillsmatter.com/event/java-jee/clojure-exchange-2013): Learning to talk to machines with speech acts - a shipwreck adventure
 * [Clojure Conj 2013](http://clojure-conj.org/): Learning to talk to
