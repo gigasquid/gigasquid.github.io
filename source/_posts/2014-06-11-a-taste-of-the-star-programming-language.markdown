@@ -9,7 +9,7 @@ categories:
 ---
 
 A while ago, I was [exploring creating a programming language with
-Instaparse](http://gigasquidsoftware.com/blog/2013/05/01/growing-a-language-with-clojure-and-instaparse/).
+Instaparse](http://gigasquidsoftware.com/blog/2013/05/01/growing-a-language-with-haskell-and-instaparse/).
 I ended up exploring some concepts of Speech Acts proposed by John
 McCarthy by creating my first toy language called
 [Babar](http://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/).
@@ -23,20 +23,27 @@ composing an reply to the email that started off with
 Then I realized that the author of the email and language was none
 other than
 [Frank McCabe](http://en.wikipedia.org/wiki/Go!_(programming_language)),
-one of the designers of the Go programming language.  My immediate
-thought was, "OMG!!!! Frank McCabe is talking to me".  This
-unfortunately, made the rest of my email reply sound something like
+one of the designers of the Go programming language.  My brain froze
+while it was thinking
+
+    "OMG!!!! Frank McCabe just email me!".
+
+This unfortunately, made the rest of my email reply sound something like
 this
 
-  ...  herp derp derp Speech Acts herp derp John McCarthy derp...
+    Frank,
+    That is so cool!  herp derp derp Speech Acts herp derp John
+    McCarthy derp...
+    
 
-His programming language that was talking about was the Star
-Programming Language.  It originated for use at a company that he
+His programming language is the Star
+Programming Language.  It was originally developed for use at a company that he
 worked at called Starview.  It has since been open sourced and moved
 to [git](https://github.com/fmccabe/star).  I finally had a bit a
-spare time to play in a new language, and I had been itching to give
-Star a look.  To my pleasant surprise, Frank was open a friendly to
-get me started in it, despite my initial fumbling email impression.
+spare time and I had been itching to give
+Star a look.  To my pleasant surprise, despite my initial fumbling
+email impression,  Frank was open a friendly to
+get me started in it.
 I have only scratched the surface in exploring the language, but I
 wanted to share my initial impressions, as well as point you to some
 [beginner katas](https://github.com/gigasquid/star-lang-katas) that I
@@ -48,20 +55,22 @@ Star is a strongly typed, functional language. It is not a pure
 functional language because is allows assignment and stateful objects,
 but the language is designed in a way that immutable functional
 programming is encouraged. The feel of the language is concise but
-human readable [1](http://dl.acm.org/citation.cfm?id=2500837&dl=ACM&coll=DL&CFID=354902651&CFTOKEN=90319052)
+human readable.
 
+{% blockquote Feel different on the Java platform: the star programming language  http://dl.acm.org/citation.cfm?id=2500837&dl=ACM&coll=DL&CFID=354902651&CFTOKEN=90319052 %}
     Star is a coherent, general-purpose programming language that
     combines elements from a wide variety of existing languages as
     well as adding innovative elements of its own. Star inherits func-
     tional programming in general, a Haskell-style type system, an F#-
     style monad for parallel computations, and Concurrent ML for or-
-    chestrating concurrent and parallel applications. 
+    chestrating concurrent and parallel applications.
+{% endblockquote %}
 
 ### Hello World
 The best way to get a feel for it is to look at a few examples.  Of
 course, let's start off with Hello World.
 
-```
+```haskell
 main() do {
   logMsg(info, "Hello World");
 }
@@ -74,7 +83,7 @@ statement will also soon not be required.  But a nice feature of using
 the worksheeet is that is a combined module and transcript of the
 session.
 
-```
+```haskell
 import worksheet
  
 worksheet{
@@ -84,17 +93,15 @@ worksheet{
 
 Here is what the output looks like:
 
-````
-Jun 11, 2014 11:21:09 AM  
-INFO: "hello world" -> "hello world" at 4
-info: execution took 0.053684428
-````
+    Jun 11, 2014 11:21:09 AM  
+    INFO: "hello world" -> "hello world" at 4
+    info: execution took 0.053684428
 
 ### Pattern Matching
 Let's take a look at another example.  This time a naive fib function
 with pattern matching.
 
-````
+```haskell
 import worksheet
  
 worksheet{
@@ -107,7 +114,7 @@ worksheet{
   assert fib(3)=2;
   assert fib(10)=55;
 }
-````
+```
 
 Notice how the fib function is defined with pattern matching.  Also
 how the keyword "is" is used instead of an "=" to make the code flow
@@ -115,23 +122,22 @@ more readable (IMO).
 
 The output of running the program is:
 
-````
-Jun 11, 2014 3:32:38 PM  
-INFO: fib(0) = 0 ok at 9
-Jun 11, 2014 3:32:38 PM  
-INFO: fib(1) = 1 ok at 10
-Jun 11, 2014 3:32:38 PM  
-INFO: fib(3) = 2 ok at 11
-Jun 11, 2014 3:32:38 PM  
-INFO: fib(10) = 55 ok at 12
-info: execution took 0.039725132
-````
+
+    Jun 11, 2014 3:32:38 PM  
+    INFO: fib(0) = 0 ok at 9
+    Jun 11, 2014 3:32:38 PM  
+    INFO: fib(1) = 1 ok at 10
+    Jun 11, 2014 3:32:38 PM  
+    INFO: fib(3) = 2 ok at 11
+    Jun 11, 2014 3:32:38 PM  
+    INFO: fib(10) = 55 ok at 12
+    info: execution took 0.039725132
 
 ### Pattern Matching with Guards
 The declaration of pattern matching for functions can also include
 guards like in this fizzbuzz example
 
-````
+```haskell
 fizzbuzz has type (integer) => string
 fizzbuzz(N) where N%3=0 and N%5=0 is "fizzbuzz"
 fizzbuzz(N) where N%3=0 is "fizz"
@@ -149,30 +155,30 @@ One of the important collection types are cons lists. These are lists
 that you add to the front of and are destructed as the first element
 and then the rest of the list. To construct a cons list:
 
-````
+```haskell
  testNumbers is cons of {1;2;3;4;5;6;7;8;9;10;11;12;13;14;15}
-````
+```
 
 To use a cons list in a function with pattern matching:
 
-````
+```haskell
 listFizzBuzz has type (cons of integer) => cons of string
 listFizzBuzz(nil) is nil
 listFizzBuzz(cons(x, xs)) is cons(fizzbuzz(x), listFizzBuzz(xs))
-``
+```
 
 The function listFizzBuzz takes in a list of integers and turns it
 into a list of strings using the fizzbuzz function. If we evaluate:
 
-````
+```haskell
 testNumbers is cons of {1;2;3;4;5;6;7;8;9;10;11;12;13;14;15}
 result is listFizzBuzz(testNumbers)
 ```
 
 The result will look like
-````
+```haskell
 cons of {"1";"2";"fizz";"4";"buzz";"fizz";"7";"8";"fizz";"buzz";"11";"fizz";"13";"14";"fizzbuzz"}
-````
+```
 
 There are other collection types such as arrays and relations, (which
 are really cool - you can do queries on them like a database), but I haven't explored them well enough to really
@@ -192,13 +198,13 @@ notifications are either going to be a book(string) method, or a
 cancel(string) method.  To book a reservation for a person or cancel
 it.
 
-````
+```haskell
 type tx is book(string) or cancel(string);
-````
+```
 
 The actor is defined using:
 
-````
+```haskell
 flight((FlightName has type string), (MaxPeople has type integer)) is actor{
     var flightStatus := "open";
  
@@ -225,7 +231,7 @@ There is some extra things in the code, but for right now, look at the
 book and cancel methods.  These are the functions that will be called
 when the actor is notified like this:
 
-```
+```haskell
 F is flight("flight123", 5)
 notify F with book("Carin") on Tx
 notify F with book("Bob") on Tx
@@ -233,13 +239,13 @@ notify F with book("Bob") on Tx
 
 To query the actor we use :
 
-```
+```haskell
  x is query F's getPassengerList with getPassengerList()
 ```
 
 To use a request with the actor we use
 
-```
+```haskell
  request F's setFlightStatus to setFlightStatus("closed")
 ```
 
