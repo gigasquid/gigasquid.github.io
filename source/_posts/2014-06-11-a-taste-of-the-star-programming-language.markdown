@@ -22,11 +22,13 @@ composing an reply to the email that started off with
 
 Then I realized that the author of the email and language was none
 other than
-[Frank McCabe](http://en.wikipedia.org/wiki/Go!_(programming_language)),
-one of the designers of the Go programming language.  My brain froze
+Frank McCabe,
+one of the designers of the
+[Go! programming language](http://bit.ly/1pJtG0x)
+(not to be confused with Google Go).  My brain froze
 while it was thinking
 
-    "OMG!!!! Frank McCabe just email me!".
+    "OMG!!!! Frank McCabe, a real language designer, just email me!".
 
 This unfortunately, made the rest of my email reply sound something like
 this
