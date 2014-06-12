@@ -28,7 +28,7 @@ one of the designers of the
 (not to be confused with Google Go).  My brain froze
 while it was thinking
 
-    "OMG!!!! Frank McCabe, a real language designer, just email me!".
+    "OMG!!!! Frank McCabe, a real language designer, just emailed me!".
 
 This unfortunately, made the rest of my email reply sound something like
 this
