@@ -262,9 +262,13 @@ be discovered in the Open Source world.  If it appeals to you as much
 as me, jump on in.  Here are a few resources to get you going:
 
 * [Star-Lang Katas](https://github.com/gigasquid/star-lang-katas):
-  Clone the repo.  It has some example katas along with a shell script
+  Clone the repo or fork the repos.  It has a shell script
   to compile and run the star programs.  It also has a emacs mode
-  plugin and a reference pdf.
+  plugin and a reference pdf. The most important part is that it has a
+  template of katas ready for your to solve.  Your challenge:
+  uncomment the assertion and make the code pass.  My solutions are in
+  the solutions branch when you are done.  If you finish all of them
+  and want more, consider creating some and submitting a pull request :)
 
 * I mentioned it earlier, but there is a great overview paper on the
   language itself
