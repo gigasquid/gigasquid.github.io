@@ -34,7 +34,7 @@ this:
     the ruby to brighten and comfort the heart.
 
 
-## Love Songs from a this Summer
+## Love Songs from this Summer
 
 {% img http://upload.wikimedia.org/wikipedia/en/8/8d/Coldplay_-_A_Sky_Full_of_Stars_%28Single%29.png %}
 
@@ -68,9 +68,12 @@ been writing about it and singing about it for at least 4,000 years.
 
 Hasn't everything already been said about it?
 
+No.
+
 We still want to hear it again.  We still want to hear it new, said by
 another. It means something slightly different, feels different
-when said again by another.
+when said again by someone else with different experiences, from a
+different life, from a different perspective..
 
 So open up your favorite editor and brush aside your fears. It is a
 blank canvas, ready for your thoughts and code.
