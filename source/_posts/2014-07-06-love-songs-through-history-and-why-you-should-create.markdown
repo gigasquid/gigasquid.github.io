@@ -75,6 +75,8 @@ another. It means something slightly different, feels different
 when said again by someone else with different experiences, from a
 different life, from a different perspective..
 
+The same goes for your writing, your code, your library, and your creation.
+
 So open up your favorite editor and brush aside your fears. It is a
 blank canvas, ready for your thoughts and code.
 
