@@ -1,0 +1,183 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>7 McCarthy Papers in 7ish Weeks - #4 - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="Reading Artificial Intelligence, Logic, and Formalizing Common Sense, led me surprisingly to reflect on, not only logic and philosophy, but also the &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">7 McCarthy Papers in 7ish Weeks - #4</h2>
+	<div class="entry-content"><p>Reading <a href="http://www-formal.stanford.edu/jmc/ailogic/ailogic.html">Artificial Intelligence, Logic, and Formalizing Common Sense</a>, led me surprisingly to reflect on, not only logic and philosophy, but also the history and present state of AI.</p>
+
+<p>Fist let&rsquo;s look at the kind of AI that McCarthy is describing in paper. He talks of a program that can use common sense knowledge about the world around it and have this knowledge structured well enough that it can be reasoned about mathematically. In fact, he describes four levels of logic:</p>
+
+<ol>
+<li><p> The computer program has its &ldquo;beliefs&rdquo; completely defined by its internal state.  If you are confused by the term &ldquo;beliefs&rdquo;, it refers to <a href="http://gigasquidsoftware.com/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">ascribing mental qualities to machines</a>.  In his famous example, a thermostat has three beliefs: the room is too hot, the room is too cold, and the room is just right.</p></li>
+<li><p> The programs express their beliefs in sentences in machine memory.  However, they do not use ordinary logic.  They use other methods like rules and procedures.</p></li>
+<li><p> In addition to expresses their beliefs in sentences, they also use first order logic and logical deduction to reach their conclusions.</p></li>
+<li><p> The fourth level is still a goal today.  It is to have the program represent general facts about the world as logical sentences.  Furthermore, to have a database of these commonsense facts that programs can share.</p></li>
+</ol>
+
+
+<p>Let&rsquo;s step back now for a moment, to a excerpt from the very beginning of the paper:</p>
+
+<blockquote><p>One path to human-level AI uses mathematical logic to formalize common-sense knowledge in such a way that common-sense problems can be solved by logical reasoning. This methodology requires understanding the common-sense world well enough to formalize facts about it and ways of achieving goals in it. Basing AI on understanding the common-sense world is different from basing it on understanding human psychology or neurophysiology.</p></blockquote>
+
+<p>This approach to AI is just one approach. It is commonly referred to as a &ldquo;top down&rdquo; approach.  In the early years of AI it was the dominant way of thinking about things. Looking back at the history of AI, the <a href="http://en.wikipedia.org/wiki/History_of_artificial_intelligence#The_golden_years_1956.E2.88.921974">golden years</a> were full of optimism, (and funding), that this was the path to achieving fully intelligent machines.  Disenchantment with unfulfilled promises, led to the first <a href="http://en.wikipedia.org/wiki/AI_winter">AI winter</a>.  There was a rise of expert systems later on that limited their scope to small domains and avoided the common sense problem, but eventually ended in a second AI winter and ushered in our current world.  This basic approach is an opposite ground-up view of AI.  It uses neural networks and statistics from a physical inspiration.  Some of this inspiration is from human neurophysiology, some of it is from insect and animal world, but simplicity behavior of a &ldquo;body&rdquo; is emphasized.  With the advances in hardware and computing power today, the innovations and accomplishments have been breath taking.</p>
+
+<p>A good example of the two approaches can be seen in my Roomba.  A top down approach, would require my Roomba to have a complete room model in its program.  It would have to understand what my couch was, where the doors where and have logically reasoning to direct it to which areas to clean and when to stop cleaning and recharge itself.  The creators of the Roomba were from the opposite camp of thinking.  They took the simpler behavior approach of having the Roomba just take a random walk in the room and turn around when it ran into an obstacle.  It took a bit longer to get the room clean in such a random fashion, but not having to deal with the overhead of a mental model was well worth the trade off.</p>
+
+<p>Noam Chomsky recently argued that the<a href="http://www.theatlantic.com/technology/archive/2012/11/noam-chomsky-on-where-artificial-intelligence-went-wrong/261637/"> pendulum has swung too far in favor of this simplified behaviorist approach</a>. Even in the light of <a href="http://norvig.com/chomsky.html">Norvig&rsquo;s response</a>, I think Chomsky has a point.  We would do well to search for gems of true intelligent systems in the historical landscape of the AI Winter.  Some of the breakthroughs of current sheer computing power and new modeling techniques, might yield great fruits.</p>
+
+<p>One of the comments by nagelonce, on the Chomsky article,  puts this very well:</p>
+
+<blockquote><p>AI has a hole in the middle. There&rsquo;s top-down AI, which focuses on abstractions and reductionism. There&rsquo;s bottom-up AI, which focuses on reactive systems and the front end of visual processing. They have yet to meet in the middle. They are, however, much closer to doing so than they were twenty years ago.</p></blockquote>
+
+<p>If you are interested in checking out a top-down open source AI project, take a look at <a href="http://www.opencyc.org/doc">OpenCyc</a>.  After a brief look at it the other night, it suffers from the lack of love and documentation.  But, I can also see the promise of McCarthy&rsquo;s common sense knowledge and logic system, covered in a thin layer of snow.</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2014
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

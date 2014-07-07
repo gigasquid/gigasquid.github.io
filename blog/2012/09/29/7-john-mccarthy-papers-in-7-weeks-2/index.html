@@ -1,0 +1,213 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>7 John McCarthy Papers in 7 Weeks - #2 - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="Well, life threw me for a bit of a loop and delayed my post on my second paper. So I am going to consider this a &ldquo;weekish&rdquo; period of time &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">7 John McCarthy Papers in 7 Weeks - #2</h2>
+	<div class="entry-content"><p>Well, life threw me for a bit of a loop and delayed my post on my second paper. So I am going to consider this a &ldquo;weekish&rdquo; period of time and just continue on.</p>
+
+<p>I read <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/towards/towards.html"> Towards a Mathematical Science of Computation</a>.  It is quite a meaty paper and was certainly a lot to digest.  Here are some highlights that I gleaned from it.</p>
+
+<h3>How can a Mathematical Science of Computation help in a practical way?</h3>
+
+<p>McCarthy points out that while it is hard to predict practical applications ahead of time.  A couple of could be</p>
+
+<ul>
+<li><p>Provide a systematic way to create of programming language.  Rather than just arguing and arbitrarily adding language features whilly nilly.</p></li>
+<li><p>&ldquo;It should be possible to eliminate debugging.  Debugging is the testing of a program on cases one hopes are typical, until it seems to work.  This frequently is in vain.&rdquo;</p></li>
+</ul>
+
+
+<p>This last point of being able to eliminate debugging really stuck with me.  Even with the best of TDD and test suites, we as developers still struggle with the testing of programs against what we hope is &ldquo;typical&rdquo;.  Over the past years we have improved our techniques and made our programs more robust, but it would certainly be nice to be able to prove a program correct.</p>
+
+<p>If fear that even if this was possible, it would not be enough. At least in my experience, a considerable amount of debugging happens at the human level:</p>
+
+<ul>
+<li><p>The translation of understanding of what the human product owner wants to what the software developer can understand.</p></li>
+<li><p>The human product owner&rsquo;s understanding of what they want in the first place.</p></li>
+</ul>
+
+
+<p>In my experience, we have just as much trouble (or even more) stating the problem for the program as we do in attempting to solve and prove that it works.</p>
+
+<h3>What we already know that can be applied to a Mathematical Science of Computation</h3>
+
+<ul>
+<li><p>The existence of Turing&rsquo;s Universal computers</p></li>
+<li><p>The existence of classes of unsolvable problems</p></li>
+</ul>
+
+
+<h3>Perhaps a sonic screwdriver will help?</h3>
+
+<p>McCarthy then goes on to add another tool to the Mathematical Science of computation toolbox. He shows that conditional expressions can be defined recursively.  Then he expands this to relate to programs/computers that can be defined recursively.</p>
+
+<h3>Can a man make a computer program that is as intelligent as him?</h3>
+
+<p>Here is the real question.  McCarthy has us consider the following problem of whether a program on a computers with unlimited memory will ever stop:</p>
+
+<p>A procedure does the following</p>
+
+<ol>
+<li><p> If the number is in a <a href="http://en.wikipedia.org/wiki/Creative_and_productive_sets">creative set</a> then return &ndash;> yes.
+If a number is not in a creative set then return &ndash;> no
+or it may run indefinitely</p></li>
+<li><p> There is no procedure while will always return &ndash;> yes when the answer is yes.  and return &ndash;> no when the answer is no</p></li>
+</ol>
+
+
+<p>It is a bit depressing that we can&rsquo;t figure out which ones that are really no and which ones run forever.  But don&rsquo;t give up.  We can just try to do the best we can.  <a href="http://en.wikipedia.org/wiki/Emil_Leon_Post">Emil Post</a> discovered that whenever we try to do the best we can, one can always improve upon it.  He showed that given any procedure, he could make a new procedure that solved all the previous cases plus some new ones. McCarthy pointed out that this process, even though it is really like trying to count the biggest ordinal number, can be mechanized.  So really there is no reason why a machine could not continually improve its own program.</p>
+
+<p>In summary, McCarthy&rsquo;s own words are the best:</p>
+
+<blockquote><p>&ldquo;In conclusion, let me re-assert that the question of whether there are limitations in principle of what problems man can make machines solve for him as compared to his own ability to solve problems, really is a technical question in recursive function theory.&rdquo;</p></blockquote>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2014
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

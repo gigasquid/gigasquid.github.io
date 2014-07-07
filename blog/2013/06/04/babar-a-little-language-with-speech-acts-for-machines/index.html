@@ -1,0 +1,390 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Babar - A Little Language with Speech Acts for Machines - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="Preface: A Gentle Obsession About a year ago, I picked up John McCarthy&rsquo;s paper on Elephant 2000. I have to admit that I only understood about &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Babar - a Little Language With Speech Acts for Machines</h2>
+	<div class="entry-content"><p><img src="http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg"></p>
+
+<h2>Preface: A Gentle Obsession</h2>
+
+<p>About a year ago, I picked up John McCarthy&rsquo;s paper on <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/elephant/elephant.html">Elephant 2000</a>. I have to admit that I only understood about 10% of it. But I was so intrigued by the ideas that it sent me on a quest. I re-read it numerous times, slept with it under my pillow, and finally decided that I needed to read his other papers to get an insight into his thoughts. I began a considered effort with <a href="http://gigasquidsoftware.com/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue/">Seven McCarthy Papers in Seven Weeks</a>. It ended up taking about three months, rather than seven 7 weeks. Again I came back to Elephant 2000. I began to understand more as other ideas and concepts sunk in, like <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/ascribing/ascribing.html">ascribing beliefs and goals to machines</a>. But to really explore the ideas, I really wanted to try to implement parts of Elephant in my own programming language. The problem was, having no formal training in computer science, (my background is Physics), I had never created a programming language before. The stars aligned and I found the <a href="https://github.com/Engelberg/instaparse">Instaparse</a> Clojure library. The result is <a href="https://github.com/gigasquid/babar">Babar</a>, a language designed to explore communication with machines via <a href="http://en.wikipedia.org/wiki/Speech_act">Speech Acts</a>.</p>
+
+<h2>What are the Speech Acts?</h2>
+
+<p>When I say say &ldquo;Pass the salt.&rdquo;, the meaning behind the utterance is that I would like someone to reach out and move the salt shaker to me. I am requesting an action be performed. It doesn&rsquo;t really matter if the utterance is in English, French, or Spanish. The intention is the same. Furthermore, if you accept my request to pass the salt. It creates a commitment on your part to actually perform the action. There are two types of speech acts that Babar is concerned with. The first is called an <a href="http://en.wikipedia.org/wiki/Illocutionary_act">Illocutionary Act</a>. Some of the english verbs denoting these acts are &ldquo;assert&rdquo;, &ldquo;command&rdquo;, &ldquo;request&rdquo;, and &ldquo;query&rdquo;. The second is a <a href="http://en.wikipedia.org/wiki/Perlocutionary_act">Perlocutionary Act</a>. These are acts that are concerned with the effects of hearing them on future actions. Some of english verbs denoting these acts are &ldquo;convince&rdquo;, &ldquo;persuade&rdquo;, and &ldquo;warn&rdquo;.</p>
+
+<h2>Hello Babar</h2>
+
+<p>Babar is an experimental language that uses these Speech Acts to communicate. It also combines one of the other ideas of McCarthy, that is of beliefs and goals. The ultimate aim in the language is discover ways of thinking about computers and communicating with them based on the way that we communicate with each other. The state of a computer at any given point in time can be very complex and hard to understand. If we ascribe this state to be a &ldquo;belief&rdquo;, it becomes easier to understand and thus easier to program. The Babar REPL has internal commitments and internal beliefs. The goal of the Babar REPL is to keep all of its commitments. Speech acts are used to &ldquo;convince&rdquo; Babar of beliefs and to make &ldquo;requests&rdquo; that form commitments. The Babar REPL continually checks to see if it needs to fulfill a commitments. It fulfills them based on its beliefs. As an optional configuration, the REPL will speak aloud its beliefs as the become true &ndash; or as it &ldquo;holds&rdquo; the belief.</p>
+
+<h2>Syntax and Basics</h2>
+
+<p>The language uses basic Clojure datatypes and makes the parens optional in most cases to make the expressions look more like syntactically sugared speech acts.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>
+</span><span class='line'>    <span class="mi">1</span>     <span class="c1">;=&gt; 1</span>
+</span><span class='line'>    <span class="mf">2.3</span>   <span class="c1">;=&gt; 2.3</span>
+</span><span class='line'>    <span class="mf">-3.4</span>  <span class="c1">;=&gt; 3.4</span>
+</span><span class='line'>    <span class="s">&quot;cat&quot;</span> <span class="c1">;=&gt; cat</span>
+</span><span class='line'>    <span class="ss">:bird</span> <span class="c1">;=&gt; bird</span>
+</span><span class='line'>    <span class="nv">true</span>  <span class="c1">;=&gt; true</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:cat</span> <span class="ss">:meow</span> <span class="ss">:dog</span> <span class="ss">:bark</span><span class="p">}</span> <span class="c1">;=&gt; {:cat :meow :dog :bark}</span>
+</span><span class='line'>    <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="nv">true</span> <span class="ss">:bird</span><span class="p">]</span> <span class="c1">;=&gt; [1 2 true bird]</span>
+</span><span class='line'>    <span class="nv">atom</span> <span class="mi">1</span> <span class="c1">;=&gt; #</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">(</span><span class="k">def </span><span class="nv">dog</span> <span class="mi">16</span><span class="p">)</span>
+</span><span class='line'>    <span class="nv">dog</span> <span class="c1">;=&gt; 16</span>
+</span><span class='line'>    <span class="k">def </span><span class="nv">cat</span> <span class="mi">18</span>
+</span><span class='line'>    <span class="nv">cat</span> <span class="c1">;=&gt; 18</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vectors are a bit interesting in the respect that you don&rsquo;t need to input the square brackets. If you just put in space delimited items, it will automatically construct a vector for you.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="c1">;=&gt; [1 2 3 4]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>You can create anonymous functions with the fn [x] syntax from clojure. And call them with surrounding parens. You can call regular functions by the () notation or the shorthand :.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="mi">1</span> <span class="c1">;=&gt; fn</span>
+</span><span class='line'><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">;=&gt; fn</span>
+</span><span class='line'><span class="p">((</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">;=&gt; 4</span>
+</span><span class='line'><span class="p">((</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">)</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">;=&gt; 6</span>
+</span><span class='line'><span class="p">((</span><span class="k">fn </span><span class="p">[]</span> <span class="p">[</span><span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">]))</span> <span class="c1">;=&gt; [4 5 6]</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">defn </span><span class="nv">dog</span> <span class="p">[]</span> <span class="s">&quot;woof&quot;</span>
+</span><span class='line'><span class="nv">dog</span><span class="err">:</span> <span class="c1">;=&gt; &quot;woof&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>To see the complete documentation &ndash; please visit the <a href="https://github.com/gigasquid/babar">Github repo</a>.</p>
+
+<h2>Show Me Babar Speech Acts</h2>
+
+<p>Now that we have the basics. Let&rsquo;s look at example of running a program with speech acts.
+This one speaks its beliefs and has assertions, a request, and queries.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">speak-config</span> <span class="nv">true.</span>
+</span><span class='line'><span class="nb">assert </span><span class="nv">sunny</span> <span class="nv">false.</span>
+</span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">nice-day</span> <span class="s">&quot;It is a nice day.&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">= </span><span class="nv">sunny</span> <span class="nv">true.</span>
+</span><span class='line'><span class="nv">request</span> <span class="nv">*open-window</span> <span class="nb">when </span><span class="o">#</span><span class="nv">nice-day</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">println </span><span class="s">&quot;Opened the window&quot;</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">query</span> <span class="nv">request-is-done</span> <span class="nv">*open-window?</span>
+</span><span class='line'><span class="nb">assert </span><span class="nv">sunny</span> <span class="nv">true.</span>
+</span><span class='line'><span class="nv">query</span> <span class="nv">request-is-done</span> <span class="nv">*open-window?</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('bt2iYsVyCOM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/bt2iYsVyCOM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/bt2iYsVyCOM/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=bt2iYsVyCOM" id="bt2iYsVyCOM" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">Babar Speech Acts</div>
+</a>
+<div class="video-info" >Examples of Speech Acts in the Babar language https://github.com/gigasquid/babar</div>
+</div>
+
+
+<p>Here is another one that shows using a request until a belief is held.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">speak-config</span> <span class="nv">true.</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">assert </span><span class="nv">counter</span> <span class="nv">atom</span> <span class="mi">1</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">done</span> <span class="s">&quot;I am done counting&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">&gt; </span><span class="err">@</span><span class="nv">counter</span> <span class="mi">3</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">request</span> <span class="nv">*count-up</span> <span class="nv">until</span> <span class="o">#</span><span class="nv">done</span> <span class="k">fn </span><span class="p">[]</span> <span class="nv">swap!</span> <span class="nv">counter</span> <span class="nv">inc.</span>
+</span><span class='line'><span class="nv">sleep</span> <span class="mi">25</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">query</span> <span class="nv">request-value</span> <span class="nv">*count-up?</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('aT8MK0w71LM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/aT8MK0w71LM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/aT8MK0w71LM/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=aT8MK0w71LM" id="aT8MK0w71LM" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">Babar Speech Acts - using requests and until</div>
+</a>
+<div class="video-info" >An example of Babar speech acts using requests until a belief is held.
+
+https://github.com/gigasquid/babar</div>
+</div>
+
+
+<p>Here the REPL asks you a question if you give it an undeclared var</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">speak-config</span> <span class="nv">true.</span>
+</span><span class='line'><span class="nv">ask-config</span> <span class="nv">true.</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">request</span> <span class="nv">*task1</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">+ </span><span class="mi">10</span> <span class="nv">x.</span>
+</span><span class='line'><span class="nv">query</span> <span class="nv">request-is-done</span> <span class="nv">*task1?</span>
+</span><span class='line'><span class="nb">assert </span><span class="nv">x</span> <span class="mi">3</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">sleep</span> <span class="mi">10</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">query</span> <span class="nv">request-is-done</span> <span class="nv">*task1?</span>
+</span><span class='line'><span class="nv">query</span> <span class="nv">request-value</span> <span class="nv">*task1?</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('nmi_fafmjsg');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/nmi_fafmjsg?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/nmi_fafmjsg/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=nmi_fafmjsg" id="nmi_fafmjsg" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">Babar asking you a question</div>
+</a>
+<div class="video-info" >An example of the speech acts in Babar.  In this example, the REPL asks you a question about what an undeclared var should be.
+
+https://github.com/gigasquid/babar</div>
+</div>
+
+
+<h2>Autonomous AR Drone Flight with Babar REPL</h2>
+
+<p>Since the language is aimed at communincating with machines. It is only natural that I use it to talk to the AR Drone.
+Here is a program that has the drone take off, get to a cruising altitude, and land &ndash; all using speech acts (and the <a href="https://github.com/gigasquid/clj-drone">clj-drone library</a>).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">speak-config</span> <span class="nv">true.</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">import </span><span class="s">&quot;clj-drone.core&quot;</span><span class="nv">.</span>
+</span><span class='line'><span class="nb">import </span><span class="s">&quot;clj-drone.navdata&quot;</span><span class="nv">.</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">assert </span><span class="nv">get-navdata</span> <span class="p">[</span><span class="nv">key</span><span class="p">]</span> <span class="nb">get </span><span class="err">@</span><span class="nv">nav-data</span> <span class="nv">key.</span>
+</span><span class='line'><span class="nb">assert </span><span class="nv">navdata-equal</span> <span class="p">[</span><span class="nb">key </span><span class="nv">val</span><span class="p">]</span> <span class="nb">= </span><span class="p">(</span><span class="nf">get-navdata</span> <span class="nv">key</span><span class="p">)</span> <span class="nv">val.</span>
+</span><span class='line'><span class="nb">assert </span><span class="nv">navdata-gt</span> <span class="p">[</span><span class="nb">key </span><span class="nv">val</span><span class="p">]</span> <span class="nb">&gt; </span><span class="p">(</span><span class="nf">get-navdata</span> <span class="nv">key</span><span class="p">)</span> <span class="nv">val.</span>
+</span><span class='line'><span class="nb">assert </span><span class="nv">init-drone</span> <span class="p">[]</span> <span class="p">(</span><span class="nf">drone-initialize</span><span class="p">)</span><span class="nv">.</span>
+</span><span class='line'><span class="nb">assert </span><span class="nv">init-nav</span> <span class="p">[]</span> <span class="p">(</span><span class="nf">drone-init-navdata</span><span class="p">)</span><span class="nv">.</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">landed</span> <span class="s">&quot;I am on the ground&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="p">(</span><span class="nf">navdata-equal</span> <span class="ss">:control-state</span> <span class="ss">:landed</span><span class="p">)</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">flying</span> <span class="s">&quot;I am flying&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">or </span><span class="p">(</span><span class="nf">navdata-equal</span> <span class="ss">:control-state</span> <span class="ss">:flying</span><span class="p">)</span>
+</span><span class='line'>                                        <span class="p">(</span><span class="nf">navdata-equal</span> <span class="ss">:control-state</span> <span class="ss">:hovering</span><span class="p">)</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">high-enough</span> <span class="s">&quot;I am high enough&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="p">(</span><span class="nf">navdata-gt</span> <span class="ss">:altitude</span> <span class="mf">1.5</span><span class="p">)</span><span class="nv">.</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">request</span> <span class="nv">*take-off</span> <span class="nb">when </span><span class="o">#</span><span class="nv">landed</span> <span class="k">fn </span><span class="p">[]</span> <span class="p">(</span><span class="nf">drone</span> <span class="ss">:take-off</span><span class="p">)</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">request</span> <span class="nv">*cruising-alt</span> <span class="nb">when </span><span class="o">#</span><span class="nv">flying</span> <span class="nv">until</span> <span class="o">#</span><span class="nv">high-enough</span> <span class="k">fn </span><span class="p">[]</span> <span class="p">(</span><span class="nf">drone</span> <span class="ss">:up</span> <span class="mf">0.1</span><span class="p">)</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">request</span> <span class="nv">*land</span> <span class="nb">when </span><span class="o">#</span><span class="nv">high-enough</span> <span class="k">fn </span><span class="p">[]</span> <span class="p">(</span><span class="nf">drone</span> <span class="ss">:land</span><span class="p">)</span><span class="nv">.</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">done</span> <span class="s">&quot;Whee! I am done.&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">and </span><span class="p">(</span><span class="nf">navdata-equal</span> <span class="ss">:control-state</span> <span class="ss">:landed</span><span class="p">)</span>
+</span><span class='line'>                                            <span class="nv">query</span> <span class="nv">request-is-done</span> <span class="nv">*land.</span>
+</span><span class='line'><span class="nv">request</span> <span class="nv">*end-navstream</span> <span class="nb">when </span><span class="o">#</span><span class="nv">done</span> <span class="k">fn </span><span class="p">[]</span> <span class="p">(</span><span class="nf">end-navstream</span><span class="p">)</span><span class="nv">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('CIzR8jD2d3c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/CIzR8jD2d3c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/CIzR8jD2d3c/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=CIzR8jD2d3c" id="CIzR8jD2d3c" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">Flying an AR Drone with Babar Speech Acts</div>
+</a>
+<div class="video-info" >In this example, we import the clojure clj-drone library https://github.com/gigasquid/clj-drone, and use it to have the drone autonomously fly, get to a cruising altitude and land - all while vocalizing its beliefs.
+
+https://github.com/gigasquid/babar</div>
+</div>
+
+
+<h2>Conclusion and Thanks</h2>
+
+<p>I can honestly say, that this has been one of the most enjoyable programming quests. I encourage you all to look at McCarthy&rsquo;s papers, Clojure, Instaparse, and of course, hacking robots. A special thanks to all the Cincy folks at <a href="http://www.neo.com/">Neo</a> who have supported me through my gentle obsessions and have let me have the freedom to follow my curiosity.</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2014
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

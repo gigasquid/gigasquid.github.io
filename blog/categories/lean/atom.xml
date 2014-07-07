@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Lean | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/lean/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2014-07-06T22:36:09-04:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Lean Customer Interview Tips for the Introverted Developer]]></title>
+    <link href="http://gigasquid.github.io/blog/2014/01/09/lean-customer-interview-tips-for-the-introverted-developer/"/>
+    <updated>2014-01-09T21:23:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2014/01/09/lean-customer-interview-tips-for-the-introverted-developer</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm5.staticflickr.com/4029/4356643150_9b26a637e9.jpg">http://farm5.staticflickr.com/4029/4356643150_9b26a637e9.jpg</a>"></p>
+
+<p>After attending a local Lean Startup Circle meetup, I decided to write
+about some of my experiences with the
+<a href="http://theleanstartup.com/">Lean Startup Methodology</a> from a software
+developer&rsquo;s point of view.</p>
+
+<h2>Why should you care about the Lean Startup Methodology?</h2>
+
+<p>As software developer, I put my passion, honed expertise, and time
+into crafting a digital product or service. One of the worst things
+that can happen is that when it is released, no one uses it or wants
+it. You can build a absolutely beautiful software product that scales
+to the nines. But if you build the wrong thing, it is a failure.</p>
+
+<p>The Lean Startup Methodology is basically a scientific approach to
+developing business and products. You analyze your assumptions and
+then devise experiments to test your hypotheses. One of the ways that
+you can test them, is by talking to people and doing customer
+interviews.</p>
+
+<h2>Talking to Random People is Terrifying</h2>
+
+<p>The prospect of talking to random people on the street is a terrifying
+prospect for me as a semi-introverted software developer. It is also
+incredibly useful to get out of the office and actually get feedback.
+These tips come from a Lean Startup Weekend in Columbus at the Neo
+office, where I successfully got
+out of my comfort zone and engaged in customer interviews.</p>
+
+<p>Background:  Our team was designing experiments around creating an app
+for Food Trucks.  The fundamental assumption that we wanted to
+validate was &ndash; &ldquo;People will pay money for a phone app that will tell
+them where all the Food Trucks are.&rdquo;  So we headed downtown to the
+local food market. This was a place where there were local artisan
+food vendors in a food hall.  It seemed like an ideal place to find
+people interested in good food and Food Trucks.</p>
+
+<h3>Tip #1 &ndash; You will suck at first, but it gets better</h3>
+
+<p>The first few people I tried to talk were complete failures. I felt
+like a complete idiot. Do not get discouraged.  It helps if you go
+with someone else for moral support, although you should interview
+people by yourself, so they don&rsquo;t feel intimidated.</p>
+
+<h3>Tip #2 &ndash; Have your questions written down</h3>
+
+<p>Come prepared with the questions that you want to ask people, so you
+don&rsquo;t have a brain freeze with nervousness.  However, I found I got
+people to talk to me more if I didn&rsquo;t carry the pad of paper with me.
+Basically anything you can do to look less like a marketer helps.</p>
+
+<h3>Tip #3 &ndash; Tell them what you are trying to build first</h3>
+
+<p>DO NOT START OUT LIKE THIS:  &ldquo;Can I ask you a few questions?&rdquo;
+This never worked. Again, this is what a marketer would say.
+I got my best responses by telling people that I was a software
+developer looking to build a app for Food Trucks. In most cases, they
+were happy to give advice on whether they would use the app and how
+much they would pay for it.</p>
+
+<h3>Tip #4 &ndash; Write down your results right away</h3>
+
+<p>Memory is a fleeting thing.  Try to record the results of your
+conversation right away.  Take the notepad from your pocket and go to
+a corner or table and note everything down, before you forgot it all.
+Also try to write down what the person said, not just your
+interpretation. If someone is helping you interview, you can have one
+person be a scribe, while one person talks.</p>
+
+<h3>Tip #5 &ndash; Give Gifts</h3>
+
+<p>If you have any funding available for this endeavor, you can get a
+stack of Amazon $10 gift cards for people&rsquo;s time. This was some advice
+given to us. I didn&rsquo;t actually try it for this particular outing, but
+I have heard that others have used it very successfully.</p>
+
+<h2>Getting out of your Comfort Zone is Scary but Rewarding</h2>
+
+<p>I certainly got out of my comfort zone as a developer that weekend.
+But the end result was worth it.  We ended up disproving our
+hypothesis the people would pay for our app.  Almost all the people we
+interviewed said that they would download the app, but no one was
+willing to pay for it.  We invalidated a core assumption, it was a
+success.</p>
+
+<p>We could move on to testing and validating another idea that could be a viable business product.</p>
+
+<p>Build things that matter.  Build well. Build the right things.</p>
+
+<h5>Thanks to Scott Burwinkel for helping review this post for me &ndash; you rock</h5>
+]]></content>
+  </entry>
+  
+</feed>

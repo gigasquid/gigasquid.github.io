@@ -1,0 +1,1032 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="Published on: Jan 11th, 2011 Tags: All, Clojure It&rsquo;s time to learn more Clojure. This time, Buffy the Vampire Slayer* is going to help us. &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/01/11/vampire-slaying-with-clojure-part-1-defrecord/">
+		
+			Vampire Slaying With Clojure - Part 1 Defrecord</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-11T22:33:43-05:00" pubdate data-updated="true">Jan 11<span>th</span>, 2011</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p>It&rsquo;s time to learn more Clojure.  This time, Buffy the Vampire Slayer* is going to help us.</p>
+
+<p>First things first, of course we need vampires!</p>
+
+<p>Let&rsquo;s create a vampire data type with defrecord.  Our vampires are going to have two attributes, their name and the number of health points that they have.  This is of course, how Buffy is going to slay them.  If a vampire&rsquo;s health points goes to zero, then they are dead.  Well, they already are undead&hellip; so let&rsquo;s say they are slayed at that point and turn into dust.</p>
+
+<p>Our first vampire&rsquo;s name is Stu and he has a health of 50.</p>
+
+<pre><code>(defrecord Vampire [name, health]) 
+(def vampire1 (Vampire. "Stu" 50))
+</code></pre>
+
+<p>When we type in the vampire1 value into the REPL we can see its values in a map format</p>
+
+<pre><code> vampire1
+#:user.Vampire{:name "Stu", :health 50}
+</code></pre>
+
+<p>Now we can access vampire1&rsquo;s name by using the keys defined in the defrecord.  Let&rsquo;s get his name.</p>
+
+<pre><code>(:name vampire1)
+"Stu"
+</code></pre>
+
+<p>And his health</p>
+
+<pre><code>(:health vampire1)
+50
+</code></pre>
+
+<p>Lovely.  But we are going to need more than one vampire for Buffy to fight.  Let&rsquo;s create some more.</p>
+
+<pre><code>(def vampire1 (Vampire. "Stu" 50))
+(def vampire2 (Vampire. "Vance" 100))
+(def vampire3 (Vampire. "Izzy" 75))
+</code></pre>
+
+<p>Alright.  Our evil doers are ready for a fight.  Where is our hero?  We need to create a slayer structure using defrecord like before.  Our vampire slayer is going to have a name and a weapon that is worth a certain number of hit points.  Buffy is such a hard case that she is just going to use her bare hands.  We&rsquo;ll define her kungfu to be worth 25 hit points.</p>
+
+<pre><code>(defrecord Slayer [name, weapon])
+(def kungfu 25)
+(def buffy (Slayer. "Buffy" kungfu))
+</code></pre>
+
+<p>Let&rsquo;s check to make sure Buffy is ready to go</p>
+
+<pre><code>(:name buffy)
+"Buffy"
+(:weapon buffy)
+25
+</code></pre>
+
+<p>We have our main characters.  Now we need a way for Buffy to hit the vampires.  A simple function will do.  We define a function that takes the vampire and the number of hitpoints and subtracts it from the vampire&rsquo;s health.  This gives us the new health of the vampire</p>
+
+<pre><code>(defn hit [vampire, hitpoints]
+  (- (:health vampire) hitpoints))
+
+(hit vampire1 20)
+30
+</code></pre>
+
+<p>Now let&rsquo;s take that one step further and create another function that allows the slayer to hit the vampire with his/her weapon.  We use out hit function and pass it the weapon of the slayer.  Then we change the value of the vampire&rsquo;s health to the new value with assoc.  The function returns a new vampire structure with the new decremented health.</p>
+
+<pre><code>(defn hit-vampire [vampire, slayer]
+  (assoc vampire :health (hit vampire (:weapon slayer))))
+
+ (hit-vampire vampire1 buffy)
+#:user.Vampire{:name "Stu", :health 25}
+</code></pre>
+
+<p>Our vampires are totally lame, they don&rsquo;t fight back, (at least in this code example), but it does take time for Buffy to kill them.  Let&rsquo;s define a time that it take for her to hit a vampire.</p>
+
+<pre><code>(def combat-time 20)
+</code></pre>
+
+<p>We&rsquo;ll go back and redefine the hit-vampire function to include a sleep</p>
+
+<pre><code>(defn hit-vampire [vampire, slayer]
+  (Thread/sleep (* combat-time 10))
+  (assoc vampire :health (hit vampire (:weapon slayer))))
+</code></pre>
+
+<p>Now we can see how much time it takes Buffy to hit vampire1</p>
+
+<pre><code> (time (hit-vampire vampire1 buffy))
+"Elapsed time: 200.454173 msecs"
+#:user.Vampire{:name "Stu", :health 25}
+</code></pre>
+
+<p>This is nice, but we really want a way to define a function to recursively have the slayer keep hitting the vampire until it is dead.  If the health of the vampire is less than 1, then then we will set the vampire&rsquo;s health to 0 and return the vampire.  Note that we use recur in the function to denote the recursive call.</p>
+
+<pre><code>(defn kill-vampire [vampire, slayer]
+  (if (&gt; (:health vampire) 1)
+    (recur (hit-vampire vampire slayer) slayer)
+    (assoc vampire :health 0)))
+</code></pre>
+
+<p>Testing it out with Buffy killing Stu the vampire1</p>
+
+<pre><code>(kill-vampire vampire1 buffy)
+#:user.Vampire{:name "Stu", :health 0}
+</code></pre>
+
+<p>How long does it take Buffy to kill Stu? Not long.</p>
+
+<pre><code>(time (kill-vampire vampire1 buffy))
+"Elapsed time: 400.542595 msecs"
+#:user.Vampire{:name "Stu", :health 0}
+</code></pre>
+
+<p>What about a tougher vampire like vampire2?</p>
+
+<pre><code>vampire2
+#:user.Vampire{:name "Vance", :health 100}
+
+(time (kill-vampire vampire2 buffy))
+"Elapsed time: 801.318529 msecs"
+#:user.Vampire{:name "Vance", :health 0}
+</code></pre>
+
+<p>For fun, let&rsquo;s redefine Buffy and give her some Holy Water as a weapon and see what happens.</p>
+
+<pre><code>(def holy-water 100)
+(def buffy (Slayer. "Buffy" holy-water))
+
+(time (kill-vampire vampire2 buffy))
+"Elapsed time: 200.247375 msecs"
+#:user.Vampire{:name "Vance", :health 0}
+</code></pre>
+
+<p>So there you have it.  We have explored defrecord and created some vampires for the express purpose of hitting.  Not a bad way to blow off steam at the end of the day.</p>
+
+<p>Stay tuned for part 2, where Buffy will line up the vampires and kill them using Clojure&rsquo;s STM (Software Transaction Memory System) so they stay dead (or undead).</p>
+
+<ul>
+<li>If you are a lawyer and object to Buffy the Vampire Slayer appearing in an code snippets as a Clojure var, please contact me and I will change the name to Biffy or Tiffy.</li>
+</ul>
+
+
+<p>_Lego Vampire: <a href="http://www.flickr.com/photos/pasukaru76/4274684369_">http://www.flickr.com/photos/pasukaru76/4274684369_</a></p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2011/01/11/vampire-slaying-with-clojure-part-1-defrecord//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/12/07/123/">
+		
+			Mutually Recursive Zombies on a Trampoline</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-07T23:06:50-05:00" pubdate data-updated="true">Dec 7<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p>It&rsquo;s late at night.  The kids are all tucked snuggly in their beds and I am ready to explore mutual recursion on my own in Clojure after doing some reading of <a href="http://pragprog.com/titles/shcloj/programming-clojure">Programming Clojure</a>.  What better subject to explore them with then zombies?  In this example we have two zombies – zombie1 and zombie2.   Let&rsquo;s represent each zombie as a sequence:</p>
+
+<pre><code>(def zombie1 '("z1_head", "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg"))
+
+(def zombie2 '("z2_head", "z2_r_arm" "z2_l_arm" "z2_torso" "z2_r_leg" "z2_l_leg"))
+</code></pre>
+
+<p>zombie1 is ready to take a bite of zombie2&rsquo;s left leg, since it is nice and tasty there at the end.  Once zombie1 takes a bite, the body part will be added to its own sequence – but in the second position, so that the head is always first and ready to take another bite.  So, if zombie2 just stood still and let itself be eaten, after one bite, zombie1 would look like this</p>
+
+<p>(z1_head,   z2_l_leg,   z1_r_arm,   z1_l_arm,   z1_torso,   z1_r_leg,   z1_l_leg)</p>
+
+<p>But zombie2 is not just going to sit around and let itself be eaten, it is hungry too!  So it looks at zombie1&rsquo;s left leg hanging off there at the end and takes a bite whenever zombie1 takes a bite.</p>
+
+<p>Let&rsquo;s define the functions.  Because they will be mutually recursive and call each, we need to declare the vars first:</p>
+
+<pre><code>(declare zombie1_eats zombie2_eats)
+</code></pre>
+
+<p>Now let&rsquo;s define the zombie functions.  The zombie1_eats function will take 3 arguments, the first is the list that represents the eater (zombie1), the next is the list that represents the food (zombie2), and the last is the number of bites that zombie1 takes.  The function will return the list that represents zombie1.</p>
+
+<pre><code>(defn zombie1_eats [eater,food,bites]
+  (if (= 0 bites) eater
+    (if (= 0 (count food)) eater
+      (zombie2_eats
+        (drop-last food)
+        (cons (first eater) (cons (last food) (rest eater)) )
+         bites))))
+
+(defn zombie2_eats [eater, food bites]
+  (if (= 0 bites) eater
+    (if (= 0 (count food)) eater
+      (zombie1_eats
+        (drop-last food)
+        (cons (first eater) (cons (last food) (rest eater)) )
+         (dec bites)))))
+</code></pre>
+
+<p>After 0 bites:</p>
+
+<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 0)
+("z1_head" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg")
+</code></pre>
+
+<p>After 1 bite</p>
+
+<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 1)
+("z1_head" "z2_l_leg" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg")
+</code></pre>
+
+<p>After 7 bites</p>
+
+<pre><code>(user=&gt; (zombie1_eats zombie1 zombie2 7)
+("z1_head" "z1_r_leg" "z1_l_leg" "z2_r_arm" "z2_l_arm" "z2_torso")
+</code></pre>
+
+<p>After 1007 bites</p>
+
+<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 1007)
+("z1_head" "z1_r_leg" "z1_l_leg" "z2_r_arm" "z2_l_arm" "z2_torso")
+</code></pre>
+
+<p>After 5000 bites</p>
+
+<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 5000)
+java.lang.StackOverflowError (NO_SOURCE_FILE:0)
+</code></pre>
+
+<p>Whoops we blew the stack!  Don&rsquo;t worry – put those zombies on a trampoline!</p>
+
+<p>Clojure provides a function for optimizing mutual recursion.  The only thing that we need to do is to modify our zombie functions with a “#” to introduce an anonymous function.  Our new zombie methods are:</p>
+
+<pre><code>(defn zombie1_eats [eater,food,bites]
+  (if (= 0 bites) eater
+    (if (= 0 (count food)) eater
+      #(zombie2_eats
+        (drop-last food)
+        (cons (first eater) (cons (last food) (rest eater)) )
+         bites))))
+
+(defn zombie2_eats [eater, food bites]
+  (if (= 0 bites) eater
+    (if (= 0 (count food)) eater
+      #(zombie1_eats
+        (drop-last food)
+        (cons (first eater) (cons (last food) (rest eater)) )
+         (dec bites)))))
+</code></pre>
+
+<p>Now lets try again:</p>
+
+<pre><code>user=&gt; (trampoline zombie1_eats zombie1 zombie2 5000)
+("z1_head" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg")
+</code></pre>
+
+<p>No problem.  Even bigger&hellip;</p>
+
+<pre><code> (trampoline zombie1_eats zombie1 zombie2 50004)
+("z1_head" "z2_l_arm" "z2_torso" "z2_r_leg" "z2_l_leg" "z1_r_arm")
+</code></pre>
+
+<p>There are other techniques to solve this as well in Clojure.  In Stuart Holloway&rsquo;s book, he mentions converting to self-recursion, replacing recursion with laziness and shortcutting recursion with <a href="http://en.wikipedia.org/wiki/Memoization"> memoization</a>.</p>
+
+<p>But for me, there is nothing more enjoyable than putting those zombies on a trampoline!</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/12/07/123//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/11/19/zen-and-zombies/">
+		
+			Zen and Zombies - Adventures in Ruby</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-19T23:06:07-05:00" pubdate data-updated="true">Nov 19<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+
+
+</div>
+    </div>
+		<p>What do Zen and Zombies have in common?  You probably got the beginning with the letter “Z”, but did you also guess Ruby?  This blog post is to share two awesome and fun filled ways to learn Ruby and Ruby and Rails.</p>
+
+<p>First, let&rsquo;s start with the Zen.  <a href="http://edgecase.com/">Edgecase </a>created a great way of learning Ruby.  It is through <a href="http://rubykoans.com/">Ruby Koans </a>.   Koans are a way of teaching Zen through questions.  The master asks the student a question.  The student then meditates on it until they come to the answer , eventually leading to enlightenment.  The Ruby Koans are cleverly designed to teach bite size tidbits of the Ruby language through the completion of unfinished test cases.  Each test case is a Koan.  Every time you fix the test case by filling in the blanks, you are gaining a deeper understanding of the language.  The main path_to_enlightment.rb file leads you through test cases that explore many areas of the languages such as Strings, Classes, Methods, and Exceptions.  Enlightenment has never been so much fun.</p>
+
+<p>Moving from enlightenment to tasty brains for Zombies, we have Rails for Zombies <a href="http://railsforzombies.org/">http://railsforzombies.org</a>.  <a href="http://envylabs.com/">Envy Labs </a> has raised the bar in online tutorials.   The traditional way to learn Ruby on Rails is to download the programs, struggle a bit as you figure out how to install it and then work through exercises locally through a book, website guide or podcast.  Rails for Zombies takes out all the pain of the traditional way and replaces it with enjoyment.  Everything is done in the browser, including code.  The format is to watch a video with Zombies and Rails code and then take what you learned by completing a lab exercise in the browser.  After you complete the lab, you unlock the next video.  Over the course of five labs, you create a Twitter web app for the Zombie hoard.  It&rsquo;s a win for you and the Zombies.</p>
+
+<p>So if you are curious about Ruby, these are two great ways to try it out.  I promise you that will have fun learning.  Although, some people may also experience occasional uncontrollable desire to eat brains&hellip;.</p>
+
+<p><em>Photo Credits</em></p>
+
+<p><em>Zen: </em><a href="http://www.flickr.com/photos/shebalso/121744939/">http://www.flickr.com/photos/shebalso/121744939/</a></p>
+
+<p>Zombie: <a href="http://www.flickr.com/photos/70109407@N00/5188908499/">http://www.flickr.com/photos/70109407@N00/5188908499/</a></p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/11/19/zen-and-zombies//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/10/11/clojure-dictionary-challenge/">
+		
+			Clojure Dictionary Challenge</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-11T23:11:52-04:00" pubdate data-updated="true">Oct 11<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/development/'>Development</a>
+
+
+</div>
+    </div>
+		<p>There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file.  Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution.  Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.</p>
+
+<p>Armed with Stuart Halloway&rsquo;s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission.</p>
+
+<p>Starting small – I decided to tackle the issue of finding consecutive consonants in a word.  I found that re-seq handles regex very nicely</p>
+
+<pre><code>user=&gt;  (re-seq #"[^aeiou]{2,}" "batty") 
+("tty")
+</code></pre>
+
+<p>Building on … let&rsquo;s find the number of letters in this word.  Since we have a sequence – we need to get the first element off of it, convert it to a string and find the length of it</p>
+
+<pre><code>user=&gt;  (.length (str (first (re-seq #"[^aeiou]{2,}" "batty"))))
+3
+</code></pre>
+
+<p>Not bad – but let&rsquo;s turn this into a function now</p>
+
+<pre><code>user=&gt; (defn count-cons [s]
+   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+ )
+#'user/count-cons
+</code></pre>
+
+<p>Now we can call the function directly</p>
+
+<pre><code>user=&gt; (count-cons "batty")
+3
+</code></pre>
+
+<p>Alright – we are making progress.  Next step, we need to be able to compare two words and see which has the bigger consonant count and return that.  For this, we will need a little “if” magic.</p>
+
+<pre><code>user=&gt; (defn compare-words [s1,s2]
+(if (&gt; (count-cons s1) (count-cons s2))
+  s1 s2))
+#'user/compare-words
+</code></pre>
+
+<p>Let&rsquo;s test it out</p>
+
+<pre><code>#'user/compare-words
+user=&gt; (compare-words "batty" "bat")
+"batty"
+user=&gt; (compare-words "bat" "batty")
+"batty"
+</code></pre>
+
+<p>Oh, yes, we are getting to the good part now.  Since we have a function that we can call on two arguments and give us one back that we can work with – we are ready to pull out the big guns …. reduce!</p>
+
+<pre><code>user=&gt; (reduce compare-words ["vat", "batty", "cars"])
+"batty"
+</code></pre>
+
+<p>Yeah!  Next we just need to feed it a file.  For this, after doing some research, I used the duck-streams library – you need to load it in using</p>
+
+<pre><code>user=&gt; (use '[clojure.contrib.duck-streams :only (spit read-lines)])
+
+nil
+</code></pre>
+
+<p>We open the file and read the lines and feed it to our function</p>
+
+<pre><code>user=&gt; (reduce compare-words (read-lines "/usr/share/dict/words"))
+
+"Ångström"
+</code></pre>
+
+<p>Yes, my regex needs some tweaking &ndash; but for this exercise, I am content.</p>
+
+<p>When you just have the working code.  It is actually quite concise:</p>
+
+<pre><code>;Counting consecutive consonants
+
+(use '[clojure.contrib.duck-streams :only (spit read-lines)])
+
+(defn count-cons [s]
+   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+ )
+
+(defn compare-words [s1,s2]
+(if (&gt; (count-cons s1) (count-cons s2))
+  s1 s2))
+
+(reduce compare-words (read-lines "/usr/share/dict/words"))
+</code></pre>
+
+<p>All in all, a fun evening trying to think functionally.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/10/11/clojure-dictionary-challenge//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/09/12/agile-software-lessons-from-ballet/">
+		
+			Agile Software Lessons From Ballet</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-12T20:09:15-04:00" pubdate data-updated="true">Sep 12<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
+
+
+</div>
+    </div>
+		<p><img src="http://lh3.ggpht.com/_ebGqcJ7qdjk/SimNpSOosaI/AAAAAAAACcI/lr-4YdYyz3E/kirov-swan-lopatkina.jpg" alt="Swan Lake" />
+_Photo by Valentin Baranovsky &ndash; Uliana Lopatkina and Danila Korsuntsev. _</p>
+
+<p>Many moons ago, I spent a couple of years dancing with a ballet company.  You wouldn&rsquo;t think that much of that experience would transfer to development projects, but I give you an example in partnership, the can be applicable straight from the ballet world to the software world.  The partnership in question is the one between the lead ballerina and the lead male dancer called a “pas de deux.”  In many ballets, this dance involves the ballerina being a swan/princess and the male dancer being a prince/sorcerer.  But in my example, it really doesn&rsquo;t matter that much.  The only important point is that they are the best dancers in the whole company.</p>
+
+<p>Each one of them can astound the audience in their solo moves, but in their duets – they can do really awesome things.  The male dancer supports the ballerina during dazzling spins and carries and lifts her in heart-stopping moves across the stage.  When it is done well, the audience goes crazy and gives them a standing ovation.  They can only pull off this spectacular performance if they have developed a great partnership.  Of course they are brilliant performers individually.  But they need more than that to pull of a pas de deux.   The job of the ballerina is to be lovely, graceful and technically brilliant.  The male partner must also to graceful and skillful (maybe not so lovely) – but his main job – is to make the ballerina look good.   Failure to make the ballerina look good – even if you are the most talented dancer in the entire universe – will still make you a lousy partner.    I don&rsquo;t care if he can spin one hundred times a second and can jump one hundred feet in the air.  If he is performing a pas de deux, and he drops his lovely ballerina on the floor, he is a lousy partner and she will be guaranteed to burn her toe shoes before agreeing to share the stage with him.</p>
+
+<p>Reasons for being a bad partner in ballet (or dropping your ballerina):</p>
+
+<ul>
+<li><p>You didn&rsquo;t have enough time to  rehearse</p></li>
+<li><p>You don&rsquo;t like your ballerina</p></li>
+<li><p>You think you should be a the star  of the show and don&rsquo;t want anyone to look better than you.</p></li>
+</ul>
+
+
+<p>Now let&rsquo;s go to the world of the corporate software project.  You have your developers and your business partner – the customer.  You, the developers,  have the supporting role.  You main job is to make the customer look good.   That&rsquo;s right, through your mastery of technology, you must partner with your customer to help them accomplish their business goals and make them look great.   If you metaphorically,  drop your customer on the floor, then you are obviously not a good partner.</p>
+
+<p>Reasons for being a bad developer partner in software projects:</p>
+
+<ul>
+<li>You are new to the team and     haven&rsquo;t gotten into the communication groove yet</li>
+</ul>
+
+
+<p>This is alright in the beginning of a project.  Heck, it happens when ballet dancers are just learning their dances too.  If you are doing short iteration cycles, then the first couple will be a little rough.  But with feedback you will improve and your team will start to gel and shift into high performance.</p>
+
+<ul>
+<li>You think all people that are not   IT are idiots.</li>
+</ul>
+
+
+<p>I have seen this sentiment common on projects that have a strict division between the IT people and the business people.  Somehow, it turns into a horrible sentiment that the anything that the business users ask for is a waste of time and only the IT department knows the right things to do.  If you have your team mixed with developers and business people this will help break down such harmful barriers.</p>
+
+<ul>
+<li>You think that you are a Superstar  and want to showcase your technical talents in your application –     maybe they will start asking you to speak at the Google Confs after     they see your work.</li>
+</ul>
+
+
+<p>You may be the Ninja Assassin of the Black Arts of Java, Ruby and all the cool Functional languages, but if you can&rsquo;t accomplish what your business needs to look good, then you suck as a partner.  Frequent communication with the customer is key.  Fun is fine, but please examine your motivations for putting in that cool new feature.  Is it going to make the customer look good or you?  Again, short iterations and feedback cycles will help put the focus back on what the customer wants and needs.</p>
+
+<p>Communication, feedback  are essential elements to a good partnership in the ballet world and the software development world.  Don&rsquo;t ever forget to make your customer look good and your projects will be sure to get a standing ovation.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/09/12/agile-software-lessons-from-ballet//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/09/12/openssl-fix-for-rails-3-0-on-ubuntu/">
+		
+			Openssl Fix for Rails 3.0 on Ubuntu</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-12T10:11:14-04:00" pubdate data-updated="true">Sep 12<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+
+
+</div>
+    </div>
+		<p>If you are trying to run ruby rvm and rails 3.0 on Ubuntu you might run into this problem when you start up you server.</p>
+
+<pre><code>LoadError: no such file to load
+-- openssl
+</code></pre>
+
+<p>After much googling and researching – just installing the openssl library on your system won&rsquo;t fix the problem.  You need to recompile and install your rvm ruby version with the openssl.  I found this fixed it for me.</p>
+
+<pre><code>rvm install 1.9.2-p0 -C --with-openssl-dir=$rvm_path/usr
+</code></pre>
+
+<p>There is also another solution
+<a href="http://cjohansen.no/en/ruby/ruby_version_manager_ubuntu_and_openssl"> here so you don&rsquo;t have to recompile every time</a></p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/09/12/openssl-fix-for-rails-3-0-on-ubuntu//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/08/19/fox-in-socks-blocks/">
+		
+			Fox in Socks Blocks</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-19T22:43:34-04:00" pubdate data-updated="true">Aug 19<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+
+
+</div>
+    </div>
+		<p>In honor of the Ruby <a href="http://www.globalnerdy.com/2010/08/19/whyday-today-august-19th/">Why Day</a>, I was inspired to dabble in Ruby Blocks after being reading &ldquo;Fox In Socks&rdquo; multiple times to my children before bed.  For all of you parents out there that have read the book many, many times while your children are giggling at your pronunciation difficulties, I am sure this bit will be familiar:</p>
+
+<pre><code>def fox_in_socks_blocks
+  chicks_bricks = ["Chicks","bricks","blocks","clocks"]
+  yield chicks_bricks[0..1]
+  yield [chicks_bricks[0],chicks_bricks[2]]
+  yield chicks_bricks
+end
+
+fox_in_socks_blocks do |sillywords|
+  puts "#{sillywords[0]} with #{sillywords[1]} come." if sillywords.size &lt; 3
+  puts "#{sillywords[0]} with #{sillywords[1]} and #{sillywords[2]} and #{sillywords[3]} come." if sillywords.size &gt;= 3
+end
+</code></pre>
+
+<p>That&rsquo;s right &ndash; the output is:
+<code>
+Chicks with bricks come.
+Chicks with blocks come.
+Chicks with bricks and blocks and clocks come.
+</code></p>
+
+<p>Is your tongue numb?</p>
+
+<p>Happy Why Day!</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/08/19/fox-in-socks-blocks//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/08/17/the-smart-not-so-smart-wave-function/">
+		
+			The Smart Not-So-Smart Wave Function</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-17T21:58:04-04:00" pubdate data-updated="true">Aug 17<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
+
+
+</div>
+    </div>
+		<p>I am cruising along in my morning.  I have a cup of tea in my hand and a good outlook on my tasks at hand.  The code is flowing off of my fingertips.  I am feeling pretty smart.  Then the cloud moves in and the code darkens.  I am at a roadblock.   I try to google, I try debugging, I try calling in my fellow developers to see if they can see what the problem is&hellip; no luck.  I bang my head unproductively for another hour and then go home.  A fresh start in the morning and a fresh cup of day move me in a new direction, somehow I stumble upon the answer and quite frankly, it was so simple I can&rsquo;t believe I missed it.  I feel not so smart.   This is one of the many smart-not-so-smart waves that rule the life of a developer.</p>
+
+<p>The example above is what I would call a mini-smart-not-so-smart wave.  There are much bigger ones too and much more important too.  These are the sort of moments that you encounter that you feel stupid in a really good way.   You learn a totally new approach or way of doing things and much better because of it.   One of these moments was when I went up to a MySQL  <a href="http://www.slideshare.net/ZendCon/sql-query-tuning-the-legend-of-drunken-query-master-presentation">Drunken Query Master Presentation </a>by Jay Pipes.  He is a brilliant speaker.  Before I went up there, I thought I was pretty smart.  I knew how to swing inner and outer joins on my queries and how to optimize using the explain plan&hellip;. After listening to him, I felt really not so smart.   I had been using Theta style instead of Ansi style in my queries and I really had no idea of how to use the storage engines properly and really understand how the optimizer worked or even more important&hellip; to really do queries well, you need to stop thinking in logic loops (the comfortable world of the developer) and start thinking in sets.   Yes, I felt really dim, but my world view had grown and I had found a whole range of stuff that I didn&rsquo;t know.   I had uncovered a whole dark section  “how do you know what you don&rsquo;t know”.</p>
+
+<p>I had similar experiences when I attended some OWASP security talks and realized that I really didn&rsquo;t know much about software security and it is actually quite important to learn and consider in design and development to make better more robust software.  More recently, I have been spending my not-so-smart cycle time learning more about Test-Driven Design and Agile development by learning Ruby and attending some awesome local community user groups.</p>
+
+<p>So, if you are feeling smart and have been for awhile.  It is really time to look around for something to challenge you views.  Look at a completely different field in technology then you are used to, try QA, project management, security, cloud computing, data governance.  Go out in the community and talk to people in user groups.   Push yourself of in the not-so-smart wave section and you will emerge smarter and happier for it.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/08/17/the-smart-not-so-smart-wave-function//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/07/29/open-source-wednesdays/">
+		
+			Open Source Wednesdays</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-29T22:54:33-04:00" pubdate data-updated="true">Jul 29<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
+
+
+</div>
+    </div>
+		<p>I have always wanted to contribute to Open Source.  I have reaped the benefits of using Open Source packages throughout the years, I sincerely want to give back.  What has been stopping me all this time?      Lack of time is my main excuse.  I have two small children and by the time I clean up from dinner and get them bathed and off to bed, there is little time left to code.   I tend to use this excuse for lots of other tasks that I avoid around the house, like closet cleaning, reorganizing the garage, etc …  But an excuse is exactly what it is.</p>
+
+<p>I learned an invaluable technique to tackling projects around the house that I would like to get done, but seem too large or for some other reason have become subject to procrastination.  First, I schedule a day to do something about it and then I put on a timer and just start doing it for 15 minutes.  After 15 minutes, I am officially done.  I can quit with no guilt and have the lovely feeling of having made a dent.  Most often, once I get started, I want to keep with it and really get rolling.  That&rsquo;s OK too.</p>
+
+<p>Last Wednesday, I decided to apply this technique and made a date with Open Source.  After a Ruby user group, the night before,  demonstrated the mechanics of fixing a bug using GitHub, I was finally confident enough to give it a go myself.  I created a GitHub account, forked the Redmine project, fixed a bite-sized bug and submitted a patch – all in one night!</p>
+
+<p>I was so jazzed up about it, that I decided that I was going to continue in my Open Source contribution quest on a limited time budget, by declaring that my Wednesday night is my Open Source night.  It might only be 15 or 30 min, but I will be doing something and feeling that contribution buzz goodness.</p>
+
+<p>I encourage everyone that has been struggling to find time for Open Source to just schedule one night a week.  Just do something for 15 min and see what flows …</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/07/29/open-source-wednesdays//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/07/07/hello-world-in-rdf/">
+		
+			Hello World in RDF</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-07T23:33:20-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/semantic-web/'>Semantic Web</a>
+
+
+</div>
+    </div>
+		<p>I decided to start playing with RDFs to start me on the road to understanding and programming Semantic Web.  As always, the first step it to start with a “Hello World” type of exercise.  In my case, I had armed myself with a good cappuccino at Starbucks and decided to set myself with a purl link and FOAF page.
+<a href="https://secure.wikimedia.org/wikipedia/en/wiki/FOAF_%28software%29">
+FOAF (Friend of a Friend)</a> is one of the most popular vocabularies out there for RDF (Resource Description Framework).  It expresses relationships in a machine readable format and is considered one of the first social Semantic Web applications.</p>
+
+<p>When you look at a foaf.rdf file, it is basically just an file with xml tags:</p>
+
+<pre><code>&lt;foaf:Person rdf:ID="me"&gt;
+&lt;foaf:name&gt;Carin Meier&lt;/foaf:name&gt;
+&lt;foaf:givenname&gt;Carin&lt;/foaf:givenname&gt;
+&lt;foaf:family_name&gt;Meier&lt;/foaf:family_name&gt;
+&lt;foaf:nick&gt;squid&lt;/foaf:nick&gt;
+</code></pre>
+
+<p>Not too much fun to start coding by hand though.  Luckily, there is a handy dandy generator &ndash; <a href="http://www.ldodds.com/foaf/foaf-a-matic">FOAF-a-matic.</a> Just fill in the form and you can easily generate the basic foaf rdf file for yourself.  You can always add to it later.  Save the file as foaf.rdf somewhere on your website for indexing.</p>
+
+<p>Now you can do some fun stuff with it.  You can check and visualize your RDF document with <a href="http://www.w3.org/RDF/Validator/">http://www.w3.org/RDF/Validator/</a>.  Or you can use a<a href="http://foaf-visualizer.org/?uri=http://gigasquidsoftware.com/foaf/foaf.rdf"> FOAF visualizer</a>.</p>
+
+<p>The final part is to set yourself up with a purl address.  <a href="http://www.purl.org/docs/index.html">Purl.org</a> is a website that is dedicated to providing web endpoints or addresses that can be indentifiers for individuals.  It provides a layer of indirection that is very useful in the changing world of the web.  For example, if I use my work web page link as my identifier in my RDF and then I change jobs, all my FOAF links will be broken.  However, I can use my purl address and set up my identifier as my webpage and then change it when then need arises.   So logon to purl.org and set yourself up with an account.
+When other people &ldquo;know&rdquo; you in FOAF, they can use your purl link:</p>
+
+<blockquote><p>&lt;foaf:Person>
+&lt;foaf:name>Carin Meier&lt;/foaf:name>
+&lt;rdfs:seeAlso rdf:resource=&ldquo;<a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier</a>&rdquo;/>
+&lt;/foaf:Person></p></blockquote>
+
+<p>My FOAF is <a href="http://gigasquidsoftware.com/foaf/foaf.rdf">http://gigasquidsoftware.com/foaf/foaf.rdf</a>
+My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier</a></p>
+
+<p>That&rsquo;s it!  Hello World in FOAF!</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/07/07/hello-world-in-rdf//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/5/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/7/" class="next">Next</a>
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2014
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

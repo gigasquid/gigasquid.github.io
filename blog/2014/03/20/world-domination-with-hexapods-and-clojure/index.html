@@ -1,0 +1,399 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>World Domination with Hexapods and Clojure - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="Once you have your hexapod assembled and running using the hand held
+controller,
+of course, your thoughts naturally turn to world domination. The &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">World Domination With Hexapods and Clojure</h2>
+	<div class="entry-content"><p>Once you have your <a href="http://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/">hexapod assembled and running using the hand held
+controller</a>,
+of course, your thoughts naturally turn to world domination.</p>
+
+<h2>The most powerful tool in the world is the Clojure REPL</h2>
+
+<p>World domination requires the most powerful tools available.  That of
+course calls for Clojure and the Clojure REPL.  I recommend Emacs
+as the editor of choice of such an endeavor.  However, it if you are
+content with city, state, or single country domination, other editors
+that support Clojure are also fine.</p>
+
+<h2>Connect the XBee to your computer</h2>
+
+<p>First, we need to get the computer to talk to the hexapod wirelessly.
+We can do this with a <a href="http://www.trossenrobotics.com/uartsbee">USB to Serial adapter</a>
+that uses the paired XBee from the handheld commander.</p>
+
+<p>Take the XBee from the handheld commander</p>
+
+<p><img src="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg"></p>
+
+<p>and move it to the USB to serial adapter</p>
+
+<p><img src="http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg"></p>
+
+<p>Now plug the usb into your computer.</p>
+
+<h2>Get your Clojure ready</h2>
+
+<p>In your clojure project, the only magic you need is the <a href="https://github.com/samaaron/serial-port">Serial Port library</a>. Import the library and list your serial ports.  Then open the one that shows up for you.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">clj-hexapod.core</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">require</span> <span class="p">[</span><span class="nv">serial-port</span> <span class="ss">:as</span> <span class="nv">serial</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; Use this command to see what port your serial port</span>
+</span><span class='line'><span class="c1">;; is assinged to</span>
+</span><span class='line'><span class="p">(</span><span class="nf">serial/list-ports</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; replace the USB0 with whater it shows</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">port</span> <span class="p">(</span><span class="nf">serial/open</span> <span class="s">&quot;/dev/ttyUSB0&quot;</span> <span class="mi">38400</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since we are going to be talking to the hexapod.  We need to send the commands in the same format that it is expecting. Basically, a packet of where the postions of the joystick are, as well as what buttons are pushed.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">checksum</span> <span class="p">[</span><span class="nv">v</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mod</span> <span class="p">(</span><span class="nb">- </span><span class="mi">255</span> <span class="p">(</span><span class="nb">reduce + </span><span class="nv">v</span><span class="p">))</span> <span class="mi">256</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">vec-&gt;bytes</span> <span class="p">[</span><span class="nv">v</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">byte-array</span> <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">%</span> <span class="p">(</span><span class="nf">Integer.</span><span class="p">)</span> <span class="p">(</span><span class="nf">.byteValue</span><span class="p">)</span> <span class="p">(</span><span class="nf">byte</span><span class="p">))</span> <span class="nv">v</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">build-packet</span> <span class="p">[</span><span class="nv">r-vert</span> <span class="nv">r-horz</span> <span class="nv">l-vert</span> <span class="nv">l-horz</span> <span class="nv">buttons</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">[</span><span class="mi">255</span> <span class="c1">;header</span>
+</span><span class='line'>   <span class="nv">r-vert</span>
+</span><span class='line'>   <span class="nv">r-horz</span>
+</span><span class='line'>   <span class="nv">l-vert</span>
+</span><span class='line'>   <span class="nv">l-horz</span>
+</span><span class='line'>   <span class="nv">buttons</span>
+</span><span class='line'>   <span class="mi">0</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">checksum</span> <span class="p">[</span><span class="nv">r-vert</span> <span class="nv">r-horz</span> <span class="nv">l-vert</span> <span class="nv">l-horz</span> <span class="nv">buttons</span><span class="p">])])</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">send </span><span class="p">[</span><span class="nv">packet</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">serial/write</span> <span class="nv">port</span> <span class="p">(</span><span class="nf">vec-&gt;bytes</span> <span class="nv">packet</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From here, we can simply make functions for the joystick controls to go up and down</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;values between 129-254</span>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">up </span><span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;joystick up for speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">good-range?</span> <span class="nv">speed</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">+ </span><span class="mi">129</span> <span class="p">(</span><span class="nb">* </span><span class="mi">125</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">speed</span> <span class="mf">100.0</span><span class="p">))))</span>
+</span><span class='line'>    <span class="nv">CENTER</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;values between 0 and 125</span>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">down </span><span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;joystick down speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">good-range?</span> <span class="nv">speed</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">- </span><span class="mi">125</span> <span class="p">(</span><span class="nb">* </span><span class="mi">125</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">speed</span> <span class="mf">100.0</span><span class="p">))))</span>
+</span><span class='line'>    <span class="nv">CENTER</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we can do things like walk, turn, and change the gait</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-forward</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;walk forward speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">up </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-backwards</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;walk backwards speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">down </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-right</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;walk right speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">up </span><span class="nv">speed</span><span class="p">)</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-left</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;walk right speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">down </span><span class="nv">speed</span><span class="p">)</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">turn-right</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;turn right speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">up </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">turn-left</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;turn left speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">down </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">change-gait</span> <span class="p">[</span><span class="nv">gait-key</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">gait-num</span> <span class="p">(</span><span class="nf">gait-key</span> <span class="nv">gaits</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">gait-num</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">stop</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="s">&quot;stop hexapod&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can control it from the REPL with some simple commands</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">walk-forward</span> <span class="mi">20</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">walk-backwards</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">walk-right</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">walk-left</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">turn-right</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">turn-left</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">change-gait</span> <span class="ss">:ripple-smooth</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">change-gait</span> <span class="ss">:tripod-normal</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">change-gait</span> <span class="ss">:ripple</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">change-gait</span> <span class="ss">:amble</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">stop</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you want to see the code, it is out on github as <a href="https://github.com/gigasquid/clj-hexapod">clj-hexapod</a>.  Please keep in mind that it is early days still, and I am still just exploring.</p>
+
+<h2>Phoneix Code Firmware</h2>
+
+<p>It is worth noting the the above code was meant to run with the default hexapod firmware.  That is the &ldquo;Nuke&rdquo; firmware.  There is another firmware, the <a href="https://github.com/KurtE/Arduino_Phoenix_Parts">Phoenix code</a>, that gives the hexapod more lifelike moves and allows it to twist and shift is rather creepy ways.</p>
+
+<p>I just loaded it on the hexapod yesterday.  The commander software changed too, so I will of course need to revisit the code, to add in the new moves.  But here is a sneak preview of what it can do:</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('PmBGt9T-yvI');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/PmBGt9T-yvI?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/PmBGt9T-yvI/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=PmBGt9T-yvI" id="PmBGt9T-yvI" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">Hexapod with Phoenix Code</div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+
+<p><em>That is my daughter singing in the background</em></p>
+
+<h2>That&rsquo;s all for now</h2>
+
+<p>I hope I have given you pointers for getting started on your own world domination with Clojure and Hexapods. Remember to practice your laugh &hellip;. Muhahaha :)</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2014/03/20/world-domination-with-hexapods-and-clojure/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2014
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2014/03/20/world-domination-with-hexapods-and-clojure/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2014/03/20/world-domination-with-hexapods-and-clojure/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

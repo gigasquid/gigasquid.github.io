@@ -1,0 +1,33 @@
+<rdf:RDF
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/"
+      xmlns:admin="http://webns.net/mvcb/">
+<foaf:PersonalProfileDocument rdf:about="">
+  <foaf:maker rdf:resource="#me"/>
+  <foaf:primaryTopic rdf:resource="#me"/>
+  <admin:generatorAgent rdf:resource="http://www.ldodds.com/foaf/foaf-a-matic"/>
+  <admin:errorReportsTo rdf:resource="mailto:leigh@ldodds.com"/>
+</foaf:PersonalProfileDocument>
+<foaf:Person rdf:ID="me">
+<foaf:name>Carin Meier</foaf:name>
+<foaf:givenname>Carin</foaf:givenname>
+<foaf:family_name>Meier</foaf:family_name>
+<foaf:nick>squid</foaf:nick>
+<foaf:mbox_sha1sum>836ad614bd09f64692814f98d000a4a198a264c6</foaf:mbox_sha1sum>
+<foaf:homepage rdf:resource="http://gigasquidsoftware.com"/>
+<foaf:depiction rdf:resource="http://www.gigasquidsoftware.com/images/carin.jpg"/>
+<foaf:workplaceHomepage rdf:resource="http://neo.com"/>
+<foaf:workInfoHomepage rdf:resource="http://neo.com/"/>
+<foaf:schoolHomepage rdf:resource="http://www.uc.edu/"/>
+<foaf:knows>
+<foaf:Person>
+<foaf:name>Brian Sletten</foaf:name>
+<foaf:mbox_sha1sum>6de5a032a9459ec947c8f54b3e5f54a6e60b7a29</foaf:mbox_sha1sum>
+<rdfs:seeAlso rdf:resource="http://purl.org/net/bsletten"/></foaf:Person></foaf:knows>
+<foaf:knows>
+<foaf:Person>
+<foaf:name>Mark Windholtz</foaf:name>
+<foaf:mbox_sha1sum>3bf091f9dfa197b3af82e34009bccafa5c3c9a61</foaf:mbox_sha1sum>
+<rdfs:seeAlso rdf:resource="http://www.agiledna.com/foaf/mark_windholtz.rdf"/></foaf:Person></foaf:knows></foaf:Person>
+</rdf:RDF>

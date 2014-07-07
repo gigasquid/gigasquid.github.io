@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: AR Drones | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/ar-drones/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2014-07-06T22:36:09-04:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Controlling Multiple Drones with Clojure and Goals and Beliefs]]></title>
+    <link href="http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs/"/>
+    <updated>2013-09-05T15:35:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs</id>
+    <content type="html"><![CDATA[<h2>How to Control Multiple Drones with Clojure</h2>
+
+<p>The <a href="https://github.com/gigasquid/clj-drone">clj-drone</a> library now
+has multi-drone support!  You can now send multiple drones commands,
+receive their navigation data, and even have them perform their
+actions autonomously with goals and beliefs.</p>
+
+<p>It takes a bit of extra setup to control more than one drone. We need to assign them each an
+ip and get them talking as an adhoc network.
+<a href="https://twitter.com/jimweirich">Jim Weirich</a> creating a neat little
+script to run on the drone to do just this.  Here are the
+instructions:</p>
+
+<h3>Change first drone to adhoc network</h3>
+
+<p>Connect your computer to the first drone&rsquo;s network.</p>
+
+<p>```clojure
+telnet 192.68.1.1
+````</p>
+
+<p>Create the following file as adhoc.sh.  This shell script will
+temporarily change the network to an adhoc network named
+&ldquo;multidrone_ah&rdquo; and assign it a static ip of 192.168.1.100.
+The next time you reboot your drone, things will be back to normal.</p>
+
+<p>```clojure
+; This script should be run on the drone.
+; Change the IP address to be difference
+; for each drone on the same ad-hoc network
+;
+killall udhcpd
+ifconfig ath0 down
+iwconfig ath0 mode ad-hoc essid multidrone_ah channel auto commit
+ifconfig ath0 192.168.1.100 netmask 255.255.255.0 up
+````</p>
+
+<p>Run the script.</p>
+
+<h3>Change the second drone to the adhoc network</h3>
+
+<p>Connect your computer to the second drone&rsquo;s network.</p>
+
+<p>```clojure
+telnet 192.68.1.1
+````</p>
+
+<p>```clojure
+; This script should be run on the drone.
+; Change the IP address to be difference
+; for each drone on the same ad-hoc network
+;
+killall udhcpd
+ifconfig ath0 down
+iwconfig ath0 mode ad-hoc essid multidrone_ah channel auto commit
+ifconfig ath0 192.168.1.200 netmask 255.255.255.0 up
+````</p>
+
+<p>Run the script.</p>
+
+<h3>On your laptop</h3>
+
+<ul>
+<li>Connect to the adhoc network that the drones are on &ldquo;multidrone_ah&rdquo;</li>
+<li>Change your computer to a static ip on the network (from network
+preferences on mac) something like 192.168.1.101</li>
+</ul>
+
+
+<p>Now you are ready to run the program.  Here is a small example of
+sending simple commands:</p>
+
+<p>```clojure
+(drone-initialize :drone1 &ldquo;192.168.1.100&rdquo; default-at-port default-navdata-port)
+(mdrone :drone1 :take-off)
+(mdrone :drone1 :land)</p>
+
+<p>(drone-initialize :drone2 &ldquo;192.168.1.200&rdquo; default-at-port default-navdata-port)
+(mdrone :drone2 :take-off)
+(mdrone :drone2 :land)
+````</p>
+
+<h2>Bring on Multiple Drones interacting with Goals and Beliefs</h2>
+
+<p>The clj-drone library implements goals and beliefs from <a href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">John
+McCarthy&rsquo;s work</a>.
+The way this works is that the navigation data being constantly sent
+to our computer for processing.  Everytime we get a navigation packet
+that ends up looking something like this, (but with lots more data):</p>
+
+<p>```clojure
+ {:altitude 0.0, :yaw -0.215, :pitch -1.075, :roll -2.904, :control-state :landed, :communication :ok, :com-watchdog :ok, :seq-num 870}
+````</p>
+
+<p>We then define a belief-action using this data.</p>
+
+<p>```clojure
+(def-belief-action ba-landed1
+  &ldquo;I (Drone1) am landed&rdquo;
+  (fn [{:keys [control-state]}] (= control-state :landed))
+  (fn [navdata] (mdrone :drone1 :take-off)))
+````</p>
+
+<p>The def-belief-action macro takes:</p>
+
+<ul>
+<li>Name of the belief action</li>
+<li>A readable sentence that expresses the belief.  (This is later
+logged, so that we know what the drone believes at all times.)</li>
+<li>A predicate that takes in the navigation data as a parameter.  When
+it evaluates to true, then the belief is said to be &ldquo;held&rdquo;.</li>
+<li>A function to execute when the belief is held</li>
+</ul>
+
+
+<p>The beliefs are then combined to form goals.</p>
+
+<p>```clojure
+(def-goal g-take-off1
+  &ldquo;I (Drone1) want to fly.&rdquo;
+  (fn [{:keys [control-state]}] (= control-state :hovering))
+  [ba-landed1 ba-taking-off1])
+````</p>
+
+<p>The def-goal macro takes:</p>
+
+<ul>
+<li>The name of the goal</li>
+<li>A readable sentence that expresses the goal. (This is later logged,
+so that we can know when it achieves a goal.)</li>
+<li>A predicate that takes in the navigation data as a parameter.  When
+it evaluates to true, the goal is said to be achieved.  It will no
+longer evaluate or hold any of the belief actions associated with
+that goal.</li>
+</ul>
+
+
+<p>Finally, we can set a list of goals for a drone to achieve:</p>
+
+<p><code>clojure
+ (set-current-goal-list drones :drone1
+ [g-take-off1 g-find-other-drone-and-wave1 g-land1])
+</code></p>
+
+<p>This sets the goal list for a drone.  It will take-off, look around
+for the other drone and wave, (do a dance), once it sees it.  Finally,
+after both drones have spotted each other and waved, they will both
+land.</p>
+
+<h2>Video or It Didn&rsquo;t Happen</h2>
+
+<p>Here is a video of both drones.  They will take off, look around for
+each other and wave when they spot each other.  They will land when
+the have both waved.  They are operating solely on goals and beliefs
+with their navigation data.</p>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('J65rvPdJQ0c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/J65rvPdJQ0c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/J65rvPdJQ0c/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=J65rvPdJQ0c" id="J65rvPdJQ0c" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">Dual Drone Seek and Dance</div>
+</a>
+<div class="video-info" >Two drones turn until they see each other. When a drone sees the other, it will do a little dance. When both have danced, they will land.
+
+Programmed by @carinmeier using the clj-drone library with beliefs and goals. (see https://github.com/gigasquid/clj-drone).</div>
+</div>
+
+</p>
+
+<p>The code running the video above can be found in the examples of the
+<a href="https://github.com/gigasquid/clj-drone/tree/master/examples">clj-drone</a>.</p>
+
+<p>Happy Hacking!</p>
+]]></content>
+  </entry>
+  
+</feed>
