@@ -16,7 +16,11 @@ Nobody knows how it happened.  Some people think it was due to the rapid expansi
 Luke was a teenager when his powers came to him.  His mother always complained that he was lazy.  It was true, he did prefer to sleep until noon.  He also had a habit of putting everything off to the last minute, like saving all his papers for the night before they were due.  One day, though, he noticed something very strange.  He could start to see the future.  Well not really “see” it.  But he could see the infinite possibilities  of the future.  Not very far into the future, but enough.  It was a few milliseconds at first.  But now it was up to a full second.  He checked the Clojure Docs as soon as he realized his gift.  It was lazy evaluation and power to deal with infinite sequences.
 
 ## Spress 
-Spress, whose real name is Emily, came into her power early.  She was only 5 years old.  Her mother had taken her to a farm to visit with the animals.  Her mother had pointed at the cow and told her daughter that it said “Moo”.  Then, at the horse, saying “Neigh”.  Spress smiled at pointed at a bucket and said “cow”.  Her mother shook her head at her, but Spress only smiled bigger.  She said “cow” again.  Then, suddenly, the bucked went “Moo”.  She was immediately taken to the Clojure X-Men school, where they identified her power as protocols.  She trained her power and now is so good at solving the “expression problem”, she is known as “Spress”.
+Spress, whose real name is Emily, came into her power early.  She was
+only 5 years old.  Her mother had taken her to a farm to visit with
+the animals.  Her mother had pointed at the cow and told her daughter
+that it said “Moo”.  Then, at the horse, saying “Neigh”.  Spress
+smiled and  pointed at a bucket and said “cow”.  Her mother shook her head at her, but Spress only smiled bigger.  She said “cow” again.  Then, suddenly, the bucked went “Moo”.  She was immediately taken to the Clojure X-Men school, where they identified her power as protocols.  She trained her power and now is so good at solving the “expression problem”, she is known as “Spress”.
 
 
 ## Multi
@@ -29,7 +33,12 @@ Dot always had a way with animals.  She had many pets growing up.  Later, she wo
 
 
 ## Bob
-Bob is the leader of the Clojure X-Men.  He seeks out people with the power of Clojure and helps train and educate them.  He also is the most powerful.  He can come into any argument, problem, or challenge and immediately separate out what is most important to focus on.  He always knows the right thing to do, without getting bogged down in the wrong things.  His power is Clojure’s simplicity.
+Bob is the leader of the Clojure X-Men.  He seeks out people with the
+power of Clojure and helps train and educate them.  He also is the
+most powerful.  He can come into any argument, problem, or challenge
+and immediately separate out what is most important to focus on.  He
+always knows the right thing to do, without getting bogged down in
+unnecessary details .  His power is Clojure’s simplicity.
 
 
 There might be others out there, we don’t know.  We can only hope, that they are found by Bob and the Clojure X-Men and use their powers for good.
