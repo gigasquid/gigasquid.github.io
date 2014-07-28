@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-07-06T22:48:57-04:00</updated>
+  <updated>2014-07-27T20:30:10-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cljoure X-Men]]></title>
+    <link href="http://gigasquid.github.io/blog/2014/07/27/cljoure-x-men/"/>
+    <updated>2014-07-27T20:12:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2014/07/27/cljoure-x-men</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://c2.staticflickr.com/6/5557/14761955842_6a8bf4a66a_n.jpg">https://c2.staticflickr.com/6/5557/14761955842_6a8bf4a66a_n.jpg</a>"></p>
+
+<p>Nobody knows how it happened.  Some people think it was due to the rapid expansion and adoption of Clojure.  Other people say that the language itself was caused by something deeper and more magical.  No one knows for sure.  All that we really know is that people starting being born with extraordinary powers.  Powers that no human had had before.  They were strange and unique to each person they touched.  The only thing that they all had in common, was that each was an aspect of the Clojure programming language.</p>
+
+<h2>Luke (AKA Lazy Luke)</h2>
+
+<p>Luke was a teenager when his powers came to him.  His mother always complained that he was lazy.  It was true, he did prefer to sleep until noon.  He also had a habit of putting everything off to the last minute, like saving all his papers for the night before they were due.  One day, though, he noticed something very strange.  He could start to see the future.  Well not really “see” it.  But he could see the infinite possibilities  of the future.  Not very far into the future, but enough.  It was a few milliseconds at first.  But now it was up to a full second.  He checked the Clojure Docs as soon as he realized his gift.  It was lazy evaluation and power to deal with infinite sequences.</p>
+
+<h2>Spress</h2>
+
+<p>Spress, whose real name is Emily, came into her power early.  She was
+only 5 years old.  Her mother had taken her to a farm to visit with
+the animals.  Her mother had pointed at the cow and told her daughter
+that it said “Moo”.  Then, at the horse, saying “Neigh”.  Spress
+smiled and  pointed at a bucket and said “cow”.  Her mother shook her head at her, but Spress only smiled bigger.  She said “cow” again.  Then, suddenly, the bucked went “Moo”.  She was immediately taken to the Clojure X-Men school, where they identified her power as protocols.  She trained her power and now is so good at solving the “expression problem”, she is known as “Spress”.</p>
+
+<h2>Multi</h2>
+
+<p>Nobody knows Multi’s background.  He came to notice in his early twenties with his powers.  Ordinary humans process sensory input, (like sight, touch, and sound), in an asynchronous fashion.  However, when it gets processed in the brain, it runs into a single pipeline bottleneck  &ndash; consciousness.  Multi’s power is that he can concurrently process his higher level consciousness and reasoning to all this sensory input.  The result is that he can move, think, and perform super fast  and in a super smart way.
+He got the power of Clojure’s concurrency.</p>
+
+<h2>Dot</h2>
+
+<p>Dot always had a way with animals.  She had many pets growing up.  Later, she would go into the forest and the animals would seek her out.  She would be found resting by a tree surrounded by deer and birds.  One time, on her walk, she fell down a ditch and had her leg trapped under a log.  Her mother arrived, after searching for her, to see a Bear reach down and gently remove the log.   She stood dumbfounded, as her daughter thanked the bear and it nodded in reply as it turned away.   She could talk with animals effortlessly.  She had the power of Clojure’s Interop.</p>
+
+<h2>Bob</h2>
+
+<p>Bob is the leader of the Clojure X-Men.  He seeks out people with the
+power of Clojure and helps train and educate them.  He also is the
+most powerful.  He can come into any argument, problem, or challenge
+and immediately separate out what is most important to focus on.  He
+always knows the right thing to do, without getting bogged down in
+unnecessary details .  His power is Clojure’s simplicity.</p>
+
+<p>There might be others out there, we don’t know.  We can only hope, that they are found by Bob and the Clojure X-Men and use their powers for good.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[World Domination with Hexapods and Clojure]]></title>
@@ -569,166 +612,6 @@ mini-marshmallows.</p>
 
 <p>&ldquo;Got it. Come on, let&rsquo;s go! Someone is trying to destroy the world and
 we need to see the otters.&rdquo;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hitchhiker's Guide to Clojure]]></title>
-    <link href="http://gigasquid.github.io/blog/2014/02/01/hitchhikers-guide-to-clojure/"/>
-    <updated>2014-02-01T19:33:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2014/02/01/hitchhikers-guide-to-clojure</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg">http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg</a>"></p>
-
-<p><em>The following is a cautionary example of the unpredictable
-combination of Clojure, a marathon viewing of the BBC&rsquo;s series &ldquo;The
-Hitchhiker&rsquo;s Guide to the Galaxy&rdquo;, and a questionable amount of
-cheese.</em></p>
-
-<p>There have been many tourism guides to the
-<a href="http://clojure.org/">Clojure</a> programming language.  Some that easily
-come to mind for their intellectual erudition and prose are &ldquo;The Joy
-of Touring Clojure&rdquo;, &ldquo;Touring Clojure&rdquo;, &ldquo;Clojure Touring&rdquo;, and the
-newest edition of &ldquo;Touring Clojure Touring&rdquo;.  However, none has
-surpassed the wild popularity of &ldquo;The Hitchhiker&rsquo;s Guide to Clojure&rdquo;.
-It has sold over 500 million copies and has been on the &ldquo;BigInt&rsquo;s
-Board of Programming Language Tourism&rdquo; for the past 15 years. While,
-arguably, it
-lacked the in-depth coverage of the other guides, it made up for it in
-useful practical tips, such as what to do if you find a nil in your
-pistachio.  Most of all, the cover had the following words printed in
-very large letters: <strong>Don&rsquo;t Worry About the Parens</strong>.</p>
-
-<p>To tell the story of the book, it is best to tell the story of two
-people whose lives were affected by it: Amy Denn, one of the last
-remaining <a href="http://en.wikipedia.org/wiki/Pascal_(programming_language">Pascal</a> developers in Cincinnati, and Frank Pecan, a time
-traveler, guidebook reseacher, and friend of Amy.</p>
-
-<p>Amy, at this moment, was completely unaware of the chronological
-advantages of her friend, being preoccupied with the stark fact that
-she was about to be fired.  She had been given a direct order from her
-CEO to deploy the code at 3:05pm.  It was now 3:00pm and she had
-realized that if she did so, all the data painstaking collected about
-the effects of
-<a href="http://en.wikipedia.org/wiki/Tuvan_throat_singing">Throat Singing</a> on
-the growth rate of tomatoes would be erased. Unfortunately, the CEO
-did not really understand or trust anything having to do with
-technology or programming.  In truth, the only two things that he
-seemed to care about were tomatoes and checklists of unreasonable
-things. The fact that no course of action available to her in the next
-5 minutes would help her employment situation, agitated Amy so much
-that she was violently shelling and eating pistachio nuts.</p>
-
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3331/3659226924_fbf336379e_n.jpg">http://farm4.staticflickr.com/3331/3659226924_fbf336379e_n.jpg</a>"></p>
-
-<p>The &ldquo;Hitchhiker&rsquo;s Guide to Clojure&rdquo; says that
-<em>pistachios are Nature&rsquo;s
-most perfect <a href="http://en.wikipedia.org/wiki/S-expression">s-expression</a>. An
-s-expression is recursively composed of s-expressions or an atom.
-In the case of the humble pistachio, the atom is the nut inside. The
-atom simply evaluates to itself.  This is best seen is an example
-where the following expressions are evaluated in the Clojure
-<a href="http://tryclj.com/">REPL</a></em></p>
-
-<p>```clojure
-&ldquo;hi&rdquo; ;;=> &ldquo;hi&rdquo;
-1 ;;=> 1
-true ;;=> true
-nil ;;=> nil
-````</p>
-
-<p><em>Which leads to the very practical tip of what to do if you find a nil
-in your pistachio.  The answer, of course, is to be thankful that you
-have a value that represents the absence of a value &ndash; and to get
-another pistachio.</em></p>
-
-<p><em>In Clojure, a s-expression is written with parens.  The first element
-within the parens is an operator or function and the rest of the
-elements are treated as data, some of which can be s-expression
-themselves.</em></p>
-
-<p><code>clojure
-(+ 1 2) ;;=&gt; 3
-(+ 1 (+ 2 2)) ;;=&gt; 5
-</code>
-<em>Considering the pistachio again, we can think of the nut in the shell
-as an s-expression, (providing we also imagine an operator or function
-right in front of the nut).</em></p>
-
-<p><em>Here we define a function that will turn the nut red, by appending the
-string &ldquo;red&rdquo; to the nut-name.</em></p>
-
-<p>```clojure
-(defn red [nut]
-  (str &ldquo;red &rdquo; nut))</p>
-
-<p>(red &ldquo;nut1&rdquo;) ;;=> &ldquo;red nut1&rdquo;
-```</p>
-
-<p><em>Notice that if we put a quote in front of the expression, it will no
-longer be evaluated.</em></p>
-
-<p><code>clojure
-'(red "nut1") ;;=&gt; (red "nut1")
-</code>
-<em>quoting the expression turns it into a list, which we can then
-manipulate with other s-expressions (code as data).</em></p>
-
-<p>```clojure
-(first &lsquo;(red &ldquo;nut1&rdquo;)) ;;=> red</p>
-
-<p>(last &lsquo;(red &ldquo;nut1&rdquo;)) ;;=> &ldquo;nut1&rdquo;
-```</p>
-
-<p><em>If we try to evaluate the s-expression with just the nut name in the
-parens, we get an error because there is no function in
-the first slot.</em></p>
-
-<p><code>clojure
-("nut1")
-;;=&gt; ClassCastException java.lang.String cannot be cast to clojure.lang.IFn
-</code></p>
-
-<p><em>The whole thing of having to have a function in front of the nut in
-the pistachio has invited much heated debate on the suitability of
-pistachios being held up as the paragon of an s-expression.  But
-critics have failed to explain the corroborating evidence of red
-pistachio nuts, or find a more suitable nut.</em></p>
-
-<p>Amy&rsquo;s time traveling friend, Frank, is due to appear on the scene
-momentarily to reveal that the whole world is really made of Clojure
-<a href="http://www.datomic.com/">Datomic</a> datoms.  Furthermore, a transaction
-is going to be evaluated soon, which will retract all the facts on
-EVERYTHING. The practical effect of this will be that nothing will
-have an attributes. A world without any attributes at all would be
-quite boring and, for all purposes, be non-existent. Luckily for Amy, Frank is a Datomic Time
-Traveller and has a hand-held &ldquo;evaluator&rdquo; which will save them. Also
-luckily, the readers will be spared dialog, since the author
-can never figure out where to put the punctuation and is really
-rubbish at it.  Only one phrase will be illustrated.  This is the
-rather important one, having been uttered by Amy after it was explained to her
-that she, and the entire world around her, was entirely composed of
-Clojure:</p>
-
-<p>&ldquo;Isn&rsquo;t that the language with a lot of parens?&rdquo;</p>
-
-<p>To which, Frank handed her the &ldquo;Hitchhiker&rsquo;s Guide to Clojure&rdquo; and
-pointed to the words on the front cover,  <strong>&ldquo;Don&rsquo;t Worry About the
-Parens.&rdquo;</strong>, and turned to the first page.</p>
-
-<p><em>&ldquo;There is absolutely no need to worry about the parens. It is known
- today that the first really important discovery of humankind was not
- fire, but <a href="http://www.emacswiki.org/emacs/ParEdit">Paredit</a>.  Paredit
- mode magically acts to insert and balance the right parens to the
- point where they actually can no longer be seen.  This is evident by
- just looking around you. The world is made of Clojure and there are
- millions, billions, and trillions of parens all around you and your
- tea cup right now.  Yet, you don&rsquo;t see them.  Paredit mode.&rdquo;</em></p>
-
-<p>At the urging of Frank, Amy quickly stuffed the remaining pistachios
-in her pockets while he readied his evaluator. The display showed
-some large integer value, that decreased as he pushed the buttons on
-the console.  Finally, he pushed the large red button and two parens
-started glowing on either side of them &hellip; and they disappeared.</p>
 ]]></content>
   </entry>
   
