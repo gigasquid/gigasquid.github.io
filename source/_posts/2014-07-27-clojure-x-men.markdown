@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Cljoure X-Men"
+title: "Clojure X-Men"
 date: 2014-07-27 20:12
 comments: true
 categories:
