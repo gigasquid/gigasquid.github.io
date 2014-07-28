@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-07-27T20:30:10-04:00</updated>
+  <updated>2014-07-28T10:17:16-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Cljoure X-Men]]></title>
-    <link href="http://gigasquid.github.io/blog/2014/07/27/cljoure-x-men/"/>
+    <title type="html"><![CDATA[Clojure X-Men]]></title>
+    <link href="http://gigasquid.github.io/blog/2014/07/27/clojure-x-men/"/>
     <updated>2014-07-27T20:12:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2014/07/27/cljoure-x-men</id>
+    <id>http://gigasquid.github.io/blog/2014/07/27/clojure-x-men</id>
     <content type="html"><![CDATA[<p><img src="https://c2.staticflickr.com/6/5557/14761955842_6a8bf4a66a_n.jpg"></p>
 
 <p>Nobody knows how it happened.  Some people think it was due to the rapid expansion and adoption of Clojure.  Other people say that the language itself was caused by something deeper and more magical.  No one knows for sure.  All that we really know is that people starting being born with extraordinary powers.  Powers that no human had had before.  They were strange and unique to each person they touched.  The only thing that they all had in common, was that each was an aspect of the Clojure programming language.</p>
