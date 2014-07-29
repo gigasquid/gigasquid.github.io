@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-07-28T10:24:53-04:00</updated>
+  <updated>2014-07-28T21:06:11-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Proper Pronunciation of Clojure's Assoc]]></title>
+    <link href="http://gigasquid.github.io/blog/2014/07/28/the-proper-pronunciation-of-clojures-assoc/"/>
+    <updated>2014-07-28T20:27:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2014/07/28/the-proper-pronunciation-of-clojures-assoc</id>
+    <content type="html"><![CDATA[<p>Sometimes I pause before talking to someone about Clojure code. Not because I am unsure of the code, but because I am unsure of
+how to pronounce the code.  The particular code in question is
+Clojure&rsquo;s <em>assoc</em>.  I have heard it pronounced two ways. One is
+&ldquo;assosh&rdquo;, the other is &ldquo;assok&rdquo;.  So, to determine it, I decided to conduct a
+scientific poll of the Clojure community.</p>
+
+<p>I posted the poll on
+<a href="https://twitter.com/gigasquid/status/493891057906896896">twitter</a> to
+the Cojure community who follow me.  The control group poll was viewed
+by those who do not follow me, and/or, are not on twitter.</p>
+
+<p>The results were startling.</p>
+
+<p><img src="https://c1.staticflickr.com/3/2928/14585605540_6d0ce6169f_n.jpg"></p>
+
+<ul>
+<li>assosh &ndash; 10</li>
+<li>assok  &ndash; 8</li>
+<li>assose &ndash; 3</li>
+<li>Jeremy &ndash; 1</li>
+<li>asoaksh &ndash; 1</li>
+</ul>
+
+
+<p>The community is clearly deeply divided on this important question.</p>
+
+<p>After sifting through the raw data, I remembered my statistical analysis and threw out the extremes.</p>
+
+<p><img src="https://c2.staticflickr.com/6/5559/14792182503_12aa682260_n.jpg"></p>
+
+<p>The conclusion was still a stark reality.</p>
+
+<p><em>We do not as a community know how to pronounce assoc.</em></p>
+
+<h2>Solution</h2>
+
+<p>I can only see one way forward.  We must address this as a community.
+I propose that the community documentation of <a href="http://clojuredocs.org/">Clojure Docs</a>
+and <a href="http://grimoire.arrdem.com/">Grimoire</a> modify their sites to include audio pronunciation like <a href="http://www.macmillandictionary.com/us/media/british/uk_pron/l/lla/llama/llama_British_English_pronunciation.mp3">this</a>.</p>
+
+<p>Remember, I&rsquo;m pulling for you.  We are all in this together.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure X-Men]]></title>
@@ -3325,272 +3374,6 @@ https://github.com/gigasquid/babar</div>
 <h2>Conclusion and Thanks</h2>
 
 <p>I can honestly say, that this has been one of the most enjoyable programming quests. I encourage you all to look at McCarthy&rsquo;s papers, Clojure, Instaparse, and of course, hacking robots. A special thanks to all the Cincy folks at <a href="http://www.neo.com/">Neo</a> who have supported me through my gentle obsessions and have let me have the freedom to follow my curiosity.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Growing a Language with Clojure and Instaparse]]></title>
-    <link href="http://gigasquid.github.io/blog/2013/05/01/growing-a-language-with-clojure-and-instaparse/"/>
-    <updated>2013-05-01T22:08:18-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2013/05/01/growing-a-language-with-clojure-and-instaparse</id>
-    <content type="html"><![CDATA[<p>Creating your own programming language with Clojure and <a href="https://github.com/Engelberg/instaparse">Instaparse</a> is like building rainbows with s-expressions.  The Instaparse library is an elegant way of building executable parsers trees with pattern matching and <a href="http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_Form"><em>standard EBNF notation</em></a> for context-free grammars. Since this is my first foray into parser trees and grammars, I thought I would share my learnings in this post.</p>
-
-<h2>Starting with a Single Word</h2>
-
-<p>Let&rsquo;s start with the simplest example:  a number.  When we start up our REPL in our brand new language, we want to be able to enter an integer, and have evaluate as an integer.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">MyCoolLang&gt;</span> <span class="mi">1</span>
-</span><span class='line'><span class="mi">1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>Using the instaparse library, we define a number to be a regex matching an integer.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">coollang.parser</span>
-</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">instaparse.core</span> <span class="ss">:as</span> <span class="nv">insta</span><span class="p">]))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">parser</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">insta/parser</span>
-</span><span class='line'>   <span class="s">&quot;number = #&#39;[0-9]+&#39;&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">parser</span> <span class="s">&quot;1&quot;</span><span class="p">)</span> <span class="c1">;=&gt;; [:number &quot;1&quot;]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>We now have a parser tree node that is of a type number. Pretty nice so far, but more rainbows are coming. You can make elegant transformations on the parser tree, and does them in a bottom up fashion, so you can use it for evaluation as well. In our simple number example, we are applying the read-string function on the :number node to turn it into a int.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">transform-options</span>
-</span><span class='line'>  <span class="p">{</span><span class="ss">:number</span> <span class="nv">read-string</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">parse </span><span class="p">[</span><span class="nv">input</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">parser</span> <span class="nv">input</span><span class="p">)</span> <span class="p">(</span><span class="nf">insta/transform</span> <span class="nv">transform-options</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nb">parse </span><span class="s">&quot;1&quot;</span><span class="p">)</span> <span class="c1">;=&gt; 1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<h2>Adding on spaces and vectors</h2>
-
-<p>Let&rsquo;s build on a bit more. When someone enters in a sequence of numbers separated by spaces, it will be defined as a vector.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">MyCoolLang&gt;</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span>
-</span><span class='line'><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>We need to add the notion of spaces, spaces with numbers, and vectors into our grammar, as well as the rules
-for evaluating these new nodes.  Notice that we use the &lt;> notation to hide the definition in the parser tree.  The + means one or more times.  The * means 0 or more times, and the | means or.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">parser</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">insta/parser</span>
-</span><span class='line'>   <span class="s">&quot;expr = number | vector</span>
-</span><span class='line'><span class="s">    vector = snumber+ number</span>
-</span><span class='line'><span class="s">    &lt;snumber&gt; = (number space)*</span>
-</span><span class='line'><span class="s">    &lt;space&gt; = &lt;#&#39;[ ]+&#39;&gt;</span>
-</span><span class='line'><span class="s">    number = #&#39;[0-9]+&#39;&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">parser</span> <span class="s">&quot;1 2 3 4&quot;</span><span class="p">)</span> <span class="c1">;=&gt; [:expr [:vector [:number &quot;1&quot;] [:number &quot;2&quot;] [:number &quot;3&quot;] [:number &quot;4&quot;]]]</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">transform-options</span>
-</span><span class='line'>  <span class="p">{</span><span class="ss">:number</span> <span class="nv">read-string</span>
-</span><span class='line'>   <span class="ss">:vector</span> <span class="p">(</span><span class="nb">comp </span><span class="nv">vec</span> <span class="nv">list</span><span class="p">)</span>
-</span><span class='line'>   <span class="ss">:expr</span> <span class="nv">identity</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">parse </span><span class="p">[</span><span class="nv">input</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">parser</span> <span class="nv">input</span><span class="p">)</span> <span class="p">(</span><span class="nf">insta/transform</span> <span class="nv">transform-options</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nb">parse </span><span class="s">&quot;1 2 3 4&quot;</span><span class="p">)</span> <span class="c1">;=&gt; [1 2 3 4]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<h2>Adding in operations</h2>
-
-<p>Pretty cool. We have numbers and vectors. Let&rsquo;s see if we can do something fun like do some simple math on these vectors or numbers. We want it so when we type in + and some numbers, it adds them up.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">MyCoolLang&gt;</span> <span class="nb">+ </span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span>
-</span><span class='line'><span class="mi">10</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>Of course we need to further expand our grammar and rules.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">parser</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">insta/parser</span>
-</span><span class='line'>   <span class="s">&quot;expr = number | vector | operation</span>
-</span><span class='line'><span class="s">    operation = operator space+ vector</span>
-</span><span class='line'><span class="s">    operator = &#39;+&#39; | &#39;-&#39; | &#39;*&#39; | &#39;/&#39;</span>
-</span><span class='line'><span class="s">    vector = snumber+ number</span>
-</span><span class='line'><span class="s">    &lt;snumber&gt; = (number space)*</span>
-</span><span class='line'><span class="s">    &lt;space&gt; = &lt;#&#39;[ ]+&#39;&gt;</span>
-</span><span class='line'><span class="s">    number = #&#39;[0-9]+&#39;&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">parser</span> <span class="s">&quot;+ 1 2 3 4&quot;</span><span class="p">)</span> <span class="c1">;=&gt; [:expr</span>
-</span><span class='line'> <span class="c1">;                        [:operation</span>
-</span><span class='line'> <span class="c1">;                         [:operator &quot;+&quot;]</span>
-</span><span class='line'> <span class="c1">;                           [:vector [:number &quot;1&quot;] [:number &quot;2&quot;] [:number &quot;3&quot;] [:number &quot;4&quot;]]]</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">choose-operator</span> <span class="p">[</span><span class="nv">op</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">case</span> <span class="nv">op</span>
-</span><span class='line'>    <span class="s">&quot;+&quot;</span> <span class="nv">+</span>
-</span><span class='line'>    <span class="s">&quot;-&quot;</span> <span class="nv">-</span>
-</span><span class='line'>    <span class="s">&quot;*&quot;</span> <span class="nv">*</span>
-</span><span class='line'>    <span class="s">&quot;/&quot;</span> <span class="nv">/</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">transform-options</span>
-</span><span class='line'>  <span class="p">{</span><span class="ss">:number</span> <span class="nv">read-string</span>
-</span><span class='line'>   <span class="ss">:vector</span> <span class="p">(</span><span class="nb">comp </span><span class="nv">vec</span> <span class="nv">list</span><span class="p">)</span>
-</span><span class='line'>   <span class="ss">:operator</span> <span class="nv">choose-operator</span>
-</span><span class='line'>   <span class="ss">:operation</span> <span class="nv">apply</span>
-</span><span class='line'>   <span class="ss">:expr</span> <span class="nv">identity</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">parse </span><span class="p">[</span><span class="nv">input</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">parser</span> <span class="nv">input</span><span class="p">)</span> <span class="p">(</span><span class="nf">insta/transform</span> <span class="nv">transform-options</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nb">parse </span><span class="s">&quot;+ 1 2 3 4&quot;</span><span class="p">)</span> <span class="c1">;=&gt; 10</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<h2>Add a REPL</h2>
-
-<p>All we need now is a cool REPL to start working in:
-We just need a main function to call our REPL, (Read &ndash; Evaluate &ndash; Print &ndash; Loop), and we are all set.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">coollang.repl</span>
-</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">coollang.parser</span> <span class="ss">:as</span> <span class="nv">parser</span><span class="p">]))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">repl</span> <span class="p">[]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">do</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">print </span><span class="s">&quot;MyCoolLang&gt; &quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">flush</span><span class="p">))</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">input</span> <span class="p">(</span><span class="nf">read-line</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">parser/parse</span> <span class="nv">input</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">recur</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-main</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">args</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Hello MyCoolLang!&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">println </span><span class="s">&quot;===============&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">flush</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">repl</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<h2>Closing and Inspiration</h2>
-
-<p>I have enjoyed playing around and learning about creating programming languages with Clojure and instaparse.
-It truly is a beautiful library. If you need any more inspiration to start creating your own programming language, may I recommend:</p>
-
-<ul>
-<li><p><a href="http://www.youtube.com/watch?v=_ahvzDzKdB0">Growing a Program Language by Guy Steele </a>&ndash; A classic and amazing talk about designing programming languages.</p></li>
-<li><p><a href="https://github.com/bodil/BODOL">BODOL</a> &ndash; A language experiment using Clojure and Instaparse</p></li>
-</ul>
-
-
-<p>Now go forth and create!</p>
 ]]></content>
   </entry>
   
