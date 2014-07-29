@@ -16,7 +16,7 @@ scientific poll of the Clojure community.
 
 I posted the poll on
 [twitter](https://twitter.com/gigasquid/status/493891057906896896) to
-the Cojure community who follow me.  The control group poll was viewed
+the Cojure community who follow me.  The control group poll was not viewed
 by those who do not follow me, and/or, are not on twitter.
 
 The results were startling.
