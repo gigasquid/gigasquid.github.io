@@ -25,7 +25,7 @@ The results were startling.
 
 * assosh - 10
 * assok  - 8
-* assose - 3
+* assose - 2
 * Jeremy - 1
 * asoaksh - 1
 
