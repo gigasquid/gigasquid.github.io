@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-08-01T18:58:32-04:00</updated>
+  <updated>2014-09-06T16:35:25-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,180 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Green Eggs and Transducers]]></title>
+    <link href="http://gigasquid.github.io/blog/2014/09/06/green-eggs-and-transducers/"/>
+    <updated>2014-09-06T15:47:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2014/09/06/green-eggs-and-transducers</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://upload.wikimedia.org/wikipedia/en/c/c2/Greenegg.gif">http://upload.wikimedia.org/wikipedia/en/c/c2/Greenegg.gif</a>"></p>
+
+<p>A quick tour of Clojure Transducers with core.async with Dr. Seuss as a guide.</p>
+
+<p>Follow along at home by:</p>
+
+<ul>
+<li><code>lein new green-eggs</code></li>
+<li>modify your project.clj to include the following:
+<code>clojure
+(defproject green-eggs "0.1.0-SNAPSHOT"
+:description "try them"
+:url "http://en.wikipedia.org/wiki/Green_Eggs_and_Ham"
+:license {:name "Eclipse Public License"
+          :url "http://www.eclipse.org/legal/epl-v10.html"}
+:dependencies [[org.clojure/clojure "1.7.0-alpha1"]
+               [org.clojure/core.async "0.1.338.0-5c5012-alpha"]])
+</code></li>
+<li>Start up a repl and hack in!</li>
+</ul>
+
+
+<h2>Green Eggs and Ham</h2>
+
+<p>Transducers are a new feature of Clojure 1.7.  Instead of trying to explain them with words, let&rsquo;s take a look of them in action.  First we need some data.  Let&rsquo;s def a vector of all the places you could try green eggs and ham.</p>
+
+<p><code>clojure
+(def green-eggs-n-ham
+  ["in the rain"
+   "on a train"
+   "in a box"
+   "with a fox"
+   "in a house"
+   "with a mouse"
+   "here or there"
+   "anywhere"])
+</code></p>
+
+<p>Next, let&rsquo;s create a function that will transform the places into a &ldquo;I would not eat them &hellip;&rdquo; sentence.</p>
+
+<p>```clojure
+(defn i-do-not-like-them [s]
+  (format &ldquo;I would not eat them %s.&rdquo; s))</p>
+
+<p>(i-do-not-like-them &ldquo;in the rain&rdquo;)
+;; &ndash;> &ldquo;I would not eat them in the rain.&rdquo;
+```</p>
+
+<p>We also need a function to take this result and actually try the green eggs and ham.</p>
+
+<p>```clojure
+(defn try-them [s]
+  (clojure.string/replace s  #&ldquo; not&rdquo; &ldquo;&rdquo;))</p>
+
+<p>(try-them &ldquo;I would not eat them in the rain.&rdquo;)
+;; &ndash;> &ldquo;I would eat them in the rain.&rdquo;
+```</p>
+
+<p>Now we have two transformations that we can apply to the vector of green-eggs-n-ham strings.
+One of the really nice things about transducers is that you can describe and compose this transformation without a data structure present.</p>
+
+<p><code>clojure
+(def sam-i-am-xform
+  (comp
+   (map i-do-not-like-them)
+   (map try-them)))
+</code></p>
+
+<p>We can run the transformation of the transducers against the data in a few ways.</p>
+
+<ul>
+<li><em>into</em>: Non-lazy turn the tranformation into a collection</li>
+<li><em>sequence</em>: Same thing but lazy</li>
+<li><em>transduce</em>: Acts like reduce on the all the transformed elements</li>
+<li>With <em>core.async</em> channels doing the transformations.</li>
+</ul>
+
+
+<p>Let&rsquo;s look at the green eggs and ham example for each one of these ways:</p>
+
+<h3>Into</h3>
+
+<p>Into takes a transducer and collection to work on and returns the vector we asked for:</p>
+
+<p><code>clojure
+(into [] sam-i-am-xform green-eggs-n-ham)
+;; -&gt; ["I would eat them in the rain."
+;;     "I would eat them on a train."
+;;     "I would eat them in a box."
+;;     "I would eat them with a fox."
+;;     "I would eat them in a house."
+;;     "I would eat them with a mouse."
+;;     "I would eat them here or there."
+;;     "I would eat them anywhere."]
+</code></p>
+
+<h3>Sequence</h3>
+
+<p>Sequence takes similar arguments, but as promised, returns a lazy sequence that we can interact with.</p>
+
+<p>```clojure
+(class (sequence sam-i-am-xform green-eggs-n-ham))
+;; &ndash;> clojure.lang.LazyTransformer</p>
+
+<p>(take 1 (sequence sam-i-am-xform green-eggs-n-ham))
+;; &ndash;> (&ldquo;I would eat them in the rain.&rdquo;)</p>
+
+<p>```</p>
+
+<h3>Transduce</h3>
+
+<p>If we want to finally arrange all our sentences in the vectors into one string, we would use reduce.  The way to do this with transducers is to use <em>transduce</em>.  It takes a function of two arguments to perform the reduce, as well as an initial data input.</p>
+
+<p><code>clojure
+(transduce sam-i-am-xform #(str %1 %2 " ") "" green-eggs-n-ham)
+;; -&gt; "I would eat them in the rain.
+;;     I would eat them on a train.
+;;     I would eat them in a box.
+;;     I would eat them with a fox.
+;;     I would eat them in a house.
+;;     I would eat them with a mouse.
+;;     I would eat them here or there.
+;;     I would eat them anywhere."
+</code></p>
+
+<h3>Core.async</h3>
+
+<p>Core.async has a really nice way to define channels with a transducer that will transform each element on the channel.</p>
+
+<p><code>clojure
+(def sam-i-am-chan (async/chan 1 sam-i-am-xform))
+</code></p>
+
+<p>Let&rsquo;s define another channel to reduce the results of the sam-i-am-chan to a string.</p>
+
+<p><code>clojure
+(def result-chan (async/reduce #(str %1 %2 " ") "" sam-i-am-chan))
+</code></p>
+
+<p>Finally let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
+
+<p><code>clojure
+(async/onto-chan sam-i-am-chan green-eggs-n-ham)
+</code></p>
+
+<p>Finally,
+we can get our result off the result channel and revel in the beauty of asynchronous data transducers.</p>
+
+<p>```clojure
+(def i-like-them (async/&lt;!! result-chan))</p>
+
+<p>i-like-them
+;; &ndash;> &ldquo;I would eat them in the rain.
+;;     I would eat them on a train.
+;;     I would eat them in a box.
+;;     I would eat them with a fox.
+;;     I would eat them in a house.
+;;     I would eat them with a mouse.
+;;     I would eat them here or there.
+;;     I would eat them anywhere.&rdquo;</p>
+
+<p>```</p>
+
+<p>Transducers are elegant and powerful, just like the rest of Clojure.  Try them, you will like them :)</p>
+
+<p><img class="<a" src="href="http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg">http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg</a>"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Proper Pronunciation of Clojure's Assoc]]></title>
@@ -293,215 +467,6 @@ easier to read them in a chronological fashion.</p>
 
 <p>There is also a public <a href="https://github.com/gigasquid/hitchhikers-clojure">repo</a> &ndash; feel free to contribute spelling and
 grammar fixes, or your great ideas.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hitchhiker's Guide to Clojure - Part 3]]></title>
-    <link href="http://gigasquid.github.io/blog/2014/02/15/hitchhikers-guide-to-clojure-part-3/"/>
-    <updated>2014-02-15T13:48:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2014/02/15/hitchhikers-guide-to-clojure-part-3</id>
-    <content type="html"><![CDATA[<p>Amy and Frank fled down the stairs from her office and met an
-unexpected obstacle to their exit, a locked door.  As
-they peered out the window, they saw yesterday&rsquo;s Amy pull up in the
-parking space, get out, retrieve her laptop, and start to head in
-the front door.</p>
-
-<p>&ldquo;Oh good, we can take your car&rdquo;, said Frank.</p>
-
-<p>Amy took a second to recover from the shock of seeing what her hair really
-looked like from behind and then asked, &ldquo;But, how can we get to it?
-The door is locked, and we
-can&rsquo;t go back up to the office&hellip; I would meet myself.&rdquo;</p>
-
-<p>Frank smiled, pulled out the <em>Hitchhiker&rsquo;s Guide to Clojure</em> and
-pulled up a page with the heading <em>Locked Doors and Other Small
-Bothers</em>.</p>
-
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3346/3191331375_a773bff1b7_n.jpg">http://farm4.staticflickr.com/3346/3191331375_a773bff1b7_n.jpg</a>"></p>
-
-<p><em>One of the reasons for the surprising success of <strong>The Hitchhiker&rsquo;s Guide
-to Clojure</strong> is helpful advice of on an assortment of practical
-matters.</em></p>
-
-<p><em>Locked doors are a common nuisance in modern times.  Fortunately,
-Clojure provides a very handy function for such occasions, <a href="http://clojuredocs.org/clojure_core/1.2.0/clojure.core/fnil">fnil</a>.
-This commonly overlooked function, takes an existing function and
-returns a new function that allows you to specify a default
-for a nil parameter. For example, take this locked door:</em></p>
-
-<p>```clojure
-(defn locked-door [key]</p>
-
-<pre><code>    (if key "open" "nope - staying shut"))
-</code></pre>
-
-<p>(locked-door :key) ;=> &ldquo;open&rdquo;
-(locked-door nil) ;=> &ldquo;nope &ndash; staying shut&rdquo;
-```</p>
-
-<p><em>In this case, the simple application of fnil will help remove this
-pesky obstacle.</em></p>
-
-<p>```clojure
-(def this-door (fnil locked-door :another-key-that-works))</p>
-
-<p>(this-door :key) ;=> &ldquo;open&rdquo;
-(this-door nil) ;=> open
-```</p>
-
-<p><em>Please be advised, that some doors are locked for a good reason. It
-is left to the user&rsquo;s discretion. But it is highly recommended in Norway&rsquo;s
-moose regions, to think twice.</em></p>
-
-<p>They unlocked the door and headed for Amy&rsquo;s car.  She couldn&rsquo;t decide
-whether she was surprised or not to find her keys in her pocket, so
-she gave up and just got in instead.  After a short drive, they
-arrived at the zoo and navigated their way through various
-school groups and arrive at the Aquarium.</p>
-
-<p>Amy at this point, having prided herself on her adaptable nature, was
-still having trouble processing the latest events. She had
-discovered that Frank was a Datomic time traveller,  the  world was
-made of Clojure, and it was also about to be destroyed in a short
-future that she just came from.  Her rational brain, (which was
-currently working way too hard), was quite
-relieved to be distracted by the sight of two really adorable otters.  They were floating
-contentedly around the pool, occasionally stopping to crack an Abalone
-shell on their fuzzy tummies.</p>
-
-<p><img class="<a" src="href="http://cdn.zmescience.com/wp-content/uploads/2012/09/sea-otters.jpg">http://cdn.zmescience.com/wp-content/uploads/2012/09/sea-otters.jpg</a>"></p>
-
-<p>Her rational brain, after having a nice breather, finally re-asserted
-itself and made Amy ask Frank:</p>
-
-<p>&ldquo;Why are we here?&rdquo;</p>
-
-<p>&ldquo;Otters are the front-line Chrono-guards, of course.&rdquo;</p>
-
-<p>He went on to explain that otters are tasked with the important job of
-keeping a close watch on human civilization and making critical, minor
-adjustments to keep things on an even track.  All those nature videos
-of otters cracking shells with rocks?  They are really evaluating
-Clojure expressions crucial to our way of life. Most of the time, they
-prefer to do their work remote.  They find floating on their backs in
-the peaceful waters the most productive work environment.  However,
-sometimes they will construct zoos or aquariums, when their work
-requires them to keep a closer watch on some areas.  In times of great
-need, they might even take a human form for a short while.  Recently,
-one of their agents was inadvertently
-<a href="https://i.chzbgr.com/maxW500/6003866624/h0B1E03BF/">exposed</a> and
-required a few extra Abalone shells to straighten out.</p>
-
-<p>Frank opened his pack and handed his evaluator to Amy to hold
-while fished out four mini-marshmallows.  He gave two to Amy and then
-proceeded to put one in his ear and the other in his mouth.  More
-remarkably still, he appeared to be speaking with the otters.</p>
-
-<p><em>Mini-marshmallows are the best way to create portable Clojure
-<a href="https://github.com/clojure/core.async">core.async</a> channels that
-won&rsquo;t melt in your hands.</em></p>
-
-<p><em>To construct a channel simply use <em>chan</em></em></p>
-
-<p><code>clojure
-(def talk-to-otters-chan (chan))
-</code></p>
-
-<p><em>Channels by default are unbuffered, which keeps them at the
-mini-marshmallow size.  It requires a rendezvous of a channel producer
-and consumer to communicate.  In the case of otters, someone to talk to
-the otters and the otters, themselves, to listen. Be advised that with
-a regular blocking put <strong>>!!</strong>, the main thread will be blocked.
-That is, if you try to speak to the otter, you will be stuck there
-until it gets around to listening. This isn&rsquo;t the best case for the talker if the
-otter was busy, so one approach would be to use a
-<a href="http://clojuredocs.org/clojure_core/clojure.core/future">future</a> to
-talk to the otter with a blocking put <em>>!!</em>.</em></p>
-
-<p><code>clojure
-(future (&gt;!! talk-to-otters-chan "Hello otters.")) ;=&gt;#&lt;Future@3c371c41: :pending&gt;
-(&lt;!! talk-to-otters-chan) ;=&gt; "Hello otters."
-</code></p>
-
-<p>One could also use a buffered channel, but that increases the size of
-the marshmallow.</p>
-
-<p>```clojure
-(def talk-to-otters-chan (chan 10)) ;;create channel with buffer size 10
-(>!! talk-to-otters-chan &ldquo;Hello otters.&rdquo;) ;=> nil
-(>!! talk-to-otters-chan &ldquo;Do you know anything about the world ending?&rdquo;) ;=> nil</p>
-
-<p>(&lt;!! talk-to-otters-chan) ;=> &ldquo;Hello otters.&rdquo;
-(&lt;!! talk-to-otters-chan) ;=> &ldquo;Do you know anything about the world ending?&rdquo;
-```</p>
-
-<p><em>The best way to conserve space and time is to use asynchronous
-communication with <em>go</em> blocks that wont' block the threads. Inside
-these go blocks one can use regular non-blocking puts <strong>>!</strong> and gets
-<strong>&lt;!</strong>.</em></p>
-
-<p>```clojure
-(def talk-to-otters-chan (chan))
-(go (while true</p>
-
-<pre><code>  (println (&lt;! talk-to-otters-chan))))
-</code></pre>
-
-<p>(>!! talk-to-otters-chan &ldquo;Hello otters&rdquo;)
-(>!! talk-to-otters-chan &ldquo;Do you know anything about the world ending?&rdquo;)
-(>!! talk-to-otters-chan &ldquo;Also, you are really fuzzy and cute.&rdquo;)</p>
-
-<p>;; (This prints out in the REPL as you talk to the otters)
-Hello otters
-Do you know anything about the world ending?
-Also, you are really fuzzy and cute.
-```</p>
-
-<p><em>This compact, lightweight, and asynchronous method of communication is
-well suited to conversations and messaging of all sorts, including
-conversing with human, animals, and other Clojure-based life forms.</em></p>
-
-<p>```clojure
-(def talk-chan (chan))
-(def listen-chan (chan))
-(go (while true</p>
-
-<pre><code>  (println (&lt;! listen-chan))))
-</code></pre>
-
-<p>(go (while true</p>
-
-<pre><code>  (&gt;! listen-chan
-      (str "You said: "(&lt;! talk-chan)
-            " " "Do you have any Abalone?" ))))
-</code></pre>
-
-<p>(>!! talk-chan &ldquo;Hello otters&rdquo;)
-(>!! talk-chan &ldquo;Do you know anything about the world ending?&rdquo;)
-(>!! talk-chan &ldquo;Also, you are really fuzzy and cute.&rdquo;)</p>
-
-<p>;; (This prints out in the REPL as you talk to the otters)
-You said: Hello otters Do you have any Abalone?
-You said: Do you know anything about the world ending? Do you have any Abalone?
-You said: Also, you are really fuzzy and cute. Do you have any Abalone?
-```</p>
-
-<p>Amy put one of the mini-marshmallows in her ear.  She immediately
-began to hear the conversation that Frank was having with the otters.</p>
-
-<p>&ldquo;But who would want to destroy the entire world?  That is really kinda
-over-board.&rdquo;</p>
-
-<p>&ldquo;I don&rsquo;t really know, but there was someone on Galactic Hacker News
-the other day that was quite tiffed over the idea that Clojure was considered
-a Lisp.&rdquo;</p>
-
-<p>Amy reached to put the other marshmallow in her mouth to ask a very
-important question.  But unfortunately, as she moved her hand, she
-accidentally pushed the big red <em>Source</em> button on the evaluator.
-Suddenly, she and Frank were swept up in a vortex that spun them
-around and sucked them down into the ground.</p>
 ]]></content>
   </entry>
   
