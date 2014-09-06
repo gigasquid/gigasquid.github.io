@@ -78,7 +78,7 @@ One of the really nice things about transducers is that you can describe and com
 We can run the transformation of the transducers against the data in a few ways.
 
 
-* _into_: Non-lazy turn the tranformation into a collection
+* _into_: Non-lazy turn the transformation into a collection
 * _sequence_: Same thing but lazy
 * _transduce_: Acts like reduce on the all the transformed elements
 * With _core.async_ channels doing the transformations.
@@ -143,13 +143,13 @@ Let's define another channel to reduce the results of the sam-i-am-chan to a str
 (def result-chan (async/reduce #(str %1 %2 " ") "" sam-i-am-chan))
 ```
 
-Finally let's actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow....
+Finally, let's actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow....
 
 ```clojure
 (async/onto-chan sam-i-am-chan green-eggs-n-ham)
 ```
 
-Finally,
+At last,
 we can get our result off the result channel and revel in the beauty of asynchronous data transducers.
 
 ```clojure
