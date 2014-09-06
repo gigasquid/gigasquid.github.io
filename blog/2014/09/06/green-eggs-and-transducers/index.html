@@ -180,7 +180,7 @@ One of the really nice things about transducers is that you can describe and com
 <p>We can run the transformation of the transducers against the data in a few ways.</p>
 
 <ul>
-<li><em>into</em>: Non-lazy turn the tranformation into a collection</li>
+<li><em>into</em>: Non-lazy turn the transformation into a collection</li>
 <li><em>sequence</em>: Same thing but lazy</li>
 <li><em>transduce</em>: Acts like reduce on the all the transformed elements</li>
 <li>With <em>core.async</em> channels doing the transformations.</li>
@@ -272,14 +272,14 @@ One of the really nice things about transducers is that you can describe and com
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Finally let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
+<p>Finally, let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">async/onto-chan</span> <span class="nv">sam-i-am-chan</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Finally,
+<p>At last,
 we can get our result off the result channel and revel in the beauty of asynchronous data transducers.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

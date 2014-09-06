@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-09-06T16:35:25-04:00</updated>
+  <updated>2014-09-06T18:42:57-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -89,7 +89,7 @@ One of the really nice things about transducers is that you can describe and com
 <p>We can run the transformation of the transducers against the data in a few ways.</p>
 
 <ul>
-<li><em>into</em>: Non-lazy turn the tranformation into a collection</li>
+<li><em>into</em>: Non-lazy turn the transformation into a collection</li>
 <li><em>sequence</em>: Same thing but lazy</li>
 <li><em>transduce</em>: Acts like reduce on the all the transformed elements</li>
 <li>With <em>core.async</em> channels doing the transformations.</li>
@@ -157,13 +157,13 @@ One of the really nice things about transducers is that you can describe and com
 (def result-chan (async/reduce #(str %1 %2 " ") "" sam-i-am-chan))
 </code></p>
 
-<p>Finally let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
+<p>Finally, let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
 
 <p><code>clojure
 (async/onto-chan sam-i-am-chan green-eggs-n-ham)
 </code></p>
 
-<p>Finally,
+<p>At last,
 we can get our result off the result channel and revel in the beauty of asynchronous data transducers.</p>
 
 <p>```clojure
