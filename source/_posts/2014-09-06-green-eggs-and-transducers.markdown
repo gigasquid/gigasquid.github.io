@@ -33,6 +33,9 @@ Follow along at home by:
 Transducers are a new feature of Clojure 1.7.  Instead of trying to explain them with words, let's take a look of them in action.  First we need some data.  Let's def a vector of all the places you could try green eggs and ham.
 
 ```clojure
+(ns green-eggs.core
+  (:require [clojure.core.async :as async]))
+
 (def green-eggs-n-ham
   ["in the rain"
    "on a train"
@@ -169,5 +172,5 @@ i-like-them
 
 Transducers are elegant and powerful, just like the rest of Clojure.  Try them, you will like them :)
 
-{% img http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg %}
+{% Mg http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg %}
 
