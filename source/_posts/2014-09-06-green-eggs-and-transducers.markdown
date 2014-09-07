@@ -172,5 +172,5 @@ i-like-them
 
 Transducers are elegant and powerful, just like the rest of Clojure.  Try them, you will like them :)
 
-{% Mg http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg %}
+{% img http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg %}
 
