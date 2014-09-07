@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-09-06T18:42:57-04:00</updated>
+  <updated>2014-09-07T15:45:06-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -44,17 +44,20 @@
 
 <p>Transducers are a new feature of Clojure 1.7.  Instead of trying to explain them with words, let&rsquo;s take a look of them in action.  First we need some data.  Let&rsquo;s def a vector of all the places you could try green eggs and ham.</p>
 
-<p><code>clojure
-(def green-eggs-n-ham
-  ["in the rain"
-   "on a train"
-   "in a box"
-   "with a fox"
-   "in a house"
-   "with a mouse"
-   "here or there"
-   "anywhere"])
-</code></p>
+<p>```clojure
+(ns green-eggs.core
+  (:require [clojure.core.async :as async]))</p>
+
+<p>(def green-eggs-n-ham
+  [&ldquo;in the rain&rdquo;
+   &ldquo;on a train&rdquo;
+   &ldquo;in a box&rdquo;
+   &ldquo;with a fox&rdquo;
+   &ldquo;in a house&rdquo;
+   &ldquo;with a mouse&rdquo;
+   &ldquo;here or there&rdquo;
+   &ldquo;anywhere&rdquo;])
+```</p>
 
 <p>Next, let&rsquo;s create a function that will transform the places into a &ldquo;I would not eat them &hellip;&rdquo; sentence.</p>
 
