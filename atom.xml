@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-09-07T21:28:03-04:00</updated>
+  <updated>2014-09-08T10:13:01-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -208,7 +208,7 @@ One of the really nice things about transducers is that you can describe and com
 </span><span class='line'><span class="c1">;;     I would eat them here or there.</span>
 </span><span class='line'><span class="c1">;;     I would eat them anywhere.&quot;</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1">;;_note: In  1.7.0-alpha2, the arity changed and you need to use a</span>
+</span><span class='line'><span class="c1">;;_note: In  1.7.0-alpha2, transduce changed and you need to use a</span>
 </span><span class='line'><span class="c1">;;(transduce sam-i-am-xform (completing #(str %1 %2 &quot; &quot;)) &quot;&quot; green-eggs-n-ham)</span>
 </span><span class='line'><span class="c1">;;instead.</span>
 </span></code></pre></td></tr></table></div></figure>

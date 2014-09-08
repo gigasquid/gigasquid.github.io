@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-09-07T21:28:03-04:00</updated>
+  <updated>2014-09-08T10:13:01-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -145,7 +145,7 @@ One of the really nice things about transducers is that you can describe and com
 ;;     I would eat them here or there.
 ;;     I would eat them anywhere.&rdquo;</p>
 
-<p>;;_note: In  1.7.0-alpha2, the arity changed and you need to use a
+<p>;;_note: In  1.7.0-alpha2, transduce changed and you need to use a
 ;;(transduce sam-i-am-xform (completing #(str %1 %2 &ldquo; &rdquo;)) &ldquo;&rdquo; green-eggs-n-ham)
 ;;instead.</p>
 
