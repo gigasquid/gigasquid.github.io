@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-09-07T15:45:06-04:00</updated>
+  <updated>2014-09-07T21:28:03-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -134,17 +134,22 @@ One of the really nice things about transducers is that you can describe and com
 
 <p>If we want to finally arrange all our sentences in the vectors into one string, we would use reduce.  The way to do this with transducers is to use <em>transduce</em>.  It takes a function of two arguments to perform the reduce, as well as an initial data input.</p>
 
-<p><code>clojure
-(transduce sam-i-am-xform #(str %1 %2 " ") "" green-eggs-n-ham)
-;; -&gt; "I would eat them in the rain.
+<p>```clojure
+(transduce sam-i-am-xform #(str %1 %2 &ldquo; &rdquo;) &ldquo;&rdquo; green-eggs-n-ham)
+;; &ndash;> &ldquo;I would eat them in the rain.
 ;;     I would eat them on a train.
 ;;     I would eat them in a box.
 ;;     I would eat them with a fox.
 ;;     I would eat them in a house.
 ;;     I would eat them with a mouse.
 ;;     I would eat them here or there.
-;;     I would eat them anywhere."
-</code></p>
+;;     I would eat them anywhere.&rdquo;</p>
+
+<p>;;_note: In  1.7.0-alpha2, the arity changed and you need to use a
+;;(transduce sam-i-am-xform (completing #(str %1 %2 &ldquo; &rdquo;)) &ldquo;&rdquo; green-eggs-n-ham)
+;;instead.</p>
+
+<p>```</p>
 
 <h3>Core.async</h3>
 
