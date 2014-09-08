@@ -131,7 +131,7 @@ If we want to finally arrange all our sentences in the vectors into one string, 
 ;;     I would eat them here or there.
 ;;     I would eat them anywhere."
 
-;;_note: In  1.7.0-alpha2, the arity changed and you need to use a
+;;_note: In  1.7.0-alpha2, transduce changed and you need to use a
 ;;(transduce sam-i-am-xform (completing #(str %1 %2 " ")) "" green-eggs-n-ham)
 ;;instead.
 
