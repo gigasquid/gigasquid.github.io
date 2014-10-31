@@ -6,14 +6,20 @@ sharing: true
 footer: true
 ---
 
+{% img https://c3.staticflickr.com/3/2949/15385040871_622db8b77d.jpg %}
+
+_Photo by Mike Bridge [@michaelbridge](https://twitter.com/michaelbridge)_
+
 I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
-* [Strange Loop 2014](https://thestrangeloop.com/): Our Shared Joy of Programming
+None for awhile.  I am working on a Clojure Book for [O'Reilly]([http://www.oreilly.com/)!
+
 
 
 ## Past Talks
+* [Strange Loop 2014](https://thestrangeloop.com/): Our Shared Joy of Programming {% youtube 3_zW63dcZB0%}
 * Solid Con 2014 Keynote: Real Time Robot Dance Party {% youtube sHK4v5MimJs %}
 * [Code Mesh 2013](http://codemesh.io/): The Joy of Flying Robots with Clojure
 * [Clojure Exchange 2013](http://skillsmatter.com/event/java-jee/clojure-exchange-2013): Learning to talk to machines with speech acts - a shipwreck adventure
