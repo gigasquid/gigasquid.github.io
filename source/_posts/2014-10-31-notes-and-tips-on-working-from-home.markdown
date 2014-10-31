@@ -98,7 +98,7 @@ The downside of working from home is that it is very easy to _not_
 leave home.  At one point, I realized that I had not left the house
 for a week.  Not good. I try go to a social event where I will
 meet with other developers and friends every week.  There is a nice
-developer coffee group that meets on Fridays.  I also help run our
+developer [coffee group](https://teamgaslight.com/coffee) that meets on Fridays.  I also help run our
 [Cincinnati Functional Programmer's
 Group](https://cincyfp.wordpress.com/) here in town.  In general,
 I find that if I am driving somewhere and see people walking on the
