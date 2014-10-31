@@ -6,7 +6,9 @@ sharing: true
 footer: true
 ---
 
-{% img http://farm8.staticflickr.com/7338/9925531405_ac51ee4d06_n.jpg %}
+{% img https://c3.staticflickr.com/3/2946/15201654208_a41f25d0ae_c.jpg %}
+
+_Photo by Mike Bridge [@michaelbridge](https://twitter.com/michaelbridge)_
 
 I started off as a professional ballet dancer, studied Physics in college, and ended up as a Software Developer.
 
