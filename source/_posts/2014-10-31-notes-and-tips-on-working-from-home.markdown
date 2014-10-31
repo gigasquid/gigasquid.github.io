@@ -58,7 +58,7 @@ I use two Thunderbolt displays.  One monitor I use for communications,
 it has my email, chat, and video on it.  The other monitor I use for
 the codez.  It works out pretty well to switch back and forth.
 
-### Good Software for communication
+### Good Software for Communication
 Good communication is a must for working remotely. Someone cannot just
 wander over to your desk and ask you a question.  Here is a list of
 communication tools I use at work:
@@ -113,8 +113,8 @@ I have found working remotely to be quite enjoyable so far.  It does
 take an extra effort to keep your life structured and communication
 flowing properly, but it is worth it.
 
-Now that it is getting colder, I am trying to work on getting my dog
-to sleep on my feet while I work, but so far no luck.
+My next challenge, since it is getting colder, is to get my dog
+to sleep on my feet while I work.  No luck so far.
 
 If anyone has
 any tips, let me know.
