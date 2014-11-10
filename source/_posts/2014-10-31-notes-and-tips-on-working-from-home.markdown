@@ -87,11 +87,13 @@ When working for home, I have found it is crucial to have a good
 routine.  Since we do a lot of pair programming at work, we all
 generally keep the same hours.  Being a distributed team over North
 America, this means I start work at around 10am EST.  I have found
-that having a routine a sticking to it helps structure my day.  I
+that having a routine a sticking to it helps structure my day.  I get
+up, get dressed, eat breakfast, just like I was going to work.  Then, I
 usually hack for a bit on personal stuff in the morning until it is
 time for work.  Then at lunch, I go for a run or work out.  Finally,
 and most importantly, in the evening, I leave the computer behind and
 devote time to family.
+
 
 ### Don't Forget to Visit with Other Humans
 The downside of working from home is that it is very easy to _not_
