@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-10-31T10:18:56-04:00</updated>
+  <updated>2014-11-10T08:57:15-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Five Stages of Writing a Book]]></title>
+    <link href="http://gigasquid.github.io/blog/2014/11/10/the-five-stages-of-writing-a-book/"/>
+    <updated>2014-11-10T08:37:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2014/11/10/the-five-stages-of-writing-a-book</id>
+    <content type="html"><![CDATA[<p><img src="http://c1.staticflickr.com/9/8078/8314929977_28fd740070_c.jpg"></p>
+
+<ol>
+<li>I am not really writing a book.</li>
+<li>Why did I ever decide to write a book?</li>
+<li>If I just finish this book, I promise never to write another one.</li>
+<li>I am never going to finish this book.</li>
+<li>I am writing a book and I am going to give it my <em>frigging all</em>.</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Notes and Tips on Working from Home]]></title>
@@ -107,7 +125,8 @@ way is not for everyone, but I am digging it.</p>
 routine.  Since we do a lot of pair programming at work, we all
 generally keep the same hours.  Being a distributed team over North
 America, this means I start work at around 10am EST.  I have found
-that having a routine a sticking to it helps structure my day.  I
+that having a routine a sticking to it helps structure my day.  I get
+up, get dressed, eat breakfast, just like I was going to work.  Then, I
 usually hack for a bit on personal stuff in the morning until it is
 time for work.  Then at lunch, I go for a run or work out.  Finally,
 and most importantly, in the evening, I leave the computer behind and
@@ -3398,39 +3417,6 @@ Programmed by @carinmeier using the clj-drone library with beliefs and goals. (s
 <a href="https://github.com/gigasquid/clj-drone/tree/master/examples">clj-drone</a>.</p>
 
 <p>Happy Hacking!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My 5 Whys of Community]]></title>
-    <link href="http://gigasquid.github.io/blog/2013/07/22/5-whys-of-community/"/>
-    <updated>2013-07-22T19:44:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2013/07/22/5-whys-of-community</id>
-    <content type="html"><![CDATA[<h2>Why do you devote time and participate in the community?</h2>
-
-<p>1) <em>Why do you devote time and participate in the community?</em></p>
-
-<p>I find joy in coding and making things. I want to be around other
-people who feel the same way.</p>
-
-<p>2) <em>Why?</em></p>
-
-<p>Because I want to be inspired by others and learn from others and hope that they are inspired and learn from me.</p>
-
-<p>3) <em>Why?</em></p>
-
-<p>Because ideas and learning doesn&rsquo;t happen in a vacuum. There is something magical about the serendipity of human interaction and that needs a community to take place.</p>
-
-<p>4) <em>Why?</em></p>
-
-<p>It is all fundamentally about people. People dream. We talk about our dreams and get together and make them reality. That is the magic of our civilization.</p>
-
-<p>5) <em>Why?</em></p>
-
-<p>I don&rsquo;t want to dream alone.</p>
-
-<p>What are your reasons?
-In response to <a href="http://words.cdmwebs.com/let-s-start-with-why">Let&rsquo;s Start with Why</a></p>
 ]]></content>
   </entry>
   
