@@ -97,7 +97,7 @@ and
 ;; -> 1
 ```
 
-And once you think about that you might want to read :) [this](https://gist.github.com/igstan/c3797e51aa0784a5d275)
+And once you think about that, you might want to read [this](https://gist.github.com/igstan/c3797e51aa0784a5d275) :)
 
 Happy Clojure Kataing!
 
