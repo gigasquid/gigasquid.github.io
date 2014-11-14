@@ -329,16 +329,22 @@
         <lastmod>2014-11-10T10:02:32-05:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://gigasquid.github.io/blog/2014/11/13/clojure-fizzbuzz-without-conditionals/
+        </loc>
+        <lastmod>2014-11-13T22:40:23-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://gigasquid.github.io/about/</loc>
         <lastmod>2014-10-31T09:51:19-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2014-11-10T10:02:32-05:00</lastmod>
+        <lastmod>2014-11-13T22:40:23-05:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2014-11-10T10:02:32-05:00</lastmod>
+        <lastmod>2014-11-13T22:40:23-05:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/robots.txt</loc>

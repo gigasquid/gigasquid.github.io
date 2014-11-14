@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-11-10T10:03:41-05:00</updated>
+  <updated>2014-11-13T22:40:24-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure FizzBuzz without Conditionals]]></title>
+    <link href="http://gigasquid.github.io/blog/2014/11/13/clojure-fizzbuzz-without-conditionals/"/>
+    <updated>2014-11-13T21:43:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2014/11/13/clojure-fizzbuzz-without-conditionals</id>
+    <content type="html"><![CDATA[<p><img src="https://c1.staticflickr.com/5/4136/4825113119_9630b7927f.jpg"></p>
+
+<p>Sure you may have done FizzBuzz before.  Maybe you have even done it
+in Clojure.  But have you done it without the use of <em>any</em>
+conditionals?</p>
+
+<p>As your brain starts to work on the <em>how</em> this we be done, you might
+be wondering <em>why</em> you should do this in the first place?</p>
+
+<p>There are two very good reasons for this.  The first is that it is a
+<em>kata</em>.</p>
+
+<h2>Katas build your code practice</h2>
+
+<p><img src="https://c4.staticflickr.com/4/3552/3434757877_711709da58_b.jpg"></p>
+
+<p>Code katas build your skill through practice.  It doesn&rsquo;t matter if
+you are a beginner or an expert.  Just, like in all those martial arts
+movies with the swordsman practicing, so must we.  We stretch and
+flex our coding muscles with katas to grow them and keep them in shape.</p>
+
+<p>Yes, you may code every day at work.  But it is not the same as kata
+practice.  So much of <em>day to day</em> work involves complexity
+with large interconnected concerns.  Our  kata practice cuts the extra
+complexity out and leaves you alone with a focused small problem.</p>
+
+<p>The second reason involves why you
+should try it, this time,  <em>without conditionals</em>.  The answer is <em>creativity</em>.</p>
+
+<h2>Constraints build creativity.</h2>
+
+<p>It turns out that constraints are a
+<a href="http://www.forbes.com/sites/groupthink/2013/07/12/creativity-how-constraints-drive-genius/">key way to drive creativity</a>.
+Programming does not only require technical skills, but also a
+creativity. We are seldom asked to build software without constraints.
+It drives design.  Sure, it can be annoying when we have to communicate with
+a server that is only active on Tuesday and emits its response in
+Morse Code.  But it gives us boundaries to unleash our creative
+spirit.</p>
+
+<p>So go for it.</p>
+
+<h2>Give it a try</h2>
+
+<p>Ready?  Here are the details.</p>
+
+<ul>
+<li>Given a number, if it number is divisible by 3 return &ldquo;fizz&rdquo;.</li>
+<li>If it is divisible by 5 return &ldquo;buzz&rdquo;.</li>
+<li>If it is divisible by 3 and 5 return &ldquo;fizzbuzz&rdquo;.</li>
+<li>Otherwise, just return the number.</li>
+<li>Don&rsquo;t use any conditionals like <em>if</em> <em>else</em> <em>case</em> <em>cond</em>.</li>
+</ul>
+
+
+<p>When you are done, you can check out some of the other solutions. Try
+not to peek until you have done your version first though.</p>
+
+<p>(There are some really awesome ones so far).</p>
+
+<p><em>Feel free to link to yours in the comments too</em> :)</p>
+
+<h2>Solutions</h2>
+
+<p><a href="https://twitter.com/adereth/status/530740818420957184">From @aderth</a></p>
+
+<p><a href="https://twitter.com/IamDrowsy/status/530900853855899648">From @IamDrowsy</a></p>
+
+<p><a href="https://twitter.com/bryanwoods/status/530822584963584000">From @Bryanwoods</a></p>
+
+<p><a href="https://twitter.com/defndaines/status/532368201472950272">From @defndaines</a></p>
+
+<p><a href="https://gist.github.com/gigasquid/dc4686e8245154482be8">From <em>me</em></a></p>
+
+<p><a href="https://twitter.com/hyPiRion/status/530718638064828416">From @hyPiRion</a> &ndash;
+a couple of notes for this one is that:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">+</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; 0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">*</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; 1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And once you think about that you might want to read :) <a href="https://gist.github.com/igstan/c3797e51aa0784a5d275">this</a></p>
+
+<p>Happy Clojure Kataing!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Five Stages of Writing a Book]]></title>
@@ -3186,237 +3290,6 @@ community in person. Hope to see you there.</p>
 
 <p>P.S. If anyone has any tips on flying overseas with an AR Drone.
 Please let me know :)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Controlling Multiple Drones with Clojure and Goals and Beliefs]]></title>
-    <link href="http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs/"/>
-    <updated>2013-09-05T15:35:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs</id>
-    <content type="html"><![CDATA[<h2>How to Control Multiple Drones with Clojure</h2>
-
-<p>The <a href="https://github.com/gigasquid/clj-drone">clj-drone</a> library now
-has multi-drone support!  You can now send multiple drones commands,
-receive their navigation data, and even have them perform their
-actions autonomously with goals and beliefs.</p>
-
-<p>It takes a bit of extra setup to control more than one drone. We need to assign them each an
-ip and get them talking as an adhoc network.
-<a href="https://twitter.com/jimweirich">Jim Weirich</a> creating a neat little
-script to run on the drone to do just this.  Here are the
-instructions:</p>
-
-<h3>Change first drone to adhoc network</h3>
-
-<p>Connect your computer to the first drone&rsquo;s network.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">telnet</span> <span class="mf">192.68</span><span class="nv">.1.1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>Create the following file as adhoc.sh.  This shell script will
-temporarily change the network to an adhoc network named
-&ldquo;multidrone_ah&rdquo; and assign it a static ip of 192.168.1.100.
-The next time you reboot your drone, things will be back to normal.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; This script should be run on the drone.</span>
-</span><span class='line'><span class="c1">; Change the IP address to be difference</span>
-</span><span class='line'><span class="c1">; for each drone on the same ad-hoc network</span>
-</span><span class='line'><span class="c1">;</span>
-</span><span class='line'><span class="nv">killall</span> <span class="nv">udhcpd</span>
-</span><span class='line'><span class="nv">ifconfig</span> <span class="nv">ath0</span> <span class="nv">down</span>
-</span><span class='line'><span class="nv">iwconfig</span> <span class="nv">ath0</span> <span class="nv">mode</span> <span class="nv">ad-hoc</span> <span class="nv">essid</span> <span class="nv">multidrone_ah</span> <span class="nv">channel</span> <span class="nv">auto</span> <span class="nv">commit</span>
-</span><span class='line'><span class="nv">ifconfig</span> <span class="nv">ath0</span> <span class="mf">192.168</span><span class="nv">.1.100</span> <span class="nv">netmask</span> <span class="mf">255.255</span><span class="nv">.255.0</span> <span class="nv">up</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>Run the script.</p>
-
-<h3>Change the second drone to the adhoc network</h3>
-
-<p>Connect your computer to the second drone&rsquo;s network.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">telnet</span> <span class="mf">192.68</span><span class="nv">.1.1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; This script should be run on the drone.</span>
-</span><span class='line'><span class="c1">; Change the IP address to be difference</span>
-</span><span class='line'><span class="c1">; for each drone on the same ad-hoc network</span>
-</span><span class='line'><span class="c1">;</span>
-</span><span class='line'><span class="nv">killall</span> <span class="nv">udhcpd</span>
-</span><span class='line'><span class="nv">ifconfig</span> <span class="nv">ath0</span> <span class="nv">down</span>
-</span><span class='line'><span class="nv">iwconfig</span> <span class="nv">ath0</span> <span class="nv">mode</span> <span class="nv">ad-hoc</span> <span class="nv">essid</span> <span class="nv">multidrone_ah</span> <span class="nv">channel</span> <span class="nv">auto</span> <span class="nv">commit</span>
-</span><span class='line'><span class="nv">ifconfig</span> <span class="nv">ath0</span> <span class="mf">192.168</span><span class="nv">.1.200</span> <span class="nv">netmask</span> <span class="mf">255.255</span><span class="nv">.255.0</span> <span class="nv">up</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>Run the script.</p>
-
-<h3>On your laptop</h3>
-
-<ul>
-<li>Connect to the adhoc network that the drones are on &ldquo;multidrone_ah&rdquo;</li>
-<li>Change your computer to a static ip on the network (from network
-preferences on mac) something like 192.168.1.101</li>
-</ul>
-
-
-<p>Now you are ready to run the program.  Here is a small example of
-sending simple commands:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">drone-initialize</span> <span class="ss">:drone1</span> <span class="s">&quot;192.168.1.100&quot;</span> <span class="nv">default-at-port</span> <span class="nv">default-navdata-port</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:take-off</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:land</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">drone-initialize</span> <span class="ss">:drone2</span> <span class="s">&quot;192.168.1.200&quot;</span> <span class="nv">default-at-port</span> <span class="nv">default-navdata-port</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone2</span> <span class="ss">:take-off</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone2</span> <span class="ss">:land</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<h2>Bring on Multiple Drones interacting with Goals and Beliefs</h2>
-
-<p>The clj-drone library implements goals and beliefs from <a href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">John
-McCarthy&rsquo;s work</a>.
-The way this works is that the navigation data being constantly sent
-to our computer for processing.  Everytime we get a navigation packet
-that ends up looking something like this, (but with lots more data):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">{</span><span class="ss">:altitude</span> <span class="mf">0.0</span>, <span class="ss">:yaw</span> <span class="mf">-0.215</span>, <span class="ss">:pitch</span> <span class="mf">-1.075</span>, <span class="ss">:roll</span> <span class="mf">-2.904</span>, <span class="ss">:control-state</span> <span class="ss">:landed</span>, <span class="ss">:communication</span> <span class="ss">:ok</span>, <span class="ss">:com-watchdog</span> <span class="ss">:ok</span>, <span class="ss">:seq-num</span> <span class="mi">870</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>We then define a belief-action using this data.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def-belief-action</span> <span class="nv">ba-landed1</span>
-</span><span class='line'>  <span class="s">&quot;I (Drone1) am landed&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">control-state</span><span class="p">]}]</span> <span class="p">(</span><span class="nb">= </span><span class="nv">control-state</span> <span class="ss">:landed</span><span class="p">))</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">navdata</span><span class="p">]</span> <span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:take-off</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>The def-belief-action macro takes:</p>
-
-<ul>
-<li>Name of the belief action</li>
-<li>A readable sentence that expresses the belief.  (This is later
-logged, so that we know what the drone believes at all times.)</li>
-<li>A predicate that takes in the navigation data as a parameter.  When
-it evaluates to true, then the belief is said to be &ldquo;held&rdquo;.</li>
-<li>A function to execute when the belief is held</li>
-</ul>
-
-
-<p>The beliefs are then combined to form goals.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def-goal</span> <span class="nv">g-take-off1</span>
-</span><span class='line'>  <span class="s">&quot;I (Drone1) want to fly.&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">control-state</span><span class="p">]}]</span> <span class="p">(</span><span class="nb">= </span><span class="nv">control-state</span> <span class="ss">:hovering</span><span class="p">))</span>
-</span><span class='line'>  <span class="p">[</span><span class="nv">ba-landed1</span> <span class="nv">ba-taking-off1</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>The def-goal macro takes:</p>
-
-<ul>
-<li>The name of the goal</li>
-<li>A readable sentence that expresses the goal. (This is later logged,
-so that we can know when it achieves a goal.)</li>
-<li>A predicate that takes in the navigation data as a parameter.  When
-it evaluates to true, the goal is said to be achieved.  It will no
-longer evaluate or hold any of the belief actions associated with
-that goal.</li>
-</ul>
-
-
-<p>Finally, we can set a list of goals for a drone to achieve:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">set-current-goal-list</span> <span class="nv">drones</span> <span class="ss">:drone1</span>
-</span><span class='line'> <span class="p">[</span><span class="nv">g-take-off1</span> <span class="nv">g-find-other-drone-and-wave1</span> <span class="nv">g-land1</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This sets the goal list for a drone.  It will take-off, look around
-for the other drone and wave, (do a dance), once it sees it.  Finally,
-after both drones have spotted each other and waved, they will both
-land.</p>
-
-<h2>Video or It Didn&rsquo;t Happen</h2>
-
-<p>Here is a video of both drones.  They will take off, look around for
-each other and wave when they spot each other.  They will land when
-the have both waved.  They are operating solely on goals and beliefs
-with their navigation data.</p>
-
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('J65rvPdJQ0c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/J65rvPdJQ0c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/J65rvPdJQ0c/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=J65rvPdJQ0c" id="J65rvPdJQ0c" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info">Dual Drone Seek and Dance</div>
-</a>
-<div class="video-info" >Two drones turn until they see each other. When a drone sees the other, it will do a little dance. When both have danced, they will land.
-
-Programmed by @carinmeier using the clj-drone library with beliefs and goals. (see https://github.com/gigasquid/clj-drone).</div>
-</div>
-
-
-<p>The code running the video above can be found in the examples of the
-<a href="https://github.com/gigasquid/clj-drone/tree/master/examples">clj-drone</a>.</p>
-
-<p>Happy Hacking!</p>
 ]]></content>
   </entry>
   

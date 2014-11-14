@@ -1,0 +1,254 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Clojure FizzBuzz without Conditionals - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="Sure you may have done FizzBuzz before. Maybe you have even done it
+in Clojure. But have you done it without the use of any
+conditionals? As your &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Clojure FizzBuzz Without Conditionals</h2>
+	<div class="entry-content"><p><img src="https://c1.staticflickr.com/5/4136/4825113119_9630b7927f.jpg"></p>
+
+<p>Sure you may have done FizzBuzz before.  Maybe you have even done it
+in Clojure.  But have you done it without the use of <em>any</em>
+conditionals?</p>
+
+<p>As your brain starts to work on the <em>how</em> this we be done, you might
+be wondering <em>why</em> you should do this in the first place?</p>
+
+<p>There are two very good reasons for this.  The first is that it is a
+<em>kata</em>.</p>
+
+<h2>Katas build your code practice</h2>
+
+<p><img src="https://c4.staticflickr.com/4/3552/3434757877_711709da58_b.jpg"></p>
+
+<p>Code katas build your skill through practice.  It doesn&rsquo;t matter if
+you are a beginner or an expert.  Just, like in all those martial arts
+movies with the swordsman practicing, so must we.  We stretch and
+flex our coding muscles with katas to grow them and keep them in shape.</p>
+
+<p>Yes, you may code every day at work.  But it is not the same as kata
+practice.  So much of <em>day to day</em> work involves complexity
+with large interconnected concerns.  Our  kata practice cuts the extra
+complexity out and leaves you alone with a focused small problem.</p>
+
+<p>The second reason involves why you
+should try it, this time,  <em>without conditionals</em>.  The answer is <em>creativity</em>.</p>
+
+<h2>Constraints build creativity.</h2>
+
+<p>It turns out that constraints are a
+<a href="http://www.forbes.com/sites/groupthink/2013/07/12/creativity-how-constraints-drive-genius/">key way to drive creativity</a>.
+Programming does not only require technical skills, but also a
+creativity. We are seldom asked to build software without constraints.
+It drives design.  Sure, it can be annoying when we have to communicate with
+a server that is only active on Tuesday and emits its response in
+Morse Code.  But it gives us boundaries to unleash our creative
+spirit.</p>
+
+<p>So go for it.</p>
+
+<h2>Give it a try</h2>
+
+<p>Ready?  Here are the details.</p>
+
+<ul>
+<li>Given a number, if it number is divisible by 3 return &ldquo;fizz&rdquo;.</li>
+<li>If it is divisible by 5 return &ldquo;buzz&rdquo;.</li>
+<li>If it is divisible by 3 and 5 return &ldquo;fizzbuzz&rdquo;.</li>
+<li>Otherwise, just return the number.</li>
+<li>Don&rsquo;t use any conditionals like <em>if</em> <em>else</em> <em>case</em> <em>cond</em>.</li>
+</ul>
+
+
+<p>When you are done, you can check out some of the other solutions. Try
+not to peek until you have done your version first though.</p>
+
+<p>(There are some really awesome ones so far).</p>
+
+<p><em>Feel free to link to yours in the comments too</em> :)</p>
+
+<h2>Solutions</h2>
+
+<p><a href="https://twitter.com/adereth/status/530740818420957184">From @aderth</a></p>
+
+<p><a href="https://twitter.com/IamDrowsy/status/530900853855899648">From @IamDrowsy</a></p>
+
+<p><a href="https://twitter.com/bryanwoods/status/530822584963584000">From @Bryanwoods</a></p>
+
+<p><a href="https://twitter.com/defndaines/status/532368201472950272">From @defndaines</a></p>
+
+<p><a href="https://gist.github.com/gigasquid/dc4686e8245154482be8">From <em>me</em></a></p>
+
+<p><a href="https://twitter.com/hyPiRion/status/530718638064828416">From @hyPiRion</a> &ndash;
+a couple of notes for this one is that:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">+</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; 0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">*</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; 1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And once you think about that you might want to read :) <a href="https://gist.github.com/igstan/c3797e51aa0784a5d275">this</a></p>
+
+<p>Happy Clojure Kataing!</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2014/11/13/clojure-fizzbuzz-without-conditionals/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2014
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2014/11/13/clojure-fizzbuzz-without-conditionals/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2014/11/13/clojure-fizzbuzz-without-conditionals/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>
