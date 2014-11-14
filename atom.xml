@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-11-13T22:40:24-05:00</updated>
+  <updated>2014-11-13T22:43:53-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -111,7 +111,7 @@ a couple of notes for this one is that:</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>And once you think about that you might want to read :) <a href="https://gist.github.com/igstan/c3797e51aa0784a5d275">this</a></p>
+<p>And once you think about that, you might want to read <a href="https://gist.github.com/igstan/c3797e51aa0784a5d275">this</a> :)</p>
 
 <p>Happy Clojure Kataing!</p>
 ]]></content>
