@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-12-17T21:25:06-05:00</updated>
+  <updated>2015-01-26T20:14:03-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Partition with Game of Thrones Pugs]]></title>
+    <link href="http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs/"/>
+    <updated>2015-01-26T18:55:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs</id>
+    <content type="html"><![CDATA[<p>Clojure&rsquo;s <em>partition</em> and <em>partition-all</em> functions are very useful.
+However, I have been bitten a few times using <em>partition</em> when I
+really wanted <em>partition-all</em>.  So to help myself and all of you to
+remember it, I have made some diagrams with <a href="http://www.designswan.com/archives/the-pugs-of-westeros-cute-pugs-dressed-up-like-characters-in-game-of-thrones.html">pugs from the Game of Thrones</a></p>
+
+<p>In code, <a href="http://clojuredocs.org/clojure.core/partition">partition</a> takes a collection and returns a lazy sequence of
+lists, each containing n items.</p>
+
+<p>To demonstrate this with pugs, we will partition 5 pugs into groups of
+twos.</p>
+
+<p><img class="<a" src="href="https://c4.staticflickr.com/8/7441/16190675727_8f8837b970_c.jpg">https://c4.staticflickr.com/8/7441/16190675727_8f8837b970_c.jpg</a>"></p>
+
+<p>This partition will give you two groups of two pugs.</p>
+
+<p><img class="<a" src="href="https://c4.staticflickr.com/8/7438/16374834221_cac3ee7bda_c.jpg">https://c4.staticflickr.com/8/7438/16374834221_cac3ee7bda_c.jpg</a>"></p>
+
+<p>Notice, (and here is the important part), the last pug is missing.  The Joffrey pug is not included because <em>partition</em> will not include items that do not make a complete partition.  In this case, because there is no group of 2 pugs for the Joffrey pug to be in, it gets dropped.</p>
+
+<p><em>This is thing that has bitten me in the past.</em></p>
+
+<p>A common use for wanting to partition things is to control the number
+of things that you process at one time.  An example of this is sending only 500 items to be processed in a batch job at one time.  If you have a few thousand items to be processed, partitioning them is a good way of chuncking.  However, if you have an arbitrary number of items, you most certainly want to process them <em>all</em> and not drop any.  This is where you should use <em>partition-all</em> instead.</p>
+
+<p><a href="http://clojuredocs.org/clojure.core/partition-all">Partition-all</a> chunks the items as well, but also includes any leftovers.  Demonstrating again with pugs.</p>
+
+<p><img class="<a" src="href="https://c1.staticflickr.com/9/8662/16189182110_4bbd002a74_c.jpg">https://c1.staticflickr.com/9/8662/16189182110_4bbd002a74_c.jpg</a>"></p>
+
+<p>This <em>partition-all</em> will give you three groups of pugs.</p>
+
+<p><img class="<a" src="href="https://c1.staticflickr.com/9/8662/16188930218_1f3262b250_c.jpg">https://c1.staticflickr.com/9/8662/16188930218_1f3262b250_c.jpg</a>"></p>
+
+<p>This time pug Joffrey is not left out!</p>
+
+<p>Remember, think carefully before using <em>partition</em>.  Don&rsquo;t leave a pug out.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure FizzBuzz without Conditionals]]></title>
@@ -383,182 +426,6 @@ always knows the right thing to do, without getting bogged down in
 unnecessary details .  His power is Clojure’s simplicity.</p>
 
 <p>There might be others out there, we don’t know.  We can only hope, that they are found by Bob and the Clojure X-Men and use their powers for good.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[World Domination with Hexapods and Clojure]]></title>
-    <link href="http://gigasquid.github.io/blog/2014/03/20/world-domination-with-hexapods-and-clojure/"/>
-    <updated>2014-03-20T21:00:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2014/03/20/world-domination-with-hexapods-and-clojure</id>
-    <content type="html"><![CDATA[<p>Once you have your <a href="http://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/">hexapod assembled and running using the hand held
-controller</a>,
-of course, your thoughts naturally turn to world domination.</p>
-
-<h2>The most powerful tool in the world is the Clojure REPL</h2>
-
-<p>World domination requires the most powerful tools available.  That of
-course calls for Clojure and the Clojure REPL.  I recommend Emacs
-as the editor of choice of such an endeavor.  However, it if you are
-content with city, state, or single country domination, other editors
-that support Clojure are also fine.</p>
-
-<h2>Connect the XBee to your computer</h2>
-
-<p>First, we need to get the computer to talk to the hexapod wirelessly.
-We can do this with a <a href="http://www.trossenrobotics.com/uartsbee">USB to Serial adapter</a>
-that uses the paired XBee from the handheld commander.</p>
-
-<p>Take the XBee from the handheld commander</p>
-
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg">http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg</a>"></p>
-
-<p>and move it to the USB to serial adapter</p>
-
-<p><img class="<a" src="href="http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg">http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg</a>"></p>
-
-<p>Now plug the usb into your computer.</p>
-
-<h2>Get your Clojure ready</h2>
-
-<p>In your clojure project, the only magic you need is the <a href="https://github.com/samaaron/serial-port">Serial Port library</a>. Import the library and list your serial ports.  Then open the one that shows up for you.</p>
-
-<p>```clojure
-(ns clj-hexapod.core
-  (require [serial-port :as serial]))</p>
-
-<p>;; Use this command to see what port your serial port
-;; is assinged to
-(serial/list-ports)</p>
-
-<p>;; replace the USB0 with whater it shows
-(def port (serial/open &ldquo;/dev/ttyUSB0&rdquo; 38400))
-```</p>
-
-<p>Since we are going to be talking to the hexapod.  We need to send the commands in the same format that it is expecting. Basically, a packet of where the postions of the joystick are, as well as what buttons are pushed.</p>
-
-<p>```clojure
-(defn checksum [v]
-  (mod (&ndash; 255 (reduce + v)) 256))</p>
-
-<p>(defn vec->bytes [v]
-  (byte-array (map #(&ndash;> % (Integer.) (.byteValue) (byte)) v)))</p>
-
-<p>(defn build-packet [r-vert r-horz l-vert l-horz buttons]
-  [255 ;header
-   r-vert
-   r-horz
-   l-vert
-   l-horz
-   buttons
-   0
-   (checksum [r-vert r-horz l-vert l-horz buttons])])</p>
-
-<p>(defn send [packet]
-  (serial/write port (vec->bytes packet)))
-```</p>
-
-<p>From here, we can simply make functions for the joystick controls to go up and down</p>
-
-<p>```clojure
-;;values between 129-254
-(defn up [speed]
-  &ldquo;joystick up for speed between 1-100&rdquo;
-  (if (good-range? speed)</p>
-
-<pre><code>(int (+ 129 (* 125 (/ speed 100.0))))
-CENTER))
-</code></pre>
-
-<p>;;values between 0 and 125
-(defn down [speed]
-  &ldquo;joystick down speed between 1-100&rdquo;
-  (if (good-range? speed)</p>
-
-<pre><code>(int (- 125 (* 125 (/ speed 100.0))))
-CENTER))
-</code></pre>
-
-<p>```</p>
-
-<p>Then we can do things like walk, turn, and change the gait</p>
-
-<p>```clojure
-(defn walk-forward [speed]
-  &ldquo;walk forward speed between 1-100&rdquo;
-  (send (build-packet CENTER CENTER (up speed) CENTER 0)))</p>
-
-<p>(defn walk-backwards [speed]
-  &ldquo;walk backwards speed between 1-100&rdquo;
-  (send (build-packet CENTER CENTER (down speed) CENTER 0)))</p>
-
-<p>(defn walk-right [speed]
-  &ldquo;walk right speed between 1-100&rdquo;
-  (send (build-packet CENTER CENTER CENTER (up speed) 0)))</p>
-
-<p>(defn walk-left [speed]
-  &ldquo;walk right speed between 1-100&rdquo;
-  (send (build-packet CENTER CENTER CENTER (down speed) 0)))</p>
-
-<p>(defn turn-right [speed]
-  &ldquo;turn right speed between 1-100&rdquo;
-  (send (build-packet CENTER (up speed) CENTER CENTER 0)))</p>
-
-<p>(defn turn-left [speed]
-  &ldquo;turn left speed between 1-100&rdquo;
-  (send (build-packet CENTER (down speed) CENTER CENTER 0)))</p>
-
-<p>(defn change-gait [gait-key]
-  (let [gait-num (gait-key gaits)]</p>
-
-<pre><code>(send (build-packet CENTER CENTER CENTER CENTER gait-num))))
-</code></pre>
-
-<p>(defn stop []
-  &ldquo;stop hexapod&rdquo;
-  (send (build-packet CENTER CENTER CENTER CENTER 0)))
-```</p>
-
-<p>You can control it from the REPL with some simple commands</p>
-
-<p><code>clojure
-(walk-forward 20)
-(walk-backwards 10)
-(walk-right 10)
-(walk-left 10)
-(turn-right 10)
-(turn-left 10)
-(change-gait :ripple-smooth)
-(change-gait :tripod-normal)
-(change-gait :ripple)
-(change-gait :amble)
-(stop)
-</code></p>
-
-<p>If you want to see the code, it is out on github as <a href="https://github.com/gigasquid/clj-hexapod">clj-hexapod</a>.  Please keep in mind that it is early days still, and I am still just exploring.</p>
-
-<h2>Phoneix Code Firmware</h2>
-
-<p>It is worth noting the the above code was meant to run with the default hexapod firmware.  That is the &ldquo;Nuke&rdquo; firmware.  There is another firmware, the <a href="https://github.com/KurtE/Arduino_Phoenix_Parts">Phoenix code</a>, that gives the hexapod more lifelike moves and allows it to twist and shift is rather creepy ways.</p>
-
-<p>I just loaded it on the hexapod yesterday.  The commander software changed too, so I will of course need to revisit the code, to add in the new moves.  But here is a sneak preview of what it can do:</p>
-
-<p>
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('PmBGt9T-yvI');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/PmBGt9T-yvI?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/PmBGt9T-yvI/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=PmBGt9T-yvI" id="PmBGt9T-yvI" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info">Hexapod with Phoenix Code</div>
-</a>
-<div class="video-info" ></div>
-</div>
-
-</p>
-
-<p><em>That is my daughter singing in the background</em></p>
-
-<h2>That&rsquo;s all for now</h2>
-
-<p>I hope I have given you pointers for getting started on your own world domination with Clojure and Hexapods. Remember to practice your laugh &hellip;. Muhahaha :)</p>
 ]]></content>
   </entry>
   

@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: May 3rd, 2012 Tags: All In a day dream, I met a genie.  He kindly offered to setup my dream dinner for me.  All I had to do was name &hellip;">
+	<meta name="description" content="Published on: Jul 7th, 2012 Tags: All, Clojure Do you need to have a specific version of Clojure in your leiningen project that you can&rsquo;t get &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -72,6 +72,82 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/07/07/how-to-include-non-clojars-clojure-version-in-your-lein-project/">
+		
+			How to Include Non Clojars/maven Clojure Version in Your Lein Project</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-07T15:02:33-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2012</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p>Do you need to have a specific version of Clojure in your leiningen project that you can&rsquo;t get from Clojars?</p>
+
+<p>I ran into this problem when I wanted to run a sample project on Clojure&rsquo;s reducers &ndash; which is not in the current Clojars version of 1.4.0.  I needed to use the most recent version, (unreleased), of 1.5.0.  These are the steps to get you running.</p>
+
+<ul>
+<li><p>Clone the <a href="https://github.com/clojure/clojure/">clojure git repository </a></p></li>
+<li><p>In the project directory &ndash; run ant to build the jar</p></li>
+<li><p>Install the jar into your local maven repo</p></li>
+</ul>
+
+
+<p><code>mvn install:install-file -DgroupId=org.clojure -DartifactId=clojure -Dfile=clojure-1.5.0-master-SNAPSHOT.jar -DpomFile=pom.xml</code></p>
+
+<ul>
+<li>Now you can update your lein project.clj with</li>
+</ul>
+
+
+<p><code>(defproject reducers "1.0.0-SNAPSHOT"
+:description "FIXME: write description"
+:dependencies [[org.clojure/clojure "1.5.0-master-SNAPSHOT"]])</code>
+Run lein deps and you should be all set.</p>
+
+<p>This trick also works with running leiningen projects with<a href="http://datomic.com/"> Datomic</a>.  In this case &ndash; download the Datomic library and from the root directory run
+<code> mvn install:install-file -DgroupId=com.datomic -DartifactId=datomic -Dfile=datomic-0.1.3164.jar -DpomFile=pom.xml</code></p>
+
+<p><strong><strong><strong><em> Update </em></strong></strong></strong>
+I found out that there is already an alpha version of Clojure on Maven.  So you don&rsquo;t need to do the build.  <a href="http://mvnrepository.com/artifact/org.clojure/clojure/1.5.0-alpha2">http://mvnrepository.com/artifact/org.clojure/clojure/1.5.0-alpha2</a></p>
+
+<p>It would simply be
+<code>(defproject reducers "1.0.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :dependencies [[org.clojure/clojure "1.5.0-alpha2"]])</code></p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2012/07/07/how-to-include-non-clojars-clojure-version-in-your-lein-project//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -737,88 +813,6 @@ Create an empty .emacs-project file in your directory</p>
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/06/11/super-easy-clojure-web-apps-with-heroku-cedar/">
-		
-			Super Easy Clojure Web Apps With Heroku Cedar</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-06-11T19:57:52-04:00" pubdate data-updated="true">Jun 11<span>th</span>, 2011</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/development/'>Development</a>
-
-
-</div>
-    </div>
-		<p>Deploying Clojure apps with a single command to the cloud is now possible with Heroku Cedar and let me tell you, it is pure joy.</p>
-
-<p>I experimented with this the other day by creating a Compojure web application that compares the followers that two twitter users have in common.</p>
-
-<p>Here is the secret sauce you need to push your apps to Heroku:</p>
-
-<p>1) <strong>Procfile: </strong>
-You need to create a file in the root of your directory that contains the way to start up your application:</p>
-
-<pre><code> web: lein run -m ring-twitter-common.core
-</code></pre>
-
-<p>2) The application must have the project.clj setup correctly so that you can just run:</p>
-
-<pre><code>lein deps
-</code></pre>
-
-<p>3) You need to install the <a href="https://github.com/heroku/heroku">Heroku gem</a></p>
-
-<p>Once you have this setup you simply do:</p>
-
-<pre><code>heroku create --stack cedar
-
-
-
-
-git push heroku master
-</code></pre>
-
-<p>That&rsquo;s it. Your webapp will auto-magically be created, and deployed and be available for your viewing pleasure.</p>
-
-<p>You can check out  my sample Twitter Heroku app here:
-<a href="http://ring-twitter-common.herokuapp.com/">http://ring-twitter-common.herokuapp.com/</a></p>
-
-<p>But wait, you say&hellip; wouldn&rsquo;t it be awesome if you could just write your Clojure app and say lein deploy and have it all work? Wouldn&rsquo;t it be super awesome if there was some command to generate a skeleton for your Compojure app? The solution is actually in the planning stages by James Reeves (weavejester)!  Hooray!</p>
-
-<p><a href="http://groups.google.com/group/leiningen/browse_thread/thread/1f3fbb808542adc6">Leiningen Google Group Text</a></p>
-
-<p>In summary:  Developing Clojure Web Apps just got easier and the future is only looking up :)</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2011/06/11/super-easy-clojure-web-apps-with-heroku-cedar//blog/page/5/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/4/" class="prev">Prev</a>
@@ -832,7 +826,7 @@ git push heroku master
     </div>
     <footer id="footer">
     <div style="display:inline">
-    Copyright &copy; 2014
+    Copyright &copy; 2015
 
     Carin Meier
 . Powered by <a href="http://octopress.org">Octopress</a> | 

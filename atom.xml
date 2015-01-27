@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2014-12-17T21:25:06-05:00</updated>
+  <updated>2015-01-26T20:14:03-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Partition with Game of Thrones Pugs]]></title>
+    <link href="http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs/"/>
+    <updated>2015-01-26T18:55:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs</id>
+    <content type="html"><![CDATA[<p>Clojure&rsquo;s <em>partition</em> and <em>partition-all</em> functions are very useful.
+However, I have been bitten a few times using <em>partition</em> when I
+really wanted <em>partition-all</em>.  So to help myself and all of you to
+remember it, I have made some diagrams with <a href="http://www.designswan.com/archives/the-pugs-of-westeros-cute-pugs-dressed-up-like-characters-in-game-of-thrones.html">pugs from the Game of Thrones</a></p>
+
+<p>In code, <a href="http://clojuredocs.org/clojure.core/partition">partition</a> takes a collection and returns a lazy sequence of
+lists, each containing n items.</p>
+
+<p>To demonstrate this with pugs, we will partition 5 pugs into groups of
+twos.</p>
+
+<p><img src="https://c4.staticflickr.com/8/7441/16190675727_8f8837b970_c.jpg"></p>
+
+<p>This partition will give you two groups of two pugs.</p>
+
+<p><img src="https://c4.staticflickr.com/8/7438/16374834221_cac3ee7bda_c.jpg"></p>
+
+<p>Notice, (and here is the important part), the last pug is missing.  The Joffrey pug is not included because <em>partition</em> will not include items that do not make a complete partition.  In this case, because there is no group of 2 pugs for the Joffrey pug to be in, it gets dropped.</p>
+
+<p><em>This is thing that has bitten me in the past.</em></p>
+
+<p>A common use for wanting to partition things is to control the number
+of things that you process at one time.  An example of this is sending only 500 items to be processed in a batch job at one time.  If you have a few thousand items to be processed, partitioning them is a good way of chuncking.  However, if you have an arbitrary number of items, you most certainly want to process them <em>all</em> and not drop any.  This is where you should use <em>partition-all</em> instead.</p>
+
+<p><a href="http://clojuredocs.org/clojure.core/partition-all">Partition-all</a> chunks the items as well, but also includes any leftovers.  Demonstrating again with pugs.</p>
+
+<p><img src="https://c1.staticflickr.com/9/8662/16189182110_4bbd002a74_c.jpg"></p>
+
+<p>This <em>partition-all</em> will give you three groups of pugs.</p>
+
+<p><img src="https://c1.staticflickr.com/9/8662/16188930218_1f3262b250_c.jpg"></p>
+
+<p>This time pug Joffrey is not left out!</p>
+
+<p>Remember, think carefully before using <em>partition</em>.  Don&rsquo;t leave a pug out.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gigasquid's Radar 2014]]></title>
@@ -3230,82 +3273,6 @@ farther as well.</p>
 
 
 <p>Go forth and create Neural Networks!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Embrace and Reach]]></title>
-    <link href="http://gigasquid.github.io/blog/2013/11/02/embrace-and-reach/"/>
-    <updated>2013-11-02T14:51:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2013/11/02/embrace-and-reach</id>
-    <content type="html"><![CDATA[<p><img src="http://farm1.staticflickr.com/99/290760357_01392a3f51_n.jpg"></p>
-
-<p>One of the wonderful things about being a technologist today, is
-to be part of an industry that is bubbling over with new and
-exciting things. It can be exhilarating and overwhelming. How can we
-try and do all these great new things?  Of course, it is not
-sensible to simply drop whatever you are using and continually chase
-after the newest tech.  Nor is steadfastly staying in one place and
-refusing to accept that there is a better way of doing things.  The
-challenge is to absorb, identify, and synthesize both good of the
-what we are currently doing and the new stuff too.  We want to embrace and continue the good things that
-are working for us and reach for the new technologies that will propel
-us farther in the future.</p>
-
-<p>Since everyone has their own experience synthesizing the world around
-them, there are many differing opinions on what we should continue to
-embrace and what we technologies and practices should reach for.  I
-humbly offer my thoughts on this based from my own perspective.</p>
-
-<h2>Embrace: Agile Feedback</h2>
-
-<h2>Reach for: Lean Startup Discipline and Programmer Anarchy</h2>
-
-<p>Agile has become a victim of its own success.  Becoming so big, its
-message has been confused and abused in too many ways to name.  But
-the core pillar of frequent and continuous feedback is a foundation to
-any successful software project and should be embraced.  However, we
-should not stop there.  We should reach for the rewards that <a href="http://theleanstartup.com/principles">Lean Startup
-Methodology</a> offers in the form
-of displinced validation.  We should also
-reach to unleash the innovation of our smart developers with
-<a href="http://www.youtube.com/watch?v=uk-CF7klLdA">Programmer Anarchy</a>, and
-look for ways to ruthlessly stomp out unnecessary and wasteful
-project management practices.</p>
-
-<h2>Embrace: Ruby&rsquo;s Community</h2>
-
-<h2>Reach for: Clojure, Go, Elixir, and Meteor</h2>
-
-<p>Ruby and Rails have been an incredible game changer for web
-development.  But they too are suffering from their own success.  One
-of the strengths of Ruby, which should be embraced and nutured, is the
-strength of the community and the openness to newcomers.  This strength
-yields a fruitful ground for a vibrant library ecosystem, which has
-helped Ruby flourish.  We need to reach beyond Ruby and Rails to other
-languages and frameworks that focus on simplicity and concurrency.  The bright future
-will belong to the likes of <a href="http://clojure.org/">Clojure</a>,
-<a href="http://golang.org/">Go</a>, <a href="http://elixir-lang.org/">Elixir</a>, and <a href="http://www.meteor.com/">Meteor</a>.  We need
-to reach and start using these in the products we build, while
-encouraging the growth of a welcoming community and ecosystem like the
-one we have in Ruby.</p>
-
-<h2>Embrace: Collaboration</h2>
-
-<h2>Reach for: the Distributed and Decentralized</h2>
-
-<p>Collaboration with tools like Google Docs works.  We should continue
-to embrace the power that this gives us. However we should embrace
-tools for combining this collaboration in a truly distributed and
-decentralized manner. Git itself is wonderful and distributed, but we
-should reach for tools like Github to be more decentralized and resilient.
-As privacy concerns grow in today&rsquo;s world.  We need to reach beyond
-the convenience that a centralized source of information gives us and
-truly understand the trade offs involved.</p>
-
-<p>We live in an incredible, vibrant time.  Look around and what you
-do everyday.  Embrace and nurture all the good parts, and never give up
-reaching for something better.</p>
 ]]></content>
   </entry>
   
