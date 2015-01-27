@@ -28,7 +28,7 @@ This partition will give you two groups of two pugs.
 
 Notice, (and here is the important part), the last pug is missing.  The Joffrey pug is not included because _partition_ will not include items that do not make a complete partition.  In this case, because there is no group of 2 pugs for the Joffrey pug to be in, it gets dropped.
 
-_This is thing that has bitten me in the past._
+_This is the thing that has bitten me in the past._
 
 A common use for wanting to partition things is to control the number
 of things that you process at one time.  An example of this is sending only 500 items to be processed in a batch job at one time.  If you have a few thousand items to be processed, partitioning them is a good way of chuncking.  However, if you have an arbitrary number of items, you most certainly want to process them _all_ and not drop any.  This is where you should use _partition-all_ instead.
