@@ -46,5 +46,9 @@ This time pug Joffrey is not left out!
 
 Remember, think carefully before using _partition_.  Don't leave a pug out.
 
+By the way, I can't wait till the next season of Game of Thrones.  Until then ..
+
+{% youtube 2EoQCtPR2-I %}
+
 
 
