@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-01-27T07:59:34-05:00</updated>
+  <updated>2015-01-27T10:51:17-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -37,7 +37,7 @@ twos.</p>
 
 <p>Notice, (and here is the important part), the last pug is missing.  The Joffrey pug is not included because <em>partition</em> will not include items that do not make a complete partition.  In this case, because there is no group of 2 pugs for the Joffrey pug to be in, it gets dropped.</p>
 
-<p><em>This is thing that has bitten me in the past.</em></p>
+<p><em>This is the thing that has bitten me in the past.</em></p>
 
 <p>A common use for wanting to partition things is to control the number
 of things that you process at one time.  An example of this is sending only 500 items to be processed in a batch job at one time.  If you have a few thousand items to be processed, partitioning them is a good way of chuncking.  However, if you have an arbitrary number of items, you most certainly want to process them <em>all</em> and not drop any.  This is where you should use <em>partition-all</em> instead.</p>
