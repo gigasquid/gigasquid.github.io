@@ -17,7 +17,6 @@ My current tech interests are Clojure, AI, and Robots.
 When I am left to daydream, I think of the dynamics of flocks of birds, what the Giant Squids might really be doing down there in the deep, and maybe opening a first-rate cheese shop one day.
 
 
-* I work for [Outpace](http://www.outpace.com/)
 * I have a [Github](https://github.com/gigasquid)
 * and a [Linked In Page](http://www.linkedin.com/in/carinmeier)
 * and a [Twitter Account](http://twitter.com/#!/gigasquid)
