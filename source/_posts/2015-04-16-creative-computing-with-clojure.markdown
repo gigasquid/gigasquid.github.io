@@ -23,7 +23,7 @@ to those that are inspired.
 We start our tour with the realm of music.
 
 
-### Music and Clojure
+### Music
 
 Creating music with Clojure is a joy. The [Overtone](https://github.com/overtone/overtone) library allows you to not only make music with Clojure.  Underneath the covers, the library provides an api to the
 [SuperCollider](http://supercollider.github.io/) synthesis engine.  It has a rich set of scales, chords, rhythm, as well as a metronome timing system.  One of the coolest things about Overtone, is the ability to
@@ -33,12 +33,38 @@ in where he shows off Overtone in action.  He starts off with simple principles 
 This interactive, and collaborative nature of using Overtone was taken to new levels with [Sam Aaron](https://twitter.com/samaaron) and [Jonathan Graham](https://twitter.com/graham_jp). The combined forces to create a fantastic  _live coding_ band called [Meta-eX](http://meta-ex.com/). When performing,
 the music surrounding the audience is driven by live code.  The code is front and center, being projected on a screen.  The audience watches as the code is created and modified, driving the beat and the music.  You really have to see them live to appreciate the whole experience, but here is a small excerpt from one of their live coding sessions, entitled [Machine Run](https://soundcloud.com/meta-ex/machine-run).
 
-For live performances, Meta-eX also combines a visual element as well.  Along with displaying the code, they will also show images, colors, and shadows, that dance along with the music. Overtone has integration for two of the visual art libraries that will we explore next.
+For live performances, Meta-eX also combines a visual element as well.  Along with displaying the code, they will also show images, colors, and shadows, that dance along with the music. Overtone has integration for two of the visual art libraries, Quil and Shadertone,  that will we explore next.
 
-#### Visual Art and Clojure
+### Visual Art
 
-One of the most well known Clojure art libraries is [Quil](https://github.com/quil/quil).  
+One of the most well known Clojure art libraries is [Quil](https://github.com/quil/quil).  It uses [Processing](https://processing.org/reference/) to create sophisticated visual structures and artwork such as this by [Danielle Kefford](https://twitter.com/quephird).
 
+{% img http://fc08.deviantart.net/fs71/i/2015/003/4/3/hedera_helix_by_quephird-d8chot2.png %}
+
+Quil supports both Clojure and ClojureScript.  It is also well documented and provides examples of how to do [generative art](https://github.com/quil/quil-examples/blob/master/src/quil_sketches/gen_art/README.md).
+
+[Shardertone](https://github.com/overtone/shadertone) is another lovely art library. One of the things I love about it is the integration with Overtone.  It was designed to mix the Musical Synthesis and OpenGL shaders seen in the [Shadertoy](https://www.shadertoy.com/)website.  When combined with the music of Overtone in a live-coding environment, the results are mesmerizing as in this video example by the [REPL Electric](https://vimeo.com/95988263).
+
+
+People have also been experimenting with Clojure Game Platforms for visual art. This stunning piece of visual art by [Joseph Parker](https://twitter.com/jplur_) uses the [Arcadia](https://github.com/arcadia-unity/Arcadia) library to integrate Clojure with the Unity 3D game engine.
+
+{% img https://files.gitter.im/selfsame/hard/gSBk/003.gif %}
+
+Some people have even been experimenting with combining Overtone and games as art.  [Joseph Wilk](https://twitter.com/josephwilk) has been harnessing the musical beat in Overtone to generate 3D shapes in minecraft.  By embedding a Clojure REPL inside the Minecrafter server, sound creates blocks and structures in this amazing [demo](https://vimeo.com/120907923).
+
+https://github.com/postspectacular/devart-codefactory
+
+Finally, Clojure has enabled a cool art project whose aim is to allow anyone to be an artist.  The [Devart-Codefactory project](http://devartcodefactory.com/#/home) is an online design tool that empowers people by giving them a tool to create a complex 3d form.  There is even the chance of having their art fabricated in 3D and showcased in an art exhibition.  The tool is written in Clojure provide people to create many intricate forms seen on the [gallery](http://devartcodefactory.com/#/gallery) and in this image.
+
+{% img http://media.devartcodefactory.com/objects/b01ef41a-e48f-4fe9-9d78-8024a14777b9/b01ef41a-e48f-4fe9-9d78-8024a14777b9.svg %}
+
+### Poetry
+
+
+### Dance
+
+
+### Summary 
 
 
 
