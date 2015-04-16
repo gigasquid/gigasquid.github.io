@@ -71,8 +71,38 @@ So far we have covered music, visual art, and poetry.  We haven't yet mentioned 
 
 ### Dance
 
+With Clojure you can control robots.  You can control everyday, helpful robots, like the Roomba with the [clj-roomba](https://github.com/gigasquid/clj-roomba) library.  You can control fun loving toy robots like the Sphero with the [ellipso](https://github.com/mattdenner/ellipso) library.  You can even control flying AR Parrot Quadcopter drones with Clojure and either the [clj-drone](https://github.com/gigasquid/clj-drone) or [turboshrimp](https://github.com/wiseman/turboshrimp) libraries.  Once you can control movement with Clojure through the interactive REPL, you just need to add music to dance.
 
-### Summary 
+This presentation from O'Reilly Solid Con of a [Real Time Robot Dance Party](https://www.youtube.com/watch?v=sHK4v5MimJs) demonstrates the combination of music and robots.  Through the power of the Clojure REPL and Overtone, a dance tune from Daft Punk is generated.  Then using the signals from the beat, robot dance moves are coordinated all real time.
+
+We have now completed our tour of a selection of creative coding with Clojure in the arts space.  Let's step back and summarize some of the tools and libraries we have used.
+
+### Summary
+
+If you are interested in exploring creating music with Clojure, check out:
+
+* [Overtone](http://overtone.github.io/) - Collaborative Programmable Music
+
+If you are interested in creating visual art with Clojure, check out:
+
+* [Quil](https://github.com/quil/quil) - Sophisticated visual structures and artwork with integration to Overtone
+* [Shardertone](https://github.com/overtone/shadertone) - OpenGL shaders and Musical Synthesis with Overtone
+* [Arcadia](https://github.com/arcadia-unity/Arcadia) - Clojure integration with Unity 3D Engine
+* [Devart-Codefactory project](http://devartcodefactory.com/#/home) - Online design tool to create complex 3d forms
+
+If you are interested in computer generated poetry, check out:
+* [Haikus](http://jr0cket.co.uk/2012/09/clojure-poetry-in-motion-developers-get.html.html) - Example code to create Haikus
+* [Markov Chain Tweet Generator](https://howistart.org/posts/clojure/1) - A walkthrough on how to create a Markov Chain Twitter Bot
+
+If you are interested in teaching robots how to dance, check out:
+*  [clj-roomba](https://github.com/gigasquid/clj-roomba) - For Hacking Roombas
+*  [ellipso](https://github.com/mattdenner/ellipso) - For Hacking Spheros
+*  [clj-drone](https://github.com/gigasquid/clj-drone) or [turboshrimp](https://github.com/wiseman/turboshrimp)  - For Hacking Drones
+*  [robot-dance-party](https://github.com/gigasquid/robot-dance-party) - Example code for robots dancing to live Overtone music
+
+
+I hope you have enjoyed this selection of creative coding.  The next time artistic inspiration strikes, pick up your editor and create with Clojure.
+
 
 
 
