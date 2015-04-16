@@ -37,30 +37,36 @@ For live performances, Meta-eX also combines a visual element as well.  Along wi
 
 ### Visual Art
 
-One of the most well known Clojure art libraries is [Quil](https://github.com/quil/quil).  It uses [Processing](https://processing.org/reference/) to create sophisticated visual structures and artwork such as these by [Danielle Kefford/ Quephird](https://twitter.com/quephird).
+One of the most well known Clojure art libraries is [Quil](https://github.com/quil/quil).  It uses [Processing](https://processing.org/reference/) to create sophisticated visual structures and artwork such as this by [Danielle Kefford/ Quephird](https://twitter.com/quephird).
 
 {% img http://fc08.deviantart.net/fs71/i/2015/003/4/3/hedera_helix_by_quephird-d8chot2.png %}
 
-{% img http://selfsamegames.com/gifs/wacky/001.gif %} 
 
 Quil supports both Clojure and ClojureScript.  It is also well documented and provides examples of how to do [generative art](https://github.com/quil/quil-examples/blob/master/src/quil_sketches/gen_art/README.md).
 
 [Shardertone](https://github.com/overtone/shadertone) is another lovely art library. One of the things I love about it is the integration with Overtone.  It was designed to mix the Musical Synthesis and OpenGL shaders seen in the [Shadertoy](https://www.shadertoy.com/)website.  When combined with the music of Overtone in a live-coding environment, the results are mesmerizing as in this video example by the [REPL Electric](https://vimeo.com/95988263).
 
 
-People have also been experimenting with Clojure Game Platforms for visual art. This stunning piece of visual art by [Joseph Parker](https://twitter.com/jplur_) uses the [Arcadia](https://github.com/arcadia-unity/Arcadia) library to integrate Clojure with the Unity 3D game engine.
+People have also been experimenting with Clojure Game Platforms for visual art. This stunning pieces of visual art by [Joseph Parker](https://twitter.com/jplur_) uses the [Arcadia](https://github.com/arcadia-unity/Arcadia) library to integrate Clojure with the Unity 3D game engine.
 
 {% img https://files.gitter.im/selfsame/hard/gSBk/003.gif %}
+
+{% img http://selfsamegames.com/gifs/wacky/001.gif %}
+
 
 Some people have even been experimenting with combining Overtone and games as art.  [Joseph Wilk](https://twitter.com/josephwilk) has been harnessing the musical beat in Overtone to generate 3D shapes in minecraft.  By embedding a Clojure REPL inside the Minecrafter server, sound creates blocks and structures in this amazing [demo](https://vimeo.com/120907923).
 
 Finally, Clojure has enabled a cool art project whose aim is to allow anyone to be an artist.  The [Devart-Codefactory project](http://devartcodefactory.com/#/home) is an online design tool that empowers people by giving them a tool to create a complex 3d form.  There is even the chance of having their art fabricated in 3D and showcased in an art exhibition.  The tool is written in Clojure provide people to create many intricate forms seen on the [gallery](http://devartcodefactory.com/#/gallery).
 
-Creativity is not limited to the visual and musical arts.  The written word is also used by Clojure for art.
+Creativity is not limited to the visual and musical arts.  The written word is also used by Clojure for art to produce poetry.
 
 ### Poetry
 
-Can computers create poetry?  With Clojure, the answer is a resounding yes.  
+Can computers create poetry?  With Clojure, the answer is a resounding yes.  People have used Clojure to generate [Haikus](http://jr0cket.co.uk/2012/09/clojure-poetry-in-motion-developers-get.html.html).  They have also used them to generate text using [Markov Chains](http://en.wikipedia.org/wiki/Markov_chain).  This method is trained on a set of text and them randomly generates new text and phrases with combined inputs.  A neat example of this is a Markov Chain generator that is trained on the poetry of Edward Lear's [Nonsense Books](http://www.gutenberg.org/ebooks/13650?msg=welcome_stranger) and a goodly dose of Functional Programming from Wikipedia.  The program is used by a twitter bot named [FunctionalELear](https://twitter.com/FunctionalELear), who generates _art tweets_ based off the input texts.  The artful combination of such two different spheres makes for some amusing text snippets as in the one below.
+
+{% img http://c1.staticflickr.com/9/8748/16983522639_59a0bd68d0_b.jpg %}
+
+So far we have covered music, visual art, and poetry.  We haven't yet mentioned dance.  But I am not talking about humans dancing with Clojure, I am talking about robots.
 
 
 ### Dance
