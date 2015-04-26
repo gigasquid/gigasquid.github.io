@@ -14,7 +14,7 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
-* [OSCON 2015](http://www.oscon.com/open-source-2015) - I will be giving a workshop _Solving the Concurrency Problem with Clojure_  and also a talk _Unconventional Programming with Chemical Computing_.
+* [OSCON 2015](http://www.oscon.com/open-source-2015) - I will be giving a workshop _Solving the Concurrency Problem with Clojure_ and also a talk _Unconventional Programming with Chemical Computing_. The schedule details are [here](http://www.oscon.com/open-source-2015/public/schedule/speaker/154757)
 
 
 
