@@ -6,7 +6,7 @@ sharing: true
 footer: true
 ---
 
-{% img http://akamaicovers.oreilly.com/images/0636920034292/rc_lrg.jpg %}
+[{% img http://akamaicovers.oreilly.com/images/0636920034292/cat.gif  %}](http://shop.oreilly.com/product/0636920034292.do?sortby=publicationDate)
 
 I am the author of [Living Clojure](http://shop.oreilly.com/product/0636920034292.do?sortby=publicationDate) by O'Reilly.  It is both an introduction and
 training plan for developers to learn Clojure.
@@ -28,9 +28,6 @@ libraries.  The second half of the book is a structured set of daily
 exercises over a course of seven weeks that will give your brain a
 gradual doses of functional programming that will have you _living_
 Clojure at the end.
-
-
-_It is currently in Early Release, but is expected out in April 2015_
 
 
 
