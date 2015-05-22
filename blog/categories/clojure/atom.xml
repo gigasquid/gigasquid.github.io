@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-04-26T10:55:39-04:00</updated>
+  <updated>2015-05-22T10:49:46-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,140 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How Not to Panic While Writing a Clojure Book]]></title>
+    <link href="http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book/"/>
+    <updated>2015-05-22T09:11:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book</id>
+    <content type="html"><![CDATA[<p>I made it to that magical moment when the Clojure book I had been working on so long was published and I could actually hold it in my hand.</p>
+
+<p><img class="<a" src="href="https://pbs.twimg.com/media/CDWsQPCUgAERViK.jpg">https://pbs.twimg.com/media/CDWsQPCUgAERViK.jpg</a>"></p>
+
+<p>It was an immense project and I am very happy that it is finally done.  Since then, I met some people that are interested in writing books as well.
+They asked if I had any insights or tips having gone through the process as a first time author.  I have collected them in this post in hopes that they will be helpful to those going through the process themselves.</p>
+
+<p>The very first thing to do is to get an outline for your book.</p>
+
+<h3>Start with an Outline</h3>
+
+<p>Ideas are soft and squishy.  They drift into different shapes like clouds, and can melt away just as quickly.  One of the hardest things to do was trying to arrange all those ideas in my head into an initial form that would serve as the structure for the entire book.  I would pick up a pen and paper, start feeling overwhelmed, and suddenly remember I had something else very pressing to do.  I successfully avoided starting a book for quite a while, until one day I cornered myself.  I decided that I write my book outline on a long plane flight.  With salted peanuts as fuel, and nowhere to escape, I finally wrote an outline.  It wasn&rsquo;t perfect but it was a start and looking back and it was not too far off.  Here it is in all of its original roughness.</p>
+
+<p>```
+Title: Living Clojure</p>
+
+<p>From beginning steps to thriving in a functional world</p>
+
+<p>(Each Chapter will follow quotes from Alice in Wonderland and very use ideas from some examples)</p>
+
+<p>Book 1 &ndash; Beginner steps</p>
+
+<p>Chapter 1 &ndash; Are you comfortable?  Talk about how OO is comfortable but there is another world out there and new way of thinking functionally.</p>
+
+<pre><code>        White Rabbit goes by
+</code></pre>
+
+<p>Chapter 2 &ndash; Forms &amp; Functions &ndash; Falling down the rabbit hole
+Chapter 3 &ndash; Functional Transformations &ndash; Growing bigger and smaller &ndash; Key to thinking functionally is about transforming data from one shape to another shape.</p>
+
+<pre><code>        Map &amp; Reduce
+</code></pre>
+
+<p>Chapter 4 &ndash; Embracing side effects  &ndash; Clojure is impure functional language (The rabbit&rsquo;s glove)  &ndash; Cover do and io stuff. Also basic stuff about</p>
+
+<pre><code>        STM atoms and agents/ Protocols
+</code></pre>
+
+<p>Chapter 5 &ndash; Libraries, Libraries  &ndash; &ndash; how to use Leiningen</p>
+
+<pre><code>        build system. Where to find clojure libraries, how to use
+        Serpents - camel-snake-kebab
+</code></pre>
+
+<p>Chapter 6 &ndash; core.asyc &ndash; Tea Party introduction to the core.async library
+Chapter 7 &ndash; Clojure web &ndash; Chesire cat  &ndash; introduction to Ring, Cheshire library, ClojureScript and OM</p>
+
+<p>Book 2 &ndash; From here to there &ndash; thriving in a functional world</p>
+
+<p>Training plan for thriving in a functional world.</p>
+
+<p>Chapter 8 &ndash; Join the community &ndash; Surround yourself with other Clojure enthusiats
+  &ndash; Twitter clojure
+  &ndash; Github account
+  &ndash; Clojure mailing list
+  &ndash; Prismatic clojure news
+  &ndash; Meetup for local community group.  If there is not one in your area. start one!
+  &ndash; Attend a Clojure conj</p>
+
+<p>Chatpter 9 &ndash; Practice and build up
+Like Couch to 5K 7 week training program to work up to
+practicing Clojure</p>
+
+<p>```</p>
+
+<p>Now that I had an outline.  I just needed to figure out how long it would take me to write the book.</p>
+
+<h3>However Long You Think It Will Take &ndash; You Are Wrong</h3>
+
+<p>Having never written a book before, I had <em>no idea</em> how much work it would be.  The closest thing I had to compare it to was writing a blog post.  I figured writing a chapter would be roughly equivalent to writing a blog post.  If I could go back in time, this is the moment where my future self would pour a glass of ice water on my past self.  Writing a book is nothing like that.  It is a lot of time and work.  If I <em>had</em> to compare it now to writing blog posts, the process would be this.</p>
+
+<pre><code>- You write a blog post.
+- You rewrite the blog post.
+- You write a second blog post.
+- You rewrite that blog post and the first one too.
+- You write another blog post.
+- You rewrite all three post .....
+</code></pre>
+
+<p>So, if you have to commit to deadlines, make sure you remember how hard it will be, and then double the number.</p>
+
+<p>Speaking of deadlines, they suck, but you should have them.</p>
+
+<h3>Make Deadlines</h3>
+
+<p>Deadlines are not fun.  In fact, deadlines might even be a source of potential panic.  But for me, they were necessary evil.  There were a few beautiful times when inspiration came knocking at my door and I couldn&rsquo;t wait to start writing.  But most of the time, inspiration was off somewhere else eating biscuits.  The only thing that actually moved the book along was me knowing that I needed to get the next chunk done by a certain date.</p>
+
+<p>I found the best thing to do was to set aside a small bit of time on a daily basis to write something.</p>
+
+<h3>Routine, Routine, Routine</h3>
+
+<p>A daily routine was the most crucial thing for me.  Life is really busy with work and family.  It is so easy to get overwhelmed with daily life.  I decided that mornings would work best for me.  So I would stumble in to my computer an hour before work, with a hot cup of tea in hand, and write something.  Some days I actually did quite a bit.  Other days, I would write one sentence and declare it done.  But, I would always do <em>something</em>.  Even though those small slices of time didn&rsquo;t seem like a lot, they added up over the course of a week.</p>
+
+<p>Another curious thing happens when you do something, even a little bit, day after day.  You start to get better at it.</p>
+
+<h3>Writing is a Different Skill from Coding</h3>
+
+<p>I was used to writing code all day.  I found that the code writing skills are not the same as writing about code.  In fact, I found it really hard to do at the start.  But, just like writing code, you get better with practice.  And to get better at anything, feedback is really important.</p>
+
+<h3>Get and Trust Feedback</h3>
+
+<p>After each chapter, I would get feedback from my editor.  She was awesome and provided ways for me to improve the experience for the reader.  I lost track of how many times I rewrote that first chapter, but each time it would get a bit better and I would improve as well.  After the book was about half done it was sent out to others for technical review.  They provided feedback not only on the writing style but also the technical content, making sure that it all made sense.</p>
+
+<p>The feedback loop is much slower for writing a book than writing code, but it is just as vital.  The great people providing feedback are you closest partners in this.  You need to trust them.  Especially during the roughest time, the middle of the book.</p>
+
+<h3>The Middle Bit is the Hardest</h3>
+
+<p>I found the hardest time was about halfway through the book.  The initial excitement of the new endeavor had long since worn off.  It seemed like such a mountain of a task, with no end in sight.  I questioned my decision to continue with it daily.  My routine and deadlines kept me moving forward.  But my circle of friends and family kept me sane.  It was great to have an outlet, not only to vent my frustration with my slow progress, but to get kind encouragement to keep my spirits up.</p>
+
+<p>During these dark days, I also ate cheese.</p>
+
+<h3>Celebrate Your Small Victories</h3>
+
+<p>At the end of every chapter or deadline I would fix myself a nice plate of cheese and crackers.  You have to celebrate the small wins.  Cheese is also very tasty.</p>
+
+<p>When the book was finally done.  I had a really tasty plate, complete with Stilton, Brie, and a dependable Cheddar.  I was incredibly happy to be finished. But I knew that I definitely could have not done it without the help of others.</p>
+
+<h3>Thank Everyone that Supported You</h3>
+
+<p>Writing a book is a huge undertaking that is utterly impossible to do alone.  I could have not done it without the help and support of my editor, reviewers, family, friends, as well as the entire Clojure Community.  I am so thankful to all of you that helped my in this project.  You are great.</p>
+
+<p>So, should you go ahead and write that book?</p>
+
+<h3>Do It</h3>
+
+<p>Yes, you should write that book and share your knowledge.  Don&rsquo;t panic, remember to breathe, get some cheese and tea, and go for it!  It will be awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Partition with Game of Thrones Pugs]]></title>
@@ -60,15 +194,10 @@ of things that you process at one time.  An example of this is sending only 500 
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('2EoQCtPR2-I');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/2EoQCtPR2-I?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
 <a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/2EoQCtPR2-I/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=2EoQCtPR2-I" id="2EoQCtPR2-I" onclick="return false;">
 <div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info">The Pugs of Westeros</div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
 </a>
-<div class="video-info" >Game of Thrones series 4 is out now on blinkbox: http://blinkbox.me/SVbSdH
-
-To celebrate the release of the fourth series of Game of Thrones on blinkbox we created this video starring 3 adorable pugs. 'The Pugs of Westeros' sees Roxy, Blue and Bono playing doggy versions of the main characters; including Joffrey Baratheon, Daenerys Targaryen and Jon Snow. 
-
-The pugs' owners, Phillip Lauer and his wife Sue, have been dressing their pugs up as characters from movies and TV since they were puppies. They normally only shoot still photography but jumped at the chance of creating a mini-movie based on one of their favourite shows. 
-
-Game of Thrones seasons 1-4 are available to buy on blinkbox now priced at £16.99 in SD and £23.99 in HD. We are also giving 1,000 extra Clubcard points with every purchase of the fourth series plus a free Tesco finest 10" pizza.</div>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
 </div>
 
 </p>
@@ -402,49 +531,6 @@ I propose that the community documentation of <a href="http://clojuredocs.org/">
 and <a href="http://grimoire.arrdem.com/">Grimoire</a> modify their sites to include audio pronunciation like <a href="http://www.macmillandictionary.com/us/media/british/uk_pron/l/lla/llama/llama_British_English_pronunciation.mp3">this</a>.</p>
 
 <p>Remember, I&rsquo;m pulling for you.  We are all in this together.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Clojure X-Men]]></title>
-    <link href="http://gigasquid.github.io/blog/2014/07/27/clojure-x-men/"/>
-    <updated>2014-07-27T20:12:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2014/07/27/clojure-x-men</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="https://c2.staticflickr.com/6/5557/14761955842_6a8bf4a66a_n.jpg">https://c2.staticflickr.com/6/5557/14761955842_6a8bf4a66a_n.jpg</a>"></p>
-
-<p>Nobody knows how it happened.  Some people think it was due to the rapid expansion and adoption of Clojure.  Other people say that the language itself was caused by something deeper and more magical.  No one knows for sure.  All that we really know is that people starting being born with extraordinary powers.  Powers that no human had had before.  They were strange and unique to each person they touched.  The only thing that they all had in common, was that each was an aspect of the Clojure programming language.</p>
-
-<h2>Luke (AKA Lazy Luke)</h2>
-
-<p>Luke was a teenager when his powers came to him.  His mother always complained that he was lazy.  It was true, he did prefer to sleep until noon.  He also had a habit of putting everything off to the last minute, like saving all his papers for the night before they were due.  One day, though, he noticed something very strange.  He could start to see the future.  Well not really “see” it.  But he could see the infinite possibilities  of the future.  Not very far into the future, but enough.  It was a few milliseconds at first.  But now it was up to a full second.  He checked the Clojure Docs as soon as he realized his gift.  It was lazy evaluation and power to deal with infinite sequences.</p>
-
-<h2>Spress</h2>
-
-<p>Spress, whose real name is Emily, came into her power early.  She was
-only 5 years old.  Her mother had taken her to a farm to visit with
-the animals.  Her mother had pointed at the cow and told her daughter
-that it said “Moo”.  Then, at the horse, saying “Neigh”.  Spress
-smiled and  pointed at a bucket and said “cow”.  Her mother shook her head at her, but Spress only smiled bigger.  She said “cow” again.  Then, suddenly, the bucket went “Moo”.  She was immediately taken to the Clojure X-Men school, where they identified her power as protocols.  She trained her power and now is so good at solving the “expression problem”, she is known as “Spress”.</p>
-
-<h2>Multi</h2>
-
-<p>Nobody knows Multi’s background.  He came to notice in his early twenties with his powers.  Ordinary humans process sensory input, (like sight, touch, and sound), in an asynchronous fashion.  However, when it gets processed in the brain, it runs into a single pipeline bottleneck  &ndash; consciousness.  Multi’s power is that he can concurrently process his higher level consciousness and reasoning to all this sensory input.  The result is that he can move, think, and perform super fast  and in a super smart way.
-He got the power of Clojure’s concurrency.</p>
-
-<h2>Dot</h2>
-
-<p>Dot always had a way with animals.  She had many pets growing up.  Later, she would go into the forest and the animals would seek her out.  She would be found resting by a tree surrounded by deer and birds.  One time, on her walk, she fell down a ditch and had her leg trapped under a log.  Her mother arrived, after searching for her, to see a Bear reach down and gently remove the log.   She stood dumbfounded, as her daughter thanked the bear and it nodded in reply as it turned away.   She could talk with animals effortlessly.  She had the power of Clojure’s Interop.</p>
-
-<h2>Bob</h2>
-
-<p>Bob is the leader of the Clojure X-Men.  He seeks out people with the
-power of Clojure and helps train and educate them.  He also is the
-most powerful.  He can come into any argument, problem, or challenge
-and immediately separate out what is most important to focus on.  He
-always knows the right thing to do, without getting bogged down in
-unnecessary details .  His power is Clojure’s simplicity.</p>
-
-<p>There might be others out there, we don’t know.  We can only hope, that they are found by Bob and the Clojure X-Men and use their powers for good.</p>
 ]]></content>
   </entry>
   

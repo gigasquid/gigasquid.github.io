@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-04-26T10:55:39-04:00</updated>
+  <updated>2015-05-22T10:49:46-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,169 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How Not to Panic While Writing a Clojure Book]]></title>
+    <link href="http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book/"/>
+    <updated>2015-05-22T09:11:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book</id>
+    <content type="html"><![CDATA[<p>I made it to that magical moment when the Clojure book I had been working on so long was published and I could actually hold it in my hand.</p>
+
+<p><img src="https://pbs.twimg.com/media/CDWsQPCUgAERViK.jpg"></p>
+
+<p>It was an immense project and I am very happy that it is finally done.  Since then, I met some people that are interested in writing books as well.
+They asked if I had any insights or tips having gone through the process as a first time author.  I have collected them in this post in hopes that they will be helpful to those going through the process themselves.</p>
+
+<p>The very first thing to do is to get an outline for your book.</p>
+
+<h3>Start with an Outline</h3>
+
+<p>Ideas are soft and squishy.  They drift into different shapes like clouds, and can melt away just as quickly.  One of the hardest things to do was trying to arrange all those ideas in my head into an initial form that would serve as the structure for the entire book.  I would pick up a pen and paper, start feeling overwhelmed, and suddenly remember I had something else very pressing to do.  I successfully avoided starting a book for quite a while, until one day I cornered myself.  I decided that I write my book outline on a long plane flight.  With salted peanuts as fuel, and nowhere to escape, I finally wrote an outline.  It wasn&rsquo;t perfect but it was a start and looking back and it was not too far off.  Here it is in all of its original roughness.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Title: Living Clojure
+</span><span class='line'>
+</span><span class='line'>From beginning steps to thriving in a functional world
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>(Each Chapter will follow quotes from Alice in Wonderland and very use ideas from some examples)
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Book 1 - Beginner steps
+</span><span class='line'>
+</span><span class='line'>Chapter 1 - Are you comfortable?  Talk about how OO is comfortable but there is another world out there and new way of thinking functionally.
+</span><span class='line'>            White Rabbit goes by
+</span><span class='line'>Chapter 2 - Forms & Functions - Falling down the rabbit hole
+</span><span class='line'>Chapter 3 - Functional Transformations - Growing bigger and smaller - Key to thinking functionally is about transforming data from one shape to another shape.
+</span><span class='line'>            Map & Reduce
+</span><span class='line'>Chapter 4 - Embracing side effects  - Clojure is impure functional language (The rabbit's glove)  - Cover do and io stuff. Also basic stuff about 
+</span><span class='line'>            STM atoms and agents/ Protocols
+</span><span class='line'>Chapter 5 - Libraries, Libraries  - - how to use Leiningen
+</span><span class='line'>            build system. Where to find clojure libraries, how to use
+</span><span class='line'>            Serpents - camel-snake-kebab
+</span><span class='line'>Chapter 6 - core.asyc - Tea Party introduction to the core.async library
+</span><span class='line'>Chapter 7 - Clojure web - Chesire cat  - introduction to Ring, Cheshire library, ClojureScript and OM 
+</span><span class='line'>
+</span><span class='line'>Book 2 - From here to there - thriving in a functional world
+</span><span class='line'>
+</span><span class='line'>Training plan for thriving in a functional world.
+</span><span class='line'>
+</span><span class='line'>Chapter 8 - Join the community - Surround yourself with other Clojure enthusiats
+</span><span class='line'>  - Twitter clojure
+</span><span class='line'>  - Github account
+</span><span class='line'>  - Clojure mailing list
+</span><span class='line'>  - Prismatic clojure news
+</span><span class='line'>  - Meetup for local community group.  If there is not one in your area. start one!
+</span><span class='line'>  - Attend a Clojure conj
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Chatpter 9 - Practice and build up 
+</span><span class='line'>Like Couch to 5K 7 week training program to work up to
+</span><span class='line'>practicing Clojure
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that I had an outline.  I just needed to figure out how long it would take me to write the book.</p>
+
+<h3>However Long You Think It Will Take &ndash; You Are Wrong</h3>
+
+<p>Having never written a book before, I had <em>no idea</em> how much work it would be.  The closest thing I had to compare it to was writing a blog post.  I figured writing a chapter would be roughly equivalent to writing a blog post.  If I could go back in time, this is the moment where my future self would pour a glass of ice water on my past self.  Writing a book is nothing like that.  It is a lot of time and work.  If I <em>had</em> to compare it now to writing blog posts, the process would be this.</p>
+
+<pre><code>- You write a blog post.
+- You rewrite the blog post.
+- You write a second blog post.
+- You rewrite that blog post and the first one too.
+- You write another blog post.
+- You rewrite all three post .....
+</code></pre>
+
+<p>So, if you have to commit to deadlines, make sure you remember how hard it will be, and then double the number.</p>
+
+<p>Speaking of deadlines, they suck, but you should have them.</p>
+
+<h3>Make Deadlines</h3>
+
+<p>Deadlines are not fun.  In fact, deadlines might even be a source of potential panic.  But for me, they were necessary evil.  There were a few beautiful times when inspiration came knocking at my door and I couldn&rsquo;t wait to start writing.  But most of the time, inspiration was off somewhere else eating biscuits.  The only thing that actually moved the book along was me knowing that I needed to get the next chunk done by a certain date.</p>
+
+<p>I found the best thing to do was to set aside a small bit of time on a daily basis to write something.</p>
+
+<h3>Routine, Routine, Routine</h3>
+
+<p>A daily routine was the most crucial thing for me.  Life is really busy with work and family.  It is so easy to get overwhelmed with daily life.  I decided that mornings would work best for me.  So I would stumble in to my computer an hour before work, with a hot cup of tea in hand, and write something.  Some days I actually did quite a bit.  Other days, I would write one sentence and declare it done.  But, I would always do <em>something</em>.  Even though those small slices of time didn&rsquo;t seem like a lot, they added up over the course of a week.</p>
+
+<p>Another curious thing happens when you do something, even a little bit, day after day.  You start to get better at it.</p>
+
+<h3>Writing is a Different Skill from Coding</h3>
+
+<p>I was used to writing code all day.  I found that the code writing skills are not the same as writing about code.  In fact, I found it really hard to do at the start.  But, just like writing code, you get better with practice.  And to get better at anything, feedback is really important.</p>
+
+<h3>Get and Trust Feedback</h3>
+
+<p>After each chapter, I would get feedback from my editor.  She was awesome and provided ways for me to improve the experience for the reader.  I lost track of how many times I rewrote that first chapter, but each time it would get a bit better and I would improve as well.  After the book was about half done it was sent out to others for technical review.  They provided feedback not only on the writing style but also the technical content, making sure that it all made sense.</p>
+
+<p>The feedback loop is much slower for writing a book than writing code, but it is just as vital.  The great people providing feedback are you closest partners in this.  You need to trust them.  Especially during the roughest time, the middle of the book.</p>
+
+<h3>The Middle Bit is the Hardest</h3>
+
+<p>I found the hardest time was about halfway through the book.  The initial excitement of the new endeavor had long since worn off.  It seemed like such a mountain of a task, with no end in sight.  I questioned my decision to continue with it daily.  My routine and deadlines kept me moving forward.  But my circle of friends and family kept me sane.  It was great to have an outlet, not only to vent my frustration with my slow progress, but to get kind encouragement to keep my spirits up.</p>
+
+<p>During these dark days, I also ate cheese.</p>
+
+<h3>Celebrate Your Small Victories</h3>
+
+<p>At the end of every chapter or deadline I would fix myself a nice plate of cheese and crackers.  You have to celebrate the small wins.  Cheese is also very tasty.</p>
+
+<p>When the book was finally done.  I had a really tasty plate, complete with Stilton, Brie, and a dependable Cheddar.  I was incredibly happy to be finished. But I knew that I definitely could have not done it without the help of others.</p>
+
+<h3>Thank Everyone that Supported You</h3>
+
+<p>Writing a book is a huge undertaking that is utterly impossible to do alone.  I could have not done it without the help and support of my editor, reviewers, family, friends, as well as the entire Clojure Community.  I am so thankful to all of you that helped my in this project.  You are great.</p>
+
+<p>So, should you go ahead and write that book?</p>
+
+<h3>Do It</h3>
+
+<p>Yes, you should write that book and share your knowledge.  Don&rsquo;t panic, remember to breathe, get some cheese and tea, and go for it!  It will be awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Partition with Game of Thrones Pugs]]></title>
@@ -59,15 +222,10 @@ of things that you process at one time.  An example of this is sending only 500 
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('2EoQCtPR2-I');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/2EoQCtPR2-I?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
 <a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/2EoQCtPR2-I/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=2EoQCtPR2-I" id="2EoQCtPR2-I" onclick="return false;">
 <div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info">The Pugs of Westeros</div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
 </a>
-<div class="video-info" >Game of Thrones series 4 is out now on blinkbox: http://blinkbox.me/SVbSdH
-
-To celebrate the release of the fourth series of Game of Thrones on blinkbox we created this video starring 3 adorable pugs. &#8216;The Pugs of Westeros&#8217; sees Roxy, Blue and Bono playing doggy versions of the main characters; including Joffrey Baratheon, Daenerys Targaryen and Jon Snow. 
-
-The pugs&#8217; owners, Phillip Lauer and his wife Sue, have been dressing their pugs up as characters from movies and TV since they were puppies. They normally only shoot still photography but jumped at the chance of creating a mini-movie based on one of their favourite shows. 
-
-Game of Thrones seasons 1-4 are available to buy on blinkbox now priced at £16.99 in SD and £23.99 in HD. We are also giving 1,000 extra Clubcard points with every purchase of the fourth series plus a free Tesco finest 10&#8221; pizza.</div>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
 </div>
 
 
@@ -1397,9 +1555,10 @@ that uses the paired XBee from the handheld commander.</p>
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('PmBGt9T-yvI');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/PmBGt9T-yvI?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
 <a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/PmBGt9T-yvI/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=PmBGt9T-yvI" id="PmBGt9T-yvI" onclick="return false;">
 <div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info">Hexapod with Phoenix Code</div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
 </a>
-<div class="video-info" ></div>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
 </div>
 
 
@@ -1544,9 +1703,10 @@ working alright.</p>
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('i9St8kDuyqU');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/i9St8kDuyqU?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
 <a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/i9St8kDuyqU/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=i9St8kDuyqU" id="i9St8kDuyqU" onclick="return false;">
 <div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info">Hexapod Test Check</div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
 </a>
-<div class="video-info" >It lives - the first test check of the PhantomX Hexapod</div>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
 </div>
 
 
@@ -1562,9 +1722,10 @@ use it to control the hexapod with hand-held joysticks.</p>
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('pUrZeJ39xjs');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/pUrZeJ39xjs?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
 <a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/pUrZeJ39xjs/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=pUrZeJ39xjs" id="pUrZeJ39xjs" onclick="return false;">
 <div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info">Baby Hexapod&#8217;s first steps</div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
 </a>
-<div class="video-info" >First cautious steps of running the PhantomX Hexapod with wireless controller</div>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
 </div>
 
 
@@ -2539,759 +2700,6 @@ The hardware is really impressive, and it feels good getting back to
 OSS.</p>
 
 <p>Best of all, I set myself free.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Neural Networks in Clojure with core.matrix]]></title>
-    <link href="http://gigasquid.github.io/blog/2013/12/02/neural-networks-in-clojure-with-core-dot-matrix/"/>
-    <updated>2013-12-02T19:28:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2013/12/02/neural-networks-in-clojure-with-core-dot-matrix</id>
-    <content type="html"><![CDATA[<p>After having spent some time recently looking at top-down AI, I
-thought I would spend some time looking at bottom&rsquo;s up AI, machine
-learning and neural networks.</p>
-
-<p>I was pleasantly introduced to <a href="https://twitter.com/mikera">@mikea&rsquo;s</a> <a href="https://github.com/mikera/core.matrix">core.matrix</a> at Clojure Conj
-this year and wanted to try making my own neural network using the
-library. The purpose of this blog is to share my learnings along the
-way.</p>
-
-<h2>What is a neural network?</h2>
-
-<p>A neural network is an approach to machine learning that involves
-simulating, (in an idealized way), the way our brains work on a
-biological level.  There are three layers to neural network: the input
-layer, the hidden layers, and the output layer.  Each layer consists
-of neurons that have a value.  In each layer, each neuron is connected to
-the neuron in the next layer by a connection strength. To get data
-into the neural network, you assign values to the input layer, (values
-between 0 and 1). These values are then &ldquo;fed forward&rdquo; to the hidden layer neurons though an algorithm that
-relies on the input values and the connection strengths. The values
-are finally &ldquo;fed forward&rdquo; in a similar fashion to the output layer.
-The &ldquo;learning&rdquo; portion of the neural network comes from &ldquo;training&rdquo; the
-network data.  The training data consists of a collection of
-associated input values and target values. The training process at a
-high level looks like this:</p>
-
-<ul>
-<li>Feed forward input values to get the output values</li>
-<li>How far off are the output values from the target values?</li>
-<li>Calculate the error values and adjust the strengths of the network</li>
-<li>Repeat until you think it has &ldquo;learned&rdquo; enough, that is when you
-feed the input values in the result of the output values are close
-enough to the target you are looking for</li>
-</ul>
-
-
-<p>The beauty of this system is that the neural network, (given the right
-configuration and the right training), can approximate any function &ndash;
-just by exposing it to data.</p>
-
-<h2>Start Small</h2>
-
-<p>I wanted to start with a very small network so that I could understand
-the algorithms and actually do the maths for the tests along the way.
-The network configuration I chose is one with 1 hidden layer.  The
-input layer has 2 neurons, the hidden layer has 3 neurons and the
-output layer has 2 neurons.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;Neurons</span>
-</span><span class='line'><span class="c1">;;  Input Hidden  Output</span>
-</span><span class='line'><span class="c1">;;  A     1       C</span>
-</span><span class='line'><span class="c1">;;  B     2       D</span>
-</span><span class='line'><span class="c1">;;        3</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;; Connection Strengths</span>
-</span><span class='line'><span class="c1">;; Input to Hidden =&gt; [[A1 A2 A3] [B1 B2 B3]]</span>
-</span><span class='line'><span class="c1">;; Hidden to Output =&gt; [[1C 1D] [2C 2D] [3C 3D]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In this example we have:</p>
-
-<ul>
-<li>Input Neurons: neuronA neuronB</li>
-<li>Hidden Neurons: neuron1 neuron2 neuron3</li>
-<li>Output Neurons: neuronC neuronD</li>
-<li>Connections between the Input and Hidden Layers
-
-<ul>
-<li>neuronA-neuron1</li>
-<li>neuronA-neuron2</li>
-<li>neuronA-neuron3</li>
-<li>neuronB-neuron1</li>
-<li>neuronB-neuron2</li>
-<li>neuronB-neuron3</li>
-</ul>
-</li>
-<li>Connections betwen the Hidden and Output Layers
-
-<ul>
-<li>neuron1-nerounC</li>
-<li>neuron1-nerounD</li>
-<li>neuron2-nerounC</li>
-<li>neuron2-nerounD</li>
-<li>neuron3-nerounC</li>
-<li>neuron3-nerounD</li>
-</ul>
-</li>
-</ul>
-
-
-<p>To give us a concrete example to work with, let&rsquo;s actually assign all
-our neurons and connection strengths to some real values.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">input-neurons</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">])</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">input-hidden-strengths</span> <span class="p">[</span> <span class="p">[</span><span class="mf">0.12</span> <span class="mf">0.2</span> <span class="mf">0.13</span><span class="p">]</span>
-</span><span class='line'>                              <span class="p">[</span><span class="mf">0.01</span> <span class="mf">0.02</span> <span class="mf">0.03</span><span class="p">]])</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">hidden-neurons</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">])</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">hidden-output-strengths</span> <span class="p">[[</span><span class="mf">0.15</span> <span class="mf">0.16</span><span class="p">]</span>
-</span><span class='line'>                              <span class="p">[</span><span class="mf">0.02</span> <span class="mf">0.03</span><span class="p">]</span>
-</span><span class='line'>                              <span class="p">[</span><span class="mf">0.01</span> <span class="mf">0.02</span><span class="p">]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Feed Forward</h2>
-
-<p>Alright, we have values in the input neuron layer, let&rsquo;s feed them
-forward through the network. The new value of neuron in the hidden
-layer is the sum of all the inputs of its connections multiplied by
-the connection strength.  The neuron can also have its own threshold,
-(meaning you would subtract the threshold from the sum of inputs), but
-to keep things a simple as possible in this example, the threshold is
-0 &ndash; so we will ignore it.  The sum is then feed into an activation
-function, that has an output in the range of -1 to 1.  The activation
-function is the tanh function.  We will also need the derivative of
-the tanh function a little later when we are calculating errors, so we
-will define both here.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">activation-fn</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="nf">Math/tanh</span> <span class="nv">x</span><span class="p">)))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dactivation-fn</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">y</span><span class="p">]</span> <span class="p">(</span><span class="nb">- </span><span class="mf">1.0</span> <span class="p">(</span><span class="nb">* </span><span class="nv">y</span> <span class="nv">y</span><span class="p">))))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">layer-activation</span> <span class="p">[</span><span class="nv">inputs</span> <span class="nv">strengths</span><span class="p">]</span>
-</span><span class='line'>  <span class="s">&quot;forward propagate the input of a layer&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">mapv</span> <span class="nv">activation-fn</span>
-</span><span class='line'>      <span class="p">(</span><span class="nf">mapv</span> <span class="o">#</span><span class="p">(</span><span class="nb">reduce + </span><span class="nv">%</span><span class="p">)</span>
-</span><span class='line'>       <span class="p">(</span><span class="nb">* </span><span class="nv">inputs</span> <span class="p">(</span><span class="nf">transpose</span> <span class="nv">strengths</span><span class="p">)))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note how nice core.matrix works on multipling vectors &lt;3.</p>
-
-<p>So now if we calculate the hidden neuron values from the input [1 0],
-we get:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">input-neurons</span> <span class="nv">input-hidden-strengths</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;=&gt;  [0.11942729853438588 0.197375320224904 0.12927258360605834]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s just remember those hidden neuron values for our next step</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-hidden-neurons</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">input-neurons</span> <span class="nv">input-hidden-strengths</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we do the same thing to calculate the output values</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">new-hidden-neurons</span> <span class="nv">hidden-output-strengths</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;=&gt;  [0.02315019005321053 0.027608061500083565]</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-output-neurons</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">new-hidden-neurons</span> <span class="nv">hidden-output-strengths</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Alright!  We have our answer
-[0.02315019005321053 0.027608061500083565].
-Notice that the values are pretty much the same.  This is because we
-haven&rsquo;t trained our network to do anything yet.</p>
-
-<h2>Backwards Propagation</h2>
-
-<p>To train our network, we have to let it know what the answer,(or
-target), should be, so we can calculate the errors and finally update
-our connection strengths. For this simple example, let&rsquo;s just inverse
-the data &ndash; so given an input of [1 0] should give us an output of
-[0 1].</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">targets</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<h3>Calculate the errors of the output layer</h3>
-
-<p>The first errors that we need to calculate are the ones for the output
-layer.  This is found by subtracting the target value form the actual
-value and then multiplying by the gradient/ derivative of the
-activation function</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">output-deltas</span> <span class="p">[</span><span class="nv">targets</span> <span class="nv">outputs</span><span class="p">]</span>
-</span><span class='line'>  <span class="s">&quot;measures the delta errors for the output layer (Desired value – actual value) and multiplying it by the gradient of the activation function&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nf">mapv</span> <span class="nv">dactivation-fn</span> <span class="nv">outputs</span><span class="p">)</span>
-</span><span class='line'>     <span class="p">(</span><span class="nb">- </span><span class="nv">targets</span> <span class="nv">outputs</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">output-deltas</span> <span class="nv">targets</span> <span class="nv">new-output-neurons</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;=&gt; [-0.023137783141771645 0.9716507764442904]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>Great let&rsquo;s remember this output deltas for later</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">odeltas</span> <span class="p">(</span><span class="nf">output-deltas</span> <span class="nv">targets</span> <span class="nv">new-output-neurons</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Calculate the errors of the hidden layer</h3>
-
-<p>The errors of the hidden layer are based off the deltas that we just
-found from the output layer.  In fact, for each hidden neuron, the
-error delta is the gradient of the activation function multiplied by
-the weighted sum of the ouput deltas of connected ouput neurons and
-it&rsquo;s connection strength.  This should remind you of the forward
-propagation of the inputs &ndash; but this time we are doing it backwards
-with the error deltas.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">hlayer-deltas</span> <span class="p">[</span><span class="nv">odeltas</span> <span class="nv">neurons</span> <span class="nv">strengths</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nf">mapv</span> <span class="nv">dactivation-fn</span> <span class="nv">neurons</span><span class="p">)</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">mapv</span> <span class="o">#</span><span class="p">(</span><span class="nb">reduce + </span><span class="nv">%</span><span class="p">)</span>
-</span><span class='line'>           <span class="p">(</span><span class="nb">* </span><span class="nv">odeltas</span> <span class="nv">strengths</span><span class="p">))))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">hlayer-deltas</span>
-</span><span class='line'>    <span class="nv">odeltas</span>
-</span><span class='line'>    <span class="nv">new-hidden-neurons</span>
-</span><span class='line'>    <span class="nv">hidden-output-strengths</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;=&gt;  [0.14982559238071416 0.027569216735265096 0.018880751432503236]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Great let&rsquo;s remember the hidden layer error deltas for later</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">hdeltas</span> <span class="p">(</span><span class="nf">hlayer-deltas</span>
-</span><span class='line'>              <span class="nv">odeltas</span>
-</span><span class='line'>              <span class="nv">new-hidden-neurons</span>
-</span><span class='line'>              <span class="nv">hidden-output-strengths</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Updating the connection strengths</h3>
-
-<p>Great!  We have all the error deltas, now we are ready to go ahead and
-update the connection strengths.  In general this is the same process
-for both the hidden-output connections and the input-hidden
-connections.</p>
-
-<ul>
-<li>weight-change = error-delta * neuron-value</li>
-<li>new-weight = weight + learning rate * weight-change</li>
-</ul>
-
-
-<p>The learning rate controls how fast the weigths and errors should be
-adjusted.  It the learning rate is too high, then there is the danger
-that it will converge to fit the solution too fast and not find the
-best solution.  If the learning rate is too low, it may never actually
-converge to the right solution given the training data that it is
-using. For this example, let&rsquo;s use a training rate of 0.2</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">update-strengths</span> <span class="p">[</span><span class="nv">deltas</span> <span class="nv">neurons</span> <span class="nv">strengths</span> <span class="nv">lrate</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">+ </span><span class="nv">strengths</span> <span class="p">(</span><span class="nb">* </span><span class="nv">lrate</span>
-</span><span class='line'>                  <span class="p">(</span><span class="nf">mapv</span> <span class="o">#</span><span class="p">(</span><span class="nb">* </span><span class="nv">deltas</span> <span class="nv">%</span><span class="p">)</span> <span class="nv">neurons</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Update the hidden-output strengths</h3>
-
-<p>Updating this layer we are going to look at</p>
-
-<ul>
-<li>weight-change = odelta * hidden value</li>
-<li>new-weight = weight + (learning rate * weight-change)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">update-strengths</span>
-</span><span class='line'>       <span class="nv">odeltas</span>
-</span><span class='line'>       <span class="nv">new-hidden-neurons</span>
-</span><span class='line'>       <span class="nv">hidden-output-strengths</span>
-</span><span class='line'>       <span class="nv">learning-rate</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;=&gt; [[0.14944734341306073 0.18320832546991603]</span>
-</span><span class='line'>    <span class="p">[</span><span class="mf">0.019086634528619688</span> <span class="mf">0.06835597662949369</span><span class="p">]</span>
-</span><span class='line'>    <span class="p">[</span><span class="mf">0.009401783798869296</span> <span class="mf">0.04512156124675721</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course, let&rsquo;s remember these values too</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-hidden-output-strengths</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">update-strengths</span>
-</span><span class='line'>       <span class="nv">odeltas</span>
-</span><span class='line'>       <span class="nv">new-hidden-neurons</span>
-</span><span class='line'>       <span class="nv">hidden-output-strengths</span>
-</span><span class='line'>       <span class="nv">learning-rate</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Update the input-hidden strengths</h3>
-
-<p>We are going to do the same thing with the input-hidden strengths too.</p>
-
-<ul>
-<li>weight-change = hdelta * input value</li>
-<li>new-weight = weight + (learning rate * weight-change)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">update-strengths</span>
-</span><span class='line'>           <span class="nv">hdeltas</span>
-</span><span class='line'>           <span class="nv">input-neurons</span>
-</span><span class='line'>           <span class="nv">input-hidden-strengths</span>
-</span><span class='line'>           <span class="nv">learning-rate</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;=&gt;  [[0.14996511847614283 0.20551384334705303 0.13377615028650064]</span>
-</span><span class='line'>           <span class="p">[</span><span class="mf">0.01</span> <span class="mf">0.02</span> <span class="mf">0.03</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>These are our new strengths</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-input-hidden-strengths</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">update-strengths</span>
-</span><span class='line'>       <span class="nv">hdeltas</span>
-</span><span class='line'>       <span class="nv">input-neurons</span>
-</span><span class='line'>       <span class="nv">input-hidden-strengths</span>
-</span><span class='line'>       <span class="nv">learning-rate</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Putting the pieces together</h2>
-
-<p>We have done it!  In our simple example we have:</p>
-
-<ul>
-<li>Forward propagated the input to get the output</li>
-<li>Calculated the errors from the target through backpropogation</li>
-<li>Updated the connection strengths/ weights</li>
-</ul>
-
-
-<p>We just need to put all the pieces together. We&rsquo;ll do this with the
-values that we got earlier to make sure it is all working.</p>
-
-<h3>Construct a network representation</h3>
-
-<p>It would be nice if we could represent an entire neural network in a
-data structure.  That way the whole transformation of feeding forward
-and training the network could give us a new network back.
-So lets define the data structure as
-[input-neurons input-hidden-strengths hidden-neurons hidden-output-strengths output-neurons].</p>
-
-<p>We will start off with all the values of the neurons being zero.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">nn</span> <span class="p">[</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">input-hidden-strengths</span> <span class="nv">hidden-neurons</span>
-</span><span class='line'><span class="nv">hidden-output-strengths</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span><span class="p">]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Generalized feed forward</h3>
-
-<p>Now we can make a feed forward function that takes this network and
-constructs a new network based on input values and the
-layer-activation function that we defined earlier.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">feed-forward</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">network</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">in</span> <span class="nv">i-h-strengths</span> <span class="nv">h</span> <span class="nv">h-o-strengths</span> <span class="nv">out</span><span class="p">]</span> <span class="nv">network</span>
-</span><span class='line'>        <span class="nv">new-h</span> <span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">input</span> <span class="nv">i-h-strengths</span><span class="p">)</span>
-</span><span class='line'>        <span class="nv">new-o</span> <span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">new-h</span> <span class="nv">h-o-strengths</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">[</span><span class="nv">input</span> <span class="nv">i-h-strengths</span> <span class="nv">new-h</span> <span class="nv">h-o-strengths</span> <span class="nv">new-o</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This should match up with the values that we got earlier when we were
-just working on the individual pieces.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">testing</span> <span class="s">&quot;feed forward&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">is</span> <span class="p">(</span><span class="nb">== </span><span class="p">[</span><span class="nv">input-neurons</span> <span class="nv">input-hidden-strengths</span> <span class="nv">new-hidden-neurons</span> <span class="nv">hidden-output-strengths</span> <span class="nv">new-output-neurons</span><span class="p">]</span>
-</span><span class='line'>          <span class="p">(</span><span class="nf">feed-forward</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">nn</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<h3>Generalized update weights / connection strengths</h3>
-
-<p>We can make a similiar update-weights function that calculate the
-errors and returns back a new network with the updated weights</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">update-weights</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[[</span> <span class="nv">in</span> <span class="nv">i-h-strengths</span> <span class="nv">h</span> <span class="nv">h-o-strengths</span> <span class="nv">out</span><span class="p">]</span> <span class="nv">network</span>
-</span><span class='line'>        <span class="nv">o-deltas</span> <span class="p">(</span><span class="nf">output-deltas</span> <span class="nv">target</span> <span class="nv">out</span><span class="p">)</span>
-</span><span class='line'>        <span class="nv">h-deltas</span> <span class="p">(</span><span class="nf">hlayer-deltas</span> <span class="nv">o-deltas</span> <span class="nv">h</span> <span class="nv">h-o-strengths</span><span class="p">)</span>
-</span><span class='line'>        <span class="nv">n-h-o-strengths</span> <span class="p">(</span><span class="nf">update-strengths</span>
-</span><span class='line'>                         <span class="nv">o-deltas</span>
-</span><span class='line'>                         <span class="nv">h</span>
-</span><span class='line'>                         <span class="nv">h-o-strengths</span>
-</span><span class='line'>                         <span class="nv">learning-rate</span><span class="p">)</span>
-</span><span class='line'>        <span class="nv">n-i-h-strengths</span> <span class="p">(</span><span class="nf">update-strengths</span>
-</span><span class='line'>                         <span class="nv">h-deltas</span>
-</span><span class='line'>                         <span class="nv">in</span>
-</span><span class='line'>                         <span class="nv">i-h-strengths</span>
-</span><span class='line'>                         <span class="nv">learning-rate</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">[</span><span class="nv">in</span> <span class="nv">n-i-h-strengths</span> <span class="nv">h</span> <span class="nv">n-h-o-strengths</span> <span class="nv">out</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This too should match up with the pieces from the earlier examples.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">testing</span> <span class="s">&quot;update-weights&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">is</span> <span class="p">(</span> <span class="nb">== </span><span class="p">[</span><span class="nv">input-neurons</span>
-</span><span class='line'>            <span class="nv">new-input-hidden-strengths</span>
-</span><span class='line'>            <span class="nv">new-hidden-neurons</span>
-</span><span class='line'>            <span class="nv">new-hidden-output-strengths</span>
-</span><span class='line'>            <span class="nv">new-output-neurons</span><span class="p">]</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">update-weights</span> <span class="p">(</span><span class="nf">feed-forward</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">nn</span><span class="p">)</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="mf">0.2</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Generalized train network</h3>
-
-<p>Now we can make a function that takes input and a target and feeds the
-input forward and then updates the weights.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train-network</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">input</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">update-weights</span> <span class="p">(</span><span class="nf">feed-forward</span> <span class="nv">input</span> <span class="nv">network</span><span class="p">)</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">testing</span> <span class="s">&quot;train-network&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">is</span> <span class="p">(</span><span class="nb">== </span><span class="p">[</span><span class="nv">input-neurons</span>
-</span><span class='line'>            <span class="nv">new-input-hidden-strengths</span>
-</span><span class='line'>            <span class="nv">new-hidden-neurons</span>
-</span><span class='line'>            <span class="nv">new-hidden-output-strengths</span>
-</span><span class='line'>           <span class="nv">new-output-neurons</span><span class="p">]</span>
-</span><span class='line'>          <span class="p">(</span><span class="nf">train-network</span> <span class="nv">nn</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="mf">0.2</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Try it out!</h2>
-
-<p>We are ready to try it out!  Let&rsquo;s train our network on a few examples
-of inversing the data</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n1</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">nn</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">train-network</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="mf">0.5</span><span class="p">)</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">train-network</span> <span class="p">[</span><span class="mf">0.5</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.5</span><span class="p">]</span> <span class="mf">0.5</span><span class="p">)</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">train-network</span> <span class="p">[</span><span class="mf">0.25</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.25</span><span class="p">]</span> <span class="mf">0.5</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We&rsquo;ll also make a helper function that just returns the output
-neurons for the feed-forward function.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">ff</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">network</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">last </span><span class="p">(</span><span class="nf">feed-forward</span> <span class="nv">input</span> <span class="nv">network</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s look at the results of the untrained and the trained networks</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;untrained</span>
-</span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">nn</span><span class="p">)</span> <span class="c1">;=&gt; [0.02315019005321053 0.027608061500083565]</span>
-</span><span class='line'><span class="c1">;;trained</span>
-</span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n1</span><span class="p">)</span> <span class="c1">;=&gt; [0.03765676393050254 0.10552175312900794]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Whoa!  The trained example isn&rsquo;t perfect, but we can see that it is
-getting closer to the right answer.  It is learning!</p>
-
-<h2>MOR Training Data</h2>
-
-<p>Well this is really cool and it is working.  But it would be nicer to
-be able to present a set of training data for it to learn on.  For
-example, it would be nice to have a training data structure look like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">target</span><span class="p">]</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">target</span><span class="p">]</span> <span class="nv">...</span> <span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s go ahead and define that.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train-data</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">data</span> <span class="nv">learning-rate</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">if-let </span><span class="p">[[</span><span class="nv">input</span> <span class="nv">target</span><span class="p">]</span> <span class="p">(</span><span class="nb">first </span><span class="nv">data</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">recur</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">train-network</span> <span class="nv">network</span> <span class="nv">input</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">)</span>
-</span><span class='line'>     <span class="p">(</span><span class="nb">rest </span><span class="nv">data</span><span class="p">)</span>
-</span><span class='line'>     <span class="nv">learning-rate</span><span class="p">)</span>
-</span><span class='line'>    <span class="nv">network</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s try that out on the example earlier</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n2</span> <span class="p">(</span><span class="nf">train-data</span> <span class="nv">nn</span> <span class="p">[</span>
-</span><span class='line'>                        <span class="p">[[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">]]</span>
-</span><span class='line'>                        <span class="p">[[</span><span class="mf">0.5</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.5</span><span class="p">]]</span>
-</span><span class='line'>                        <span class="p">[[</span><span class="mf">0.25</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.25</span><span class="p">]</span> <span class="p">]</span>
-</span><span class='line'>                        <span class="p">]</span>
-</span><span class='line'>                    <span class="mf">0.5</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n2</span><span class="p">)</span> <span class="c1">;=&gt; [0.03765676393050254 0.10552175312900794]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Cool. We can now train on data sets. That means we can construct data
-sets out of infinite lazy sequences too.  Let&rsquo;s make a lazy training
-set of inputs and their inverse.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">inverse-data</span> <span class="p">[]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">n</span> <span class="p">(</span><span class="nb">rand </span><span class="mi">1</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">[[</span><span class="nv">n</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="nv">n</span><span class="p">]]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s see how well our network is doing after we train it with some
-more data</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n3</span> <span class="p">(</span><span class="nf">train-data</span> <span class="nv">nn</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="mi">400</span> <span class="nv">inverse-data</span><span class="p">)</span> <span class="mf">0.5</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n3</span><span class="p">)</span> <span class="c1">;=&gt; [-4.958278484025221E-4 0.8211647699205362]</span>
-</span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mf">0.5</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n3</span><span class="p">)</span> <span class="c1">;=&gt; [2.1645760787874696E-4 0.5579396715416916]</span>
-</span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mf">0.25</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n3</span><span class="p">)</span> <span class="c1">;=&gt; [1.8183385523103048E-4 0.31130601296149013]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wow. The more examples it sees, the better that network is doing at
-learning what to do!</p>
-
-<h3>General Construct Network</h3>
-
-<p>The only piece that we are missing now is to have a function that will
-create a general neural network for us.  We can choose how many input
-nerurons, hidden neurons, and output neurons and have a network
-constructed with random weights.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">gen-strengths</span> <span class="p">[</span><span class="nv">to</span> <span class="nv">from</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">l</span> <span class="p">(</span><span class="nb">* </span><span class="nv">to</span> <span class="nv">from</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">map </span><span class="nv">vec</span> <span class="p">(</span><span class="nf">partition</span> <span class="nv">from</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="nv">l</span> <span class="o">#</span><span class="p">(</span><span class="nb">rand </span><span class="p">(</span><span class="nb">/ </span><span class="mi">1</span> <span class="nv">l</span><span class="p">)))))))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">construct-network</span> <span class="p">[</span><span class="nv">num-in</span> <span class="nv">num-hidden</span> <span class="nv">num-out</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">vec</span> <span class="p">(</span><span class="nb">map </span><span class="nv">vec</span> <span class="p">[(</span><span class="nb">repeat </span><span class="nv">num-in</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>             <span class="p">(</span><span class="nf">gen-strengths</span> <span class="nv">num-in</span> <span class="nv">num-hidden</span><span class="p">)</span>
-</span><span class='line'>             <span class="p">(</span><span class="nb">repeat </span><span class="nv">num-hidden</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>             <span class="p">(</span><span class="nf">gen-strengths</span> <span class="nv">num-hidden</span> <span class="nv">num-out</span><span class="p">)</span>
-</span><span class='line'>             <span class="p">(</span><span class="nb">repeat </span><span class="nv">num-out</span> <span class="mi">0</span><span class="p">)])))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we can construct our network from scratch and train it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">tnn</span> <span class="p">(</span><span class="nf">construct-network</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">2</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n5</span> <span class="p">(</span><span class="nf">train-data</span> <span class="nv">tnn</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="mi">1000</span> <span class="nv">inverse-data</span><span class="p">)</span> <span class="mf">0.2</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n4</span><span class="p">)</span> <span class="c1">;=&gt; [-4.954958580800465E-4 0.8160149309699489]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And that&rsquo;s it.  We have constucted a neural network with core.matrix</p>
-
-<h2>Want more?</h2>
-
-<p>I put together a github library based on the neural network code in
-the posts.  It is called <a href="https://github.com/gigasquid/k9">K9</a>, named
-after Dr. Who&rsquo;s best dog friend.  You can find the examples we have
-gone through in the tests.  There is also an example program using it
-in the examples directory.  It learns what colors are based on thier
-RGB value.</p>
-
-<p>There are a couple web resources I would recommend if you want to look
-farther as well.</p>
-
-<ul>
-<li><a href="http://takinginitiative.wordpress.com/2008/04/03/basic-neural-network-tutorial-theory/">Basic Network Tutorial</a></li>
-<li><a href="http://www.youtube.com/watch?v=QJ1qgCr09j8&amp;feature=player_embedded">Mike Anderson&rsquo;s Clojure Conj talk on Neural Networks</a></li>
-</ul>
-
-
-<p>Go forth and create Neural Networks!</p>
 ]]></content>
   </entry>
   

@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Nov 19th, 2010 Tags: All, Ruby What do Zen and Zombies have in common? You probably got the beginning with the letter “Z”, but did you &hellip;">
+	<meta name="description" content="Published on: Dec 7th, 2010 Tags: All, Clojure It&rsquo;s late at night. The kids are all tucked snuggly in their beds and I am ready to explore &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,152 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/12/07/123/">
+		
+			Mutually Recursive Zombies on a Trampoline</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-07T23:06:50-05:00" pubdate data-updated="true">Dec 7<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p>It&rsquo;s late at night.  The kids are all tucked snuggly in their beds and I am ready to explore mutual recursion on my own in Clojure after doing some reading of <a href="http://pragprog.com/titles/shcloj/programming-clojure">Programming Clojure</a>.  What better subject to explore them with then zombies?  In this example we have two zombies – zombie1 and zombie2.   Let&rsquo;s represent each zombie as a sequence:</p>
+
+<pre><code>(def zombie1 '("z1_head", "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg"))
+
+(def zombie2 '("z2_head", "z2_r_arm" "z2_l_arm" "z2_torso" "z2_r_leg" "z2_l_leg"))
+</code></pre>
+
+<p>zombie1 is ready to take a bite of zombie2&rsquo;s left leg, since it is nice and tasty there at the end.  Once zombie1 takes a bite, the body part will be added to its own sequence – but in the second position, so that the head is always first and ready to take another bite.  So, if zombie2 just stood still and let itself be eaten, after one bite, zombie1 would look like this</p>
+
+<p>(z1_head,   z2_l_leg,   z1_r_arm,   z1_l_arm,   z1_torso,   z1_r_leg,   z1_l_leg)</p>
+
+<p>But zombie2 is not just going to sit around and let itself be eaten, it is hungry too!  So it looks at zombie1&rsquo;s left leg hanging off there at the end and takes a bite whenever zombie1 takes a bite.</p>
+
+<p>Let&rsquo;s define the functions.  Because they will be mutually recursive and call each, we need to declare the vars first:</p>
+
+<pre><code>(declare zombie1_eats zombie2_eats)
+</code></pre>
+
+<p>Now let&rsquo;s define the zombie functions.  The zombie1_eats function will take 3 arguments, the first is the list that represents the eater (zombie1), the next is the list that represents the food (zombie2), and the last is the number of bites that zombie1 takes.  The function will return the list that represents zombie1.</p>
+
+<pre><code>(defn zombie1_eats [eater,food,bites]
+  (if (= 0 bites) eater
+    (if (= 0 (count food)) eater
+      (zombie2_eats
+        (drop-last food)
+        (cons (first eater) (cons (last food) (rest eater)) )
+         bites))))
+
+(defn zombie2_eats [eater, food bites]
+  (if (= 0 bites) eater
+    (if (= 0 (count food)) eater
+      (zombie1_eats
+        (drop-last food)
+        (cons (first eater) (cons (last food) (rest eater)) )
+         (dec bites)))))
+</code></pre>
+
+<p>After 0 bites:</p>
+
+<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 0)
+("z1_head" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg")
+</code></pre>
+
+<p>After 1 bite</p>
+
+<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 1)
+("z1_head" "z2_l_leg" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg")
+</code></pre>
+
+<p>After 7 bites</p>
+
+<pre><code>(user=&gt; (zombie1_eats zombie1 zombie2 7)
+("z1_head" "z1_r_leg" "z1_l_leg" "z2_r_arm" "z2_l_arm" "z2_torso")
+</code></pre>
+
+<p>After 1007 bites</p>
+
+<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 1007)
+("z1_head" "z1_r_leg" "z1_l_leg" "z2_r_arm" "z2_l_arm" "z2_torso")
+</code></pre>
+
+<p>After 5000 bites</p>
+
+<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 5000)
+java.lang.StackOverflowError (NO_SOURCE_FILE:0)
+</code></pre>
+
+<p>Whoops we blew the stack!  Don&rsquo;t worry – put those zombies on a trampoline!</p>
+
+<p>Clojure provides a function for optimizing mutual recursion.  The only thing that we need to do is to modify our zombie functions with a “#” to introduce an anonymous function.  Our new zombie methods are:</p>
+
+<pre><code>(defn zombie1_eats [eater,food,bites]
+  (if (= 0 bites) eater
+    (if (= 0 (count food)) eater
+      #(zombie2_eats
+        (drop-last food)
+        (cons (first eater) (cons (last food) (rest eater)) )
+         bites))))
+
+(defn zombie2_eats [eater, food bites]
+  (if (= 0 bites) eater
+    (if (= 0 (count food)) eater
+      #(zombie1_eats
+        (drop-last food)
+        (cons (first eater) (cons (last food) (rest eater)) )
+         (dec bites)))))
+</code></pre>
+
+<p>Now lets try again:</p>
+
+<pre><code>user=&gt; (trampoline zombie1_eats zombie1 zombie2 5000)
+("z1_head" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg")
+</code></pre>
+
+<p>No problem.  Even bigger&hellip;</p>
+
+<pre><code> (trampoline zombie1_eats zombie1 zombie2 50004)
+("z1_head" "z2_l_arm" "z2_torso" "z2_r_leg" "z2_l_leg" "z1_r_arm")
+</code></pre>
+
+<p>There are other techniques to solve this as well in Clojure.  In Stuart Holloway&rsquo;s book, he mentions converting to self-recursion, replacing recursion with laziness and shortcutting recursion with <a href="http://en.wikipedia.org/wiki/Memoization"> memoization</a>.</p>
+
+<p>But for me, there is nothing more enjoyable than putting those zombies on a trampoline!</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/12/07/123//blog/page/7/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -689,60 +835,6 @@ My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier<
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2010/07/01/no-fluff-just-stuff-columbus-2010//blog/page/7/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/06/26/not-ready-to-throw-the-object-model-out-with-the-bath-water/">
-		
-			Not Ready to Throw the Object Model Out With the Bath Water</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-06-26T22:38:46-04:00" pubdate data-updated="true">Jun 26<span>th</span>, 2010</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
-
-
-</div>
-    </div>
-		<p><img src="http://farm4.staticflickr.com/3833/9925947563_50031edb46_o.jpg"></p>
-
-<p>I have been attending talks on functional programming languages at NFJS over the past couple of days.  I have to admit it, I am really taken with the power of Scala and Clojure to tackle problems that Java cannot handle.  I even purchased a Clojure book to add to my &ldquo;languages to take a good hard look at&rdquo; stack.   I really believe that it is true that the functional languages have a lot to offer.</p>
-
-<p> However, let&rsquo;s not loose track of one really powerful tool that the Object Oriented world provides to us.   This is the way to model the world in a more natural way.  Since we do this all the time in Java and other object oriented languages, we take it for granted now.   But the advantage that this modeling the world in our mind and our code is tremendous.  One of the biggest constraint on developing software is the ability to hold in our minds the mental model of what the code is doing and how it is doing it.  Once, you do this – you “know the application”.   Having the ability to break the world up into chunks that more easily fit allows us to more naturally build applications without the complexity drowning us out.</p>
-
-<p>I am wary of the temptation to “throw the baby out with the bathwater” to go to pure functional and leave objects behind.  This is way Scala seems like a pragmatic solution, since it allows you to turn the dial back and forth from the Object Oriented way of doing things to the functional side.</p>
-
-<p>That being said, I still intend to learn Clojure next instead of Scala.  Why?  Because to learn a new language that is a new way of thinking, I would prefer not to have an alternative way to fall back to old familiar ways of thinking.  That way you can really get a new perspective on things to see what the true functional side has to offer.  And no, I am not hard core enough to learn Haskell.</p>
-
-<p>One thing is for sure.  The future is multi-core.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2010/06/26/not-ready-to-throw-the-object-model-out-with-the-bath-water//blog/page/7/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
