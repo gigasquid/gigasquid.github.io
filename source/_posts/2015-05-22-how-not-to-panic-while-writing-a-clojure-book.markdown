@@ -97,7 +97,7 @@ Another curious thing happens when you do something, even a little bit, day afte
 
 ###  Writing is a Different Skill from Coding
 
-I was used to writing code all day.  I found that the code writing skills are not the same as writing about code.  In fact, I found it really hard to do at the start.  But, just like writing code, you get better with practice.  To get better at anything, feedback is really important.
+I was used to writing code all day.  I found that the code writing skills are not the same as writing about code.  In fact, I found it really hard to do at the start.  But, just like writing code, you get better with practice.  And to get better at anything, feedback is really important.
 
 ### Get and Trust Feedback
 
