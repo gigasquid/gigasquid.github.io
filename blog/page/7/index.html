@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Dec 7th, 2010 Tags: All, Clojure It&rsquo;s late at night. The kids are all tucked snuggly in their beds and I am ready to explore &hellip;">
+	<meta name="description" content="Published on: Jan 11th, 2011 Tags: All, Clojure It&rsquo;s time to learn more Clojure. This time, Buffy the Vampire Slayer* is going to help us. &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,189 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/01/11/vampire-slaying-with-clojure-part-1-defrecord/">
+		
+			Vampire Slaying With Clojure - Part 1 Defrecord</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-11T22:33:43-05:00" pubdate data-updated="true">Jan 11<span>th</span>, 2011</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p>It&rsquo;s time to learn more Clojure.  This time, Buffy the Vampire Slayer* is going to help us.</p>
+
+<p>First things first, of course we need vampires!</p>
+
+<p>Let&rsquo;s create a vampire data type with defrecord.  Our vampires are going to have two attributes, their name and the number of health points that they have.  This is of course, how Buffy is going to slay them.  If a vampire&rsquo;s health points goes to zero, then they are dead.  Well, they already are undead&hellip; so let&rsquo;s say they are slayed at that point and turn into dust.</p>
+
+<p>Our first vampire&rsquo;s name is Stu and he has a health of 50.</p>
+
+<pre><code>(defrecord Vampire [name, health]) 
+(def vampire1 (Vampire. "Stu" 50))
+</code></pre>
+
+<p>When we type in the vampire1 value into the REPL we can see its values in a map format</p>
+
+<pre><code> vampire1
+#:user.Vampire{:name "Stu", :health 50}
+</code></pre>
+
+<p>Now we can access vampire1&rsquo;s name by using the keys defined in the defrecord.  Let&rsquo;s get his name.</p>
+
+<pre><code>(:name vampire1)
+"Stu"
+</code></pre>
+
+<p>And his health</p>
+
+<pre><code>(:health vampire1)
+50
+</code></pre>
+
+<p>Lovely.  But we are going to need more than one vampire for Buffy to fight.  Let&rsquo;s create some more.</p>
+
+<pre><code>(def vampire1 (Vampire. "Stu" 50))
+(def vampire2 (Vampire. "Vance" 100))
+(def vampire3 (Vampire. "Izzy" 75))
+</code></pre>
+
+<p>Alright.  Our evil doers are ready for a fight.  Where is our hero?  We need to create a slayer structure using defrecord like before.  Our vampire slayer is going to have a name and a weapon that is worth a certain number of hit points.  Buffy is such a hard case that she is just going to use her bare hands.  We&rsquo;ll define her kungfu to be worth 25 hit points.</p>
+
+<pre><code>(defrecord Slayer [name, weapon])
+(def kungfu 25)
+(def buffy (Slayer. "Buffy" kungfu))
+</code></pre>
+
+<p>Let&rsquo;s check to make sure Buffy is ready to go</p>
+
+<pre><code>(:name buffy)
+"Buffy"
+(:weapon buffy)
+25
+</code></pre>
+
+<p>We have our main characters.  Now we need a way for Buffy to hit the vampires.  A simple function will do.  We define a function that takes the vampire and the number of hitpoints and subtracts it from the vampire&rsquo;s health.  This gives us the new health of the vampire</p>
+
+<pre><code>(defn hit [vampire, hitpoints]
+  (- (:health vampire) hitpoints))
+
+(hit vampire1 20)
+30
+</code></pre>
+
+<p>Now let&rsquo;s take that one step further and create another function that allows the slayer to hit the vampire with his/her weapon.  We use out hit function and pass it the weapon of the slayer.  Then we change the value of the vampire&rsquo;s health to the new value with assoc.  The function returns a new vampire structure with the new decremented health.</p>
+
+<pre><code>(defn hit-vampire [vampire, slayer]
+  (assoc vampire :health (hit vampire (:weapon slayer))))
+
+ (hit-vampire vampire1 buffy)
+#:user.Vampire{:name "Stu", :health 25}
+</code></pre>
+
+<p>Our vampires are totally lame, they don&rsquo;t fight back, (at least in this code example), but it does take time for Buffy to kill them.  Let&rsquo;s define a time that it take for her to hit a vampire.</p>
+
+<pre><code>(def combat-time 20)
+</code></pre>
+
+<p>We&rsquo;ll go back and redefine the hit-vampire function to include a sleep</p>
+
+<pre><code>(defn hit-vampire [vampire, slayer]
+  (Thread/sleep (* combat-time 10))
+  (assoc vampire :health (hit vampire (:weapon slayer))))
+</code></pre>
+
+<p>Now we can see how much time it takes Buffy to hit vampire1</p>
+
+<pre><code> (time (hit-vampire vampire1 buffy))
+"Elapsed time: 200.454173 msecs"
+#:user.Vampire{:name "Stu", :health 25}
+</code></pre>
+
+<p>This is nice, but we really want a way to define a function to recursively have the slayer keep hitting the vampire until it is dead.  If the health of the vampire is less than 1, then then we will set the vampire&rsquo;s health to 0 and return the vampire.  Note that we use recur in the function to denote the recursive call.</p>
+
+<pre><code>(defn kill-vampire [vampire, slayer]
+  (if (&gt; (:health vampire) 1)
+    (recur (hit-vampire vampire slayer) slayer)
+    (assoc vampire :health 0)))
+</code></pre>
+
+<p>Testing it out with Buffy killing Stu the vampire1</p>
+
+<pre><code>(kill-vampire vampire1 buffy)
+#:user.Vampire{:name "Stu", :health 0}
+</code></pre>
+
+<p>How long does it take Buffy to kill Stu? Not long.</p>
+
+<pre><code>(time (kill-vampire vampire1 buffy))
+"Elapsed time: 400.542595 msecs"
+#:user.Vampire{:name "Stu", :health 0}
+</code></pre>
+
+<p>What about a tougher vampire like vampire2?</p>
+
+<pre><code>vampire2
+#:user.Vampire{:name "Vance", :health 100}
+
+(time (kill-vampire vampire2 buffy))
+"Elapsed time: 801.318529 msecs"
+#:user.Vampire{:name "Vance", :health 0}
+</code></pre>
+
+<p>For fun, let&rsquo;s redefine Buffy and give her some Holy Water as a weapon and see what happens.</p>
+
+<pre><code>(def holy-water 100)
+(def buffy (Slayer. "Buffy" holy-water))
+
+(time (kill-vampire vampire2 buffy))
+"Elapsed time: 200.247375 msecs"
+#:user.Vampire{:name "Vance", :health 0}
+</code></pre>
+
+<p>So there you have it.  We have explored defrecord and created some vampires for the express purpose of hitting.  Not a bad way to blow off steam at the end of the day.</p>
+
+<p>Stay tuned for part 2, where Buffy will line up the vampires and kill them using Clojure&rsquo;s STM (Software Transaction Memory System) so they stay dead (or undead).</p>
+
+<ul>
+<li>If you are a lawyer and object to Buffy the Vampire Slayer appearing in an code snippets as a Clojure var, please contact me and I will change the name to Biffy or Tiffy.</li>
+</ul>
+
+
+<p>_Lego Vampire: <a href="http://www.flickr.com/photos/pasukaru76/4274684369_">http://www.flickr.com/photos/pasukaru76/4274684369_</a></p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2011/01/11/vampire-slaying-with-clojure-part-1-defrecord//blog/page/7/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -785,56 +968,6 @@ My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier<
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2010/07/07/hello-world-in-rdf//blog/page/7/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/07/01/no-fluff-just-stuff-columbus-2010/">
-		
-			No Fluff Just Stuff - Columbus 2010</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-07-01T14:04:53-04:00" pubdate data-updated="true">Jul 1<span>st</span>, 2010</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
-
-
-</div>
-    </div>
-		<p>I attended my first NFJS conference last weekend up in Columbus.  Overall, it was an excellent experience.   The speakers were all first rate and I got a chance to hang out and meet some other like-minded people who are interested in giving up a weekend to learn new technologies and generally just geek-out.</p>
-
-<p>The main technologies that stood out to me are concurrency and semantic web.   Concurrency and functional programming are becoming more and more important with the ability to scale out on the server, rather then scale up (horizontal vs vertical scaling).    There is always some threshold to the amount of power that you can throw at one system.  However, that limit disappears if you can spread the load out across many servers.  Java runs into some real problems with threads and concurrency.  For this reason, the functional languages like Scala, Erlang, and Clojure are really starting to shine.   I was so impressed with Clojure, that I picked up a book for my “play around and take a look at” tech stack.</p>
-
-<p>The highlight of the conference for me was on Sunday.  I was fortunate enough to attend all of Brian Sletten&rsquo;s sessions on REST, RDF,  and all things Semantic Web.   I was interested in the Semantic Web before I attended, but afterwards it is my new love.   I have always been interested in databases and datasets, so discovering a technology that enriches data in a open distributed way across the web just made me giddy.   The potential enterprise applications are very exciting.  When RDF is combined with a HATEOS architecture, you have can have a robust, scalable, agile architecture that can integrate data across many different systems and datasources.   These rich datasources can be sliced and diced for reporting and BI and can also be secured by row/ column level like security.    On the e-commerce side of the Internet, even very simple implementations of  RDF vocabularies are yielding very promising results.  Best Buy put in a semantic web vocabulary on their website that resulted in 30% increase of sales.   It is a very exciting time for semantic web technologies.  I am a firm believer in that it is “ all about the data”.   I think for the future it will be more like “Why have just data when you can have data with context?”</p>
-
-<p>All in all, I had a great time and it was definitely worth the trip up to Columbus for the weekend.  If you have chance to check out NFJS or any stuff about the Semantic Web or Functional Languages, go for it.  You will enjoy it.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2010/07/01/no-fluff-just-stuff-columbus-2010//blog/page/7/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

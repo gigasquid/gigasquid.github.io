@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Jul 7th, 2012 Tags: All, Clojure Once upon a time, a young girl decided to take a break from her code and stroll in the forest. It was &hellip;">
+	<meta name="description" content="Published on: Aug 2nd, 2012 Tags: All I love Roomba. It cleans our floors and it can be hacked to help teach my kids programming. Win! Here are the &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,73 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/08/02/talking-to-your-roomba-via-bluetooth-and-roombacom/">
+		
+			Talking to Your Roomba via Bluetooth and RoombaComm</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-02T14:29:37-04:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2012</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>
+
+
+</div>
+    </div>
+		<p>I love Roomba. It cleans our floors and it can be <a href="http://www.irobot.com/images/consumer/hacker/roomba_sci_spec_manual.pdf">hacked</a> to help teach my kids programming. Win!</p>
+
+<p>Here are the setup steps that I used to get going talking to Roomba:</p>
+
+<ul>
+<li><p>Ordered a <a href="https://www.sparkfun.com/products/10980?">Rootooth</a> bluetooth connection for Roomba.  I could have build one from <a href="http://hackingroomba.com/projects/build-a-roomba-bluetooth-adapter/">scratch</a>, but I am a busy mom and hacker.</p></li>
+<li><p>Removed the cover from Roomba to expose the ROI port (<a href="http://www.youtube.com/watch?v=EaZibdOIeD0">Video</a>).</p></li>
+<li><p>Setup the Bluetooth adapter on my Mac</p>
+
+<ul>
+<li><p>Start Bluetooth network assistant</p></li>
+<li><p>Have the firefly adapter deteted</p></li>
+<li><p>Enter the passkey: 1234</p></li>
+<li><p>Click edit serial ports to see what port it assigned.  Mine was FireFly-943A-SPP.  Alternatively, you can look at /dev directory</p></li>
+<li><p>Next, you need to configure the baud rate for your Roomba. I found these <a href="http://www.robotappstore.com/Knowledge-Base/3-Serial-Port-Baud-Rate-Configuration/17.html">instructions</a> helpful</p></li>
+<li><p>Install zterm on your mac  - set the serial port to your roomba and the baud rate to the correct baud rate</p></li>
+<li><p>On zterm you now should be able to echo any key you type</p></li>
+</ul>
+</li>
+<li><p>Download<a href="http://hackingroomba.com/code/roombacomm/"> RoombaComm</a> java package</p></li>
+<li><p>Look at the README.  You will need to run makeit.sh to build and ./rxtxlib/macosx_setup.command (for Macs)</p></li>
+<li><p>Finally run RoombaCommTest.sh to connect up and control your Roomba!</p></li>
+</ul>
+
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2012/08/02/talking-to-your-roomba-via-bluetooth-and-roombacom//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -852,59 +919,6 @@ I found out that there is already an alpha version of Clojure on Maven.  So you 
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2011/08/20/on-men-in-ballet-and-women-in-software//blog/page/5/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/08/13/project-grep-another-sharp-tool-for-your-emacs/">
-		
-			Project-Grep : Another Sharp Tool for Your Emacs</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-08-13T14:31:20-04:00" pubdate data-updated="true">Aug 13<span>th</span>, 2011</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
-
-
-</div>
-    </div>
-		<p>Since joining EdgeCase, I have shelved my heavy Intellij and Eclipse IDEs in favor of Emacs. Overall, I have enjoyed moving to the light-weight but powerful editor. There is one thing that I did miss from my IDEs – that was the ability to search projects for string occurrences and being able to click navigate to them through the editor. Fortunately, one of the strengths of Emacs is it&rsquo;s infinite configurability and extensibility. Even more fortunate, one of the guys in our shared office, <a href="http://twitter.com/#!/dougalcorn">Doug Alcorn</a> of Gaslight Software, had already written just this feature for his Emacs. I installed it and was so pleased with it, that I thought I would share …</p>
-
-<p><a href="https://github.com/dougalcorn/emacs.d/blob/master/site-lisp/misc/project-grep.el">https://github.com/dougalcorn/emacs.d/blob/master/site-lisp/misc/project-grep.el</a></p>
-
-<p><strong>To install:</strong>
-Download <a href="https://github.com/dougalcorn/emacs.d/blob/master/site-lisp/misc/project-local-variables.el">project-local-variables.el</a> and <a href="https://github.com/dougalcorn/emacs.d/blob/master/site-lisp/misc/project-grep.el">project-grep.el</a>
-In your init.el file: (require &lsquo;project-grep)
-Create an empty .emacs-project file in your directory</p>
-
-<p><strong>To use:</strong> meta-x project-grep</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2011/08/13/project-grep-another-sharp-tool-for-your-emacs//blog/page/5/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

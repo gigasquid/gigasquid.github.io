@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-05-22T10:49:46-04:00</updated>
+  <updated>2015-05-30T11:08:59-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Wild Horses, Things, and Creativity]]></title>
+    <link href="http://gigasquid.github.io/blog/2015/05/30/wilds-horses-things-and-creativity/"/>
+    <updated>2015-05-30T10:53:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2015/05/30/wilds-horses-things-and-creativity</id>
+    <content type="html"><![CDATA[<p><img src="https://nmbdesigner.files.wordpress.com/2012/05/where-the-wild-things-are-2.jpeg"></p>
+
+<p>Sometimes I want to create something and I run into a limitation or
+constraint. It is at this point where I am tempted to give up and say
+that I just <em>can&rsquo;t</em> do that.</p>
+
+<p>At this time,  I remember Maurice Sendak and the origins of <em>Where
+the Wild Things Are</em>.  In this <a href="http://www.pbs.org/now/arts/sendak.html">interview with Bill Moyers</a>, he explains
+how the book was originally titled <em>Where the Wild Horses Are</em>, but he
+couldn&rsquo;t draw horses.</p>
+
+<blockquote><p>She was this torrential woman, passionate woman, who could spot talent 10 miles away. I had no education. I did not go to art school. My drawing was so crude. I had shines on shoes like in Mutt &lsquo;n&rsquo; Jeff in Walt Disney. And she saw through that monstrous crudity and cultivated me, really made me grow up. And then, it was time to do my own picture book.</p>
+
+<p>And I came to her with a title that was &ldquo;Where the Wild Horses Are.&rdquo; And she just loved that. It was so poetic and evocative. And she gave me a contract based on &ldquo;Where the Wild Horses Are.&rdquo; And then, it turned out after some very few months to her chagrin and anger, I couldn&rsquo;t draw horses. The whole book would have to be full of horses to make the book make sense.</p>
+
+<p>And when I tried a number of things, I remember the acid tones. She said, &ldquo;Maurice, what can you draw?&rdquo; Okay. Cause she was investing in a full color picture book. That was an enormous thing back then.</p>
+
+<p>And so, I thought well things, things.</p></blockquote>
+
+<p>Limits or constraints cannot hold back creativity.  But it can help
+mold it in surprising directions.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Not to Panic While Writing a Clojure Book]]></title>
@@ -2551,155 +2580,6 @@ success.</p>
 <p>Build things that matter.  Build well. Build the right things.</p>
 
 <h5>Thanks to Scott Burwinkel for helping review this post for me &ndash; you rock</h5>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Guide to Leaving your Mac Laptop]]></title>
-    <link href="http://gigasquid.github.io/blog/2013/12/26/guide-to-leaving-your-mac-laptop/"/>
-    <updated>2013-12-26T00:00:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2013/12/26/guide-to-leaving-your-mac-laptop</id>
-    <content type="html"><![CDATA[<p><img src="http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg"></p>
-
-<p>I felt like I was in a controlling relationship headed downhill.
-After two custom laptops returned for defective hardware, I wanted to
-leave.  But leaving didn&rsquo;t seem so easy after living in the walled
-garden of Apple all those years.</p>
-
-<p>This blog post is about how to leave your Mac and return to OSS.</p>
-
-<h2>Make a New Plan, Stan</h2>
-
-<p>There are quite a few nice alternatives to the Mac Air out there.
-I decided to go with the new
-<a href="http://www.dell.com/us/business/p/xps-13-linux/pd">Sputnik 3</a>.
-Some of my reasons:</p>
-
-<ul>
-<li>Powerful &ndash; New Haswell processor</li>
-<li>13.3 inch touch display with 1920 x 1080 resolution</li>
-<li>Ships with Ubuntu 12.04 (64 bit)</li>
-<li>Nice design (yes looks are important)</li>
-</ul>
-
-
-<p>It arrived a couple of days before Christmas. The packaging itself
-was quite nice.  Here is a picture next
-to my 13 inch Mac Air.</p>
-
-<p><img src="http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg"></p>
-
-<p>The best was that everything just &ldquo;worked&rdquo; out of the box.
-I had no problems configuring Ubuntu and getting the wireless network
-hooked up.  I could close the lid and reopen it and have &ldquo;instant on&rdquo;
-just like the Mac Air.  The keyboard is enjoyable to use and nicely
-backlit.  The sleek design and light weight of the laptop is very
-comparable to the Mac Air.</p>
-
-<p><img src="http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg"></p>
-
-<h2>Hop on the Bus, Gus</h2>
-
-<p>It took my about a day to set up all my programs that I use on a daily
-basis.
-Here is a overview:</p>
-
-<h4>Application Dock/ Organization &ndash; Dash</h4>
-
-<p>Ubuntu has a dock on the left hand side of the screen, that is very
-similar to the mac one.  You can right click and pin applications to
-the dock to keep them in there. Clicking into the dash option, you can
-browse your applications that are installed.</p>
-
-<h4>Getting New Apps &ndash; Ubuntu Software Center or apt-get</h4>
-
-<p>You can install new applications easily by using the Ubuntu Software
-Center.  Browsing the applications and installing them is point and
-click easy. If you don&rsquo;t see the one you need or need a more recent
-version, you can always install via the command line with</p>
-
-<pre><code>sudo apt-get install package-name
-</code></pre>
-
-<h4>Browser &ndash; Firefox or Chromium</h4>
-
-<p>Ubuntu comes with Firefox and Chromium installed.
-You can also go with Chrome of course.</p>
-
-<h4>Mail &ndash; Thunderbird</h4>
-
-<p>Ubuntu comes with Thunderbird mail ready to go.
-I was pleasantly surprised by how easy it was to setup Thunderbird
-Mail.  You simply put in your email and password.  Ubuntu keeps a
-configuration list of commonly used email providers.  It automagically
-figured out the correct domains and ports to use. On the downside, it
-doesn&rsquo;t do anything magic with your contacts. So you are on your own
-there.  I also just found out about
-<a href="http://www.omgubuntu.co.uk/2013/10/geary-0-4-released-with-new-look-new-features">Geary</a>,
-which looks pretty sweet.</p>
-
-<h4>Password Management &ndash; 1 Password Anywhere + Dropbox / LastPass</h4>
-
-<p>There is not a linux client for 1Password. I can still use it by using
-<a href="http://help.agilebits.com/1Password3/1passwordanywhere.html">1PasswordAnywhere</a>.
-I just have a bookmark to the 1PasswordAnyway link and I haz my
-logins. I am switching over to LastPass though, so you can edit / add
-new passwords. There is also an import utility to move stuff over from 1Password.</p>
-
-<h4>Emacs</h4>
-
-<p>Emacs just works :)
-It might be just me, but I think it is happier back on Ubuntu.
-I did an apt-get to get the 24 version.</p>
-
-<h4>Git Client</h4>
-
-<p>I went with gitg for a graphical Git client. It seems to have all the
-things you need.</p>
-
-<h4>Terminal &ndash; Byobu</h4>
-
-<p><a href="http://byobu.co/">Byobu Terminal</a> comes already installed in Ubuntu. I have been taking
-it for a test drive and really like some of the features of easily
-adding new tabs, splitting screens and re-attaching to sessions.</p>
-
-<h4>Evernote/ Everpad</h4>
-
-<p>With
-<a href="http://www.omgubuntu.co.uk/2012/09/use-evernote-in-ubuntu-with-everpad">Everpad</a>,
-I can still use all my evernote stuff too.</p>
-
-<h4>Presentations &ndash; LibreOffice / Reveal.js</h4>
-
-<p>I have used Keynote heavily on the Mac.  For existing presentations, I
-can convert them to ppt format and then modify or run in LibreOffice
-Impress. Most likely with all my new presentations, I will just use a
-JavaScript framework like <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a></p>
-
-<h4>Communication &ndash; Hipchat / Skype/ Google Hangouts / Campfire</h4>
-
-<p>We use Hipchat for messaging at work.  Hipchat has a linux client
-that works just the same.  Skype also has a linux client.  Of course,
-Google Hangouts is just fine on the web.  I also use Campfire
-sometimes. There are a couple of linux clients out there, but I
-haven&rsquo;t tried them yet.  The web version works fine for me right now.</p>
-
-<h4>iPhone</h4>
-
-<p>On my mac, I used to plug in my phone and sync to my dropbox.  I tried
-plugging in my phone, but unfortunately, iOS7 put in a security
-feature to that prevents having the phone connect properly.  The
-solution for me is to just use the phone dropbox app to sync the
-pictures automatically to my Dropbox.</p>
-
-<h2>Get Yourself Free</h2>
-
-<p>I don&rsquo;t expect the road to free of bumps.  I have only been using my
-new laptop for a week.  But so far, it has been an enjoyable switch.
-The hardware is really impressive, and it feels good getting back to
-OSS.</p>
-
-<p>Best of all, I set myself free.</p>
 ]]></content>
   </entry>
   

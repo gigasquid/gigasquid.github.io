@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content=" Published on: Jan 1st, 2013 Tags: All, John McCarthy Papers Saving the best for last.  Elephant 2000 To be continued&hellip;. Comments ">
+	<meta name="description" content="Published on: Feb 4th, 2013 Tags: All, Clojure Clojure is fun.  Flying AR Parrot Drones are fun.  Put them together and there is pure joy. Ever &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,196 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/02/04/the-joy-of-flying-ar-drones-with-clojure/">
+		
+			The Joy of Flying AR Drones With Clojure</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-04T22:45:19-05:00" pubdate data-updated="true">Feb 4<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p>Clojure is fun.  Flying <a href="http://ardrone2.parrot.com/usa/">AR Parrot Drones</a> are fun.  Put them together and there is pure joy.</p>
+
+<p><img src="http://farm8.staticflickr.com/7441/9925804126_e4707c8b72_o.jpg"></p>
+
+<p>Ever since I found out that you could program and control your drone over UDP, I couldn&rsquo;t wait to try it out in Clojure.  I had dreams of controlling it with my Emacs REPL.  That dream came true and it has been a true joy to fly in a function language. This blog post shows some of the features that the <a href="https://github.com/gigasquid">clj-drone project</a> has so far.  There is still a bit of work to go to make it complete.  But, I wanted to share and hopefully encourage others to start playing with it too.</p>
+
+<h2>The Simple Take-off and Landing</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">clj-drone.example.simple</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clj-drone.core</span> <span class="ss">:refer</span> <span class="ss">:all</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">drone-initialize</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;Use ip and port for non-standard drone ip/port</span>
+</span><span class='line'><span class="c1">;(initialize ip port)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone</span> <span class="ss">:take-off</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">Thread/sleep</span> <span class="mi">10000</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone</span> <span class="ss">:land</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>Here is a video of executing the entire program in nrepl/ emacs</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('IjKDZVUk1M8');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/IjKDZVUk1M8?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/IjKDZVUk1M8/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=IjKDZVUk1M8" id="IjKDZVUk1M8" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
+</a>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
+</div>
+
+
+<h2>Controlling the Drone with Emacs/ Clojure REPL</h2>
+
+<p>Running the program all at once to control the drone is fun. But, I prefer to have more control over it in flight. I find being able to execute commands with keystrokes in emacs, the best way to do it. Here is a short video demonstrating control via the REPL. (Note: I am just doing simple take off / up and landings because of the constraints of flying indoors in my kitchen. There are many more moves you can do if you have more space.)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">clj-drone.example.moves</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clj-drone.core</span> <span class="ss">:refer</span> <span class="ss">:all</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">drone-initialize</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;Use ip and port for non-standard drone ip/port</span>
+</span><span class='line'><span class="c1">;(initialize ip port)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone-do-for</span> <span class="mi">4</span> <span class="ss">:take-off</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone-do-for</span> <span class="mi">2</span> <span class="ss">:up</span> <span class="mf">0.3</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone-do-for</span> <span class="mf">3.75</span> <span class="ss">:fly</span> <span class="mf">0.2</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mf">0.5</span><span class="p">)</span> <span class="c1">; sprial</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone</span> <span class="ss">:hover</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone</span> <span class="ss">:land</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('kNLx5X49Lig');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/kNLx5X49Lig?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/kNLx5X49Lig/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=kNLx5X49Lig" id="kNLx5X49Lig" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
+</a>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
+</div>
+
+
+<h2>Looking at the Navigation Data</h2>
+
+<p>You can also hook into the navigation feed. There are many drone states and properties to look at. There is a list of all the ones currently available on the <a href="https://github.com/gigasquid/clj-drone">github project site</a>. There are also many more, including targeting information, that have yet to be added. There is a logging function that will pair down the navigation properties that you are interested in. The navigation data map as an atom, so it can be de-referenced anywhere in your program. Here is a short video of what the navigation logging data looks like when it is turned on.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">clj-drone.example.nav-test</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clj-drone.core</span> <span class="ss">:refer</span> <span class="ss">:all</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">clj-drone.navdata</span> <span class="ss">:refer</span> <span class="ss">:all</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; logging is configured to go to the logs/drone.log file</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">set-log-data</span> <span class="p">[</span><span class="ss">:seq-num</span> <span class="ss">:flying</span> <span class="ss">:battery-percent</span> <span class="ss">:control-state</span> <span class="ss">:roll</span> <span class="ss">:pitch</span> <span class="ss">:yaw</span>
+</span><span class='line'>                <span class="ss">:velocity-x</span> <span class="ss">:velocity-y</span> <span class="ss">:velocity-z</span><span class="p">])</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone-initialize</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone-init-navdata</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone</span> <span class="ss">:take-off</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">drone</span> <span class="ss">:land</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">end-navstream</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('peQTVvsayrA');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/peQTVvsayrA?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/peQTVvsayrA/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=peQTVvsayrA" id="peQTVvsayrA" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
+</a>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
+</div>
+
+
+<h2>Auto-piloting with goals and beliefs</h2>
+
+<p>Inspired by reading John McCarthy&rsquo;s paper on <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/ascribing/ascribing.html">Ascribing Mental Qualities to Machines</a>, the drone can also auto-pilot itself based on goals and beliefs about its streaming navigation data. You define belief-actions and then goals. Finally, you set a vector of the current goals for the drone to process. You can see an example here of the AR drone having three goals: Take off, Get to a cruising altitude, and then land. It does it solely by inspecting and acting on the streaming navigation data.
+Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/blob/master/examples/nav_goals.clj">https://github.com/gigasquid/clj-drone/blob/master/examples/nav_goals.clj</a></p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('ujqeKFT8HdQ');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/ujqeKFT8HdQ?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/ujqeKFT8HdQ/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=ujqeKFT8HdQ" id="ujqeKFT8HdQ" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info">https://youtube.com/devicesupport</div>
+</a>
+<div class="video-info" >https://youtube.com/devicesupport
+http://m.youtube.com</div>
+</div>
+
+
+<h2>Go Fly!</h2>
+
+<p>I have had a lot of fun so far working on this project. I hope that you get a chance to play with it too. The project is still very young, so stay tuned for updates and, of course, pull requests are always welcome :)</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/02/04/the-joy-of-flying-ar-drones-with-clojure//blog/page/4/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -884,73 +1074,6 @@ One of the things that I love about Clojure is that it can go anywhere that Java
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2012/08/09/a-clojure-repl-driven-roomba//blog/page/4/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/08/02/talking-to-your-roomba-via-bluetooth-and-roombacom/">
-		
-			Talking to Your Roomba via Bluetooth and RoombaComm</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-08-02T14:29:37-04:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2012</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>
-
-
-</div>
-    </div>
-		<p>I love Roomba. It cleans our floors and it can be <a href="http://www.irobot.com/images/consumer/hacker/roomba_sci_spec_manual.pdf">hacked</a> to help teach my kids programming. Win!</p>
-
-<p>Here are the setup steps that I used to get going talking to Roomba:</p>
-
-<ul>
-<li><p>Ordered a <a href="https://www.sparkfun.com/products/10980?">Rootooth</a> bluetooth connection for Roomba.  I could have build one from <a href="http://hackingroomba.com/projects/build-a-roomba-bluetooth-adapter/">scratch</a>, but I am a busy mom and hacker.</p></li>
-<li><p>Removed the cover from Roomba to expose the ROI port (<a href="http://www.youtube.com/watch?v=EaZibdOIeD0">Video</a>).</p></li>
-<li><p>Setup the Bluetooth adapter on my Mac</p>
-
-<ul>
-<li><p>Start Bluetooth network assistant</p></li>
-<li><p>Have the firefly adapter deteted</p></li>
-<li><p>Enter the passkey: 1234</p></li>
-<li><p>Click edit serial ports to see what port it assigned.  Mine was FireFly-943A-SPP.  Alternatively, you can look at /dev directory</p></li>
-<li><p>Next, you need to configure the baud rate for your Roomba. I found these <a href="http://www.robotappstore.com/Knowledge-Base/3-Serial-Port-Baud-Rate-Configuration/17.html">instructions</a> helpful</p></li>
-<li><p>Install zterm on your mac  - set the serial port to your roomba and the baud rate to the correct baud rate</p></li>
-<li><p>On zterm you now should be able to echo any key you type</p></li>
-</ul>
-</li>
-<li><p>Download<a href="http://hackingroomba.com/code/roombacomm/"> RoombaComm</a> java package</p></li>
-<li><p>Look at the README.  You will need to run makeit.sh to build and ./rxtxlib/macosx_setup.command (for Macs)</p></li>
-<li><p>Finally run RoombaCommTest.sh to connect up and control your Roomba!</p></li>
-</ul>
-
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2012/08/02/talking-to-your-roomba-via-bluetooth-and-roombacom//blog/page/4/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
