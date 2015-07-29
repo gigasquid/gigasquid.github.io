@@ -14,11 +14,11 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
-* [OSCON 2015](http://www.oscon.com/open-source-2015) - I will be giving a workshop _Solving the Concurrency Problem with Clojure_ and also a talk _Unconventional Programming with Chemical Computing_. The schedule details are [here](http://www.oscon.com/open-source-2015/public/schedule/speaker/154757)
-
+* [Strange Loop 2015](https://thestrangeloop.com/): Unconventional Programming with Chemical Computing
 
 
 ## Past Talks
+* [OSCON 2015](http://www.oscon.com/open-source-2015) - A workshop _Solving the Concurrency Problem with Clojure_ and also a talk _Unconventional Programming with Chemical Computing_. The schedule details are [here](http://www.oscon.com/open-source-2015/public/schedule/speaker/154757)
 * [Strange Loop 2014](https://thestrangeloop.com/): Our Shared Joy of Programming {% youtube 3_zW63dcZB0%}
 * Solid Con 2014 Keynote: Real Time Robot Dance Party {% youtube sHK4v5MimJs %}
 * [Code Mesh 2013](http://codemesh.io/): The Joy of Flying Robots with Clojure
@@ -32,4 +32,3 @@ be Clojure, Robots, and AI lately.
 * CodeMash 2012: [A Fairy Tale in Clojure](http://www.slideshare.net/gigasquidcm/fairy-taleclojure)
 * JRubyConf 2011:
   [Semantic Web with JRuby](https://github.com/gigasquid/Presentations/blob/master/SemanticWebJRuby.pdf)
-
