@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-08-18T07:05:26-04:00</updated>
+  <updated>2015-08-18T07:32:08-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -163,7 +163,7 @@
 <p><strong>Datomic:</strong> No.  I am pretty smart that way.  I will figure it out
   once you try to tell me about some real entities.  In fact, entities don&rsquo;t have types. A ref attribute can reference <em>any</em> entity.</p>
 
-<p><strong>Human:</strong>  Cool.  Well, in that case, here are is the owner schema.  The owner has a name and some dogs.</p>
+<p><strong>Human:</strong>  Cool.  Well, in that case, here is the owner schema.  The owner has a name and some dogs.</p>
 
 <p>```clojure
 (def owner-schema [{:db/id #db/id[:db.part/db]</p>
