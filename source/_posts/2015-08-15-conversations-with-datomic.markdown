@@ -352,3 +352,7 @@ The `where` section of the query is going to look for the `?dog` entity that mat
 **Human:** That sounds really interesting.  I think I need some tea and cookies before I delve into that.  Let's take a short break and talk again soon.
 
 **Datomic:**  My pleasure.  I look forward to it.
+
+
+_Special thanks to [Paul deGrandis](https://twitter.com/ohpauleez) for
+the conversation idea :)_
