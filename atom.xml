@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-08-17T21:11:01-04:00</updated>
+  <updated>2015-08-17T21:17:57-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -479,6 +479,9 @@
 <p><strong>Human:</strong> That sounds really interesting.  I think I need some tea and cookies before I delve into that.  Let&rsquo;s take a short break and talk again soon.</p>
 
 <p><strong>Datomic:</strong>  My pleasure.  I look forward to it.</p>
+
+<p><em>Special thanks to <a href="https://twitter.com/ohpauleez">Paul deGrandis</a> for
+the conversation idea :)</em></p>
 ]]></content>
   </entry>
   
