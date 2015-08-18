@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-08-17T21:17:57-04:00</updated>
+  <updated>2015-08-18T07:05:26-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -69,7 +69,7 @@
 
 <p><strong>Human:</strong> So, being a database, obviously you store things.  What sort of things to you store?</p>
 
-<p><strong>Datomic:</strong>  I store facts about things, which I call <em>entities</em>.</p>
+<p><strong>Datomic:</strong>  I store facts about things, which I call <em>datoms</em>.</p>
 
 <p><strong>Human:</strong>  That sound neat.  How do I tell you a fact to store?  For example, what if I want you to store a fact about a dog, like its name?</p>
 
@@ -141,7 +141,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>Datomic:</strong> You got it.  Now, that you have these datoms, you can give them to me using a transaction with the connection.</p>
+<p><strong>Datomic:</strong> You got it.  Now, that you have these attributes, you can give them to me using a transaction with the connection.</p>
 
 <p><strong>Human:</strong> Ok.  Do you want that in a specific format?</p>
 
@@ -207,7 +207,8 @@
 
 <p><strong>Human:</strong>  Do I need to tell you that is a type of dog somehow?</p>
 
-<p><strong>Datomic:</strong> No.  I am pretty smart that way.  I will figure it out once you try to tell me about some real entities.</p>
+<p><strong>Datomic:</strong> No.  I am pretty smart that way.  I will figure it out
+  once you try to tell me about some real entities.  In fact, entities don&rsquo;t have types. A ref attribute can reference <em>any</em> entity.</p>
 
 <p><strong>Human:</strong>  Cool.  Well, in that case, here are is the owner schema.  The owner has a name and some dogs.</p>
 
