@@ -53,7 +53,7 @@ Then we can create the database and simply connect to it.
 
 **Human:** So, being a database, obviously you store things.  What sort of things to you store?
 
-**Datomic:**  I store facts about things, which I call _entities_.
+**Datomic:**  I store facts about things, which I call _datoms_.
 
 **Human:**  That sound neat.  How do I tell you a fact to store?  For example, what if I want you to store a fact about a dog, like its name?
 
@@ -102,7 +102,7 @@ Then we can create the database and simply connect to it.
  :db.install/_attribute :db.part/db}
 ```
 
-**Datomic:** You got it.  Now, that you have these datoms, you can give them to me using a transaction with the connection.
+**Datomic:** You got it.  Now, that you have these attributes, you can give them to me using a transaction with the connection.
 
 **Human:** Ok.  Do you want that in a specific format?
 
@@ -147,7 +147,8 @@ Then we can create the database and simply connect to it.
 
 **Human:**  Do I need to tell you that is a type of dog somehow?
 
-**Datomic:** No.  I am pretty smart that way.  I will figure it out once you try to tell me about some real entities.
+**Datomic:** No.  I am pretty smart that way.  I will figure it out
+  once you try to tell me about some real entities.  In fact, entities don't have types. A ref attribute can reference _any_ entity.
 
 
 **Human:**  Cool.  Well, in that case, here are is the owner schema.  The owner has a name and some dogs.
