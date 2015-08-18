@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-08-18T07:32:08-04:00</updated>
+  <updated>2015-08-18T07:45:06-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -229,7 +229,7 @@
 
 <p><strong>Human:</strong>  What is the <code>(d/db conn)</code> all about?</p>
 
-<p><strong>Datomic:</strong>  That function returns the current database value of the connection. The facts I know change during time.  Every time there is a transaction, I consider the time to be different and there is a new database value.  the <code>d/db</code> function gives you the most recent value that I know about.</p>
+<p><strong>Datomic:</strong>  That function returns the current database value of the connection. The facts I know change during time.  Every time there is a transaction, I consider the time to be different and there is a new database value.  The <code>d/db</code> function gives you the most recent value that I know about.</p>
 
 <p><strong>Human:</strong> I am assuming the <code>[*]</code> is a wildcard that means give me all the attributes for that dog?</p>
 
