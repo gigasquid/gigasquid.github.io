@@ -151,7 +151,7 @@ Then we can create the database and simply connect to it.
   once you try to tell me about some real entities.  In fact, entities don't have types. A ref attribute can reference _any_ entity.
 
 
-**Human:**  Cool.  Well, in that case, here are is the owner schema.  The owner has a name and some dogs.
+**Human:**  Cool.  Well, in that case, here is the owner schema.  The owner has a name and some dogs.
 
 ```clojure
 (def owner-schema [{:db/id #db/id[:db.part/db]
