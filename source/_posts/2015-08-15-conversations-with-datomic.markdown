@@ -213,7 +213,7 @@ I am a bit confused how to represent the dogs of the owners. How do I do that?
 
 **Human:**  What is the `(d/db conn)` all about?
 
-**Datomic:**  That function returns the current database value of the connection. The facts I know change during time.  Every time there is a transaction, I consider the time to be different and there is a new database value.  the `d/db` function gives you the most recent value that I know about.
+**Datomic:**  That function returns the current database value of the connection. The facts I know change during time.  Every time there is a transaction, I consider the time to be different and there is a new database value.  The `d/db` function gives you the most recent value that I know about.
 
 **Human:** I am assuming the `[*]` is a wildcard that means give me all the attributes for that dog?
 
