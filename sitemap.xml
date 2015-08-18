@@ -353,12 +353,16 @@
         <lastmod>2015-05-30T11:08:59-04:00</lastmod>
     </url>
     <url>
+        <loc>http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/</loc>
+        <lastmod>2015-08-17T21:10:48-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://gigasquid.github.io/about/</loc>
         <lastmod>2015-04-06T14:57:10-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2015-07-27T19:25:42-04:00</lastmod>
+        <lastmod>2015-08-17T21:10:48-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/books/</loc>
@@ -366,7 +370,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2015-07-27T19:25:42-04:00</lastmod>
+        <lastmod>2015-08-17T21:10:48-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/robots.txt</loc>

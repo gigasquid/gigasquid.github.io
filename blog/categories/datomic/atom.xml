@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2015-08-17T21:11:01-04:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Conversations with Datomic]]></title>
+    <link href="http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/"/>
+    <updated>2015-08-15T10:29:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
+
+<p><strong>Human:</strong> Hi <a href="http://www.datomic.com/">Datomic</a>.   I have been hearing good things about you.  I would like to talk to you and get to know you.  Is that alright?</p>
+
+<p><strong>Datomic:</strong> Sure!  I would be happy to talk with you.  What language would you like to converse in?</p>
+
+<p><strong>Human:</strong>  I like Clojure.</p>
+
+<p><strong>Datomic:</strong>  That is one of my favorites too.  You know how to setup a Leiningen project right?</p>
+
+<p><strong>Human:</strong> Oh yes.  What dependency should I use?</p>
+
+<p><strong>Datomic:</strong> Just use <code>[com.datomic/datomic-free "0.9.5206"]</code>.</p>
+
+<p><strong>Human:</strong> Got it.  Do you mind if I record our conversation in a namespaced file, so that I can refer back to it later?</p>
+
+<p><strong>Datomic:</strong>  Not a problem.  Make sure to require <code>datomic.api</code> when you set it up.</p>
+
+<p><code>clojure
+(ns conversations.datomic
+  (require [datomic.api :as d]))
+</code></p>
+
+<p><strong>Human:</strong>  All right.  I am all setup up.  I don&rsquo;t really know where to start, so maybe you can tell me a little about yourself.</p>
+
+<p><strong>Datomic:</strong>  I would be happy to.  I am a database of facts.  Would you like to create a database with me?</p>
+
+<p><strong>Human:</strong>  Sure.  How do I do that?</p>
+
+<p><strong>Datomic:</strong> For a casual conversation like this, we can use a in memory database with a uri like this:</p>
+
+<p>```clojure
+(def uri &ldquo;datomic:mem://first-conversation&rdquo;)
+````</p>
+
+<p>Then we can create the database and simply connect to it.</p>
+
+<p><code>clojure
+(d/create-database uri)
+(def conn (d/connect uri))
+</code></p>
+
+<p><strong>Human:</strong> So, being a database, obviously you store things.  What sort of things to you store?</p>
+
+<p><strong>Datomic:</strong>  I store facts about things, which I call <em>entities</em>.</p>
+
+<p><strong>Human:</strong>  That sound neat.  How do I tell you a fact to store?  For example, what if I want you to store a fact about a dog, like its name?</p>
+
+<p><strong>Datomic:</strong>  Ah.  Well the name of a dog is an attribute.  First, you need to tell me about the name attribute, so that I can use it to store the fact for you .  You can describe the attribute in the form of a map like this:</p>
+
+<p><code>clojure
+{:db/id #db/id[:db.part/db]
+ :db/ident :dog/name
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/unique :db.unique/identity
+ :db/doc "Name of the Dog"
+ :db.install/_attribute :db.part/db}
+</code>
+ This map is also considered a fact, that I call a  <em>datom</em>.  This datom is about the schema, which is about the possible attributes that an entity, (like a dog), can have. I will explain the different parts to you.</p>
+
+<ul>
+<li><code>db/id</code> is the internal id of the fact. With <code>#db/id[:db.part/db]</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li>
+<li><code>db/ident</code> is the human readable reference for it. While I am fine just referring to the attribute by an id, humans prefer text.  This says that you can refer to this attribute by the namespaced keyword <code>:dog/name</code>.</li>
+<li><code>db/valueType</code> tells me the type of the attribute.  The dog&rsquo;s name is a string.</li>
+<li><code>db/cardinality</code> lets me know if there is a one-to-one relationship with the entity or not. In our case, a dog has only one name.</li>
+<li><code>db/unique</code> is if that attribute is unique for an entity.  In our example case, we are saying that a dog can be uniquely identified by its name.</li>
+<li><code>db/doc</code> is some documentation for humans that explains a bit more about the attribute.</li>
+<li><code>db.install/_attribute</code> tells me that this is an schema attribute that I should store with the other things like it.</li>
+</ul>
+
+
+<p><strong>Human:</strong> I think I understand. Let me try one out for myself.  So dog breed would be this?</p>
+
+<p><code>clojure
+{:db/id #db/id[:db.part/db]
+ :db/ident :dog/breed
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "Breed of the Dog"
+ :db.install/_attribute :db.part/db}
+</code></p>
+
+<p><strong>Datomic:</strong>  Yes!  I think you got it.  Let&rsquo;s try one more.</p>
+
+<p><strong>Human:</strong> Ok.  How about the dog&rsquo;s favorite treat?</p>
+
+<p><code>clojure
+{:db/id #db/id[:db.part/db]
+ :db/ident :dog/favorite-treat
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "Dog's Favorite Treat to Eat"
+ :db.install/_attribute :db.part/db}
+</code></p>
+
+<p><strong>Datomic:</strong> You got it.  Now, that you have these datoms, you can give them to me using a transaction with the connection.</p>
+
+<p><strong>Human:</strong> Ok.  Do you want that in a specific format?</p>
+
+<p><strong>Datomic:</strong>  Yes.  Please send it to me using the form:</p>
+
+<p><code>clojure
+(d/transact conn [....facts....])
+</code></p>
+
+<p><strong>Human:</strong> Sounds good.  I will put the dog schema datoms we discussed in a vector and call it <code>dog-schema</code> and then send it to you.</p>
+
+<p>```clojure
+(def dog-schema  [{:db/id #db/id[:db.part/db]</p>
+
+<pre><code>               :db/ident :dog/name
+               :db/valueType :db.type/string
+               :db/cardinality :db.cardinality/one
+               :db/unique :db.unique/identity
+               :db/doc "Name of the Dog"
+               :db.install/_attribute :db.part/db}
+              {:db/id #db/id[:db.part/db]
+               :db/ident :dog/breed
+               :db/valueType :db.type/string
+               :db/cardinality :db.cardinality/one
+               :db/doc "Breed of the Dog"
+               :db.install/_attribute :db.part/db}
+              {:db/id #db/id[:db.part/db]
+               :db/ident :dog/favorite-treat
+               :db/valueType :db.type/string
+               :db/cardinality :db.cardinality/one
+               :db/doc "Dog's Favorite Treat to Eat"
+               :db.install/_attribute :db.part/db}])
+</code></pre>
+
+<p>(d/transact conn dog-schema)
+```</p>
+
+<p><strong>Datomic:</strong> The transaction was fine.  I know all about those dog attributes now.</p>
+
+<p><strong>Human:</strong>  I would like to also add a schema for owners for the dogs now.  I think I know how to describe the name of the owner, but I don&rsquo;t know how to express how the owner has dogs.</p>
+
+<p><strong>Datomic:</strong> Ah. I that case you can specify the <code>db:valueType</code> as a <code>ref</code> type.  This lets me know that it references another entity.</p>
+
+<p><strong>Human:</strong>  Do I need to tell you that is a type of dog somehow?</p>
+
+<p><strong>Datomic:</strong> No.  I am pretty smart that way.  I will figure it out once you try to tell me about some real entities.</p>
+
+<p><strong>Human:</strong>  Cool.  Well, in that case, here are is the owner schema.  The owner has a name and some dogs.</p>
+
+<p>```clojure
+(def owner-schema [{:db/id #db/id[:db.part/db]</p>
+
+<pre><code>                :db/ident :owner/name
+                :db/valueType :db.type/string
+                :db/cardinality :db.cardinality/one
+                :db/unique :db.unique/identity
+                :db/doc "Name of the Owner"
+                :db.install/_attribute :db.part/db}
+               {:db/id #db/id[:db.part/db]
+                :db/ident :owner/dogs
+                :db/valueType :db.type/ref
+                :db/cardinality :db.cardinality/many
+                :db/doc "Dogs of the Owner"
+                :db.install/_attribute :db.part/db}])
+</code></pre>
+
+<p>(d/transact conn owner-schema)
+```</p>
+
+<p><strong>Datomic:</strong>  The transaction is fine.  I now know about the attributes that dogs and owners have.  Would you like to tell me some facts about specific dogs and owners?</p>
+
+<p><strong>Human:</strong>  Yes. Bob is an owner.  He has two dogs. Fluffy is a poodle whose favorite treat is cheese, and Fido is a mixed breed, whose favorite treat is a bone.  Lucy is also an owner who has one dog named Tiny.  Tiny is a Great Dane whose favorite treat is cheese.</p>
+
+<p>I am a bit confused how to represent the dogs of the owners. How do I do that?</p>
+
+<p><strong>Datomic:</strong>  That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them.  Each dog or owner will by its own map.  Use <code>:db/id</code> set to <code>#db/id [:db.part/user]</code> so I can generate it for you.  Then use each attribute from the schema as the key and let me know the value.</p>
+
+<p><strong>Human:</strong>  Like this?</p>
+
+<p>```clojure
+(d/transact conn [{:db/id #db/id [:db.part/user]</p>
+
+<pre><code>               :owner/name "Bob"
+               :owner/dogs [{:db/id #db/id [:db.part/user]
+                             :dog/name "Fluffy"
+                             :dog/breed "Poodle"
+                             :dog/favorite-treat "Cheese"}
+                            {:db/id #db/id [:db.part/user]
+                             :dog/name "Fido"
+                             :dog/breed "Mix"
+                             :dog/favorite-treat "Bone"}]}
+              {:db/id #db/id [:db.part/user]
+               :owner/name "Lucy"
+               :owner/dogs [{:db/id #db/id [:db.part/user]
+                             :dog/name "Tiny"
+                             :dog/breed "Great Dane"
+                             :dog/favorite-treat "Cheese"}]}])
+</code></pre>
+
+<p>```</p>
+
+<p><strong>Datomic:</strong>  Exactly right.  I now know the facts about Bob and Lucy and their dogs.</p>
+
+<p><strong>Human:</strong>  Umm, how do I query you about the facts that your know?  For example, how do I ask you about the dog named Tiny?</p>
+
+<p><strong>Datomic:</strong>  There are a couple a ways to inquire about facts I know.  To find out about the attributes of a specific dog, or entity, I would recommend using <code>d/pull</code>.  You can ask me in the form of this to get all the attributes for a given dog name.  Note that this works since the dog name is a way to uniquely identify the dog:</p>
+
+<p><code>clojure
+(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
+</code></p>
+
+<p><strong>Human:</strong>  What is the <code>(d/db conn)</code> all about?</p>
+
+<p><strong>Datomic:</strong>  That function returns the current database value of the connection. The facts I know change during time.  Every time there is a transaction, I consider the time to be different and there is a new database value.  the <code>d/db</code> function gives you the most recent value that I know about.</p>
+
+<p><strong>Human:</strong> I am assuming the <code>[*]</code> is a wildcard that means give me all the attributes for that dog?</p>
+
+<p><strong>Datomic:</strong>  Exactly right.</p>
+
+<p><strong>Human:</strong> Ok.  Tell me about Tiny.</p>
+
+<p><code>clojure
+(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
+</code></p>
+
+<p><strong>Datomic:</strong>
+<code>clojure
+{:db/id 17592186045424
+ :dog/name "Tiny"
+ :dog/breed "Great Dane"
+ :dog/favorite-treat "Cheese"}
+</code></p>
+
+<p>Tiny is a Great Dane that has a favorite treat of Cheese.</p>
+
+<p><strong>Human:</strong>  This is fun.  What about more complicated questions.  How do I ask about the name of the owner of the dog &ldquo;Tiny&rdquo;?</p>
+
+<p><strong>Datomic:</strong>  For that I would ask using the <em>datalog</em> query <code>d/q</code>.  It uses logic to unify your query with all of my facts and give you the result.  The query itself would be a vector with logic statements inside like:</p>
+
+<p>```clojure
+&lsquo;[:find ?owner-name
+  :where [?owner :owner/name ?owner-name]</p>
+
+<pre><code>     [?owner :owner/dogs ?dog]
+     [?dog :dog/name "Tiny"]]
+</code></pre>
+
+<p>```</p>
+
+<p><strong>Human:</strong>  Whoa.  What is the deal with those question marks?</p>
+
+<p><strong>Datomic:</strong> The things with the question marks are considered as variables that we will <em>unify</em> to find the answer.  For example, we are looking for something that we are going to call <code>?owner-name</code>. I am going the use the following constraints with my facts to try to find the answer:</p>
+
+<ul>
+<li>There is an entity that we are going to call <code>?owner</code> that has an attribute of <code>:owner/name</code> that has some value that we are going to refer to as <code>?owner-name</code></li>
+<li>This same <code>?owner</code> entity must have an attribute <code>:owner/dogs</code> that has some value that we will refer to as <code>?dog</code></li>
+<li>This <code>`?dog</code> is an entity that has an attribute <code>:dog/name</code> that also has the value of &ldquo;Tiny&rdquo;.</li>
+</ul>
+
+
+<p><strong>Human:</strong>  Alright, so when I ask for this query, do I need to give you a database value too?</p>
+
+<p><strong>Datomic:</strong>  Yes.  They should have the form of:</p>
+
+<p><code>clojure
+(d/q '[datalog-query] db-value)
+</code></p>
+
+<p>Remember, to get the current db value use <code>(d/db conn)</code>.</p>
+
+<p><strong>Human:</strong>  Ok.  Here we go.</p>
+
+<p>```clojure
+(d/q &lsquo;[:find ?owner-name</p>
+
+<pre><code>   :where [?owner :owner/name ?owner-name]
+          [?owner :owner/dogs ?dog]
+          [?dog :dog/name "Tiny"]]
+ (d/db conn))
+</code></pre>
+
+<p>```</p>
+
+<p><strong>Datomic:</strong></p>
+
+<p>The answer is:</p>
+
+<p>```clojure</p>
+
+<h1>{[&ldquo;Lucy&rdquo;]}</h1>
+
+<p>```</p>
+
+<p><strong>Human:</strong>  What if I want to pass the dog name as a parameter?  How do I communicate that to you?</p>
+
+<p><strong>Datomic:</strong>  You will need to use an <code>in</code> clause in the query like this:</p>
+
+<p><code>clojure
+'[:find [blah]
+   :in $ ?dog-name
+   :where [blah]]
+</code></p>
+
+<p>The $ is shorthand for the database value and the <code>?dog-name</code> is what you will pass in as a parameter in the query after the db-value.</p>
+
+<p><strong>Human:</strong>  Like this?</p>
+
+<p>```clojure
+(d/q &lsquo;[:find ?owner-name</p>
+
+<pre><code>   :in $ ?dog-name
+   :where [?owner :owner/name ?owner-name]
+          [?owner :owner/dogs ?dog]
+          [?dog :dog/name ?dog-name]]
+ (d/db conn) "Tiny")
+</code></pre>
+
+<p>````</p>
+
+<p><strong>Datomic:</strong>  Exactly right.  The answer is Lucy again.</p>
+
+<p>```clojure</p>
+
+<h1>{[&ldquo;Lucy&rdquo;]}</h1>
+
+<p>```</p>
+
+<p><strong>Human:</strong>  I think I am getting the hang of this!  Another quick question.  How would I go about asking you which dogs have cheese as their favorite treat?  I would want the dog&rsquo;s name and breed back.</p>
+
+<p><strong>Datomic:</strong>  You would simply construct another datalog query.  This time I would recommend that you combine the <code>pull</code> syntax within the <code>find</code> part of the query.  The <code>pull</code> syntax is great at selecting attributes from an entity.  So the <code>find</code> part would look something like this:</p>
+
+<p><code>clojure
+[(pull ?dog [:dog/name :dog/breed]) ...]
+</code></p>
+
+<p>This will return the attributes of the <code>:dog/name</code> and the <code>:dog/breed</code>.  The three dots on the end will let me know that you want a collection returned, so I will give you back a simple vector with the entity attributes requested, instead of the set of vectors I normally give back.</p>
+
+<p>The <code>where</code> section of the query is going to look for the <code>?dog</code> entity that matches the <code>:dog/favorite-treat</code> attribute with &ldquo;Cheese&rdquo;.</p>
+
+<p><code>clojure
+'[:find [(pull ?dog [:dog/name :dog/breed]) ...]
+  :where [?dog :dog/favorite-treat "Cheese"]]
+</code></p>
+
+<p><strong>Human:</strong>  Then I put it together with the current database value in a <code>d/q</code> function?</p>
+
+<p>```clojure
+(d/q &lsquo;[:find [(pull ?dog [:dog/name :dog/breed]) &hellip;]</p>
+
+<pre><code>   :where [?dog :dog/favorite-treat "Cheese"]]
+ (d/db conn))
+</code></pre>
+
+<p>```</p>
+
+<p><strong>Datomic:</strong> Yup.  The answer is:</p>
+
+<p><code>clojure
+[{:dog/name "Fluffy", :dog/breed "Poodle"}
+ {:dog/name "Tiny", :dog/breed "Great Dane"}]
+</code></p>
+
+<p><strong>Human:</strong>  Thanks so much.  I think I beginning to get the hang of schemas and queries.  What other things do I need to know about you?</p>
+
+<p><strong>Datomic:</strong>  Well, you have just scratched the surface really.  One of the most interesting things about me is that I never forget facts.  You can add new facts, like Tiny&rsquo;s favorite food is now hotdogs, but I won&rsquo;t forget that he liked cheese at another point in time.</p>
+
+<p><strong>Human:</strong> That sounds really interesting.  I think I need some tea and cookies before I delve into that.  Let&rsquo;s take a short break and talk again soon.</p>
+
+<p><strong>Datomic:</strong>  My pleasure.  I look forward to it.</p>
+]]></content>
+  </entry>
+  
+</feed>
