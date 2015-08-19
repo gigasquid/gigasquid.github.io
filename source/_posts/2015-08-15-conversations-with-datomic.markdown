@@ -300,7 +300,7 @@ The $ is shorthand for the database value and the `?dog-name` is what you will p
 ```clojure
 (d/q '[:find ?owner-name
        :in $ ?dog-name
-       :where [?dog :dog/name "Tiny"]
+       :where [?dog :dog/name dog-name?]
               [?owner :owner/dogs ?dog]
               [?owner :owner/name ?owner-name]]
      (d/db conn) "Tiny")
