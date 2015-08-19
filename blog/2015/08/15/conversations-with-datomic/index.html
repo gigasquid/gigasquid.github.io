@@ -112,8 +112,6 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>`</p>
-
 <p>Then we can create the database and simply connect to it.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -138,7 +136,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span><span class="p">[</span><span class="ss">:db.part/db</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
 </span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/name</span>
 </span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
 </span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
@@ -148,10 +146,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p> This map is also considered a fact, that I call a  <em>datom</em>.  This datom is about the schema, which is about the possible attributes that an entity, (like a dog), can have. I will explain the different parts to you.</p>
+<p> This map is a set of facts, (called <em>datoms</em>),  about an entity.  In this
+ case, the entity is an attribute. Attributes, in turn, can be used to describe other entities, like a dog. I will explain the different parts to you.</p>
 
 <ul>
-<li><code>db/id</code> is the internal id of the fact. With <code>#db/id[:db.part/db]</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li>
+<li><code>db/id</code> is the internal id of the fact. With <code>(d/tempid :db.part/db)</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li>
 <li><code>db/ident</code> is the human readable reference for it. While I am fine just referring to the attribute by an id, humans prefer text.  This says that you can refer to this attribute by the namespaced keyword <code>:dog/name</code>.</li>
 <li><code>db/valueType</code> tells me the type of the attribute.  The dog&rsquo;s name is a string.</li>
 <li><code>db/cardinality</code> lets me know if there is a one-to-one relationship with the entity or not. In our case, a dog has only one name.</li>
@@ -169,7 +168,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span><span class="p">[</span><span class="ss">:db.part/db</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
 </span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/breed</span>
 </span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
 </span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
@@ -188,7 +187,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span><span class="p">[</span><span class="ss">:db.part/db</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
 </span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/favorite-treat</span>
 </span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
 </span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
@@ -231,20 +230,20 @@
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dog-schema</span>  <span class="p">[{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span><span class="p">[</span><span class="ss">:db.part/db</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dog-schema</span>  <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
 </span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/name</span>
 </span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
 </span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
 </span><span class='line'>                   <span class="ss">:db/unique</span> <span class="ss">:db.unique/identity</span>
 </span><span class='line'>                   <span class="ss">:db/doc</span> <span class="s">&quot;Name of the Dog&quot;</span>
 </span><span class='line'>                   <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span><span class="p">[</span><span class="ss">:db.part/db</span><span class="p">]</span>
+</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
 </span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/breed</span>
 </span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
 </span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
 </span><span class='line'>                   <span class="ss">:db/doc</span> <span class="s">&quot;Breed of the Dog&quot;</span>
 </span><span class='line'>                   <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span><span class="p">[</span><span class="ss">:db.part/db</span><span class="p">]</span>
+</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
 </span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/favorite-treat</span>
 </span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
 </span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
@@ -283,14 +282,14 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">owner-schema</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span><span class="p">[</span><span class="ss">:db.part/db</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">owner-schema</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
 </span><span class='line'>                    <span class="ss">:db/ident</span> <span class="ss">:owner/name</span>
 </span><span class='line'>                    <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
 </span><span class='line'>                    <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
 </span><span class='line'>                    <span class="ss">:db/unique</span> <span class="ss">:db.unique/identity</span>
 </span><span class='line'>                    <span class="ss">:db/doc</span> <span class="s">&quot;Name of the Owner&quot;</span>
 </span><span class='line'>                    <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                   <span class="p">{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span><span class="p">[</span><span class="ss">:db.part/db</span><span class="p">]</span>
+</span><span class='line'>                   <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
 </span><span class='line'>                    <span class="ss">:db/ident</span> <span class="ss">:owner/dogs</span>
 </span><span class='line'>                    <span class="ss">:db/valueType</span> <span class="ss">:db.type/ref</span>
 </span><span class='line'>                    <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/many</span>
@@ -307,7 +306,7 @@
 
 <p>I am a bit confused how to represent the dogs of the owners. How do I do that?</p>
 
-<p><strong>Datomic:</strong>  That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them.  Each dog or owner will by its own map.  Use <code>:db/id</code> set to <code>#db/id [:db.part/user]</code> so I can generate it for you.  Then use each attribute from the schema as the key and let me know the value.</p>
+<p><strong>Datomic:</strong>  That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them.  Each dog or owner will by its own map.  Use <code>:db/id</code> set to <code>(d/tempid :db.part/user)</code> so I can generate it for you.  Then use each attribute from the schema as the key and let me know the value.</p>
 
 <p><strong>Human:</strong>  Like this?</p>
 
@@ -327,19 +326,19 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span> <span class="p">[</span><span class="ss">:db.part/user</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
 </span><span class='line'>                   <span class="ss">:owner/name</span> <span class="s">&quot;Bob&quot;</span>
-</span><span class='line'>                   <span class="ss">:owner/dogs</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span> <span class="p">[</span><span class="ss">:db.part/user</span><span class="p">]</span>
+</span><span class='line'>                   <span class="ss">:owner/dogs</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
 </span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Fluffy&quot;</span>
 </span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Poodle&quot;</span>
 </span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
-</span><span class='line'>                                <span class="p">{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span> <span class="p">[</span><span class="ss">:db.part/user</span><span class="p">]</span>
+</span><span class='line'>                                <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
 </span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span>
 </span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Mix&quot;</span>
 </span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Bone&quot;</span><span class="p">}]}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span> <span class="p">[</span><span class="ss">:db.part/user</span><span class="p">]</span>
+</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
 </span><span class='line'>                   <span class="ss">:owner/name</span> <span class="s">&quot;Lucy&quot;</span>
-</span><span class='line'>                   <span class="ss">:owner/dogs</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="o">#</span><span class="nv">db/id</span> <span class="p">[</span><span class="ss">:db.part/user</span><span class="p">]</span>
+</span><span class='line'>                   <span class="ss">:owner/dogs</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
 </span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
 </span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
 </span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}]}])</span>
@@ -396,9 +395,9 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
-</span><span class='line'>  <span class="ss">:where</span> <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]</span>
+</span><span class='line'>  <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
 </span><span class='line'>         <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]]</span>
+</span><span class='line'>         <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -407,9 +406,9 @@
 <p><strong>Datomic:</strong> The things with the question marks are considered as variables that we will <em>unify</em> to find the answer.  For example, we are looking for something that we are going to call <code>?owner-name</code>. I am going the use the following constraints with my facts to try to find the answer:</p>
 
 <ul>
-<li>There is an entity that we are going to call <code>?owner</code> that has an attribute of <code>:owner/name</code> that has some value that we are going to refer to as <code>?owner-name</code></li>
-<li>This same <code>?owner</code> entity must have an attribute <code>:owner/dogs</code> that has some value that we will refer to as <code>?dog</code></li>
-<li>This <code>`?dog</code> is an entity that has an attribute <code>:dog/name</code> that also has the value of &ldquo;Tiny&rdquo;.</li>
+<li>There is an entity that we are going to call <code>?dog</code> that has the attribute <code>:dog/name</code> that is &ldquo;Tiny&rdquo;</li>
+<li>There is an entity that we are going to call <code>?owner</code> that has an attribute <code>:owner/dogs</code> that is the same as the <code>?dog</code> entity</li>
+<li>That same <code>?owner</code> entity also has an attribute <code>:owner/name</code> that has the value <code>?owner-name</code></li>
 </ul>
 
 
@@ -432,9 +431,9 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]</span>
+</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
 </span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]]</span>
+</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -473,14 +472,12 @@
 <span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
 </span><span class='line'>       <span class="ss">:in</span> <span class="nv">$</span> <span class="nv">?dog-name</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]</span>
+</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
 </span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="nv">?dog-name</span><span class="p">]]</span>
+</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="s">&quot;Tiny&quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>`</p>
 
 <p><strong>Datomic:</strong>  Exactly right.  The answer is Lucy again.</p>
 

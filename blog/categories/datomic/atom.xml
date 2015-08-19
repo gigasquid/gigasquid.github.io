@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-08-18T07:45:06-04:00</updated>
+  <updated>2015-08-18T20:54:09-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -49,11 +49,10 @@
 
 <p><strong>Datomic:</strong> For a casual conversation like this, we can use a in memory database with a uri like this:</p>
 
-<p>```clojure
-(def uri &ldquo;datomic:mem://first-conversation&rdquo;)
-````</p>
-
-<p>Then we can create the database and simply connect to it.</p>
+<p><code>clojure
+(def uri "datomic:mem://first-conversation")
+</code>
+Then we can create the database and simply connect to it.</p>
 
 <p><code>clojure
 (d/create-database uri)
@@ -69,7 +68,7 @@
 <p><strong>Datomic:</strong>  Ah.  Well the name of a dog is an attribute.  First, you need to tell me about the name attribute, so that I can use it to store the fact for you .  You can describe the attribute in the form of a map like this:</p>
 
 <p><code>clojure
-{:db/id #db/id[:db.part/db]
+{:db/id (d/tempid :db.part/db)
  :db/ident :dog/name
  :db/valueType :db.type/string
  :db/cardinality :db.cardinality/one
@@ -77,10 +76,11 @@
  :db/doc "Name of the Dog"
  :db.install/_attribute :db.part/db}
 </code>
- This map is also considered a fact, that I call a  <em>datom</em>.  This datom is about the schema, which is about the possible attributes that an entity, (like a dog), can have. I will explain the different parts to you.</p>
+ This map is a set of facts, (called <em>datoms</em>),  about an entity.  In this
+ case, the entity is an attribute. Attributes, in turn, can be used to describe other entities, like a dog. I will explain the different parts to you.</p>
 
 <ul>
-<li><code>db/id</code> is the internal id of the fact. With <code>#db/id[:db.part/db]</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li>
+<li><code>db/id</code> is the internal id of the fact. With <code>(d/tempid :db.part/db)</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li>
 <li><code>db/ident</code> is the human readable reference for it. While I am fine just referring to the attribute by an id, humans prefer text.  This says that you can refer to this attribute by the namespaced keyword <code>:dog/name</code>.</li>
 <li><code>db/valueType</code> tells me the type of the attribute.  The dog&rsquo;s name is a string.</li>
 <li><code>db/cardinality</code> lets me know if there is a one-to-one relationship with the entity or not. In our case, a dog has only one name.</li>
@@ -93,7 +93,7 @@
 <p><strong>Human:</strong> I think I understand. Let me try one out for myself.  So dog breed would be this?</p>
 
 <p><code>clojure
-{:db/id #db/id[:db.part/db]
+{:db/id (d/tempid :db.part/db)
  :db/ident :dog/breed
  :db/valueType :db.type/string
  :db/cardinality :db.cardinality/one
@@ -106,7 +106,7 @@
 <p><strong>Human:</strong> Ok.  How about the dog&rsquo;s favorite treat?</p>
 
 <p><code>clojure
-{:db/id #db/id[:db.part/db]
+{:db/id (d/tempid :db.part/db)
  :db/ident :dog/favorite-treat
  :db/valueType :db.type/string
  :db/cardinality :db.cardinality/one
@@ -127,7 +127,7 @@
 <p><strong>Human:</strong> Sounds good.  I will put the dog schema datoms we discussed in a vector and call it <code>dog-schema</code> and then send it to you.</p>
 
 <p>```clojure
-(def dog-schema  [{:db/id #db/id[:db.part/db]</p>
+(def dog-schema  [{:db/id (d/tempid :db.part/db)</p>
 
 <pre><code>               :db/ident :dog/name
                :db/valueType :db.type/string
@@ -135,13 +135,13 @@
                :db/unique :db.unique/identity
                :db/doc "Name of the Dog"
                :db.install/_attribute :db.part/db}
-              {:db/id #db/id[:db.part/db]
+              {:db/id (d/tempid :db.part/db)
                :db/ident :dog/breed
                :db/valueType :db.type/string
                :db/cardinality :db.cardinality/one
                :db/doc "Breed of the Dog"
                :db.install/_attribute :db.part/db}
-              {:db/id #db/id[:db.part/db]
+              {:db/id (d/tempid :db.part/db)
                :db/ident :dog/favorite-treat
                :db/valueType :db.type/string
                :db/cardinality :db.cardinality/one
@@ -166,7 +166,7 @@
 <p><strong>Human:</strong>  Cool.  Well, in that case, here is the owner schema.  The owner has a name and some dogs.</p>
 
 <p>```clojure
-(def owner-schema [{:db/id #db/id[:db.part/db]</p>
+(def owner-schema [{:db/id (d/tempid :db.part/db)</p>
 
 <pre><code>                :db/ident :owner/name
                 :db/valueType :db.type/string
@@ -174,7 +174,7 @@
                 :db/unique :db.unique/identity
                 :db/doc "Name of the Owner"
                 :db.install/_attribute :db.part/db}
-               {:db/id #db/id[:db.part/db]
+               {:db/id (d/tempid :db.part/db)
                 :db/ident :owner/dogs
                 :db/valueType :db.type/ref
                 :db/cardinality :db.cardinality/many
@@ -191,25 +191,25 @@
 
 <p>I am a bit confused how to represent the dogs of the owners. How do I do that?</p>
 
-<p><strong>Datomic:</strong>  That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them.  Each dog or owner will by its own map.  Use <code>:db/id</code> set to <code>#db/id [:db.part/user]</code> so I can generate it for you.  Then use each attribute from the schema as the key and let me know the value.</p>
+<p><strong>Datomic:</strong>  That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them.  Each dog or owner will by its own map.  Use <code>:db/id</code> set to <code>(d/tempid :db.part/user)</code> so I can generate it for you.  Then use each attribute from the schema as the key and let me know the value.</p>
 
 <p><strong>Human:</strong>  Like this?</p>
 
 <p>```clojure
-(d/transact conn [{:db/id #db/id [:db.part/user]</p>
+(d/transact conn [{:db/id (d/tempid :db.part/user)</p>
 
 <pre><code>               :owner/name "Bob"
-               :owner/dogs [{:db/id #db/id [:db.part/user]
+               :owner/dogs [{:db/id (d/tempid :db.part/user)
                              :dog/name "Fluffy"
                              :dog/breed "Poodle"
                              :dog/favorite-treat "Cheese"}
-                            {:db/id #db/id [:db.part/user]
+                            {:db/id (d/tempid :db.part/user)
                              :dog/name "Fido"
                              :dog/breed "Mix"
                              :dog/favorite-treat "Bone"}]}
-              {:db/id #db/id [:db.part/user]
+              {:db/id (d/tempid :db.part/user)
                :owner/name "Lucy"
-               :owner/dogs [{:db/id #db/id [:db.part/user]
+               :owner/dogs [{:db/id (d/tempid :db.part/user)
                              :dog/name "Tiny"
                              :dog/breed "Great Dane"
                              :dog/favorite-treat "Cheese"}]}])
@@ -257,10 +257,10 @@
 
 <p>```clojure
 &lsquo;[:find ?owner-name
-  :where [?owner :owner/name ?owner-name]</p>
+  :where [?dog :dog/name &ldquo;Tiny&rdquo;]</p>
 
 <pre><code>     [?owner :owner/dogs ?dog]
-     [?dog :dog/name "Tiny"]]
+     [?owner :owner/name ?owner-name]]
 </code></pre>
 
 <p>```</p>
@@ -270,9 +270,9 @@
 <p><strong>Datomic:</strong> The things with the question marks are considered as variables that we will <em>unify</em> to find the answer.  For example, we are looking for something that we are going to call <code>?owner-name</code>. I am going the use the following constraints with my facts to try to find the answer:</p>
 
 <ul>
-<li>There is an entity that we are going to call <code>?owner</code> that has an attribute of <code>:owner/name</code> that has some value that we are going to refer to as <code>?owner-name</code></li>
-<li>This same <code>?owner</code> entity must have an attribute <code>:owner/dogs</code> that has some value that we will refer to as <code>?dog</code></li>
-<li>This <code>`?dog</code> is an entity that has an attribute <code>:dog/name</code> that also has the value of &ldquo;Tiny&rdquo;.</li>
+<li>There is an entity that we are going to call <code>?dog</code> that has the attribute <code>:dog/name</code> that is &ldquo;Tiny&rdquo;</li>
+<li>There is an entity that we are going to call <code>?owner</code> that has an attribute <code>:owner/dogs</code> that is the same as the <code>?dog</code> entity</li>
+<li>That same <code>?owner</code> entity also has an attribute <code>:owner/name</code> that has the value <code>?owner-name</code></li>
 </ul>
 
 
@@ -291,9 +291,9 @@
 <p>```clojure
 (d/q &lsquo;[:find ?owner-name</p>
 
-<pre><code>   :where [?owner :owner/name ?owner-name]
+<pre><code>   :where [?dog :dog/name "Tiny"]
           [?owner :owner/dogs ?dog]
-          [?dog :dog/name "Tiny"]]
+          [?owner :owner/name ?owner-name]]
  (d/db conn))
 </code></pre>
 
@@ -327,13 +327,13 @@
 (d/q &lsquo;[:find ?owner-name</p>
 
 <pre><code>   :in $ ?dog-name
-   :where [?owner :owner/name ?owner-name]
+   :where [?dog :dog/name "Tiny"]
           [?owner :owner/dogs ?dog]
-          [?dog :dog/name ?dog-name]]
+          [?owner :owner/name ?owner-name]]
  (d/db conn) "Tiny")
 </code></pre>
 
-<p>````</p>
+<p>```</p>
 
 <p><strong>Datomic:</strong>  Exactly right.  The answer is Lucy again.</p>
 
