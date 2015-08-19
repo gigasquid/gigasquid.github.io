@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-08-18T20:54:09-04:00</updated>
+  <updated>2015-08-18T22:40:50-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -327,7 +327,7 @@ Then we can create the database and simply connect to it.</p>
 (d/q &lsquo;[:find ?owner-name</p>
 
 <pre><code>   :in $ ?dog-name
-   :where [?dog :dog/name "Tiny"]
+   :where [?dog :dog/name dog-name?]
           [?owner :owner/dogs ?dog]
           [?owner :owner/name ?owner-name]]
  (d/db conn) "Tiny")
