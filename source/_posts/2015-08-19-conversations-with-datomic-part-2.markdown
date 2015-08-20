@@ -190,7 +190,7 @@ Yes, it is a "Bone".
 
 Fido now has a favorite-treat of "Eggs".
 
-**Human:** This is really cool.  You _never_ forget any facts?
+**Human:** This is really neat.  You _never_ forget any facts?
 
 **Datomic:** Nope. Well, except in really exceptional circumstances that usually involve lawyers.
 
@@ -202,9 +202,9 @@ Fido now has a favorite-treat of "Eggs".
 
 **Datomic:** I prefer to keep all my facts intact.
 
-**Human:** I can definitely see that. Well, on a happier subject, I have been very impressed with you during our conversations.  Having a time traveling database that can reason about facts seems like a really useful thing.  You are also really nice.
+**Human:** I can definitely see that. Well, on a happier subject, I have been very impressed with you during our conversations.  Having a time traveling database that can reason about facts seems like a really useful thing.  Also, you are also really nice.
 
-**Datomic:** Awww shucks, thanks.  You are really nice for a human too.
+**Datomic:** Awww shucks, thanks.  For a human, you are really nice too.
 
 **Human:** I was thinking about the possibility of you coming and working with me every day. Would you mind chatting some more to me about your architecture?  I want to understand how your would fit with our other systems.
 
