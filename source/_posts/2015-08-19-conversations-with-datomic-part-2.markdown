@@ -11,6 +11,8 @@ categories:
 
 {% img https://avatars0.githubusercontent.com/u/1478702?v=3&s=200 %}
 
+_The following is a continuation of the first [conversation](http://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/) which touched on schema creation and querying.  This conversation includes learning new facts, time, and the sometimes unfortunate reality of lawyers._
+
 **Human:**  Hi [Datomic](http://www.datomic.com/).  I am back from my tea and cookies break.  I really enjoyed talking with you, could we continue our conversation?
 
 **Datomic:** Certainly.  Let me see, where did we leave off?
@@ -23,7 +25,7 @@ categories:
 
 **Datomic:** Sure.  I learn facts when you tell me to _add_ a new fact about some entity, or to _retract_ a fact about it.  It will probably make more sense with an example.  Let's take the dog with the name "Tiny" that I know about.  Could you please ask me about the dog and all of the attributes?
 
-**Human:**  Ok.
+**Human:** Alright.
 
 ```clojure
 (d/pull (d/db conn) '[*] [:dog/name "Tiny"])
@@ -32,7 +34,10 @@ categories:
 **Datomic:**
 
 ```clojure
-{:db/id 17592186045423, :dog/name "Tiny", :dog/breed "Great Dane", :dog/favorite-treat "Cheese"}
+{:db/id 17592186045423
+ :dog/name "Tiny"
+ :dog/breed "Great Dane"
+ :dog/favorite-treat "Cheese"}
 ```
 There is an entity (dog) with the name "Tiny" who is a Great Dane and his favorite-treat is Cheese.  I am not really sure why the Cheese is capitalized, but I am sure it makes sense to a human.
 
@@ -49,10 +54,21 @@ There is an entity (dog) with the name "Tiny" who is a Great Dane and his favori
 
 **Datomic:** Exactly.  I have retracted that fact about "Tiny".  Go ahead and ask me about all of Tiny's attributes again.
 
-**Human:**.  Alright.
+**Human:**  Ok.  I use `(d/db conn)` for the current database value right?
+
+**Datomic:** Yes. But if you are going to be asking me multiple questions about this database value, you should not repeat the `(d/db conn)` all the time.
+
+**Human:** Oh. What should I do instead?
+
+**Datomic:** The connection with me is like a ref.  Just like other refs, you should deref it once to get the database value and then use the value repeatedly. This single database value will provide consistency for all your queries.
+
+**Human:** That makes sense.
+
 
 ```clojure
-(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
+(def db-tiny-no-cheese (d/db conn))
+
+(d/pull db-tiny-no-cheese '[*] [:dog/name "Tiny"])
 ```
 
 **Datomic:**
@@ -66,7 +82,7 @@ Tiny is a Great Dane.
 
 **Human:** So you don't know anything about the `:dog/favorite-treat` for "Tiny"?
 
-**Datomic:** At this particular time, I do not have anything to assert about the favorite-treat of Tiny.  However, I still remember everything about all the facts that you have told me.  For each transaction that you send me, I have a notion of a point in time like _t0_, _t1_, _t2_.  I have a complete database value for each one of those points in time.  In fact, you can look at _all_ of my assertions and retractions that I have learned about using the `d/history` function on the connection.  It will return back a special database containing all the _datoms_ with an additional field.
+**Datomic:** At this particular time, I do not have anything to assert about the favorite-treat of Tiny.  However, I still remember everything about all the facts that you have told me.  For each transaction that you send me, I have a notion of a point in time like _t0_, _t1_, _t2_.  I have a complete database value for each one of those points in time.  In fact, you can look at _all_ of my assertions and retractions that I have learned about using the `d/history` function on the database value.  This asks me to expose my history, which is normally hidden in favor of the _present_. I will return back a special database containing all the _datoms_ with an additional field.
 
 **Human:**  What is the additional field?
 
@@ -88,7 +104,7 @@ which will return all the entity, attribute, value, transaction, and operation f
        :in $
        :where [?e :dog/name "Tiny"]
        [?e ?a ?v ?tx ?op]]
-  (d/history (d/db conn)))
+  (d/history db-tiny-no-cheese))
 ```
 
 **Datomic:**
@@ -110,12 +126,12 @@ During another transaction, you told me to retract a fact regarding the attribut
 
 **Human:** Wow, that is really cool.  Is there a way that I can _travel back in time_ to see the world as it was during that first transaction?
 
-**Datomic:** Yes.  I am practically a Tardis.  You can use the `d/as-of` function with a connection and the transaction number and you can time travel.  Using that database value, you can ask me about all the facts I knew as of that time.
+**Datomic:** Yes.  I am practically a Tardis.  You can use the `d/as-of` function with a database value and the transaction number and you can time travel.  Using that _time traveled_ database value, you can ask me about all the facts I knew as of that time.
 
 **Human:** I can't wait to try this.  Ok, let's go back to the time when I first asserted the fact that Tiny liked cheese.
 
 ```clojure
-(d/pull (d/as-of (d/db conn) 13194139534314) '[*] [:dog/name "Tiny"])
+(d/pull (d/as-of db-tiny-no-cheese 13194139534314) '[*] [:dog/name "Tiny"])
 ```
 
 **Datomic:**  Hold on.  We are time traveling!
@@ -131,12 +147,12 @@ Tiny is a Great Dane whose favorite treat is Cheese.
 
 **Human:** Fantastic! Let's go back to the future now, ummm I mean present. Time is a bit wibbly wobbly.
 
-**Datomic:** Keep with `(d/db conn)` to get my latest view of the world.  It makes things simpler for humans.
+**Datomic:** Just take the `as-of` function off of the database value and you will be back in the _present_.
 
 **Human:** Hmmm... Do I have to do a _retract_ every time I want to change a value?  For example, the dog named Fido has a favorite treat of a Bone right now, right?
 
 ```clojure
-(d/pull (d/db conn) '[*] [:dog/name "Fido"])
+(d/pull db-tiny-no-cheese '[*] [:dog/name "Fido"])
 ```
 
 **Datomic:**
