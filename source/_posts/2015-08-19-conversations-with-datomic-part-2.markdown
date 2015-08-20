@@ -166,7 +166,7 @@ Tiny is a Great Dane whose favorite treat is Cheese.
 
 Yes, it is a "Bone".
 
-**Human:** So, if I want to change it to be "Eggs".  Do I need to retract the current value of "Bone" first and then add the fact of "Eggs"?
+**Human:** So, if I want to change it to be "Eggs",  do I need to retract the current value of "Bone" first and then add the fact of "Eggs"?
 
 **Datomic:** You certainly could do that and I would understand you perfectly.  However, if you simply assert a new value for an existing attribute, I will automatically add the retraction for you.
 
