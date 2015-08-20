@@ -82,11 +82,11 @@ Tiny is a Great Dane.
 
 **Human:** So you don't know anything about the `:dog/favorite-treat` for "Tiny"?
 
-**Datomic:** At this particular time, I do not have anything to assert about the favorite-treat of Tiny.  However, I still remember everything about all the facts that you have told me.  For each transaction that you send me, I have a notion of a point in time like _t0_, _t1_, _t2_.  I have a complete database value for each one of those points in time.  In fact, you can look at _all_ of my assertions and retractions that I have learned about using the `d/history` function on the database value.  This asks me to expose my history, which is normally hidden in favor of the _present_. I will return back a special database containing all the _datoms_ with an additional field.
+**Datomic:** At this particular time, I do not have anything to assert about the favorite-treat of Tiny.  However, I still remember everything about all the facts that you have told me.  For each transaction that you send me, I have a notion of a point in time like _t0_, _t1_, _t2_.  I have a complete database value for each one of those points in time.  In fact, you can look at _all_ of my assertions and retractions that I have learned about using the `d/history` function on the database value.  This asks me to expose my history, which is normally hidden in favor of the _present_. I will return back a special database containing all the assertions and retractions across time.  Any queries that you ask me will have a fifth _datom_ field to help you distinguish the difference.
 
-**Human:**  What is the additional field?
+**Human:**  A fifth datom field?
 
-**Datomic:** Normally, a _datom_ consists of 4 parts: the entity, the attribute, the value, and the transaction (e a v tx).  This history database adds a fifth part to this datom, operation, which tells you if the fact was added or retracted (e a v tx op).  Why don't you try using the `d/history` function to ask me about all the facts having to do with Tiny?  I suggest using the datalog query
+**Datomic:** A _datom_ consists of the following parts: the entity, the attribute, the value, transaction, and an operation which tells you if the fact was added or retracted (e a v tx op).  Why don't you try using the `d/history` function to ask me about all the facts having to do with Tiny?  I suggest using the datalog query
 
 ```clojure
 '[:find ?e ?a ?v ?tx ?op
