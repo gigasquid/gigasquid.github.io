@@ -792,7 +792,7 @@
 <span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
 </span><span class='line'>       <span class="ss">:in</span> <span class="nv">$</span> <span class="nv">?dog-name</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="nv">dog-name?</span><span class="p">]</span>
+</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="nv">?dog-name</span><span class="p">]</span>
 </span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
 </span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="s">&quot;Tiny&quot;</span><span class="p">)</span>
