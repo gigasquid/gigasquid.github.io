@@ -357,3 +357,5 @@ The `where` section of the query is going to look for the `?dog` entity that mat
 
 _Special thanks to [Paul deGrandis](https://twitter.com/ohpauleez) for
 the conversation idea :)_
+
+_(P.S. Humans, there are some great [Datomic Training Videos](http://www.datomic.com/training.html) if you want to learn more)_

@@ -211,3 +211,5 @@ Fido now has a favorite-treat of "Eggs".
 **Datomic:** Certainly. I would love that.  Do you want to talk about it now, or have another cookie break first?
 
 **Human:** Now that you mention cookies... Let's take a short break and we will talk again soon.
+
+_(P.S. Humans, there are some great [Datomic Training Videos](http://www.datomic.com/training.html) if you want to learn more)_
