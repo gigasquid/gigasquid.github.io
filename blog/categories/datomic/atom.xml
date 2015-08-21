@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-08-20T19:49:59-04:00</updated>
+  <updated>2015-08-20T21:30:35-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -230,6 +230,8 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 <p><strong>Datomic:</strong> Certainly. I would love that.  Do you want to talk about it now, or have another cookie break first?</p>
 
 <p><strong>Human:</strong> Now that you mention cookies&hellip; Let&rsquo;s take a short break and we will talk again soon.</p>
+
+<p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
 ]]></content>
   </entry>
   
@@ -608,6 +610,8 @@ Then we can create the database and simply connect to it.</p>
 
 <p><em>Special thanks to <a href="https://twitter.com/ohpauleez">Paul deGrandis</a> for
 the conversation idea :)</em></p>
+
+<p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
 ]]></content>
   </entry>
   
