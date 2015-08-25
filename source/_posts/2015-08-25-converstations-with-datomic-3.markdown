@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Conversations with Datomic - Part 3"
-date: 2015-08-22 10:28
+date: 2015-08-25 10:28
 comments: true
 categories:
 - All
@@ -70,7 +70,7 @@ The final D in _ACID_ is for Durability.  Once a transaction has been committed 
 
 **Human:** Which one is the best to use?
 
-**Datomic:** **The best one to use is the one that you are already have in place at work**.  This way, I can integrate seamlessly with your other systems.
+**Datomic:** _The best one to use is the one that you are already have in place at work_.  This way, I can integrate seamlessly with your other systems.
 
 **Human:** Oh, we didn't really talk about caching.  Can you explain how you do that?
 
@@ -100,11 +100,11 @@ Each peer has a its own _working set_ of recent datoms along with a index to all
 **Datomic:** I really excel at reads.  All you have to do is elastically add another peer to me for querying.  I am not really a good fit for write scale, like big data, or log file analysis.  You will find me most happy with data that is valuable information of record and has history that is important, like transaction, medical, or inventory data.  I am also really good at being flexible for development and operations since I can use many different types of storage.  I have worked with many web and cloud apps.
 
 
-**Human:** Thanks for answering all my questions.  I think you would fit in quite well with our other systems.  I would be happy to have you come and work with us.
+**Human:** Thanks for answering all my questions.  I think you might fit in quite well with our other systems.
 
 **Datomic:** Great!
 
-**Human:** One more thing, this conversation has been great, but do you have any training resources for me and  my other human coworkers?
+**Human:** One more thing, this conversation has been great, but do you have any training resources for me and my other human coworkers?
 
 **Datomic:** Sure thing. There are a few really good resources on the [Datomic Training Site](http://www.datomic.com/training.html).  I would suggest watching the videos there and pairing them with:
 
@@ -113,6 +113,8 @@ Each peer has a its own _working set_ of recent datoms along with a index to all
 * [Tne Datomic Development Resources](http://docs.datomic.com/), which include the docs on the [Clojure API](http://docs.datomic.com/clojure/index.html)
 
 
-Also, if you are still wondering if your data is good fit for me, I suggest you describe your data to the [Datomic Google Group](https://groups.google.com/forum/#!forum/datomic).  They are a good group of humans and will be able to tell you.
+Also, if you want to confirm that your data is good fit for me, I suggest you describe your data to the [Datomic Google Group](https://groups.google.com/forum/#!forum/datomic).  They are nice and knowledgeable group of humans.
 
-**Human:** Thanks Datomic!  That is an excellent suggestion.  I will grab another cookie do just that.
+**Human:** Thanks again Datomic!  I will grab another cookie and check it out!
+
+**Datomic:** What is it with humans and cookies?...
