@@ -6,7 +6,8 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Aug 19th, 2015 Tags: All, Clojure, Datomic The following is a continuation of the first conversation which touched on schema creation &hellip;">
+	<meta name="description" content="Published on: Aug 25th, 2015 Tags: All, Clojure, Datomic This is a continuation of the first and
+second conversations in which topics such as &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +74,159 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/08/25/converstations-with-datomic-3/">
+		
+			Conversations With Datomic - Part 3</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-08-25T10:28:00-04:00" pubdate data-updated="true">Aug 25<span>th</span>, 2015</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/datomic/'>Datomic</a>
+
+
+</div>
+    </div>
+		<p><img src="https://avatars0.githubusercontent.com/u/1478702?v=3&s=200"></p>
+
+<p><em>This is a continuation of the <a href="http://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/">first</a> and
+<a href="http://gigasquidsoftware.com/blog/2015/08/19/conversations-with-datomic-part-2/">second</a> conversations in which topics such as creating databases,
+learning facts, querying, and time traveling were discussed.  Today&rsquo;s topics include architecture, caching, and scaling.</em></p>
+
+<p><strong>Human:</strong>  Hello again <a href="http://www.datomic.com/">Datomic</a>. Ready to talk again?</p>
+
+<p><strong>Datomic:</strong> Sure.  I think you wanted to ask me some questions about how I would fit in with your other systems.</p>
+
+<p><strong>Human:</strong> Yes.  Like I was saying earlier, I think your abilities to learn facts, reason about them, and keep track of the history of all those facts is really great.
+I am interested in having you work with me every day, but first I want to understand your components so that I can make sure you are a good fit for us.</p>
+
+<p><strong>Datomic:</strong> I would be happy to explain my architecture to you.  Perhaps showing you this picture is the best way to start.</p>
+
+<p><img src="http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg"></p>
+
+<p>I am made of three main parts: my <em>transactors</em>, my <em>peers</em>, and my <em>storage</em>.</p>
+
+<p><strong>Human</strong>:  What is a <em>peer</em>?</p>
+
+<p><strong>Datomic</strong>:  A <em>peer</em> is an application that is using the peer library.  In our last conversations,  we were talking through the Clojure api with <code>datomic.api</code>.  The application, or process, that is running this api is called a peer.  There can be many of these, all having conversations with me.</p>
+
+<p><strong>Human</strong>: The peers then talk to your <em>transactor</em>?</p>
+
+<p><strong>Datomic</strong> Yes. The peers talk to my transactor whenever you call <code>transact</code> with the peer library.  It is the central coordinator between all the peers and processes the requests using <em>ACID</em> transactions, and then sends the facts off to storage.</p>
+
+<p><strong>Human:</strong>  Could you remind me what <em>ACID</em> stands for again?  I always forget.  The first one is <em>Atomic</em> right?</p>
+
+<p><strong>Datomic:</strong> That is right.  I am <em>Atomic</em> in that every transaction you send to me is all or nothing.  If for some reason, one part of it fails, I will reject the entire transaction and leave my database unchanged.</p>
+
+<p>The C is for <em>Consistency</em>.  This means that I provide every peer with a consistent view of facts over time and transactions.  I provide a global ordering of transactions across all the peers with my transactor and peers will always see all the transactions up to their current time without any gaps.</p>
+
+<p><strong>Human:</strong> What if a peer is behind the global time?  How do they catch up to know about the new facts that were transacted by a different peer?</p>
+
+<p><strong>Datomic:</strong> After one peer sends me a successful transaction with some new facts, I will notify all the peers about them.</p>
+
+<p><strong>Human:</strong> Cool. That takes care of the A and C in ACID. What about the I?</p>
+
+<p><strong>Datomic:</strong> It stands for Isolated.  It makes sure that even through there are many peers having conversations with me, transactions are executed serially.  This happens naturally with my transactor.  Since there is only one transactor, transactions are always executed serially.</p>
+
+<p><strong>Human</strong>:  In the picture, why are there are two transactors then?</p>
+
+<p><strong>Datomic</strong>:  Oh, that is for High Availability.  When I startup my system, I can launch two running transactors, but hold one in reserve.  Just on the off chance something happens to the main one, I will swap in the failover one to keep things running smoothly.</p>
+
+<p>The final D in <em>ACID</em> is for Durability.  Once a transaction has been committed by my transactor, it is shipped off to storage for safe keeping.</p>
+
+<p><strong>Human:</strong> What exactly is this storage?</p>
+
+<p><strong>Datomic:</strong> Instead of storing datoms, I send <em>segments</em>, which are closely related datoms,  to storage.  I have quite a few options for storage:</p>
+
+<ul>
+<li>Dev mode &ndash; which just runs within my transactor and writes to the local file system.</li>
+<li>SQL database</li>
+<li>DynamoDB</li>
+<li>Cassandra</li>
+<li>Riak</li>
+<li>Couchbase</li>
+<li>Infispan memory cluster</li>
+</ul>
+
+
+<p><strong>Human:</strong> Which one is the best to use?</p>
+
+<p><strong>Datomic:</strong> <em>The best one to use is the one that you are already have in place at work</em>.  This way, I can integrate seamlessly with your other systems.</p>
+
+<p><strong>Human:</strong> Oh, we didn&rsquo;t really talk about caching.  Can you explain how you do that?</p>
+
+<p><strong>Datomic:</strong> Certainly.  It is even worth another picture.</p>
+
+<p><img src="http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg"></p>
+
+<p>Each peer has a its own <em>working set</em> of recent datoms along with a index to all the rest of the datoms in storage in memory.  When the peer has a query for a datom, it first checks to see if it has it locally in its memory cache.  If it can&rsquo;t find it there, then it will ask for a segment of that datom from storage.  Storage will return that datom along with other related datoms in that segment so that the peer can cache that in memory to make it faster for the next query.</p>
+
+<p><strong>Human:</strong> That seems really different from other databases, where the client constantly requests queries from a server.</p>
+
+<p><strong>Datomic:</strong> Yes.  When most questions can be answered from the local memory, responses are really fast.  You don&rsquo;t need to hit storage unless you really need too.  You can even add an extra layer of caching with memcached.</p>
+
+<p><strong>Human:</strong> That sounds great.  I can&rsquo;t wait tell you about all of our data.  We talked a bit about your querying ability earlier, can you do the same queries that our other standard relational databases do, like joins?</p>
+
+<p><strong>Datomic:</strong> Oh yes.  In fact, with me, you don&rsquo;t need to specify your joins explicitly.  I use <em>Datalog</em>, which is based on logic, so my joins are implicit.  I will figure out exactly what I need to put together to answer your query without you having to spell it out for me.</p>
+
+<p><strong>Human:</strong> Ok.  I know that I can map some of my data that is already in other database tables to you.  What about other types of irregular data, like graphs, or sparse data.</p>
+
+<p><strong>Datomic:</strong> I am actually very proud of my data model.  It is extremely flexible.  Since I store things on such a granular datom level, you don&rsquo;t need to map your logical data model to my physical model.  I can handle <em>rectangular</em> table shaped data quite happily along with graph data, sparse data, or other <em>non-rectangular</em> data.</p>
+
+<p><strong>Human:</strong> That sounds great.  What do I need to know about your scaling?</p>
+
+<p><strong>Datomic:</strong> I really excel at reads.  All you have to do is elastically add another peer to me for querying.  I am not really a good fit for write scale, like big data, or log file analysis.  You will find me most happy with data that is valuable information of record and has history that is important, like transaction, medical, or inventory data.  I am also really good at being flexible for development and operations since I can use many different types of storage.  I have worked with many web and cloud apps.</p>
+
+<p><strong>Human:</strong> Thanks for answering all my questions.  I think you might fit in quite well with our other systems.</p>
+
+<p><strong>Datomic:</strong> Great!</p>
+
+<p><strong>Human:</strong> One more thing, this conversation has been great, but do you have any training resources for me and my other human coworkers?</p>
+
+<p><strong>Datomic:</strong> Sure thing. There are a few really good resources on the <a href="http://www.datomic.com/training.html">Datomic Training Site</a>.  I would suggest watching the videos there and pairing them with:</p>
+
+<ul>
+<li><a href="https://github.com/stuarthalloway/presentations/blob/master/Nov2014/DayOfDatomicNov2014.pdf?raw=true">The slides for the videos</a> which have the labs to work through form the videos.</li>
+<li><a href="https://github.com/Datomic/day-of-datomic">The Day of Datomic Repo</a> which has lots of great examples to play with.</li>
+<li><a href="http://docs.datomic.com/">Tne Datomic Development Resources</a>, which include the docs on the <a href="http://docs.datomic.com/clojure/index.html">Clojure API</a></li>
+</ul>
+
+
+<p>Also, if you want to confirm that your data is good fit for me, I suggest you describe your data to the <a href="https://groups.google.com/forum/#!forum/datomic">Datomic Google Group</a>.  They are nice and knowledgeable group of humans.</p>
+
+<p><strong>Human:</strong> Thanks again Datomic!  I will grab another cookie and check it out!</p>
+
+<p><strong>Datomic:</strong> What is it with humans and cookies?&hellip;</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2015/08/25/converstations-with-datomic-3//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1665,299 +1819,6 @@ any tips, let me know.</p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2014/10/31/notes-and-tips-on-working-from-home//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/09/06/green-eggs-and-transducers/">
-		
-			Green Eggs and Transducers</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-06T15:47:00-04:00" pubdate data-updated="true">Sep 6<span>th</span>, 2014</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
-
-
-</div>
-    </div>
-		<p><img src="http://upload.wikimedia.org/wikipedia/en/c/c2/Greenegg.gif"></p>
-
-<p>A quick tour of Clojure Transducers with core.async with Dr. Seuss as a guide.</p>
-
-<p>Follow along at home by:</p>
-
-<ul>
-<li><code>lein new green-eggs</code></li>
-<li>modify your project.clj to include the following:</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defproject </span><span class="nv">green-eggs</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
-</span><span class='line'>  <span class="ss">:description</span> <span class="s">&quot;try them&quot;</span>
-</span><span class='line'>  <span class="ss">:url</span> <span class="s">&quot;http://en.wikipedia.org/wiki/Green_Eggs_and_Ham&quot;</span>
-</span><span class='line'>  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Eclipse Public License&quot;</span>
-</span><span class='line'>            <span class="ss">:url</span> <span class="s">&quot;http://www.eclipse.org/legal/epl-v10.html&quot;</span><span class="p">}</span>
-</span><span class='line'>  <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">org.clojure/clojure</span> <span class="s">&quot;1.7.0-alpha1&quot;</span><span class="p">]</span>
-</span><span class='line'>                 <span class="p">[</span><span class="nv">org.clojure/core.async</span> <span class="s">&quot;0.1.338.0-5c5012-alpha&quot;</span><span class="p">]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Start up a repl and hack in!</li>
-</ul>
-
-
-<h2>Green Eggs and Ham</h2>
-
-<p>Transducers are a new feature of Clojure 1.7.  Instead of trying to explain them with words, let&rsquo;s take a look of them in action.  First we need some data.  Let&rsquo;s def a vector of all the places you could try green eggs and ham.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">green-eggs.core</span>
-</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.async</span> <span class="ss">:as</span> <span class="nv">async</span><span class="p">]))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">green-eggs-n-ham</span>
-</span><span class='line'>  <span class="p">[</span><span class="s">&quot;in the rain&quot;</span>
-</span><span class='line'>   <span class="s">&quot;on a train&quot;</span>
-</span><span class='line'>   <span class="s">&quot;in a box&quot;</span>
-</span><span class='line'>   <span class="s">&quot;with a fox&quot;</span>
-</span><span class='line'>   <span class="s">&quot;in a house&quot;</span>
-</span><span class='line'>   <span class="s">&quot;with a mouse&quot;</span>
-</span><span class='line'>   <span class="s">&quot;here or there&quot;</span>
-</span><span class='line'>   <span class="s">&quot;anywhere&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Next, let&rsquo;s create a function that will transform the places into a &ldquo;I would not eat them &hellip;&rdquo; sentence.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">i-do-not-like-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;I would not eat them %s.&quot;</span> <span class="nv">s</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">i-do-not-like-them</span> <span class="s">&quot;in the rain&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; -&gt; &quot;I would not eat them in the rain.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We also need a function to take this result and actually try the green eggs and ham.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">try-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">clojure.string/replace</span> <span class="nv">s</span>  <span class="o">#</span><span class="s">&quot; not&quot;</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">try-them</span> <span class="s">&quot;I would not eat them in the rain.&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we have two transformations that we can apply to the vector of green-eggs-n-ham strings.
-One of the really nice things about transducers is that you can describe and compose this transformation without a data structure present.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-xform</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">comp</span>
-</span><span class='line'>   <span class="p">(</span><span class="nb">map </span><span class="nv">i-do-not-like-them</span><span class="p">)</span>
-</span><span class='line'>   <span class="p">(</span><span class="nb">map </span><span class="nv">try-them</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can run the transformation of the transducers against the data in a few ways.</p>
-
-<ul>
-<li><em>into</em>: Non-lazy turn the transformation into a collection</li>
-<li><em>sequence</em>: Same thing but lazy</li>
-<li><em>transduce</em>: Acts like reduce on the all the transformed elements</li>
-<li>With <em>core.async</em> channels doing the transformations.</li>
-</ul>
-
-
-<p>Let&rsquo;s look at the green eggs and ham example for each one of these ways:</p>
-
-<h3>Into</h3>
-
-<p>Into takes a transducer and collection to work on and returns the vector we asked for:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; -&gt; [&quot;I would eat them in the rain.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them on a train.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them in a box.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them with a fox.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them in a house.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them with a mouse.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them here or there.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them anywhere.&quot;]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Sequence</h3>
-
-<p>Sequence takes similar arguments, but as promised, returns a lazy sequence that we can interact with.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">class </span><span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
-</span><span class='line'><span class="c1">;; -&gt; clojure.lang.LazyTransformer</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">1</span> <span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
-</span><span class='line'><span class="c1">;; -&gt; (&quot;I would eat them in the rain.&quot;)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Transduce</h3>
-
-<p>If we want to finally arrange all our sentences in the vectors into one string, we would use reduce.  The way to do this with transducers is to use <em>transduce</em>.  It takes a function of two arguments to perform the reduce, as well as an initial data input.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">transduce</span> <span class="nv">sam-i-am-xform</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.</span>
-</span><span class='line'><span class="c1">;;     I would eat them on a train.</span>
-</span><span class='line'><span class="c1">;;     I would eat them in a box.</span>
-</span><span class='line'><span class="c1">;;     I would eat them with a fox.</span>
-</span><span class='line'><span class="c1">;;     I would eat them in a house.</span>
-</span><span class='line'><span class="c1">;;     I would eat them with a mouse.</span>
-</span><span class='line'><span class="c1">;;     I would eat them here or there.</span>
-</span><span class='line'><span class="c1">;;     I would eat them anywhere.&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;;_note: In  1.7.0-alpha2, transduce changed and you need to use a</span>
-</span><span class='line'><span class="c1">;;(transduce sam-i-am-xform (completing #(str %1 %2 &quot; &quot;)) &quot;&quot; green-eggs-n-ham)</span>
-</span><span class='line'><span class="c1">;;instead.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Core.async</h3>
-
-<p>Core.async has a really nice way to define channels with a transducer that will transform each element on the channel.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-chan</span> <span class="p">(</span><span class="nf">async/chan</span> <span class="mi">1</span> <span class="nv">sam-i-am-xform</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s define another channel to reduce the results of the sam-i-am-chan to a string.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result-chan</span> <span class="p">(</span><span class="nf">async/reduce</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">sam-i-am-chan</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally, let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">async/onto-chan</span> <span class="nv">sam-i-am-chan</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>At last,
-we can get our result off the result channel and revel in the beauty of asynchronous data transducers.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">i-like-them</span> <span class="p">(</span><span class="nf">async/&lt;!!</span> <span class="nv">result-chan</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">i-like-them</span>
-</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.</span>
-</span><span class='line'><span class="c1">;;     I would eat them on a train.</span>
-</span><span class='line'><span class="c1">;;     I would eat them in a box.</span>
-</span><span class='line'><span class="c1">;;     I would eat them with a fox.</span>
-</span><span class='line'><span class="c1">;;     I would eat them in a house.</span>
-</span><span class='line'><span class="c1">;;     I would eat them with a mouse.</span>
-</span><span class='line'><span class="c1">;;     I would eat them here or there.</span>
-</span><span class='line'><span class="c1">;;     I would eat them anywhere.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Transducers are elegant and powerful, just like the rest of Clojure.  Try them, you will like them :)</p>
-
-<p><img src="http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg"></p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2014/09/06/green-eggs-and-transducers//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
