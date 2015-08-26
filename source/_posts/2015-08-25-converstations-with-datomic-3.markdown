@@ -66,7 +66,7 @@ The final D in _ACID_ is for Durability.  Once a transaction has been committed 
 * Cassandra
 * Riak
 * Couchbase
-* Infispan memory cluster
+* Infinispan memory cluster
 
 **Human:** Which one is the best to use?
 
