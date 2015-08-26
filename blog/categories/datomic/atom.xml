@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-08-25T18:37:58-04:00</updated>
+  <updated>2015-08-26T08:28:13-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -76,7 +76,7 @@ I am interested in having you work with me every day, but first I want to unders
 <li>Cassandra</li>
 <li>Riak</li>
 <li>Couchbase</li>
-<li>Infispan memory cluster</li>
+<li>Infinispan memory cluster</li>
 </ul>
 
 
