@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-10-20T17:47:02-04:00</updated>
+  <updated>2015-10-20T18:37:27-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -419,6 +419,8 @@
 
 
 <p>Want more?  Check out the code <a href="https://github.com/gigasquid/speech-acts-classifier">https://github.com/gigasquid/speech-acts-classifier</a>.</p>
+
+<p><em>Special thanks to Paul deGrandis for allowing me to pick his awesome brain on AI things</em></p>
 ]]></content>
   </entry>
   
