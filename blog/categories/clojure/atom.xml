@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-10-11T11:13:15-04:00</updated>
+  <updated>2015-10-20T16:07:14-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,326 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Speech Act Classification for Text with Clojure]]></title>
+    <link href="http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/"/>
+    <updated>2015-10-20T13:11:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure</id>
+    <content type="html"><![CDATA[<p>We humans are quite wonderful.  We do amazing things every day without even realizing it.  One of them, you are doing right now.  You are reading text.  Your brain is taking these jumbles of letters and spaces in this sentence, which in linguist terms is called an <a href="https://en.wikipedia.org/wiki/Utterance">utterance</a>, and making sense out of it.  The individual meanings of sentences might be quite complex.</p>
+
+<p>Take for example the utterance, &ldquo;I like cheese&rdquo;.  To understand it properly, you need to know the meanings of the individual words.  In particular, you would need to know that cheese is a tasty food stuff that is made from milk.  This would be a detailed and full understanding.  But there is a higher level of understanding that we can look at called <a href="https://en.wikipedia.org/wiki/Utterance">Speech Acts</a>.</p>
+
+<p>Speech Acts are way of classifying our communication according to purposes.  We perform speech acts when we ask questions, make statements, requests, promises, or even just say thanks.  These speech acts cross languages.  When I ask a question in English, it is the same speech act as if I ask it in French.  In fact, if we were to travel to another planet with aliens, we can assume if they had a language, it would involve speech acts.  It should be no surprise then, to communicate effectively with machines, it will have to understand speech acts.</p>
+
+<p>To explore this communication we are going to consider only three speech acts:</p>
+
+<ul>
+<li>Statements &ndash; &ldquo;I like cheese.&rdquo;</li>
+<li>Questions &ndash; &ldquo;How do you make cheese?&rdquo;</li>
+<li>Expressives &ndash; &ldquo;Thank you&rdquo;</li>
+</ul>
+
+
+<p><em>Our goal is to have our program be able to tell the difference between these three speech acts &ndash; without punctuation.</em></p>
+
+<p>Why not use punctuation?  If you are having a conversation with a human over Slack or some other chat channel, you may or may not put in a question mark or period.  To have a computer be able to converse as naturally with a human as another human, it will have to understand the speech act without the aid of punctuation.</p>
+
+<p>Generally, we want to have the computer:</p>
+
+<ol>
+<li>Read in an utterance/text that may or may not have punctuation.</li>
+<li>Classify whether the result is a statement, question, or expressive.</li>
+</ol>
+
+
+<p>To tackle this problem, we are going to have to break this up into two main parts.  The first is <em>parsing</em> the text and annotating it with data.  The second is to classify the text based on the data from the parsing.</p>
+
+<h2>Parsing and Annotating Text with Stanford CoreNLP</h2>
+
+<p>The <a href="http://nlp.stanford.edu/software/corenlp.shtml">Stanford CoreNLP</a> is considering the state of the art for POS, (Part of Speech), tagging and other linguistic annotations.  It also is a Java library, so very easy to use from Clojure.</p>
+
+<p>Here we are using a simple wrapper library called <a href="https://github.com/gigasquid/stanford-talk">stanford-talk</a> to take in some text and process it.  The result is a list of <em>tokens</em> for each word in the <code>:token-data</code> map.  Each token is annotated with the POS tag.  There is a lot more data in the annotations that we can look at to give us insight into this text.  But, to keep things simple, we are just going to look at the POS speech tag at the moment.</p>
+
+<p>```clojure
+(process-text &ldquo;I like cheese&rdquo;)</p>
+
+<p>;{:token-data
+; ({:sent-num 0, :token &ldquo;I&rdquo;, :pos &ldquo;PRP&rdquo;, :net &ldquo;O&rdquo;, :lemma &ldquo;I&rdquo;, :sentiment &ldquo;Neutral&rdquo;}
+;  {:sent-num 0, :token &ldquo;like&rdquo;, :pos &ldquo;VBP&rdquo;, :net &ldquo;O&rdquo;, :lemma &ldquo;like&rdquo;, :sentiment &ldquo;Neutral&rdquo;}
+;  {:sent-num 0, :token &ldquo;cheese&rdquo;, :pos &ldquo;NN&rdquo;, :net &ldquo;O&rdquo;, :lemma &ldquo;cheese&rdquo;, :sentiment &ldquo;Neutral&rdquo;}),
+; :refs [[{:sent-num 0, :token &ldquo;I&rdquo;, :gender &ldquo;UNKNOWN&rdquo;, :mention-type &ldquo;PRONOMINAL&rdquo;, :number &ldquo;SINGULAR&rdquo;, :animacy &ldquo;ANIMATE&rdquo;};]]}
+```</p>
+
+<p>So the text &ldquo;I like cheese&rdquo; has the following POS tags <a href="https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html">list of all POS tags</a>:</p>
+
+<ul>
+<li>I = PRP Personal Pronoun</li>
+<li>like = VBP Verb, non-3rd person singular present</li>
+<li>cheese &ndash; Noun, singular or mass</li>
+</ul>
+
+
+<p>This is great.  We have some data about the text we can analyze.  The next thing to do is to figure out how to classify the text based on this data.</p>
+
+<h2>Classification with Weka</h2>
+
+<p><a href="http://www.cs.waikato.ac.nz/ml/weka/">Weka</a> is a collection of machine learning algorithms.  There is a program for interactive exploration of data sets, as well as a java library so you can use it programatically.  Speaking of data sets, we need some.  Just having one sentence about liking cheese is not going to get us very far with any machine learning.</p>
+
+<p>So where can you go to get conversational questions and statements on the internet?  Well, one place that is pretty good for that is <a href="http://www.answers.com/Q/FAQ/2528-9">answers.com</a>.  We can scrape some pages for questions and answers.  Enough so that we can collect and cleanup some input files of</p>
+
+<ul>
+<li>~ 200 statements</li>
+<li>~ 200 questions</li>
+</ul>
+
+
+<p>The expressives were a bit more difficult.  Let&rsquo;s just make a list of about 80 of them.</p>
+
+<p>Now, we have a list of text data.  We need to decide on some features and generate some input files to train the classifiers on.</p>
+
+<h3>Choosing Features for Classification</h3>
+
+<p>First, what is a feature?  A feature is some sort of encoding of the data that the computer is going to consider for classification. For example, the number of nouns in a sentence could be a feature.  There is a whole field of study dedicated to figuring out what the best features for data for machine learning are.  Again, to keep things simple, we can take an educated guess on some features based on a good <a href="https://www.cs.utah.edu/~riloff/pdfs/emnlp11-speechacts.pdf">paper</a>:</p>
+
+<ul>
+<li>Sentence length</li>
+<li>Number of nouns in the sentence (NN, NNS, NNP, NNPS)</li>
+<li>If the sentence ends in a noun or adjective (NN, NNS, NNP, NNPS, JJ, JJR, JJS)</li>
+<li>If the sentence begins in a verb (VB, VBD, VBG, VBP, VPZ)</li>
+<li>The count of the wh, (like who, what) markers (WDT, WRB, WP, WP$)</li>
+</ul>
+
+
+<p>We can now go through our data file, generate our feature data, and output .arff file format to ready it as training file for weka.</p>
+
+<p>Raw question file example:</p>
+
+<p><code>
+What is floater exe
+Is bottled water or tap water better for your dog
+How do you treat lie bumps on the tongue
+Can caffeine be used in powder form
+</code></p>
+
+<p>Arff file with features</p>
+
+<p>```
+@relation speechacts</p>
+
+<p>@attribute       sen_len            numeric
+@attribute       nn_num             numeric
+@attribute       end_in_n           numeric
+@attribute       begin_v            numeric
+@attribute       wh_num             numeric
+@attribute       type               {assertion,question,expressive}</p>
+
+<p>@data
+4,2,1,0,1,question
+10,4,1,0,0,question
+9,3,1,0,1,question
+7,3,1,0,0,question
+```</p>
+
+<p>Now that we have our input file to training our machine learning algorithms, we can start looking at classifiers.</p>
+
+<h3>Choosing the Classifier</h3>
+
+<p><img class="<a" src="href="http://c2.staticflickr.com/6/5794/22338401315_1abf0ffb2d_z.jpg">http://c2.staticflickr.com/6/5794/22338401315_1abf0ffb2d_z.jpg</a>"></p>
+
+<p>Using the weka explorer, we can try out different classification models.  For this data, the best one seems to be the <a href="https://en.wikipedia.org/wiki/Random_forest">Random Forest</a>.  In the explorer, it beat out Naive Bayes and J48.  It is also worth mentioning that we are not using a separate source of test data, we are cross validating on the original training set.  If we wanted to be more rigorous, we could collect more data and cut it in half, using one set for the training and one set for the testing.</p>
+
+<p>Now that we have a classifier, we can create some Clojure code with the java library to use it.</p>
+
+<h3>Using the Weka Classifier from our Clojure Code</h3>
+
+<p>After importing the needed Java classes into our Clojure code, we can create the Random Forest classifier.</p>
+
+<p><code>clojure
+(def classifier (new RandomForest))
+</code></p>
+
+<p>We then create a function that will load our arff input file as a datasource</p>
+
+<p>```clojure
+(defn get-datasource [fname]
+  (new ConverterUtils$DataSource</p>
+
+<pre><code>   (.getResourceAsStream (clojure.lang.RT/baseLoader) fname)))
+</code></pre>
+
+<p>```</p>
+
+<p>And another uses it to train the classifier, returning a map of the <em>evaluator</em> and <em>data</em> that we will need for our predictions.</p>
+
+<p>```clojure
+(defn train-classifier [fname]
+  (let [source (get-datasource fname)</p>
+
+<pre><code>    data (.getDataSet source)
+    _ (.setClassIndex data (dec (.numAttributes data)))
+    _  (.buildClassifier classifier data)
+    e (new Evaluation data)]
+(.crossValidateModel e classifier data (.intValue (int 10)) (new Random 1) (into-array []))
+(println (.toSummaryString e))
+{:evaluator e
+ :data data}))
+</code></pre>
+
+<p>```</p>
+
+<p>Now, we need to be able to ask about a classification for a particular instance of new data.  This is going to be where we are parsing new text and asking for an answer from our trained model.  To do this, we need to generate an <em>instance</em> for the evaluation to look at.  It is constructed from numbers in the same order as our arff file.  The exception is that we are not going to provide a value for the final field of the speech act type.  We will assign that to the a missing value.</p>
+
+<p>```clojure
+(defn gen-instance [dataset [val0 val1 val2 val3 val4]]
+  (let [i (new Instance 6)]</p>
+
+<pre><code>(doto i
+  (.setValue 0 (double val0))
+  (.setValue 1 (double val1))
+  (.setValue 2 (double val2))
+  (.setValue 3 (double val3))
+  (.setValue 4 (double val4))
+  (.setValue 5 (Instance/missingValue))
+  (.setDataset dataset))))
+</code></pre>
+
+<p>```</p>
+
+<p>Now we can use this function in a prediction function to get our answer back</p>
+
+<p>```clojure
+(defn predict [ev d vals]
+  (let [v  (.evaluateModelOnce ev classifier (gen-instance d vals))]</p>
+
+<pre><code>(case v
+  0.0 :statement
+  1.0 :question
+  2.0 :expressive)))
+</code></pre>
+
+<p>```</p>
+
+<p>Calling the predict function would look something like:</p>
+
+<p><code>clojure
+(def results (train-classifier "speech-acts-input-all.arff"))
+(def predictor (:evaluator results))
+(def data (:data results))
+(predict predictor data [1 1 1 0 0])
+;; -&gt; :expressive
+</code></p>
+
+<p>Now that we have the parsing piece and the classification piece, we can put everything together.</p>
+
+<h3>Putting it all together</h3>
+
+<p>We finally have all the details we need write a <code>classify-text</code> function.</p>
+
+<p>```clojure
+(defn classify-text [text]
+  (let [stats (parser/gen-stats text)</p>
+
+<pre><code>    features [(:sen-len stats)
+              (:nn-num stats)
+              (:end-in-n stats)
+              (:begin-v stats)
+              (:wh-num stats)]]
+(weka/predict predictor data features)))
+</code></pre>
+
+<p>(classify-text &ldquo;I like cheese&rdquo;)
+;; &ndash;> :statement
+(classify-text &ldquo;How do you make cheese&rdquo;)
+;; &ndash;> :question
+(classify-text &ldquo;Right on&rdquo;)
+;; &ndash;> :expressive
+```</p>
+
+<p>Yea! It worked.  We finally have something that will read in text and tell us its best guess of a speech act, all without punctuation.  Let&rsquo;s quickly review what we have done.</p>
+
+<h3>Summary</h3>
+
+<ul>
+<li>Gather data sets of statements, questions, and expressives</li>
+<li>Parse text and annotate it with POS tags using Stanford CoreNLP</li>
+<li>Choose features of the data to analyze and generate arff files</li>
+<li>Use Weka explorer to try out the best classification algorithims</li>
+<li>Programatically use weka to train classifier and predict a new instance</li>
+<li>Write a program to tie it all together</li>
+</ul>
+
+
+<p>It&rsquo;s funny how a simple thing like asking whether something is a statement or question gets you knee deep in Natural Language Processing and Machine Learning pretty fast.</p>
+
+<p>We&rsquo;ve learned a lot, now let&rsquo;s have a bit of fun.  Now that we can classify speech acts, we can make a sort of proto chat bot with a really limited responses.</p>
+
+<h3>Proto Chat Bot</h3>
+
+<p>Here we are going to be a bit loose and actually check if a question mark is used.  If it is, we will automatically mark it as a question.  Otherwise, we will classify it.</p>
+
+<p>```clojure
+(defn respond [text]
+  (let [question-mark? (re-find  #&ldquo;\?$&rdquo; text)</p>
+
+<pre><code>    type (if question-mark?
+           :question
+           (classify-text text))]
+(case type
+  :question "That is an interesting question."
+  :statement "Nice to know."
+  :expressive ":)")))
+</code></pre>
+
+<p>```</p>
+
+<p>We just need a quick repl and main function now:</p>
+
+<p>```clojure
+(defn repl []
+  (do</p>
+
+<pre><code>(print "&gt;&gt; ")
+(flush))
+</code></pre>
+
+<p>  (let [input (read-line)]</p>
+
+<pre><code>(if-not (= input "quit")
+ (do
+   (println (try (c/respond input)
+                 (catch Exception e (str "Sorry: " e " - " (.getMessage e)))))
+   (recur))
+ (do (println "Bye!")
+     (System/exit 0)))))
+</code></pre>
+
+<p>(defn -main [&amp; args]
+  (println &ldquo;Hello.  Let&rsquo;s chat.&rdquo;)
+  (flush)
+  (repl))
+```</p>
+
+<p>Testing it out with <code>lein run</code>, we can have a little chat:</p>
+
+<p>```
+Hello.  Let&rsquo;s chat.</p>
+
+<blockquote><blockquote><p>Hi
+:)
+Do you know where I can go to buy cheese
+That is an interesting question.
+I am a big cheese fan
+Nice to know.
+you are quite smart
+Nice to know.
+bye
+:)
+```</p></blockquote></blockquote>
+
+<p>Want more?  Check out the code <a href="https://github.com/gigasquid/speech-acts-classifier">https://github.com/gigasquid/speech-acts-classifier</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Conversations with Datomic - Part 3]]></title>
@@ -864,62 +1184,6 @@ practicing Clojure</p>
 <h3>Do It</h3>
 
 <p>Yes, you should write that book and share your knowledge.  Don&rsquo;t panic, remember to breathe, get some cheese and tea, and go for it!  It will be awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Partition with Game of Thrones Pugs]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs/"/>
-    <updated>2015-01-26T18:55:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs</id>
-    <content type="html"><![CDATA[<p>Clojure&rsquo;s <em>partition</em> and <em>partition-all</em> functions are very useful.
-However, I have been bitten a few times using <em>partition</em> when I
-really wanted <em>partition-all</em>.  So to help myself and all of you to
-remember it, I have made some diagrams with <a href="http://www.designswan.com/archives/the-pugs-of-westeros-cute-pugs-dressed-up-like-characters-in-game-of-thrones.html">pugs from the Game of Thrones</a></p>
-
-<p>In code, <a href="http://clojuredocs.org/clojure.core/partition">partition</a> takes a collection and returns a lazy sequence of
-lists, each containing n items.</p>
-
-<p>To demonstrate this with pugs, we will partition 5 pugs into groups of
-twos.</p>
-
-<p><img class="<a" src="href="https://c4.staticflickr.com/8/7301/15757758964_570d260a31_c.jpg">https://c4.staticflickr.com/8/7301/15757758964_570d260a31_c.jpg</a>"></p>
-
-<p>This partition will give you two groups of two pugs.</p>
-
-<p><img class="<a" src="href="https://c4.staticflickr.com/8/7350/16380203235_91c8c4e9ee_c.jpg">https://c4.staticflickr.com/8/7350/16380203235_91c8c4e9ee_c.jpg</a>"></p>
-
-<p>Notice, (and here is the important part), the last pug is missing.  The Joffrey pug is not included because <em>partition</em> will not include items that do not make a complete partition.  In this case, because there is no group of 2 pugs for the Joffrey pug to be in, it gets dropped.</p>
-
-<p><em>This is the thing that has bitten me in the past.</em></p>
-
-<p>A common use for wanting to partition things is to control the number
-of things that you process at one time.  An example of this is sending only 500 items to be processed in a batch job at one time.  If you have a few thousand items to be processed, partitioning them is a good way of chuncking.  However, if you have an arbitrary number of items, you most certainly want to process them <em>all</em> and not drop any.  This is where you should use <em>partition-all</em> instead.</p>
-
-<p><a href="http://clojuredocs.org/clojure.core/partition-all">Partition-all</a> chunks the items as well, but also includes any leftovers.  Demonstrating again with pugs.</p>
-
-<p><img class="<a" src="href="https://c4.staticflickr.com/8/7427/15757758884_20bfd014eb_c.jpg">https://c4.staticflickr.com/8/7427/15757758884_20bfd014eb_c.jpg</a>"></p>
-
-<p>This <em>partition-all</em> will give you three groups of pugs.</p>
-
-<p><img class="<a" src="href="https://c4.staticflickr.com/8/7323/16193980179_229343f7f3_c.jpg">https://c4.staticflickr.com/8/7323/16193980179_229343f7f3_c.jpg</a>"></p>
-
-<p>This time pug Joffrey is not left out!</p>
-
-<p>Remember, think carefully before using <em>partition</em>.  Don&rsquo;t leave a pug out.</p>
-
-<p>By the way, I can&rsquo;t wait till the next season of Game of Thrones.  Until then ..</p>
-
-<p>
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('2EoQCtPR2-I');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/2EoQCtPR2-I?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/2EoQCtPR2-I/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=2EoQCtPR2-I" id="2EoQCtPR2-I" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info"></div>
-</a>
-<div class="video-info" ></div>
-</div>
-
-</p>
 ]]></content>
   </entry>
   
