@@ -281,4 +281,4 @@ Nice to know.
 
 Want more?  Check out the code [https://github.com/gigasquid/speech-acts-classifier](https://github.com/gigasquid/speech-acts-classifier).
 
-_Special thanks to Paul deGrandis for allowing me to pick his awesome brain on AI things_
+_Special thanks to [Paul deGrandis](https://twitter.com/ohpauleez) for allowing me to pick his awesome brain on AI things_
