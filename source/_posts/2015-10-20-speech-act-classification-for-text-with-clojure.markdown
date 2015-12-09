@@ -57,7 +57,7 @@ This is great.  We have some data about the text we can analyze.  The next thing
 
 ## Classification with Weka
 
-[Weka](http://www.cs.waikato.ac.nz/ml/weka/) is a collection of machine learning algorithms.  There is a program for interactive exploration of data sets, as well as a java library so you can use it programatically.  Speaking of data sets, we need some.  Just having one sentence about liking cheese is not going to get us very far with any machine learning.
+[Weka](http://www.cs.waikato.ac.nz/~ml/weka/) is a collection of machine learning algorithms.  There is a program for interactive exploration of data sets, as well as a java library so you can use it programatically.  Speaking of data sets, we need some.  Just having one sentence about liking cheese is not going to get us very far with any machine learning.
 
 So where can you go to get conversational questions and statements on the internet?  Well, one place that is pretty good for that is [answers.com](http://www.answers.com/Q/FAQ/2528-9).  We can scrape some pages for questions and answers.  Enough so that we can collect and cleanup some input files of
 
