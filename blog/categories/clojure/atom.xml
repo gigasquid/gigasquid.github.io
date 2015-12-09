@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-10-20T18:41:52-04:00</updated>
+  <updated>2015-12-09T17:45:41-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -76,7 +76,7 @@
 
 <h2>Classification with Weka</h2>
 
-<p><a href="http://www.cs.waikato.ac.nz/ml/weka/">Weka</a> is a collection of machine learning algorithms.  There is a program for interactive exploration of data sets, as well as a java library so you can use it programatically.  Speaking of data sets, we need some.  Just having one sentence about liking cheese is not going to get us very far with any machine learning.</p>
+<p><a href="http://www.cs.waikato.ac.nz/~ml/weka/">Weka</a> is a collection of machine learning algorithms.  There is a program for interactive exploration of data sets, as well as a java library so you can use it programatically.  Speaking of data sets, we need some.  Just having one sentence about liking cheese is not going to get us very far with any machine learning.</p>
 
 <p>So where can you go to get conversational questions and statements on the internet?  Well, one place that is pretty good for that is <a href="http://www.answers.com/Q/FAQ/2528-9">answers.com</a>.  We can scrape some pages for questions and answers.  Enough so that we can collect and cleanup some input files of</p>
 
