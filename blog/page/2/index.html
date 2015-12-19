@@ -6,9 +6,8 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Nov 10th, 2014 Tags: All Denial: I am not really writing a book.
-Anger: Why did I ever decide to write a book?
-Bargaining: If I just &hellip;">
+	<meta name="description" content="Published on: Nov 13th, 2014 Tags: All, Clojure Sure you may have done FizzBuzz before. Maybe you have even done it
+in Clojure. But have you done it &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -75,6 +74,145 @@ Bargaining: If I just &hellip;">
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/11/13/clojure-fizzbuzz-without-conditionals/">
+		
+			Clojure FizzBuzz Without Conditionals</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-13T21:43:00-05:00" pubdate data-updated="true">Nov 13<span>th</span>, 2014</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p><img src="https://c1.staticflickr.com/5/4136/4825113119_9630b7927f.jpg"></p>
+
+<p>Sure you may have done FizzBuzz before.  Maybe you have even done it
+in Clojure.  But have you done it without the use of <em>any</em>
+conditionals?</p>
+
+<p>As your brain starts to work on the <em>how</em> this we be done, you might
+be wondering <em>why</em> you should do this in the first place?</p>
+
+<p>There are two very good reasons for this.  The first is that it is a
+<em>kata</em>.</p>
+
+<h2>Katas build your code practice</h2>
+
+<p><img src="https://c4.staticflickr.com/4/3552/3434757877_711709da58_b.jpg"></p>
+
+<p>Code katas build your skill through practice.  It doesn&rsquo;t matter if
+you are a beginner or an expert.  Just, like in all those martial arts
+movies with the swordsman practicing, so must we.  We stretch and
+flex our coding muscles with katas to grow them and keep them in shape.</p>
+
+<p>Yes, you may code every day at work.  But it is not the same as kata
+practice.  So much of <em>day to day</em> work involves complexity
+with large interconnected concerns.  Our  kata practice cuts the extra
+complexity out and leaves you alone with a focused small problem.</p>
+
+<p>The second reason involves why you
+should try it, this time,  <em>without conditionals</em>.  The answer is <em>creativity</em>.</p>
+
+<h2>Constraints build creativity.</h2>
+
+<p>It turns out that constraints are a
+<a href="http://www.forbes.com/sites/groupthink/2013/07/12/creativity-how-constraints-drive-genius/">key way to drive creativity</a>.
+Programming does not only require technical skills, but also
+creativity. We are seldom asked to build software without constraints.
+It drives design.  Sure, it can be annoying when we have to communicate with
+a server that is only active on Tuesday and emits its response in
+Morse Code.  But it gives us boundaries to unleash our creative
+spirit.</p>
+
+<p>So go for it.</p>
+
+<h2>Give it a try</h2>
+
+<p>Ready?  Here are the details.</p>
+
+<ul>
+<li>Given a number, if it number is divisible by 3 return &ldquo;fizz&rdquo;.</li>
+<li>If it is divisible by 5 return &ldquo;buzz&rdquo;.</li>
+<li>If it is divisible by 3 and 5 return &ldquo;fizzbuzz&rdquo;.</li>
+<li>Otherwise, just return the number.</li>
+<li>Don&rsquo;t use any conditionals like <em>if</em> <em>else</em> <em>case</em> <em>cond</em>.</li>
+</ul>
+
+
+<p>When you are done, you can check out some of the other solutions. Try
+not to peek until you have done your version first though.</p>
+
+<p>(There are some really awesome ones so far).</p>
+
+<p><em>Feel free to link to yours in the comments too</em> :)</p>
+
+<h2>Solutions</h2>
+
+<p><a href="https://twitter.com/adereth/status/530740818420957184">From @aderth</a></p>
+
+<p><a href="https://twitter.com/IamDrowsy/status/530900853855899648">From @IamDrowsy</a></p>
+
+<p><a href="https://twitter.com/bryanwoods/status/530822584963584000">From @Bryanwoods</a></p>
+
+<p><a href="https://twitter.com/defndaines/status/532368201472950272">From @defndaines</a></p>
+
+<p><a href="https://gist.github.com/gigasquid/dc4686e8245154482be8">From <em>me</em></a></p>
+
+<p><a href="https://twitter.com/hyPiRion/status/530718638064828416">From @hyPiRion</a> &ndash;
+a couple of notes for this one is that:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">+</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; 0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">*</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; 1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And once you think about that, you might want to read <a href="https://gist.github.com/igstan/c3797e51aa0784a5d275">this</a> :)</p>
+
+<p>Happy Clojure Kataing!</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2014/11/13/clojure-fizzbuzz-without-conditionals//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1729,121 +1867,6 @@ life-like moves</em></p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2014/03/19/walking-with-hexapods//blog/page/2/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/02/22/remembering-jim/">
-		
-			Remembering Jim</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-22T11:02:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2014</time></div>
-      <div class="tags">Tags: 
-
-</div>
-    </div>
-		<p><img src="https://newcontext-production.s3.amazonaws.com/portrait/jim-weirich/medium_78048abb24eadb2017034c5ee10826f9.jpg"></p>
-
-<p>You don&rsquo;t really understand how important someone is in your life
-until they are suddenly gone. I have had the honor and privilege of
-working, playing, and laughing alongside Jim Weirich for the last few
-years.  He was an amazing man.  I miss him dearly.</p>
-
-<h2>Think</h2>
-
-<p>Jim taught us how to think about computer programming. I once had a
-Physics professor tell me not to worry so
-much about the formulas and math. The most important thing was how to
-<strong>think</strong>.
-Everything thing after that would
-naturally fall into place.  Jim embodied that philosophy for
-programming.  The languages and algorithms poured almost
-effortlessly from his masterful fingers.  He knew how to <strong>think</strong> about
-the problem, observe from a multitude of angles.  Finally, bringing his
-experience, creativity, and humility to bear on it, he would shape it into
-a beautiful piece of code.</p>
-
-<h2>Make</h2>
-
-<p>Jim showed us how to make. He was a master craftsman and a maker. The
-care and joy that infused his work was inspiring.  He loved the
-process of Test Driven Development. Green tests were always a
-celebration. The surprise of beautiful code emerging from a
-refactoring was treated as a gift.  He is best known for his
-<a href="https://github.com/jimweirich/rake">Rake</a> build tool, but his testing
-library <a href="https://github.com/jimweirich/rspec-given">rspec-given</a> is
-one that reminds me most of him and the way that he loved to craft code.</p>
-
-<h2>Care</h2>
-
-<p>Jim showed us how to care.  Jim cared deeply about each and every
-person.  While flying his drone in the office hallway, he would wave
-down a passing building maintenance worker and ask if they wanted to
-fly it.  Over the course of the next few minutes, Jim would put them
-completely at ease and chat happily with them.  He was like that to
-<strong>everyone</strong>.  In the few days after
-his passing, many building workers, and people from other offices, that
-I only ever nodded at in passing, stopped by to give their sincere
-condolences his loss. He is without a doubt, the kindest person I have
-ever known.  He took great joy in his faith and in his family.  He
-would talk about his family all the time and how much they enjoyed
-each others company.  He is without a doubt, one of the personally richest men I have ever known.</p>
-
-<h2>Share</h2>
-
-<p>Jim taught us how to share. Jim wanted to share his knowledge.  He was
-a great teacher and presenter. He gave engaging presentations that
-took people on a journey with him, not only imparting knowledge, but
-becoming friends with him in the process.  He was a pillar in the local
-Cincinnati technical community. He is the reason why myself and
-countless others were drawn to Ruby and the Ruby community.</p>
-
-<h2>Dream</h2>
-
-<p>Jim dreamed with us.  He was a creative. He was also a singer, song
-writer, musician, and artist.  He brought that creative spirit,
-curiosity, and love of learning to the technical world. I will cherish
-our lunches spent together flying our AR Drones, sometimes crashing
-them into walls and each other, while trying to find creative ways of
-controlling them with code.  He was just lately exploring with the
-micro-quadcopters like the
-<a href="http://www.amazon.com/Estes-4606-Proto-Quadcopter-Black/dp/B00G924W98">Proto-X</a>.
-We had plans to make all our Spheros, Roombas, big drones, and little
-drones dance to live coded music. We were both auditing on
-<a href="https://www.edx.org/course/ethx/ethx-amrx-autonomous-mobile-robots-1342">Autonomous Mobile Robots</a>
-to see what we could learn to help us with our robot dreams.</p>
-
-<p>I miss him dearly.  I will cherish my memories of him and I am so
-grateful for all the ways he has enriched my life.  I will remember
-that when I dream in code, he is still there with me.</p>
-
-<p>Until that day when we will fly our friendly robots together again.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2014/02/22/remembering-jim//blog/page/2/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

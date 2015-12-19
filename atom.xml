@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2015-12-09T17:45:41-05:00</updated>
+  <updated>2015-12-19T14:56:25-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Key to Moving Fast is Feedback]]></title>
+    <link href="http://gigasquid.github.io/blog/2015/12/19/the-key-to-moving-fast-is-feedback/"/>
+    <updated>2015-12-19T14:06:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2015/12/19/the-key-to-moving-fast-is-feedback</id>
+    <content type="html"><![CDATA[<p><img src="http://c1.staticflickr.com/3/2205/1809288965_c84080f2d3_n.jpg"></p>
+
+<p>The last time I went to the dentist to get a cavity filled, I got a shot of Novocain as a local anesthetic to numb the area.  After I emerged from the dental chair, I still had no feeling in my lip and mouth area.
+Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles down my face.  Luckily, the loss of feeling only lasted a couple hours.  Soon, I was back to normal.  Even in this small and common scenario, we can see the close link between motion and sensory perception.  What would happen if you couldn&rsquo;t feel your whole body?</p>
+
+<p>This is exactly what happened in the tragic and amazing story of <a href="http://docuwiki.net/index.php?title=The_Man_who_Lost_his_Body">Ian Watermann</a>.  At age 19, he had what appeared to be the flu, but was actually a rare disease of the nervous system that left him unable to fell any sensation of touch below the neck.  Unable to process this sensory information, he was totally unable to walk or move his body.  This is despite the fact that his motor system was left almost untouched by the disease.  He had the capacity to move, but without the sensory feedback he was paralyzed.</p>
+
+<p>Ian was told that he would spend the rest of his life in a wheelchair, but in an inspiring show of determination he recovered mobility.  With the help of physiotherapists, he retrained his brain to substitute visual feedback for touch feedback.  He could move his hands and legs while he could see them.  Finally, he could walk again with his sight and concentration.  If the visual feedback is taken away, (lights turned off), the ability to move vanishes.</p>
+
+<p>Feedback is the essential ingredient for human motion.  But what about businesses, startups, and software projects?  One of the challenges that all of these face is the ability to <em>move</em> fast.  This ability to move is not unlike that in our own bodies.  Movement and action are a result of a complex, interdependent system.  In the case of businesses, they are made of people, technology, and processes.  Like the human body, it is critically dependent on feedback.   A business can have the capacity for action, but without the ability to process feedback it is essentially immobilized.</p>
+
+<p>If you want to move fast, single most important thing you can do is to improve your feedback at every level.</p>
+
+<p>If you want to add new technology, ask how it improves your feedback.</p>
+
+<ul>
+<li>Feedback from the market</li>
+<li>Feedback from your users</li>
+<li>Feedback from your operational systems</li>
+<li>Feedback from your code</li>
+<li>Feedback from your employees</li>
+<li>Feedback from yourself</li>
+</ul>
+
+
+<p>The best feedback systems are distributed and multi-layered. A single market feedback signal to the CEO is good, but much better is one that gets shared among the many facets of a company.  A distributed and interconnected network of feedback will help companies and projects be responsive, fast, nimble, and resilient.</p>
+
+<p>The next time you hear, &ldquo;How can we go faster&rdquo;?&ldquo; ask the question &#8220;How can we increase feedback?&rdquo;  You&rsquo;ll be on the right track to fly.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gigasquid's Radar 2015]]></title>
@@ -3075,90 +3111,6 @@ use it to control the hexapod with hand-held joysticks.</p>
 <p><em>Stay tuned for the next post of how to control the hexapod with your
 Clojure code and loading the Phoenix firmware that gives it a
 life-like moves</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Remembering Jim]]></title>
-    <link href="http://gigasquid.github.io/blog/2014/02/22/remembering-jim/"/>
-    <updated>2014-02-22T11:02:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2014/02/22/remembering-jim</id>
-    <content type="html"><![CDATA[<p><img src="https://newcontext-production.s3.amazonaws.com/portrait/jim-weirich/medium_78048abb24eadb2017034c5ee10826f9.jpg"></p>
-
-<p>You don&rsquo;t really understand how important someone is in your life
-until they are suddenly gone. I have had the honor and privilege of
-working, playing, and laughing alongside Jim Weirich for the last few
-years.  He was an amazing man.  I miss him dearly.</p>
-
-<h2>Think</h2>
-
-<p>Jim taught us how to think about computer programming. I once had a
-Physics professor tell me not to worry so
-much about the formulas and math. The most important thing was how to
-<strong>think</strong>.
-Everything thing after that would
-naturally fall into place.  Jim embodied that philosophy for
-programming.  The languages and algorithms poured almost
-effortlessly from his masterful fingers.  He knew how to <strong>think</strong> about
-the problem, observe from a multitude of angles.  Finally, bringing his
-experience, creativity, and humility to bear on it, he would shape it into
-a beautiful piece of code.</p>
-
-<h2>Make</h2>
-
-<p>Jim showed us how to make. He was a master craftsman and a maker. The
-care and joy that infused his work was inspiring.  He loved the
-process of Test Driven Development. Green tests were always a
-celebration. The surprise of beautiful code emerging from a
-refactoring was treated as a gift.  He is best known for his
-<a href="https://github.com/jimweirich/rake">Rake</a> build tool, but his testing
-library <a href="https://github.com/jimweirich/rspec-given">rspec-given</a> is
-one that reminds me most of him and the way that he loved to craft code.</p>
-
-<h2>Care</h2>
-
-<p>Jim showed us how to care.  Jim cared deeply about each and every
-person.  While flying his drone in the office hallway, he would wave
-down a passing building maintenance worker and ask if they wanted to
-fly it.  Over the course of the next few minutes, Jim would put them
-completely at ease and chat happily with them.  He was like that to
-<strong>everyone</strong>.  In the few days after
-his passing, many building workers, and people from other offices, that
-I only ever nodded at in passing, stopped by to give their sincere
-condolences his loss. He is without a doubt, the kindest person I have
-ever known.  He took great joy in his faith and in his family.  He
-would talk about his family all the time and how much they enjoyed
-each others company.  He is without a doubt, one of the personally richest men I have ever known.</p>
-
-<h2>Share</h2>
-
-<p>Jim taught us how to share. Jim wanted to share his knowledge.  He was
-a great teacher and presenter. He gave engaging presentations that
-took people on a journey with him, not only imparting knowledge, but
-becoming friends with him in the process.  He was a pillar in the local
-Cincinnati technical community. He is the reason why myself and
-countless others were drawn to Ruby and the Ruby community.</p>
-
-<h2>Dream</h2>
-
-<p>Jim dreamed with us.  He was a creative. He was also a singer, song
-writer, musician, and artist.  He brought that creative spirit,
-curiosity, and love of learning to the technical world. I will cherish
-our lunches spent together flying our AR Drones, sometimes crashing
-them into walls and each other, while trying to find creative ways of
-controlling them with code.  He was just lately exploring with the
-micro-quadcopters like the
-<a href="http://www.amazon.com/Estes-4606-Proto-Quadcopter-Black/dp/B00G924W98">Proto-X</a>.
-We had plans to make all our Spheros, Roombas, big drones, and little
-drones dance to live coded music. We were both auditing on
-<a href="https://www.edx.org/course/ethx/ethx-amrx-autonomous-mobile-robots-1342">Autonomous Mobile Robots</a>
-to see what we could learn to help us with our robot dreams.</p>
-
-<p>I miss him dearly.  I will cherish my memories of him and I am so
-grateful for all the ways he has enriched my life.  I will remember
-that when I dream in code, he is still there with me.</p>
-
-<p>Until that day when we will fly our friendly robots together again.</p>
 ]]></content>
   </entry>
   
