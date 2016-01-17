@@ -13,10 +13,6 @@ This 21st century illustrated manuscript was recently uncovered.  It depicts mir
 
 Some examples of the glorious illustrations and text translations are presented here.
 
-{% img http://c2.staticflickr.com/2/1513/23811305873_ae80b905db_z.jpg "Book of Software Miracles - Fol. 10" %}
-
-_In the year of 1936, the vision of Alan Turing and his Universal Machine appeared._
-
 {% img http://c2.staticflickr.com/2/1520/24070311299_c23fc388e0_z.jpg "Book of Software Miracles Fol. 26" %}
 
 _On the day in 1958 that John McCarthy invented LISP, three suns appeared in the East in the morning sky which moved towards each other so that they merged into one._
@@ -33,8 +29,5 @@ _In the year of 2007, a great and wonderful comet appeared in the sky.  This was
 
 _A month after the NPM Node repository burst its banks in the year of 2015, a wondrous creature appeared from the JavaScript ecosystem.  Found dead after the raging subsided, was in this shape and form and is painted here._
 
-{% img http://c2.staticflickr.com/2/1662/24070310699_75b80c504b_c.jpg  "Book of Software Miracles Fol. 187" %}
-
-_Software Revelations 1300:1-4 - And I saw the Singularity rising out of the Data Lake with ten horns, seven heads, with diadems on its horns._
 
 For more information about this remarkable book visit [Book of Software Miracles](http://www.taschen.com/pages/en/catalogue/classics/all/03107/facts.the_book_of_miracles.htm)
