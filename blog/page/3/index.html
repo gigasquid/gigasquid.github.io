@@ -6,8 +6,8 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Mar 19th, 2014 Tags: All, Robots Here we see the PhantomX Hexapod thriving in the natural habitat of a
-cozy, climate controlled, &hellip;">
+	<meta name="description" content="Published on: Mar 20th, 2014 Tags: Clojure, Robots, World Domination Once you have your hexapod assembled and running using the hand held
+controller &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -74,6 +74,290 @@ cozy, climate controlled, &hellip;">
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/03/20/world-domination-with-hexapods-and-clojure/">
+		
+			World Domination With Hexapods and Clojure</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-20T21:00:00-04:00" pubdate data-updated="true">Mar 20<span>th</span>, 2014</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/robots/'>Robots</a>, <a class='category' href='/blog/categories/world-domination/'>World Domination</a>
+
+
+</div>
+    </div>
+		<p>Once you have your <a href="http://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/">hexapod assembled and running using the hand held
+controller</a>,
+of course, your thoughts naturally turn to world domination.</p>
+
+<h2>The most powerful tool in the world is the Clojure REPL</h2>
+
+<p>World domination requires the most powerful tools available.  That of
+course calls for Clojure and the Clojure REPL.  I recommend Emacs
+as the editor of choice of such an endeavor.  However, it if you are
+content with city, state, or single country domination, other editors
+that support Clojure are also fine.</p>
+
+<h2>Connect the XBee to your computer</h2>
+
+<p>First, we need to get the computer to talk to the hexapod wirelessly.
+We can do this with a <a href="http://www.trossenrobotics.com/uartsbee">USB to Serial adapter</a>
+that uses the paired XBee from the handheld commander.</p>
+
+<p>Take the XBee from the handheld commander</p>
+
+<p><img src="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg"></p>
+
+<p>and move it to the USB to serial adapter</p>
+
+<p><img src="http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg"></p>
+
+<p>Now plug the usb into your computer.</p>
+
+<h2>Get your Clojure ready</h2>
+
+<p>In your clojure project, the only magic you need is the <a href="https://github.com/samaaron/serial-port">Serial Port library</a>. Import the library and list your serial ports.  Then open the one that shows up for you.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">clj-hexapod.core</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">require</span> <span class="p">[</span><span class="nv">serial-port</span> <span class="ss">:as</span> <span class="nv">serial</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; Use this command to see what port your serial port</span>
+</span><span class='line'><span class="c1">;; is assinged to</span>
+</span><span class='line'><span class="p">(</span><span class="nf">serial/list-ports</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; replace the USB0 with whater it shows</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">port</span> <span class="p">(</span><span class="nf">serial/open</span> <span class="s">&quot;/dev/ttyUSB0&quot;</span> <span class="mi">38400</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since we are going to be talking to the hexapod.  We need to send the commands in the same format that it is expecting. Basically, a packet of where the postions of the joystick are, as well as what buttons are pushed.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">checksum</span> <span class="p">[</span><span class="nv">v</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mod</span> <span class="p">(</span><span class="nb">- </span><span class="mi">255</span> <span class="p">(</span><span class="nb">reduce + </span><span class="nv">v</span><span class="p">))</span> <span class="mi">256</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">vec-&gt;bytes</span> <span class="p">[</span><span class="nv">v</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">byte-array</span> <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">%</span> <span class="p">(</span><span class="nf">Integer.</span><span class="p">)</span> <span class="p">(</span><span class="nf">.byteValue</span><span class="p">)</span> <span class="p">(</span><span class="nf">byte</span><span class="p">))</span> <span class="nv">v</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">build-packet</span> <span class="p">[</span><span class="nv">r-vert</span> <span class="nv">r-horz</span> <span class="nv">l-vert</span> <span class="nv">l-horz</span> <span class="nv">buttons</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">[</span><span class="mi">255</span> <span class="c1">;header</span>
+</span><span class='line'>   <span class="nv">r-vert</span>
+</span><span class='line'>   <span class="nv">r-horz</span>
+</span><span class='line'>   <span class="nv">l-vert</span>
+</span><span class='line'>   <span class="nv">l-horz</span>
+</span><span class='line'>   <span class="nv">buttons</span>
+</span><span class='line'>   <span class="mi">0</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">checksum</span> <span class="p">[</span><span class="nv">r-vert</span> <span class="nv">r-horz</span> <span class="nv">l-vert</span> <span class="nv">l-horz</span> <span class="nv">buttons</span><span class="p">])])</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">send </span><span class="p">[</span><span class="nv">packet</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">serial/write</span> <span class="nv">port</span> <span class="p">(</span><span class="nf">vec-&gt;bytes</span> <span class="nv">packet</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From here, we can simply make functions for the joystick controls to go up and down</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;values between 129-254</span>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">up </span><span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;joystick up for speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">good-range?</span> <span class="nv">speed</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">+ </span><span class="mi">129</span> <span class="p">(</span><span class="nb">* </span><span class="mi">125</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">speed</span> <span class="mf">100.0</span><span class="p">))))</span>
+</span><span class='line'>    <span class="nv">CENTER</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;values between 0 and 125</span>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">down </span><span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;joystick down speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">good-range?</span> <span class="nv">speed</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">- </span><span class="mi">125</span> <span class="p">(</span><span class="nb">* </span><span class="mi">125</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">speed</span> <span class="mf">100.0</span><span class="p">))))</span>
+</span><span class='line'>    <span class="nv">CENTER</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we can do things like walk, turn, and change the gait</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-forward</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;walk forward speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">up </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-backwards</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;walk backwards speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">down </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-right</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;walk right speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">up </span><span class="nv">speed</span><span class="p">)</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-left</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;walk right speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">down </span><span class="nv">speed</span><span class="p">)</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">turn-right</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;turn right speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">up </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">turn-left</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</span><span class='line'>  <span class="s">&quot;turn left speed between 1-100&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">down </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">change-gait</span> <span class="p">[</span><span class="nv">gait-key</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">gait-num</span> <span class="p">(</span><span class="nf">gait-key</span> <span class="nv">gaits</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">gait-num</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">stop</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="s">&quot;stop hexapod&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can control it from the REPL with some simple commands</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">walk-forward</span> <span class="mi">20</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">walk-backwards</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">walk-right</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">walk-left</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">turn-right</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">turn-left</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">change-gait</span> <span class="ss">:ripple-smooth</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">change-gait</span> <span class="ss">:tripod-normal</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">change-gait</span> <span class="ss">:ripple</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">change-gait</span> <span class="ss">:amble</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">stop</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you want to see the code, it is out on github as <a href="https://github.com/gigasquid/clj-hexapod">clj-hexapod</a>.  Please keep in mind that it is early days still, and I am still just exploring.</p>
+
+<h2>Phoneix Code Firmware</h2>
+
+<p>It is worth noting the the above code was meant to run with the default hexapod firmware.  That is the &ldquo;Nuke&rdquo; firmware.  There is another firmware, the <a href="https://github.com/KurtE/Arduino_Phoenix_Parts">Phoenix code</a>, that gives the hexapod more lifelike moves and allows it to twist and shift is rather creepy ways.</p>
+
+<p>I just loaded it on the hexapod yesterday.  The commander software changed too, so I will of course need to revisit the code, to add in the new moves.  But here is a sneak preview of what it can do:</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('PmBGt9T-yvI');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/PmBGt9T-yvI?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/PmBGt9T-yvI/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=PmBGt9T-yvI" id="PmBGt9T-yvI" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+
+<p><em>That is my daughter singing in the background</em></p>
+
+<h2>That&rsquo;s all for now</h2>
+
+<p>I hope I have given you pointers for getting started on your own world domination with Clojure and Hexapods. Remember to practice your laugh &hellip;. Muhahaha :)</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2014/03/20/world-domination-with-hexapods-and-clojure//blog/page/3/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -2270,117 +2554,6 @@ farther as well.</p>
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/11/02/embrace-and-reach/">
-		
-			Embrace and Reach</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-02T14:51:00-04:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>, <a class='category' href='/blog/categories/technology/'>Technology</a>
-
-
-</div>
-    </div>
-		<p><img src="http://farm1.staticflickr.com/99/290760357_01392a3f51_n.jpg"></p>
-
-<p>One of the wonderful things about being a technologist today, is
-to be part of an industry that is bubbling over with new and
-exciting things. It can be exhilarating and overwhelming. How can we
-try and do all these great new things?  Of course, it is not
-sensible to simply drop whatever you are using and continually chase
-after the newest tech.  Nor is steadfastly staying in one place and
-refusing to accept that there is a better way of doing things.  The
-challenge is to absorb, identify, and synthesize both good of the
-what we are currently doing and the new stuff too.  We want to embrace and continue the good things that
-are working for us and reach for the new technologies that will propel
-us farther in the future.</p>
-
-<p>Since everyone has their own experience synthesizing the world around
-them, there are many differing opinions on what we should continue to
-embrace and what we technologies and practices should reach for.  I
-humbly offer my thoughts on this based from my own perspective.</p>
-
-<h2>Embrace: Agile Feedback</h2>
-
-<h2>Reach for: Lean Startup Discipline and Programmer Anarchy</h2>
-
-<p>Agile has become a victim of its own success.  Becoming so big, its
-message has been confused and abused in too many ways to name.  But
-the core pillar of frequent and continuous feedback is a foundation to
-any successful software project and should be embraced.  However, we
-should not stop there.  We should reach for the rewards that <a href="http://theleanstartup.com/principles">Lean Startup
-Methodology</a> offers in the form
-of displinced validation.  We should also
-reach to unleash the innovation of our smart developers with
-<a href="http://www.youtube.com/watch?v=uk-CF7klLdA">Programmer Anarchy</a>, and
-look for ways to ruthlessly stomp out unnecessary and wasteful
-project management practices.</p>
-
-<h2>Embrace: Ruby&rsquo;s Community</h2>
-
-<h2>Reach for: Clojure, Go, Elixir, and Meteor</h2>
-
-<p>Ruby and Rails have been an incredible game changer for web
-development.  But they too are suffering from their own success.  One
-of the strengths of Ruby, which should be embraced and nutured, is the
-strength of the community and the openness to newcomers.  This strength
-yields a fruitful ground for a vibrant library ecosystem, which has
-helped Ruby flourish.  We need to reach beyond Ruby and Rails to other
-languages and frameworks that focus on simplicity and concurrency.  The bright future
-will belong to the likes of <a href="http://clojure.org/">Clojure</a>,
-<a href="http://golang.org/">Go</a>, <a href="http://elixir-lang.org/">Elixir</a>, and <a href="http://www.meteor.com/">Meteor</a>.  We need
-to reach and start using these in the products we build, while
-encouraging the growth of a welcoming community and ecosystem like the
-one we have in Ruby.</p>
-
-<h2>Embrace: Collaboration</h2>
-
-<h2>Reach for: the Distributed and Decentralized</h2>
-
-<p>Collaboration with tools like Google Docs works.  We should continue
-to embrace the power that this gives us. However we should embrace
-tools for combining this collaboration in a truly distributed and
-decentralized manner. Git itself is wonderful and distributed, but we
-should reach for tools like Github to be more decentralized and resilient.
-As privacy concerns grow in today&rsquo;s world.  We need to reach beyond
-the convenience that a centralized source of information gives us and
-truly understand the trade offs involved.</p>
-
-<p>We live in an incredible, vibrant time.  Look around and what you
-do everyday.  Embrace and nurture all the good parts, and never give up
-reaching for something better.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/11/02/embrace-and-reach//blog/page/3/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/2/" class="prev">Prev</a>
@@ -2394,7 +2567,7 @@ reaching for something better.</p>
     </div>
     <footer id="footer">
     <div style="display:inline">
-    Copyright &copy; 2015
+    Copyright &copy; 2016
 
     Carin Meier
 . Powered by <a href="http://octopress.org">Octopress</a> | 
