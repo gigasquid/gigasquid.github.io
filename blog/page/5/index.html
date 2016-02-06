@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Dec 26th, 2012 Tags: All, Clojure I spend most of my work day in Ruby and CoffeeScript. However, my true love belongs to Clojure, &hellip;">
+	<meta name="description" content=" Published on: Jan 1st, 2013 Tags: All, John McCarthy Papers Saving the best for last.  Elephant 2000 To be continued&hellip;. Comments ">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,52 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/01/01/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000/">
+		
+			7 McCarthy Papers in 7ish Weeks #7 - Elephant 2000</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-01T19:30:32-05:00" pubdate data-updated="true">Jan 1<span>st</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/john-mccarthy-papers/'>John McCarthy Papers</a>
+
+
+</div>
+    </div>
+		<p>Saving the best for last.  <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/elephant/elephant.html">Elephant 2000</a></p>
+
+<p>To be continued&hellip;.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/01/01/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -905,154 +951,6 @@ One of the things that I love about Clojure is that it can go anywhere that Java
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2012/08/02/talking-to-your-roomba-via-bluetooth-and-roombacom//blog/page/5/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/07/07/baba-yaga-and-the-clojure-reducers/">
-		
-			Baba Yaga and the Clojure Reducers</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-07T19:56:36-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2012</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
-
-
-</div>
-    </div>
-		<p><img src="http://www.thebells.net/Halloween/BabaYaga/BabaYaga3.GIF" alt="Baba Yaga's House" /></p>
-
-<p>Once upon a time, a young girl decided to take a break from her code and stroll in the forest.  It was quite a pleasant day, she packed her lunch in her bag and set off.  While she was walking, she started thinking about a concurrency bug that her OO project was having.  As she pondered the complexities of mutablilty, state, and threads, she must of strayed from the trail and lost track of time.  By the time she looked around, she realized that she was totally lost.</p>
-
-<p>It was then she spotted a very strange hut on chicken legs in the middle of the forest.  The door was open, and there was a ladder leading up to it.  She yelled &ldquo;Hello&rdquo;, but there was no response.  She climbed up the ladder and entered the hut to see if she could find anyone inside.  The hut was empty except for a pile of old books, a large kettle, and very skinny, malnourished black cat. Her heart went out to the poor cat.  She took her sandwich from her bag and watched as the cat greedily ate it.  The cat looked up at her and said, &ldquo;Thank you for your kindness.  Now, you should really get out of her before Baba Yaga &hellip;&rdquo;</p>
-
-<p>A large gust of wind came at the door and Baba Yaga appeared.  She smiled an iron tooth grin at the girl and said, &ldquo;What do we have here? An intruder!&rdquo;.</p>
-
-<p>The girl stammered out, &ldquo;I am sorry, it is just a mistake.  I am lost ..&rdquo;</p>
-
-<p>&ldquo;Too late!&rdquo; Baba Yaga grinned larger.  &ldquo;You are now my slave and if you don&rsquo;t complete my tasks, I will eat you for my supper.&rdquo; She thought for a moment and then pulled a book titled <em>The Odyssey</em> from the pile.  &ldquo;Your first task is to calculate the hash code of every character this book. Then sum of the values of only the even ones.  Make sure you have it done before I return.  And do it fast, I will be timing you.&rdquo;  Baba Yaga turned and disappeared in a gust of wind, with the door slamming and locking firmly in place behind her.</p>
-
-<p>The girl sunk to the floor and started to weep.  How could she complete the task?  The cat rubbed up against her and purred, &ldquo;You showed kindess to me where Baba Yaga never has. I will help you. It seems like this task would be best suited to a Clojure map, filter, and reduce, don&rsquo;t you think?&rdquo;</p>
-
-<p>The girl wiped her eyes. &ldquo;Cat, I think you are right.&rdquo;  She picked up the book.  &ldquo;The first thing we need is to get the content of this book into a vector.&rdquo;</p>
-
-<pre><code>(def odyssey-text (vec (slurp "odyssey.txt")))
-(class odyssey-text) ;=&gt; java.lang.PersistentVector
-</code></pre>
-
-<p>&ldquo;The vector contains all the characters.  See, we can grab the first one and find its hash code this way.&rdquo;</p>
-
-<pre><code>(first odyssey-text) ;=&gt; \P
-(class (first odyssey-text)) ;=&gt; java.lang.Character
-(.hashCode (first odyssey-text)) ;=&gt; 80
-</code></pre>
-
-<p>&ldquo;Now, all we need to do is to make a function to find the hash code and map it to the entire string.&rdquo;</p>
-
-<pre><code>(defn hashcode [c] (.hashCode c))
-(map hashcode odyssey-text) ;=&gt; (80 114 ..... )
-</code></pre>
-
-<p>&ldquo;Next, we need to filter only the even ones out.&rdquo;</p>
-
-<pre><code>(defn hashcode [c] (.hashCode c))
-(map hashcode odyssey-text) ;=&gt; (80 114 111..... )
-(filter even? (map hashcode odyssey-text)) ;=&gt; (80 114 ... )
-</code></pre>
-
-<p>&ldquo;Finally, we just need to sum all these values up with reduce.&rdquo;</p>
-
-<pre><code>(reduce + (filter even? (map hashcode odyssey-text))) ;=&gt; 33702446
-</code></pre>
-
-<p>As soon as she had gotten her answer, Baba Yaga appeared back through the door.  &ldquo;Well, you seemed to have found the answer.  But, let&rsquo;s see how long it took you.&rdquo;</p>
-
-<pre><code>(dotimes [n 5]
-  (println (str "map - filter - reduce - ( run " n " ):"))
-  (time (reduce + (filter even? (map hashcode odyssey-text)))))
-       ;=&gt; map - filter - reduce - ( run 0 ):
-       ;   "Elapsed time: 6932.227 msecs"
-       ;   map - filter - reduce - ( run 1 ):
-       ;   "Elapsed time: 5433.219 msecs"
-       ;   map - filter - reduce - ( run 2 ):
-       ;   "Elapsed time: 5157.45 msecs"
-       ;   map - filter - reduce - ( run 3 ):
-       ;   "Elapsed time: 5397.058 msecs"
-       ;   map - filter - reduce - ( run 4 ):
-       ;   "Elapsed time: 5224.334 msecs"
-</code></pre>
-
-<p>Baba Yaga chuckled &ldquo;Have it done again in under 5 seconds by the time I return.  I am getting hungry.&rdquo;</p>
-
-<p>The girl starting sobbing again. &ldquo;How am I supposed to make it faster?&rdquo;</p>
-
-<p>The cat calmly cleaned himself and said &ldquo;I have heard that Clojure has a new Reducers library that allows you to do composable, parallel, reducible functions like mapping and filtering.  Try this in the namespace.&rdquo;</p>
-
-<pre><code>(ns reducers.core
-  (:require [clojure.core.reducers :as r]))
-</code></pre>
-
-<p>&ldquo;The new parallel versions of map and filter have the exact same shape as the regular versions.  So all we need to do is use the new reducer versions.&rdquo;</p>
-
-<pre><code>(r/fold + (r/filter even? (r/map hashcode odyssey-text))) ;=&gt; 33702446
-</code></pre>
-
-<p>&ldquo;But, is it faster?  The girl hoped.&rdquo;</p>
-
-<pre><code>        ;=&gt;   r/map - r/filter - r/fold - ( run 0 ):
-        ;     "Elapsed time: 4702.766 msecs"
-        ;     r/map - r/filter - r/fold - ( run 1 ):
-        ;     "Elapsed time: 4617.575 msecs"
-        ;     r/map - r/filter - r/fold - ( run 2 ):
-        ;     "Elapsed time: 4596.329 msecs"
-        ;     r/map - r/filter - r/fold - ( run 3 ):
-        ;     "Elapsed time: 4636.259 msecs"
-        ;     r/map - r/filter - r/fold - ( run 4 ):
-        ;     "Elapsed time: 4572.804 msecs"
-</code></pre>
-
-<p>&ldquo;No!&rdquo; Baba Yaga stormed in the room.  &ldquo;Cat!  You helped her!  You mangy thing. Get out of here!&rdquo;  She shoved the cat out the door.  &ldquo;Let me look at that.  I don&rsquo;t believe it. I want to see the all the filtered hash values for myself.&rdquo;</p>
-
-<p>The cat peeked around the corner and spoke softly to the girl. &ldquo;Luckily, <em>into</em> uses reduce.&rdquo;</p>
-
-<pre><code>(into [] (r/filter even? (r/map hashcode odyssey-text))) ;=&gt; [80 114 ... ]
-</code></pre>
-
-<p>While Baba Yaga was intently inspecting all the values in the vector, the cat motioned to the girl to slip out the door.  Once outside, she grabbed the cat in her arms and ran as fast and as far away as she could.  She was relieved to finally reach her home safely.  Where she and cat lived happily for ever after writing Clojure code.</p>
-
-<p><strong>The End</strong></p>
-
-<p>For more information about <a href="http://clojure.com/blog/2012/05/08/reducers-a-library-and-model-for-collection-processing.html">Clojure Reducers</a>
-For the code on <a href="https://github.com/gigasquid/baba-yaga-reducers">github</a> if you want to explore yourself.
-More about <a href="http://en.wikipedia.org/wiki/Baba_Yaga">Baba Yaga Russian Fairy Tales</a>.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2012/07/07/baba-yaga-and-the-clojure-reducers//blog/page/5/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

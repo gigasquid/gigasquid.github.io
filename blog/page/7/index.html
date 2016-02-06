@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Jun 11th, 2011 Tags: All, Clojure, Development Deploying Clojure apps with a single command to the cloud is now possible with Heroku &hellip;">
+	<meta name="description" content="Published on: Aug 7th, 2011 Tags: All, Ruby, Semantic Web I got the chance to share my enthusiasm for two of my favorite technologies at JRubyConf &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,59 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/08/07/semantic-web-and-jruby/">
+		
+			Semantic Web and JRuby</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-07T22:30:21-04:00" pubdate data-updated="true">Aug 7<span>th</span>, 2011</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>, <a class='category' href='/blog/categories/semantic-web/'>Semantic Web</a>
+
+
+</div>
+    </div>
+		<p>I got the chance to share my enthusiasm for two of my favorite technologies at JRubyConf by giving a presentation on Semantic Web and JRuby. It was an excellent experience. I was able to connect with other people that shared my interest in the Semantic Web and some that have even worked with the technologies professionally. Most exciting, I had the opportunity to share my knowledge and hopefully inspire others to look farther into using JRuby with the Jena Semantic Web Framework.</p>
+
+<p>Here are some resources from the presentation that I wanted to share with everyone:</p>
+
+<p>On github, <a href="https://github.com/gigasquid/jruby_semantic_web_examples">https://github.com/gigasquid/jruby_semantic_web_examples</a>, I put together some examples of SPARQL queries against dbpedia as well as translating the examples that they have on the <a href="http://jena.sourceforge.net/tutorial/RDF_API/index.html">Jena RDF API</a> to use JRuby</p>
+
+<p>Here is the presentation itself:
+<a href="https://github.com/gigasquid/Presentations/blob/master/SemanticWebJRuby.pdf">https://github.com/gigasquid/Presentations/blob/master/SemanticWebJRuby.pdf</a></p>
+
+<p>A special note of thanks to <a href="http://foaf-visualizer.org/?uri=http://purl.org/net/bsletten">Brian Sletten</a>, the Semantic Web guru, who inspired and exposed me to the Semantic Web, helped me out by answering my questions and pointing me in the right direction and for just being a swell guy.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2011/08/07/semantic-web-and-jruby//blog/page/7/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -773,152 +826,6 @@ The Katas are taken more or less from the Coding Kata site <a href="http://codin
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2011/01/11/vampire-slaying-with-clojure-part-1-defrecord//blog/page/7/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/12/07/123/">
-		
-			Mutually Recursive Zombies on a Trampoline</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-12-07T23:06:50-05:00" pubdate data-updated="true">Dec 7<span>th</span>, 2010</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
-
-
-</div>
-    </div>
-		<p>It&rsquo;s late at night.  The kids are all tucked snuggly in their beds and I am ready to explore mutual recursion on my own in Clojure after doing some reading of <a href="http://pragprog.com/titles/shcloj/programming-clojure">Programming Clojure</a>.  What better subject to explore them with then zombies?  In this example we have two zombies – zombie1 and zombie2.   Let&rsquo;s represent each zombie as a sequence:</p>
-
-<pre><code>(def zombie1 '("z1_head", "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg"))
-
-(def zombie2 '("z2_head", "z2_r_arm" "z2_l_arm" "z2_torso" "z2_r_leg" "z2_l_leg"))
-</code></pre>
-
-<p>zombie1 is ready to take a bite of zombie2&rsquo;s left leg, since it is nice and tasty there at the end.  Once zombie1 takes a bite, the body part will be added to its own sequence – but in the second position, so that the head is always first and ready to take another bite.  So, if zombie2 just stood still and let itself be eaten, after one bite, zombie1 would look like this</p>
-
-<p>(z1_head,   z2_l_leg,   z1_r_arm,   z1_l_arm,   z1_torso,   z1_r_leg,   z1_l_leg)</p>
-
-<p>But zombie2 is not just going to sit around and let itself be eaten, it is hungry too!  So it looks at zombie1&rsquo;s left leg hanging off there at the end and takes a bite whenever zombie1 takes a bite.</p>
-
-<p>Let&rsquo;s define the functions.  Because they will be mutually recursive and call each, we need to declare the vars first:</p>
-
-<pre><code>(declare zombie1_eats zombie2_eats)
-</code></pre>
-
-<p>Now let&rsquo;s define the zombie functions.  The zombie1_eats function will take 3 arguments, the first is the list that represents the eater (zombie1), the next is the list that represents the food (zombie2), and the last is the number of bites that zombie1 takes.  The function will return the list that represents zombie1.</p>
-
-<pre><code>(defn zombie1_eats [eater,food,bites]
-  (if (= 0 bites) eater
-    (if (= 0 (count food)) eater
-      (zombie2_eats
-        (drop-last food)
-        (cons (first eater) (cons (last food) (rest eater)) )
-         bites))))
-
-(defn zombie2_eats [eater, food bites]
-  (if (= 0 bites) eater
-    (if (= 0 (count food)) eater
-      (zombie1_eats
-        (drop-last food)
-        (cons (first eater) (cons (last food) (rest eater)) )
-         (dec bites)))))
-</code></pre>
-
-<p>After 0 bites:</p>
-
-<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 0)
-("z1_head" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg")
-</code></pre>
-
-<p>After 1 bite</p>
-
-<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 1)
-("z1_head" "z2_l_leg" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg")
-</code></pre>
-
-<p>After 7 bites</p>
-
-<pre><code>(user=&gt; (zombie1_eats zombie1 zombie2 7)
-("z1_head" "z1_r_leg" "z1_l_leg" "z2_r_arm" "z2_l_arm" "z2_torso")
-</code></pre>
-
-<p>After 1007 bites</p>
-
-<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 1007)
-("z1_head" "z1_r_leg" "z1_l_leg" "z2_r_arm" "z2_l_arm" "z2_torso")
-</code></pre>
-
-<p>After 5000 bites</p>
-
-<pre><code>user=&gt; (zombie1_eats zombie1 zombie2 5000)
-java.lang.StackOverflowError (NO_SOURCE_FILE:0)
-</code></pre>
-
-<p>Whoops we blew the stack!  Don&rsquo;t worry – put those zombies on a trampoline!</p>
-
-<p>Clojure provides a function for optimizing mutual recursion.  The only thing that we need to do is to modify our zombie functions with a “#” to introduce an anonymous function.  Our new zombie methods are:</p>
-
-<pre><code>(defn zombie1_eats [eater,food,bites]
-  (if (= 0 bites) eater
-    (if (= 0 (count food)) eater
-      #(zombie2_eats
-        (drop-last food)
-        (cons (first eater) (cons (last food) (rest eater)) )
-         bites))))
-
-(defn zombie2_eats [eater, food bites]
-  (if (= 0 bites) eater
-    (if (= 0 (count food)) eater
-      #(zombie1_eats
-        (drop-last food)
-        (cons (first eater) (cons (last food) (rest eater)) )
-         (dec bites)))))
-</code></pre>
-
-<p>Now lets try again:</p>
-
-<pre><code>user=&gt; (trampoline zombie1_eats zombie1 zombie2 5000)
-("z1_head" "z1_r_arm" "z1_l_arm" "z1_torso" "z1_r_leg" "z1_l_leg")
-</code></pre>
-
-<p>No problem.  Even bigger&hellip;</p>
-
-<pre><code> (trampoline zombie1_eats zombie1 zombie2 50004)
-("z1_head" "z2_l_arm" "z2_torso" "z2_r_leg" "z2_l_leg" "z1_r_arm")
-</code></pre>
-
-<p>There are other techniques to solve this as well in Clojure.  In Stuart Holloway&rsquo;s book, he mentions converting to self-recursion, replacing recursion with laziness and shortcutting recursion with <a href="http://en.wikipedia.org/wiki/Memoization"> memoization</a>.</p>
-
-<p>But for me, there is nothing more enjoyable than putting those zombies on a trampoline!</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2010/12/07/123//blog/page/7/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
