@@ -184,4 +184,4 @@ We can compare the result with the known values and find the closest match.
 We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva's paper on your own and to find comfort in that when you can't find one of your socks, it's not your fault. It most likely has something to do with curious nature of hyperspace.
 
 
-_Thanks to [Ross Gaylor](https://twitter.com/ross_gayler) for bringing the paper to my attention and to [Joe Smith](https://twitter.com/solussd) for the great conversations on SDM_
+_Thanks to [Ross Gayler](https://twitter.com/ross_gayler) for bringing the paper to my attention and to [Joe Smith](https://twitter.com/solussd) for the great conversations on SDM_
