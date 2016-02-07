@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-02-06T19:58:17-05:00</updated>
+  <updated>2016-02-06T20:06:24-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -20,11 +20,11 @@
     <id>http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg">http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg</a>"></p>
 
-<p>The nature of computing in hyperdimensions is a strange and wonderful place.   I have only started to scratch the surface by reading a paper by <a href="http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf">Kanerva</a>. Not only is it interesting from a computer science standpoint, it&rsquo;s also interesting from a cognitive science point of view.  In fact, it could hold the key to better model AI and general reasoning.  This blog is a casual stroll through the main points of Kanerva&rsquo;s paper along with examples in Clojure to make it tangible.  First things first, what is a hyperdimension?</p>
+<p>The nature of computing in hyperdimensions is a strange and wonderful place.   I have only started to scratch the surface by reading a paper by <a href="http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf">Kanerva</a>. Not only is it interesting from a computer science standpoint, it&rsquo;s also interesting from a cognitive science point of view.  In fact, it could hold the key to better model AI and general reasoning.  This blog is a casual stroll through some of the main points of Kanerva&rsquo;s paper along with examples in Clojure to make it tangible.  First things first, what is a hyperdimension?</p>
 
 <h3>What is a Hyperdimension and Where Are My Socks?</h3>
 
-<p>When we are talking about hyperdimensions, we are really talking about <em>lots</em> of dimensions.  You can have a vector with dimensions as well.  A regular vector could have three dimensions <code>[0 1 1]</code>, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors <em>hypervectors</em> for short, which makes them sound really cool. Although the vectors could be make up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use <em>sparse</em> vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The <a href="https://github.com/mikera/core.matrix">core.matrix</a> project from Mike Anderson is what we will use in our examples.  Let&rsquo;s go ahead and make some random hypervectors.</p>
+<p>When we are talking about hyperdimensions, we are really talking about <em>lots</em> of dimensions.  A vector has dimensions.  A regular vector could have three dimensions <code>[0 1 1]</code>, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors <em>hypervectors</em> for short, which makes them sound really cool. Although the vectors could be make up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use <em>sparse</em> vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The <a href="https://github.com/mikera/core.matrix">core.matrix</a> project from Mike Anderson is what we will use in our examples.  Let&rsquo;s go ahead and make some random hypervectors.</p>
 
 <p>First we import the core.matrix libraries and set the implementation to vectorz which provides fast double precision vector math.</p>
 
@@ -38,7 +38,7 @@
 <p>(m/set-current-implementation :vectorz)
 ```</p>
 
-<p>Next we set the sz of our hypervectors to be 100,000.  We also create a function to generate a random sparse hypervector, by choosing to put ones in about 10% of the space.</p>
+<p>Next we set the sz of our hypervectors to be 100,000.  We also create a function to generate a random sparse hypervector by choosing to put ones in about 10% of the space.</p>
 
 <p>```clojure
 (def sz 100000)</p>
@@ -65,16 +65,16 @@ hv))
 <p>a ;=> #vectorz/vector Large vector with shape: [100000]
 ```</p>
 
-<p>You can think of each of this hypervectors as random hyperdimensional sock, or hypersock, because that sounds cooler.  These hypersocks, have curious properties.  One of which, is that they will ~never match.</p>
+<p>You can think of each of this hypervectors as random hyperdimensional sock, or hypersock, because that sounds cooler.  These hypersocks, have curious properties.  One of which is that they will ~never match.</p>
 
 <h3>Hypersocks never match</h3>
 
-<p>Because we are dealing with huge amount of dimensions, a mathematically peculiar probability distribution occurs.  We can take a random hypervector to represent something, then take another one and they will different from each by about 100 STD. We can take another one and it too, will be 100 STD from the other ones.  For practical purpose, we will run out of time before we will run of vectors that are unrelated.  Because of this, any two hypersocks will never match each other.</p>
+<p>Because we are dealing with huge amount of dimensions, a mathematically peculiar probability distribution occurs.  We can take a random hypervector to represent something, then take another one and they will different from each by about 100 STD. We can take another one and it too, will be 100 STD from the other ones.  For practical purposes, we will run out of time before we will run of vectors that are unrelated.  Because of this, any two hypersocks will never match each other.</p>
 
-<p>How can we tell how similar two hypersocks are?  You can use the cosine to tell the similarity between two vectors.  This is determined by the dot product.  We can construct a <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity</a> function to give us a value from -1 to 1 to measure how alike they are with 1 being the same and -1 being the complete opposite.</p>
+<p>How can we tell how similar two hypersocks are?  The cosine to tell the similarity between two vectors.  This is determined by the dot product.  We can construct a <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity</a> function to give us a value from -1 to 1 to measure how alike they are with 1 being the same and -1 being the complete opposite.</p>
 
 <p>```clojure
-defn cosine-sim [v1 v2]
+(defn cosine-sim [v1 v2]
   (/ (m/dot v1 v2)</p>
 
 <pre><code> (* (ml/norm v1) (ml/norm v2))))
