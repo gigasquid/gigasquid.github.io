@@ -141,7 +141,7 @@ Another great party trick in hyperspace, is the ability to bind and unbind hyper
 A map of pairs is a very important data structure.  It gives the ability to bind symbols to values and then retrieve those values.  We can do this with hypervectors too.  Consider the following structure:
 
 ```clojure
-{:name "Gigasquid'
+{:name "Gigasquid"
  :cute-animal "duck"
  :favorite-sock "red plaid"}
 ```
