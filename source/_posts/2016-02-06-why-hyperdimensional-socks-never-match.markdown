@@ -10,11 +10,11 @@ categories:
 
 {% img http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg %}
 
-The nature of computing in hyperdimensions is a strange and wonderful place.   I have only started to scratch the surface by reading a paper by [Kanerva](http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf). Not only is it interesting from a computer science standpoint, it's also interesting from a cognitive science point of view.  In fact, it could hold the key to better model AI and general reasoning.  This blog is a casual stroll through the main points of Kanerva's paper along with examples in Clojure to make it tangible.  First things first, what is a hyperdimension?
+The nature of computing in hyperdimensions is a strange and wonderful place.   I have only started to scratch the surface by reading a paper by [Kanerva](http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf). Not only is it interesting from a computer science standpoint, it's also interesting from a cognitive science point of view.  In fact, it could hold the key to better model AI and general reasoning.  This blog is a casual stroll through some of the main points of Kanerva's paper along with examples in Clojure to make it tangible.  First things first, what is a hyperdimension?
 
 ### What is a Hyperdimension and Where Are My Socks?
 
-When we are talking about hyperdimensions, we are really talking about _lots_ of dimensions.  You can have a vector with dimensions as well.  A regular vector could have three dimensions `[0 1 1]`, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors _hypervectors_ for short, which makes them sound really cool. Although the vectors could be make up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use _sparse_ vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The [core.matrix](https://github.com/mikera/core.matrix) project from Mike Anderson is what we will use in our examples.  Let's go ahead and make some random hypervectors.
+When we are talking about hyperdimensions, we are really talking about _lots_ of dimensions.  A vector has dimensions.  A regular vector could have three dimensions `[0 1 1]`, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors _hypervectors_ for short, which makes them sound really cool. Although the vectors could be make up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use _sparse_ vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The [core.matrix](https://github.com/mikera/core.matrix) project from Mike Anderson is what we will use in our examples.  Let's go ahead and make some random hypervectors.
 
 First we import the core.matrix libraries and set the implementation to vectorz which provides fast double precision vector math.
 
@@ -26,7 +26,7 @@ First we import the core.matrix libraries and set the implementation to vectorz 
 (m/set-current-implementation :vectorz)
 ```
 
-Next we set the sz of our hypervectors to be 100,000.  We also create a function to generate a random sparse hypervector, by choosing to put ones in about 10% of the space.
+Next we set the sz of our hypervectors to be 100,000.  We also create a function to generate a random sparse hypervector by choosing to put ones in about 10% of the space.
 
 ```clojure
 (def sz 100000)
@@ -50,16 +50,16 @@ Now we can generate some.
 a ;=> #vectorz/vector Large vector with shape: [100000]
 ```
 
-You can think of each of this hypervectors as random hyperdimensional sock, or hypersock, because that sounds cooler.  These hypersocks, have curious properties.  One of which, is that they will ~never match.
+You can think of each of this hypervectors as random hyperdimensional sock, or hypersock, because that sounds cooler.  These hypersocks, have curious properties.  One of which is that they will ~never match.
 
 ### Hypersocks never match
 
-Because we are dealing with huge amount of dimensions, a mathematically peculiar probability distribution occurs.  We can take a random hypervector to represent something, then take another one and they will different from each by about 100 STD. We can take another one and it too, will be 100 STD from the other ones.  For practical purpose, we will run out of time before we will run of vectors that are unrelated.  Because of this, any two hypersocks will never match each other.
+Because we are dealing with huge amount of dimensions, a mathematically peculiar probability distribution occurs.  We can take a random hypervector to represent something, then take another one and they will different from each by about 100 STD. We can take another one and it too, will be 100 STD from the other ones.  For practical purposes, we will run out of time before we will run of vectors that are unrelated.  Because of this, any two hypersocks will never match each other.
 
-How can we tell how similar two hypersocks are?  You can use the cosine to tell the similarity between two vectors.  This is determined by the dot product.  We can construct a [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) function to give us a value from -1 to 1 to measure how alike they are with 1 being the same and -1 being the complete opposite.
+How can we tell how similar two hypersocks are?  The cosine to tell the similarity between two vectors.  This is determined by the dot product.  We can construct a [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) function to give us a value from -1 to 1 to measure how alike they are with 1 being the same and -1 being the complete opposite.
 
 ```clojure
-defn cosine-sim [v1 v2]
+(defn cosine-sim [v1 v2]
   (/ (m/dot v1 v2)
      (* (ml/norm v1) (ml/norm v2))))
 ```
