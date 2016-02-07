@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-02-06T17:38:34-05:00</updated>
+  <updated>2016-02-06T19:58:17-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -161,7 +161,7 @@ defn cosine-sim [v1 v2]
 <p>A map of pairs is a very important data structure.  It gives the ability to bind symbols to values and then retrieve those values.  We can do this with hypervectors too.  Consider the following structure:</p>
 
 <p><code>clojure
-{:name "Gigasquid'
+{:name "Gigasquid"
  :cute-animal "duck"
  :favorite-sock "red plaid"}
 </code></p>
