@@ -27,7 +27,7 @@ Our goal is to assemble a frequency matrix, with all the different nouns as the 
 
 The size of the matrix will be big enough to support hypervector behavior, but not so big as to make computation too annoyingly slow.  It will be nouns x 10,000.
 
-The first task is to get a set of nouns to fill out the rows.  Although, there are numerous online sources for linguistic nouns.  They unfortunately do not cover the same language spectrum as old fairy tale books.  So we are going to collect our own.  Using [Stanford CoreNLP](http://stanfordnlp.github.io/CoreNLP/), we can collect a set of nouns using Grimm's Book as a guide.  There are about 2500 nouns there to give us a nice sample to play with.  This makes our total matrix size ~ 2500 x 10,000.
+The first task is to get a set of nouns to fill out the rows.  Although, there are numerous online sources for linguistic nouns, they unfortunately do not cover the same language spectrum as old fairy tale books.  So we are going to collect our own.  Using [Stanford CoreNLP](http://stanfordnlp.github.io/CoreNLP/), we can collect a set of nouns using Grimm's Book as a guide.  There are about 2500 nouns there to give us a nice sample to play with.  This makes our total matrix size ~ 2500 x 10,000.
 
 Now that we have our nouns, let's get down to business.  We want to create an index to row to make a `noun-idx` and then create a sparse matrix for our word frequency matrix.
 
@@ -328,10 +328,15 @@ Are Jack and Hansel siblings? - Yes
     (xor-mul siblings facts)) ;=>0.48003572523507465
 ```
 
+It is interesting to think of that nothing is stopping us at this point from _retracting_ facts by simply subtracting the fact encoded word vectors from our "database" value and making a new value from it.
 
 
 ### Conclusions
 
 In this fun, but casual exploration of word vector we have seen the potential for reasoning about language in a way that uses nothing more complicated than addition and multiplication.  The ability to store dense information in hypervectors, extract it with simple methods, and flexibly collect it randomly, shows its versatility and power.  Hyperdimensional vectors  might hold the key to unlocking a deeper understanding of cognitive computing or perhaps even true artificial intelligence.
+
+It is interesting to note that this technique is not limited to words. Other applications done the same way.  For example a video recommendation using a hypervector with movie titles.  Or perhaps even anomaly detection using sensor readings over a regular weekly time period.
+
+Looking over our journey with word vectors.  At the beginning it seemed that word vectors were magical.  Now, after an understanding of the basics, it still seems like magic.
 
 If you are interested in exploring further, feel free to use my github [hyperdimensional-playground](https://github.com/gigasquid/hyperdimensional-playground) as a starting point.
