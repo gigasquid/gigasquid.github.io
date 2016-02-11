@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-02-10T23:16:55-05:00</updated>
+  <updated>2016-02-11T08:17:13-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -68,7 +68,7 @@
 
 <p>The size of the matrix will be big enough to support hypervector behavior, but not so big as to make computation too annoyingly slow.  It will be nouns x 10,000.</p>
 
-<p>The first task is to get a set of nouns to fill out the rows.  Although, there are numerous online sources for linguistic nouns.  They unfortunately do not cover the same language spectrum as old fairy tale books.  So we are going to collect our own.  Using <a href="http://stanfordnlp.github.io/CoreNLP/">Stanford CoreNLP</a>, we can collect a set of nouns using Grimm&rsquo;s Book as a guide.  There are about 2500 nouns there to give us a nice sample to play with.  This makes our total matrix size ~ 2500 x 10,000.</p>
+<p>The first task is to get a set of nouns to fill out the rows.  Although, there are numerous online sources for linguistic nouns, they unfortunately do not cover the same language spectrum as old fairy tale books.  So we are going to collect our own.  Using <a href="http://stanfordnlp.github.io/CoreNLP/">Stanford CoreNLP</a>, we can collect a set of nouns using Grimm&rsquo;s Book as a guide.  There are about 2500 nouns there to give us a nice sample to play with.  This makes our total matrix size ~ 2500 x 10,000.</p>
 
 <p>Now that we have our nouns, let&rsquo;s get down to business.  We want to create an index to row to make a <code>noun-idx</code> and then create a sparse matrix for our word frequency matrix.</p>
 
@@ -430,9 +430,15 @@
 
 <p>```</p>
 
+<p>It is interesting to think of that nothing is stopping us at this point from <em>retracting</em> facts by simply subtracting the fact encoded word vectors from our &ldquo;database&rdquo; value and making a new value from it.</p>
+
 <h3>Conclusions</h3>
 
 <p>In this fun, but casual exploration of word vector we have seen the potential for reasoning about language in a way that uses nothing more complicated than addition and multiplication.  The ability to store dense information in hypervectors, extract it with simple methods, and flexibly collect it randomly, shows its versatility and power.  Hyperdimensional vectors  might hold the key to unlocking a deeper understanding of cognitive computing or perhaps even true artificial intelligence.</p>
+
+<p>It is interesting to note that this technique is not limited to words. Other applications done the same way.  For example a video recommendation using a hypervector with movie titles.  Or perhaps even anomaly detection using sensor readings over a regular weekly time period.</p>
+
+<p>Looking over our journey with word vectors.  At the beginning it seemed that word vectors were magical.  Now, after an understanding of the basics, it still seems like magic.</p>
 
 <p>If you are interested in exploring further, feel free to use my github <a href="https://github.com/gigasquid/hyperdimensional-playground">hyperdimensional-playground</a> as a starting point.</p>
 ]]></content>
