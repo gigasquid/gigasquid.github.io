@@ -335,7 +335,7 @@ It is interesting to think of that nothing is stopping us at this point from _re
 
 In this fun, but casual exploration of word vector we have seen the potential for reasoning about language in a way that uses nothing more complicated than addition and multiplication.  The ability to store dense information in hypervectors, extract it with simple methods, and flexibly collect it randomly, shows its versatility and power.  Hyperdimensional vectors  might hold the key to unlocking a deeper understanding of cognitive computing or perhaps even true artificial intelligence.
 
-It is interesting to note that this technique is not limited to words. Other applications done the same way.  For example a video recommendation using a hypervector with movie titles.  Or perhaps even anomaly detection using sensor readings over a regular weekly time period.
+It is interesting to note that this technique is not limited to words. Other applications can be done the same way.  For example a video recommendation using a hypervector with movie titles.  Or perhaps even anomaly detection using sensor readings over a regular weekly time period.
 
 Looking over our journey with word vectors.  At the beginning it seemed that word vectors were magical.  Now, after an understanding of the basics, it still seems like magic.
 
