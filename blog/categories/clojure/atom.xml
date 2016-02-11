@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-02-06T20:06:24-05:00</updated>
+  <updated>2016-02-10T23:16:55-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,431 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fairy Tale Word Vectors]]></title>
+    <link href="http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors/"/>
+    <updated>2016-02-10T21:27:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg">http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg</a>"></p>
+
+<p>This post continues our exploration from the last blog post <a href="http://gigasquidsoftware.com/blog/2016/02/06/why-hyperdimensional-socks-never-match/">Why Hyperdimensional Socks Never Match</a>.  We are still working our way through <a href="http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf">Kanerva&rsquo;s paper</a>.  This time, with the basics of hypervectors under our belts, we&rsquo;re ready to explore how words can be expressed as context vectors.  Once in a high dimensional form, you can compare two words to see how similar they are and even perform reasoning.</p>
+
+<p>To kick off our word vector adventure, we need some words.  Preferring whimsy over the Google news, our text will be taken from ten freely available fairy tale books on <a href="http://www.gutenberg.org/">http://www.gutenberg.org/</a>.</p>
+
+<h3>Gather ye nouns</h3>
+
+<p>Our goal is to assemble a frequency matrix, with all the different nouns as the rows and the columns will be the counts of if the word appears or not in the document.  Our matrix will be binary with just 1s and 0s.  The <em>document</em> will be a sentence or fragment of words.  A small visualization is below.</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> Noun          </th>
+<th align="center"> Doc1</th>
+<th> Doc2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> flower        </td>
+<td align="center"> 1   </td>
+<td>0</td>
+</tr>
+<tr>
+<td></td>
+<td> king          </td>
+<td align="center"> 0   </td>
+<td>1</td>
+</tr>
+<tr>
+<td></td>
+<td> fairy         </td>
+<td align="center"> 1   </td>
+<td>0</td>
+</tr>
+<tr>
+<td></td>
+<td> gold          </td>
+<td align="center"> 1   </td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>The size of the matrix will be big enough to support hypervector behavior, but not so big as to make computation too annoyingly slow.  It will be nouns x 10,000.</p>
+
+<p>The first task is to get a set of nouns to fill out the rows.  Although, there are numerous online sources for linguistic nouns.  They unfortunately do not cover the same language spectrum as old fairy tale books.  So we are going to collect our own.  Using <a href="http://stanfordnlp.github.io/CoreNLP/">Stanford CoreNLP</a>, we can collect a set of nouns using Grimm&rsquo;s Book as a guide.  There are about 2500 nouns there to give us a nice sample to play with.  This makes our total matrix size ~ 2500 x 10,000.</p>
+
+<p>Now that we have our nouns, let&rsquo;s get down to business.  We want to create an index to row to make a <code>noun-idx</code> and then create a sparse matrix for our word frequency matrix.</p>
+
+<p>```clojure
+(ns hyperdimensional-playground.context-vectors
+  (:require [clojure.core.matrix :as m]</p>
+
+<pre><code>        [clojure.core.matrix.linear :as ml]
+        [clojure.string :as string]
+        [hyperdimensional-playground.core :refer [rand-hv cosine-sim mean-add inverse xor-mul]]
+        [hyperdimensional-playground.fairytale-nouns :refer [fairy-tales-nouns book-list]]))
+</code></pre>
+
+<p>(m/set-current-implementation :vectorz)
+;; size of the hypervectors and freq matrix columns
+(def sz 10000)
+;; The nouns come from a sampling of Grimm&rsquo;s fairy tale nouns these will
+;; make up the rows in the frequency matrix
+(def noun-idx (zipmap fairy-tales-nouns (range)))
+(def freq-matrix (m/new-sparse-array [(count fairy-tales-nouns) sz]))
+```</p>
+
+<p>The next thing we need to do is to have some functions to take a book, read it in, split it into documents and then update the frequency matrix.</p>
+
+<h3>Random indexing for the win</h3>
+
+<p>The interesting thing about the update method is that we can use <em>random indexing</em>.  We don&rsquo;t need to worry about having a column for each document.  Because of the nature of hyperdimensions, we can randomly assign 10 columns for each document.</p>
+
+<p>```clojure
+(defn update-doc!
+  &ldquo;Given a document &ndash; upate the frequency matrix using random indexing&rdquo;
+  [doc]
+  (let [known-nouns (clojure.set/intersection fairy-tales-nouns (set doc))]</p>
+
+<pre><code>; use positive random indexing
+(doall (repeatedly 10 #(doseq [noun known-nouns]
+                   (m/mset! freq-matrix (get noun-idx noun) (rand-int sz) 1))))))
+</code></pre>
+
+<p>```</p>
+
+<p>The whole book is processed by slurping in the contents and using a regex to split it up into docs to update the matrix.</p>
+
+<p>```clojure
+(defn process-book
+  &ldquo;Load a book and break it into sentence like documents and update the frequency matrix&rdquo;
+  [book-str]
+  (let [book-text (slurp book-str)</p>
+
+<pre><code>    docs (partition 25 (map string/lower-case
+                            (string/split book-text #"\s|\.|\,|\;|\!|\?")))
+    doc-count (count docs)]
+(println "processing:" book-str "(with" doc-count "docs)")
+(doall (map-indexed (fn [idx doc]
+                      (when (zero? (mod idx 1000)) (println "doc:" idx))
+                      (update-doc! doc))
+                    docs))
+(println "DONE with " book-str)))
+</code></pre>
+
+<p>```</p>
+
+<p>We can now run the whole processing with:</p>
+
+<p>```clojure
+(doseq [book book-list]</p>
+
+<pre><code>(process-book book))
+</code></pre>
+
+<p>```</p>
+
+<p>On my system, it only takes about 3 seconds.</p>
+
+<p>Great!  Now we have hypervectors associated with word frequencies.  They are now <em>context word vectors</em>.  What can we do with them.</p>
+
+<h3>How close is a king to a goat?</h3>
+
+<p>One of the things that we can do with them is find out a measure of how closely related the context of two words are by a measure of their cosine similarity.  First, we need a handy function to turn a string word into a word vector by getting it out of our frequency matrix.</p>
+
+<p>```clojure
+(defn wv [word]
+  &ldquo;Get a hypervector for the word from the frequency matrix&rdquo;
+  (let [i (get noun-idx word)]</p>
+
+<pre><code>(assert (not (nil? i)) (str word " not found"))
+(m/slice freq-matrix i)))
+</code></pre>
+
+<p>```</p>
+
+<p>Then we can make another nice function to compare two words and give a informational map back.</p>
+
+<p>```clojure
+(defn compare-wvs
+  &ldquo;Compare two words and give the cosine distance info map&rdquo;
+  [word1 word2]
+  (let [wv1 (wv word1)</p>
+
+<pre><code>    wv2 (wv word2)]
+(when (not= word1 word2)
+  {:word1 word1
+   :word2 word2
+   :cosine (cosine-sim wv1 wv2)})))
+</code></pre>
+
+<p>```</p>
+
+<p>Let&rsquo;s take a look at the similarities of some words to <em>king</em>.</p>
+
+<p>```clojure
+(sort-by :cosine[(compare-wvs &ldquo;king&rdquo; &ldquo;queen&rdquo;)</p>
+
+<pre><code>             (compare-wvs "king" "prince")
+             (compare-wvs "king" "princess")
+             (compare-wvs "king" "guard")
+             (compare-wvs "king" "goat")])
+</code></pre>
+
+<p>  ;; ({:word1 &ldquo;king&rdquo;, :word2 &ldquo;goat&rdquo;, :cosine 0.1509151478896664}
+  ;;  {:word1 &ldquo;king&rdquo;, :word2 &ldquo;guard&rdquo;, :cosine 0.16098893367403827}
+  ;;  {:word1 &ldquo;king&rdquo;, :word2 &ldquo;queen&rdquo;, :cosine 0.49470535530616655}
+  ;;  {:word1 &ldquo;king&rdquo;, :word2 &ldquo;prince&rdquo;, :cosine 0.5832521795716931}
+  ;;  {:word1 &ldquo;king&rdquo;, :word2 &ldquo;princess&rdquo;, :cosine 0.5836922474743367})
+```</p>
+
+<p>As expected, the royal family is closer to the king then a guard or goat is.</p>
+
+<p>One of the interesting things is that now we can do addition and subtraction with these word vectors and see how it affects the relation with other words.</p>
+
+<h3>Boy + Gold = King, Boy + Giant = Jack</h3>
+
+<p>We can take a look at how close <em>boy</em> and <em>king</em> are together by themselves.</p>
+
+<p><code>clojure
+(cosine-sim (wv "boy") (wv "king")) ;=&gt; 0.42996397142253145
+</code></p>
+
+<p>Now we can add some gold to the boy and that new word vector will be closer to king than boy was alone.</p>
+
+<p>```clojure
+(cosine-sim (mean-add (wv &ldquo;boy&rdquo;) (wv &ldquo;gold&rdquo;))</p>
+
+<pre><code>          (wv "king")) ;=&gt; 0.5876251031366048
+</code></pre>
+
+<p>```</p>
+
+<p>Doing the same for <em>boy</em> and <em>jack</em>, we find that adding a giant moves the context closer.</p>
+
+<p>```clojure
+(cosine-sim (wv &ldquo;boy&rdquo;) (wv &ldquo;jack&rdquo;)) ;=> 0.33102858702785953
+;; boy + giant = jack
+(cosine-sim (mean-add (wv &ldquo;giant&rdquo;) (wv &ldquo;boy&rdquo;))</p>
+
+<pre><code>          (wv "jack")) ;=&gt;0.4491473187787431
+</code></pre>
+
+<p>```</p>
+
+<p>Amusingly, a frog and a princess make a prince.</p>
+
+<p><code>clojure
+;;; frog + princess = prince
+  (cosine-sim (wv-add "frog" "princess") (wv "prince")) ;=&gt; 0.5231641991974249
+</code></p>
+
+<p>We can take this even farther by subtracting words and adding others.  For example a similarity to the word queen can be obtained by subtracting man from king and adding woman.</p>
+
+<p>```clojure
+;;; queen= (king-man) + woman
+  (cosine-sim (wv &ldquo;queen&rdquo;)</p>
+
+<pre><code>          (mean-add (wv "woman") (wv-subtract "king" "man"))) ;=&gt;0.5659832204544486
+</code></pre>
+
+<p>```</p>
+
+<p>Similarly, a contextual closeness to father can be gotten from subtracting woman from mother and adding man.</p>
+
+<p>```clojure
+(cosine-sim (wv &ldquo;father&rdquo;)</p>
+
+<pre><code>          (mean-add (wv "man") (wv-subtract "mother" "woman"))) ;=&gt;0.5959841177719538
+</code></pre>
+
+<p>```</p>
+
+<p>But wait, that&rsquo;s not all.  We can also do express facts with these word vectors and <em>reason</em> about them.</p>
+
+<h3>Reasoning with word vector with the database as a hyperdimensional value</h3>
+
+<p>The curious nature of hypervectors allows the storage of multiple entity, attributes in it and allow the retrieval of the likeness of them later by simple linear math &ndash; using only xor multiplication and addition.  This gives us the <em>database as a value</em> in the form of a high dimensional vector.</p>
+
+<p>For an example, say we want to express the fact that Hansel is a brother of Gretel.  We can do this by adding the xor product of brother with hansel and the product of brother with Gretel.</p>
+
+<p>```clojure
+;; hansel is the brother of gretel
+;; B<em>H + B</em>G
+(def hansel-brother-of-gretel
+   (mean-add</p>
+
+<pre><code>(xor-mul (wv "brother") (wv "hansel"))
+(xor-mul (wv "brother") (wv "gretel"))))
+</code></pre>
+
+<p>```</p>
+
+<p>Also we can express that Jack is a bother of Hansel.</p>
+
+<p>```clojure
+(def jack-brother-of-hansel
+  (mean-add</p>
+
+<pre><code> (xor-mul (wv "brother") (wv "jack"))
+ (xor-mul (wv "brother") (wv "hansel"))))
+</code></pre>
+
+<p>```</p>
+
+<p>We can add these two facts together to make a new hypervector value.</p>
+
+<p>```clojure
+(def facts (mean-add hansel-brother-of-gretel</p>
+
+<pre><code>                   jack-brother-of-hansel))
+</code></pre>
+
+<p>```</p>
+
+<p>Now we can actually <em>reason</em> about them and ask questions.  Is Jack a brother of Hansel?  With a high cosine similarity, we can assume the answer is likely.</p>
+
+<p>```clojure
+ ;; is jack the brother of hansel?
+  (cosine-sim
+   (wv &ldquo;jack&rdquo;)
+   (xor-mul (mean-add (wv &ldquo;brother&rdquo;) (wv &ldquo;gretel&rdquo;))</p>
+
+<pre><code>        facts)) ;=&gt;0.8095270629815969
+</code></pre>
+
+<p>```</p>
+
+<p>What about someone unrelated.  Is Cinderella the brother of Gretel? &ndash; No</p>
+
+<p>```clojure
+ ;; is cinderella the brother of gretel ?
+  (cosine-sim
+   (wv &ldquo;cinderella&rdquo;)
+   (xor-mul (mean-add (wv &ldquo;brother&rdquo;) (wv &ldquo;gretel&rdquo;))</p>
+
+<pre><code>        facts)) ;=&gt;0.1451799916656951
+</code></pre>
+
+<p>```</p>
+
+<p>Is Jack the brother of Gretel &ndash; Yes</p>
+
+<p>```clojure
+ ;; is jack the brother of gretel ?
+  (cosine-sim
+   (wv &ldquo;jack&rdquo;)
+   (xor-mul (mean-add (wv &ldquo;brother&rdquo;) (wv &ldquo;gretel&rdquo;))</p>
+
+<pre><code>        facts)) ;=&gt; 0.8095270629815969
+</code></pre>
+
+<p>```</p>
+
+<p>We can take this further by adding more facts and inventing a relation of our own.</p>
+
+<h3>Siblings in Hyperspace</h3>
+
+<p>Let&rsquo;s invent a new word vector that is not in our nouns &ndash; <em>siblings</em>.  We are going to create new random hypervector to represent it.</p>
+
+<p><code>clojure
+(def siblings (rand-hv))
+</code></p>
+
+<p>We will define it in terms of word vectors that we already have.  That is, siblings will be a the sum of brother + sister.  We XOR multiply it by siblings to associate it with the hypervector.</p>
+
+<p>```clojure
+(def siblings-brother-sister</p>
+
+<pre><code>(mean-add (xor-mul siblings (wv "brother")) (xor-mul siblings (wv "sister"))))
+</code></pre>
+
+<p>```</p>
+
+<p>Now we can add some more facts.  Gretel is a sister of Hansel.</p>
+
+<p>```clojure
+ ;; gretel is the sister of hansel
+  ;; S<em>G + S</em>H
+  (def gretel-sister-of-hansel</p>
+
+<pre><code>(mean-add
+ (xor-mul (wv "sister") (wv "gretel"))
+ (xor-mul (wv "sister") (wv "hansel"))))
+</code></pre>
+
+<p>```</p>
+
+<p>Gretel is also a sister of Jack.</p>
+
+<p>```clojure
+  ;; gretel is the sister of jack
+  ; S<em>G + S</em>H
+  (def gretel-sister-of-jack</p>
+
+<pre><code>(mean-add
+ (xor-mul (wv "sister") (wv "gretel"))
+ (xor-mul (wv "sister") (wv "jack"))))
+</code></pre>
+
+<p>```</p>
+
+<p>Collecting all of our facts into one hypervector (as a database).</p>
+
+<p>```clojure
+ (def facts (mean-add hansel-brother-of-gretel</p>
+
+<pre><code>                   jack-brother-of-hansel
+                   gretel-sister-of-jack
+                   gretel-sister-of-hansel
+                   siblings-brother-sister))
+</code></pre>
+
+<p>```</p>
+
+<p>Now we can ask some for questions.</p>
+
+<p>Are Hansel and Gretel siblings? &ndash; Yes</p>
+
+<p><code>clojure
+;; are hansel and gretel siblings?
+  (cosine-sim
+   (mean-add (wv "hansel") (wv "gretel"))
+   (xor-mul siblings facts)) ;=&gt;0.627015379034067
+</code></p>
+
+<p>Are John and Roland siblings &ndash; No</p>
+
+<p><code>clojure
+;; are john and roland siblings?
+  (cosine-sim
+   (mean-add (wv "roland") (wv "john"))
+   (xor-mul siblings facts)) ;=&gt; 0.1984017637065277
+</code></p>
+
+<p>Are Jack and Hansel siblings? &ndash; Yes</p>
+
+<p>```clojure
+  (cosine-sim</p>
+
+<pre><code>(mean-add (wv "jack") (wv "hansel"))
+(xor-mul siblings facts)) ;=&gt;0.48003572523507465
+</code></pre>
+
+<p>```</p>
+
+<h3>Conclusions</h3>
+
+<p>In this fun, but casual exploration of word vector we have seen the potential for reasoning about language in a way that uses nothing more complicated than addition and multiplication.  The ability to store dense information in hypervectors, extract it with simple methods, and flexibly collect it randomly, shows its versatility and power.  Hyperdimensional vectors  might hold the key to unlocking a deeper understanding of cognitive computing or perhaps even true artificial intelligence.</p>
+
+<p>If you are interested in exploring further, feel free to use my github <a href="https://github.com/gigasquid/hyperdimensional-playground">hyperdimensional-playground</a> as a starting point.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Why Hyperdimensional Socks Never Match]]></title>
@@ -864,386 +1289,6 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 <p><strong>Datomic:</strong> Certainly. I would love that.  Do you want to talk about it now, or have another cookie break first?</p>
 
 <p><strong>Human:</strong> Now that you mention cookies&hellip; Let&rsquo;s take a short break and we will talk again soon.</p>
-
-<p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Conversations with Datomic]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/"/>
-    <updated>2015-08-15T10:29:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
-
-<p><strong>Human:</strong> Hi <a href="http://www.datomic.com/">Datomic</a>.   I have been hearing good things about you.  I would like to talk to you and get to know you.  Is that alright?</p>
-
-<p><strong>Datomic:</strong> Sure!  I would be happy to talk with you.  What language would you like to converse in?</p>
-
-<p><strong>Human:</strong>  I like Clojure.</p>
-
-<p><strong>Datomic:</strong>  That is one of my favorites too.  You know how to setup a Leiningen project right?</p>
-
-<p><strong>Human:</strong> Oh yes.  What dependency should I use?</p>
-
-<p><strong>Datomic:</strong> Just use <code>[com.datomic/datomic-free "0.9.5206"]</code>.</p>
-
-<p><strong>Human:</strong> Got it.  Do you mind if I record our conversation in a namespaced file, so that I can refer back to it later?</p>
-
-<p><strong>Datomic:</strong>  Not a problem.  Make sure to require <code>datomic.api</code> when you set it up.</p>
-
-<p><code>clojure
-(ns conversations.datomic
-  (require [datomic.api :as d]))
-</code></p>
-
-<p><strong>Human:</strong>  All right.  I am all setup up.  I don&rsquo;t really know where to start, so maybe you can tell me a little about yourself.</p>
-
-<p><strong>Datomic:</strong>  I would be happy to.  I am a database of facts.  Would you like to create a database with me?</p>
-
-<p><strong>Human:</strong>  Sure.  How do I do that?</p>
-
-<p><strong>Datomic:</strong> For a casual conversation like this, we can use a in memory database with a uri like this:</p>
-
-<p><code>clojure
-(def uri "datomic:mem://first-conversation")
-</code>
-Then we can create the database and simply connect to it.</p>
-
-<p><code>clojure
-(d/create-database uri)
-(def conn (d/connect uri))
-</code></p>
-
-<p><strong>Human:</strong> So, being a database, obviously you store things.  What sort of things to you store?</p>
-
-<p><strong>Datomic:</strong>  I store facts about things, which I call <em>datoms</em>.</p>
-
-<p><strong>Human:</strong>  That sound neat.  How do I tell you a fact to store?  For example, what if I want you to store a fact about a dog, like its name?</p>
-
-<p><strong>Datomic:</strong>  Ah.  Well the name of a dog is an attribute.  First, you need to tell me about the name attribute, so that I can use it to store the fact for you .  You can describe the attribute in the form of a map like this:</p>
-
-<p><code>clojure
-{:db/id (d/tempid :db.part/db)
- :db/ident :dog/name
- :db/valueType :db.type/string
- :db/cardinality :db.cardinality/one
- :db/unique :db.unique/identity
- :db/doc "Name of the Dog"
- :db.install/_attribute :db.part/db}
-</code>
- This map is a set of facts, (called <em>datoms</em>),  about an entity.  In this
- case, the entity is an attribute. Attributes, in turn, can be used to describe other entities, like a dog. I will explain the different parts to you.</p>
-
-<ul>
-<li><code>db/id</code> is the internal id of the fact. With <code>(d/tempid :db.part/db)</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li>
-<li><code>db/ident</code> is the human readable reference for it. While I am fine just referring to the attribute by an id, humans prefer text.  This says that you can refer to this attribute by the namespaced keyword <code>:dog/name</code>.</li>
-<li><code>db/valueType</code> tells me the type of the attribute.  The dog&rsquo;s name is a string.</li>
-<li><code>db/cardinality</code> lets me know if there is a one-to-one relationship with the entity or not. In our case, a dog has only one name.</li>
-<li><code>db/unique</code> is if that attribute is unique for an entity.  In our example case, we are saying that a dog can be uniquely identified by its name.</li>
-<li><code>db/doc</code> is some documentation for humans that explains a bit more about the attribute.</li>
-<li><code>db.install/_attribute</code> tells me that this is an schema attribute that I should store with the other things like it.</li>
-</ul>
-
-
-<p><strong>Human:</strong> I think I understand. Let me try one out for myself.  So dog breed would be this?</p>
-
-<p><code>clojure
-{:db/id (d/tempid :db.part/db)
- :db/ident :dog/breed
- :db/valueType :db.type/string
- :db/cardinality :db.cardinality/one
- :db/doc "Breed of the Dog"
- :db.install/_attribute :db.part/db}
-</code></p>
-
-<p><strong>Datomic:</strong>  Yes!  I think you got it.  Let&rsquo;s try one more.</p>
-
-<p><strong>Human:</strong> Ok.  How about the dog&rsquo;s favorite treat?</p>
-
-<p><code>clojure
-{:db/id (d/tempid :db.part/db)
- :db/ident :dog/favorite-treat
- :db/valueType :db.type/string
- :db/cardinality :db.cardinality/one
- :db/doc "Dog's Favorite Treat to Eat"
- :db.install/_attribute :db.part/db}
-</code></p>
-
-<p><strong>Datomic:</strong> You got it.  Now, that you have these attributes, you can give them to me using a transaction with the connection.</p>
-
-<p><strong>Human:</strong> Ok.  Do you want that in a specific format?</p>
-
-<p><strong>Datomic:</strong>  Yes.  Please send it to me using the form:</p>
-
-<p><code>clojure
-(d/transact conn [....facts....])
-</code></p>
-
-<p><strong>Human:</strong> Sounds good.  I will put the dog schema datoms we discussed in a vector and call it <code>dog-schema</code> and then send it to you.</p>
-
-<p>```clojure
-(def dog-schema  [{:db/id (d/tempid :db.part/db)</p>
-
-<pre><code>               :db/ident :dog/name
-               :db/valueType :db.type/string
-               :db/cardinality :db.cardinality/one
-               :db/unique :db.unique/identity
-               :db/doc "Name of the Dog"
-               :db.install/_attribute :db.part/db}
-              {:db/id (d/tempid :db.part/db)
-               :db/ident :dog/breed
-               :db/valueType :db.type/string
-               :db/cardinality :db.cardinality/one
-               :db/doc "Breed of the Dog"
-               :db.install/_attribute :db.part/db}
-              {:db/id (d/tempid :db.part/db)
-               :db/ident :dog/favorite-treat
-               :db/valueType :db.type/string
-               :db/cardinality :db.cardinality/one
-               :db/doc "Dog's Favorite Treat to Eat"
-               :db.install/_attribute :db.part/db}])
-</code></pre>
-
-<p>(d/transact conn dog-schema)
-```</p>
-
-<p><strong>Datomic:</strong> The transaction was fine.  I know all about those dog attributes now.</p>
-
-<p><strong>Human:</strong>  I would like to also add a schema for owners for the dogs now.  I think I know how to describe the name of the owner, but I don&rsquo;t know how to express how the owner has dogs.</p>
-
-<p><strong>Datomic:</strong> Ah. I that case you can specify the <code>db:valueType</code> as a <code>ref</code> type.  This lets me know that it references another entity.</p>
-
-<p><strong>Human:</strong>  Do I need to tell you that is a type of dog somehow?</p>
-
-<p><strong>Datomic:</strong> No.  I am pretty smart that way.  I will figure it out
-  once you try to tell me about some real entities.  In fact, entities don&rsquo;t have types. A ref attribute can reference <em>any</em> entity.</p>
-
-<p><strong>Human:</strong>  Cool.  Well, in that case, here is the owner schema.  The owner has a name and some dogs.</p>
-
-<p>```clojure
-(def owner-schema [{:db/id (d/tempid :db.part/db)</p>
-
-<pre><code>                :db/ident :owner/name
-                :db/valueType :db.type/string
-                :db/cardinality :db.cardinality/one
-                :db/unique :db.unique/identity
-                :db/doc "Name of the Owner"
-                :db.install/_attribute :db.part/db}
-               {:db/id (d/tempid :db.part/db)
-                :db/ident :owner/dogs
-                :db/valueType :db.type/ref
-                :db/cardinality :db.cardinality/many
-                :db/doc "Dogs of the Owner"
-                :db.install/_attribute :db.part/db}])
-</code></pre>
-
-<p>(d/transact conn owner-schema)
-```</p>
-
-<p><strong>Datomic:</strong>  The transaction is fine.  I now know about the attributes that dogs and owners have.  Would you like to tell me some facts about specific dogs and owners?</p>
-
-<p><strong>Human:</strong>  Yes. Bob is an owner.  He has two dogs. Fluffy is a poodle whose favorite treat is cheese, and Fido is a mixed breed, whose favorite treat is a bone.  Lucy is also an owner who has one dog named Tiny.  Tiny is a Great Dane whose favorite treat is cheese.</p>
-
-<p>I am a bit confused how to represent the dogs of the owners. How do I do that?</p>
-
-<p><strong>Datomic:</strong>  That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them.  Each dog or owner will by its own map.  Use <code>:db/id</code> set to <code>(d/tempid :db.part/user)</code> so I can generate it for you.  Then use each attribute from the schema as the key and let me know the value.</p>
-
-<p><strong>Human:</strong>  Like this?</p>
-
-<p>```clojure
-(d/transact conn [{:db/id (d/tempid :db.part/user)</p>
-
-<pre><code>               :owner/name "Bob"
-               :owner/dogs [{:db/id (d/tempid :db.part/user)
-                             :dog/name "Fluffy"
-                             :dog/breed "Poodle"
-                             :dog/favorite-treat "Cheese"}
-                            {:db/id (d/tempid :db.part/user)
-                             :dog/name "Fido"
-                             :dog/breed "Mix"
-                             :dog/favorite-treat "Bone"}]}
-              {:db/id (d/tempid :db.part/user)
-               :owner/name "Lucy"
-               :owner/dogs [{:db/id (d/tempid :db.part/user)
-                             :dog/name "Tiny"
-                             :dog/breed "Great Dane"
-                             :dog/favorite-treat "Cheese"}]}])
-</code></pre>
-
-<p>```</p>
-
-<p><strong>Datomic:</strong>  Exactly right.  I now know the facts about Bob and Lucy and their dogs.</p>
-
-<p><strong>Human:</strong>  Umm, how do I query you about the facts that your know?  For example, how do I ask you about the dog named Tiny?</p>
-
-<p><strong>Datomic:</strong>  There are a couple a ways to inquire about facts I know.  To find out about the attributes of a specific dog, or entity, I would recommend using <code>d/pull</code>.  You can ask me in the form of this to get all the attributes for a given dog name.  Note that this works since the dog name is a way to uniquely identify the dog:</p>
-
-<p><code>clojure
-(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
-</code></p>
-
-<p><strong>Human:</strong>  What is the <code>(d/db conn)</code> all about?</p>
-
-<p><strong>Datomic:</strong>  That function returns the current database value of the connection. The facts I know change during time.  Every time there is a transaction, I consider the time to be different and there is a new database value.  The <code>d/db</code> function gives you the most recent value that I know about.</p>
-
-<p><strong>Human:</strong> I am assuming the <code>[*]</code> is a wildcard that means give me all the attributes for that dog?</p>
-
-<p><strong>Datomic:</strong>  Exactly right.</p>
-
-<p><strong>Human:</strong> Ok.  Tell me about Tiny.</p>
-
-<p><code>clojure
-(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
-</code></p>
-
-<p><strong>Datomic:</strong>
-<code>clojure
-{:db/id 17592186045424
- :dog/name "Tiny"
- :dog/breed "Great Dane"
- :dog/favorite-treat "Cheese"}
-</code></p>
-
-<p>Tiny is a Great Dane that has a favorite treat of Cheese.</p>
-
-<p><strong>Human:</strong>  This is fun.  What about more complicated questions.  How do I ask about the name of the owner of the dog &ldquo;Tiny&rdquo;?</p>
-
-<p><strong>Datomic:</strong>  For that I would ask using the <em>datalog</em> query <code>d/q</code>.  It uses logic to unify your query with all of my facts and give you the result.  The query itself would be a vector with logic statements inside like:</p>
-
-<p>```clojure
-&lsquo;[:find ?owner-name
-  :where [?dog :dog/name &ldquo;Tiny&rdquo;]</p>
-
-<pre><code>     [?owner :owner/dogs ?dog]
-     [?owner :owner/name ?owner-name]]
-</code></pre>
-
-<p>```</p>
-
-<p><strong>Human:</strong>  Whoa.  What is the deal with those question marks?</p>
-
-<p><strong>Datomic:</strong> The things with the question marks are considered as variables that we will <em>unify</em> to find the answer.  For example, we are looking for something that we are going to call <code>?owner-name</code>. I am going the use the following constraints with my facts to try to find the answer:</p>
-
-<ul>
-<li>There is an entity that we are going to call <code>?dog</code> that has the attribute <code>:dog/name</code> that is &ldquo;Tiny&rdquo;</li>
-<li>There is an entity that we are going to call <code>?owner</code> that has an attribute <code>:owner/dogs</code> that is the same as the <code>?dog</code> entity</li>
-<li>That same <code>?owner</code> entity also has an attribute <code>:owner/name</code> that has the value <code>?owner-name</code></li>
-</ul>
-
-
-<p><strong>Human:</strong>  Alright, so when I ask for this query, do I need to give you a database value too?</p>
-
-<p><strong>Datomic:</strong>  Yes.  They should have the form of:</p>
-
-<p><code>clojure
-(d/q '[datalog-query] db-value)
-</code></p>
-
-<p>Remember, to get the current db value use <code>(d/db conn)</code>.</p>
-
-<p><strong>Human:</strong>  Ok.  Here we go.</p>
-
-<p>```clojure
-(d/q &lsquo;[:find ?owner-name</p>
-
-<pre><code>   :where [?dog :dog/name "Tiny"]
-          [?owner :owner/dogs ?dog]
-          [?owner :owner/name ?owner-name]]
- (d/db conn))
-</code></pre>
-
-<p>```</p>
-
-<p><strong>Datomic:</strong></p>
-
-<p>The answer is:</p>
-
-<p>```clojure</p>
-
-<h1>{[&ldquo;Lucy&rdquo;]}</h1>
-
-<p>```</p>
-
-<p><strong>Human:</strong>  What if I want to pass the dog name as a parameter?  How do I communicate that to you?</p>
-
-<p><strong>Datomic:</strong>  You will need to use an <code>in</code> clause in the query like this:</p>
-
-<p><code>clojure
-'[:find [blah]
-   :in $ ?dog-name
-   :where [blah]]
-</code></p>
-
-<p>The $ is shorthand for the database value and the <code>?dog-name</code> is what you will pass in as a parameter in the query after the db-value.</p>
-
-<p><strong>Human:</strong>  Like this?</p>
-
-<p>```clojure
-(d/q &lsquo;[:find ?owner-name</p>
-
-<pre><code>   :in $ ?dog-name
-   :where [?dog :dog/name ?dog-name]
-          [?owner :owner/dogs ?dog]
-          [?owner :owner/name ?owner-name]]
- (d/db conn) "Tiny")
-</code></pre>
-
-<p>```</p>
-
-<p><strong>Datomic:</strong>  Exactly right.  The answer is Lucy again.</p>
-
-<p>```clojure</p>
-
-<h1>{[&ldquo;Lucy&rdquo;]}</h1>
-
-<p>```</p>
-
-<p><strong>Human:</strong>  I think I am getting the hang of this!  Another quick question.  How would I go about asking you which dogs have cheese as their favorite treat?  I would want the dog&rsquo;s name and breed back.</p>
-
-<p><strong>Datomic:</strong>  You would simply construct another datalog query.  This time I would recommend that you combine the <code>pull</code> syntax within the <code>find</code> part of the query.  The <code>pull</code> syntax is great at selecting attributes from an entity.  So the <code>find</code> part would look something like this:</p>
-
-<p><code>clojure
-[(pull ?dog [:dog/name :dog/breed]) ...]
-</code></p>
-
-<p>This will return the attributes of the <code>:dog/name</code> and the <code>:dog/breed</code>.  The three dots on the end will let me know that you want a collection returned, so I will give you back a simple vector with the entity attributes requested, instead of the set of vectors I normally give back.</p>
-
-<p>The <code>where</code> section of the query is going to look for the <code>?dog</code> entity that matches the <code>:dog/favorite-treat</code> attribute with &ldquo;Cheese&rdquo;.</p>
-
-<p><code>clojure
-'[:find [(pull ?dog [:dog/name :dog/breed]) ...]
-  :where [?dog :dog/favorite-treat "Cheese"]]
-</code></p>
-
-<p><strong>Human:</strong>  Then I put it together with the current database value in a <code>d/q</code> function?</p>
-
-<p>```clojure
-(d/q &lsquo;[:find [(pull ?dog [:dog/name :dog/breed]) &hellip;]</p>
-
-<pre><code>   :where [?dog :dog/favorite-treat "Cheese"]]
- (d/db conn))
-</code></pre>
-
-<p>```</p>
-
-<p><strong>Datomic:</strong> Yup.  The answer is:</p>
-
-<p><code>clojure
-[{:dog/name "Fluffy", :dog/breed "Poodle"}
- {:dog/name "Tiny", :dog/breed "Great Dane"}]
-</code></p>
-
-<p><strong>Human:</strong>  Thanks so much.  I think I beginning to get the hang of schemas and queries.  What other things do I need to know about you?</p>
-
-<p><strong>Datomic:</strong>  Well, you have just scratched the surface really.  One of the most interesting things about me is that I never forget facts.  You can add new facts, like Tiny&rsquo;s favorite food is now hotdogs, but I won&rsquo;t forget that he liked cheese at another point in time.</p>
-
-<p><strong>Human:</strong> That sounds really interesting.  I think I need some tea and cookies before I delve into that.  Let&rsquo;s take a short break and talk again soon.</p>
-
-<p><strong>Datomic:</strong>  My pleasure.  I look forward to it.</p>
-
-<p><em>Special thanks to <a href="https://twitter.com/ohpauleez">Paul deGrandis</a> for
-the conversation idea :)</em></p>
 
 <p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
 ]]></content>
