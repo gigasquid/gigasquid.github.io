@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-02-11T11:33:37-05:00</updated>
+  <updated>2016-02-12T09:02:59-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -277,7 +277,7 @@
 
 <p>```</p>
 
-<p>Also we can express that Jack is a bother of Hansel.</p>
+<p>Also we can express that Jack is a brother of Hansel.</p>
 
 <p>```clojure
 (def jack-brother-of-hansel
@@ -513,7 +513,7 @@ hv))
 
 <p>```</p>
 
-<p>If we looks at the similarity of a hypervector with itself, the result is ~1.  We the other random hypervectors, it is ~0.</p>
+<p>If we look at the similarity of a hypervector with itself, the result is ~1.  With the other random hypervectors, it is ~0.</p>
 
 <p>```clojure
 (cosine-sim a a) ;=>  1.0
@@ -545,7 +545,7 @@ hv))
 (cosine-sim x b) ;=&gt; 0.7252586504505658
 </code></p>
 
-<p>You can also do a very simple for of multiplication on vectors with 1s and 0s with using <em>XOR</em>.  We can do this by add the two vectors together and then mapping <code>mod 2</code> on each of the elements.</p>
+<p>You can also do a very simple form of multiplication on vectors with 1s and 0s with using <em>XOR</em>.  We can do this by add the two vectors together and then mapping <code>mod 2</code> on each of the elements.</p>
 
 <p>```clojure
 (defn xor-mul [v1 v2]
@@ -632,7 +632,7 @@ hv))
 
 <h3>Conclusion</h3>
 
-<p>We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva&rsquo;s paper on your own and to find comfort in that when you can&rsquo;t find one of your socks, it&rsquo;s not your fault. It most likely has something to do with curious nature of hyperspace.</p>
+<p>We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva&rsquo;s paper on your own and to find comfort in that when you can&rsquo;t find one of your socks, it&rsquo;s not your fault. It most likely has something to do with the curious nature of hyperspace.</p>
 
 <p><em>Thanks to <a href="https://twitter.com/ross_gayler">Ross Gayler</a> for bringing the paper to my attention and to <a href="https://twitter.com/solussd">Joe Smith</a> for the great conversations on SDM</em></p>
 ]]></content>
