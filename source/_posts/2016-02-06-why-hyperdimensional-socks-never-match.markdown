@@ -64,7 +64,7 @@ How can we tell how similar two hypersocks are?  The cosine to tell the similari
      (* (ml/norm v1) (ml/norm v2))))
 ```
 
-If we looks at the similarity of a hypervector with itself, the result is ~1.  We the other random hypervectors, it is ~0.
+If we look at the similarity of a hypervector with itself, the result is ~1.  With the other random hypervectors, it is ~0.
 
 ```clojure
 (cosine-sim a a) ;=>  1.0
@@ -96,7 +96,7 @@ The interesting thing about addition is that the result is similar to all the ve
 (cosine-sim x b) ;=> 0.7252586504505658
 ```
 
-You can also do a very simple for of multiplication on vectors with 1s and 0s with using _XOR_.  We can do this by add the two vectors together and then mapping `mod 2` on each of the elements.
+You can also do a very simple form of multiplication on vectors with 1s and 0s with using _XOR_.  We can do this by add the two vectors together and then mapping `mod 2` on each of the elements.
 
 ```clojure
 (defn xor-mul [v1 v2]
@@ -181,7 +181,7 @@ We can compare the result with the known values and find the closest match.
 
 ### Conclusion
 
-We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva's paper on your own and to find comfort in that when you can't find one of your socks, it's not your fault. It most likely has something to do with curious nature of hyperspace.
+We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva's paper on your own and to find comfort in that when you can't find one of your socks, it's not your fault. It most likely has something to do with the curious nature of hyperspace.
 
 
 _Thanks to [Ross Gayler](https://twitter.com/ross_gayler) for bringing the paper to my attention and to [Joe Smith](https://twitter.com/solussd) for the great conversations on SDM_

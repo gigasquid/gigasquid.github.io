@@ -204,7 +204,7 @@ For an example, say we want to express the fact that Hansel is a brother of Gret
     (xor-mul (wv "brother") (wv "gretel"))))
 ```
 
-Also we can express that Jack is a bother of Hansel.
+Also we can express that Jack is a brother of Hansel.
 
 ```clojure
 (def jack-brother-of-hansel
