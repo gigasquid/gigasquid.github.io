@@ -80,7 +80,7 @@
 
 <h3>What is a Hyperdimension and Where Are My Socks?</h3>
 
-<p>When we are talking about hyperdimensions, we are really talking about <em>lots</em> of dimensions.  A vector has dimensions.  A regular vector could have three dimensions <code>[0 1 1]</code>, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors <em>hypervectors</em> for short, which makes them sound really cool. Although the vectors could be make up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use <em>sparse</em> vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The <a href="https://github.com/mikera/core.matrix">core.matrix</a> project from Mike Anderson is what we will use in our examples.  Let&rsquo;s go ahead and make some random hypervectors.</p>
+<p>When we are talking about hyperdimensions, we are really talking about <em>lots</em> of dimensions.  A vector has dimensions.  A regular vector could have three dimensions <code>[0 1 1]</code>, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors <em>hypervectors</em> for short, which makes them sound really cool. Although the vectors could be made up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use <em>sparse</em> vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The <a href="https://github.com/mikera/core.matrix">core.matrix</a> project from Mike Anderson is what we will use in our examples.  Let&rsquo;s go ahead and make some random hypervectors.</p>
 
 <p>First we import the core.matrix libraries and set the implementation to vectorz which provides fast double precision vector math.</p>
 
@@ -152,7 +152,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>If we looks at the similarity of a hypervector with itself, the result is ~1.  We the other random hypervectors, it is ~0.</p>
+<p>If we looks at the similarity of a hypervector with itself, the result is ~1.  With the other random hypervectors, it is ~0.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -197,7 +197,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>You can also do a very simple for of multiplication on vectors with 1s and 0s with using <em>XOR</em>.  We can do this by add the two vectors together and then mapping <code>mod 2</code> on each of the elements.</p>
+<p>You can also do a very simple form of multiplication on vectors with 1s and 0s with using <em>XOR</em>.  We can do this by add the two vectors together and then mapping <code>mod 2</code> on each of the elements.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -324,7 +324,7 @@
 
 <h3>Conclusion</h3>
 
-<p>We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva&rsquo;s paper on your own and to find comfort in that when you can&rsquo;t find one of your socks, it&rsquo;s not your fault. It most likely has something to do with curious nature of hyperspace.</p>
+<p>We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva&rsquo;s paper on your own and to find comfort in that when you can&rsquo;t find one of your socks, it&rsquo;s not your fault. It most likely has something to do with the curious nature of hyperspace.</p>
 
 <p><em>Thanks to <a href="https://twitter.com/ross_gayler">Ross Gayler</a> for bringing the paper to my attention and to <a href="https://twitter.com/solussd">Joe Smith</a> for the great conversations on SDM</em></p>
 </div>
