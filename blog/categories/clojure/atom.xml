@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-03-16T21:03:31-04:00</updated>
+  <updated>2016-03-16T21:09:32-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -22,7 +22,7 @@
 
 <h2>What is a Kolmogorov-Uspensky machine?</h2>
 
-<p>The first thing I found is that the Kolmogorov-Uspensky machine, (also referred to as KUM), is very similar to the <a href="https://en.wikipedia.org/wiki/Turing_machine">Turning machine</a>.  In fact, it shares the same computational class of being Turing-complete.</p>
+<p>The first thing I found is that the Kolmogorov-Uspensky machine, (also referred to as KUM), is very similar to the <a href="https://en.wikipedia.org/wiki/Turing_machine">Turing machine</a>.  In fact, it shares the same computational class of being Turing-complete.</p>
 
 <p><img class="<a" src="href="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Turing_machine_2b.svg/320px-Turing_machine_2b.svg.png">https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Turing_machine_2b.svg/320px-Turing_machine_2b.svg.png</a>"></p>
 
