@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-03-16T21:33:45-04:00</updated>
+  <updated>2016-03-16T21:38:15-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -18,7 +18,7 @@
     <link href="http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine/"/>
     <updated>2016-03-16T18:19:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine</id>
-    <content type="html"><![CDATA[<p>It happened again.  I was sitting down reading a paper and I came across the phrase <em>Kolmogorov-Uspensky machine</em> and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn&rsquo;t important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared <em>again</em>.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn&rsquo;t even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was <em>once more</em>.  This time right in the same paragraph, silently mocking me.  I knew then I had to do something so I strode to my computer and pulled the thread.</p>
+    <content type="html"><![CDATA[<p>It happened again.  I was sitting down reading a paper and I came across the phrase <em>Kolmogorov-Uspensky machine</em> and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn&rsquo;t important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared <em>again</em>.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn&rsquo;t even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was <em>once more</em>.  This time right in the same paragraph, silently mocking me.  I knew I had to do something so I strode to my computer and pulled the thread.</p>
 
 <h2>What is a Kolmogorov-Uspensky machine?</h2>
 
