@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Aug 2nd, 2012 Tags: All I love Roomba. It cleans our floors and it can be hacked to help teach my kids programming. Win! Here are the &hellip;">
+	<meta name="description" content="Published on: Aug 9th, 2012 Tags: All, Clojure One of the things that I love about Clojure is that it can go anywhere that Java can.  That is why, &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,114 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/08/09/a-clojure-repl-driven-roomba/">
+		
+			A Clojure REPL Driven Roomba</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-09T16:03:52-04:00" pubdate data-updated="true">Aug 9<span>th</span>, 2012</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p><img src="http://farm3.staticflickr.com/2826/9925780955_4a32b8dc8a_o.jpg">
+One of the things that I love about Clojure is that it can go anywhere that Java can.  That is why, when I found out that the Roomba already had a <a href="http://hackingroomba.com/code/roombacomm/">Java library</a> written for it &ndash; I was excited to be able to hook it up to my Emacs / Swank and be able to control it from my editor.</p>
+
+<p>It is great fun!  If you have a Roomba at home and you want to play along&hellip;</p>
+
+<ol>
+<li><p>Read <a href="http://gigasquidsoftware.com/blog/2012/08/02/talking-to-your-roomba-via-bluetooth-and-roombacom/">Setting up and Configuring Bluetooth and Roomba part from this post</a>.</p></li>
+<li><p> Checkout the sample project <a href="https://github.com/gigasquid/clj-roomba">clj-roomba</a> from github.</p></li>
+</ol>
+
+
+<p>Have fun doing this like this:</p>
+
+<pre><code>(def roomba (RoombaCommSerial. ))
+
+;;Find your port for your Roomba
+(map println (.listPorts roomba))
+(def portname "/dev/cu.FireFly-943A-SPP")
+(.connect roomba portname)
+(.startup roomba)  ;;puts Roomba in safe Mode
+;; What mode is Roomba in?
+(.modeAsString roomba)
+(.control roomba)
+(.updateSensors roomba) ; returns true if you are connected
+
+
+(.pause roomba 30)
+(.playNote roomba 72 40)
+(.playNote roomba 79 40)
+(.spinLeft roomba)
+(.spinRight roomba)
+(.goBackward roomba)
+(.goForward roomba)
+(.turnLeft roomba)
+(.turnRight roomba)
+
+(.stop roomba)
+(.reset roomba)
+(.vacuum roomba true)
+(.vacuum roomba false)
+(.clean roomba)
+
+;; Get the sensor data
+(.updateSensors roomba) 
+(.bumpLeft roomba)
+(.bumpRight roomba)
+(.wheelDropLeft roomba)
+(.wheelDropRight roomba)
+(.wheelDropCenter roomba)
+(.sensorsAsString roomba)
+
+
+(defn bark [r]
+  (doto r
+    (.vacuum true)
+    (.playNote 50 5)
+    (.pause 150)
+    (.vacuum false)))
+
+(bark roomba)
+</code></pre>
+
+<p><a href="http://cl.ly/Idv5">A quick video of hacking Roomba in action</a></p>
+
+<p>Next up &ndash; Getting more roombas to implement Rich Hickey&rsquo;s <a href="http://juliangamble.com/blog/2011/12/28/clojure-gui-demo-of-ants/">ant colony demo</a>&hellip;</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2012/08/09/a-clojure-repl-driven-roomba//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -850,75 +958,6 @@ I found out that there is already an alpha version of Clojure on Maven.  So you 
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2011/09/12/299//blog/page/6/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/08/20/on-men-in-ballet-and-women-in-software/">
-		
-			On Men in Ballet and Women in Software Development</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-08-20T16:15:02-04:00" pubdate data-updated="true">Aug 20<span>th</span>, 2011</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
-
-
-</div>
-    </div>
-		<p>Long ago,  I worked for a couple years as a professional ballet dancer with a small company. Reflecting on this, I have an interesting perspective of working in field were woman are the majority and also one where women are in the minority. I thought I would dedicate this post a few observations of similarities between men in ballet and women in software development.</p>
-
-<p><strong>Men in Ballet</strong>
-<img class="left" src="http://farm4.staticflickr.com/3786/9925846994_2673f8183c_o.jpg"></p>
-
-<ul>
-<li><p>Have some lame people think ballet is just for girls and make assumptions about them based on cultural stereotypes</p></li>
-<li><p>Have to have a sense of humor to handle accidentally injuries due to kicks or slips while rehearsing choreography with women.</p></li>
-<li><p>Clearly love what they do. Otherwise, they most likely would have never overcome the social pressure to pursue their craft.</p></li>
-<li><p>Partner when ballerinas to create great performances. The diversity of having men and women dance together allows more freedom of expression in the choreography. Ultimately, that produces a show that is more valuable and pleasing to the audience.</p></li>
-<li><p>Usually have no wait in line for the men&rsquo;s restroom during ballet performance intermissions.</p></li>
-</ul>
-
-
-<p><strong>Women in Software Development</strong></p>
-
-<ul>
-<li><p>Have some lame people think software development is just for boys and make assumptions about them based on cultural stereotypes.</p></li>
-<li><p>Have to have a sense of humor to handle accidental insensitive remarks due to slips in conversation when working with men. (Ex: hot chicks, rude jokes, etc&hellip;.)</p></li>
-<li><p>Clearly love what they do. Otherwise, they most likely would have never overcome the social pressure to pursue their craft.</p></li>
-<li><p>Partner with other software developers to create great software. More diversity*, allows more freedom of expression in understanding and applying technology to solve business needs. Ultimately, that produces software that is more valuable and pleasing to the business and user.</p></li>
-<li><p>Usually have no wait in line for the women&rsquo;s restroom during technical conference breaks.</p></li>
-</ul>
-
-
-<p>*And yes, the diversity I am talking about is not limited to just men and women.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2011/08/20/on-men-in-ballet-and-women-in-software//blog/page/6/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

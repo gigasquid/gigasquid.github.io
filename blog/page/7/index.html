@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Aug 13th, 2011 Tags: All, Development Since joining EdgeCase, I have shelved my heavy Intellij and Eclipse IDEs in favor of Emacs. &hellip;">
+	<meta name="description" content="Published on: Aug 20th, 2011 Tags: All, Development Long ago,  I worked for a couple years as a professional ballet dancer with a small company. &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,75 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/08/20/on-men-in-ballet-and-women-in-software/">
+		
+			On Men in Ballet and Women in Software Development</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-20T16:15:02-04:00" pubdate data-updated="true">Aug 20<span>th</span>, 2011</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
+
+
+</div>
+    </div>
+		<p>Long ago,  I worked for a couple years as a professional ballet dancer with a small company. Reflecting on this, I have an interesting perspective of working in field were woman are the majority and also one where women are in the minority. I thought I would dedicate this post a few observations of similarities between men in ballet and women in software development.</p>
+
+<p><strong>Men in Ballet</strong>
+<img class="left" src="http://farm4.staticflickr.com/3786/9925846994_2673f8183c_o.jpg"></p>
+
+<ul>
+<li><p>Have some lame people think ballet is just for girls and make assumptions about them based on cultural stereotypes</p></li>
+<li><p>Have to have a sense of humor to handle accidentally injuries due to kicks or slips while rehearsing choreography with women.</p></li>
+<li><p>Clearly love what they do. Otherwise, they most likely would have never overcome the social pressure to pursue their craft.</p></li>
+<li><p>Partner when ballerinas to create great performances. The diversity of having men and women dance together allows more freedom of expression in the choreography. Ultimately, that produces a show that is more valuable and pleasing to the audience.</p></li>
+<li><p>Usually have no wait in line for the men&rsquo;s restroom during ballet performance intermissions.</p></li>
+</ul>
+
+
+<p><strong>Women in Software Development</strong></p>
+
+<ul>
+<li><p>Have some lame people think software development is just for boys and make assumptions about them based on cultural stereotypes.</p></li>
+<li><p>Have to have a sense of humor to handle accidental insensitive remarks due to slips in conversation when working with men. (Ex: hot chicks, rude jokes, etc&hellip;.)</p></li>
+<li><p>Clearly love what they do. Otherwise, they most likely would have never overcome the social pressure to pursue their craft.</p></li>
+<li><p>Partner with other software developers to create great software. More diversity*, allows more freedom of expression in understanding and applying technology to solve business needs. Ultimately, that produces software that is more valuable and pleasing to the business and user.</p></li>
+<li><p>Usually have no wait in line for the women&rsquo;s restroom during technical conference breaks.</p></li>
+</ul>
+
+
+<p>*And yes, the diversity I am talking about is not limited to just men and women.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2011/08/20/on-men-in-ballet-and-women-in-software//blog/page/7/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -555,147 +624,6 @@ The Katas are taken more or less from the Coding Kata site <a href="http://codin
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2011/02/28/bowling-game-kata-in-clojure-with-stm-and-defrecord//blog/page/7/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/01/17/vampire-slaying-in-clojure-with-stm-part-2/">
-		
-			Vampire Slaying in Clojure With STM - Part 2</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-17T22:01:47-05:00" pubdate data-updated="true">Jan 17<span>th</span>, 2011</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/clojure/'>Clojure</a>
-
-
-</div>
-    </div>
-		<p>In Part 1, we used defrecords to create a vampire slayer named “Buffy” and a few vampires for her to kick around.  Today we are going to use Buffy and her vampires to explore STM (Software Transactional Memory) in Clojure for managing state.</p>
-
-<p>Recap</p>
-
-<pre><code>(defrecord Vampire [name, health])
-(def vampire1 (Vampire. "Stu" 50))
-(def vampire2 (Vampire. "Vance" 100))
-(def vampire3 (Vampire. "Izzy" 75))
-
-(defrecord Slayer [name, weapon])
-(def kungfu 25)
-(def buffy (Slayer. "Buffy" kungfu))
-
-(defn hit [vampire, hitpoints]
-  (- (:health vampire) hitpoints))
-
-;vampires don't fight back but it takes time to kill them
-(def combat-time 20)
-
-(defn hit-vampire [vampire, slayer]
-  (Thread/sleep (* combat-time 10))
-  (assoc vampire :health (hit vampire (:weapon slayer))))
-
-(defn kill-vampire [vampire, slayer]
-  (if (&gt; (:health vampire) 1)
-    (recur (hit-vampire vampire slayer) slayer)
-    (assoc vampire :health 0)))
-</code></pre>
-
-<p>Let&rsquo;s take our vampires and stand them up in a line for Buffy to fight.  We are also going to create a function that just has Buffy killing a vampire, rather then a generic slayer.</p>
-
-<pre><code>(def vampire-line [vampire1 vampire2 vampire3])
-
-(defn buffy-kill-vampire [vampire]
-  (kill-vampire vampire buffy))
-</code></pre>
-
-<p>Test Buffy killing vampire1</p>
-
-<pre><code>(buffy-kill-vampire vampire1)
-#:user.Vampire{:name "Stu", :health 0}
-</code></pre>
-
-<p>Now we can use the map function to apply the buffy-kill-vampire function to every vampire in our vampire line.</p>
-
-<pre><code>(map buffy-kill-vampire vampire-line)
-(#:user.Vampire{:name "Stu", :health 0} #:user.Vampire{:name "Vance", :health 0} #:user.Vampire{:name "Izzy", :health 0})
-</code></pre>
-
-<p>This is also a good time to bring up pmap (pmap f coll).  The pmap is the same as the map execpt that it applys the function to the collection in parallel.  It is useful when the time to process each function is computationally intensive.  To show the difference between map and pmap let&rsquo;s change the combat-time to be 200ms instead of 20ms and time each way.  We need a dorun to force the function to not be lazy.</p>
-
-<pre><code>(def combat-time 200)
-
-(time (dorun (map buffy-kill-vampire vampire-line)))
-"Elapsed time: 18002.67764 msecs"
-
-(time (dorun (pmap buffy-kill-vampire vampire-line)))
-"Elapsed time: 8001.808821 msecs
-</code></pre>
-
-<p>Now if you notice, even though we have be killing the vampire line over and over again.  They don&rsquo;t stay dead</p>
-
-<pre><code>vampire-line
-[#:user.Vampire{:name "Stu", :health 50} #:user.Vampire{:name "Vance", :health 100} #:user.Vampire{:name "Izzy", :health 75}]
-</code></pre>
-
-<p>We need to involve some state so that our vampire-line will reflect the health of zero for all of the vampires once Buffy slays them.  In Clojure, state is handled by Software Transactional Memory (STM).  You can use Refs for coordinated and synchronous updates, Atoms for Uncoordinated and Synchronous updates, or Agents for asynchronous updates.  In our example, we are going to use the Atom, since it is lighter weight and we just want to maintain the state of the vampire-line.</p>
-
-<p>Let&rsquo;s refine the vampire-line as an atom.  We</p>
-
-<pre><code>(def vampire-line (atom [vampire1 vampire2 vampire3]))
-</code></pre>
-
-<p>We need to deference it now to know it&rsquo;s value</p>
-
-<pre><code>@vampire-line
-[#:user.Vampire{:name "Stu", :health 50} #:user.Vampire{:name "Vance", :health 100} #:user.Vampire{:name "Izzy", :health 75}]
-</code></pre>
-
-<p>Now we are going to redefine the buffy-destroy-all-vampires function to use the reset! function to update its value.  We also need to convert the result to a vector before calling reset!  Also note that we need to deference the vampire-line value when call using map.</p>
-
-<pre><code>(defn buffy-destroy-all-vampires []
-  (reset! vampire-line (vec (map buffy-kill-vampire @vampire-line))))
-</code></pre>
-
-<p>Now let&rsquo;s see what happens when Buffy kills them</p>
-
-<pre><code> @vampire-line
-[#:user.Vampire{:name "Stu", :health 0} #:user.Vampire{:name "Vance", :health 0} #:user.Vampire{:name "Izzy", :health 0}]
-
-(buffy-destroy-all-vampires)
-[#:user.Vampire{:name "Stu", :health 0} #:user.Vampire{:name "Vance", :health 0} #:user.Vampire{:name "Izzy", :health 0}]
-
- @vampire-line
-[#:user.Vampire{:name "Stu", :health 0} #:user.Vampire{:name "Vance", :health 0} #:user.Vampire{:name "Izzy", :health 0}]
-</code></pre>
-
-<p>The vampires are finally dead and staying dead!  Score one for the good guys!</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2011/01/17/vampire-slaying-in-clojure-with-stm-part-2//blog/page/7/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
