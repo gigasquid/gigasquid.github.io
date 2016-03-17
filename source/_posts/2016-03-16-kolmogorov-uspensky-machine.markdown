@@ -9,7 +9,7 @@ categories:
 ---
 
 
-It happened again.  I was sitting down reading a paper and I came across the phrase _Kolmogorov-Uspensky machine_ and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn't important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared _again_.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn't even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was _once more_.  This time right in the same paragraph, silently mocking me.  I knew then I had to do something so I strode to my computer pulled the thread.
+It happened again.  I was sitting down reading a paper and I came across the phrase _Kolmogorov-Uspensky machine_ and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn't important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared _again_.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn't even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was _once more_.  This time right in the same paragraph, silently mocking me.  I knew then I had to do something so I strode to my computer and pulled the thread.
 
 ## What is a Kolmogorov-Uspensky machine?
 
