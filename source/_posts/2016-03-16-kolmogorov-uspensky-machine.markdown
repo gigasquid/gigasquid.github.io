@@ -13,7 +13,7 @@ It happened again.  I was sitting down reading a paper and I came across the phr
 
 ## What is a Kolmogorov-Uspensky machine?
 
-The first thing I found is that the Kolmogorov-Uspensky machine, (also referred to as KUM), is very similar to the [Turning machine](https://en.wikipedia.org/wiki/Turing_machine).  In fact, it shares the same computational class of being Turing-complete.
+The first thing I found is that the Kolmogorov-Uspensky machine, (also referred to as KUM), is very similar to the [Turing machine](https://en.wikipedia.org/wiki/Turing_machine).  In fact, it shares the same computational class of being Turing-complete.
 
 {% img https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Turing_machine_2b.svg/320px-Turing_machine_2b.svg.png %}
 
