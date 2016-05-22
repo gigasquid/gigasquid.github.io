@@ -14,7 +14,7 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
-None for a bit.  I am busy working on writing a YA fantasy novel with a Clojure coding heroine called _Code Shifter_.  A tentative date for the draft completion is March 2016.
+None for a bit.  I am busy working on writing a middle grade,fantasy/scifi novel featuring a heroine and real Clojure code called _Code Shifter_.
 
 
 ## Past Talks

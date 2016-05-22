@@ -29,5 +29,5 @@ exercises over a course of seven weeks that will give your brain a
 gradual doses of functional programming that will have you _living_
 Clojure at the end.
 
-
-
+## Code Shifter
+ I'm busy working on writing a middle grade, fantasy/sci-fi novel featuring a coding heroine as well as real programming concepts and Clojure code.  I would give you a completion date, but I've found that [Hofstadter's Law](https://en.wikipedia.org/wiki/Hofstadter%27s_law) seems to hold true for writing books as well as coding. It always takes longer than you expect, even when you take it Hofstadter's law into account.
