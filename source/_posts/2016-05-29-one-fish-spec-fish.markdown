@@ -10,9 +10,9 @@ categories:
 
 {% img https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg %}
 
-[Clojure.spec](http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec) is an exciting, new core library for Clojure.  It enables pragmatic specifications for functions.  It brings a new level of robustness to building software in Clojure, along with the unexpected side benefit of being able to write specifications to generate Dr. Seuss inspired rhymes.
+[Clojure.spec](http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec) is an exciting, new core library for Clojure.  It enables pragmatic specifications for functions and brings a new level of robustness to building software in Clojure, along with unexpected side benefits.  One of which is the ability to write specifications that generate Dr. Seuss inspired rhymes.
 
-In this blog post, we will take a tour of writing specifications for a clojure function, as well as the power of data generation, with help from the inspirational words:
+In this blog post, we will take a tour of writing specifications for a clojure function, as well as the power of data generation.  First, some inspirational words:
 
 >>One fish
 >>Two fish
@@ -22,7 +22,7 @@ In this blog post, we will take a tour of writing specifications for a clojure f
 The mere shape of these words brings a function to mind.  One that would take in a vector:
 
 ```clojure
-[1 2 "Red" Blue"]
+[1 2 "Red" "Blue"]
 ```
 
 and print out the transformed items with the word _fish_ added, of course.
@@ -44,7 +44,7 @@ Back to the parameters. The first two are integers, that's pretty easy, but we w
               2 "Two"})
 ```
 
-Then, we can use the _s/def_ to register the spec we are going to define for global reuse.  We'll use a namespaced keyword `::number` to express that our specification for a valid number is the keys of the numbers map.
+Then, we can use the `s/def` to register the spec we are going to define for global reuse.  We'll use a namespaced keyword `::number` to express that our specification for a valid number is the keys of the numbers map.
 
 ```clojure
 (s/def ::number (set (keys numbers)))
@@ -70,12 +70,12 @@ Which, of course,  totally makes sense because `5` is not in our numbers map.  N
 (s/def ::color #{"Red" "Blue" "Dun"})
 ```
 
-You may be asking yourself, "Is dun really a color?".  The author can assure you that it is in fact a real color, like a [dun colored horse](http://www.dictionary.com/browse/dun).  Furthermore, it has the very important characteristic of rhyming with number one, which the author spent way too much time trying to think of.
+_You may be asking yourself, "Is dun really a color?".  The author can assure you that it is in fact a real color, like a [dun colored horse](http://www.dictionary.com/browse/dun).  Furthermore, it has the very important characteristic of rhyming with number one, which the author spent way too much time trying to think of._
 
 
 ### Specifying the sequences of the values
 
-We are at the point where we can start specifying things about the sequence of values in the parameter vector.  We will have 2 numbers followed by two colors.  Using the `s/cat`, which is a concatentation of predicates/patterns, we can specify it as the `::first-line`
+We are at the point where we can start specifying things about the sequence of values in the parameter vector.  We will have two numbers followed by two colors.  Using the `s/cat`, which is a concatentation of predicates/patterns, we can specify it as the `::first-line`
 
 ```clojure
 (s/def ::first-line (s/cat :n1 ::number :n2 ::number :c1 ::color :c2 ::color))
@@ -85,7 +85,8 @@ What the spec is doing here is associating each _part_ with a _tag_, to identify
 
 ```clojure
 (s/explain ::first-line  [1 2 "Red" "Black"])
-In: [3] val: "Black" fails spec: :one-fish.core/color at: [:c2] predicate: #{"Blue" "Dun" "Red"}
+;; In: [3] val: "Black" fails spec: :one-fish.core/color
+;;   at: [:c2] predicate: #{"Blue" "Dun" "Red"}
 ```
 
 This is great, but there's more we can express about the sequence of values.  For example, the second number should be one bigger than the first number.
@@ -95,7 +96,7 @@ This is great, but there's more we can express about the sequence of values.  Fo
   (= n2 (inc n1)))
 ```
 
-Also, the colors should not be the same value.  We can add these additional specifications with `s/and/`.
+Also, the colors should not be the same value.  We can add these additional specifications with `s/and`.
 
 ```clojure
 (s/def ::first-line (s/and (s/cat :n1 ::number :n2 ::number :c1 ::color :c2 ::color)
@@ -121,7 +122,8 @@ Failing values, for the specification can be easily identified.
 ```clojure
 (s/valid? ::first-line [2 1 "Red" "Blue"]) ;=> false
 (s/explain ::first-line [2 1 "Red" "Blue"])
-;val: {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"} fails predicate: (one-bigger? (:n1 %) (:n2 %))
+;; val: {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"} fails predicate:
+;;      (one-bigger? (:n1 %) (:n2 %))
 ```
 
 We our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.
@@ -159,7 +161,7 @@ Let's fix this by adding an extra predicate `number-rhymes-with-color`
    (= [n c] [1 "Dun"])))
 ```
 
-We'll add this to our definition of `::first-line``, stating that the second number parameter should rhyme with the second color parameter.
+We'll add this to our definition of `::first-line`, stating that the second number parameter should rhyme with the second color parameter.
 
 ```clojure
 (s/def ::first-line (s/and (s/cat :number1 ::number :number2 ::number :color1 ::color :color2 ::color)
@@ -168,7 +170,8 @@ We'll add this to our definition of `::first-line``, stating that the second num
 
 (s/valid? ::first-line [1 2 "Red" "Blue"]) ;=> true
 (s/explain ::first-line [1 2 "Red" "Dun"])
-;=> val: {:n1 1, :n2 2, :c1 "Red", :c2 "Dun"} fails predicate: (number-rhymes-with-color? (:n2 %) (:c2 %)
+;; val: {:n1 1, :n2 2, :c1 "Red", :c2 "Dun"} fails predicate:
+;;   (number-rhymes-with-color? (:n2 %) (:c2 %)
 ```
 
 Now, let's try the data generation again.
@@ -239,7 +242,7 @@ But what about with bad data?
  ;;      :via [:one-fish.core/first-line],
  ;;      :in [0]}},
  ;;    :clojure.spec/args ([2 1 "Red" "Blue"])}
-```clojure
+```
 
 Ah, yes - the first number must be one smaller than the second number.
 
@@ -250,7 +253,9 @@ I hope you've enjoyed this brief tour of clojure.spec.  If you're interested in 
 
 In the meantime, I'll leave you with one of our generated lines, sure to be a big hit with future generations.
 
->>Zero fish
->>One fish
->>Red fish
->>Dun fish
+```
+Zero fish
+One fish
+Red fish
+Dun fish
+```
