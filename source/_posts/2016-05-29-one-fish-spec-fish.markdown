@@ -36,35 +36,35 @@ But, let us turn our attention the parameters of this function and see how we ca
 
 ### Specifying the values of the parameters
 
-Back to the parameters. The first two are integers, that's pretty easy, but we want to say more about them.  For example, I don't want them to be very big.  Having a child's poem with the _One Hundred Thousand and Thirty Three fish_ really won't do.  In fact, what we really want is to say is there is finite notion of _numbers_ and it is a map of integer to string representation.
+Back to the parameters. The first two are integers, that's pretty easy, but we want to say more about them.  For example, I don't want them to be very big.  Having a child's poem with the _One Hundred Thousand and Thirty Three fish_ really won't do.  In fact, what we really want is to say is there is finite notion of _fish-numbers_ and it is a map of integer to string representation.
 
 ```clojure
-(def numbers {0 "Zero"
+(def fish-numbers {0 "Zero"
               1 "One"
               2 "Two"})
 ```
 
-Then, we can use the `s/def` to register the spec we are going to define for global reuse.  We'll use a namespaced keyword `::number` to express that our specification for a valid number is the keys of the numbers map.
+Then, we can use the `s/def` to register the spec we are going to define for global reuse.  We'll use a namespaced keyword `::fish-number` to express that our specification for a valid number is the keys of the `fish-numbers` map.
 
 ```clojure
-(s/def ::number (set (keys numbers)))
+(s/def ::fish-number (set (keys fish-numbers)))
 ```
 
 Now that we have the specification, we can ask it if it's valid for a given value.
 
 ```clojure
-(s/valid? ::number 1) ;=> true
-(s/valid? ::number 5) ;=> false
+(s/valid? ::fish-number 1) ;=> true
+(s/valid? ::fish-number 5) ;=> false
 ```
 
 So `5` is not a valid number for us.  We can ask it to explain why not.
 
 ```clojure
-(s/explain ::number 5)
-; val: 5 fails predicate: (set (keys numbers))
+(s/explain ::fish-number 5)
+val: 5 fails predicate: (set (keys fish-numbers))
 ```
 
-Which, of course,  totally makes sense because `5` is not in our numbers map.  Now that we've covered the numbers, let's turn our attention to the colors.  We will use a finite set of colors for our specification.  In addition to the classic red and blue, we will also add the color dun.
+Which, of course,  totally makes sense because `5` is not in our `fish-numbers` map.  Now that we've covered the numbers, let's turn our attention to the colors.  We will use a finite set of colors for our specification.  In addition to the classic red and blue, we will also add the color dun.
 
 ```clojure
 (s/def ::color #{"Red" "Blue" "Dun"})
@@ -89,18 +89,18 @@ What the spec is doing here is associating each _part_ with a _tag_, to identify
 ;;   at: [:c2] predicate: #{"Blue" "Dun" "Red"}
 ```
 
-This is great, but there's more we can express about the sequence of values.  For example, the second number should be one bigger than the first number.
+This is great, but there's more we can express about the sequence of values.  For example, the second number should be one bigger than the first number.  The input to the function is going to be the map of the destructured value from the `::first-line`
 
 ```
-(defn one-bigger? [n1 n2]
+(defn one-bigger? [{:keys [n1 n2]}]
   (= n2 (inc n1)))
 ```
 
 Also, the colors should not be the same value.  We can add these additional specifications with `s/and`.
 
 ```clojure
-(s/def ::first-line (s/and (s/cat :n1 ::number :n2 ::number :c1 ::color :c2 ::color)
-                           #(one-bigger? (:n1 %) (:n2 %))
+(s/def ::first-line (s/and (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color)
+                           one-bigger?
                            #(not= (:c1 %) (:c2 %))))
 ```
 
@@ -122,8 +122,9 @@ Failing values, for the specification can be easily identified.
 ```clojure
 (s/valid? ::first-line [2 1 "Red" "Blue"]) ;=> false
 (s/explain ::first-line [2 1 "Red" "Blue"])
-;; val: {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"} fails predicate:
-;;      (one-bigger? (:n1 %) (:n2 %))
+;; val: {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"}
+   fails predicate: one-bigger?
+
 ```
 
 We our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.
@@ -152,10 +153,10 @@ Red fish
 
 Although, it meets our criteria, it's missing one essential ingredient - rhyming!
 
-Let's fix this by adding an extra predicate `number-rhymes-with-color`
+Let's fix this by adding an extra predicate `number-rhymes-with-color`.
 
 ```clojure
-(defn number-rhymes-with-color? [n c]
+(defn fish-number-rhymes-with-color? [{n :n2 c :c2}]
   (or
    (= [n c] [2 "Blue"])
    (= [n c] [1 "Dun"])))
@@ -164,14 +165,15 @@ Let's fix this by adding an extra predicate `number-rhymes-with-color`
 We'll add this to our definition of `::first-line`, stating that the second number parameter should rhyme with the second color parameter.
 
 ```clojure
-(s/def ::first-line (s/and (s/cat :number1 ::number :number2 ::number :color1 ::color :color2 ::color)
-                           #(one-bigger? (:number1 %) (:number2 %))
-                           #(number-rhymes-with-color? (:number2 %) (:color2 %))))
+(s/def ::first-line (s/and (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color)
+                           one-bigger?
+                           #(not= (:c1 %) (:c2 %))
+                           fish-number-rhymes-with-color?))
 
 (s/valid? ::first-line [1 2 "Red" "Blue"]) ;=> true
 (s/explain ::first-line [1 2 "Red" "Dun"])
-;; val: {:n1 1, :n2 2, :c1 "Red", :c2 "Dun"} fails predicate:
-;;   (number-rhymes-with-color? (:n2 %) (:c2 %)
+;; val: {:n1 1, :n2 2, :c1 "Red", :c2 "Dun"}
+;;   fails predicate: fish-number-rhymes-with-color?
 ```
 
 Now, let's try the data generation again.
@@ -195,53 +197,53 @@ Much better.  To finish things off, let's finally create a function to print out
 ### Using spec with functions
 
 
-Here's our function `print-fish-line` that takes in our values as a parameter.  It will also have another arity for no values passed.
+Here's our function `fish-line` that takes in our values as a parameters.
 
 ```clojure
-(defn print-fish-line
-  ([] (println "give me some data"))
-  ([line]
-   (doseq [i line]
-     (println (if (integer? i) (get numbers i) i) "fish"))))
+(defn fish-line [n1 n2 c1 c2]
+  (clojure.string/join " "
+ (map #(str % " fish.")
+      [(get fish-numbers n1)
+       (get fish-numbers n2)
+       c1
+       c2])))
 ```
 
-We can specify that the args for this function with  `s/?`, which is a sequence of 0 or 1 of the predicate/pattern.
+We can specify that the args for this function be validated with `::first-line` and the return value is a string.
 
 ```clojure
-(s/fdef print-fish-line
-        :args (s/? ::first-line))
+(s/fdef fish-line
+        :args ::first-line
+        :ret  string?)
 ```
 
 Now, we turn on the instrumentation of the validation for functions and see what happens.
 
 ```clojure
-(print-fish-line)
-;=> "give me some data"
+(s/instrument #'fish-line)
 
-(print-fish-line [1 2 "Red" "Blue"])
-;; One fish
-;; Two fish
-;; Red fish
-;; Blue fish
+(fish-line 1 2 "Red" "Blue")
+;-> "One fish. Two fish. Red fish. Blue fish."
+
 ```
 
 But what about with bad data?
 
 ```clojure
-(print-fish-line [2 1 "Red" "Blue"])
+(fish-line 2 1 "Red" "Blue")
 
- ;; Call to #'one-fish.core/print-fish-line did not conform to spec:
- ;;   In: [0] val: {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"} fails spec:
- ;;   :one-fish.core/first-line at: [:args] predicate: (one-bigger? (:n1
- ;;   %) (:n2 %)) :clojure.spec/args ([2 1 "Red" "Blue"])
+ ;; Call to #'one-fish.core/fish-line did not conform to spec: val:
+ ;;   {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"} fails at: [:args] predicate:
+ ;;   one-bigger? :clojure.spec/args (2 1 "Red" "Blue")
 
  ;;   {:clojure.spec/problems
  ;;    {[:args]
- ;;     {:pred (one-bigger? (:n1 %) (:n2 %)),
+ ;;     {:pred one-bigger?,
  ;;      :val {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"},
- ;;      :via [:one-fish.core/first-line],
- ;;      :in [0]}},
- ;;    :clojure.spec/args ([2 1 "Red" "Blue"])}
+ ;;      :via [],
+ ;;      :in []}},
+ ;;    :clojure.spec/args (2 1 "Red" "Blue")}
+
 ```
 
 Ah, yes - the first number must be one smaller than the second number.
