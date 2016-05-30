@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-05-30T10:18:50-04:00</updated>
+  <updated>2016-05-30T12:06:05-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -92,7 +92,7 @@ Blue fish
 <p>We&rsquo;re at the point where we can start specifying things about the sequence of values in the parameter vector.  We&rsquo;ll have two numbers followed by two colors.  Using the <code>s/cat</code>, which is a concatentation of predicates/patterns, we can specify it as the <code>::first-line</code></p>
 
 <p><code>clojure
-(s/def ::first-line (s/cat :n1 ::number :n2 ::number :c1 ::color :c2 ::color))
+(s/def ::first-line (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color))
 </code></p>
 
 <p>What the spec is doing here is associating each <em>part</em> with a <em>tag</em>, to identify what was matched or not, and its predicate/pattern.  So, if we try to explain a failing spec, it will tell us where it went wrong.</p>
@@ -144,7 +144,7 @@ Blue fish
 
 <p>```</p>
 
-<p>We our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.</p>
+<p>With our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.</p>
 
 <h3>Generating test data &ndash; and poetry with specification</h3>
 

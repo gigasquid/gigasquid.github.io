@@ -160,7 +160,7 @@
 <p>We&rsquo;re at the point where we can start specifying things about the sequence of values in the parameter vector.  We&rsquo;ll have two numbers followed by two colors.  Using the <code>s/cat</code>, which is a concatentation of predicates/patterns, we can specify it as the <code>::first-line</code></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::number</span> <span class="ss">:n2</span> <span class="ss">::number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -224,7 +224,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.</p>
+<p>With our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.</p>
 
 <h3>Generating test data &ndash; and poetry with specification</h3>
 
