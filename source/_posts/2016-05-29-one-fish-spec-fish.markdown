@@ -80,7 +80,7 @@ _You may be asking yourself, "Is dun really a color?".  The author can assure yo
 We're at the point where we can start specifying things about the sequence of values in the parameter vector.  We'll have two numbers followed by two colors.  Using the `s/cat`, which is a concatentation of predicates/patterns, we can specify it as the `::first-line`
 
 ```clojure
-(s/def ::first-line (s/cat :n1 ::number :n2 ::number :c1 ::color :c2 ::color))
+(s/def ::first-line (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color))
 ```
 
 What the spec is doing here is associating each _part_ with a _tag_, to identify what was matched or not, and its predicate/pattern.  So, if we try to explain a failing spec, it will tell us where it went wrong.
@@ -129,7 +129,7 @@ Failing values, for the specification can be easily identified.
 
 ```
 
-We our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.
+With our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.
 
 ### Generating test data - and poetry with specification
 
