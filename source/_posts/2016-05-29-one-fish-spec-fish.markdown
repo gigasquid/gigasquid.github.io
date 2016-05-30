@@ -12,7 +12,7 @@ categories:
 
 [Clojure.spec](http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec) is an exciting, new core library for Clojure.  It enables pragmatic specifications for functions and brings a new level of robustness to building software in Clojure, along with unexpected side benefits.  One of which is the ability to write specifications that generate Dr. Seuss inspired rhymes.
 
-In this blog post, we will take a tour of writing specifications for a clojure function, as well as the power of data generation.  First, some inspirational words:
+In this blog post, we'll take a tour of writing specifications for a clojure function, as well as the power of data generation.  First, some inspirational words:
 
 >>One fish
 >>Two fish
@@ -25,7 +25,7 @@ The mere shape of these words brings a function to mind.  One that would take in
 [1 2 "Red" "Blue"]
 ```
 
-and print out the transformed items with the word _fish_ added, of course.
+and give us back a string of transformed items with the word _fish_ added, of course.
 
 But, let us turn our attention the parameters of this function and see how we can further specify them.  Before we get started, make sure you use the latest version of clojure, currently `[org.clojure/clojure "1.9.0-alpha3"]`,  test.check `[org.clojure/test.check "0.9.0"]`, and add clojure.spec to your namespace.
 
@@ -36,12 +36,12 @@ But, let us turn our attention the parameters of this function and see how we ca
 
 ### Specifying the values of the parameters
 
-Back to the parameters. The first two are integers, that's pretty easy, but we want to say more about them.  For example, I don't want them to be very big.  Having a child's poem with the _One Hundred Thousand and Thirty Three fish_ really won't do.  In fact, what we really want is to say is there is finite notion of _fish-numbers_ and it is a map of integer to string representation.
+Back to the parameters. The first two are integers, that's pretty easy, but we want to say more about them.  For example, I don't want them to be very big.  Having a child's poem with the _One Hundred Thousand and Thirty Three fish_ really won't do.  In fact, what we really want is to say is there is finite notion of _fish-numbers_ and it's a map of integer to string representation.
 
 ```clojure
 (def fish-numbers {0 "Zero"
-              1 "One"
-              2 "Two"})
+                   1 "One"
+                   2 "Two"})
 ```
 
 Then, we can use the `s/def` to register the spec we are going to define for global reuse.  We'll use a namespaced keyword `::fish-number` to express that our specification for a valid number is the keys of the `fish-numbers` map.
@@ -61,21 +61,21 @@ So `5` is not a valid number for us.  We can ask it to explain why not.
 
 ```clojure
 (s/explain ::fish-number 5)
-val: 5 fails predicate: (set (keys fish-numbers))
+;; val: 5 fails predicate: (set (keys fish-numbers))
 ```
 
-Which, of course,  totally makes sense because `5` is not in our `fish-numbers` map.  Now that we've covered the numbers, let's turn our attention to the colors.  We will use a finite set of colors for our specification.  In addition to the classic red and blue, we will also add the color dun.
+Which, of course,  totally makes sense because `5` is not in our `fish-numbers` map.  Now that we've covered the numbers, let's look at the colors.  We'll use a finite set of colors for our specification.  In addition to the classic red and blue, we'll also add the color _dun_.
 
 ```clojure
 (s/def ::color #{"Red" "Blue" "Dun"})
 ```
 
-_You may be asking yourself, "Is dun really a color?".  The author can assure you that it is in fact a real color, like a [dun colored horse](http://www.dictionary.com/browse/dun).  Furthermore, it has the very important characteristic of rhyming with number one, which the author spent way too much time trying to think of._
+_You may be asking yourself, "Is dun really a color?".  The author can assure you that it is in fact a real color, like a [dun colored horse](http://www.dictionary.com/browse/dun).  Furthermore, the word has the very important characteristic of rhyming with number one, which the author spent way too much time trying to think of._
 
 
 ### Specifying the sequences of the values
 
-We are at the point where we can start specifying things about the sequence of values in the parameter vector.  We will have two numbers followed by two colors.  Using the `s/cat`, which is a concatentation of predicates/patterns, we can specify it as the `::first-line`
+We're at the point where we can start specifying things about the sequence of values in the parameter vector.  We'll have two numbers followed by two colors.  Using the `s/cat`, which is a concatentation of predicates/patterns, we can specify it as the `::first-line`
 
 ```clojure
 (s/def ::first-line (s/cat :n1 ::number :n2 ::number :c1 ::color :c2 ::color))
@@ -89,7 +89,7 @@ What the spec is doing here is associating each _part_ with a _tag_, to identify
 ;;   at: [:c2] predicate: #{"Blue" "Dun" "Red"}
 ```
 
-This is great, but there's more we can express about the sequence of values.  For example, the second number should be one bigger than the first number.  The input to the function is going to be the map of the destructured value from the `::first-line`
+That's great, but there's more we can express about the sequence of values.  For example, the second number should be one bigger than the first number.  The input to the function is going to be the map of the destructured tag keys from the `::first-line`
 
 ```
 (defn one-bigger? [{:keys [n1 n2]}]
@@ -153,7 +153,7 @@ Red fish
 
 Although, it meets our criteria, it's missing one essential ingredient - rhyming!
 
-Let's fix this by adding an extra predicate `number-rhymes-with-color`.
+Let's fix this by adding an extra predicate `number-rhymes-with-color?`.
 
 ```clojure
 (defn fish-number-rhymes-with-color? [{n :n2 c :c2}]
@@ -192,7 +192,7 @@ Now, let's try the data generation again.
 ;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}])
 ```
 
-Much better.  To finish things off, let's finally create a function to print out our mini-poem from our data.  While, we're at it, we can use our spec with `s/fdef`, to validate that the parameters are indeed in the form of `::first-line`.
+Much better.  To finish things off, let's finally create a function to create a string for our mini-poem from our data.  While  we're at it, we can use our spec with `s/fdef`, to validate that the parameters are indeed in the form of `::first-line`.
 
 ### Using spec with functions
 
@@ -202,7 +202,7 @@ Here's our function `fish-line` that takes in our values as a parameters.
 ```clojure
 (defn fish-line [n1 n2 c1 c2]
   (clojure.string/join " "
- (map #(str % " fish.")
+    (map #(str % " fish.")
       [(get fish-numbers n1)
        (get fish-numbers n2)
        c1
