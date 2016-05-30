@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-05-22T12:40:09-04:00</updated>
+  <updated>2016-05-30T08:20:20-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,278 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[One Fish Spec Fish]]></title>
+    <link href="http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/"/>
+    <updated>2016-05-29T16:29:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg">https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg</a>"></p>
+
+<p><a href="http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec">Clojure.spec</a> is an exciting, new core library for Clojure.  It enables pragmatic specifications for functions and brings a new level of robustness to building software in Clojure, along with unexpected side benefits.  One of which is the ability to write specifications that generate Dr. Seuss inspired rhymes.</p>
+
+<p>In this blog post, we&rsquo;ll take a tour of writing specifications for a clojure function, as well as the power of data generation.  First, some inspirational words:</p>
+
+<blockquote><blockquote><p>One fish
+Two fish
+Red fish
+Blue fish</p></blockquote></blockquote>
+
+<p>The mere shape of these words brings a function to mind.  One that would take in a vector:</p>
+
+<p><code>clojure
+[1 2 "Red" "Blue"]
+</code></p>
+
+<p>and give us back a string of transformed items with the word <em>fish</em> added, of course.</p>
+
+<p>But, let us turn our attention the parameters of this function and see how we can further specify them.  Before we get started, make sure you use the latest version of clojure, currently <code>[org.clojure/clojure "1.9.0-alpha3"]</code>,  test.check <code>[org.clojure/test.check "0.9.0"]</code>, and add clojure.spec to your namespace.</p>
+
+<p><code>clojure
+(ns one-fish.core
+  (:require [clojure.spec :as s]))
+</code></p>
+
+<h3>Specifying the values of the parameters</h3>
+
+<p>Back to the parameters. The first two are integers, that&rsquo;s pretty easy, but we want to say more about them.  For example, I don&rsquo;t want them to be very big.  Having a child&rsquo;s poem with the <em>One Hundred Thousand and Thirty Three fish</em> really won&rsquo;t do.  In fact, what we really want is to say is there is finite notion of <em>fish-numbers</em> and it&rsquo;s a map of integer to string representation.</p>
+
+<p>```clojure
+(def fish-numbers {0 &ldquo;Zero&rdquo;</p>
+
+<pre><code>               1 "One"
+               2 "Two"})
+</code></pre>
+
+<p>```</p>
+
+<p>Then, we can use the <code>s/def</code> to register the spec we are going to define for global reuse.  We&rsquo;ll use a namespaced keyword <code>::fish-number</code> to express that our specification for a valid number is the keys of the <code>fish-numbers</code> map.</p>
+
+<p><code>clojure
+(s/def ::fish-number (set (keys fish-numbers)))
+</code></p>
+
+<p>Now that we have the specification, we can ask it if it&rsquo;s valid for a given value.</p>
+
+<p><code>clojure
+(s/valid? ::fish-number 1) ;=&gt; true
+(s/valid? ::fish-number 5) ;=&gt; false
+</code></p>
+
+<p>So <code>5</code> is not a valid number for us.  We can ask it to explain why not.</p>
+
+<p><code>clojure
+(s/explain ::fish-number 5)
+;; val: 5 fails predicate: (set (keys fish-numbers))
+</code></p>
+
+<p>Which, of course,  totally makes sense because <code>5</code> is not in our <code>fish-numbers</code> map.  Now that we&rsquo;ve covered the numbers, let&rsquo;s look at the colors.  We&rsquo;ll use a finite set of colors for our specification.  In addition to the classic red and blue, we&rsquo;ll also add the color <em>dun</em>.</p>
+
+<p><code>clojure
+(s/def ::color #{"Red" "Blue" "Dun"})
+</code></p>
+
+<p><em>You may be asking yourself, &ldquo;Is dun really a color?&rdquo;.  The author can assure you that it is in fact a real color, like a <a href="http://www.dictionary.com/browse/dun">dun colored horse</a>.  Furthermore, the word has the very important characteristic of rhyming with number one, which the author spent way too much time trying to think of.</em></p>
+
+<h3>Specifying the sequences of the values</h3>
+
+<p>We&rsquo;re at the point where we can start specifying things about the sequence of values in the parameter vector.  We&rsquo;ll have two numbers followed by two colors.  Using the <code>s/cat</code>, which is a concatentation of predicates/patterns, we can specify it as the <code>::first-line</code></p>
+
+<p><code>clojure
+(s/def ::first-line (s/cat :n1 ::number :n2 ::number :c1 ::color :c2 ::color))
+</code></p>
+
+<p>What the spec is doing here is associating each <em>part</em> with a <em>tag</em>, to identify what was matched or not, and its predicate/pattern.  So, if we try to explain a failing spec, it will tell us where it went wrong.</p>
+
+<p><code>clojure
+(s/explain ::first-line  [1 2 "Red" "Black"])
+;; In: [3] val: "Black" fails spec: :one-fish.core/color
+;;   at: [:c2] predicate: #{"Blue" "Dun" "Red"}
+</code></p>
+
+<p>That&rsquo;s great, but there&rsquo;s more we can express about the sequence of values.  For example, the second number should be one bigger than the first number.  The input to the function is going to be the map of the destructured tag keys from the <code>::first-line</code></p>
+
+<p><code>
+(defn one-bigger? [{:keys [n1 n2]}]
+  (= n2 (inc n1)))
+</code></p>
+
+<p>Also, the colors should not be the same value.  We can add these additional specifications with <code>s/and</code>.</p>
+
+<p>```clojure
+(s/def ::first-line (s/and (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color)</p>
+
+<pre><code>                       one-bigger?
+                       #(not= (:c1 %) (:c2 %))))
+</code></pre>
+
+<p>```</p>
+
+<p>We can test if our data is valid.</p>
+
+<p><code>clojure
+(s/valid? ::first-line [1 2 "Red" "Blue"]) ;=&gt; true
+</code></p>
+
+<p>If we want to get the destructured, conformed values, we can use <code>s/conform</code>.  It will return the tags along with the values.</p>
+
+<p><code>clojure
+(s/conform ::first-line [1 2 "Red" "Blue"])
+;=&gt; {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}
+</code></p>
+
+<p>Failing values, for the specification can be easily identified.</p>
+
+<p>```clojure
+(s/valid? ::first-line [2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;]) ;=> false
+(s/explain ::first-line [2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;])
+;; val: {:n1 2, :n2 1, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Blue&rdquo;}
+   fails predicate: one-bigger?</p>
+
+<p>```</p>
+
+<p>We our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.</p>
+
+<h3>Generating test data &ndash; and poetry with specification</h3>
+
+<p>The <code>s/exercise</code> function will generate data for your specifications.  It does 10 items by default, but we can tell it to do only 5.  Let&rsquo;s see what it comes up with.</p>
+
+<p><code>clojure
+(s/exercise ::first-line 5)
+;; ([(0 1 "Dun" "Red") {:n1 0, :n2 1, :c1 "Dun", :c2 "Red"}]
+;;  [(0 1 "Blue" "Red") {:n1 0, :n2 1, :c1 "Blue", :c2 "Red"}]
+;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}]
+;;  [(1 2 "Blue" "Dun") {:n1 1, :n2 2, :c1 "Blue", :c2 "Dun"}]
+;;  [(1 2 "Dun" "Red") {:n1 1, :n2 2, :c1 "Dun", :c2 "Red"}])
+</code></p>
+
+<p>Hmmm&hellip; something&rsquo;s not quite right.  Looking at the first result <code>[0 1 "Dun" Red"]</code>, it would result in:</p>
+
+<p><code>
+Zero fish
+One fish
+Dun fish
+Red fish
+</code></p>
+
+<p>Although, it meets our criteria, it&rsquo;s missing one essential ingredient &ndash; rhyming!</p>
+
+<p>Let&rsquo;s fix this by adding an extra predicate <code>number-rhymes-with-color?</code>.</p>
+
+<p><code>clojure
+(defn fish-number-rhymes-with-color? [{n :n2 c :c2}]
+  (or
+   (= [n c] [2 "Blue"])
+   (= [n c] [1 "Dun"])))
+</code></p>
+
+<p>We&rsquo;ll add this to our definition of <code>::first-line</code>, stating that the second number parameter should rhyme with the second color parameter.</p>
+
+<p>```clojure
+(s/def ::first-line (s/and (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color)</p>
+
+<pre><code>                       one-bigger?
+                       #(not= (:c1 %) (:c2 %))
+                       fish-number-rhymes-with-color?))
+</code></pre>
+
+<p>(s/valid? ::first-line [1 2 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;]) ;=> true
+(s/explain ::first-line [1 2 &ldquo;Red&rdquo; &ldquo;Dun&rdquo;])
+;; val: {:n1 1, :n2 2, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Dun&rdquo;}
+;;   fails predicate: fish-number-rhymes-with-color?
+```</p>
+
+<p>Now, let&rsquo;s try the data generation again.</p>
+
+<p><code>clojure
+(s/exercise ::first-line)
+;; ([(1 2 "Red" "Blue") {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}]
+;;  [(1 2 "Red" "Blue") {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}]
+;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}]
+;;  [(1 2 "Dun" "Blue") {:n1 1, :n2 2, :c1 "Dun", :c2 "Blue"}]
+;;  [(1 2 "Dun" "Blue") {:n1 1, :n2 2, :c1 "Dun", :c2 "Blue"}]
+;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}]
+;;  [(1 2 "Red" "Blue") {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}]
+;;  [(0 1 "Red" "Dun") {:n1 0, :n2 1, :c1 "Red", :c2 "Dun"}]
+;;  [(0 1 "Red" "Dun") {:n1 0, :n2 1, :c1 "Red", :c2 "Dun"}]
+;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}])
+</code></p>
+
+<p>Much better.  To finish things off, let&rsquo;s finally create a function to create a string for our mini-poem from our data.  While  we&rsquo;re at it, we can use our spec with <code>s/fdef</code>, to validate that the parameters are indeed in the form of <code>::first-line</code>.</p>
+
+<h3>Using spec with functions</h3>
+
+<p>Here&rsquo;s our function <code>fish-line</code> that takes in our values as a parameters.</p>
+
+<p>```clojure
+(defn fish-line [n1 n2 c1 c2]
+  (clojure.string/join &ldquo; &rdquo;</p>
+
+<pre><code>(map #(str % " fish.")
+  [(get fish-numbers n1)
+   (get fish-numbers n2)
+   c1
+   c2])))
+</code></pre>
+
+<p>```</p>
+
+<p>We can specify that the args for this function be validated with <code>::first-line</code> and the return value is a string.</p>
+
+<p>```clojure
+(s/fdef fish-line</p>
+
+<pre><code>    :args ::first-line
+    :ret  string?)
+</code></pre>
+
+<p>```</p>
+
+<p>Now, we turn on the instrumentation of the validation for functions and see what happens.</p>
+
+<p>```clojure
+(s/instrument #&lsquo;fish-line)</p>
+
+<p>(fish-line 1 2 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)
+;&ndash;> &ldquo;One fish. Two fish. Red fish. Blue fish.&rdquo;</p>
+
+<p>```</p>
+
+<p>But what about with bad data?</p>
+
+<p>```clojure
+(fish-line 2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)</p>
+
+<p> ;; Call to #&lsquo;one-fish.core/fish-line did not conform to spec: val:
+ ;;   {:n1 2, :n2 1, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Blue&rdquo;} fails at: [:args] predicate:
+ ;;   one-bigger? :clojure.spec/args (2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)</p>
+
+<p> ;;   {:clojure.spec/problems
+ ;;    {[:args]
+ ;;     {:pred one-bigger?,
+ ;;      :val {:n1 2, :n2 1, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Blue&rdquo;},
+ ;;      :via [],
+ ;;      :in []}},
+ ;;    :clojure.spec/args (2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)}</p>
+
+<p>```</p>
+
+<p>Ah, yes &ndash; the first number must be one smaller than the second number.</p>
+
+<h3>Wrap up</h3>
+
+<p>I hope you&rsquo;ve enjoyed this brief tour of clojure.spec.  If you&rsquo;re interested in learning more, you should check out the <a href="http://clojure.org/guides/spec">spec.guide</a>.  It really is an exciting, new feature to Clojure.</p>
+
+<p>In the meantime, I&rsquo;ll leave you with one of our generated lines, sure to be a big hit with future generations.</p>
+
+<p><code>
+Zero fish
+One fish
+Red fish
+Dun fish
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ Kolmogorov-Uspensky Machine]]></title>
@@ -1094,124 +1366,6 @@ bye
 <p>Want more?  Check out the code <a href="https://github.com/gigasquid/speech-acts-classifier">https://github.com/gigasquid/speech-acts-classifier</a>.</p>
 
 <p><em>Special thanks to <a href="https://twitter.com/ohpauleez">Paul deGrandis</a> for allowing me to pick his awesome brain on AI things</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Conversations with Datomic - Part 3]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3/"/>
-    <updated>2015-08-25T10:28:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
-
-<p><em>This is a continuation of the <a href="http://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/">first</a> and
-<a href="http://gigasquidsoftware.com/blog/2015/08/19/conversations-with-datomic-part-2/">second</a> conversations in which topics such as creating databases,
-learning facts, querying, and time traveling were discussed.  Today&rsquo;s topics include architecture, caching, and scaling.</em></p>
-
-<p><strong>Human:</strong>  Hello again <a href="http://www.datomic.com/">Datomic</a>. Ready to talk again?</p>
-
-<p><strong>Datomic:</strong> Sure.  I think you wanted to ask me some questions about how I would fit in with your other systems.</p>
-
-<p><strong>Human:</strong> Yes.  Like I was saying earlier, I think your abilities to learn facts, reason about them, and keep track of the history of all those facts is really great.
-I am interested in having you work with me every day, but first I want to understand your components so that I can make sure you are a good fit for us.</p>
-
-<p><strong>Datomic:</strong> I would be happy to explain my architecture to you.  Perhaps showing you this picture is the best way to start.</p>
-
-<p><img class="<a" src="href="http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg">http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg</a>"></p>
-
-<p>I am made of three main parts: my <em>transactors</em>, my <em>peers</em>, and my <em>storage</em>.</p>
-
-<p><strong>Human</strong>:  What is a <em>peer</em>?</p>
-
-<p><strong>Datomic</strong>:  A <em>peer</em> is an application that is using the peer library.  In our last conversations,  we were talking through the Clojure api with <code>datomic.api</code>.  The application, or process, that is running this api is called a peer.  There can be many of these, all having conversations with me.</p>
-
-<p><strong>Human</strong>: The peers then talk to your <em>transactor</em>?</p>
-
-<p><strong>Datomic</strong> Yes. The peers talk to my transactor whenever you call <code>transact</code> with the peer library.  It is the central coordinator between all the peers and processes the requests using <em>ACID</em> transactions, and then sends the facts off to storage.</p>
-
-<p><strong>Human:</strong>  Could you remind me what <em>ACID</em> stands for again?  I always forget.  The first one is <em>Atomic</em> right?</p>
-
-<p><strong>Datomic:</strong> That is right.  I am <em>Atomic</em> in that every transaction you send to me is all or nothing.  If for some reason, one part of it fails, I will reject the entire transaction and leave my database unchanged.</p>
-
-<p>The C is for <em>Consistency</em>.  This means that I provide every peer with a consistent view of facts over time and transactions.  I provide a global ordering of transactions across all the peers with my transactor and peers will always see all the transactions up to their current time without any gaps.</p>
-
-<p><strong>Human:</strong> What if a peer is behind the global time?  How do they catch up to know about the new facts that were transacted by a different peer?</p>
-
-<p><strong>Datomic:</strong> After one peer sends me a successful transaction with some new facts, I will notify all the peers about them.</p>
-
-<p><strong>Human:</strong> Cool. That takes care of the A and C in ACID. What about the I?</p>
-
-<p><strong>Datomic:</strong> It stands for Isolated.  It makes sure that even through there are many peers having conversations with me, transactions are executed serially.  This happens naturally with my transactor.  Since there is only one transactor, transactions are always executed serially.</p>
-
-<p><strong>Human</strong>:  In the picture, why are there are two transactors then?</p>
-
-<p><strong>Datomic</strong>:  Oh, that is for High Availability.  When I startup my system, I can launch two running transactors, but hold one in reserve.  Just on the off chance something happens to the main one, I will swap in the failover one to keep things running smoothly.</p>
-
-<p>The final D in <em>ACID</em> is for Durability.  Once a transaction has been committed by my transactor, it is shipped off to storage for safe keeping.</p>
-
-<p><strong>Human:</strong> What exactly is this storage?</p>
-
-<p><strong>Datomic:</strong> Instead of storing datoms, I send <em>segments</em>, which are closely related datoms,  to storage.  I have quite a few options for storage:</p>
-
-<ul>
-<li>Dev mode &ndash; which just runs within my transactor and writes to the local file system.</li>
-<li>SQL database</li>
-<li>DynamoDB</li>
-<li>Cassandra</li>
-<li>Riak</li>
-<li>Couchbase</li>
-<li>Infinispan memory cluster</li>
-</ul>
-
-
-<p><strong>Human:</strong> Which one is the best to use?</p>
-
-<p><strong>Datomic:</strong> <em>The best one to use is the one that you are already have in place at work</em>.  This way, I can integrate seamlessly with your other systems.</p>
-
-<p><strong>Human:</strong> Oh, we didn&rsquo;t really talk about caching.  Can you explain how you do that?</p>
-
-<p><strong>Datomic:</strong> Certainly.  It is even worth another picture.</p>
-
-<p><img class="<a" src="href="http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg">http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg</a>"></p>
-
-<p>Each peer has a its own <em>working set</em> of recent datoms along with a index to all the rest of the datoms in storage in memory.  When the peer has a query for a datom, it first checks to see if it has it locally in its memory cache.  If it can&rsquo;t find it there, then it will ask for a segment of that datom from storage.  Storage will return that datom along with other related datoms in that segment so that the peer can cache that in memory to make it faster for the next query.</p>
-
-<p><strong>Human:</strong> That seems really different from other databases, where the client constantly requests queries from a server.</p>
-
-<p><strong>Datomic:</strong> Yes.  When most questions can be answered from the local memory, responses are really fast.  You don&rsquo;t need to hit storage unless you really need too.  You can even add an extra layer of caching with memcached.</p>
-
-<p><strong>Human:</strong> That sounds great.  I can&rsquo;t wait tell you about all of our data.  We talked a bit about your querying ability earlier, can you do the same queries that our other standard relational databases do, like joins?</p>
-
-<p><strong>Datomic:</strong> Oh yes.  In fact, with me, you don&rsquo;t need to specify your joins explicitly.  I use <em>Datalog</em>, which is based on logic, so my joins are implicit.  I will figure out exactly what I need to put together to answer your query without you having to spell it out for me.</p>
-
-<p><strong>Human:</strong> Ok.  I know that I can map some of my data that is already in other database tables to you.  What about other types of irregular data, like graphs, or sparse data.</p>
-
-<p><strong>Datomic:</strong> I am actually very proud of my data model.  It is extremely flexible.  Since I store things on such a granular datom level, you don&rsquo;t need to map your logical data model to my physical model.  I can handle <em>rectangular</em> table shaped data quite happily along with graph data, sparse data, or other <em>non-rectangular</em> data.</p>
-
-<p><strong>Human:</strong> That sounds great.  What do I need to know about your scaling?</p>
-
-<p><strong>Datomic:</strong> I really excel at reads.  All you have to do is elastically add another peer to me for querying.  I am not really a good fit for write scale, like big data, or log file analysis.  You will find me most happy with data that is valuable information of record and has history that is important, like transaction, medical, or inventory data.  I am also really good at being flexible for development and operations since I can use many different types of storage.  I have worked with many web and cloud apps.</p>
-
-<p><strong>Human:</strong> Thanks for answering all my questions.  I think you might fit in quite well with our other systems.</p>
-
-<p><strong>Datomic:</strong> Great!</p>
-
-<p><strong>Human:</strong> One more thing, this conversation has been great, but do you have any training resources for me and my other human coworkers?</p>
-
-<p><strong>Datomic:</strong> Sure thing. There are a few really good resources on the <a href="http://www.datomic.com/training.html">Datomic Training Site</a>.  I would suggest watching the videos there and pairing them with:</p>
-
-<ul>
-<li><a href="https://github.com/stuarthalloway/presentations/blob/master/Nov2014/DayOfDatomicNov2014.pdf?raw=true">The slides for the videos</a> which have the labs to work through form the videos.</li>
-<li><a href="https://github.com/Datomic/day-of-datomic">The Day of Datomic Repo</a> which has lots of great examples to play with.</li>
-<li><a href="http://docs.datomic.com/">Tne Datomic Development Resources</a>, which include the docs on the <a href="http://docs.datomic.com/clojure/index.html">Clojure API</a></li>
-</ul>
-
-
-<p>Also, if you want to confirm that your data is good fit for me, I suggest you describe your data to the <a href="https://groups.google.com/forum/#!forum/datomic">Datomic Google Group</a>.  They are nice and knowledgeable group of humans.</p>
-
-<p><strong>Human:</strong> Thanks again Datomic!  I will grab another cookie and check it out!</p>
-
-<p><strong>Datomic:</strong> What is it with humans and cookies?&hellip;</p>
 ]]></content>
   </entry>
   
