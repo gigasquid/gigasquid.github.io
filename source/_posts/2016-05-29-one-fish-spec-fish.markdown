@@ -14,10 +14,12 @@ categories:
 
 In this blog post, we'll take a tour of writing specifications for a clojure function, as well as the power of data generation.  First, some inspirational words:
 
->>One fish
->>Two fish
->>Red fish
->>Blue fish
+```
+One fish
+Two fish
+Red fish
+Blue fish
+```
 
 The mere shape of these words brings a function to mind.  One that would take in a vector:
 
@@ -36,7 +38,7 @@ But, let us turn our attention the parameters of this function and see how we ca
 
 ### Specifying the values of the parameters
 
-Back to the parameters. The first two are integers, that's pretty easy, but we want to say more about them.  For example, I don't want them to be very big.  Having a child's poem with the _One Hundred Thousand and Thirty Three fish_ really won't do.  In fact, what we really want is to say is there is finite notion of _fish-numbers_ and it's a map of integer to string representation.
+Back to the parameters. The first two are integers, that's pretty easy, but we want to say more about them.  For example, we don't want them to be very big.  Having a child's poem with the _One Hundred Thousand and Thirty Three fish_ really won't do.  In fact, what we really want is to say is there is finite notion of _fish-numbers_ and it's a map of integer to string representation.
 
 ```clojure
 (def fish-numbers {0 "Zero"
