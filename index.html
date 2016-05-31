@@ -242,7 +242,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Failing values, for the specification can be easily identified.</p>
+<p>Failing values for the specification can be easily identified.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -251,7 +251,7 @@
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; false</span>
 </span><span class='line'><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;; val: {:n1 2, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}</span>
-</span><span class='line'>   <span class="nv">fails</span> <span class="nv">predicate</span><span class="err">:</span> <span class="nv">one-bigger?</span>
+</span><span class='line'><span class="c1">;;   fails predicate: one-bigger?</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
