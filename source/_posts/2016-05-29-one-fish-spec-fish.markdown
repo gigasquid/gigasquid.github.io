@@ -119,13 +119,13 @@ If we want to get the destructured, conformed values, we can use `s/conform`.  I
 ;=> {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}
 ```
 
-Failing values, for the specification can be easily identified.
+Failing values for the specification can be easily identified.
 
 ```clojure
 (s/valid? ::first-line [2 1 "Red" "Blue"]) ;=> false
 (s/explain ::first-line [2 1 "Red" "Blue"])
 ;; val: {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"}
-   fails predicate: one-bigger?
+;;   fails predicate: one-bigger?
 
 ```
 
