@@ -11,7 +11,7 @@ categories:
 
 So you want to write a book?  Awesome.  I've been working on one too for the last year.
 
-No, it's not really a programming book, but does have code in it.  It's a sci-fi/fantasy book written for my ten year daughter, but this post isn't about that.  It's about the tools and setup that I've found work best for me.
+No, it's not really a programming book, but it does have code in it.  It's a sci-fi/fantasy book written for my ten year daughter, but this post isn't about that.  It's about sharing the tools and setup that I've found work best for me.
 
 ## Tools for Writing
 
@@ -47,7 +47,7 @@ Once you write your manuscript, (what the publishing world calls your book text)
 
 I don't have any real firm advice in this area yet since I'm still at the copy editing and walking backwards stage, but I'll share the two options that I'm looking at - traditional publishing and self publishing.
 
-Self publishing is more easily understood to the two.  You can put your book up for sale at any time through Leanpub or Amazon.  For better or worse, you have complete control of the content, display, marketing, and revenue of your book.
+Self publishing is more easily understood of the two.  You can put your book up for sale at any time through Leanpub or Amazon.  For better or worse, you have complete control of the content, display, marketing, and revenue of your book.
 
 Traditional publishing involves finding an literary agent and/or publisher to work with.  This route involves pitching your manuscript to someone to represent it through a [query](http://nybookeditors.com/2015/12/how-to-write-a-darn-good-query-letter/).  The advantages of this are that, (if you find a good match), you will have a team of people helping you make your book the best it can be and have the possibility of getting it on the shelf in a bookstore.  One of the downsides is that the traditional publishing world takes a lot longer than pushing the self publish button.
 
