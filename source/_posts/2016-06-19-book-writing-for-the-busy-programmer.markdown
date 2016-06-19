@@ -30,7 +30,7 @@ Since I was writing a book with my daughter in mind, the most important feedback
 
 After my kids reviewed the chapters, I also sought some professional writing advice from a free-lance editor.  I highly recommend getting this sort of feedback from either an editor, writing group, or trusted friend to help you grow and improve. The one catch is that most of the writing world works with Microsoft Word, so I needed to convert my chapters to that format.
 
-From my experience, all PDF to Word converters are full of fail.  The formatting goes all over the place and your writing ends up looking like some horrible abstract text art experiment gone wrong.  So far, the best converter I've found is [pandoc](http://pandoc.org/).
+From my experience, all PDF to Word converters are full of fail.  The formatting goes all over the place and your writing ends up looking like some horrible abstract text art experiment gone wrong.  So far, the best converter I've found is [pandoc](http://pandoc.org/).  It allows you to take your Markdown files and turn them into quite presentable Word documents.
 
 If you have a Mac, it's as simple as `brew install pandoc`.  Then, you can create a simple script to convert all your chapters,(or a selection) into a properly formatted Word Doc.
 
