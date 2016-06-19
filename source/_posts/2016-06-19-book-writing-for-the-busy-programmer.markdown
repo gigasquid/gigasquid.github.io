@@ -49,7 +49,7 @@ I don't have any real firm advice in this area yet since I'm still at the copy e
 
 Self publishing is more easily understood to the two.  You can put your book up for sale at any time through Leanpub or Amazon.  For better or worse, you have complete control of the content, display, marketing, and revenue of your book.
 
-Traditional publishing involves finding an literary agent and/or publisher to work with.  This route involves pitching your manuscript to someone to represent it through a [query](http://nybookeditors.com/2015/12/how-to-write-a-darn-good-query-letter/).  The advantages of this are that, (if you find a good match), you will have a team of people helping you make your book the best it can be and have the possibility of getting it on the shelf in a bookstore.  The downsides are that the traditional publishing world takes a lot longer than pushing the self publish button.
+Traditional publishing involves finding an literary agent and/or publisher to work with.  This route involves pitching your manuscript to someone to represent it through a [query](http://nybookeditors.com/2015/12/how-to-write-a-darn-good-query-letter/).  The advantages of this are that, (if you find a good match), you will have a team of people helping you make your book the best it can be and have the possibility of getting it on the shelf in a bookstore.  One of the downsides is that the traditional publishing world takes a lot longer than pushing the self publish button.
 
 
 With any luck, I'll have a clearer picture of this all in a bit and be able to share my experiences.  In the meantime, I encourage you to grab your keyboard and bring your book ideas to life.
