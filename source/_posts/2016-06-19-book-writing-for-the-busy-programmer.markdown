@@ -22,7 +22,7 @@ Hold on though, there's another way.
 Starting out with only my book idea, I spent some time looking at the best authoring tools out there.  I knew that I wanted to able to write in an editor that I was comfortable in and in a terse format like Markdown.  I also wanted to be able to use git for revision management.  After searching, I settled on [Leanpub](https://leanpub.com/)
 
 
-Leanpub is a free service for authoring that has [git integration](https://leanpub.com/help/getting_started_sync_github) in [Markdown format](https://leanpub.com/help).  With it, I was able to write in my favorite text editor, (Emacs of course), commit and push my changes to my git repo, and then generate PDF and e-book formats.  The multiple formats were important to me because it allowed me to share my chapters and get feedback.
+Leanpub is a free service for authoring that has [Git integration](https://leanpub.com/help/getting_started_sync_github) in [Markdown format](https://leanpub.com/help).  With it, I was able to write in my favorite text editor, (Emacs of course), commit and push my changes to my git repo, and then generate PDF and e-book formats.  The multiple formats were important to me because it allowed me to share my chapters and get feedback.
 
 ## Tools for Feedback
 
