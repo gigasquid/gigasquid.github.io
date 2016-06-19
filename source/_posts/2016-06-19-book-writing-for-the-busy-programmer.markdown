@@ -26,7 +26,7 @@ Leanpub is a free service for authoring that has [Git integration](https://leanp
 
 ## Tools for Feedback
 
-Since I was writing a book with my daughter in mind, the most important feedback was from her.  After every chapter was done.  I would either print her out a copy or download it to her kindle for review.  She actually really enjoyed reading it on her Kindle because it made it for more _real_ to her.  My son also got interested in the story and before long, I had them both getting in heated debates about which direction the story should go.
+Since I was writing a book with my daughter in mind, the most important feedback was from her.  After every chapter was done.  I would either print her out a copy or download it to her Kindle for review.  She actually really enjoyed reading it on her Kindle because it made it for more _real_ to her.  My son also got interested in the story and before long, I had them both getting in heated debates about which direction the story should go.
 
 After my kids reviewed the chapters, I also sought some professional writing advice from a free-lance editor.  I highly recommend getting this sort of feedback from an editor, writing group, or trusted friend to help you grow and improve. The one catch is that most of the writing world works with Microsoft Word, so I needed to convert my chapters to that format.
 
