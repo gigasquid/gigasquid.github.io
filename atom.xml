@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-05-31T09:17:35-04:00</updated>
+  <updated>2016-06-19T10:35:51-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,63 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Book Writing for the Busy Programmer]]></title>
+    <link href="http://gigasquid.github.io/blog/2016/06/19/book-writing-for-the-busy-programmer/"/>
+    <updated>2016-06-19T09:22:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2016/06/19/book-writing-for-the-busy-programmer</id>
+    <content type="html"><![CDATA[<p><img src="http://c5.staticflickr.com/8/7302/27492453220_eecdf6dee1.jpg"></p>
+
+<p>So you want to write a book?  Awesome.  I&rsquo;ve been working on one too for the last year.</p>
+
+<p>No, it&rsquo;s not really a programming book, but does have code in it.  It&rsquo;s a sci-fi/fantasy book written for my ten year daughter, but this post isn&rsquo;t about that.  It&rsquo;s about the tools and setup that I&rsquo;ve found work best for me.</p>
+
+<h2>Tools for Writing</h2>
+
+<p>If the first thing you think of when you want to write a book is creating some really cool tools to help you, I can totally relate.  It&rsquo;s a programmer thing.</p>
+
+<p>Hold on though, there&rsquo;s another way.</p>
+
+<p>Starting out with only my book idea, I spent some time looking at the best authoring tools out there.  I knew that I wanted to able to write in an editor that I was comfortable in and in a terse format like Markdown.  I also wanted to be able to use git for revision management.  After searching, I settled on <a href="https://leanpub.com/">Leanpub</a></p>
+
+<p>Leanpub is a free service for authoring that has <a href="https://leanpub.com/help/getting_started_sync_github">git integration</a> in <a href="https://leanpub.com/help">Markdown format</a>.  With it, I was able to write in my favorite text editor, (Emacs of course), commit and push my changes to my git repo, and then generate PDF and e-book formats.  The multiple formats were important to me because it allowed me to share my chapters and get feedback.</p>
+
+<h2>Tools for Feedback</h2>
+
+<p>Since I was writing a book with my daughter in mind, the most important feedback was from her.  After every chapter was done.  I would either print her out a copy or download it to her kindle for review.  She actually really enjoyed reading it on her Kindle because it made it for more <em>real</em> to her.  My son also got interested in the story and before long, I had them both getting in heated debates about which direction the story should go.</p>
+
+<p>After my kids reviewed the chapters, I also sought some professional writing advice from a free-lance editor.  I highly recommend getting this sort of feedback from either an editor, writing group, or trusted friend to help you grow and improve. The one catch is that most of the writing world works with Microsoft Word, so I needed to convert my chapters to that format.</p>
+
+<p>From my experience, all PDF to Word converters are full of fail.  The formatting goes all over the place and your writing ends up looking like some horrible abstract text art experiment gone wrong.  So far, the best converter I&rsquo;ve found is <a href="http://pandoc.org/">pandoc</a>.</p>
+
+<p>If you have a Mac, it&rsquo;s as simple as <code>brew install pandoc</code>.  Then, you can create a simple script to convert all your chapters,(or a selection) into a properly formatted Word Doc.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
+</span><span class='line'>rm ./all.md
+</span><span class='line'>for i in `cat ./Book.txt`; do  cat $i &gt;&gt; all.md; echo "  " &gt;&gt; all.md ; done
+</span><span class='line'>pandoc -o all.docx -f markdown -t docx ./all.md</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you write your manuscript, (what the publishing world calls your book text), revise it, copy edit it, and walk backwards in a circle three times, you&rsquo;re ready to publish.</p>
+
+<h2>Tools for Publishing</h2>
+
+<p>I don&rsquo;t have any real firm advice in this area yet since I&rsquo;m still at the copy editing and walking backwards stage, but I&rsquo;ll share the two options that I&rsquo;m looking at &ndash; traditional publishing and self publishing.</p>
+
+<p>Self publishing is more easily understood to the two.  You can put your book up for sale at any time through Leanpub or Amazon.  For better or worse, you have complete control of the content, display, marketing, and revenue of your book.</p>
+
+<p>Traditional publishing involves finding an literary agent and/or publisher to work with.  This route involves pitching your manuscript to someone to represent it through a <a href="http://nybookeditors.com/2015/12/how-to-write-a-darn-good-query-letter/">query</a>.  The advantages of this are that, (if you find a good match), you will have a team of people helping you make your book the best it can be and have the possibility of getting it on the shelf in a bookstore.  The downsides are that the traditional publishing world takes a lot longer than pushing the self publish button.</p>
+
+<p>With any luck, I&rsquo;ll have a clearer picture of this all in a bit and be able to share my experiences.  In the meantime, I encourage you to grab your keyboard and bring your book ideas to life.</p>
+
+<p>No matter the outcome, it&rsquo;s a rewarding journey.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[One Fish Spec Fish]]></title>
@@ -3238,264 +3295,6 @@ to sleep on my feet while I work.  No luck so far.</p>
 any tips, let me know.</p>
 
 <p><img src="https://c4.staticflickr.com/8/7480/15053352894_a2ac5db294.jpg"></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Green Eggs and Transducers]]></title>
-    <link href="http://gigasquid.github.io/blog/2014/09/06/green-eggs-and-transducers/"/>
-    <updated>2014-09-06T15:47:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2014/09/06/green-eggs-and-transducers</id>
-    <content type="html"><![CDATA[<p><img src="http://upload.wikimedia.org/wikipedia/en/c/c2/Greenegg.gif"></p>
-
-<p>A quick tour of Clojure Transducers with core.async with Dr. Seuss as a guide.</p>
-
-<p>Follow along at home by:</p>
-
-<ul>
-<li><code>lein new green-eggs</code></li>
-<li>modify your project.clj to include the following:</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defproject </span><span class="nv">green-eggs</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
-</span><span class='line'>  <span class="ss">:description</span> <span class="s">&quot;try them&quot;</span>
-</span><span class='line'>  <span class="ss">:url</span> <span class="s">&quot;http://en.wikipedia.org/wiki/Green_Eggs_and_Ham&quot;</span>
-</span><span class='line'>  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Eclipse Public License&quot;</span>
-</span><span class='line'>            <span class="ss">:url</span> <span class="s">&quot;http://www.eclipse.org/legal/epl-v10.html&quot;</span><span class="p">}</span>
-</span><span class='line'>  <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">org.clojure/clojure</span> <span class="s">&quot;1.7.0-alpha1&quot;</span><span class="p">]</span>
-</span><span class='line'>                 <span class="p">[</span><span class="nv">org.clojure/core.async</span> <span class="s">&quot;0.1.338.0-5c5012-alpha&quot;</span><span class="p">]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Start up a repl and hack in!</li>
-</ul>
-
-
-<h2>Green Eggs and Ham</h2>
-
-<p>Transducers are a new feature of Clojure 1.7.  Instead of trying to explain them with words, let&rsquo;s take a look of them in action.  First we need some data.  Let&rsquo;s def a vector of all the places you could try green eggs and ham.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">green-eggs.core</span>
-</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.async</span> <span class="ss">:as</span> <span class="nv">async</span><span class="p">]))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">green-eggs-n-ham</span>
-</span><span class='line'>  <span class="p">[</span><span class="s">&quot;in the rain&quot;</span>
-</span><span class='line'>   <span class="s">&quot;on a train&quot;</span>
-</span><span class='line'>   <span class="s">&quot;in a box&quot;</span>
-</span><span class='line'>   <span class="s">&quot;with a fox&quot;</span>
-</span><span class='line'>   <span class="s">&quot;in a house&quot;</span>
-</span><span class='line'>   <span class="s">&quot;with a mouse&quot;</span>
-</span><span class='line'>   <span class="s">&quot;here or there&quot;</span>
-</span><span class='line'>   <span class="s">&quot;anywhere&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Next, let&rsquo;s create a function that will transform the places into a &ldquo;I would not eat them &hellip;&rdquo; sentence.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">i-do-not-like-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;I would not eat them %s.&quot;</span> <span class="nv">s</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">i-do-not-like-them</span> <span class="s">&quot;in the rain&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; -&gt; &quot;I would not eat them in the rain.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We also need a function to take this result and actually try the green eggs and ham.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">try-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">clojure.string/replace</span> <span class="nv">s</span>  <span class="o">#</span><span class="s">&quot; not&quot;</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">try-them</span> <span class="s">&quot;I would not eat them in the rain.&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we have two transformations that we can apply to the vector of green-eggs-n-ham strings.
-One of the really nice things about transducers is that you can describe and compose this transformation without a data structure present.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-xform</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">comp</span>
-</span><span class='line'>   <span class="p">(</span><span class="nb">map </span><span class="nv">i-do-not-like-them</span><span class="p">)</span>
-</span><span class='line'>   <span class="p">(</span><span class="nb">map </span><span class="nv">try-them</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can run the transformation of the transducers against the data in a few ways.</p>
-
-<ul>
-<li><em>into</em>: Non-lazy turn the transformation into a collection</li>
-<li><em>sequence</em>: Same thing but lazy</li>
-<li><em>transduce</em>: Acts like reduce on the all the transformed elements</li>
-<li>With <em>core.async</em> channels doing the transformations.</li>
-</ul>
-
-
-<p>Let&rsquo;s look at the green eggs and ham example for each one of these ways:</p>
-
-<h3>Into</h3>
-
-<p>Into takes a transducer and collection to work on and returns the vector we asked for:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; -&gt; [&quot;I would eat them in the rain.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them on a train.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them in a box.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them with a fox.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them in a house.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them with a mouse.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them here or there.&quot;</span>
-</span><span class='line'><span class="c1">;;     &quot;I would eat them anywhere.&quot;]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Sequence</h3>
-
-<p>Sequence takes similar arguments, but as promised, returns a lazy sequence that we can interact with.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">class </span><span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
-</span><span class='line'><span class="c1">;; -&gt; clojure.lang.LazyTransformer</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">1</span> <span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
-</span><span class='line'><span class="c1">;; -&gt; (&quot;I would eat them in the rain.&quot;)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Transduce</h3>
-
-<p>If we want to finally arrange all our sentences in the vectors into one string, we would use reduce.  The way to do this with transducers is to use <em>transduce</em>.  It takes a function of two arguments to perform the reduce, as well as an initial data input.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">transduce</span> <span class="nv">sam-i-am-xform</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.</span>
-</span><span class='line'><span class="c1">;;     I would eat them on a train.</span>
-</span><span class='line'><span class="c1">;;     I would eat them in a box.</span>
-</span><span class='line'><span class="c1">;;     I would eat them with a fox.</span>
-</span><span class='line'><span class="c1">;;     I would eat them in a house.</span>
-</span><span class='line'><span class="c1">;;     I would eat them with a mouse.</span>
-</span><span class='line'><span class="c1">;;     I would eat them here or there.</span>
-</span><span class='line'><span class="c1">;;     I would eat them anywhere.&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;;_note: In  1.7.0-alpha2, transduce changed and you need to use a</span>
-</span><span class='line'><span class="c1">;;(transduce sam-i-am-xform (completing #(str %1 %2 &quot; &quot;)) &quot;&quot; green-eggs-n-ham)</span>
-</span><span class='line'><span class="c1">;;instead.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Core.async</h3>
-
-<p>Core.async has a really nice way to define channels with a transducer that will transform each element on the channel.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-chan</span> <span class="p">(</span><span class="nf">async/chan</span> <span class="mi">1</span> <span class="nv">sam-i-am-xform</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s define another channel to reduce the results of the sam-i-am-chan to a string.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result-chan</span> <span class="p">(</span><span class="nf">async/reduce</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">sam-i-am-chan</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally, let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">async/onto-chan</span> <span class="nv">sam-i-am-chan</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>At last,
-we can get our result off the result channel and revel in the beauty of asynchronous data transducers.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">i-like-them</span> <span class="p">(</span><span class="nf">async/&lt;!!</span> <span class="nv">result-chan</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">i-like-them</span>
-</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.</span>
-</span><span class='line'><span class="c1">;;     I would eat them on a train.</span>
-</span><span class='line'><span class="c1">;;     I would eat them in a box.</span>
-</span><span class='line'><span class="c1">;;     I would eat them with a fox.</span>
-</span><span class='line'><span class="c1">;;     I would eat them in a house.</span>
-</span><span class='line'><span class="c1">;;     I would eat them with a mouse.</span>
-</span><span class='line'><span class="c1">;;     I would eat them here or there.</span>
-</span><span class='line'><span class="c1">;;     I would eat them anywhere.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Transducers are elegant and powerful, just like the rest of Clojure.  Try them, you will like them :)</p>
-
-<p><img src="http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg"></p>
 ]]></content>
   </entry>
   

@@ -1,0 +1,206 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Book Writing for the Busy Programmer - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="So you want to write a book? Awesome. I&rsquo;ve been working on one too for the last year. No, it&rsquo;s not really a programming book, but does &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/books/index.html">Books</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Book Writing for the Busy Programmer</h2>
+	<div class="entry-content"><p><img src="http://c5.staticflickr.com/8/7302/27492453220_eecdf6dee1.jpg"></p>
+
+<p>So you want to write a book?  Awesome.  I&rsquo;ve been working on one too for the last year.</p>
+
+<p>No, it&rsquo;s not really a programming book, but does have code in it.  It&rsquo;s a sci-fi/fantasy book written for my ten year daughter, but this post isn&rsquo;t about that.  It&rsquo;s about the tools and setup that I&rsquo;ve found work best for me.</p>
+
+<h2>Tools for Writing</h2>
+
+<p>If the first thing you think of when you want to write a book is creating some really cool tools to help you, I can totally relate.  It&rsquo;s a programmer thing.</p>
+
+<p>Hold on though, there&rsquo;s another way.</p>
+
+<p>Starting out with only my book idea, I spent some time looking at the best authoring tools out there.  I knew that I wanted to able to write in an editor that I was comfortable in and in a terse format like Markdown.  I also wanted to be able to use git for revision management.  After searching, I settled on <a href="https://leanpub.com/">Leanpub</a></p>
+
+<p>Leanpub is a free service for authoring that has <a href="https://leanpub.com/help/getting_started_sync_github">git integration</a> in <a href="https://leanpub.com/help">Markdown format</a>.  With it, I was able to write in my favorite text editor, (Emacs of course), commit and push my changes to my git repo, and then generate PDF and e-book formats.  The multiple formats were important to me because it allowed me to share my chapters and get feedback.</p>
+
+<h2>Tools for Feedback</h2>
+
+<p>Since I was writing a book with my daughter in mind, the most important feedback was from her.  After every chapter was done.  I would either print her out a copy or download it to her kindle for review.  She actually really enjoyed reading it on her Kindle because it made it for more <em>real</em> to her.  My son also got interested in the story and before long, I had them both getting in heated debates about which direction the story should go.</p>
+
+<p>After my kids reviewed the chapters, I also sought some professional writing advice from a free-lance editor.  I highly recommend getting this sort of feedback from either an editor, writing group, or trusted friend to help you grow and improve. The one catch is that most of the writing world works with Microsoft Word, so I needed to convert my chapters to that format.</p>
+
+<p>From my experience, all PDF to Word converters are full of fail.  The formatting goes all over the place and your writing ends up looking like some horrible abstract text art experiment gone wrong.  So far, the best converter I&rsquo;ve found is <a href="http://pandoc.org/">pandoc</a>.</p>
+
+<p>If you have a Mac, it&rsquo;s as simple as <code>brew install pandoc</code>.  Then, you can create a simple script to convert all your chapters,(or a selection) into a properly formatted Word Doc.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
+</span><span class='line'>rm ./all.md
+</span><span class='line'>for i in `cat ./Book.txt`; do  cat $i &gt;&gt; all.md; echo "  " &gt;&gt; all.md ; done
+</span><span class='line'>pandoc -o all.docx -f markdown -t docx ./all.md</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you write your manuscript, (what the publishing world calls your book text), revise it, copy edit it, and walk backwards in a circle three times, you&rsquo;re ready to publish.</p>
+
+<h2>Tools for Publishing</h2>
+
+<p>I don&rsquo;t have any real firm advice in this area yet since I&rsquo;m still at the copy editing and walking backwards stage, but I&rsquo;ll share the two options that I&rsquo;m looking at &ndash; traditional publishing and self publishing.</p>
+
+<p>Self publishing is more easily understood to the two.  You can put your book up for sale at any time through Leanpub or Amazon.  For better or worse, you have complete control of the content, display, marketing, and revenue of your book.</p>
+
+<p>Traditional publishing involves finding an literary agent and/or publisher to work with.  This route involves pitching your manuscript to someone to represent it through a <a href="http://nybookeditors.com/2015/12/how-to-write-a-darn-good-query-letter/">query</a>.  The advantages of this are that, (if you find a good match), you will have a team of people helping you make your book the best it can be and have the possibility of getting it on the shelf in a bookstore.  The downsides are that the traditional publishing world takes a lot longer than pushing the self publish button.</p>
+
+<p>With any luck, I&rsquo;ll have a clearer picture of this all in a bit and be able to share my experiences.  In the meantime, I encourage you to grab your keyboard and bring your book ideas to life.</p>
+
+<p>No matter the outcome, it&rsquo;s a rewarding journey.</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2016/06/19/book-writing-for-the-busy-programmer/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2016
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2016/06/19/book-writing-for-the-busy-programmer/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2016/06/19/book-writing-for-the-busy-programmer/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>
