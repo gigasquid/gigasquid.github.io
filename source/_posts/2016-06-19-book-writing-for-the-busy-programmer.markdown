@@ -45,7 +45,7 @@ Once you write your manuscript, (what the publishing world calls your book text)
 
 ## Tools for Publishing
 
-I don't have any real firm advice in this area yet since I'm still at the copy editing and walking backwards stage, but I'll share the two options that I'm looking at - traditional publishing and self publishing.
+I don't have any real firm advice in this area yet since I'm still in the midst of it, but I'll share the two options that I'm looking at - traditional publishing and self publishing.
 
 Self publishing is more easily understood of the two.  You can put your book up for sale at any time through Leanpub or Amazon.  For better or worse, you have complete control of the content, display, marketing, and revenue of your book.
 
