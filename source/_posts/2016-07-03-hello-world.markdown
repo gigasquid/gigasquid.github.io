@@ -44,7 +44,7 @@ You can forget the important things in life.  Turn away from family and friends.
 ### You can let the code make them smile.
 You can use your skills to brighten dark days.  Use your programs to make them laugh.  Then when you have their attention, inspire them to dream with you of a better world and then make it happen.
 
-### You can make the code save lives
+### You can make the code save lives.
 You can turn those algorithms to unraveling the mysteries of DNA, our brain, and the human body.  Battle against the age old enemies of humanity, death and disease.  Then, you lift your head to the sky and
 
 ### You can make the code reach the stars.
