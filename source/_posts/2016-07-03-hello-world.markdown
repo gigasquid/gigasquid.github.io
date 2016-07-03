@@ -51,7 +51,7 @@ You can turn those algorithms to heal our DNA, brain, and body.  Battle against 
 You can see the surface of Mars.  Pick up a rock from a planet that was unimaginable generations before.  Look out at what is beyond our solar system and peer into the mysteries of the beginning of time.
 
 
-### You can
+### You can.
 
 All these things are yours now.  The terrible and beautiful power of it.
 
