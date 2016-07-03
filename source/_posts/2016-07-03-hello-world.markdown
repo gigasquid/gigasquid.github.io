@@ -42,7 +42,7 @@ You can automate hate.  Use the latest AI to keep them in control.  Watch them w
 You can forget the important things in life.  Turn away from family and friends.  Lose yourself in some self created digital representation of yourself that never feels smart enough and leaves you grasping for more.  Until that day, when you walk the streets with a deadened heart and you see the sad faces all around you and you remember that
 
 ### You can let the code make them smile.
-You can use your skills to brighten dark days.  Use your programs to make them laugh.  When you have their attention, inspire them to dream with you of a better world and then 
+You can use your skills to brighten dark days.  Use your programs to make them laugh.  When you have their attention, inspire them to dream with you of a better world and next
 
 ### You can make the code save lives.
 You can turn those algorithms to unraveling the mysteries of DNA, our brain, and the human body.  Battle against the age old enemies of humanity, death and disease.  Then, you lift your head to the sky and
