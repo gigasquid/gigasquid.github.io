@@ -6,7 +6,8 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Jun 4th, 2013 Tags: All, Clojure, Development, John McCarthy Papers, Language Preface: A Gentle Obsession About a year ago, I picked &hellip;">
+	<meta name="description" content="Published on: Jul 15th, 2013 Tags: All, Drone Lately, I have had the pleasure of speaking and sharing my experience
+of programming AR Drones with &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +74,108 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/07/15/demoing-with-drones-tips-and-warnings/">
+		
+			Demoing With Drones: Tips and Warnings</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-15T15:42:00-04:00" pubdate data-updated="true">Jul 15<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/drone/'>Drone</a>
+
+
+</div>
+    </div>
+		<p>Lately, I have had the pleasure of speaking and sharing my experience
+of programming <a href="http://ardrone2.parrot.com/">AR Drones</a> with Clojure.  However, doing live hardware
+demos has not always been a smooth ride.  In fact, it can be fraught
+with peril.  I thought that I would share some of the tips and tricks
+that have helped me, as well as help make you
+aware of some potential pitfalls.</p>
+
+<h2>Traveling with the AR Drone</h2>
+
+<p><img class="left" src="http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg"></p>
+
+<p>Do you need to take your drone with you on the plane to the demo?
+The box that the drone comes in is a very nice carrying case, however it
+is too big to take on as a carry-on.  I found that taking the hull
+off, and packing it into a plastic box worked well.  It was small
+enough to pack under the seat of even the smaller planes.  I took the
+battery out and packed it in my checked luggage.</p>
+
+<h2>Before the Demo</h2>
+
+<ul>
+<li><p><strong>Put colored masking tape on the floor</strong> : If the floor is
+  featureless, the drone will have a hard time staying in one place
+  while it is hovering.  Put down some strips of colored masking
+  tape in the area that you want to demo the drone.</p></li>
+<li><p><strong>Charge the spare battery</strong>:  Make sure that you have at least 2
+  batteries charged and ready to go.  If there is an extra plug
+  nearby, just plug in the battery and charger until you are ready
+  to present.</p></li>
+<li><p><strong>Beware the network interference</strong>:  In some larger venues, like
+  hotels, the network traffic will make things break.  In
+  particular, receiving navigation data back from the drone. There
+  are possible strategies for mitigating this &ndash; the only one I have
+  tried so far is to bump up the timeout on the UDP connection.
+  Other things that you may want to try would be to auto-reconnect
+  after timeout.  Also limiting the amount navdata you need might
+  also work.</p></li>
+<li><p><strong>Backup videos</strong> &ndash; Having backup videos of your demo actually
+  working is essential.  It is safety net that will allow you to
+  sleep the night before.  Like they say, &ldquo;Hope for the best, but
+  plan for the worst&rdquo;.</p></li>
+<li><p><strong>Rehearse</strong> &ndash; If possible, go through your drone demos in the space
+  sometime before the talk.  You will get a feeling for issues that
+  might occur &ndash; like network troubles.</p></li>
+</ul>
+
+
+<h2>Demo Time!</h2>
+
+<ul>
+<li><p><strong>Front row drone catchers</strong> &ndash; Enlist the aid of your audience.
+  Show the people in the front row how to catch a drone safely and
+  hold it at a 90 degree angle so the engine cuts out.  That way, if
+  the drone starts going off in unplanned ways, you will have help.</p></li>
+<li><p><strong>Cross your fingers and have fun</strong> &ndash; Good luck.  Hardware demos are
+  a lot of fun.  Hopefully, everything we work as planned, but if
+  not &ndash; at least it was interesting.</p></li>
+</ul>
+
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/15/demoing-with-drones-tips-and-warnings//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1292,106 +1395,6 @@ Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/bl
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2012/10/14/7-john-mccarthy-papers-in-7-weeks-3//blog/page/5/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2/">
-		
-			7 John McCarthy Papers in 7 Weeks - #2</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-29T12:00:36-04:00" pubdate data-updated="true">Sep 29<span>th</span>, 2012</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/john-mccarthy-papers/'>John McCarthy Papers</a>
-
-
-</div>
-    </div>
-		<p>Well, life threw me for a bit of a loop and delayed my post on my second paper. So I am going to consider this a &ldquo;weekish&rdquo; period of time and just continue on.</p>
-
-<p>I read <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/towards/towards.html"> Towards a Mathematical Science of Computation</a>.  It is quite a meaty paper and was certainly a lot to digest.  Here are some highlights that I gleaned from it.</p>
-
-<h3>How can a Mathematical Science of Computation help in a practical way?</h3>
-
-<p>McCarthy points out that while it is hard to predict practical applications ahead of time.  A couple of could be</p>
-
-<ul>
-<li><p>Provide a systematic way to create of programming language.  Rather than just arguing and arbitrarily adding language features whilly nilly.</p></li>
-<li><p>&ldquo;It should be possible to eliminate debugging.  Debugging is the testing of a program on cases one hopes are typical, until it seems to work.  This frequently is in vain.&rdquo;</p></li>
-</ul>
-
-
-<p>This last point of being able to eliminate debugging really stuck with me.  Even with the best of TDD and test suites, we as developers still struggle with the testing of programs against what we hope is &ldquo;typical&rdquo;.  Over the past years we have improved our techniques and made our programs more robust, but it would certainly be nice to be able to prove a program correct.</p>
-
-<p>If fear that even if this was possible, it would not be enough. At least in my experience, a considerable amount of debugging happens at the human level:</p>
-
-<ul>
-<li><p>The translation of understanding of what the human product owner wants to what the software developer can understand.</p></li>
-<li><p>The human product owner&rsquo;s understanding of what they want in the first place.</p></li>
-</ul>
-
-
-<p>In my experience, we have just as much trouble (or even more) stating the problem for the program as we do in attempting to solve and prove that it works.</p>
-
-<h3>What we already know that can be applied to a Mathematical Science of Computation</h3>
-
-<ul>
-<li><p>The existence of Turing&rsquo;s Universal computers</p></li>
-<li><p>The existence of classes of unsolvable problems</p></li>
-</ul>
-
-
-<h3>Perhaps a sonic screwdriver will help?</h3>
-
-<p>McCarthy then goes on to add another tool to the Mathematical Science of computation toolbox. He shows that conditional expressions can be defined recursively.  Then he expands this to relate to programs/computers that can be defined recursively.</p>
-
-<h3>Can a man make a computer program that is as intelligent as him?</h3>
-
-<p>Here is the real question.  McCarthy has us consider the following problem of whether a program on a computers with unlimited memory will ever stop:</p>
-
-<p>A procedure does the following</p>
-
-<ol>
-<li><p> If the number is in a <a href="http://en.wikipedia.org/wiki/Creative_and_productive_sets">creative set</a> then return &ndash;> yes.
-If a number is not in a creative set then return &ndash;> no
-or it may run indefinitely</p></li>
-<li><p> There is no procedure while will always return &ndash;> yes when the answer is yes.  and return &ndash;> no when the answer is no</p></li>
-</ol>
-
-
-<p>It is a bit depressing that we can&rsquo;t figure out which ones that are really no and which ones run forever.  But don&rsquo;t give up.  We can just try to do the best we can.  <a href="http://en.wikipedia.org/wiki/Emil_Leon_Post">Emil Post</a> discovered that whenever we try to do the best we can, one can always improve upon it.  He showed that given any procedure, he could make a new procedure that solved all the previous cases plus some new ones. McCarthy pointed out that this process, even though it is really like trying to count the biggest ordinal number, can be mechanized.  So really there is no reason why a machine could not continually improve its own program.</p>
-
-<p>In summary, McCarthy&rsquo;s own words are the best:</p>
-
-<blockquote><p>&ldquo;In conclusion, let me re-assert that the question of whether there are limitations in principle of what problems man can make machines solve for him as compared to his own ability to solve problems, really is a technical question in recursive function theory.&rdquo;</p></blockquote>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2//blog/page/5/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-07-01T16:11:03-04:00</updated>
+  <updated>2016-07-03T16:28:08-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,82 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hello World for the Next Generation]]></title>
+    <link href="http://gigasquid.github.io/blog/2016/07/03/hello-world/"/>
+    <updated>2016-07-03T15:01:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2016/07/03/hello-world</id>
+    <content type="html"><![CDATA[<p>I sit next to my daughter, showing her programming for the first time.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="mi">1</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&ldquo;Now press enter.&rdquo;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="mi">2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&ldquo;Pretty cool, huh?&rdquo;</p>
+
+<p>She looks unimpressed.  I fear I&rsquo;m losing her.  How can I explain that this is just a small tip of something so much bigger?</p>
+
+<h3>You can make the code sing to you.</h3>
+
+<p>You can take these numbers, turn them into notes, and line them up with the beat of your heart. Bring in the melody and chorus and build them up to a crescendo. Let it crash in waves and then</p>
+
+<h3>You can make the code dance for you.</h3>
+
+<p>You can create delicate swirls and patterns with mathematical expressions.  Have them pulse to the music in a never ending prism of fractals, flexing your control with confidence because</p>
+
+<h3>You can make the code lift you up.</h3>
+
+<p>It doesn&rsquo;t matter if you don&rsquo;t look like them.  It doesn&rsquo;t matter if they think you don&rsquo;t belong. They can&rsquo;t hold you back. You&rsquo;re smart and strong and</p>
+
+<h3>You can make the code create your life.</h3>
+
+<p>You can solve problems for people.  Make things work better and faster.  Keep the data flowing.  Make a company for yourself.  Watch that company and your power and influence in the world grow until nothing feels out of reach and then, if you&rsquo;re not careful</p>
+
+<h3>You can make the code hard and cruel.</h3>
+
+<p>You can automate hate.  Use the latest AI to keep them in control.  Watch them with never sleeping eyes.  Steal their money and point guns at them with armed robots.  Then, late at night, you can think how</p>
+
+<h3>You can let the code control you.</h3>
+
+<p>You can forget the important things in life.  Turn away from family and friends.  Lose yourself in some self created digital representation of yourself that never feels smart enough and leaves you grasping for more.  Until that day, when you walk the streets with a deadened heart and you see the sad faces all around you and you remember that</p>
+
+<h3>You can let the code make them smile.</h3>
+
+<p>You can use your skills to brighten dark days.  Use your programs to make them laugh.  Then when you have their attention, inspire them to dream with you of a better world and then make it happen.</p>
+
+<h3>You can make the code save lives</h3>
+
+<p>You can turn those algorithms to unraveling the mysteries of DNA, our brain, and the human body.  Battle against the age old enemies of humanity, death and disease.  Then, you lift your head to the sky and</p>
+
+<h3>You can make the code reach the stars.</h3>
+
+<p>You can see the surface of Mars.  Pick up a rock from a planet that was unimaginable generations before.  Look out at what is beyond our solar system and peer into the mysteries of the beginning of time.</p>
+
+<h3>You can</h3>
+
+<p>All these things are yours now.  The terrible and beautiful power of it.</p>
+
+<p>I reach down to type the words that distill my hopes and fears for the next generation.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">println </span><span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then I slide the keyboard over to her, a tear sliding down my cheek, and lean over to whisper the one word of advice that I can form into words,</p>
+
+<p>&ldquo;Don&rsquo;t forget the closing parens.&rdquo;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Book Writing for the Busy Programmer]]></title>
@@ -3164,137 +3240,6 @@ a couple of notes for this one is that:</p>
 <li><em>Resolution</em>: I am writing a book and I am going to give it my <em>frigging all</em>.</li>
 </ol>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Notes and Tips on Working from Home]]></title>
-    <link href="http://gigasquid.github.io/blog/2014/10/31/notes-and-tips-on-working-from-home/"/>
-    <updated>2014-10-31T08:16:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2014/10/31/notes-and-tips-on-working-from-home</id>
-    <content type="html"><![CDATA[<p><img src="http://c4.staticflickr.com/8/7538/15671394561_261bf74b95.jpg"></p>
-
-<p>Recently, I switched from a traditional, &ldquo;go to an office&rdquo;
-job,
-to working from my home.  It took some time to setup my home
-work space and get used to working remotely, but I finally have a
-system working for me.  In this post, I thought I would share some things that I
-found useful.</p>
-
-<h3>Window Seat Please</h3>
-
-<p>If at all possible, locate your home work space near a window.  The
-natural light does wonders for you mood and being able to glance up
-and look at trees and real life is a refreshing break from staring at
-code all day.</p>
-
-<h3>A Door is Great</h3>
-
-<p>Having a door to your workspace is a real advantage.  It enables you
-to close off noise and other activity that might be going on in the
-house. It is also <em>incredibly</em> useful if you have small children.  For
-my kids, if the door is closed, then it is a sign that Mommy is
-working &ndash; do not disturb.</p>
-
-<h3>Invest in a good chair.</h3>
-
-<p>Backs are very important.  I started working from home with just my
-kitchen chair &ndash; big mistake.  After a day or two, my back was crying
-out for something better. I did some research on good chairs to get
-and I ended up with a <a href="http://store.steelcase.com/brochures/leap/">Steelcase Leap Chair</a>.  They are not cheap.
-But, I was able to get a refurb one that was considerably less than
-new, and my back loves it.</p>
-
-<h3>Don&rsquo;t Sit All the Time</h3>
-
-<p>Even with my great chair, it is not the best to sit constantly.  I had
-tried a straight standing desk a while back and I found that standing
-<em>all</em> the time was not the best for me.  I prefer to mix it up.  I got
-a adjustable <a href="http://www.geekdesk.com/">Geek Desk</a>.  I generally stand
-up in the morning and sit in the afternoons.</p>
-
-<h3>Freedom from a Headset with a Good Mic</h3>
-
-<p>I have used a headset before when doing remote calls.  They work fine,
-but after a while, I found it annoying to have on my head all day.
-I switched to a <a href="http://www.bluemic.com/snowball/">Blue Snowball Mic</a>
-at home and am really happy with it.  My voice comes in clear and I am
-headset free.</p>
-
-<h3>Dual Monitors for the Win</h3>
-
-<p>I use two Thunderbolt displays.  One monitor I use for communications,
-it has my email, chat, and video on it.  The other monitor I use for
-the codez.  It works out pretty well to switch back and forth.</p>
-
-<h3>Good Software for Communication</h3>
-
-<p>Good communication is a must for working remotely. Someone cannot just
-wander over to your desk and ask you a question.  Here is a list of
-communication tools I use at work:</p>
-
-<ul>
-<li><a href="https://slack.com/">Slack</a> &ndash; for team communication.</li>
-<li>Google Docs</li>
-<li><a href="http://zoom.us/">Zoom</a> &ndash; for video and screen sharing.  It is way
-better than Google hangouts in terms of video quality.</li>
-<li>Apple&rsquo;s Screen sharing &ndash; for pair code development.  This let&rsquo;s
-people use whatever editor they are comfortable with, yet you can
-see the code and still share control.</li>
-</ul>
-
-
-<h3>Pair Programming is Awesome</h3>
-
-<p>At work, we do pair programming most of the time.  I really like to
-work this way.  One of the things that I was concerned about in
-switching to remote work was being lonely. Pair programming really
-helps in this.  I am usually working with someone during
-the day, with one monitor going with video and voice, while the other
-monitor has the code we are working on.  For me, it has all the advantages of
-idea sharing and group problem solving.  I realize that working this
-way is not for everyone, but I am digging it.</p>
-
-<h3>Routine is Everything</h3>
-
-<p>When working for home, I have found it is crucial to have a good
-routine.  Since we do a lot of pair programming at work, we all
-generally keep the same hours.  Being a distributed team over North
-America, this means I start work at around 10am EST.  I have found
-that having a routine a sticking to it helps structure my day.  I get
-up, get dressed, eat breakfast, just like I was going to work.  Then, I
-usually hack for a bit on personal stuff in the morning until it is
-time for work.  Then at lunch, I go for a run or work out.  Finally,
-and most importantly, in the evening, I leave the computer behind and
-devote time to family.</p>
-
-<h3>Don&rsquo;t Forget to Visit with Other Humans</h3>
-
-<p>The downside of working from home is that it is very easy to <em>not</em>
-leave home.  At one point, I realized that I had not left the house
-for a week.  Not good. I try go to a social event where I will
-meet with other developers and friends every week.  There is a nice
-developer <a href="https://teamgaslight.com/coffee">coffee group</a> that meets on Fridays.  I also help run our
-<a href="https://cincyfp.wordpress.com/">Cincinnati Functional Programmer&rsquo;s
-Group</a> here in town.  In general,
-I find that if I am driving somewhere and see people walking on the
-street and start thinking, &ldquo;Look Humans!&rdquo;, it is time to get out and
-socialize a bit more.  Working remotely, makes going to conferences
-and being with other developers in person even more fun.</p>
-
-<h3>Summary (with a Dog Pic)</h3>
-
-<p>I have found working remotely to be quite enjoyable so far.  It does
-take an extra effort to keep your life structured and communication
-flowing properly, but it is worth it.</p>
-
-<p>My next challenge, since it is getting colder, is to get my dog
-to sleep on my feet while I work.  No luck so far.</p>
-
-<p>If anyone has
-any tips, let me know.</p>
-
-<p><img src="https://c4.staticflickr.com/8/7480/15053352894_a2ac5db294.jpg"></p>
 ]]></content>
   </entry>
   

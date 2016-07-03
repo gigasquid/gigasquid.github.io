@@ -413,12 +413,16 @@
         <lastmod>2016-07-01T16:10:46-04:00</lastmod>
     </url>
     <url>
+        <loc>http://gigasquid.github.io/blog/2016/07/03/hello-world/</loc>
+        <lastmod>2016-07-03T16:28:07-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://gigasquid.github.io/about/</loc>
         <lastmod>2016-06-17T08:50:00-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2016-07-01T16:10:46-04:00</lastmod>
+        <lastmod>2016-07-03T16:28:07-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/books/</loc>
@@ -426,7 +430,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2016-07-01T16:10:46-04:00</lastmod>
+        <lastmod>2016-07-03T16:28:07-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/robots.txt</loc>
