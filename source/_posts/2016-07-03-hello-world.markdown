@@ -39,7 +39,7 @@ You can solve problems for people.  Make things work better and faster.  Keep th
 You can automate hate.  Use the latest AI to keep them in control.  Watch them with never sleeping eyes.  Steal their money and point guns at them with armed robots.  Then, late at night, you can think how
 
 ### You can let the code control you.
-You can forget the important things in life.  Turn away from family and friends.  Lose yourself in some self created digital representation of yourself that never feels smart enough and leaves you grasping for more.  Until that day, when you walk the streets with a deadened heart and you see the sad faces all around you and you remember that
+You can forget the important things in life.  Turn away from family and friends.  Lose yourself in some self created digital representation of yourself that never feels smart enough and leaves you grasping for more.  Until that day, when you walk the streets with a deadened heart and you see the sad faces all around and you remember that
 
 ### You can let the code make them smile.
 You can use your skills to brighten dark days.  Use your programs to make them laugh.  When you have their attention, inspire them to dream with you of a better world and next
