@@ -62,6 +62,6 @@ I reach down to type the words that distill my hopes and fears for the next gene
 (println "Hello World")
 ```
 
-Then I slide the keyboard over to her, a tear sliding down my cheek, and lean over to whisper the one word of advice that I can form into words,
+Then I slide the keyboard over to her, a tear sliding down my cheek, and lean over to whisper the only advice that I can form into words,
 
 "Don't forget the closing parens."
