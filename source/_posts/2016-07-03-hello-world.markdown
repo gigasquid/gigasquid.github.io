@@ -55,7 +55,7 @@ You can see the surface of Mars.  Pick up a rock from a planet that was unimagin
 
 All these things are yours now.  The terrible and beautiful power of it.
 
-I reach down to type the words that distill my hopes and fears for the next generation.
+I reach down to type the code that distills my hopes and fears for the next generation.
 
 
 ```clojure
