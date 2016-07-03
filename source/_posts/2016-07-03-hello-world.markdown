@@ -45,7 +45,7 @@ You can forget the important things in life.  Turn away from family and friends.
 You can use your skills to brighten dark days.  Use your programs to make them laugh.  When you have their attention, inspire them to dream with you of a better world and next
 
 ### You can make the code save lives.
-You can turn those algorithms to unraveling the mysteries of DNA, our brain, and the human body.  Battle against the age old enemies of humanity, death and disease.  Then, you lift your head to the sky and
+You can turn those algorithms to heal our DNA, brain, and body.  Battle against the age old enemies of humanity, death and disease.  Then, you lift your head to the sky and
 
 ### You can make the code reach the stars.
 You can see the surface of Mars.  Pick up a rock from a planet that was unimaginable generations before.  Look out at what is beyond our solar system and peer into the mysteries of the beginning of time.
