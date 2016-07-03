@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-07-03T18:58:29-04:00</updated>
+  <updated>2016-07-03T18:59:45-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -76,7 +76,7 @@
 
 <p>All these things are yours now.  The terrible and beautiful power of it.</p>
 
-<p>I reach down to type the words that distill my hopes and fears for the next generation.</p>
+<p>I reach down to type the code that distills my hopes and fears for the next generation.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">println </span><span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
