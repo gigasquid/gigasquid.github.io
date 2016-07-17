@@ -324,6 +324,10 @@ Most importantly, have fun!
 
 If you want to play with the code, it's on github here [https://github.com/gigasquid/genetic-programming-spec](https://github.com/gigasquid/genetic-programming-spec)
 
+If you want to learn more about clojure.spec this [video](https://www.youtube.com/watch?v=nqY4nUMfus8) is a great place to start.  The [guide](http://clojure.org/guides/spec) is also a great reference with examples.
+
+If you want to learn more about genetic programming, there are a couple of books I would recommend: [Collective Intelligence](http://clojure.org/guides/spec) and [Genetic Algorithms + Data Structures = Evolution Programs](http://clojure.org/guides/spec)
+
 
 
 
