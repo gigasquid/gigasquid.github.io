@@ -11,13 +11,13 @@ categories:
 {% img http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg %}
 
 
-[Clojure.spec](http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec) is a cool new library for Clojure that enables you to write specifications for your program.  In an earlier [post](http://gigasquidsoftware.com/blog/2016/05/29/one-fish-spec-fish/), I showed off some of it's power to generate test data from your specifications.  It's a pretty cool feature.  Given some clojure.spec code, you can generate sample data for you based off of the specifications.  But what if you could write a program that would _generate_ your clojure.spec program based off of data so that you could generate more test data?
+[Clojure.spec](http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec) is a new library for Clojure that enables you to write specifications for your program.  In an earlier [post](http://gigasquidsoftware.com/blog/2016/05/29/one-fish-spec-fish/), I showed off some of it's power to generate test data from your specifications.  It's a pretty cool feature.  Given some clojure.spec code, you can generate sample data for you based off of the specifications.  But what if you could write a program that would _generate_ your clojure.spec program based off of data so that you could generate more test data?
 
 
 
 ## Genetic programming
 
-Here is where we embark for fun.  We are going to use genetic programming to generate clojure.spec _creatures_ that contain a program.  Through a successive generations, those creatures will breed, mutate, and evolve to fit the data that we are going to give it.  Going with our creature theme, we're going to say that it _eats_ a sequence of data like this
+Here is where we embark for fun.  We are going to use genetic programming to generate clojure.spec _creatures_ that contain a program.  Through successive generations, those creatures will breed, mutate, and evolve to fit the data that we are going to give it.  Going with our creature theme, we can say that it _eats_ a sequence of data like this
 
 ```clojure
 ["hi" true 5 10 "boo"]
@@ -30,7 +30,7 @@ Each creature will be represented by a map that has information about two key pi
  :score 0}
 ```
 
-How do we figure out a score from the creature's spec?  We run the spec and see how much of it the creature can successful consume.
+How do we figure out a score from the creature's spec?  We run the spec and see how much of the data that it can successfully consume.
 
 ### Scoring a creature
 
@@ -60,14 +60,14 @@ In the above example, the `:in` key tells us that it fails at index 1. This give
    (catch Throwable e (assoc creature :score 0))))
 ```
 
-This function tries to run the spec against the data.  If there are no problems, the creature gets a 100 score.  Otherwise, it records the farthest point in the sequence that it got.  Creatures with a higher score are considered more `fit`.
+This function tries to run the spec against the data.  If there are no problems, the creature gets a 100 score.  Otherwise, it records the farthest point in the sequence that it got.  Creatures with a higher score are considered more _fit_.
 
 ```clojure
 (score {:program '(s/cat :0 int? :1 string?)} [1 true])
 ;=> {:program (s/cat :0 int? :1 string?), :score 1}
 ```
 
-Now that we have a fitness function to evaluate our creatures, we need a way to generate a random one.
+Now that we have a fitness function to evaluate our creatures, we need a way to generate a random clojure.spec creature.
 
 {% img http:////c1.staticflickr.com/9/8781/28071856800_0477b25fcc.jpg %}
 
@@ -96,7 +96,7 @@ We are also going to have some probability knobs to control how the random creat
 (def and-or-prob 0.5)
 ```
 
-The `seq-prob` is the probability that a new spec sub sequence will be constructed.  The `nest-prob` is set to zero right now, to keep things simple, but if turned up with increase the chance that a nested spec sequence would occur.  We are going to be writing a recursive function for generation, so we'll keep things to a limited depth with `max-depth`.  Finally, we have the chance that when constructing a spec sub sequence, that it will be an and/or with `and-or-prob`.  Putting it all together with code.  We can construct a random arg with
+The `seq-prob` is the probability that a new spec sub sequence will be constructed.  The `nest-prob` is set to zero right now, to keep things simple, but if turned up with increase the chance that a nested spec sequence would occur.  We are going to be writing a recursive function for generation, so we'll keep things to a limited depth with `max-depth`.  Finally, we have the chance that when constructing a spec sub sequence, that it will be an and/or with `and-or-prob`.  Putting it all together with code to construct a random arg.
 
 
 ```clojure
@@ -106,7 +106,7 @@ The `seq-prob` is the probability that a new spec sub sequence will be construct
     `~(rand-nth preds)))
 ```
 
-and construct a random spec sub sequence with
+Also creating a random sub sequence.
 
 ```clojure
 (defn make-random-seq [n]
@@ -142,7 +142,7 @@ Let's see it in action.
 ;=> (clojure.spec/cat :0 (s/and integer? odd?) :1 integer? :2 boolean?)
 ```
 
-We can make a bunch of new creatures for our initial population using this function.
+We can make a batch of new creatures for our initial population using this function.
 
 ```clojure
 (defn initial-population [popsize max-cat-length]
@@ -320,6 +320,9 @@ We'll leave with a quick summary of Genetic Programming.
   * Don't forget about diversity
 
 Most importantly, have fun!
+
+
+If you want to play with the code, it's on github here [https://github.com/gigasquid/genetic-programming-spec](https://github.com/gigasquid/genetic-programming-spec)
 
 
 
