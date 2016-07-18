@@ -325,4 +325,4 @@ If you want to play with the code, it's on github here [https://github.com/gigas
 
 If you want to learn more about clojure.spec this [video](https://www.youtube.com/watch?v=nqY4nUMfus8) is a great place to start.  The [guide](http://clojure.org/guides/spec) is also a great reference with examples.
 
-If you want to learn more about genetic programming, there are a couple of books I would recommend: [Collective Intelligence](http://clojure.org/guides/spec) and [Genetic Algorithms + Data Structures = Evolution Programs](http://clojure.org/guides/spec)
+If you want to learn more about genetic programming, there are a couple of books I would recommend: [Collective Intelligence](https://www.amazon.com/Programming-Collective-Intelligence-Building-Applications/dp/0596529325) and [Genetic Algorithms + Data Structures = Evolution Programs](https://www.amazon.com/Genetic-Algorithms-Structures-Evolution-Programs/dp/3540606769/ref=sr_1_1?s=books&ie=UTF8&qid=1468862704&sr=1-1&keywords=genetic+algorithms+data+structures)
