@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-07-18T09:41:50-04:00</updated>
+  <updated>2016-07-18T13:25:16-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -373,7 +373,7 @@
 
 <p>If you want to learn more about clojure.spec this <a href="https://www.youtube.com/watch?v=nqY4nUMfus8">video</a> is a great place to start.  The <a href="http://clojure.org/guides/spec">guide</a> is also a great reference with examples.</p>
 
-<p>If you want to learn more about genetic programming, there are a couple of books I would recommend: <a href="http://clojure.org/guides/spec">Collective Intelligence</a> and <a href="http://clojure.org/guides/spec">Genetic Algorithms + Data Structures = Evolution Programs</a></p>
+<p>If you want to learn more about genetic programming, there are a couple of books I would recommend: <a href="https://www.amazon.com/Programming-Collective-Intelligence-Building-Applications/dp/0596529325">Collective Intelligence</a> and <a href="https://www.amazon.com/Genetic-Algorithms-Structures-Evolution-Programs/dp/3540606769/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1468862704&amp;sr=1-1&amp;keywords=genetic+algorithms+data+structures">Genetic Algorithms + Data Structures = Evolution Programs</a></p>
 ]]></content>
   </entry>
   
