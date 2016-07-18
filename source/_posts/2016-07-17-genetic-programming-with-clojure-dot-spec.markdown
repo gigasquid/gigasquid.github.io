@@ -93,7 +93,7 @@ We are also going to have some probability knobs to control how the random creat
 (def seq-prob 0.3)
 (def nest-prob 0.00)
 (def max-depth 4)
-(def and-or-prob 0.5)
+(def and-or-prob 0.85)
 ```
 
 The `seq-prob` is the probability that a new spec sub sequence will be constructed.  The `nest-prob` is set to zero right now, to keep things simple, but if turned up with increase the chance that a nested spec sequence would occur.  We are going to be writing a recursive function for generation, so we'll keep things to a limited depth with `max-depth`.  Finally, we have the chance that when constructing a spec sub sequence, that it will be an and/or with `and-or-prob`.  Putting it all together with code to construct a random arg.
@@ -117,7 +117,7 @@ Also creating a random sub sequence.
 
 
     (< (rand) and-or-prob)
-    `(~(rand-nth and-ors) ~(make-random-arg (dec n)))
+    `(~(rand-nth and-ors) ~(make-random-arg (dec n)) ~(make-random-arg (dec n)))
 
     :else
     `(~(rand-nth seqs) ~(make-random-arg (dec n)))))
