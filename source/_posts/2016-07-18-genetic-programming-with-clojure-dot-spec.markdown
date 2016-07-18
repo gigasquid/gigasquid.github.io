@@ -1,11 +1,11 @@
 ---
 layout: post
 title: "Genetic Programming with clojure.spec"
-date: 2016-07-17 10:01
+date: 2016-07-18 09:40
 comments: true
 categories:
-- Clojure
 - All
+- Clojure
 ---
 
 {% img http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg %}
@@ -114,7 +114,6 @@ Also creating a random sub sequence.
 
     (< (rand) nest-prob)
     `(s/spec (~(rand-nth seqs) ~(make-random-arg (dec n))))
-
 
     (< (rand) and-or-prob)
     `(~(rand-nth and-ors) ~(make-random-arg (dec n)) ~(make-random-arg (dec n)))
@@ -327,15 +326,3 @@ If you want to play with the code, it's on github here [https://github.com/gigas
 If you want to learn more about clojure.spec this [video](https://www.youtube.com/watch?v=nqY4nUMfus8) is a great place to start.  The [guide](http://clojure.org/guides/spec) is also a great reference with examples.
 
 If you want to learn more about genetic programming, there are a couple of books I would recommend: [Collective Intelligence](http://clojure.org/guides/spec) and [Genetic Algorithms + Data Structures = Evolution Programs](http://clojure.org/guides/spec)
-
-
-
-
-
-
-
-
-
-
-
-
