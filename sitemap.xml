@@ -417,12 +417,18 @@
         <lastmod>2016-07-03T19:11:57-04:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec/
+        </loc>
+        <lastmod>2016-07-18T09:41:44-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://gigasquid.github.io/about/</loc>
         <lastmod>2016-06-17T08:50:00-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2016-07-03T19:11:57-04:00</lastmod>
+        <lastmod>2016-07-18T09:41:44-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/books/</loc>
@@ -430,7 +436,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2016-07-03T19:11:57-04:00</lastmod>
+        <lastmod>2016-07-18T09:41:44-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/robots.txt</loc>

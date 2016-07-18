@@ -6,8 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Jul 3rd, 2016 Tags: All I sit next to my daughter, showing her programming for the first time. 1
-(+ 1 1) &ldquo;Now press enter.&rdquo &hellip;">
+	<meta name="description" content="Published on: Jul 18th, 2016 Tags: All, Clojure Clojure.spec is a new library for Clojure that enables you to write specifications for your program &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -74,6 +73,494 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2016/07/18/genetic-programming-with-clojure-dot-spec/">
+		
+			Genetic Programming With clojure.spec</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-07-18T09:40:00-04:00" pubdate data-updated="true">Jul 18<span>th</span>, 2016</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p><img src="http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg"></p>
+
+<p><a href="http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec">Clojure.spec</a> is a new library for Clojure that enables you to write specifications for your program.  In an earlier <a href="http://gigasquidsoftware.com/blog/2016/05/29/one-fish-spec-fish/">post</a>, I showed off some of it&rsquo;s power to generate test data from your specifications.  It&rsquo;s a pretty cool feature.  Given some clojure.spec code, you can generate sample data for you based off of the specifications.  But what if you could write a program that would <em>generate</em> your clojure.spec program based off of data so that you could generate more test data?</p>
+
+<h2>Genetic programming</h2>
+
+<p>Here is where we embark for fun.  We are going to use genetic programming to generate clojure.spec <em>creatures</em> that contain a program.  Through successive generations, those creatures will breed, mutate, and evolve to fit the data that we are going to give it.  Going with our creature theme, we can say that it <em>eats</em> a sequence of data like this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[</span><span class="s">&quot;hi&quot;</span> <span class="nv">true</span> <span class="mi">5</span> <span class="mi">10</span> <span class="s">&quot;boo&quot;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each creature will be represented by a map that has information about two key pieces, its program and the <em>fitness</em> score.  Each program is going to start with a <a href="https://clojure.github.io/clojure/branch-master/clojure.spec-api.html#clojure.spec/cat">clojure.spec/cat</a>, (which is the spec to describe a sequence).  From here on out, I&rsquo;m going to refer to the clojure.spec namespace as <code>s/</code>.  So, a simple creature would look like this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>
+</span><span class='line'> <span class="ss">:score</span> <span class="mi">0</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How do we figure out a score from the creature&rsquo;s spec?  We run the spec and see how much of the data that it can successfully consume.</p>
+
+<h3>Scoring a creature</h3>
+
+<p>To score a creature, we&rsquo;re going to use the clojure.spec <code>explain-data</code> function. It enables us to run a spec against some data and get back the problems in a data format that we can inspect.  If there are no problems and the spec passes, the result is nil.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/explain-data</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>  <span class="p">[</span><span class="mi">1</span> <span class="s">&quot;hi&quot;</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;=&gt; nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, if there is a problem, we can get information about what went wrong.  In particular, we can see <em>where</em> it went wrong in the sequence.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/explain-data</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>  <span class="p">[</span><span class="mi">1</span> <span class="nv">true</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;=&gt; #:clojure.spec{:problems [{:path [:1], :pred string?, :val true, :via [], :in [1]}]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the above example, the <code>:in</code> key tells us that it fails at index 1. This gives us all the information we need to write a score function for our creature.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">score</span> <span class="p">[</span><span class="nv">creature</span> <span class="nv">test-data</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">try</span>
+</span><span class='line'>   <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">problems</span> <span class="p">(</span><span class="ss">:clojure.spec/problems</span> <span class="p">(</span><span class="nf">s/explain-data</span> <span class="p">(</span><span class="nb">eval </span><span class="p">(</span><span class="ss">:program</span> <span class="nv">creature</span><span class="p">))</span> <span class="nv">test-data</span><span class="p">))]</span>
+</span><span class='line'>     <span class="p">(</span><span class="k">if </span><span class="nv">problems</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">assoc </span><span class="nv">creature</span> <span class="ss">:score</span> <span class="p">(</span><span class="nf">get-in</span> <span class="nv">problems</span> <span class="p">[</span><span class="mi">0</span> <span class="ss">:in</span> <span class="mi">0</span><span class="p">]))</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">assoc </span><span class="nv">creature</span> <span class="ss">:score</span> <span class="mi">100</span><span class="p">)))</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">catch</span> <span class="nv">Throwable</span> <span class="nv">e</span> <span class="p">(</span><span class="nb">assoc </span><span class="nv">creature</span> <span class="ss">:score</span> <span class="mi">0</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This function tries to run the spec against the data.  If there are no problems, the creature gets a 100 score.  Otherwise, it records the farthest point in the sequence that it got.  Creatures with a higher score are considered more <em>fit</em>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">score</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)}</span> <span class="p">[</span><span class="mi">1</span> <span class="nv">true</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;=&gt; {:program (s/cat :0 int? :1 string?), :score 1}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we have a fitness function to evaluate our creatures, we need a way to generate a random clojure.spec creature.</p>
+
+<p><img src="http:////c1.staticflickr.com/9/8781/28071856800_0477b25fcc.jpg"></p>
+
+<h3>Create a random creature</h3>
+
+<p>This is where I really love Clojure.  Code is data, so we can create the programs as lists and they are just themselves.  To run the programs, we just need to call <code>eval</code> on them.  We are going to constrain the creatures somewhat.  They are all going to start out with <code>s/cat</code> and have a certain length of items in the sequence.  Also, we are going to allow the parts of the spec to be created with certain predicates.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">[</span><span class="ss">&#39;integer?</span> <span class="ss">&#39;string?</span> <span class="ss">&#39;boolean?</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">even?</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also allowing, composition with ands and ors and other sequences.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">seqs</span> <span class="p">[</span><span class="ss">&#39;s/+</span> <span class="ss">&#39;s/*</span><span class="p">])</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">and-ors</span> <span class="p">[</span><span class="ss">&#39;s/and</span> <span class="ss">&#39;s/or</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We are also going to have some probability knobs to control how the random creature is constructed.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">seq-prob</span> <span class="mf">0.3</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">nest-prob</span> <span class="mf">0.00</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">max-depth</span> <span class="mi">4</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">and-or-prob</span> <span class="mf">0.85</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>seq-prob</code> is the probability that a new spec sub sequence will be constructed.  The <code>nest-prob</code> is set to zero right now, to keep things simple, but if turned up with increase the chance that a nested spec sequence would occur.  We are going to be writing a recursive function for generation, so we&rsquo;ll keep things to a limited depth with <code>max-depth</code>.  Finally, we have the chance that when constructing a spec sub sequence, that it will be an and/or with <code>and-or-prob</code>.  Putting it all together with code to construct a random arg.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-arg</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">seq-prob</span><span class="p">))</span>
+</span><span class='line'>    <span class="o">`~</span><span class="p">(</span><span class="nf">make-random-seq</span> <span class="nv">n</span><span class="p">)</span>
+</span><span class='line'>    <span class="o">`~</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">preds</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also creating a random sub sequence.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-seq</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cond</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">nest-prob</span><span class="p">)</span>
+</span><span class='line'>    <span class="o">`</span><span class="p">(</span><span class="nf">s/spec</span> <span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">seqs</span><span class="p">)</span> <span class="o">~</span><span class="p">(</span><span class="nf">make-random-arg</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">and-or-prob</span><span class="p">)</span>
+</span><span class='line'>    <span class="o">`</span><span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">and-ors</span><span class="p">)</span> <span class="o">~</span><span class="p">(</span><span class="nf">make-random-arg</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">))</span> <span class="o">~</span><span class="p">(</span><span class="nf">make-random-arg</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="ss">:else</span>
+</span><span class='line'>    <span class="o">`</span><span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">seqs</span><span class="p">)</span> <span class="o">~</span><span class="p">(</span><span class="nf">make-random-arg</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">)))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we can create a random <code>s/cat</code> spec with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-cat</span> <span class="p">[</span><span class="nv">len</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">args</span> <span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">r</span> <span class="nv">i</span><span class="p">]</span>
+</span><span class='line'>                       <span class="p">(</span><span class="nb">conj </span><span class="nv">r</span> <span class="p">(</span><span class="nb">keyword </span><span class="p">(</span><span class="nb">str </span><span class="nv">i</span><span class="p">))</span>
+</span><span class='line'>                             <span class="p">(</span><span class="nf">make-random-arg</span> <span class="nv">max-depth</span><span class="p">)))</span>
+</span><span class='line'>                     <span class="p">[]</span>
+</span><span class='line'>                     <span class="p">(</span><span class="nb">range </span><span class="nv">len</span><span class="p">))]</span>
+</span><span class='line'>    <span class="o">`</span><span class="p">(</span><span class="nf">s/cat</span> <span class="o">~@</span><span class="nv">args</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s see it in action.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">make-random-cat</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; (clojure.spec/cat :0 (s/and integer? odd?) :1 integer? :2 boolean?)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can make a batch of new creatures for our initial population using this function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">initial-population</span> <span class="p">[</span><span class="nv">popsize</span> <span class="nv">max-cat-length</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">range </span><span class="nv">popsize</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">make-random-cat</span> <span class="p">(</span><span class="nb">inc </span><span class="p">(</span><span class="nb">rand-int </span><span class="nv">max-cat-length</span><span class="p">)))}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Great! Now we have a way to make new random spec creatures.  But, we need a way to alter them and let them evolve.  The first way to do this is with <em>mutation</em>.</p>
+
+<p><img src="http://c2.staticflickr.com/9/8807/28275661121_94361d2fc4.jpg"></p>
+
+<h3>Mutating a creature</h3>
+
+<p>Mutation in our case, means changing part of the code tree of the creature&rsquo;s program.  To keep the program runnable, we don&rsquo;t want to be able to mutate every node, only specific ones.  We&rsquo;re going to control this by defining a <code>mutable</code> function that will only change nodes that start with our sequences or predicates.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">mutable?</span> <span class="p">[</span><span class="nv">node</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">seq? </span><span class="nv">node</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nb">contains? </span><span class="p">(</span><span class="nf">set/union</span> <span class="p">(</span><span class="nb">set </span><span class="nv">seqs</span><span class="p">)</span> <span class="o">#</span><span class="p">{</span><span class="ss">&#39;clojure.spec/spec</span><span class="p">})</span> <span class="p">(</span><span class="nb">first </span><span class="nv">node</span><span class="p">)))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">contains? </span><span class="p">(</span><span class="nb">set </span><span class="nv">preds</span><span class="p">)</span> <span class="nv">node</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then, we can use <code>postwalk</code> to walk the code tree and alter a node by a mutation probability factor</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">mutate-prob</span> <span class="mf">0.1</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">mutate</span> <span class="p">[</span><span class="nv">creature</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">program</span> <span class="p">(</span><span class="ss">:program</span> <span class="nv">creature</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">mutated-program</span> <span class="p">(</span><span class="nf">walk/postwalk</span>
+</span><span class='line'>                         <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nf">mutable?</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">mutate-prob</span><span class="p">))</span>
+</span><span class='line'>                                  <span class="p">(</span><span class="nf">make-random-arg</span> <span class="nv">max-depth</span><span class="p">)</span>
+</span><span class='line'>                                  <span class="nv">x</span><span class="p">))</span> <span class="nv">program</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">assoc </span><span class="nv">creature</span> <span class="ss">:program</span> <span class="nv">mutated-program</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Trying it on one of our creatures.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">mutate</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">clojure.spec/cat</span> <span class="ss">:0</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)</span> <span class="ss">:1</span> <span class="nv">integer?</span><span class="p">)})</span>
+</span><span class='line'><span class="c1">;=&gt; {:program (clojure.spec/cat :0 (s/or (s/and integer? even?)) :1 integer?)}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can change our creatures via mutation, but what about breeding it with other creatures?</p>
+
+<p><img src="http://c8.staticflickr.com/9/8670/28354279095_25661401c0_z.jpg"></p>
+
+<h3>Crossovers with creatures</h3>
+
+<p>Crossover is another way to modify programs.  It takes two creatures and swaps a node from one creature to another. To accomplish this, we&rsquo;re going to use the <code>walk</code> function to select at a random probability the crossover node from the first node, then insert it into the second&rsquo;s creatures program at another random spot.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">crossover-prob</span> <span class="mf">0.7</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">crossover</span> <span class="p">[</span><span class="nv">creature1</span> <span class="nv">creature2</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">program1</span> <span class="p">(</span><span class="ss">:program</span> <span class="nv">creature1</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">program2</span> <span class="p">(</span><span class="ss">:program</span> <span class="nv">creature2</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">chosen-node</span> <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">walk/walk</span>
+</span><span class='line'>                            <span class="o">#</span><span class="p">(</span><span class="nf">when</span>
+</span><span class='line'>                                 <span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">crossover-prob</span><span class="p">)</span>
+</span><span class='line'>                                      <span class="p">(</span><span class="nf">mutable?</span> <span class="nv">%</span><span class="p">))</span>
+</span><span class='line'>                               <span class="nv">%</span><span class="p">)</span>
+</span><span class='line'>                            <span class="o">#</span><span class="p">(</span><span class="nb">remove nil? </span><span class="nv">%</span><span class="p">)</span> <span class="nv">program1</span><span class="p">))</span>
+</span><span class='line'>        <span class="nv">crossed-over?</span> <span class="p">(</span><span class="nf">atom</span> <span class="nv">false</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">crossover-program</span> <span class="p">(</span><span class="k">if </span><span class="nv">chosen-node</span>
+</span><span class='line'>                             <span class="p">(</span><span class="nf">walk/postwalk</span>
+</span><span class='line'>                              <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span>
+</span><span class='line'>                                <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nf">mutable?</span> <span class="nv">x</span><span class="p">)</span>
+</span><span class='line'>                                         <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">crossover-prob</span><span class="p">)</span>
+</span><span class='line'>                                         <span class="p">(</span><span class="nb">not </span><span class="err">@</span><span class="nv">crossed-over?</span><span class="p">))</span>
+</span><span class='line'>                                  <span class="p">(</span><span class="k">do </span><span class="p">(</span><span class="nf">reset!</span> <span class="nv">crossed-over?</span> <span class="nv">true</span><span class="p">)</span> <span class="nv">chosen-node</span><span class="p">)</span>
+</span><span class='line'>                                  <span class="nv">x</span><span class="p">))</span>
+</span><span class='line'>                              <span class="nv">program2</span><span class="p">)</span>
+</span><span class='line'>                             <span class="nv">program2</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:program</span> <span class="nv">crossover-program</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Taking two creatures and putting them together.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">crossover</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">clojure.spec/cat</span> <span class="ss">:0</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)</span> <span class="ss">:1</span> <span class="nv">integer?</span><span class="p">)}</span>
+</span><span class='line'>           <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">clojure.spec/cat</span> <span class="ss">:0</span> <span class="nb">string? </span><span class="ss">:1</span> <span class="nv">boolean?</span><span class="p">)})</span>
+</span><span class='line'><span class="c1">;=&gt; {:program (clojure.spec/cat :0 (s/and integer? odd?) :1 boolean?)}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We have our ways to change our creatures to let them evolve and we have a way to rank them.  What we need now is to put it together in a way that will let them evolve to the solution.</p>
+
+<p><img src="http://c5.staticflickr.com/9/8570/28320682956_2a301eea70_z.jpg"></p>
+
+<h3>Evolving creatures</h3>
+
+<p>The process will be in general terms:</p>
+
+<ul>
+<li>Create initial population</li>
+<li>Rank them</li>
+<li>Take the top two best ones and carry them over (this is known as <em>elitism</em>)</li>
+<li>Create the next generation from by <em>selecting</em> creatures for crossover and mutation</li>
+<li>Repeat!</li>
+</ul>
+
+
+<p>So how do we select the best creatures for our next population?  This is an interesting question, there are many approaches.  The one that we&rsquo;re going to use is called <a href="https://en.wikipedia.org/wiki/Tournament_selection">tournament selection</a>.  It involves picking n creatures from the whole population and then, among those, picking the best scored one.  This will allow diversity in our population that is needed for proper evolution.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">select-best</span> <span class="p">[</span><span class="nv">creatures</span> <span class="nv">tournament-size</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">selected</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="nv">tournament-size</span> <span class="o">#</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">creatures</span><span class="p">))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nb">sort-by </span><span class="ss">:score</span> <span class="nv">selected</span><span class="p">)</span> <span class="nb">reverse </span><span class="nv">first</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&rsquo;re now ready to write our evolve function.  In it, we pass in the population size, how many generations we want, the tournament size, and of course, our test data that our creatures are going to feed on.  The loop ends when it reaches a perfect fitting solution, (a creature with a score of 100), or the max generations.</p>
+
+<p>Note that we have a chance for a completely random creature to appear in the generations, to further encourage diversity.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">perfect-fit</span> <span class="p">[</span><span class="nv">creatures</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nb">filter </span><span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="mi">100</span> <span class="p">(</span><span class="ss">:score</span> <span class="nv">%</span><span class="p">))</span> <span class="nv">creatures</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">evolve</span> <span class="p">[</span><span class="nv">pop-size</span> <span class="nv">max-gen</span> <span class="nv">tournament-size</span> <span class="nv">test-data</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">n</span> <span class="nv">max-gen</span>
+</span><span class='line'>         <span class="nv">creatures</span> <span class="p">(</span><span class="nf">initial-population</span> <span class="nv">pop-size</span> <span class="p">(</span><span class="nb">count </span><span class="nv">test-data</span><span class="p">))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;generation &quot;</span> <span class="p">(</span><span class="nb">- </span><span class="nv">max-gen</span> <span class="nv">n</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">scored-creatures</span> <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">creature</span><span class="p">]</span> <span class="p">(</span><span class="nf">score</span> <span class="nv">creature</span> <span class="nv">test-data</span><span class="p">))</span> <span class="nv">creatures</span><span class="p">)]</span>
+</span><span class='line'>     <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">zero? </span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nf">perfect-fit</span> <span class="nv">scored-creatures</span><span class="p">))</span>
+</span><span class='line'>       <span class="nv">scored-creatures</span>
+</span><span class='line'>       <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">elites</span> <span class="p">(</span><span class="nb">take </span><span class="mi">2</span> <span class="p">(</span><span class="nb">reverse </span><span class="p">(</span><span class="nb">sort-by </span><span class="ss">:score</span> <span class="nv">scored-creatures</span><span class="p">)))</span>
+</span><span class='line'>             <span class="nv">new-creatures</span> <span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">range </span><span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nb">count </span><span class="nv">creatures</span><span class="p">)</span> <span class="mi">2</span><span class="p">))]</span>
+</span><span class='line'>                             <span class="c1">;; add a random node to improve diversity</span>
+</span><span class='line'>                             <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">new-node-prob</span><span class="p">)</span>
+</span><span class='line'>                               <span class="p">{</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">make-random-cat</span> <span class="p">(</span><span class="nb">count </span><span class="nv">test-data</span><span class="p">))}</span>
+</span><span class='line'>                               <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">creature1</span> <span class="p">(</span><span class="nf">select-best</span> <span class="nv">scored-creatures</span> <span class="nv">tournament-size</span><span class="p">)</span>
+</span><span class='line'>                                     <span class="nv">creature2</span> <span class="p">(</span><span class="nf">select-best</span> <span class="nv">scored-creatures</span> <span class="nv">tournament-size</span><span class="p">)]</span>
+</span><span class='line'>                                 <span class="p">(</span><span class="nf">mutate</span> <span class="p">(</span><span class="nf">crossover</span> <span class="nv">creature1</span> <span class="nv">creature2</span><span class="p">)))))]</span>
+</span><span class='line'>         <span class="p">(</span><span class="nb">println </span><span class="s">&quot;best-scores&quot;</span> <span class="p">(</span><span class="nb">map </span><span class="ss">:score</span> <span class="nv">elites</span><span class="p">))</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">into </span><span class="nv">new-creatures</span> <span class="nv">elites</span><span class="p">)))))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Trying it out. We get a perfect clojure.spec creature!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">creature-specs</span> <span class="p">(</span><span class="nf">evolve</span> <span class="mi">100</span> <span class="mi">100</span> <span class="mi">7</span> <span class="p">[</span><span class="s">&quot;hi&quot;</span> <span class="nv">true</span> <span class="mi">5</span> <span class="mi">10</span> <span class="s">&quot;boo&quot;</span><span class="p">]))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">perfect-fit</span> <span class="nv">creature-specs</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1">;=&gt;{:program (clojure.spec/cat :0 string? :1 boolean? :2 (s/and integer? odd?) :3 integer? :4 string?)</span>
+</span><span class='line'>      <span class="ss">:score</span> <span class="mi">100</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, our clojure.spec creature can generate data on its own with the <code>exercise</code> function.  Let&rsquo;s have it generate 5 more examples of data that conform to its spec.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">s/exercise</span> <span class="p">(</span><span class="nb">eval </span><span class="p">(</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">perfect-fit</span> <span class="nv">creature-specs</span><span class="p">)))</span> <span class="mi">5</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; ([(&quot;&quot; true -1 -1 &quot;&quot;) {:0 &quot;&quot;, :1 true, :2 -1, :3 -1, :4 &quot;&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(&quot;D&quot; false -1 -1 &quot;G&quot;) {:0 &quot;D&quot;, :1 false, :2 -1, :3 -1, :4 &quot;G&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(&quot;12&quot; false -1 0 &quot;l0&quot;) {:0 &quot;12&quot;, :1 false, :2 -1, :3 0, :4 &quot;l0&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(&quot;&quot; false -1 -2 &quot;&quot;) {:0 &quot;&quot;, :1 false, :2 -1, :3 -2, :4 &quot;&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(&quot;2&quot; false 1 0 &quot;Jro&quot;) {:0 &quot;2&quot;, :1 false, :2 1, :3 0, :4 &quot;Jro&quot;}])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If we wanted to, we could adjust our evolve function and let it continue to evolve creatures and lots of different solutions to choose from. We could even take the generated data from the <code>exercise function</code> and let it generate more creatures who generate more data&hellip;&hellip;</p>
+
+<p>The mind boggles.</p>
+
+<p>We&rsquo;ll leave with a quick summary of Genetic Programming.</p>
+
+<ul>
+<li>Start with a way to generate random creatures</li>
+<li>Have a way to evaluate their fitness</li>
+<li>Create a way to change them for the next generations using
+
+<ul>
+<li>Mutation</li>
+<li>Crossover</li>
+</ul>
+</li>
+<li>Have an evolution process
+
+<ul>
+<li>Create an initial population</li>
+<li>Rank them</li>
+<li>Create the next generation using selection techniques and mutation/ crossovers</li>
+<li>Don&rsquo;t forget about diversity</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Most importantly, have fun!</p>
+
+<p>If you want to play with the code, it&rsquo;s on github here <a href="https://github.com/gigasquid/genetic-programming-spec">https://github.com/gigasquid/genetic-programming-spec</a></p>
+
+<p>If you want to learn more about clojure.spec this <a href="https://www.youtube.com/watch?v=nqY4nUMfus8">video</a> is a great place to start.  The <a href="http://clojure.org/guides/spec">guide</a> is also a great reference with examples.</p>
+
+<p>If you want to learn more about genetic programming, there are a couple of books I would recommend: <a href="http://clojure.org/guides/spec">Collective Intelligence</a> and <a href="http://clojure.org/guides/spec">Genetic Algorithms + Data Structures = Evolution Programs</a></p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2016/07/18/genetic-programming-with-clojure-dot-spec//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1875,104 +2362,6 @@ Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2015/12/19/the-key-to-moving-fast-is-feedback//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/12/08/gigasquids-radar-2015/">
-		
-			Gigasquid&#8217;s Radar 2015</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-12-08T17:36:00-05:00" pubdate data-updated="true">Dec 8<span>th</span>, 2015</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>
-
-
-</div>
-    </div>
-		<p><img src="http://c1.staticflickr.com/1/627/23249736219_dfa625309b_c.jpg"></p>
-
-<p>It&rsquo;s that time of the year again for <em>radars</em>.  Since I made <a href="http://gigasquidsoftware.com/blog/2014/12/17/gigasquids-radar-2014/">one last year</a>, I decided to continue the tradition and make one this year.</p>
-
-<h2>Languages</h2>
-
-<p>No changes from last year for Clojure and Pixie.</p>
-
-<ul>
-<li><em>Adopt</em>: Clojure &ndash; It is fantastic language.</li>
-<li><em>Trial</em>: <a href="https://github.com/pixie-lang/pixie">Pixie</a> &ndash; The language continues to grow and improve and has a great community &ndash; and it is a LISP.</li>
-<li><em>Assess</em>: <a href="http://elixir-lang.org/">Elixir</a> &ndash; Another great functional language leveraging the Erlang VM.   It has a lot of energy in the community.</li>
-<li><em>Hold</em>: Java &ndash; There are plenty of other great alternatives out there on the JVM.</li>
-</ul>
-
-
-<h2>Cute Animals</h2>
-
-<p>Alpacas have moved up from <em>trial</em> last year, and Llamas to <em>hold</em>.  Alpacas are clearly more fluffy.</p>
-
-<ul>
-<li><em>Adopt</em>: <a href="http://www.preciousanimals.com/wp-content/plugins/woo-tumblog/functions/thumb.php?src=wp-content/uploads/2012/03/Cute-Animals-4e41e26ba45d7.jpg&amp;w=530&amp;h=&amp;zc=1&amp;q=90">Alpacas</a> &ndash; Like llamas only fluffier.</li>
-<li><em>Trial</em>: <a href="http://www.animalfactguide.com/wp-content/uploads/2013/08/quokka1.jpg">Quokkas</a> &ndash; Where does Australia get this <a href="https://en.wikipedia.org/wiki/Quokka">cutie</a>?</li>
-<li><em>Assess</em>: <a href="http://apod.nasa.gov/apod/image/1303/tardigrade_eyeofscience_1024.jpg">Tardigrades &ndash; or Water Bear</a> &ndash; They are the cutest microscopic creature out there.</li>
-<li><em>Hold</em>: <a href="http://www.llamas.org/imgs/corner.jpg">Llamas</a> &ndash; Not as fluffy as they could be.</li>
-</ul>
-
-
-<h2>Artificial Intelligence</h2>
-
-<p>I haven&rsquo;t been too into robots this year, so the category has been changed to AI.</p>
-
-<ul>
-<li><em>Adopt</em>: <a href="http://www.cs.waikato.ac.nz/~ml/weka/">Weka</a> &ndash; A collection of machine learning algorithms and explorers.  I was very impressed with it when I tried it on a <a href="http://gigasquidsoftware.com/blog/2015/10/20/speech-act-classification-for-text-with-clojure/">speech acts classifier project</a>.</li>
-<li><em>Trial</em>: <a href="http://deeplearning4j.org/word2vec.html">Word Vectors</a> &ndash; A way to encode words and leverage training so that you can see the relation between them.  For example, a dog is closer to the word wolf than cat.</li>
-<li><em>Assess</em>: <a href="https://www.tensorflow.org/">Tensor Flow</a> &ndash; I have only scratched the surface with this, but it is an exciting open source computational pipeline for machine learning (and other things).  The tutorials are pretty amazing in quality alone.</li>
-<li><em>Hold</em>: <a href="https://en.wikipedia.org/wiki/Inference#Automatic_logical_inference">Logical Inference</a> &ndash; This is pretty bold, but I base it on Professor Geoff Hinton&rsquo;s Deep Learning <a href="https://www.youtube.com/watch?v=IcOMKXAw5VA&amp;feature=youtu.be">talk</a> (at 33:00)  where he explains that thought vectors, (made from word vectors), will be able to perform natural reasoning with only linear algebra.  The grand dream of old fashioned strong AI, will then be realized in a completely different way.</li>
-</ul>
-
-
-<h2>Tasty Food</h2>
-
-<ul>
-<li><em>Adopt</em>: <a href="http://www.murrayscheese.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/b/l/blue_stilton_colston_bassett.jpg">Stilton Cheese</a> &ndash; The king of cheeses.</li>
-<li><em>Trial</em>: <a href="http://www.seriouseats.com/images/20100603-nibs-500.jpg">Cocoa Nibs</a> &ndash;  I have to admit I am getting into crunching on some nibs in the afternoon.  Best of all, no sugar!</li>
-<li><em>Assess</em>: <a href="http://www.ahisushi.com/images/gallery/gallery-cold-sake.jpg">Cold Sake</a> &ndash; I was firmly in the warm sake camp, until I tried some very nice cold sakes.  However, in the winter, warm is so nice &hellip;</li>
-<li><em>Hold</em>: <a href="https://cbshouston.files.wordpress.com/2012/12/fruitcake9.jpg?w=360">Fruit Cake</a> &ndash; Traditions are important, but sometimes you need to let it go.</li>
-</ul>
-
-
-<h3>Special Thanks</h3>
-
-<p>The radar this year was generated by a cool <a href="https://github.com/thefourhorsemen/radar">github project</a> that uses Clojure and Quill to generate the image based off of a json config file.  So go out there and make a radar of your own.</p>
-
-<p>Happy Holidays!</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2015/12/08/gigasquids-radar-2015//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
