@@ -14,7 +14,9 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
-None for a bit.  I am busy working on writing a middle grade,fantasy/scifi novel featuring a heroine and real Clojure code called _Code Shifter_.
+* [Gee Con 2016](http://2016.geecon.cz) Clojure, clojure.spec, and Beyond
+* [EuroClojure 2016](http://euroclojure.org/) Genetic Programming and Beyond with clojure.spec
+* [Ohio DevFest 2016](https://ohiodevfest.com/) How to Train Your Computer to Talk To You
 
 
 ## Past Talks
