@@ -180,14 +180,156 @@ This is the one that we will want to use to replace our broken one.
 
 We have the problem, we have the donor candidates.  All we need is the self-healing code to detect the problem, select and validate the right replacement function, and replace it.
 
-### The Self Healing
+### The Self Healing Process
 
 Our process is going to go like this:
 
 * Try the `report` function and catch any exceptions.
 * If we get an exception, look through the stack trace and find the failing function name.
 * Retrieve the failing function's spec from the spec registry
-* Look for potential replacement matches in the 
+* Look for potential replacement matches in the donor candidates
+  * Check if the orig function's and the donor's `:args` spec and make sure that they are both valid for the failing input
+  * Check if the orig function's and the donor's `:ret` spec and make sure that they are both valid for the failing input
+  * Call spec `exercise` for the original function and get a seed value.  Check that the candidate function's result when called with the seed value is the same result when called with the original function.
+* If a donor match is found, then redefine the failing function as new function.  Then call the top level `report` form again, this time using the healed good function.
+* Return the result!
+
+```clojure
+(ns self-healing.healing
+  (:require [clojure.spec :as s]
+            [clojure.string :as string]))
+
+(defn get-spec-data [spec-symb]
+  (let [[_ _ args _ ret _ fn] (s/form spec-symb)]
+       {:args args
+        :ret ret
+        :fn fn}))
+
+(defn failing-function-name [e]
+  (as-> (.getStackTrace e) ?
+    (map #(.getClassName %) ?)
+    (filter #(string/starts-with? % "self_healing.core") ?)
+    (first ?)
+    (string/split ? #"\$")
+    (last ?)
+    (string/replace ? #"_" "-")
+    (str *ns* "/" ?)))
+
+(defn spec-inputs-match? [args1 args2 input]
+  (println "****Comparing args" args1 args2 "with input" input)
+  (and (s/valid? args1 input)
+       (s/valid? args2 input)))
+
+(defn- try-fn [f input]
+  (try (apply f input) (catch Exception e :failed)))
+
+(defn spec-return-match? [fname c-fspec orig-fspec failing-input candidate]
+  (let [rcandidate (resolve candidate)
+        orig-fn (resolve (symbol fname))
+        result-new (try-fn rcandidate failing-input)
+        [[seed]] (s/exercise (:args orig-fspec) 1)
+        result-old-seed (try-fn rcandidate seed)
+        result-new-seed (try-fn orig-fn seed)]
+    (println "****Comparing seed " seed "with new function")
+    (println "****Result: old" result-old-seed "new" result-new-seed)
+    (and (not= :failed result-new)
+         (s/valid? (:ret c-fspec) result-new)
+         (s/valid? (:ret orig-fspec) result-new)
+         (= result-old-seed result-new-seed))))
+
+(defn spec-matching? [fname orig-fspec failing-input candidate]
+  (println "----------")
+  (println "**Looking at candidate " candidate)
+  (let [c-fspec (get-spec-data candidate)]
+    (and (spec-inputs-match? (:args c-fspec) (:args orig-fspec) failing-input)
+         (spec-return-match? fname c-fspec orig-fspec  failing-input candidate))))
+
+(defn find-spec-candidate-match [fname fspec-data failing-input]
+  (let [candidates (->> (s/registry)
+                        keys
+                        (filter #(string/starts-with? (namespace %) "self-healing.candidates"))
+                        (filter symbol?))]
+    (println "Checking candidates " candidates)
+    (some #(if (spec-matching? fname fspec-data failing-input %) %) (shuffle candidates))))
+
+
+(defn self-heal [e input orig-form]
+  (let [fname (failing-function-name e)
+        _ (println "ERROR in function" fname (.getMessage e) "-- looking for replacement")
+        fspec-data (get-spec-data (symbol fname))
+        _ (println "Retriving spec information for function " fspec-data)
+        match (find-spec-candidate-match fname fspec-data [input])]
+    (if match
+      (do
+        (println "Found a matching candidate replacement for failing function" fname " for input" input)
+        (println "Replacing with candidate match" match)
+        (println "----------")
+        (eval `(def ~(symbol fname) ~match))
+        (println "Calling function again")
+        (let [new-result (eval orig-form)]
+          (println "Healed function result is:" new-result)
+          new-result))
+      (println "No suitable replacment for failing function "  fname " with input " input ":("))))
+
+(defmacro with-healing [body]
+  (let [params (second body)]
+    `(try ~body
+          (catch Exception e# (self-heal e# ~params '~body)))))
+
+```
+
+What are we waiting for?  Let's try it out.
+
+### Running the Experiment
+
+First we call the `report` function with a non-empty vector.
+
+```clojure
+(healing/with-healing (report [1 2 3 4 5 "a" "b"]))
+;=>"The average is 3"
+```
+Now, the big test.
+
+```clojure
+(healing/with-healing (report []))
+; ERROR in function self-healing.core/calc-average Divide by zero -- looking for replacement
+; Retriving spec information for function  {:args :self-healing.core/cleaned-earnings, :ret :self-healing.core/average, :fn nil}
+; Checking candidates  (self-healing.candidates/better-calc-average self-healing.candidates/adder self-healing.candidates/bad-calc-average self-healing.candidates/bad-calc-average2)
+; ----------
+; **Looking at candidate  self-healing.candidates/better-calc-average
+; ****Comparing args :self-healing.candidates/numbers :self-healing.core/cleaned-earnings with input [[]]
+; ****Comparing seed  [[1 2 3 4 5]] with new function
+; ****Result: old 3 new 3
+; Found a matching candidate replacement for failing function self-healing.core/calc-average  for input []
+; Replacing with candidate match self-healing.candidates/better-calc-average
+; ----------
+; Calling function again
+; Healed function result is: The average is 0
+;=>"The average is 0"
+```
+
+Since the function is now healed we can call it again and it won't have the same issue.
+
+```clojure
+(healing/with-healing (report []))
+;=>"The average is 0"
+```
+
+It worked!
+
+Taking a step back, let's a take a look at the bigger picture.
+
+## Summary
+
+The self healing experiment we did was intentionally very simple.  We didn't include any validation on the `:fn` component of the spec, which gives us yet another extra layer of compatibility checking. We also only checked one seed value from the spec's `exercise` generator.  If we wanted to, we could have checked 10 or 100 values to ensure the replacement function's compatibility.  Finally, (as mentioned in the footnote), we neglected to use any of spec's built in testing `check` functionality, which would have identified the divide by zero error before it happened.
+
+Despite being just being a simple experiment, I think that it proves that clojure.spec adds another dimension to how we can solve problems in self-healing and other AI areas. In fact, I think we have just scratched the surface on all sorts of new and exciting ways of looking at the world.
+
+
+
+
+
+
 
 
 
