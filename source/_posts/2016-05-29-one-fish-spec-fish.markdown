@@ -29,7 +29,7 @@ The mere shape of these words brings a function to mind.  One that would take in
 
 and give us back a string of transformed items with the word _fish_ added, of course.
 
-But, let us turn our attention the parameters of this function and see how we can further specify them.  Before we get started, make sure you use the latest version of clojure, currently `[org.clojure/clojure "1.9.0-alpha3"]`,  test.check `[org.clojure/test.check "0.9.0"]`, and add clojure.spec to your namespace.
+But, let us turn our attention the parameters of this function and see how we can further specify them.  Before we get started, make sure you use the latest version of clojure, currently `[org.clojure/clojure "1.9.0-alpha13"]`,  test.check `[org.clojure/test.check "0.9.0"]`, and add clojure.spec to your namespace.
 
 ```clojure
 (ns one-fish.core
@@ -63,7 +63,7 @@ So `5` is not a valid number for us.  We can ask it to explain why not.
 
 ```clojure
 (s/explain ::fish-number 5)
-;; val: 5 fails predicate: (set (keys fish-numbers))
+;;val: 5 fails spec: :one-fish.core/fish-number predicate: (set (keys fish-numbers))
 ```
 
 Which, of course,  totally makes sense because `5` is not in our `fish-numbers` map.  Now that we've covered the numbers, let's look at the colors.  We'll use a finite set of colors for our specification.  In addition to the classic red and blue, we'll also add the color _dun_.
@@ -124,8 +124,10 @@ Failing values for the specification can be easily identified.
 ```clojure
 (s/valid? ::first-line [2 1 "Red" "Blue"]) ;=> false
 (s/explain ::first-line [2 1 "Red" "Blue"])
+;;In: [3] val: "Black" fails spec: :one-fish.core/color at:
+;;[:c2] predicate: #{"Blue" "Dun" "Red"}
 ;; val: {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"}
-;;   fails predicate: one-bigger?
+;; fails spec: :one-fish.core/first-line predicate: one-bigger?
 
 ```
 
@@ -174,8 +176,8 @@ We'll add this to our definition of `::first-line`, stating that the second numb
 
 (s/valid? ::first-line [1 2 "Red" "Blue"]) ;=> true
 (s/explain ::first-line [1 2 "Red" "Dun"])
-;; val: {:n1 1, :n2 2, :c1 "Red", :c2 "Dun"}
-;;   fails predicate: fish-number-rhymes-with-color?
+;;  {:n1 1, :n2 2, :c1 "Red", :c2 "Dun"} fails spec:
+;;  :one-fish.core/first-line predicate: fish-number-rhymes-with-color?
 ```
 
 Now, let's try the data generation again.
@@ -219,10 +221,18 @@ We can specify that the args for this function be validated with `::first-line` 
         :ret  string?)
 ```
 
-Now, we turn on the instrumentation of the validation for functions and see what happens.
+Now, we turn on the instrumentation of the validation for functions and see what happens. To enable this, we need to add the `spec.test` namespace to our requires:
 
 ```clojure
-(s/instrument #'fish-line)
+(ns one-fish.core
+  (:require [clojure.spec :as s]
+            [clojure.spec.test :as stest]))
+```
+
+The instrument function takes a fully-qualified symbol so add ` before the function name  to resolve it in the context of the current namespace.
+
+```clojure
+(stest/instrument `fish-line)
 
 (fish-line 1 2 "Red" "Blue")
 ;-> "One fish. Two fish. Red fish. Blue fish."
