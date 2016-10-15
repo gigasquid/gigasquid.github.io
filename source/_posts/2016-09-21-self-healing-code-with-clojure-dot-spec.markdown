@@ -1,4 +1,4 @@
----
+    ---
 layout: post
 title: "Self Healing Code with clojure.spec"
 date: 2016-09-21 20:11
@@ -8,9 +8,9 @@ categories:
 - All
 ---
 
-I have an interest in AI and ways that we can make code _smarter_.  One of the ways that code can be smarter is to be more resilient to errors.  Wouldn't it be great if a program could recover from an error and _heal_ itself? This code would be able to rise above the mistakes of its humble programmer and make itself better.
+How can we can make code _smarter_?  One of the ways is to be more resilient to errors.  Wouldn't it be great if a program could recover from an error and _heal_ itself? This code would be able to rise above the mistakes of its humble programmer and make itself better.
 
-The prospect of self-healing code has been heavily researched and long sought after.  In this post, we will take a look at some of the key ingredients and inspiration drawn from academic papers and then attempt an experiment in Clojure using clojure.spec.
+The prospect of self-healing code has been heavily researched and long sought after.  In this post, we will take a look at some of the key ingredients from research papers. Then, drawing inspiration for one of them, attempt an experiment in Clojure using clojure.spec.
 
 ## Self Healing Code Ingredients
 
@@ -29,11 +29,11 @@ MIT developed a system called [CodePhage](http://people.csail.mit.edu/stelios/pa
 
 This is super cool.  Could we do something like this in Clojure?
 
-Clojure itself has the fundamental ability with macros to let the code modify itself.  The programs can make programs!  That is a key building block.  But clojure.spec is something new and has many other advantages that we can use.
+Clojure itself has the fundamental ability with macros to let the code modify itself.  The programs can make programs!  That is a key building block but clojure.spec is something new and has many other advantages that we can use.
 
-* Clojure.spec gives code the ability to _describe_ itself.  With it we can describe the data the functions take as input and output in a concise and composable way.
-* Clojure.spec gives us the ability to _share_ these specifications with other code in the global _registry_.
-* Clojure.spec gives us the ability to _generate_ data from the specifications, so we can make example data that fits the function's description.
+* clojure.spec gives code the ability to _describe_ itself.  With it we can describe the data the functions take as input and output in a concise and composable way.
+* clojure.spec gives us the ability to _share_ these specifications with other code in the global _registry_.
+* clojure.spec gives us the ability to _generate_ data from the specifications, so we can make example data that fits the function's description.
 
 With the help of clojure.spec, we have all that we need to design and implement a self-healing code experiment.
 
@@ -91,14 +91,14 @@ An example of running the function is:
 ;=>(1 2 3)
 ```
 
-If we call spec's `excercise` on it, it will return the custom sample data from the generator.
+If we call spec's `exercise` on it, it will return the custom sample data from the generator.
 
 ```clojure
 (s/exercise ::cleaned-earnings 1)
 ;=> ([[[1 2 3 4 5]] {:clean-elements [1 2 3 4 5]}])
 ```
 
-Now we can spec the function itself with `s/def`.  It takes the `earnings` spec for the args and the `cleaned-earnings` spec for the return value.
+Now we can spec the function itself with `s/fdef`.  It takes the `earnings` spec for the args and the `cleaned-earnings` spec for the return value.
 
 ```clojure
 (s/fdef clean-bad-data
@@ -188,8 +188,8 @@ Our process is going to go like this:
 * If we get an exception, look through the stack trace and find the failing function name.
 * Retrieve the failing function's spec from the spec registry
 * Look for potential replacement matches in the donor candidates
-  * Check if the orig function's and the donor's `:args` spec and make sure that they are both valid for the failing input
-  * Check if the orig function's and the donor's `:ret` spec and make sure that they are both valid for the failing input
+  * Check the orig function's and the donor's `:args` spec and make sure that they are both valid for the failing input
+  * Check the orig function's and the donor's `:ret` spec and make sure that they are both valid for the failing input
   * Call spec `exercise` for the original function and get a seed value.  Check that the candidate function's result when called with the seed value is the same result when called with the original function.
 * If a donor match is found, then redefine the failing function as new function.  Then call the top level `report` form again, this time using the healed good function.
 * Return the result!
@@ -324,17 +324,6 @@ Taking a step back, let's a take a look at the bigger picture.
 The self healing experiment we did was intentionally very simple.  We didn't include any validation on the `:fn` component of the spec, which gives us yet another extra layer of compatibility checking. We also only checked one seed value from the spec's `exercise` generator.  If we wanted to, we could have checked 10 or 100 values to ensure the replacement function's compatibility.  Finally, (as mentioned in the footnote), we neglected to use any of spec's built in testing `check` functionality, which would have identified the divide by zero error before it happened.
 
 Despite being just being a simple experiment, I think that it proves that clojure.spec adds another dimension to how we can solve problems in self-healing and other AI areas. In fact, I think we have just scratched the surface on all sorts of new and exciting ways of looking at the world.
-
-
-
-
-
-
-
-
-
-
-
 
 
 [^1]: The reason for this is that if the programmer in our made up example didn't have the custom generator and ran spec's [check](http://clojure.org/guides/spec#_testing) function, it would have reported the divide by zero function and we would have found the problem.  Just like in the movies, where if the protagonist had just done x there would be no crisis that would require them to do something heroic.
