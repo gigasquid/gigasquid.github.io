@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-09-18T10:51:35-04:00</updated>
+  <updated>2016-10-15T14:02:27-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -403,7 +403,7 @@ Blue fish
 
 <p>and give us back a string of transformed items with the word <em>fish</em> added, of course.</p>
 
-<p>But, let us turn our attention the parameters of this function and see how we can further specify them.  Before we get started, make sure you use the latest version of clojure, currently <code>[org.clojure/clojure "1.9.0-alpha3"]</code>,  test.check <code>[org.clojure/test.check "0.9.0"]</code>, and add clojure.spec to your namespace.</p>
+<p>But, let us turn our attention the parameters of this function and see how we can further specify them.  Before we get started, make sure you use the latest version of clojure, currently <code>[org.clojure/clojure "1.9.0-alpha13"]</code>,  test.check <code>[org.clojure/test.check "0.9.0"]</code>, and add clojure.spec to your namespace.</p>
 
 <p><code>clojure
 (ns one-fish.core
@@ -440,7 +440,7 @@ Blue fish
 
 <p><code>clojure
 (s/explain ::fish-number 5)
-;; val: 5 fails predicate: (set (keys fish-numbers))
+;;val: 5 fails spec: :one-fish.core/fish-number predicate: (set (keys fish-numbers))
 </code></p>
 
 <p>Which, of course,  totally makes sense because <code>5</code> is not in our <code>fish-numbers</code> map.  Now that we&rsquo;ve covered the numbers, let&rsquo;s look at the colors.  We&rsquo;ll use a finite set of colors for our specification.  In addition to the classic red and blue, we&rsquo;ll also add the color <em>dun</em>.</p>
@@ -503,8 +503,10 @@ Blue fish
 <p>```clojure
 (s/valid? ::first-line [2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;]) ;=> false
 (s/explain ::first-line [2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;])
+;;In: [3] val: &ldquo;Black&rdquo; fails spec: :one-fish.core/color at:
+;;[:c2] predicate: #{&ldquo;Blue&rdquo; &ldquo;Dun&rdquo; &ldquo;Red&rdquo;}
 ;; val: {:n1 2, :n2 1, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Blue&rdquo;}
-;;   fails predicate: one-bigger?</p>
+;; fails spec: :one-fish.core/first-line predicate: one-bigger?</p>
 
 <p>```</p>
 
@@ -555,8 +557,8 @@ Red fish
 
 <p>(s/valid? ::first-line [1 2 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;]) ;=> true
 (s/explain ::first-line [1 2 &ldquo;Red&rdquo; &ldquo;Dun&rdquo;])
-;; val: {:n1 1, :n2 2, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Dun&rdquo;}
-;;   fails predicate: fish-number-rhymes-with-color?
+;;  {:n1 1, :n2 2, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Dun&rdquo;} fails spec:
+;;  :one-fish.core/first-line predicate: fish-number-rhymes-with-color?
 ```</p>
 
 <p>Now, let&rsquo;s try the data generation again.</p>
@@ -605,10 +607,21 @@ Red fish
 
 <p>```</p>
 
-<p>Now, we turn on the instrumentation of the validation for functions and see what happens.</p>
+<p>Now, we turn on the instrumentation of the validation for functions and see what happens. To enable this, we need to add the <code>spec.test</code> namespace to our requires:</p>
 
 <p>```clojure
-(s/instrument #&lsquo;fish-line)</p>
+(ns one-fish.core
+  (:require [clojure.spec :as s]</p>
+
+<pre><code>        [clojure.spec.test :as stest]))
+</code></pre>
+
+<p>```</p>
+
+<p>The instrument function takes a fully-qualified symbol so add ` before the function name  to resolve it in the context of the current namespace.</p>
+
+<p><code>``clojure
+(stest/instrument</code>fish-line)</p>
 
 <p>(fish-line 1 2 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)
 ;&ndash;> &ldquo;One fish. Two fish. Red fish. Blue fish.&rdquo;</p>
