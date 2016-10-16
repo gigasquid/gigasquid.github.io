@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-15T14:02:27-04:00</updated>
+  <updated>2016-10-16T16:22:16-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -503,8 +503,6 @@ Blue fish
 <p>```clojure
 (s/valid? ::first-line [2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;]) ;=> false
 (s/explain ::first-line [2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;])
-;;In: [3] val: &ldquo;Black&rdquo; fails spec: :one-fish.core/color at:
-;;[:c2] predicate: #{&ldquo;Blue&rdquo; &ldquo;Dun&rdquo; &ldquo;Red&rdquo;}
 ;; val: {:n1 2, :n2 1, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Blue&rdquo;}
 ;; fails spec: :one-fish.core/first-line predicate: one-bigger?</p>
 
@@ -539,7 +537,7 @@ Red fish
 <p>Let&rsquo;s fix this by adding an extra predicate <code>number-rhymes-with-color?</code>.</p>
 
 <p><code>clojure
-(defn fish-number-rhymes-with-color? [{n :n2 c :c2}]
+(defn fish-number-rhymes-with-color? [{:keys [n :n2 c :c2]}]
   (or
    (= [n c] [2 "Blue"])
    (= [n c] [1 "Dun"])))

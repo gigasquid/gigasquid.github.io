@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-15T14:02:27-04:00</updated>
+  <updated>2016-10-16T16:22:16-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -747,12 +747,8 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; false</span>
 </span><span class='line'><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
-</span><span class='line'><span class="c1">;;In: [3] val: &quot;Black&quot; fails spec: :one-fish.core/color at:</span>
-</span><span class='line'><span class="c1">;;[:c2] predicate: #{&quot;Blue&quot; &quot;Dun&quot; &quot;Red&quot;}</span>
 </span><span class='line'><span class="c1">;; val: {:n1 2, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}</span>
 </span><span class='line'><span class="c1">;; fails spec: :one-fish.core/first-line predicate: one-bigger?</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -800,7 +796,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-number-rhymes-with-color?</span> <span class="p">[{</span><span class="nv">n</span> <span class="ss">:n2</span> <span class="nv">c</span> <span class="ss">:c2</span><span class="p">}]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-number-rhymes-with-color?</span> <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">n</span> <span class="ss">:n2</span> <span class="nv">c</span> <span class="ss">:c2</span><span class="p">]}]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">or</span>
 </span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="nv">n</span> <span class="nv">c</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
 </span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="nv">n</span> <span class="nv">c</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="s">&quot;Dun&quot;</span><span class="p">])))</span>
