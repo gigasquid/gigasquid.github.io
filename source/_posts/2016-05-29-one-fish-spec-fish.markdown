@@ -124,8 +124,6 @@ Failing values for the specification can be easily identified.
 ```clojure
 (s/valid? ::first-line [2 1 "Red" "Blue"]) ;=> false
 (s/explain ::first-line [2 1 "Red" "Blue"])
-;;In: [3] val: "Black" fails spec: :one-fish.core/color at:
-;;[:c2] predicate: #{"Blue" "Dun" "Red"}
 ;; val: {:n1 2, :n2 1, :c1 "Red", :c2 "Blue"}
 ;; fails spec: :one-fish.core/first-line predicate: one-bigger?
 
@@ -160,7 +158,7 @@ Although, it meets our criteria, it's missing one essential ingredient - rhyming
 Let's fix this by adding an extra predicate `number-rhymes-with-color?`.
 
 ```clojure
-(defn fish-number-rhymes-with-color? [{n :n2 c :c2}]
+(defn fish-number-rhymes-with-color? [{:keys [n :n2 c :c2]}]
   (or
    (= [n c] [2 "Blue"])
    (= [n c] [1 "Dun"])))
