@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-16T16:22:16-04:00</updated>
+  <updated>2016-10-23T19:02:32+02:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Conversations with Datomic - Part 3]]></title>
     <link href="http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3/"/>
-    <updated>2015-08-25T10:28:00-04:00</updated>
+    <updated>2015-08-25T10:28:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
 
@@ -134,7 +134,7 @@ I am interested in having you work with me every day, but first I want to unders
   <entry>
     <title type="html"><![CDATA[Conversations with Datomic Part 2]]></title>
     <link href="http://gigasquid.github.io/blog/2015/08/19/conversations-with-datomic-part-2/"/>
-    <updated>2015-08-19T08:56:00-04:00</updated>
+    <updated>2015-08-19T08:56:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/19/conversations-with-datomic-part-2</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
 
@@ -356,7 +356,7 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
   <entry>
     <title type="html"><![CDATA[Conversations with Datomic]]></title>
     <link href="http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/"/>
-    <updated>2015-08-15T10:29:00-04:00</updated>
+    <updated>2015-08-15T10:29:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
 

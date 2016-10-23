@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-16T16:22:16-04:00</updated>
+  <updated>2016-10-23T19:02:32+02:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Genetic Programming with clojure.spec]]></title>
     <link href="http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec/"/>
-    <updated>2016-07-18T09:40:00-04:00</updated>
+    <updated>2016-07-18T09:40:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg">http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg</a>"></p>
 
@@ -380,7 +380,7 @@
   <entry>
     <title type="html"><![CDATA[One Fish Spec Fish]]></title>
     <link href="http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/"/>
-    <updated>2016-05-29T16:29:00-04:00</updated>
+    <updated>2016-05-29T16:29:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg">https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg</a>"></p>
 
@@ -537,7 +537,7 @@ Red fish
 <p>Let&rsquo;s fix this by adding an extra predicate <code>number-rhymes-with-color?</code>.</p>
 
 <p><code>clojure
-(defn fish-number-rhymes-with-color? [{:keys [n :n2 c :c2]}]
+(defn fish-number-rhymes-with-color? [{n :n2 c :c2}]
   (or
    (= [n c] [2 "Blue"])
    (= [n c] [1 "Dun"])))
@@ -665,7 +665,7 @@ Dun fish
   <entry>
     <title type="html"><![CDATA[ Kolmogorov-Uspensky Machine]]></title>
     <link href="http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine/"/>
-    <updated>2016-03-16T18:19:00-04:00</updated>
+    <updated>2016-03-16T18:19:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine</id>
     <content type="html"><![CDATA[<p>It happened again.  I was sitting down reading a paper and I came across the phrase <em>Kolmogorov-Uspensky machine</em> and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn&rsquo;t important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared <em>again</em>.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn&rsquo;t even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was <em>once more</em>.  This time right in the same paragraph, silently mocking me.  I knew I had to do something so I strode to my computer and pulled the thread.</p>
 
@@ -802,7 +802,7 @@ ab (1) a
   <entry>
     <title type="html"><![CDATA[Fairy Tale Word Vectors]]></title>
     <link href="http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors/"/>
-    <updated>2016-02-10T21:27:00-05:00</updated>
+    <updated>2016-02-10T21:27:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg">http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg</a>"></p>
 
@@ -1233,7 +1233,7 @@ ab (1) a
   <entry>
     <title type="html"><![CDATA[Why Hyperdimensional Socks Never Match]]></title>
     <link href="http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match/"/>
-    <updated>2016-02-06T14:26:00-05:00</updated>
+    <updated>2016-02-06T14:26:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg">http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg</a>"></p>
 

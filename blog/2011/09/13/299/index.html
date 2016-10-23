@@ -1,0 +1,182 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Sunday in the Park with George and Clojure - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="  White: a Blank Page or Canvas. As I spent a pleasant Sunday outside doing yard work, songs from one of my favorite musicals, “Sunday in the Park &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/books/index.html">Books</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Sunday in the Park With George and Clojure</h2>
+	<div class="entry-content"><h1> </h1>
+
+<p><img class="left" src="http://farm3.staticflickr.com/2843/9925803956_c92c63045e_o.jpg"></p>
+
+<p>White: a Blank Page or Canvas.</p>
+
+<p>As I spent a pleasant Sunday outside doing yard work, songs from one of my favorite musicals, <a href="http://en.wikipedia.org/wiki/Sunday_in_the_Park_with_George">“Sunday in the Park with George”</a>, came to mind. While the songs were playing in my head, my thoughts again drifted to one of my favorite programming languages, Clojure. To my surprise, I was struck by similarities between the musical, which is about the artist Geroges Seuret and his creation of one of his famous painting, and that of the functional JVM language of Clojure. Granted, musicals, art and programming languages don&rsquo;t generally get discussed together, but please humor me and let me elaborate. Following the thread of my inspiration, I will be using the first few opening lines from the musical as my headings and guides for my discussion.</p>
+
+<p>Let&rsquo;s start with the broad subjects of Art and Software. They are both created. We use our tools, palettes and techniques to create representations of the world. The visual artist portrays this representation in paints and on canvas, while the software developer uses programming languages and computers.</p>
+
+<p>Looking back in time, we see that there are many different styles of painting that have developed over time. From flat, idealized Byzantine Art to that of the incredible realistic detail of Renaissance Dutch portrait masters. These styles were a reflection of not only the techniques and materials of the time, but also an outlook on the world and the way the artist represented it. Likewise, software styles also have differed over time. From the procedural BASIC language to the current dominant style of Object Oriented programming, the styles are a reflection of not only the technology available to us, but in the way that we model real world concepts and processes into the digital space.</p>
+
+<h2>The Challenge: Bring Order to the Whole.</h2>
+
+<p>Georges Seuret was interested in the optic effect when two small points of different color placed close to one another, would seem to create a third new and luminous color when viewed at a distance. He innovated a technique called pointillism, and created a whole painting composed of tiny dots of color. The striking effect of this can be seen in his famous, large scale painting titled &ldquo;A Sunday Afternoon on the Island of La Grande Jatte”.</p>
+
+<p>In his use of pointillism, Seuret turned to simplicity to create order and achieve complexity. By breaking the painting down into the essence of dots of colors, he opened the way for a sort of parallelism in color viewing by the user, which ended up giving the viewer a perception of richer colors. This very technique, enhanced by todays technology is of course the basis of our incredible RGB viewing in our televisions and monitors.</p>
+
+<p>Let&rsquo;s turn to Clojure. Clojure is a functional language that is interested with concurrency. It also turns to simplicity to achieve complexity. By breaking things down and simplifying to more pure functions with immutable data structures, it make the complex problem of parallel programming possible. This is something that is very hard in the Object Oriented world view programming model. In my opinion, Clojure&rsquo;s approach to concurrent complexity with simplicity is an important innovation to our world of software, just as pointillism was to the world of art. To better explain, let&rsquo;s walk though some of the language features.</p>
+
+<h2>Through Design</h2>
+
+<p>Rich Hickey designed Clojure as a general-purpose language. He wanted it to combine some of best parts of a scripting language – the approachability and interactive development with a REPL – with an infrastructure that would be fast, robust and support multithreaded programming.</p>
+
+<h2>Composition</h2>
+
+<p>The language itself is a LISP. It gains the benefits of the simplicity of syntax of the code as data as well as having the power of Macros that allows one to customize the language. The beauty of this simplicity and conciseness allows one to focuses more on the code that matters.</p>
+
+<h2>Tension</h2>
+
+<p>Pure functions and immutable state is great, but to most things you will need some sort of state. Clojure also provides ways to use mutable state and still support correct multithreaded designs. It uses Software Transaction Memory System and Agents to achieve this. This use of mutable state in a controlled and isolated way, allows clean, efficient and concurrent programming.</p>
+
+<h2>Balance</h2>
+
+<p>Clojure embraces the JVM as it&rsquo;s platform. This pragmatic approach gives not only gives the language a scalable, proven run time environment, it also gives it the advantage of accessing Java&rsquo;s many mature libraries through wrapper free interoperability.</p>
+
+<h2>Light</h2>
+
+<p>Clojure language is a joy to learn. Being concise and a LISP, is very regular in it&rsquo;s syntax. There are only a few key data structures and forms to learn to really get started.</p>
+
+<h2>and Harmony.</h2>
+
+<p>Clojure has an awesome community. The level of enthusiasm and innovation among the Clojure open source developers is inspiring. Every day seems to bring a new development or contribution. There is ClojureScript for JavaScript development, Noir for web development, Logic programming just to name a few.</p>
+
+<p>In summary, innovation in art and technology can come through a quest for simplification. This very act of simplification, then allows for breakthroughs in complexity. Both Seuret and Hickey have shared in this vision in both their art and software.</p>
+
+<p>Finally, I highly recommend watching “Sunday in the Park with George” if you haven&rsquo;t seen it yet. I also highly recommend looking at Clojure too. In fact, you might want to try some <a href="https://github.com/functional-koans/clojure-koans">Clojure Koans</a> before watching the show. You might enjoy it from a different perspective&hellip;</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2011/09/13/299/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2016
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Machine Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/machine-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-16T16:22:16-04:00</updated>
+  <updated>2016-10-23T19:02:32+02:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Neural Networks in Clojure with core.matrix]]></title>
     <link href="http://gigasquid.github.io/blog/2013/12/02/neural-networks-in-clojure-with-core-dot-matrix/"/>
-    <updated>2013-12-02T19:28:00-05:00</updated>
+    <updated>2013-12-02T19:28:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2013/12/02/neural-networks-in-clojure-with-core-dot-matrix</id>
     <content type="html"><![CDATA[<p>After having spent some time recently looking at top-down AI, I
 thought I would spend some time looking at bottom&rsquo;s up AI, machine

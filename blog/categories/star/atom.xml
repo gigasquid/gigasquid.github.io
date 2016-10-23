@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Star | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/star/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-16T16:22:16-04:00</updated>
+  <updated>2016-10-23T19:02:32+02:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[A Taste of the Star Programming Language]]></title>
     <link href="http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language/"/>
-    <updated>2014-06-11T10:38:00-04:00</updated>
+    <updated>2014-06-11T10:38:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language</id>
     <content type="html"><![CDATA[<p>A while ago, I was <a href="http://gigasquidsoftware.com/blog/2013/05/01/growing-a-language-with-haskell-and-instaparse/">exploring creating a programming language with
 Instaparse</a>.

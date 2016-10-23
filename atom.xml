@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-16T16:22:16-04:00</updated>
+  <updated>2016-10-23T19:02:32+02:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Genetic Programming with clojure.spec]]></title>
     <link href="http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec/"/>
-    <updated>2016-07-18T09:40:00-04:00</updated>
+    <updated>2016-07-18T09:40:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec</id>
     <content type="html"><![CDATA[<p><img src="http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg"></p>
 
@@ -469,7 +469,7 @@
   <entry>
     <title type="html"><![CDATA[Hello World for the Next Generation]]></title>
     <link href="http://gigasquid.github.io/blog/2016/07/03/hello-world/"/>
-    <updated>2016-07-03T15:01:00-04:00</updated>
+    <updated>2016-07-03T15:01:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2016/07/03/hello-world</id>
     <content type="html"><![CDATA[<p>I sit next to my daughter, showing her programming for the first time.</p>
 
@@ -545,7 +545,7 @@
   <entry>
     <title type="html"><![CDATA[Book Writing for the Busy Programmer]]></title>
     <link href="http://gigasquid.github.io/blog/2016/06/19/book-writing-for-the-busy-programmer/"/>
-    <updated>2016-06-19T09:22:00-04:00</updated>
+    <updated>2016-06-19T09:22:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2016/06/19/book-writing-for-the-busy-programmer</id>
     <content type="html"><![CDATA[<p><img src="http://c5.staticflickr.com/8/7302/27492453220_eecdf6dee1.jpg"></p>
 
@@ -602,7 +602,7 @@
   <entry>
     <title type="html"><![CDATA[One Fish Spec Fish]]></title>
     <link href="http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/"/>
-    <updated>2016-05-29T16:29:00-04:00</updated>
+    <updated>2016-05-29T16:29:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish</id>
     <content type="html"><![CDATA[<p><img src="https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg"></p>
 
@@ -796,7 +796,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-number-rhymes-with-color?</span> <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">n</span> <span class="ss">:n2</span> <span class="nv">c</span> <span class="ss">:c2</span><span class="p">]}]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-number-rhymes-with-color?</span> <span class="p">[{</span><span class="nv">n</span> <span class="ss">:n2</span> <span class="nv">c</span> <span class="ss">:c2</span><span class="p">}]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">or</span>
 </span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="nv">n</span> <span class="nv">c</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
 </span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="nv">n</span> <span class="nv">c</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="s">&quot;Dun&quot;</span><span class="p">])))</span>
@@ -966,7 +966,7 @@
   <entry>
     <title type="html"><![CDATA[ Kolmogorov-Uspensky Machine]]></title>
     <link href="http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine/"/>
-    <updated>2016-03-16T18:19:00-04:00</updated>
+    <updated>2016-03-16T18:19:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine</id>
     <content type="html"><![CDATA[<p>It happened again.  I was sitting down reading a paper and I came across the phrase <em>Kolmogorov-Uspensky machine</em> and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn&rsquo;t important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared <em>again</em>.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn&rsquo;t even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was <em>once more</em>.  This time right in the same paragraph, silently mocking me.  I knew I had to do something so I strode to my computer and pulled the thread.</p>
 
@@ -1106,7 +1106,7 @@
   <entry>
     <title type="html"><![CDATA[Fairy Tale Word Vectors]]></title>
     <link href="http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors/"/>
-    <updated>2016-02-10T21:27:00-05:00</updated>
+    <updated>2016-02-10T21:27:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors</id>
     <content type="html"><![CDATA[<p><img src="http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg"></p>
 
@@ -1604,7 +1604,7 @@
   <entry>
     <title type="html"><![CDATA[Why Hyperdimensional Socks Never Match]]></title>
     <link href="http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match/"/>
-    <updated>2016-02-06T14:26:00-05:00</updated>
+    <updated>2016-02-06T14:26:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match</id>
     <content type="html"><![CDATA[<p><img src="http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg"></p>
 
@@ -1865,7 +1865,7 @@
   <entry>
     <title type="html"><![CDATA[Book of Software Miracles]]></title>
     <link href="http://gigasquid.github.io/blog/2016/01/16/book-of-software-miracles/"/>
-    <updated>2016-01-16T22:09:00-05:00</updated>
+    <updated>2016-01-16T22:09:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2016/01/16/book-of-software-miracles</id>
     <content type="html"><![CDATA[<p><img src="http://c2.staticflickr.com/2/1611/23811303563_029d4c864e_c.jpg" title="&#34;Book of Software Miracles - Cover&#34;" alt="&#34;Book of Software Miracles - Cover&#34;"></p>
 
@@ -1896,7 +1896,7 @@
   <entry>
     <title type="html"><![CDATA[Can a Programming Language Make You Smarter?]]></title>
     <link href="http://gigasquid.github.io/blog/2015/12/20/can-a-programming-language-make-you-smarter/"/>
-    <updated>2015-12-20T11:16:00-05:00</updated>
+    <updated>2015-12-20T11:16:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2015/12/20/can-a-programming-language-make-you-smarter</id>
     <content type="html"><![CDATA[<p><img src="http://c1.staticflickr.com/1/34/118425909_86f332f075_z.jpg?zz=1"></p>
 
@@ -1933,7 +1933,7 @@
   <entry>
     <title type="html"><![CDATA[The Key to Moving Fast is Feedback]]></title>
     <link href="http://gigasquid.github.io/blog/2015/12/19/the-key-to-moving-fast-is-feedback/"/>
-    <updated>2015-12-19T14:06:00-05:00</updated>
+    <updated>2015-12-19T14:06:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2015/12/19/the-key-to-moving-fast-is-feedback</id>
     <content type="html"><![CDATA[<p><img src="http://c1.staticflickr.com/3/2205/1809288965_c84080f2d3_n.jpg"></p>
 
@@ -1969,7 +1969,7 @@ Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles
   <entry>
     <title type="html"><![CDATA[Gigasquid's Radar 2015]]></title>
     <link href="http://gigasquid.github.io/blog/2015/12/08/gigasquids-radar-2015/"/>
-    <updated>2015-12-08T17:36:00-05:00</updated>
+    <updated>2015-12-08T17:36:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2015/12/08/gigasquids-radar-2015</id>
     <content type="html"><![CDATA[<p><img src="http://c1.staticflickr.com/1/627/23249736219_dfa625309b_c.jpg"></p>
 
@@ -2032,7 +2032,7 @@ Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles
   <entry>
     <title type="html"><![CDATA[Speech Act Classification for Text with Clojure]]></title>
     <link href="http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/"/>
-    <updated>2015-10-20T13:11:00-04:00</updated>
+    <updated>2015-10-20T13:11:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure</id>
     <content type="html"><![CDATA[<p>We humans are quite wonderful.  We do amazing things every day without even realizing it.  One of them, you are doing right now.  You are reading text.  Your brain is taking these jumbles of letters and spaces in this sentence, which in linguist terms is called an <a href="https://en.wikipedia.org/wiki/Utterance">utterance</a>, and making sense out of it.  The individual meanings of sentences might be quite complex.</p>
 
@@ -2443,7 +2443,7 @@ Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles
   <entry>
     <title type="html"><![CDATA[Conversations with Datomic - Part 3]]></title>
     <link href="http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3/"/>
-    <updated>2015-08-25T10:28:00-04:00</updated>
+    <updated>2015-08-25T10:28:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3</id>
     <content type="html"><![CDATA[<p><img src="https://avatars0.githubusercontent.com/u/1478702?v=3&s=200"></p>
 
@@ -2561,7 +2561,7 @@ I am interested in having you work with me every day, but first I want to unders
   <entry>
     <title type="html"><![CDATA[Conversations with Datomic Part 2]]></title>
     <link href="http://gigasquid.github.io/blog/2015/08/19/conversations-with-datomic-part-2/"/>
-    <updated>2015-08-19T08:56:00-04:00</updated>
+    <updated>2015-08-19T08:56:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/19/conversations-with-datomic-part-2</id>
     <content type="html"><![CDATA[<p><img src="https://avatars0.githubusercontent.com/u/1478702?v=3&s=200"></p>
 
@@ -2815,7 +2815,7 @@ I am interested in having you work with me every day, but first I want to unders
   <entry>
     <title type="html"><![CDATA[Conversations with Datomic]]></title>
     <link href="http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/"/>
-    <updated>2015-08-15T10:29:00-04:00</updated>
+    <updated>2015-08-15T10:29:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic</id>
     <content type="html"><![CDATA[<p><img src="https://avatars0.githubusercontent.com/u/1478702?v=3&s=200"></p>
 
@@ -3287,7 +3287,7 @@ the conversation idea :)</em></p>
   <entry>
     <title type="html"><![CDATA[Wild Horses, Things, and Creativity]]></title>
     <link href="http://gigasquid.github.io/blog/2015/05/30/wilds-horses-things-and-creativity/"/>
-    <updated>2015-05-30T10:53:00-04:00</updated>
+    <updated>2015-05-30T10:53:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/05/30/wilds-horses-things-and-creativity</id>
     <content type="html"><![CDATA[<p><img src="https://nmbdesigner.files.wordpress.com/2012/05/where-the-wild-things-are-2.jpeg"></p>
 
@@ -3316,7 +3316,7 @@ mold it in surprising directions.</p>
   <entry>
     <title type="html"><![CDATA[How Not to Panic While Writing a Clojure Book]]></title>
     <link href="http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book/"/>
-    <updated>2015-05-22T09:11:00-04:00</updated>
+    <updated>2015-05-22T09:11:00+02:00</updated>
     <id>http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book</id>
     <content type="html"><![CDATA[<p>I made it to that magical moment when the Clojure book I had been working on so long was published and I could actually hold it in my hand.</p>
 
@@ -3479,7 +3479,7 @@ They asked if I had any insights or tips having gone through the process as a fi
   <entry>
     <title type="html"><![CDATA[Partition with Game of Thrones Pugs]]></title>
     <link href="http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs/"/>
-    <updated>2015-01-26T18:55:00-05:00</updated>
+    <updated>2015-01-26T18:55:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs</id>
     <content type="html"><![CDATA[<p>Clojure&rsquo;s <em>partition</em> and <em>partition-all</em> functions are very useful.
 However, I have been bitten a few times using <em>partition</em> when I
@@ -3535,7 +3535,7 @@ of things that you process at one time.  An example of this is sending only 500 
   <entry>
     <title type="html"><![CDATA[Gigasquid's Radar 2014]]></title>
     <link href="http://gigasquid.github.io/blog/2014/12/17/gigasquids-radar-2014/"/>
-    <updated>2014-12-17T20:55:00-05:00</updated>
+    <updated>2014-12-17T20:55:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2014/12/17/gigasquids-radar-2014</id>
     <content type="html"><![CDATA[<p><img src="https://c4.staticflickr.com/8/7554/16045999682_b4658620c1_c.jpg"></p>
 
@@ -3588,7 +3588,7 @@ of things that you process at one time.  An example of this is sending only 500 
   <entry>
     <title type="html"><![CDATA[Clojure FizzBuzz without Conditionals]]></title>
     <link href="http://gigasquid.github.io/blog/2014/11/13/clojure-fizzbuzz-without-conditionals/"/>
-    <updated>2014-11-13T21:43:00-05:00</updated>
+    <updated>2014-11-13T21:43:00+01:00</updated>
     <id>http://gigasquid.github.io/blog/2014/11/13/clojure-fizzbuzz-without-conditionals</id>
     <content type="html"><![CDATA[<p><img src="https://c1.staticflickr.com/5/4136/4825113119_9630b7927f.jpg"></p>
 
