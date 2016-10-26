@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-23T19:02:32+02:00</updated>
+  <updated>2016-10-26T15:39:29+02:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -111,8 +111,8 @@
 (defn make-random-arg [n]
   (if (and (pos? n) (&lt; (rand) seq-prob))</p>
 
-<pre><code>`~(make-random-seq n)
-`~(rand-nth preds)))
+<pre><code>(make-random-seq n)
+(rand-nth preds)))
 </code></pre>
 
 <p>```</p>

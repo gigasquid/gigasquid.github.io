@@ -220,8 +220,8 @@
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-arg</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">seq-prob</span><span class="p">))</span>
-</span><span class='line'>    <span class="o">`~</span><span class="p">(</span><span class="nf">make-random-seq</span> <span class="nv">n</span><span class="p">)</span>
-</span><span class='line'>    <span class="o">`~</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">preds</span><span class="p">)))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">make-random-seq</span> <span class="nv">n</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">preds</span><span class="p">)))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
