@@ -102,8 +102,8 @@ The `seq-prob` is the probability that a new spec sub sequence will be construct
 ```clojure
 (defn make-random-arg [n]
   (if (and (pos? n) (< (rand) seq-prob))
-    `~(make-random-seq n)
-    `~(rand-nth preds)))
+    (make-random-seq n)
+    (rand-nth preds)))
 ```
 
 Also creating a random sub sequence.
