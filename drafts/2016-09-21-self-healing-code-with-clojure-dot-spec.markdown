@@ -162,7 +162,7 @@ Now we have our problem setup.  We need to have our donor candidates.
 We are going to have a separate namespace with them.  They will be a number of them, all function speced out.  Some of them will not be a match for our spec at all.  Those bad ones include:
 
 * `bad-calc-average` It returns the first number in the list and doesn't calc the average at all.
-* `bad-calc-average2` It returns a good average function but the result is a string.It wont' match the spec of our `calc-average` function.
+* `bad-calc-average2` It returns a good average function but the result is a string. It won't match the spec of our `calc-average` function.
 * `adder` It takes a number and adds 5 to it.  It also won't match the spec of `calc-average`.
 
 There is a matching function called `better-calc-average` that matches the spec of our `calc-average` function and has the additional check for divide by zero.
@@ -293,7 +293,7 @@ Now, the big test.
 ```clojure
 (healing/with-healing (report []))
 ; ERROR in function self-healing.core/calc-average Divide by zero -- looking for replacement
-; Retriving spec information for function  {:args :self-healing.core/cleaned-earnings, :ret :self-healing.core/average, :fn nil}
+; Retrieving spec information for function  {:args :self-healing.core/cleaned-earnings, :ret :self-healing.core/average, :fn nil}
 ; Checking candidates  (self-healing.candidates/better-calc-average self-healing.candidates/adder self-healing.candidates/bad-calc-average self-healing.candidates/bad-calc-average2)
 ; ----------
 ; **Looking at candidate  self-healing.candidates/better-calc-average
