@@ -141,7 +141,7 @@ Finally, we will create the rest of the `display-report` function and finish spe
       (display-report)))
 
 (s/fdef report
-        :args ::earnings
+        :args ::earnings-params
         :ret ::report-format)
 ```
 
