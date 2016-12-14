@@ -71,17 +71,19 @@ The first helper function is called `clean-bad-data`.  It takes in a vector of a
 (defn clean-bad-data [earnings]
   (filter number? earnings))
 ```
-Let's create a couple of specs to help us describe it.  The first, `earnings` will be a vector, (for the params) with another vector of anything.
+Let's create some specs to help us describe it.  The first, `::earnings` will be a collection of anything and then `::earnings-params` (for the params) with another vector of anything.
 
 ```clojure
-(s/def ::earnings (s/cat :elements (s/coll-of any?)))
+(s/def ::earnings (s/coll-of any?))
+(s/def ::earnings-params (s/cat :elements ::earnings))
 ```
-The next spec for the output of the function we will call `cleaned-earnings`. It is going to have a custom generator for the purposes of this experiment, which will constrain the generator to just returning the value `[[1 2 3 4 5]]` as its example data[^1].
+The next specs will be for the output of the function. One, we will call `::cleaned-earnings`. It is going to have a custom generator for the purposes of this experiment, which will constrain the generator to just returning the value `[1 2 3 4 5]` as its example data[^1]. The other `::cleaned-earnings-params` will be for the function parameter vector.
 
 ```clojure
 (s/def ::cleaned-earnings (s/with-gen
-                            (s/cat :clean-elements (s/coll-of number?))
-                            #(gen/return [[1 2 3 4 5]]))
+                            (s/coll-of number?)
+                            #(gen/return [1 2 3 4 5])))
+(s/def ::cleaned-earnings-params (s/cat :clean-elements ::cleaned-earnings))
 ```
 
 An example of running the function is:
@@ -95,14 +97,14 @@ If we call spec's `exercise` on it, it will return the custom sample data from t
 
 ```clojure
 (s/exercise ::cleaned-earnings 1)
-;=> ([[[1 2 3 4 5]] {:clean-elements [1 2 3 4 5]}])
+;=> ([[1 2 3 4 5] [1 2 3 4 5]])
 ```
 
 Now we can spec the function itself with `s/fdef`.  It takes the `earnings` spec for the args and the `cleaned-earnings` spec for the return value.
 
 ```clojure
 (s/fdef clean-bad-data
-        :args ::earnings
+        :args ::earnings-params
         :ret ::cleaned-earnings)
 ```
 
@@ -113,10 +115,11 @@ We will do the same for the `calc-average` function, which has the flaw vital to
   (/ (apply + earnings) (count earnings)))
 
 (s/def ::average number?)
+(s/def ::average-params (s/cat :elements ::average))
 
 (s/fdef calc-average
-    :args ::cleaned-earnings
-    :ret ::average)
+        :args ::cleaned-earnings-params
+        :ret ::average)
 ```
 
 Finally, we will create the rest of the `display-report` function and finish specing the function for `report`.
@@ -126,9 +129,9 @@ Finally, we will create the rest of the `display-report` function and finish spe
 
 (defn display-report [avg]
   (str "The average is " avg))
-
+  
 (s/fdef display-report
-        :args ::average
+        :args ::average-params
         :ret ::report-format)
 
 (defn report [earnings]
@@ -139,7 +142,7 @@ Finally, we will create the rest of the `display-report` function and finish spe
 
 (s/fdef report
         :args ::earnings
-        :ret string?)
+        :ret ::report-format)
 ```
 
 Giving a test drive:
@@ -168,13 +171,13 @@ We are going to have a separate namespace with them.  They will be a number of t
 There is a matching function called `better-calc-average` that matches the spec of our `calc-average` function and has the additional check for divide by zero.
 
 ```clojure
-(s/def ::numbers (s/cat :elements (s/coll-of number?)))
+(s/def ::numbers (s/coll-of number?))
+(s/def ::numbers-params (s/cat :elements ::numbers))
 (s/def ::result number?)
 
-(defn better-calc-average [earnings]
-  (if (empty? earnings)
-    0
-    (/ (apply + earnings) (count earnings))))
+(s/fdef better-calc-average
+        :args ::numbers-params
+        :ret ::result)
 ```
 This is the one that we will want to use to replace our broken one.
 
