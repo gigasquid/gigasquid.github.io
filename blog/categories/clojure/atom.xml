@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-26T15:39:29+02:00</updated>
+  <updated>2016-12-27T12:11:36-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -14,9 +14,264 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Deep Learning in Clojure with Cortex]]></title>
+    <link href="http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex/"/>
+    <updated>2016-12-27T10:44:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex</id>
+    <content type="html"><![CDATA[<p>There is an awesome new <em>Clojure-first</em> machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> that was open sourced recently. I&rsquo;ve been exploring it lately and wanted to share my discoveries so far in this post. In our exploration, we are going to tackle one of the classic classification problems of the internet. How do you tell the difference between a cat and dog pic?</p>
+
+<h2>Where to Start?</h2>
+
+<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
+
+<p>For any machine learning problem, we&rsquo;re going to need data. For this, we can use Kaggle&rsquo;s data for the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Cats vs Dogs Challenge</a>.  The training data consists of 25,000 images of cats and dogs. That should be more than enough to train our computer to recognize cats from doggies.</p>
+
+<p>We also need some idea of how to train against the data. Luckily, the Cortex project has a very nice set of examples to help you get started. In particular there is a <a href="https://github.com/thinktopic/cortex/tree/master/examples/suite-classification">suite classification example</a> using MNIST, (hand written digit), corpus. This example contains a number cutting edge features that we&rsquo;ll want to use:</p>
+
+<ul>
+<li>Uses GPU for <em>fast</em> computation.</li>
+<li>Uses a deep, multi-layered, convolutional layered network for feature recognition.</li>
+<li>Has &ldquo;forever&rdquo; training by image augmentation.</li>
+<li>Saves the network configuration as it trains to an external nippy file so that it can be imported later.</li>
+<li>Has a really nice ClojureScript front end to visualize the training progress with a confusion matrix.</li>
+<li>Has a way to import the saved nippy network configuration and perform inference on it to classify a new image.</li>
+</ul>
+
+
+<p>Basically, it has everything we need to hit the ground running.</p>
+
+<h2>Data Wrangling</h2>
+
+<p>To use the example&rsquo;s <em>forever</em> training, we need to get the data in the right form. We need all the images to be the same size as well as in a directory structure that is split up into the training and test images. Furthermore, we want all the dog images to be under a &ldquo;dog&rdquo; directory and the cat images under the &ldquo;cat&rdquo; directory so that the all the indexed images under them have the correct &ldquo;label&rdquo;.  It will look like this:</p>
+
+<p>```
+&ndash; training
+  &ndash; cat</p>
+
+<pre><code>- 1.png
+- 2.png
+</code></pre>
+
+<ul>
+<li>dog
+
+<ul>
+<li>1.png</li>
+<li>2.png
+```</li>
+</ul>
+</li>
+</ul>
+
+
+<p>For this task, we are going to use a couple image libraries to help us out:</p>
+
+<p><code>clojure
+ [mikera.image.core :as imagez]
+ [think.image.image :as image]
+</code></p>
+
+<p>We can resize and rewrite the original images into the form we want. For a image size, we&rsquo;re going to go with 52x52. The choice is arbitrary in that I wanted it bigger than the MNIST dataset which is 28x28 so it will be easier to see, but not so big that it kills my CPU. This is even more important since we want to use RGB colors which is 3 channels as opposed to the MNIST grey scale of 1.</p>
+
+<p>```clojure
+(def dataset-image-size 52)
+(def dataset-num-classes 2)
+(def dataset-num-channels 3)
+(def dataset-datatype :float)</p>
+
+<p>(defn resize-and-write-data
+  [output-dir [idx [file label]]]
+  (let [img-path (str output-dir &ldquo;/&rdquo; label &ldquo;/&rdquo; idx &ldquo;.png&rdquo; )]</p>
+
+<pre><code>(when-not (.exists (io/file img-path))
+  (io/make-parents img-path)
+  (-&gt; (imagez/load-image file)
+      (image/resize dataset-image-size dataset-image-size)
+      (imagez/save img-path)))
+nil))
+</code></pre>
+
+<p>```</p>
+
+<p>As far as the split between training images and testing images, we are going the go for an simple even split between testing and training data.</p>
+
+<h2>Network Configuration</h2>
+
+<p>The Network layer configuration is the meat of the whole thing. We are going to go with the exact same network description as the MNIST example:</p>
+
+<p><code>clojure
+(defn create-basic-network-description
+  []
+  [(desc/input dataset-image-size dataset-image-size dataset-num-channels)
+   (desc/convolutional 5 0 1 20)
+   (desc/max-pooling 2 0 2)
+   (desc/relu)
+   (desc/convolutional 5 0 1 50)
+   (desc/max-pooling 2 0 2)
+   (desc/relu)
+   (desc/convolutional 1 0 1 50)
+   (desc/relu)
+   (desc/linear-&gt;relu 1000)
+   (desc/dropout 0.5)
+   (desc/linear-&gt;softmax dataset-num-classes)])
+</code></p>
+
+<p>It uses a series of convolutional layers with max pooling for feature recognition. We&rsquo;ll see if it works for color versions of cats and dogs as well as street numbers.</p>
+
+<p>We&rsquo;ll also keep the image augmentation the same as in the example.</p>
+
+<p>```clojure
+(def max-image-rotation-degrees 25)</p>
+
+<p>(defn img-aug-pipeline
+  [img]
+  (&ndash;> img</p>
+
+<pre><code>  (image-aug/rotate (- (rand-int (* 2 max-image-rotation-degrees))
+                       max-image-rotation-degrees)
+                    false)
+  (image-aug/inject-noise (* 0.25 (rand)))))
+</code></pre>
+
+<p>(def ^:dynamic <em>num-augmented-images-per-file</em> 1)
+```</p>
+
+<p>It injects one augmented image into our training data by slightly rotating it and adding noise.</p>
+
+<h3>Running it!</h3>
+
+<p>It&rsquo;s time to test it out. Using <code>lein run</code>, we&rsquo;ll launch the <code>train-forever</code> function:</p>
+
+<p>```clojure
+(defn train-forever
+  []
+  (let [dataset (create-dataset)</p>
+
+<pre><code>    initial-description (create-basic-network-description)
+    confusion-matrix-atom (display-dataset-and-model dataset initial-description)]
+(classification/train-forever dataset observation-&gt;image
+                              initial-description
+                              :confusion-matrix-atom confusion-matrix-atom)))
+</code></pre>
+
+<p>```</p>
+
+<p>This opens a port to a localhost webpage where we can view the progress <code>http://localhost:8091/</code></p>
+
+<p><img class="<a" src="href="http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg">http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg</a>"></p>
+
+<p>Below the confusion matrix is shown. This tracks the progress of the training in the classification. In particular, how many times it thought a cat was really a cat and how many times it got it wrong.</p>
+
+<p><img class="<a" src="href="http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg">http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg</a>"></p>
+
+<p>As we are training the data, the loss for each epoch is shown on the console as well as when it saves the network to the external file.</p>
+
+<p>After only thirty minutes of training on my Mac Book Pro, we get to some pretty good results, with the correct percentage in the 99s :</p>
+
+<p><img class="<a" src="href="http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg">http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg</a>"></p>
+
+<p>It&rsquo;s time to do some inference on our trained network.</p>
+
+<h2>Inference</h2>
+
+<p>Firing up a REPL we can connect to our namespace and use the <code>label-one</code> function from the cortex example to spot check our classification. It reads in the external nippy file that contains the trained network description, takes a random image from the testing directory, and classifies it.</p>
+
+<p>```clojure
+(defn label-one
+  &ldquo;Take an arbitrary image and label it.&rdquo;
+  []
+  (let [file-label-pairs (shuffle (classification/directory->file-label-seq testing-dir</p>
+
+<pre><code>                                                                        false))
+    [test-file test-label] (first file-label-pairs)
+    test-img (imagez/load-image test-file)
+    observation (png-&gt;observation dataset-datatype false test-img)]
+(imagez/show test-img)
+(infer/classify-one-observation (:network-description
+                                 (suite-io/read-nippy-file "trained-network.nippy"))
+                                observation
+                                (ds/create-image-shape dataset-num-channels
+                                                       dataset-image-size
+                                                       dataset-image-size)
+                                dataset-datatype
+                                (classification/get-class-names-from-directory testing-dir))))
+</code></pre>
+
+<p>```</p>
+
+<p>Running <code>(label-one)</code> gives us the picture:</p>
+
+<p><img class="<a" src="href="http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg">http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg</a>"></p>
+
+<p>and classifies it as a cat. Yipee!</p>
+
+<p><code>clojure
+{:probability-map {"cat" 0.9995587468147278, "dog" 4.4119369704276323E-4}, :classification "cat"}
+</code></p>
+
+<p>Not bad, but let&rsquo;s try it with something harder. Personally, I&rsquo;m not even sure whether this is a cat or a dog.</p>
+
+<p><img class="<a" src="href="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg">http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg</a>"></p>
+
+<p>Feeding it through the program &ndash; it says it is a cat.</p>
+
+<p><code>clojure
+ {:probability-map {"cat" 0.9942012429237366, "dog" 0.005798777565360069}, :classification "cat"}
+</code></p>
+
+<p>After much <a href="http://www.today.com/pets/cat-or-dog-wild-eyed-cutie-has-us-all-confused-t104835">debate on the internet</a>, I think that is the best answer the humans got too :)</p>
+
+<h2>Kaggle it</h2>
+
+<p>So it seems like we have a pretty good model, why don&rsquo;t we submit our results to the Kaggle competition and see how it rates. All they need is to have us run the classification against their test data of 12,500 images and classify them as 1 = dog or 0 = cat in a csv format.</p>
+
+<p>We will take each image and resize it, then feed it into cortex&rsquo;s <code>infer-n-observations</code> function, to do all our classification as a batch.</p>
+
+<p>```clojure
+ (infer/infer-n-observations (:network-description</p>
+
+<pre><code>                                         (suite-io/read-nippy-file "trained-network.nippy"))
+                                        observations
+                                        (ds/create-image-shape dataset-num-channels
+                                                               dataset-image-size
+                                                               dataset-image-size)
+                                        dataset-datatype)
+</code></pre>
+
+<p>```</p>
+
+<p>Finally, we just need to format our results to a csv file and export it:</p>
+
+<p>```clojure
+(defn write-kaggle-results [results]
+  (with-open [out-file (io/writer &ldquo;kaggle-results.csv&rdquo;)]</p>
+
+<pre><code>(csv/write-csv out-file
+               (into [["id" "label"]]
+                     (-&gt; (mapv (fn [[id class]] [(Integer/parseInt id) (if (= "dog" class) 1 0)]) results)
+                         (sort))))))
+</code></pre>
+
+<p>```</p>
+
+<p>After uploading the file to the Kaggle, I was pleased that the answer got in the top 91%! It made it on the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/leaderboard">Leaderboard</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>Using an example setup from the Cortex project and 30 minutes of processing time on my laptop, we were able to crunch through some significant data and come up with a trained classification model that was good enough to make the charts in the Kaggle competition. On top of it all, it is in pure Clojure.</p>
+
+<p>In my mind, this is truely impressive and even though the Cortex library is in it&rsquo;s early phases, it puts it on track to be as useful as tool as Tensor Flow for Machine Learning.</p>
+
+<p>Earlier this month, I watched an ACM Learning webcast with Peter Norvig speaking on AI. In it, he spoke of one of the next challenges of AI which is to combine <a href="https://twitter.com/gigasquid/status/806916856040689664?lang=en">symbolic with neural</a>. I can think of no better language than Clojure with it&rsquo;s simplicity, power, and rich LISP heritage to take on the challenge for the future. With the Cortex library, it&rsquo;s off to a great start.</p>
+
+<p><em>If want to see all the cats vs dog  Kaggle Code, it&rsquo;s out on github here <a href="https://github.com/gigasquid/kaggle-cats-dogs">https://github.com/gigasquid/kaggle-cats-dogs</a></em></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Genetic Programming with clojure.spec]]></title>
     <link href="http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec/"/>
-    <updated>2016-07-18T09:40:00+02:00</updated>
+    <updated>2016-07-18T09:40:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg">http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg</a>"></p>
 
@@ -380,7 +635,7 @@
   <entry>
     <title type="html"><![CDATA[One Fish Spec Fish]]></title>
     <link href="http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/"/>
-    <updated>2016-05-29T16:29:00+02:00</updated>
+    <updated>2016-05-29T16:29:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg">https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg</a>"></p>
 
@@ -665,7 +920,7 @@ Dun fish
   <entry>
     <title type="html"><![CDATA[ Kolmogorov-Uspensky Machine]]></title>
     <link href="http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine/"/>
-    <updated>2016-03-16T18:19:00+01:00</updated>
+    <updated>2016-03-16T18:19:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine</id>
     <content type="html"><![CDATA[<p>It happened again.  I was sitting down reading a paper and I came across the phrase <em>Kolmogorov-Uspensky machine</em> and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn&rsquo;t important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared <em>again</em>.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn&rsquo;t even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was <em>once more</em>.  This time right in the same paragraph, silently mocking me.  I knew I had to do something so I strode to my computer and pulled the thread.</p>
 
@@ -802,7 +1057,7 @@ ab (1) a
   <entry>
     <title type="html"><![CDATA[Fairy Tale Word Vectors]]></title>
     <link href="http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors/"/>
-    <updated>2016-02-10T21:27:00+01:00</updated>
+    <updated>2016-02-10T21:27:00-05:00</updated>
     <id>http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg">http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg</a>"></p>
 
@@ -1227,200 +1482,6 @@ ab (1) a
 <p>Looking over our journey with word vectors.  At the beginning it seemed that word vectors were magical.  Now, after an understanding of the basics, it still seems like magic.</p>
 
 <p>If you are interested in exploring further, feel free to use my github <a href="https://github.com/gigasquid/hyperdimensional-playground">hyperdimensional-playground</a> as a starting point.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why Hyperdimensional Socks Never Match]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match/"/>
-    <updated>2016-02-06T14:26:00+01:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg">http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg</a>"></p>
-
-<p>The nature of computing in hyperdimensions is a strange and wonderful place.   I have only started to scratch the surface by reading a paper by <a href="http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf">Kanerva</a>. Not only is it interesting from a computer science standpoint, it&rsquo;s also interesting from a cognitive science point of view.  In fact, it could hold the key to better model AI and general reasoning.  This blog is a casual stroll through some of the main points of Kanerva&rsquo;s paper along with examples in Clojure to make it tangible.  First things first, what is a hyperdimension?</p>
-
-<h3>What is a Hyperdimension and Where Are My Socks?</h3>
-
-<p>When we are talking about hyperdimensions, we are really talking about <em>lots</em> of dimensions.  A vector has dimensions.  A regular vector could have three dimensions <code>[0 1 1]</code>, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors <em>hypervectors</em> for short, which makes them sound really cool. Although the vectors could be made up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use <em>sparse</em> vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The <a href="https://github.com/mikera/core.matrix">core.matrix</a> project from Mike Anderson is what we will use in our examples.  Let&rsquo;s go ahead and make some random hypervectors.</p>
-
-<p>First we import the core.matrix libraries and set the implementation to vectorz which provides fast double precision vector math.</p>
-
-<p>```clojure
-(ns hyperdimensional-playground.core
-  (:require [clojure.core.matrix :as m]</p>
-
-<pre><code>        [clojure.core.matrix.linear :as ml]))
-</code></pre>
-
-<p>(m/set-current-implementation :vectorz)
-```</p>
-
-<p>Next we set the sz of our hypervectors to be 100,000.  We also create a function to generate a random sparse hypervector by choosing to put ones in about 10% of the space.</p>
-
-<p>```clojure
-(def sz 100000)</p>
-
-<p>(defn rand-hv []
-  (let [hv (m/new-sparse-array [sz])</p>
-
-<pre><code>    n (* 0.1 sz)]
-(dotimes [i n]
-  (m/mset! hv (rand-int sz) 1))
-hv))
-</code></pre>
-
-<p>```</p>
-
-<p>Now we can generate some.</p>
-
-<p>```clojure
-(def a (rand-hv))
-(def b (rand-hv))
-(def c (rand-hv))
-(def d (rand-hv))</p>
-
-<p>a ;=> #vectorz/vector Large vector with shape: [100000]
-```</p>
-
-<p>You can think of each of this hypervectors as random hyperdimensional sock, or hypersock, because that sounds cooler.  These hypersocks, have curious properties.  One of which is that they will ~never match.</p>
-
-<h3>Hypersocks never match</h3>
-
-<p>Because we are dealing with huge amount of dimensions, a mathematically peculiar probability distribution occurs.  We can take a random hypervector to represent something, then take another one and they will different from each by about 100 STD. We can take another one and it too, will be 100 STD from the other ones.  For practical purposes, we will run out of time before we will run of vectors that are unrelated.  Because of this, any two hypersocks will never match each other.</p>
-
-<p>How can we tell how similar two hypersocks are?  The cosine to tell the similarity between two vectors.  This is determined by the dot product.  We can construct a <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity</a> function to give us a value from -1 to 1 to measure how alike they are with 1 being the same and -1 being the complete opposite.</p>
-
-<p>```clojure
-(defn cosine-sim [v1 v2]
-  (/ (m/dot v1 v2)</p>
-
-<pre><code> (* (ml/norm v1) (ml/norm v2))))
-</code></pre>
-
-<p>```</p>
-
-<p>If we look at the similarity of a hypervector with itself, the result is ~1.  With the other random hypervectors, it is ~0.</p>
-
-<p>```clojure
-(cosine-sim a a) ;=>  1.0
-(cosine-sim d d) ;=> 1.0</p>
-
-<p>(cosine-sim a b) ;=>  0.0859992468320239
-(cosine-sim b c) ;=> 0.09329186588790261
-(cosine-sim a c) ;=> 0.08782018973001954
-```</p>
-
-<p>There are other cool things we can do with hypervectors, like do math with them.</p>
-
-<h3>The Hamming Distance of Two Hypersocks</h3>
-
-<p>We can add hypervectors together with a sum mean vector. We add the vector of 1s and 0s together then we divide the resulting vector by the number of total vectors.  Finally, to get back to our 1s and 0s, we round the result.</p>
-
-<p><code>clojure
-(defn mean-add [&amp; hvs]
-  (m/emap #(Math/round (double %))
-   (m/div (apply m/add hvs) (count hvs))))
-</code></p>
-
-<p>The interesting thing about addition is that the result is similar to all the vectors in it.  For example, if we add a and b together to make x, <code>x = a + b</code>, then x will be similar to a and similar to b.</p>
-
-<p><code>clojure
-;; x = a + b
-(def x (mean-add a b))
-(cosine-sim x a) ;=&gt; 0.7234734658023224
-(cosine-sim x b) ;=&gt; 0.7252586504505658
-</code></p>
-
-<p>You can also do a very simple form of multiplication on vectors with 1s and 0s with using <em>XOR</em>.  We can do this by add the two vectors together and then mapping <code>mod 2</code> on each of the elements.</p>
-
-<p>```clojure
-(defn xor-mul [v1 v2]
-  (&ndash;>> (m/add v1 v2)</p>
-
-<pre><code>  (m/emap #(mod % 2))))
-</code></pre>
-
-<p>```</p>
-
-<p>We can actually use this <code>xor-mul</code> to calculate the <a href="https://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a>, which is an important measure of error detection.  The Hamming distance is simply the sum of all of the xor multiplied elements.</p>
-
-<p>```clojure
-(defn hamming-dist [v1 v2]
-  (m/esum (xor-mul v1 v2)))</p>
-
-<p>(hamming-dist [1 0 1] [1 0 1]) ;=> 0
-(hamming-dist [1 0 1 1 1 0 1] [1 0 0 1 0 0 1]) ;=> 2
-(hamming-dist a a) ;=> 0
-```</p>
-
-<p>This illustrates a point that xor multiplication randomizes the hypervector, but preserves the distance.  In the following example, we xor multiply two random hypervectors by another and the hamming distance stays the same.</p>
-
-<p>```clojure
-; xa = x * a
-; ya = y * a
-; hamming distance of xa is the same as ya</p>
-
-<p>;; multiplication randomizes but preserves the distance
-(def x (rand-hv))
-(def y (rand-hv))
-(def xa (xor-mul x a))
-(def ya (xor-mul y a))
-(hamming-dist xa ya) ;=> 1740.0
-(hamming-dist x y) ;=> 1740.0
-```</p>
-
-<p>So you can xor multiply your two hypersocks and move them to a different point in hyperspace, but they will still be the same distance apart.</p>
-
-<p>Another great party trick in hyperspace, is the ability to bind and unbind hypervectors for use as map like pairs.</p>
-
-<h3>Using Hypervectors to Represent Maps</h3>
-
-<p>A map of pairs is a very important data structure.  It gives the ability to bind symbols to values and then retrieve those values.  We can do this with hypervectors too.  Consider the following structure:</p>
-
-<p><code>clojure
-{:name "Gigasquid"
- :cute-animal "duck"
- :favorite-sock "red plaid"}
-</code></p>
-
-<p>We can now create hypervectors to represent each of these values.  Then we can xor the hypervector symbol to the hypervector value and sum them up.</p>
-
-<p>```clojure
-;; data records with bound pairs
-(def x (rand-hv)) ;; favorite-sock
-(def y (rand-hv)) ;; cute-animal
-(def z (rand-hv)) ;; name
-(def a (rand-hv)) ;; red-plaid
-(def b (rand-hv)) ;; duck
-(def c (rand-hv)) ;; gigasquid</p>
-
-<p>;H = X * A + Y * B + Z * C
-(def h (mean-add (xor-mul x a) (xor-mul y b) (xor-mul z c)))
-```</p>
-
-<p>Now, we have a sum of all these things and we want to find the value of the <em>favorite sock</em>.  We can <em>unbind</em> it from the sum by xor multiplying the favorite-sock hypervector <code>x</code>.  Because of the property that xor multiplication both distributes and cancels itself out.</p>
-
-<p><code>clojure
-(hamming-dist (xor-mul x (xor-mul x a)) a) ;=&gt; 0
-</code></p>
-
-<p>We can compare the result with the known values and find the closest match.</p>
-
-<p>```clojure
-(hamming-dist a (xor-mul x h)) ;=> 1462.0  ;; closest to &ldquo;red-plaid&rdquo;
-(hamming-dist b (xor-mul x h)) ;=> 1721.0
-(hamming-dist c (xor-mul x h)) ;=> 1736.0</p>
-
-<p>(cosine-sim a (xor-mul x h)) ;=> 0.3195059768353112 ;; closest to &ldquo;red-plaid&rdquo;
-(cosine-sim b (xor-mul x h)) ;=> 0.1989075567830733
-(cosine-sim c (xor-mul x h)) ;=> 0.18705233578983288
-```</p>
-
-<h3>Conclusion</h3>
-
-<p>We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva&rsquo;s paper on your own and to find comfort in that when you can&rsquo;t find one of your socks, it&rsquo;s not your fault. It most likely has something to do with the curious nature of hyperspace.</p>
-
-<p><em>Thanks to <a href="https://twitter.com/ross_gayler">Ross Gayler</a> for bringing the paper to my attention and to <a href="https://twitter.com/solussd">Joe Smith</a> for the great conversations on SDM</em></p>
 ]]></content>
   </entry>
   

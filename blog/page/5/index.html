@@ -6,7 +6,8 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Jul 22nd, 2013 Tags: community Why do you devote time and participate in the community? 1) Why do you devote time and participate in &hellip;">
+	<meta name="description" content="Published on: Sep 5th, 2013 Tags: AR Drones, All, Clojure, Development How to Control Multiple Drones with Clojure The clj-drone library now
+has &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -78,6 +79,270 @@
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs/">
+		
+			Controlling Multiple Drones With Clojure and Goals and Beliefs</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-05T15:35:00-04:00" pubdate data-updated="true">Sep 5<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/ar-drones/'>AR Drones</a>, <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/development/'>Development</a>
+
+
+</div>
+    </div>
+		<h2>How to Control Multiple Drones with Clojure</h2>
+
+<p>The <a href="https://github.com/gigasquid/clj-drone">clj-drone</a> library now
+has multi-drone support!  You can now send multiple drones commands,
+receive their navigation data, and even have them perform their
+actions autonomously with goals and beliefs.</p>
+
+<p>It takes a bit of extra setup to control more than one drone. We need to assign them each an
+ip and get them talking as an adhoc network.
+<a href="https://twitter.com/jimweirich">Jim Weirich</a> creating a neat little
+script to run on the drone to do just this.  Here are the
+instructions:</p>
+
+<h3>Change first drone to adhoc network</h3>
+
+<p>Connect your computer to the first drone&rsquo;s network.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">telnet</span> <span class="mf">192.68</span><span class="nv">.1.1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>Create the following file as adhoc.sh.  This shell script will
+temporarily change the network to an adhoc network named
+&ldquo;multidrone_ah&rdquo; and assign it a static ip of 192.168.1.100.
+The next time you reboot your drone, things will be back to normal.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; This script should be run on the drone.</span>
+</span><span class='line'><span class="c1">; Change the IP address to be difference</span>
+</span><span class='line'><span class="c1">; for each drone on the same ad-hoc network</span>
+</span><span class='line'><span class="c1">;</span>
+</span><span class='line'><span class="nv">killall</span> <span class="nv">udhcpd</span>
+</span><span class='line'><span class="nv">ifconfig</span> <span class="nv">ath0</span> <span class="nv">down</span>
+</span><span class='line'><span class="nv">iwconfig</span> <span class="nv">ath0</span> <span class="nv">mode</span> <span class="nv">ad-hoc</span> <span class="nv">essid</span> <span class="nv">multidrone_ah</span> <span class="nv">channel</span> <span class="nv">auto</span> <span class="nv">commit</span>
+</span><span class='line'><span class="nv">ifconfig</span> <span class="nv">ath0</span> <span class="mf">192.168</span><span class="nv">.1.100</span> <span class="nv">netmask</span> <span class="mf">255.255</span><span class="nv">.255.0</span> <span class="nv">up</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>Run the script.</p>
+
+<h3>Change the second drone to the adhoc network</h3>
+
+<p>Connect your computer to the second drone&rsquo;s network.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">telnet</span> <span class="mf">192.68</span><span class="nv">.1.1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; This script should be run on the drone.</span>
+</span><span class='line'><span class="c1">; Change the IP address to be difference</span>
+</span><span class='line'><span class="c1">; for each drone on the same ad-hoc network</span>
+</span><span class='line'><span class="c1">;</span>
+</span><span class='line'><span class="nv">killall</span> <span class="nv">udhcpd</span>
+</span><span class='line'><span class="nv">ifconfig</span> <span class="nv">ath0</span> <span class="nv">down</span>
+</span><span class='line'><span class="nv">iwconfig</span> <span class="nv">ath0</span> <span class="nv">mode</span> <span class="nv">ad-hoc</span> <span class="nv">essid</span> <span class="nv">multidrone_ah</span> <span class="nv">channel</span> <span class="nv">auto</span> <span class="nv">commit</span>
+</span><span class='line'><span class="nv">ifconfig</span> <span class="nv">ath0</span> <span class="mf">192.168</span><span class="nv">.1.200</span> <span class="nv">netmask</span> <span class="mf">255.255</span><span class="nv">.255.0</span> <span class="nv">up</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>Run the script.</p>
+
+<h3>On your laptop</h3>
+
+<ul>
+<li>Connect to the adhoc network that the drones are on &ldquo;multidrone_ah&rdquo;</li>
+<li>Change your computer to a static ip on the network (from network
+preferences on mac) something like 192.168.1.101</li>
+</ul>
+
+
+<p>Now you are ready to run the program.  Here is a small example of
+sending simple commands:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">drone-initialize</span> <span class="ss">:drone1</span> <span class="s">&quot;192.168.1.100&quot;</span> <span class="nv">default-at-port</span> <span class="nv">default-navdata-port</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:take-off</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:land</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">drone-initialize</span> <span class="ss">:drone2</span> <span class="s">&quot;192.168.1.200&quot;</span> <span class="nv">default-at-port</span> <span class="nv">default-navdata-port</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone2</span> <span class="ss">:take-off</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone2</span> <span class="ss">:land</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<h2>Bring on Multiple Drones interacting with Goals and Beliefs</h2>
+
+<p>The clj-drone library implements goals and beliefs from <a href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">John
+McCarthy&rsquo;s work</a>.
+The way this works is that the navigation data being constantly sent
+to our computer for processing.  Everytime we get a navigation packet
+that ends up looking something like this, (but with lots more data):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">{</span><span class="ss">:altitude</span> <span class="mf">0.0</span>, <span class="ss">:yaw</span> <span class="mf">-0.215</span>, <span class="ss">:pitch</span> <span class="mf">-1.075</span>, <span class="ss">:roll</span> <span class="mf">-2.904</span>, <span class="ss">:control-state</span> <span class="ss">:landed</span>, <span class="ss">:communication</span> <span class="ss">:ok</span>, <span class="ss">:com-watchdog</span> <span class="ss">:ok</span>, <span class="ss">:seq-num</span> <span class="mi">870</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>We then define a belief-action using this data.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def-belief-action</span> <span class="nv">ba-landed1</span>
+</span><span class='line'>  <span class="s">&quot;I (Drone1) am landed&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">control-state</span><span class="p">]}]</span> <span class="p">(</span><span class="nb">= </span><span class="nv">control-state</span> <span class="ss">:landed</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">navdata</span><span class="p">]</span> <span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:take-off</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>The def-belief-action macro takes:</p>
+
+<ul>
+<li>Name of the belief action</li>
+<li>A readable sentence that expresses the belief.  (This is later
+logged, so that we know what the drone believes at all times.)</li>
+<li>A predicate that takes in the navigation data as a parameter.  When
+it evaluates to true, then the belief is said to be &ldquo;held&rdquo;.</li>
+<li>A function to execute when the belief is held</li>
+</ul>
+
+
+<p>The beliefs are then combined to form goals.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def-goal</span> <span class="nv">g-take-off1</span>
+</span><span class='line'>  <span class="s">&quot;I (Drone1) want to fly.&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">control-state</span><span class="p">]}]</span> <span class="p">(</span><span class="nb">= </span><span class="nv">control-state</span> <span class="ss">:hovering</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">ba-landed1</span> <span class="nv">ba-taking-off1</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>The def-goal macro takes:</p>
+
+<ul>
+<li>The name of the goal</li>
+<li>A readable sentence that expresses the goal. (This is later logged,
+so that we can know when it achieves a goal.)</li>
+<li>A predicate that takes in the navigation data as a parameter.  When
+it evaluates to true, the goal is said to be achieved.  It will no
+longer evaluate or hold any of the belief actions associated with
+that goal.</li>
+</ul>
+
+
+<p>Finally, we can set a list of goals for a drone to achieve:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">set-current-goal-list</span> <span class="nv">drones</span> <span class="ss">:drone1</span>
+</span><span class='line'> <span class="p">[</span><span class="nv">g-take-off1</span> <span class="nv">g-find-other-drone-and-wave1</span> <span class="nv">g-land1</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sets the goal list for a drone.  It will take-off, look around
+for the other drone and wave, (do a dance), once it sees it.  Finally,
+after both drones have spotted each other and waved, they will both
+land.</p>
+
+<h2>Video or It Didn&rsquo;t Happen</h2>
+
+<p>Here is a video of both drones.  They will take off, look around for
+each other and wave when they spot each other.  They will land when
+the have both waved.  They are operating solely on goals and beliefs
+with their navigation data.</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('J65rvPdJQ0c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/J65rvPdJQ0c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/J65rvPdJQ0c/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=J65rvPdJQ0c" id="J65rvPdJQ0c" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+
+<p>The code running the video above can be found in the examples of the
+<a href="https://github.com/gigasquid/clj-drone/tree/master/examples">clj-drone</a>.</p>
+
+<p>Happy Hacking!</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2013/07/22/5-whys-of-community/">
 		
 			My 5 Whys of Community</a>
@@ -96,7 +361,7 @@
   
 
 
-<time datetime="2013-07-22T19:44:00+02:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2013</time></div>
+<time datetime="2013-07-22T19:44:00-04:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
@@ -164,7 +429,7 @@ In response to <a href="http://words.cdmwebs.com/let-s-start-with-why">Let&rsquo
   
 
 
-<time datetime="2013-07-15T15:42:00+02:00" pubdate data-updated="true">Jul 15<span>th</span>, 2013</time></div>
+<time datetime="2013-07-15T15:42:00-04:00" pubdate data-updated="true">Jul 15<span>th</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
@@ -266,7 +531,7 @@ battery out and packed it in my checked luggage.</p>
   
 
 
-<time datetime="2013-06-04T20:57:52+02:00" pubdate data-updated="true">Jun 4<span>th</span>, 2013</time></div>
+<time datetime="2013-06-04T14:57:52-04:00" pubdate data-updated="true">Jun 4<span>th</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
@@ -541,7 +806,7 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2013/05/02/growing-a-language-with-clojure-and-instaparse/">
+		<a href="/blog/2013/05/01/growing-a-language-with-clojure-and-instaparse/">
 		
 			Growing a Language With Clojure and Instaparse</a>
 	</h2>
@@ -559,7 +824,7 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
   
 
 
-<time datetime="2013-05-02T04:08:18+02:00" pubdate data-updated="true">May 2<span>nd</span>, 2013</time></div>
+<time datetime="2013-05-01T22:08:18-04:00" pubdate data-updated="true">May 1<span>st</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
@@ -833,7 +1098,7 @@ It truly is a beautiful library. If you need any more inspiration to start creat
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2013/05/02/growing-a-language-with-clojure-and-instaparse//blog/page/5/index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2013/05/01/growing-a-language-with-clojure-and-instaparse//blog/page/5/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -842,7 +1107,7 @@ It truly is a beautiful library. If you need any more inspiration to start creat
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2013/03/14/why-open-a-coworking-space/">
+		<a href="/blog/2013/03/13/why-open-a-coworking-space/">
 		
 			Why Open a Coworking Space?</a>
 	</h2>
@@ -860,7 +1125,7 @@ It truly is a beautiful library. If you need any more inspiration to start creat
   
 
 
-<time datetime="2013-03-14T03:32:31+01:00" pubdate data-updated="true">Mar 14<span>th</span>, 2013</time></div>
+<time datetime="2013-03-13T22:32:31-04:00" pubdate data-updated="true">Mar 13<span>th</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
@@ -913,7 +1178,7 @@ It truly is a beautiful library. If you need any more inspiration to start creat
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2013/03/14/why-open-a-coworking-space//blog/page/5/index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2013/03/13/why-open-a-coworking-space//blog/page/5/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -922,7 +1187,7 @@ It truly is a beautiful library. If you need any more inspiration to start creat
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2013/02/05/the-joy-of-flying-ar-drones-with-clojure/">
+		<a href="/blog/2013/02/04/the-joy-of-flying-ar-drones-with-clojure/">
 		
 			The Joy of Flying AR Drones With Clojure</a>
 	</h2>
@@ -940,7 +1205,7 @@ It truly is a beautiful library. If you need any more inspiration to start creat
   
 
 
-<time datetime="2013-02-05T04:45:19+01:00" pubdate data-updated="true">Feb 5<span>th</span>, 2013</time></div>
+<time datetime="2013-02-04T22:45:19-05:00" pubdate data-updated="true">Feb 4<span>th</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
@@ -1099,7 +1364,7 @@ Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/bl
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2013/02/05/the-joy-of-flying-ar-drones-with-clojure//blog/page/5/index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2013/02/04/the-joy-of-flying-ar-drones-with-clojure//blog/page/5/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -1108,7 +1373,7 @@ Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/bl
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2013/01/02/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000/">
+		<a href="/blog/2013/01/01/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000/">
 		
 			7 McCarthy Papers in 7ish Weeks #7 - Elephant 2000</a>
 	</h2>
@@ -1126,7 +1391,7 @@ Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/bl
   
 
 
-<time datetime="2013-01-02T01:30:32+01:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2013</time></div>
+<time datetime="2013-01-01T19:30:32-05:00" pubdate data-updated="true">Jan 1<span>st</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
@@ -1145,7 +1410,7 @@ Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/bl
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2013/01/02/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000//blog/page/5/index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2013/01/01/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000//blog/page/5/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -1172,7 +1437,7 @@ Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/bl
   
 
 
-<time datetime="2012-12-26T22:58:43+01:00" pubdate data-updated="true">Dec 26<span>th</span>, 2012</time></div>
+<time datetime="2012-12-26T16:58:43-05:00" pubdate data-updated="true">Dec 26<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -1244,7 +1509,7 @@ Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/bl
   
 
 
-<time datetime="2012-11-25T15:08:53+01:00" pubdate data-updated="true">Nov 25<span>th</span>, 2012</time></div>
+<time datetime="2012-11-25T09:08:53-05:00" pubdate data-updated="true">Nov 25<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -1318,76 +1583,6 @@ Code for the program is here: <a href="https://github.com/gigasquid/clj-drone/bl
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5//blog/page/5/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4/">
-		
-			7 McCarthy Papers in 7ish Weeks - #4</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-06T14:32:04+01:00" pubdate data-updated="true">Nov 6<span>th</span>, 2012</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/john-mccarthy-papers/'>John McCarthy Papers</a>
-
-
-</div>
-    </div>
-		<p>Reading <a href="http://www-formal.stanford.edu/jmc/ailogic/ailogic.html">Artificial Intelligence, Logic, and Formalizing Common Sense</a>, led me surprisingly to reflect on, not only logic and philosophy, but also the history and present state of AI.</p>
-
-<p>Fist let&rsquo;s look at the kind of AI that McCarthy is describing in paper. He talks of a program that can use common sense knowledge about the world around it and have this knowledge structured well enough that it can be reasoned about mathematically. In fact, he describes four levels of logic:</p>
-
-<ol>
-<li><p> The computer program has its &ldquo;beliefs&rdquo; completely defined by its internal state.  If you are confused by the term &ldquo;beliefs&rdquo;, it refers to <a href="http://gigasquidsoftware.com/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">ascribing mental qualities to machines</a>.  In his famous example, a thermostat has three beliefs: the room is too hot, the room is too cold, and the room is just right.</p></li>
-<li><p> The programs express their beliefs in sentences in machine memory.  However, they do not use ordinary logic.  They use other methods like rules and procedures.</p></li>
-<li><p> In addition to expresses their beliefs in sentences, they also use first order logic and logical deduction to reach their conclusions.</p></li>
-<li><p> The fourth level is still a goal today.  It is to have the program represent general facts about the world as logical sentences.  Furthermore, to have a database of these commonsense facts that programs can share.</p></li>
-</ol>
-
-
-<p>Let&rsquo;s step back now for a moment, to a excerpt from the very beginning of the paper:</p>
-
-<blockquote><p>One path to human-level AI uses mathematical logic to formalize common-sense knowledge in such a way that common-sense problems can be solved by logical reasoning. This methodology requires understanding the common-sense world well enough to formalize facts about it and ways of achieving goals in it. Basing AI on understanding the common-sense world is different from basing it on understanding human psychology or neurophysiology.</p></blockquote>
-
-<p>This approach to AI is just one approach. It is commonly referred to as a &ldquo;top down&rdquo; approach.  In the early years of AI it was the dominant way of thinking about things. Looking back at the history of AI, the <a href="http://en.wikipedia.org/wiki/History_of_artificial_intelligence#The_golden_years_1956.E2.88.921974">golden years</a> were full of optimism, (and funding), that this was the path to achieving fully intelligent machines.  Disenchantment with unfulfilled promises, led to the first <a href="http://en.wikipedia.org/wiki/AI_winter">AI winter</a>.  There was a rise of expert systems later on that limited their scope to small domains and avoided the common sense problem, but eventually ended in a second AI winter and ushered in our current world.  This basic approach is an opposite ground-up view of AI.  It uses neural networks and statistics from a physical inspiration.  Some of this inspiration is from human neurophysiology, some of it is from insect and animal world, but simplicity behavior of a &ldquo;body&rdquo; is emphasized.  With the advances in hardware and computing power today, the innovations and accomplishments have been breath taking.</p>
-
-<p>A good example of the two approaches can be seen in my Roomba.  A top down approach, would require my Roomba to have a complete room model in its program.  It would have to understand what my couch was, where the doors where and have logically reasoning to direct it to which areas to clean and when to stop cleaning and recharge itself.  The creators of the Roomba were from the opposite camp of thinking.  They took the simpler behavior approach of having the Roomba just take a random walk in the room and turn around when it ran into an obstacle.  It took a bit longer to get the room clean in such a random fashion, but not having to deal with the overhead of a mental model was well worth the trade off.</p>
-
-<p>Noam Chomsky recently argued that the<a href="http://www.theatlantic.com/technology/archive/2012/11/noam-chomsky-on-where-artificial-intelligence-went-wrong/261637/"> pendulum has swung too far in favor of this simplified behaviorist approach</a>. Even in the light of <a href="http://norvig.com/chomsky.html">Norvig&rsquo;s response</a>, I think Chomsky has a point.  We would do well to search for gems of true intelligent systems in the historical landscape of the AI Winter.  Some of the breakthroughs of current sheer computing power and new modeling techniques, might yield great fruits.</p>
-
-<p>One of the comments by nagelonce, on the Chomsky article,  puts this very well:</p>
-
-<blockquote><p>AI has a hole in the middle. There&rsquo;s top-down AI, which focuses on abstractions and reductionism. There&rsquo;s bottom-up AI, which focuses on reactive systems and the front end of visual processing. They have yet to meet in the middle. They are, however, much closer to doing so than they were twenty years ago.</p></blockquote>
-
-<p>If you are interested in checking out a top-down open source AI project, take a look at <a href="http://www.opencyc.org/doc">OpenCyc</a>.  After a brief look at it the other night, it suffers from the lack of love and documentation.  But, I can also see the promise of McCarthy&rsquo;s common sense knowledge and logic system, covered in a thin layer of snow.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4//blog/page/5/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

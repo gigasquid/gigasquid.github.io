@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-26T15:39:29+02:00</updated>
+  <updated>2016-12-27T12:11:36-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Semantic Web and JRuby]]></title>
-    <link href="http://gigasquid.github.io/blog/2011/08/08/semantic-web-and-jruby/"/>
-    <updated>2011-08-08T04:30:21+02:00</updated>
-    <id>http://gigasquid.github.io/blog/2011/08/08/semantic-web-and-jruby</id>
+    <link href="http://gigasquid.github.io/blog/2011/08/07/semantic-web-and-jruby/"/>
+    <updated>2011-08-07T22:30:21-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2011/08/07/semantic-web-and-jruby</id>
     <content type="html"><![CDATA[<p>I got the chance to share my enthusiasm for two of my favorite technologies at JRubyConf by giving a presentation on Semantic Web and JRuby. It was an excellent experience. I was able to connect with other people that shared my interest in the Semantic Web and some that have even worked with the technologies professionally. Most exciting, I had the opportunity to share my knowledge and hopefully inspire others to look farther into using JRuby with the Jena Semantic Web Framework.</p>
 
 <p>Here are some resources from the presentation that I wanted to share with everyone:</p>
@@ -33,9 +33,9 @@
   
   <entry>
     <title type="html"><![CDATA[Yellow Belt Katas for Ruby and Clojure]]></title>
-    <link href="http://gigasquid.github.io/blog/2011/04/16/yellow-belt-katas-for-ruby-and-clojure/"/>
-    <updated>2011-04-16T05:11:29+02:00</updated>
-    <id>http://gigasquid.github.io/blog/2011/04/16/yellow-belt-katas-for-ruby-and-clojure</id>
+    <link href="http://gigasquid.github.io/blog/2011/04/15/yellow-belt-katas-for-ruby-and-clojure/"/>
+    <updated>2011-04-15T23:11:29-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2011/04/15/yellow-belt-katas-for-ruby-and-clojure</id>
     <content type="html"><![CDATA[<p>I have put a couple projects out on GitHub to help people get started with Clojure and Ruby.
 The Katas are taken more or less from the Coding Kata site <a href="http://codingkata.org/katas/">http://codingkata.org/katas/</a>. The projects both include the basic project setup for you to get started with TDD beginner katas.</p>
 
@@ -50,9 +50,9 @@ The Katas are taken more or less from the Coding Kata site <a href="http://codin
   
   <entry>
     <title type="html"><![CDATA[On Thinking in Ruby and Clojure]]></title>
-    <link href="http://gigasquid.github.io/blog/2011/04/08/on-thinking-in-ruby-and-clojure/"/>
-    <updated>2011-04-08T04:02:09+02:00</updated>
-    <id>http://gigasquid.github.io/blog/2011/04/08/on-thinking-in-ruby-and-clojure</id>
+    <link href="http://gigasquid.github.io/blog/2011/04/07/on-thinking-in-ruby-and-clojure/"/>
+    <updated>2011-04-07T22:02:09-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2011/04/07/on-thinking-in-ruby-and-clojure</id>
     <content type="html"><![CDATA[<p>Recently, I decided to work on a set of code Katas.  I couldn&rsquo;t decide whether to do them in Ruby or Clojure, so I decided to do them in both.  I did the Kata in Ruby first and then immediately followed up with the same one in Clojure.  It was an interesting exercise, not only for the learning of the languages, but to highlight how I thought about the problems differently depending on the language.</p>
 
 <p>Ruby is a fantastic language.  It would delight and sometimes surprise me with how elegant and natural it was to solve problems.  When I approached the Kata, I found myself thinking, “How can I make this more readable?”.   Ruby never failed to please.</p>
@@ -67,9 +67,9 @@ The Katas are taken more or less from the Coding Kata site <a href="http://codin
   
   <entry>
     <title type="html"><![CDATA[Zen and Zombies - Adventures in Ruby]]></title>
-    <link href="http://gigasquid.github.io/blog/2010/11/20/zen-and-zombies/"/>
-    <updated>2010-11-20T05:06:07+01:00</updated>
-    <id>http://gigasquid.github.io/blog/2010/11/20/zen-and-zombies</id>
+    <link href="http://gigasquid.github.io/blog/2010/11/19/zen-and-zombies/"/>
+    <updated>2010-11-19T23:06:07-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2010/11/19/zen-and-zombies</id>
     <content type="html"><![CDATA[<p>What do Zen and Zombies have in common?  You probably got the beginning with the letter “Z”, but did you also guess Ruby?  This blog post is to share two awesome and fun filled ways to learn Ruby and Ruby and Rails.</p>
 
 <p>First, let&rsquo;s start with the Zen.  <a href="http://edgecase.com/">Edgecase </a>created a great way of learning Ruby.  It is through <a href="http://rubykoans.com/">Ruby Koans </a>.   Koans are a way of teaching Zen through questions.  The master asks the student a question.  The student then meditates on it until they come to the answer , eventually leading to enlightenment.  The Ruby Koans are cleverly designed to teach bite size tidbits of the Ruby language through the completion of unfinished test cases.  Each test case is a Koan.  Every time you fix the test case by filling in the blanks, you are gaining a deeper understanding of the language.  The main path_to_enlightment.rb file leads you through test cases that explore many areas of the languages such as Strings, Classes, Methods, and Exceptions.  Enlightenment has never been so much fun.</p>
@@ -89,7 +89,7 @@ The Katas are taken more or less from the Coding Kata site <a href="http://codin
   <entry>
     <title type="html"><![CDATA[Openssl fix for Rails 3.0 on Ubuntu]]></title>
     <link href="http://gigasquid.github.io/blog/2010/09/12/openssl-fix-for-rails-3-0-on-ubuntu/"/>
-    <updated>2010-09-12T16:11:14+02:00</updated>
+    <updated>2010-09-12T10:11:14-04:00</updated>
     <id>http://gigasquid.github.io/blog/2010/09/12/openssl-fix-for-rails-3-0-on-ubuntu</id>
     <content type="html"><![CDATA[<p>If you are trying to run ruby rvm and rails 3.0 on Ubuntu you might run into this problem when you start up you server.</p>
 

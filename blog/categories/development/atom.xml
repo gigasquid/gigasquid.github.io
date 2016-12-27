@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Development | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-26T15:39:29+02:00</updated>
+  <updated>2016-12-27T12:11:36-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Embrace and Reach]]></title>
     <link href="http://gigasquid.github.io/blog/2013/11/02/embrace-and-reach/"/>
-    <updated>2013-11-02T14:51:00+01:00</updated>
+    <updated>2013-11-02T14:51:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2013/11/02/embrace-and-reach</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm1.staticflickr.com/99/290760357_01392a3f51_n.jpg">http://farm1.staticflickr.com/99/290760357_01392a3f51_n.jpg</a>"></p>
 
@@ -92,7 +92,7 @@ reaching for something better.</p>
   <entry>
     <title type="html"><![CDATA[Controlling Multiple Drones with Clojure and Goals and Beliefs]]></title>
     <link href="http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs/"/>
-    <updated>2013-09-05T15:35:00+02:00</updated>
+    <updated>2013-09-05T15:35:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs</id>
     <content type="html"><![CDATA[<h2>How to Control Multiple Drones with Clojure</h2>
 
@@ -271,7 +271,7 @@ with their navigation data.</p>
   <entry>
     <title type="html"><![CDATA[Babar - A Little Language with Speech Acts for Machines]]></title>
     <link href="http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/"/>
-    <updated>2013-06-04T20:57:52+02:00</updated>
+    <updated>2013-06-04T14:57:52-04:00</updated>
     <id>http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg">http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg</a>"></p>
 
@@ -495,7 +495,7 @@ request *end-navstream when #done fn [] (end-navstream).
   <entry>
     <title type="html"><![CDATA[7 John McCarthy Papers in 7 weeks – #1 How My Thermostat has Beliefs and Goals]]></title>
     <link href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/"/>
-    <updated>2012-09-20T15:03:36+02:00</updated>
+    <updated>2012-09-20T09:03:36-04:00</updated>
     <id>http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg">http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg</a>"></p>
 
@@ -635,9 +635,9 @@ It is in fact, turtles all the way down :)</p>
   
   <entry>
     <title type="html"><![CDATA[7 John McCarthy Papers in 7 weeks - Prologue]]></title>
-    <link href="http://gigasquid.github.io/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue/"/>
-    <updated>2012-09-19T03:50:08+02:00</updated>
-    <id>http://gigasquid.github.io/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue</id>
+    <link href="http://gigasquid.github.io/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue/"/>
+    <updated>2012-09-18T21:50:08-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue</id>
     <content type="html"><![CDATA[<p>In the spirit of <a href="http://pragprog.com/book/btlang/seven-languages-in-seven-weeks">Seven Languages in Seven Weeks</a>, I have decided to embark on a quest. But instead of focusing on expanding my mindset with different programming languages, I am focusing on trying to get into the mindset of <a href="http://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist">John McCarthy</a>), father of LISP and AI, by reading and thinking about seven of his <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/">papers</a>.</p>
 
 <h3>Why?</h3>

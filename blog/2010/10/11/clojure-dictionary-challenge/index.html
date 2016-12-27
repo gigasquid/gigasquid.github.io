@@ -1,0 +1,222 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Clojure Dictionary Challenge - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file. Of course, &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/books/index.html">Books</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Clojure Dictionary Challenge</h2>
+	<div class="entry-content"><p>There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file.  Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution.  Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.</p>
+
+<p>Armed with Stuart Halloway&rsquo;s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission.</p>
+
+<p>Starting small – I decided to tackle the issue of finding consecutive consonants in a word.  I found that re-seq handles regex very nicely</p>
+
+<pre><code>user=&gt;  (re-seq #"[^aeiou]{2,}" "batty") 
+("tty")
+</code></pre>
+
+<p>Building on … let&rsquo;s find the number of letters in this word.  Since we have a sequence – we need to get the first element off of it, convert it to a string and find the length of it</p>
+
+<pre><code>user=&gt;  (.length (str (first (re-seq #"[^aeiou]{2,}" "batty"))))
+3
+</code></pre>
+
+<p>Not bad – but let&rsquo;s turn this into a function now</p>
+
+<pre><code>user=&gt; (defn count-cons [s]
+   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+ )
+#'user/count-cons
+</code></pre>
+
+<p>Now we can call the function directly</p>
+
+<pre><code>user=&gt; (count-cons "batty")
+3
+</code></pre>
+
+<p>Alright – we are making progress.  Next step, we need to be able to compare two words and see which has the bigger consonant count and return that.  For this, we will need a little “if” magic.</p>
+
+<pre><code>user=&gt; (defn compare-words [s1,s2]
+(if (&gt; (count-cons s1) (count-cons s2))
+  s1 s2))
+#'user/compare-words
+</code></pre>
+
+<p>Let&rsquo;s test it out</p>
+
+<pre><code>#'user/compare-words
+user=&gt; (compare-words "batty" "bat")
+"batty"
+user=&gt; (compare-words "bat" "batty")
+"batty"
+</code></pre>
+
+<p>Oh, yes, we are getting to the good part now.  Since we have a function that we can call on two arguments and give us one back that we can work with – we are ready to pull out the big guns …. reduce!</p>
+
+<pre><code>user=&gt; (reduce compare-words ["vat", "batty", "cars"])
+"batty"
+</code></pre>
+
+<p>Yeah!  Next we just need to feed it a file.  For this, after doing some research, I used the duck-streams library – you need to load it in using</p>
+
+<pre><code>user=&gt; (use '[clojure.contrib.duck-streams :only (spit read-lines)])
+
+nil
+</code></pre>
+
+<p>We open the file and read the lines and feed it to our function</p>
+
+<pre><code>user=&gt; (reduce compare-words (read-lines "/usr/share/dict/words"))
+
+"Ångström"
+</code></pre>
+
+<p>Yes, my regex needs some tweaking &ndash; but for this exercise, I am content.</p>
+
+<p>When you just have the working code.  It is actually quite concise:</p>
+
+<pre><code>;Counting consecutive consonants
+
+(use '[clojure.contrib.duck-streams :only (spit read-lines)])
+
+(defn count-cons [s]
+   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+ )
+
+(defn compare-words [s1,s2]
+(if (&gt; (count-cons s1) (count-cons s2))
+  s1 s2))
+
+(reduce compare-words (read-lines "/usr/share/dict/words"))
+</code></pre>
+
+<p>All in all, a fun evening trying to think functionally.</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/10/11/clojure-dictionary-challenge/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2016
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: John McCarthy Papers | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/john-mccarthy-papers/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-26T15:39:29+02:00</updated>
+  <updated>2016-12-27T12:11:36-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Babar - A Little Language with Speech Acts for Machines]]></title>
     <link href="http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/"/>
-    <updated>2013-06-04T20:57:52+02:00</updated>
+    <updated>2013-06-04T14:57:52-04:00</updated>
     <id>http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg">http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg</a>"></p>
 
@@ -239,9 +239,9 @@ request *end-navstream when #done fn [] (end-navstream).
   
   <entry>
     <title type="html"><![CDATA[7 McCarthy Papers in 7ish weeks #7 - Elephant 2000]]></title>
-    <link href="http://gigasquid.github.io/blog/2013/01/02/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000/"/>
-    <updated>2013-01-02T01:30:32+01:00</updated>
-    <id>http://gigasquid.github.io/blog/2013/01/02/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000</id>
+    <link href="http://gigasquid.github.io/blog/2013/01/01/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000/"/>
+    <updated>2013-01-01T19:30:32-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/01/01/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000</id>
     <content type="html"><![CDATA[<p>Saving the best for last.  <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/elephant/elephant.html">Elephant 2000</a></p>
 
 <p>To be continued&hellip;.</p>
@@ -251,7 +251,7 @@ request *end-navstream when #done fn [] (end-navstream).
   <entry>
     <title type="html"><![CDATA[7 McCarthy Papers in 7ish Weeks #5 & #6 - SDFW Tic-Tac-Toe]]></title>
     <link href="http://gigasquid.github.io/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5/"/>
-    <updated>2012-11-25T15:08:53+01:00</updated>
+    <updated>2012-11-25T09:08:53-05:00</updated>
     <id>http://gigasquid.github.io/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png">http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png</a>"></p>
 
@@ -316,7 +316,7 @@ request *end-navstream when #done fn [] (end-navstream).
   <entry>
     <title type="html"><![CDATA[7 McCarthy Papers in 7ish Weeks - #4]]></title>
     <link href="http://gigasquid.github.io/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4/"/>
-    <updated>2012-11-06T14:32:04+01:00</updated>
+    <updated>2012-11-06T08:32:04-05:00</updated>
     <id>http://gigasquid.github.io/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4</id>
     <content type="html"><![CDATA[<p>Reading <a href="http://www-formal.stanford.edu/jmc/ailogic/ailogic.html">Artificial Intelligence, Logic, and Formalizing Common Sense</a>, led me surprisingly to reflect on, not only logic and philosophy, but also the history and present state of AI.</p>
 
@@ -350,9 +350,9 @@ request *end-navstream when #done fn [] (end-navstream).
   
   <entry>
     <title type="html"><![CDATA[7 John McCarthy Papers in 7 Weeks #3]]></title>
-    <link href="http://gigasquid.github.io/blog/2012/10/15/7-john-mccarthy-papers-in-7-weeks-3/"/>
-    <updated>2012-10-15T03:37:30+02:00</updated>
-    <id>http://gigasquid.github.io/blog/2012/10/15/7-john-mccarthy-papers-in-7-weeks-3</id>
+    <link href="http://gigasquid.github.io/blog/2012/10/14/7-john-mccarthy-papers-in-7-weeks-3/"/>
+    <updated>2012-10-14T21:37:30-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2012/10/14/7-john-mccarthy-papers-in-7-weeks-3</id>
     <content type="html"><![CDATA[<p><strong>In which I realize that John McCarthy is the father of the Semantic Web</strong></p>
 
 <p>I have realized that it generally takes me more than a week to read a paper, reflect on it, experiment, and finally blog about it. But, since I made up the rules of the project in the first place,  I am not going to dwell on the time frame and just move forward with the next paper.</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Robots | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/robots/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-26T15:39:29+02:00</updated>
+  <updated>2016-12-27T12:11:36-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[World Domination with Hexapods and Clojure]]></title>
     <link href="http://gigasquid.github.io/blog/2014/03/20/world-domination-with-hexapods-and-clojure/"/>
-    <updated>2014-03-20T21:00:00+01:00</updated>
+    <updated>2014-03-20T21:00:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2014/03/20/world-domination-with-hexapods-and-clojure</id>
     <content type="html"><![CDATA[<p>Once you have your <a href="http://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/">hexapod assembled and running using the hand held
 controller</a>,
@@ -192,7 +192,7 @@ CENTER))
   <entry>
     <title type="html"><![CDATA[Walking with Hexapods]]></title>
     <link href="http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/"/>
-    <updated>2014-03-19T21:06:00+01:00</updated>
+    <updated>2014-03-19T21:06:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg">http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg</a>"></p>
 

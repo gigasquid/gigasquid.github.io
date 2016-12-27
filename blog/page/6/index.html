@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Oct 15th, 2012 Tags: All, John McCarthy Papers In which I realize that John McCarthy is the father of the Semantic Web I have realized &hellip;">
+	<meta name="description" content="Published on: Nov 6th, 2012 Tags: All, John McCarthy Papers Reading Artificial Intelligence, Logic, and Formalizing Common Sense, led me &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -78,7 +78,77 @@
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2012/10/15/7-john-mccarthy-papers-in-7-weeks-3/">
+		<a href="/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4/">
+		
+			7 McCarthy Papers in 7ish Weeks - #4</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-06T08:32:04-05:00" pubdate data-updated="true">Nov 6<span>th</span>, 2012</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/john-mccarthy-papers/'>John McCarthy Papers</a>
+
+
+</div>
+    </div>
+		<p>Reading <a href="http://www-formal.stanford.edu/jmc/ailogic/ailogic.html">Artificial Intelligence, Logic, and Formalizing Common Sense</a>, led me surprisingly to reflect on, not only logic and philosophy, but also the history and present state of AI.</p>
+
+<p>Fist let&rsquo;s look at the kind of AI that McCarthy is describing in paper. He talks of a program that can use common sense knowledge about the world around it and have this knowledge structured well enough that it can be reasoned about mathematically. In fact, he describes four levels of logic:</p>
+
+<ol>
+<li><p> The computer program has its &ldquo;beliefs&rdquo; completely defined by its internal state.  If you are confused by the term &ldquo;beliefs&rdquo;, it refers to <a href="http://gigasquidsoftware.com/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">ascribing mental qualities to machines</a>.  In his famous example, a thermostat has three beliefs: the room is too hot, the room is too cold, and the room is just right.</p></li>
+<li><p> The programs express their beliefs in sentences in machine memory.  However, they do not use ordinary logic.  They use other methods like rules and procedures.</p></li>
+<li><p> In addition to expresses their beliefs in sentences, they also use first order logic and logical deduction to reach their conclusions.</p></li>
+<li><p> The fourth level is still a goal today.  It is to have the program represent general facts about the world as logical sentences.  Furthermore, to have a database of these commonsense facts that programs can share.</p></li>
+</ol>
+
+
+<p>Let&rsquo;s step back now for a moment, to a excerpt from the very beginning of the paper:</p>
+
+<blockquote><p>One path to human-level AI uses mathematical logic to formalize common-sense knowledge in such a way that common-sense problems can be solved by logical reasoning. This methodology requires understanding the common-sense world well enough to formalize facts about it and ways of achieving goals in it. Basing AI on understanding the common-sense world is different from basing it on understanding human psychology or neurophysiology.</p></blockquote>
+
+<p>This approach to AI is just one approach. It is commonly referred to as a &ldquo;top down&rdquo; approach.  In the early years of AI it was the dominant way of thinking about things. Looking back at the history of AI, the <a href="http://en.wikipedia.org/wiki/History_of_artificial_intelligence#The_golden_years_1956.E2.88.921974">golden years</a> were full of optimism, (and funding), that this was the path to achieving fully intelligent machines.  Disenchantment with unfulfilled promises, led to the first <a href="http://en.wikipedia.org/wiki/AI_winter">AI winter</a>.  There was a rise of expert systems later on that limited their scope to small domains and avoided the common sense problem, but eventually ended in a second AI winter and ushered in our current world.  This basic approach is an opposite ground-up view of AI.  It uses neural networks and statistics from a physical inspiration.  Some of this inspiration is from human neurophysiology, some of it is from insect and animal world, but simplicity behavior of a &ldquo;body&rdquo; is emphasized.  With the advances in hardware and computing power today, the innovations and accomplishments have been breath taking.</p>
+
+<p>A good example of the two approaches can be seen in my Roomba.  A top down approach, would require my Roomba to have a complete room model in its program.  It would have to understand what my couch was, where the doors where and have logically reasoning to direct it to which areas to clean and when to stop cleaning and recharge itself.  The creators of the Roomba were from the opposite camp of thinking.  They took the simpler behavior approach of having the Roomba just take a random walk in the room and turn around when it ran into an obstacle.  It took a bit longer to get the room clean in such a random fashion, but not having to deal with the overhead of a mental model was well worth the trade off.</p>
+
+<p>Noam Chomsky recently argued that the<a href="http://www.theatlantic.com/technology/archive/2012/11/noam-chomsky-on-where-artificial-intelligence-went-wrong/261637/"> pendulum has swung too far in favor of this simplified behaviorist approach</a>. Even in the light of <a href="http://norvig.com/chomsky.html">Norvig&rsquo;s response</a>, I think Chomsky has a point.  We would do well to search for gems of true intelligent systems in the historical landscape of the AI Winter.  Some of the breakthroughs of current sheer computing power and new modeling techniques, might yield great fruits.</p>
+
+<p>One of the comments by nagelonce, on the Chomsky article,  puts this very well:</p>
+
+<blockquote><p>AI has a hole in the middle. There&rsquo;s top-down AI, which focuses on abstractions and reductionism. There&rsquo;s bottom-up AI, which focuses on reactive systems and the front end of visual processing. They have yet to meet in the middle. They are, however, much closer to doing so than they were twenty years ago.</p></blockquote>
+
+<p>If you are interested in checking out a top-down open source AI project, take a look at <a href="http://www.opencyc.org/doc">OpenCyc</a>.  After a brief look at it the other night, it suffers from the lack of love and documentation.  But, I can also see the promise of McCarthy&rsquo;s common sense knowledge and logic system, covered in a thin layer of snow.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/10/14/7-john-mccarthy-papers-in-7-weeks-3/">
 		
 			7 John McCarthy Papers in 7 Weeks #3</a>
 	</h2>
@@ -96,7 +166,7 @@
   
 
 
-<time datetime="2012-10-15T03:37:30+02:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time></div>
+<time datetime="2012-10-14T21:37:30-04:00" pubdate data-updated="true">Oct 14<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -143,7 +213,7 @@
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2012/10/15/7-john-mccarthy-papers-in-7-weeks-3//blog/page/6/index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2012/10/14/7-john-mccarthy-papers-in-7-weeks-3//blog/page/6/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -170,7 +240,7 @@
   
 
 
-<time datetime="2012-09-29T18:00:36+02:00" pubdate data-updated="true">Sep 29<span>th</span>, 2012</time></div>
+<time datetime="2012-09-29T12:00:36-04:00" pubdate data-updated="true">Sep 29<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -270,7 +340,7 @@ or it may run indefinitely</p></li>
   
 
 
-<time datetime="2012-09-20T15:03:36+02:00" pubdate data-updated="true">Sep 20<span>th</span>, 2012</time></div>
+<time datetime="2012-09-20T09:03:36-04:00" pubdate data-updated="true">Sep 20<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -428,7 +498,7 @@ It is in fact, turtles all the way down :)</p>
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue/">
+		<a href="/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue/">
 		
 			7 John McCarthy Papers in 7 Weeks - Prologue</a>
 	</h2>
@@ -446,7 +516,7 @@ It is in fact, turtles all the way down :)</p>
   
 
 
-<time datetime="2012-09-19T03:50:08+02:00" pubdate data-updated="true">Sep 19<span>th</span>, 2012</time></div>
+<time datetime="2012-09-18T21:50:08-04:00" pubdate data-updated="true">Sep 18<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -487,7 +557,7 @@ It is in fact, turtles all the way down :)</p>
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue//blog/page/6/index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue//blog/page/6/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -514,7 +584,7 @@ It is in fact, turtles all the way down :)</p>
   
 
 
-<time datetime="2012-08-09T22:03:52+02:00" pubdate data-updated="true">Aug 9<span>th</span>, 2012</time></div>
+<time datetime="2012-08-09T16:03:52-04:00" pubdate data-updated="true">Aug 9<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -622,7 +692,7 @@ One of the things that I love about Clojure is that it can go anywhere that Java
   
 
 
-<time datetime="2012-08-02T20:29:37+02:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2012</time></div>
+<time datetime="2012-08-02T14:29:37-04:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -671,7 +741,7 @@ One of the things that I love about Clojure is that it can go anywhere that Java
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2012/07/08/baba-yaga-and-the-clojure-reducers/">
+		<a href="/blog/2012/07/07/baba-yaga-and-the-clojure-reducers/">
 		
 			Baba Yaga and the Clojure Reducers</a>
 	</h2>
@@ -689,7 +759,7 @@ One of the things that I love about Clojure is that it can go anywhere that Java
   
 
 
-<time datetime="2012-07-08T01:56:36+02:00" pubdate data-updated="true">Jul 8<span>th</span>, 2012</time></div>
+<time datetime="2012-07-07T19:56:36-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -810,7 +880,7 @@ More about <a href="http://en.wikipedia.org/wiki/Baba_Yaga">Baba Yaga Russian Fa
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2012/07/08/baba-yaga-and-the-clojure-reducers//blog/page/6/index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2012/07/07/baba-yaga-and-the-clojure-reducers//blog/page/6/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -837,7 +907,7 @@ More about <a href="http://en.wikipedia.org/wiki/Baba_Yaga">Baba Yaga Russian Fa
   
 
 
-<time datetime="2012-07-07T21:02:33+02:00" pubdate data-updated="true">Jul 7<span>th</span>, 2012</time></div>
+<time datetime="2012-07-07T15:02:33-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -895,7 +965,7 @@ I found out that there is already an alpha version of Clojure on Maven.  So you 
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2012/05/04/day-dream-dinner/">
+		<a href="/blog/2012/05/03/day-dream-dinner/">
 		
 			Day Dream Dinner</a>
 	</h2>
@@ -913,7 +983,7 @@ I found out that there is already an alpha version of Clojure on Maven.  So you 
   
 
 
-<time datetime="2012-05-04T04:06:43+02:00" pubdate data-updated="true">May 4<span>th</span>, 2012</time></div>
+<time datetime="2012-05-03T22:06:43-04:00" pubdate data-updated="true">May 3<span>rd</span>, 2012</time></div>
       <div class="tags">Tags: 
 
 
@@ -944,151 +1014,7 @@ I found out that there is already an alpha version of Clojure on Maven.  So you 
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2012/05/04/day-dream-dinner//blog/page/6/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/04/12/the-software-bathtub-curve/">
-		
-			The Software Bathtub Curve</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-12T06:02:09+02:00" pubdate data-updated="true">Apr 12<span>th</span>, 2012</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/development/'>Development</a>
-
-
-</div>
-    </div>
-		<p><img class="left" src="http://farm4.staticflickr.com/3767/9925846584_3bf93b2cca.jpg"></p>
-
-<p>I have had my Dualit Toaster for close to 19 years now. It has never broken down. It has reliably toasted my bread every morning with the mere turn of a dial.</p>
-
-<p>I have had my dishwasher for 1 year and 2 weeks. It has all sorts of cool buttons and modes so that I can customize my wash cycles to suit my dishes and my mood. Precisely two weeks after the warranty expired, it began to blink randomly and stopped working. The control board had died. This was not an isolated incident. I have gone through many such failures with other appliances, my refrigerator, stove and washing machine.</p>
-
-<p>Looking at my toaster and dishwasher, I made a couple of observations:</p>
-
-<ol>
-<li> <strong>The more complex the product, the less reliable it is, and the shorter the life span.</strong></li>
-</ol>
-
-
-<p>Sure, it would be cool if I could control my toaster with my mobile phone app, but just having a heating coil and a dial gives the advantage of having a lot less things that could go wrong.</p>
-
-<ol>
-<li> <strong>A product is only as reliable as its least reliable part.</strong></li>
-</ol>
-
-
-<p>You can pay a small fortune for a oven built of stainless steel with all the latest technological advances in color display and computerized air flow. But if it relies on the same computer circuit board that all the other ovens use, (the one gives out after a year), then your investment is not any more reliable.</p>
-
-<p>I also noted that these observations could be translated to software as well. Certainly, in the case of building software, the more complex the system the more things that can go wrong. The same could hold true that overall software system is only as reliable as the least reliable part of it.</p>
-
-<p>This brought me to the larger question.</p>
-
-<blockquote><p>How can they predict the dates so accurately? My dishwasher stopped working 2 weeks after the warranty ran out.</p></blockquote>
-
-<p>— Carin Meier (@carinmeier) <a href="https://twitter.com/carinmeier/status/190222737594269696">April 11, 2012</a></p>
-
-<p>How do the manufacturers know, with such accuracy, when the product is going to fail? Could you apply the same principles to software?</p>
-
-<blockquote><p>@<a href="https://twitter.com/carinmeier">carinmeier</a> believe it or not they spend millions calculating it. I spent way too many hours in 6-sigma training with bathtub curves.</p></blockquote>
-
-<p>— Jonathan Hays (@cheesemaker) <a href="https://twitter.com/cheesemaker/status/190225140863348736">April 11, 2012</a></p>
-
-<p><a href="http://en.wikipedia.org/wiki/Bathtub_curve">The Bathtub Curve</a>, according to wikipedia, is widely used in reliability engineering. It gets its name from the shape of the curve, which looks a bit like a bathtub. It is talked about in three sections:</p>
-
-<ol>
-<li><p> Decreasing failure rate (early failures)</p></li>
-<li><p> Constant failure rate (random failures)</p></li>
-<li><p> Increasing failure rate (wear-out failures)</p></li>
-</ol>
-
-
-<p>With software, we don&rsquo;t talk about failures so much. We do talk about bugs, but even that is a bit misleading because it doesn&rsquo;t take into account the need to accommodate features and evolving changes. So let&rsquo;s talk about “issues” instead that can be broad enough to accommodate traditional bugs, gaps of functional needs, and performance related items.</p>
-
-<p>The Software Bathtub Curve might look like the following:</p>
-
-<p><strong>Decreasing issue rate (launch &amp; growing pains)</strong></p>
-
-<p>This is the early stage of the software. After its initial launch, gaps in functionality, bugs, and performance issues are readily identified and corrected. The main factors of reliability here are communication, responsiveness and agility.</p>
-
-<p>Sample questions for determining data for this part of the curve:</p>
-
-<ol>
-<li><p> Do you use a dynamic language/ framework that allows rapid development? +10</p></li>
-<li><p> If the product owner and developers were in the same restaurant would they recognize each other? + 10</p></li>
-<li><p> Can the product owner and developers recognize each other by voice? +5</p></li>
-<li><p> Do you have a daily standup? + 5</p></li>
-<li><p> Do you really stand up the whole time? +2</p></li>
-<li><p> How many outside integration points are there? -5 for each</p></li>
-<li><p> How many programming languages and frameworks are there? -5 for each</p></li>
-<li><p> Do you release often? +5 for every 2 weeks (-1 for each week longer)</p></li>
-<li><p> Do you work over 40 hours a week regularly? -10</p></li>
-<li><p>. Do you have an automated test suite? + 10</p></li>
-<li><p>. Does it have regularly have untended errors in it? -5</p></li>
-<li><p>. Do you use pair programming or code reviews? +10</p></li>
-</ol>
-
-
-<p><strong>Constant failure rate (random failures)</strong></p>
-
-<p>****This is the time when the software reaches maturity. The business needs do not change drastically, but require minor refinements. Random issues occur from 3rd party integration issues or real world data issues. Major factors for reliability in this phase are avoidance of technical debt, data curation, and code quality.</p>
-
-<ol>
-<li><p> Has the team scaled down to just include a minimal or junior support staff? -10</p></li>
-<li><p> Do new features/ fixes get put in with the appropriate refactoring and tests? + 10</p></li>
-<li><p> Do new features/fixes more often just get stuck in there in the easiest way possible? -5</p></li>
-<li><p> Do your tests still all pass +10</p></li>
-<li><p> Do you get advance warning when a 3rd party api is changing? + 10</p></li>
-<li><p> Do you test that change in advance? + 5</p></li>
-<li><p> Do you still talk to the product owners? +5</p></li>
-<li><p> Do you care about code / data quality? + 10</p></li>
-</ol>
-
-
-<p><strong>Increasing failure rate (Failure to adapt to new business needs)</strong></p>
-
-<p>This is the final phase in the software life cycle. The new business needs cannot be met with the exsiting software and the cost of changing or adapting it is too high or not possible. Major factors for reliability and length of life span include openness and complexity of design and architecture.</p>
-
-<ol>
-<li><p> Do you have have to pay for a closed vendor product? -10</p></li>
-<li><p> Do you use open source languages and libraries? + 10</p></li>
-<li><p> Are you afraid to change anything because it might break? -10</p></li>
-<li><p> Is your main software language more than 1 version behind the latest? -5 for each version behind</p></li>
-<li><p> Does the mention of new features install fear instead of passion? -500</p></li>
-</ol>
-
-
-<p>In the end, although it is interesting to compare software to the appliance Bathtub Curve, it is a leaky abstraction at best (sorry, couldn&rsquo;t resist). Software is living thing. It needs to respond to its ever changing environment and needs. Furthermore, it is made up of a collection of living people who care and tend for it as well. However, there are clear factors that can go a long way to increasing the reliability, usability, and lifespan of software as well. We, as software developers, should keep them in mind as part of the ultimate goal of creating living, quality software.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2012/04/12/the-software-bathtub-curve//blog/page/6/index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2012/05/03/day-dream-dinner//blog/page/6/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

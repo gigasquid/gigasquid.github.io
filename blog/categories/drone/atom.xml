@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Drone | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/drone/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-26T15:39:29+02:00</updated>
+  <updated>2016-12-27T12:11:36-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Demoing with Drones: Tips and Warnings]]></title>
     <link href="http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/"/>
-    <updated>2013-07-15T15:42:00+02:00</updated>
+    <updated>2013-07-15T15:42:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings</id>
     <content type="html"><![CDATA[<p>Lately, I have had the pleasure of speaking and sharing my experience
 of programming <a href="http://ardrone2.parrot.com/">AR Drones</a> with Clojure.  However, doing live hardware

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Hitchhiker's Guide to Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/hitchhikers-guide-to-clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2016-10-26T15:39:29+02:00</updated>
+  <updated>2016-12-27T12:11:36-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Hitchhiker's Clojure has a New Home]]></title>
     <link href="http://gigasquid.github.io/blog/2014/02/16/hitchhikers-clojure-has-a-new-home/"/>
-    <updated>2014-02-16T14:57:00+01:00</updated>
+    <updated>2014-02-16T14:57:00-05:00</updated>
     <id>http://gigasquid.github.io/blog/2014/02/16/hitchhikers-clojure-has-a-new-home</id>
     <content type="html"><![CDATA[<p>The Hitchhiker&rsquo;s Guide to Clojure posts now have a new home to make it
 easier to read them in a chronological fashion.</p>
@@ -31,7 +31,7 @@ grammar fixes, or your great ideas.</p>
   <entry>
     <title type="html"><![CDATA[Hitchhiker's Guide to Clojure - Part 3]]></title>
     <link href="http://gigasquid.github.io/blog/2014/02/15/hitchhikers-guide-to-clojure-part-3/"/>
-    <updated>2014-02-15T13:48:00+01:00</updated>
+    <updated>2014-02-15T13:48:00-05:00</updated>
     <id>http://gigasquid.github.io/blog/2014/02/15/hitchhikers-guide-to-clojure-part-3</id>
     <content type="html"><![CDATA[<p>Amy and Frank fled down the stairs from her office and met an
 unexpected obstacle to their exit, a locked door.  As
@@ -240,7 +240,7 @@ around and sucked them down into the ground.</p>
   <entry>
     <title type="html"><![CDATA[Hitchhiker's Guide to Clojure - Part 2]]></title>
     <link href="http://gigasquid.github.io/blog/2014/02/08/hitchhikers-guide-to-clojure-part2/"/>
-    <updated>2014-02-08T21:20:00+01:00</updated>
+    <updated>2014-02-08T21:20:00-05:00</updated>
     <id>http://gigasquid.github.io/blog/2014/02/08/hitchhikers-guide-to-clojure-part2</id>
     <content type="html"><![CDATA[<p>Amy and Frank were hurtled quite rapidly through time and space after
 attaching themselves to a transaction headed through the
@@ -399,7 +399,7 @@ we need to see the otters.&rdquo;</p>
   <entry>
     <title type="html"><![CDATA[Hitchhiker's Guide to Clojure]]></title>
     <link href="http://gigasquid.github.io/blog/2014/02/01/hitchhikers-guide-to-clojure/"/>
-    <updated>2014-02-01T19:33:00+01:00</updated>
+    <updated>2014-02-01T19:33:00-05:00</updated>
     <id>http://gigasquid.github.io/blog/2014/02/01/hitchhikers-guide-to-clojure</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg">http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg</a>"></p>
 

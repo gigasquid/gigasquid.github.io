@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Jul 18th, 2016 Tags: All, Clojure Clojure.spec is a new library for Clojure that enables you to write specifications for your program &hellip;">
+	<meta name="description" content="Published on: Dec 27th, 2016 Tags: AI, All, Clojure, Machine Learning There is an awesome new Clojure-first machine learning library called Cortex &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -78,6 +78,356 @@
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2016/12/27/deep-learning-in-clojure-with-cortex/">
+		
+			Deep Learning in Clojure With Cortex</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-12-27T10:44:00-05:00" pubdate data-updated="true">Dec 27<span>th</span>, 2016</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/ai/'>AI</a>, <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/machine-learning/'>Machine Learning</a>
+
+
+</div>
+    </div>
+		<p>There is an awesome new <em>Clojure-first</em> machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> that was open sourced recently. I&rsquo;ve been exploring it lately and wanted to share my discoveries so far in this post. In our exploration, we are going to tackle one of the classic classification problems of the internet. How do you tell the difference between a cat and dog pic?</p>
+
+<h2>Where to Start?</h2>
+
+<p><img src="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg"></p>
+
+<p>For any machine learning problem, we&rsquo;re going to need data. For this, we can use Kaggle&rsquo;s data for the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Cats vs Dogs Challenge</a>.  The training data consists of 25,000 images of cats and dogs. That should be more than enough to train our computer to recognize cats from doggies.</p>
+
+<p>We also need some idea of how to train against the data. Luckily, the Cortex project has a very nice set of examples to help you get started. In particular there is a <a href="https://github.com/thinktopic/cortex/tree/master/examples/suite-classification">suite classification example</a> using MNIST, (hand written digit), corpus. This example contains a number cutting edge features that we&rsquo;ll want to use:</p>
+
+<ul>
+<li>Uses GPU for <em>fast</em> computation.</li>
+<li>Uses a deep, multi-layered, convolutional layered network for feature recognition.</li>
+<li>Has &ldquo;forever&rdquo; training by image augmentation.</li>
+<li>Saves the network configuration as it trains to an external nippy file so that it can be imported later.</li>
+<li>Has a really nice ClojureScript front end to visualize the training progress with a confusion matrix.</li>
+<li>Has a way to import the saved nippy network configuration and perform inference on it to classify a new image.</li>
+</ul>
+
+
+<p>Basically, it has everything we need to hit the ground running.</p>
+
+<h2>Data Wrangling</h2>
+
+<p>To use the example&rsquo;s <em>forever</em> training, we need to get the data in the right form. We need all the images to be the same size as well as in a directory structure that is split up into the training and test images. Furthermore, we want all the dog images to be under a &ldquo;dog&rdquo; directory and the cat images under the &ldquo;cat&rdquo; directory so that the all the indexed images under them have the correct &ldquo;label&rdquo;.  It will look like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- training
+</span><span class='line'>  - cat
+</span><span class='line'>    - 1.png
+</span><span class='line'>    - 2.png
+</span><span class='line'>  - dog
+</span><span class='line'>    - 1.png
+</span><span class='line'>    - 2.png</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For this task, we are going to use a couple image libraries to help us out:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">[</span><span class="nv">mikera.image.core</span> <span class="ss">:as</span> <span class="nv">imagez</span><span class="p">]</span>
+</span><span class='line'> <span class="p">[</span><span class="nv">think.image.image</span> <span class="ss">:as</span> <span class="nv">image</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can resize and rewrite the original images into the form we want. For a image size, we&rsquo;re going to go with 52x52. The choice is arbitrary in that I wanted it bigger than the MNIST dataset which is 28x28 so it will be easier to see, but not so big that it kills my CPU. This is even more important since we want to use RGB colors which is 3 channels as opposed to the MNIST grey scale of 1.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dataset-image-size</span> <span class="mi">52</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dataset-num-classes</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dataset-num-channels</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dataset-datatype</span> <span class="ss">:float</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">resize-and-write-data</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">output-dir</span> <span class="p">[</span><span class="nv">idx</span> <span class="p">[</span><span class="nv">file</span> <span class="nv">label</span><span class="p">]]]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">img-path</span> <span class="p">(</span><span class="nb">str </span><span class="nv">output-dir</span> <span class="s">&quot;/&quot;</span> <span class="nv">label</span> <span class="s">&quot;/&quot;</span> <span class="nv">idx</span> <span class="s">&quot;.png&quot;</span> <span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">when-not </span><span class="p">(</span><span class="nf">.exists</span> <span class="p">(</span><span class="nf">io/file</span> <span class="nv">img-path</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">io/make-parents</span> <span class="nv">img-path</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">imagez/load-image</span> <span class="nv">file</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nf">image/resize</span> <span class="nv">dataset-image-size</span> <span class="nv">dataset-image-size</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nf">imagez/save</span> <span class="nv">img-path</span><span class="p">)))</span>
+</span><span class='line'>    <span class="nv">nil</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As far as the split between training images and testing images, we are going the go for an simple even split between testing and training data.</p>
+
+<h2>Network Configuration</h2>
+
+<p>The Network layer configuration is the meat of the whole thing. We are going to go with the exact same network description as the MNIST example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">create-basic-network-description</span>
+</span><span class='line'>  <span class="p">[]</span>
+</span><span class='line'>  <span class="p">[(</span><span class="nf">desc/input</span> <span class="nv">dataset-image-size</span> <span class="nv">dataset-image-size</span> <span class="nv">dataset-num-channels</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/convolutional</span> <span class="mi">5</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">20</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/max-pooling</span> <span class="mi">2</span> <span class="mi">0</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/relu</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/convolutional</span> <span class="mi">5</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">50</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/max-pooling</span> <span class="mi">2</span> <span class="mi">0</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/relu</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/convolutional</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">50</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/relu</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/linear-&gt;relu</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/dropout</span> <span class="mf">0.5</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">desc/linear-&gt;softmax</span> <span class="nv">dataset-num-classes</span><span class="p">)])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It uses a series of convolutional layers with max pooling for feature recognition. We&rsquo;ll see if it works for color versions of cats and dogs as well as street numbers.</p>
+
+<p>We&rsquo;ll also keep the image augmentation the same as in the example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">max-image-rotation-degrees</span> <span class="mi">25</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">img-aug-pipeline</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">img</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">img</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">image-aug/rotate</span> <span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nb">rand-int </span><span class="p">(</span><span class="nb">* </span><span class="mi">2</span> <span class="nv">max-image-rotation-degrees</span><span class="p">))</span>
+</span><span class='line'>                           <span class="nv">max-image-rotation-degrees</span><span class="p">)</span>
+</span><span class='line'>                        <span class="nv">false</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">image-aug/inject-noise</span> <span class="p">(</span><span class="nb">* </span><span class="mf">0.25</span> <span class="p">(</span><span class="nf">rand</span><span class="p">)))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="o">^</span><span class="ss">:dynamic</span> <span class="nv">*num-augmented-images-per-file*</span> <span class="mi">1</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It injects one augmented image into our training data by slightly rotating it and adding noise.</p>
+
+<h3>Running it!</h3>
+
+<p>It&rsquo;s time to test it out. Using <code>lein run</code>, we&rsquo;ll launch the <code>train-forever</code> function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train-forever</span>
+</span><span class='line'>  <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">dataset</span> <span class="p">(</span><span class="nf">create-dataset</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">initial-description</span> <span class="p">(</span><span class="nf">create-basic-network-description</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">confusion-matrix-atom</span> <span class="p">(</span><span class="nf">display-dataset-and-model</span> <span class="nv">dataset</span> <span class="nv">initial-description</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">classification/train-forever</span> <span class="nv">dataset</span> <span class="nv">observation-&gt;image</span>
+</span><span class='line'>                                  <span class="nv">initial-description</span>
+</span><span class='line'>                                  <span class="ss">:confusion-matrix-atom</span> <span class="nv">confusion-matrix-atom</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This opens a port to a localhost webpage where we can view the progress <code>http://localhost:8091/</code></p>
+
+<p><img src="http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg"></p>
+
+<p>Below the confusion matrix is shown. This tracks the progress of the training in the classification. In particular, how many times it thought a cat was really a cat and how many times it got it wrong.</p>
+
+<p><img src="http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg"></p>
+
+<p>As we are training the data, the loss for each epoch is shown on the console as well as when it saves the network to the external file.</p>
+
+<p>After only thirty minutes of training on my Mac Book Pro, we get to some pretty good results, with the correct percentage in the 99s :</p>
+
+<p><img src="http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg"></p>
+
+<p>It&rsquo;s time to do some inference on our trained network.</p>
+
+<h2>Inference</h2>
+
+<p>Firing up a REPL we can connect to our namespace and use the <code>label-one</code> function from the cortex example to spot check our classification. It reads in the external nippy file that contains the trained network description, takes a random image from the testing directory, and classifies it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">label-one</span>
+</span><span class='line'>  <span class="s">&quot;Take an arbitrary image and label it.&quot;</span>
+</span><span class='line'>  <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">file-label-pairs</span> <span class="p">(</span><span class="nf">shuffle</span> <span class="p">(</span><span class="nf">classification/directory-&gt;file-label-seq</span> <span class="nv">testing-dir</span>
+</span><span class='line'>                                                                            <span class="nv">false</span><span class="p">))</span>
+</span><span class='line'>        <span class="p">[</span><span class="nv">test-file</span> <span class="nv">test-label</span><span class="p">]</span> <span class="p">(</span><span class="nb">first </span><span class="nv">file-label-pairs</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">test-img</span> <span class="p">(</span><span class="nf">imagez/load-image</span> <span class="nv">test-file</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">observation</span> <span class="p">(</span><span class="nf">png-&gt;observation</span> <span class="nv">dataset-datatype</span> <span class="nv">false</span> <span class="nv">test-img</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">imagez/show</span> <span class="nv">test-img</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">infer/classify-one-observation</span> <span class="p">(</span><span class="ss">:network-description</span>
+</span><span class='line'>                                     <span class="p">(</span><span class="nf">suite-io/read-nippy-file</span> <span class="s">&quot;trained-network.nippy&quot;</span><span class="p">))</span>
+</span><span class='line'>                                    <span class="nv">observation</span>
+</span><span class='line'>                                    <span class="p">(</span><span class="nf">ds/create-image-shape</span> <span class="nv">dataset-num-channels</span>
+</span><span class='line'>                                                           <span class="nv">dataset-image-size</span>
+</span><span class='line'>                                                           <span class="nv">dataset-image-size</span><span class="p">)</span>
+</span><span class='line'>                                    <span class="nv">dataset-datatype</span>
+</span><span class='line'>                                    <span class="p">(</span><span class="nf">classification/get-class-names-from-directory</span> <span class="nv">testing-dir</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running <code>(label-one)</code> gives us the picture:</p>
+
+<p><img src="http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg"></p>
+
+<p>and classifies it as a cat. Yipee!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:probability-map</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span> <span class="mf">0.9995587468147278</span>, <span class="s">&quot;dog&quot;</span> <span class="mf">4.4119369704276323</span><span class="nv">E-4</span><span class="p">}</span>, <span class="ss">:classification</span> <span class="s">&quot;cat&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Not bad, but let&rsquo;s try it with something harder. Personally, I&rsquo;m not even sure whether this is a cat or a dog.</p>
+
+<p><img src="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg"></p>
+
+<p>Feeding it through the program &ndash; it says it is a cat.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">{</span><span class="ss">:probability-map</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span> <span class="mf">0.9942012429237366</span>, <span class="s">&quot;dog&quot;</span> <span class="mf">0.005798777565360069</span><span class="p">}</span>, <span class="ss">:classification</span> <span class="s">&quot;cat&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After much <a href="http://www.today.com/pets/cat-or-dog-wild-eyed-cutie-has-us-all-confused-t104835">debate on the internet</a>, I think that is the best answer the humans got too :)</p>
+
+<h2>Kaggle it</h2>
+
+<p>So it seems like we have a pretty good model, why don&rsquo;t we submit our results to the Kaggle competition and see how it rates. All they need is to have us run the classification against their test data of 12,500 images and classify them as 1 = dog or 0 = cat in a csv format.</p>
+
+<p>We will take each image and resize it, then feed it into cortex&rsquo;s <code>infer-n-observations</code> function, to do all our classification as a batch.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">infer/infer-n-observations</span> <span class="p">(</span><span class="ss">:network-description</span>
+</span><span class='line'>                                             <span class="p">(</span><span class="nf">suite-io/read-nippy-file</span> <span class="s">&quot;trained-network.nippy&quot;</span><span class="p">))</span>
+</span><span class='line'>                                            <span class="nv">observations</span>
+</span><span class='line'>                                            <span class="p">(</span><span class="nf">ds/create-image-shape</span> <span class="nv">dataset-num-channels</span>
+</span><span class='line'>                                                                   <span class="nv">dataset-image-size</span>
+</span><span class='line'>                                                                   <span class="nv">dataset-image-size</span><span class="p">)</span>
+</span><span class='line'>                                            <span class="nv">dataset-datatype</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we just need to format our results to a csv file and export it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">write-kaggle-results</span> <span class="p">[</span><span class="nv">results</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">with-open </span><span class="p">[</span><span class="nv">out-file</span> <span class="p">(</span><span class="nf">io/writer</span> <span class="s">&quot;kaggle-results.csv&quot;</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">csv/write-csv</span> <span class="nv">out-file</span>
+</span><span class='line'>                   <span class="p">(</span><span class="nb">into </span><span class="p">[[</span><span class="s">&quot;id&quot;</span> <span class="s">&quot;label&quot;</span><span class="p">]]</span>
+</span><span class='line'>                         <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">mapv</span> <span class="p">(</span><span class="k">fn </span><span class="p">[[</span><span class="nv">id</span> <span class="nv">class</span><span class="p">]]</span> <span class="p">[(</span><span class="nf">Integer/parseInt</span> <span class="nv">id</span><span class="p">)</span> <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="s">&quot;dog&quot;</span> <span class="nv">class</span><span class="p">)</span> <span class="mi">1</span> <span class="mi">0</span><span class="p">)])</span> <span class="nv">results</span><span class="p">)</span>
+</span><span class='line'>                             <span class="p">(</span><span class="nf">sort</span><span class="p">))))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After uploading the file to the Kaggle, I was pleased that the answer got in the top 91%! It made it on the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/leaderboard">Leaderboard</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>Using an example setup from the Cortex project and 30 minutes of processing time on my laptop, we were able to crunch through some significant data and come up with a trained classification model that was good enough to make the charts in the Kaggle competition. On top of it all, it is in pure Clojure.</p>
+
+<p>In my mind, this is truely impressive and even though the Cortex library is in it&rsquo;s early phases, it puts it on track to be as useful as tool as Tensor Flow for Machine Learning.</p>
+
+<p>Earlier this month, I watched an ACM Learning webcast with Peter Norvig speaking on AI. In it, he spoke of one of the next challenges of AI which is to combine <a href="https://twitter.com/gigasquid/status/806916856040689664?lang=en">symbolic with neural</a>. I can think of no better language than Clojure with it&rsquo;s simplicity, power, and rich LISP heritage to take on the challenge for the future. With the Cortex library, it&rsquo;s off to a great start.</p>
+
+<p><em>If want to see all the cats vs dog  Kaggle Code, it&rsquo;s out on github here <a href="https://github.com/gigasquid/kaggle-cats-dogs">https://github.com/gigasquid/kaggle-cats-dogs</a></em></p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2016/12/27/deep-learning-in-clojure-with-cortex//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2016/07/18/genetic-programming-with-clojure-dot-spec/">
 		
 			Genetic Programming With clojure.spec</a>
@@ -96,7 +446,7 @@
   
 
 
-<time datetime="2016-07-18T09:40:00+02:00" pubdate data-updated="true">Jul 18<span>th</span>, 2016</time></div>
+<time datetime="2016-07-18T09:40:00-04:00" pubdate data-updated="true">Jul 18<span>th</span>, 2016</time></div>
       <div class="tags">Tags: 
 
 
@@ -584,7 +934,7 @@
   
 
 
-<time datetime="2016-07-03T15:01:00+02:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2016</time></div>
+<time datetime="2016-07-03T15:01:00-04:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2016</time></div>
       <div class="tags">Tags: 
 
 
@@ -695,7 +1045,7 @@
   
 
 
-<time datetime="2016-06-19T09:22:00+02:00" pubdate data-updated="true">Jun 19<span>th</span>, 2016</time></div>
+<time datetime="2016-06-19T09:22:00-04:00" pubdate data-updated="true">Jun 19<span>th</span>, 2016</time></div>
       <div class="tags">Tags: 
 
 
@@ -787,7 +1137,7 @@
   
 
 
-<time datetime="2016-05-29T16:29:00+02:00" pubdate data-updated="true">May 29<span>th</span>, 2016</time></div>
+<time datetime="2016-05-29T16:29:00-04:00" pubdate data-updated="true">May 29<span>th</span>, 2016</time></div>
       <div class="tags">Tags: 
 
 
@@ -1186,7 +1536,7 @@
   
 
 
-<time datetime="2016-03-16T18:19:00+01:00" pubdate data-updated="true">Mar 16<span>th</span>, 2016</time></div>
+<time datetime="2016-03-16T18:19:00-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2016</time></div>
       <div class="tags">Tags: 
 
 
@@ -1361,7 +1711,7 @@
   
 
 
-<time datetime="2016-02-10T21:27:00+01:00" pubdate data-updated="true">Feb 10<span>th</span>, 2016</time></div>
+<time datetime="2016-02-10T21:27:00-05:00" pubdate data-updated="true">Feb 10<span>th</span>, 2016</time></div>
       <div class="tags">Tags: 
 
 
@@ -1894,7 +2244,7 @@
   
 
 
-<time datetime="2016-02-06T14:26:00+01:00" pubdate data-updated="true">Feb 6<span>th</span>, 2016</time></div>
+<time datetime="2016-02-06T14:26:00-05:00" pubdate data-updated="true">Feb 6<span>th</span>, 2016</time></div>
       <div class="tags">Tags: 
 
 
@@ -2190,7 +2540,7 @@
   
 
 
-<time datetime="2016-01-16T22:09:00+01:00" pubdate data-updated="true">Jan 16<span>th</span>, 2016</time></div>
+<time datetime="2016-01-16T22:09:00-05:00" pubdate data-updated="true">Jan 16<span>th</span>, 2016</time></div>
       <div class="tags">Tags: 
 
 
@@ -2256,7 +2606,7 @@
   
 
 
-<time datetime="2015-12-20T11:16:00+01:00" pubdate data-updated="true">Dec 20<span>th</span>, 2015</time></div>
+<time datetime="2015-12-20T11:16:00-05:00" pubdate data-updated="true">Dec 20<span>th</span>, 2015</time></div>
       <div class="tags">Tags: 
 
 
@@ -2302,77 +2652,6 @@
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2015/12/20/can-a-programming-language-make-you-smarter//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/12/19/the-key-to-moving-fast-is-feedback/">
-		
-			The Key to Moving Fast Is Feedback</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-12-19T14:06:00+01:00" pubdate data-updated="true">Dec 19<span>th</span>, 2015</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>
-
-
-</div>
-    </div>
-		<p><img src="http://c1.staticflickr.com/3/2205/1809288965_c84080f2d3_n.jpg"></p>
-
-<p>The last time I went to the dentist to get a cavity filled, I got a shot of Novocain as a local anesthetic to numb the area.  After I emerged from the dental chair, I still had no feeling in my lip and mouth area.
-Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles down my face.  Luckily, the loss of feeling only lasted a couple hours.  Soon, I was back to normal.  Even in this small and common scenario, we can see the close link between motion and sensory perception.  What would happen if you couldn&rsquo;t feel your whole body?</p>
-
-<p>This is exactly what happened in the tragic and amazing story of <a href="http://docuwiki.net/index.php?title=The_Man_who_Lost_his_Body">Ian Watermann</a>.  At age 19, he had what appeared to be the flu, but was actually a rare disease of the nervous system that left him unable to feel any sensation of touch below the neck.  Unable to process this sensory information, he was totally unable to walk or move his body.  This is despite the fact that his motor system was left almost untouched by the disease.  He had the capacity to move, but without the sensory feedback he was paralyzed.</p>
-
-<p>Ian was told that he would spend the rest of his life in a wheelchair, but in an inspiring show of determination he recovered mobility.  With the help of physiotherapists, he retrained his brain to substitute visual feedback for touch feedback.  He could move his hands and legs while he could see them.  Finally, he could walk again with his sight and concentration.  If the visual feedback is taken away, (lights turned off), the ability to move vanishes.</p>
-
-<p>Feedback is the essential ingredient for human motion.  But what about businesses, startups, and software projects?  One of the challenges that all of these face is the ability to <em>move</em> fast.  This ability to move is not unlike that in our own bodies.  Movement and action are a result of a complex, interdependent system.  In the case of businesses, they are made of people, technology, and processes.  Like the human body, it is critically dependent on feedback.   A business can have the capacity for action, but without the ability to process feedback it is essentially immobilized.</p>
-
-<p>If you want to move fast, single most important thing you can do is to improve your feedback at every level.</p>
-
-<p>If you want to add new technology, ask how it improves your feedback.</p>
-
-<ul>
-<li>Feedback from the market</li>
-<li>Feedback from your users</li>
-<li>Feedback from your operational systems</li>
-<li>Feedback from your code</li>
-<li>Feedback from your employees</li>
-<li>Feedback from yourself</li>
-</ul>
-
-
-<p>The best feedback systems are distributed and multi-layered. A single market feedback signal to the CEO is good, but much better is one that gets shared among the many facets of a company.  A distributed and interconnected network of feedback will help companies and projects be responsive, fast, nimble, and resilient.</p>
-
-<p>The next time you hear, &ldquo;How can we go faster&rdquo;?&ldquo; ask the question &#8220;How can we increase feedback?&rdquo;  You&rsquo;ll be on the right track to fly.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2015/12/19/the-key-to-moving-fast-is-feedback//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
