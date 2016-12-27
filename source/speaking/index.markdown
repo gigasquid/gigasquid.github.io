@@ -14,6 +14,7 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
+* Will announce soon
 
 
 ## Past Talks
