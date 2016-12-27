@@ -18,6 +18,9 @@ be Clojure, Robots, and AI lately.
 
 
 ## Past Talks
+* [Ohio DevFest 2016](https://ohiodevfest.com/) How to Train Your Computer to Talk To You
+* [EuroClojure 2016](http://euroclojure.org/) [Genetic Programming and Beyond with clojure.spec](https://www.youtube.com/watch?v=xvk-Gnydn54&t=7s)
+* [GeeCon 2016](http://2016.geecon.cz) Clojure, clojure.spec, and Beyond
 * [Strange Loop 2015](https://thestrangeloop.com/): [Unconventional Programming with Chemical Computing](http://www.thestrangeloop.com/2015/unconventional-programming-with-chemical-computing.html) {% youtube cHoYNStQOEc %}
 * [OSCON 2015](http://www.oscon.com/open-source-2015) - A workshop _Solving the Concurrency Problem with Clojure_ and also a talk _Unconventional Programming with Chemical Computing_. The schedule details are [here](http://www.oscon.com/open-source-2015/public/schedule/speaker/154757)
 * [Strange Loop 2014](https://thestrangeloop.com/): Our Shared Joy of Programming {% youtube 3_zW63dcZB0%}
@@ -33,7 +36,4 @@ be Clojure, Robots, and AI lately.
 * CodeMash 2012: [A Fairy Tale in Clojure](http://www.slideshare.net/gigasquidcm/fairy-taleclojure)
 * JRubyConf 2011:
   [Semantic Web with JRuby](https://github.com/gigasquid/Presentations/blob/master/SemanticWebJRuby.pdf)
-* [GeeCon 2016](http://2016.geecon.cz) Clojure, clojure.spec, and Beyond
-* [EuroClojure 2016](http://euroclojure.org/) [Genetic Programming and Beyond with clojure.spec](https://www.youtube.com/watch?v=xvk-Gnydn54&t=7s)
-* [Ohio DevFest 2016](https://ohiodevfest.com/) How to Train Your Computer to Talk To You
 
