@@ -225,7 +225,7 @@ After uploading the file to the Kaggle, I was pleased that the answer got in the
 
 Using an example setup from the Cortex project and 30 minutes of processing time on my laptop, we were able to crunch through some significant data and come up with a trained classification model that was good enough to make the charts in the Kaggle competition. On top of it all, it is in pure Clojure.
 
-In my mind, this is truely impressive and even though the Cortex library is in it's early phases, it puts it on track to be as useful as tool as Tensor Flow for Machine Learning.
+In my mind, this is truely impressive and even though the Cortex library is in it's early phases, it puts it on track to be as useful a tool as Tensor Flow for Machine Learning.
 
 Earlier this month, I watched an ACM Learning webcast with Peter Norvig speaking on AI. In it, he spoke of one of the next challenges of AI which is to combine [symbolic with neural](https://twitter.com/gigasquid/status/806916856040689664?lang=en). I can think of no better language than Clojure with it's simplicity, power, and rich LISP heritage to take on the challenge for the future. With the Cortex library, it's off to a great start.
 
