@@ -30,9 +30,9 @@ gradual doses of functional programming that will have you _living_
 Clojure at the end.
 
 ## Code Shifter
-I'm busy working on writing a middle grade, fantasy/sci-fi novel featuring a coding heroine as well as real programming concepts and Clojure code.
 
-For the last twelve years, Eliza has led an ordinary life with her family.  Growing up in this town is especially easy since the government’s artificial intelligence takes care of everything. Unfortunately, the price for all this convenience is freedom, especially the freedom to code.  All technical knowledge is strictly controlled by the government.
+Twelve year old Eliza discovers she has the power to change a machine’s code just by touch. When the government’s evil artificial intelligence takes her brother away, she uses her new ability to fight back. Now she's on the run as an outlaw and her only hope to save him is to find the Underground Programmer’s Academy. She needs to learn how to control her powers and fast. If she doesn’t get her brother back in time, his brain could be scrambled forever. 
 
-When her older brother is drafted into lifetime service against his wishes, she discovers she has a strange power to visualize and _push_ code with her mind.  The only problem is that she triggers the hacking alarms in the process.  Now, she’s on the run from both the AI and its terrifying robots.  She needs to find the Underground Programmer’s Academy and learn enough to rescue her brother before it’s too late.
+Together, with her friends, Eliza sets out on an adventure that involves learning code, fighting robots, and finding out how strong she can be.
 
+[http://www.codeshifterbook.com/](http://www.codeshifterbook.com/)
