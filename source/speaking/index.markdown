@@ -14,8 +14,8 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
-* [Joy of Coding - June 2016](http://joyofcoding.org/) TBA
-* [Velocity Conf NY -  October 2016](https://conferences.oreilly.com/velocity/vl-ny) TBA
+* [Joy of Coding - June 2017](http://joyofcoding.org/) TBA
+* [Velocity Conf NY -  October 2017](https://conferences.oreilly.com/velocity/vl-ny) TBA
 
 
 ## Past Talks
