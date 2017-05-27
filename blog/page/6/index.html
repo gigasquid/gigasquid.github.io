@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Nov 6th, 2012 Tags: All, John McCarthy Papers Reading Artificial Intelligence, Logic, and Formalizing Common Sense, led me &hellip;">
+	<meta name="description" content="Published on: Nov 25th, 2012 Tags: All, Clojure, John McCarthy Papers This holiday edition blog post covers two McCarthy papers instead of just one &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,106 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5/">
+		
+			7 McCarthy Papers in 7ish Weeks #5 & #6 - SDFW Tic-Tac-Toe</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-25T09:08:53-05:00" pubdate data-updated="true">Nov 25<span>th</span>, 2012</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/john-mccarthy-papers/'>John McCarthy Papers</a>
+
+
+</div>
+    </div>
+		<p><img src="http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png"></p>
+
+<p>This holiday edition blog post covers two McCarthy papers instead of just one.  We will be talking about <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/freewill.pdf">Free Will &ndash; Even for Robots</a> and the companion paper <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/freewill2.pdf">Simple Deterministic Free Will</a>.</p>
+
+<h2>In which we deftly sidestep the philosophers</h2>
+
+<p>We know that computers and programs are completely deterministic.  A philosophical question is whether we, as humans are ruled by determinism, (although complex it may be), or not.  If we take the decision that humans are deterministic, then we can argue that either there is no free will &ndash; or that free will is &ldquo;compatible&rdquo; with determinism.  Philosophers, of course, could discuss such questions interminably, trying to get a theory to fit for all people and all occasions.  Thankfully, McCarthy takes a very admirable and practical view on free will.  Let&rsquo;s try out something simple for a computer program and see how it works.  He explores a philosophy &#8221;Compatibilist&rsquo;s&#8221; view, which regards a person to have free will if his actions are decided by an internal process, even if this process itself is deterministic.  But by exploring this view with computer programs, he makes clear:</p>
+
+<blockquote><p>&hellip; I don&rsquo;t need to take a position on determinism itself.</p></blockquote>
+
+<h2>Simple Deterministic Free Will</h2>
+
+<p>So what would Free Will look like for a machine. How do we go about defining it? McCarthy proposes the idea of Simple Deterministic Free Will. The main idea is that the mechanism of free will is broken up into two parts. The first part looks at the possible actions and the consequences of those actions, and the second part decides which of those actions are preferable and does them. He gives the example of a chess program:</p>
+
+<blockquote><p>People and chess programs carry thinking about choice beyond the ﬁrst level. Thus “If I make this move, my opponent (or nature regarded as an opponent) will have the following choices, each of which will give me further choices.” Examining such trees of possibilities is an aspect of free will in the world, but the simplest form of free will in a deterministic world does not involve branching more than once.</p></blockquote>
+
+<p>So perhaps we could find an example that is simpler than chess to work with &hellip;</p>
+
+<blockquote><p>&hellip;it would be interesting to design the simplest possible system exhibiting deterministic free will. A program for tic-tac-toe is simpler than a chess program, but the usual program does consider choices.</p></blockquote>
+
+<h2>Simple Deterministic Free Will Tic Tac Toe</h2>
+
+<p>So to explore McCarthy&rsquo;s idea of Simple Deterministic Free Will, I decided to try to construct a game of Tic Tac Toe with SDFW principles. Coincidentally, my six year old daughter, just learned how to play Tic Tac Toe as well. I wanted to construct a program that would &ldquo;reason&rdquo; about the game as would a child. Even though the game of Tic Tac Toe is simple enough to have all the possibility trees of moves completely solved, this is not how a my daughter approaches the game. Each time it is her move, she only looks one move ahead to see if she can win three in a row, or if she needs to block her opponent from winning the next move.</p>
+
+<h2>My Tic Tac Toe Program has Beliefs</h2>
+
+<p>It has three beliefs to be precise. It believes that no one is going to win, or it is going to win, or its opponent is going to win.</p>
+
+<pre><code>(def beliefs
+  { :win "I am going to win."
+    :lose "My opponent is going to win."
+    :noone "No one is going to win."})
+</code></pre>
+
+<p>McCarthy thinks that <a href="http://gigasquidsoftware.com/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">ascribing programs beliefs can be useful</a>. One of the reasons is that it helps us as humans, reason and debug our programs. I definitely saw the value of this when I was trying to debug my tic tac toe game. After it failed to block my winning move, I could see what its false belief was &ndash; ah &ndash; it thought that &ldquo;No one is going to win&rdquo;. I wrote another failing unit test to fix its bad belief.</p>
+
+<h2>My Tic Tac Toe Program Looks to See What Its Possible Actions and Preferences Are</h2>
+
+<p>It looks at the board and computes all its possible next moves. Then it computes all the possible next moves of its opponent. It looks at the consequences of these moves by assigning a belief from one of its three beliefs. Next, it ranks the moves according to the preference of its beliefs.</p>
+
+<pre><code>(def belief-action-preferences
+  { (beliefs :win) 1
+    (beliefs :lose) 2
+    (beliefs :noone) 3})
+</code></pre>
+
+<p>It then chooses the move to take that has the highest rank. If it believes that no-one is going to win, I opted to have it choose a random move from the list of possible choices. But this randomness is completely arbitrary on my part and not necessary to SDFW at all.</p>
+
+<h2>Why ClojureScript is Awesome</h2>
+
+<p>I coded the core tic-tac-toe program in Clojure, but then I thought that having a web page UI would be nice for my daughter to play with. So, I just took the game logic and moved it to ClojureScript. Let me say that again slower&hellip; I used the same code on the server on the browser. Awesome. Using the <a href="https://github.com/emezeske/lein-cljsbuild/blob/0.2.10/doc/CROSSOVERS.md">lein-cljsbuild crossover support</a>, I was able to simply configure my UI ClojureScript code to access my regular clojure game engine. Very cool. I was also very pleased to work with the <a href="https://github.com/levand/domina">https://github.com/levand/domina</a> DOM manipulation library for ClojureScript.</p>
+
+<h2>End Result</h2>
+
+<p>It was a fun project that let me play with ClojureScript, explore McCarthy&rsquo;s free will for robots, have some very interesting conversations about free will with my co-wokers and code and coffee friends, and make a game for my daughter to play and enjoy. If you are interested in checking out the program for yourself &ndash; <a href="http://gigasquid.github.com/sdfw-tic-tac-toe/">http://gigasquid.github.com/sdfw-tic-tac-toe/</a>. The last belief is displayed at the bottom. I have only tried it on Chrome, so beware. Finally, if you find any false beliefs, feel free to submit a pull request to <a href="https://github.com/gigasquid/sdfw-tic-tac-toe">https://github.com/gigasquid/sdfw-tic-tac-toe</a>.</p>
+
+<p>P.S. If you are wondering, I drew the awesome graphics all by myself.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -957,64 +1057,6 @@ I found out that there is already an alpha version of Clojure on Maven.  So you 
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2012/07/07/how-to-include-non-clojars-clojure-version-in-your-lein-project//blog/page/6/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/05/03/day-dream-dinner/">
-		
-			Day Dream Dinner</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-03T22:06:43-04:00" pubdate data-updated="true">May 3<span>rd</span>, 2012</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>
-
-
-</div>
-    </div>
-		<p>In a day dream, I met a genie.  He kindly offered to setup my dream dinner for me.  All I had to do was name six guests and they would receive gilt invitations to the best restaurant in the world.  Of course, they would all be delighted to attend and would be spared the nuisance of travel arrangements by handy magical teleportation.  I hesitated for a moment, there are so many people that I would like to name.  The genie tapped his foot impatiently.  Alright here they are:</p>
-
-<p><a href="http://en.wikipedia.org/wiki/Philip_Wadler">Philip Wadler</a></p>
-
-<p><a href="http://en.wikipedia.org/wiki/Daniel_P._Friedman">Daniel Friedman</a></p>
-
-<p><a href="http://en.wikipedia.org/wiki/Rich_Hickey">Rich Hickey</a></p>
-
-<p><a href="http://en.wikipedia.org/wiki/Philip_Glass">Philip Glass</a></p>
-
-<p><a href="http://en.wikipedia.org/wiki/George_R._R._Martin">George RR Martin</a></p>
-
-<p><a href="http://en.wikipedia.org/wiki/Neil_gaiman">Neil Gaiman</a></p>
-
-<p>Who would you name?</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2012/05/03/day-dream-dinner//blog/page/6/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

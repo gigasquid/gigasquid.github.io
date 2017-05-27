@@ -426,7 +426,13 @@
         <loc>
             http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex/
         </loc>
-        <lastmod>2016-12-27T12:46:31-05:00</lastmod>
+        <lastmod>2017-05-27T17:18:45-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://gigasquid.github.io/blog/2017/05/27/self-publishing-for-the-creative-coder/
+        </loc>
+        <lastmod>2017-05-27T18:16:32-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/about/</loc>
@@ -434,7 +440,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2016-12-27T12:46:31-05:00</lastmod>
+        <lastmod>2017-05-27T18:16:32-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/books/</loc>
@@ -442,7 +448,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2016-12-27T12:46:31-05:00</lastmod>
+        <lastmod>2017-05-27T18:16:32-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/robots.txt</loc>
