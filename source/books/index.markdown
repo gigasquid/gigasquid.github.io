@@ -31,6 +31,8 @@ Clojure at the end.
 
 ## Code Shifter
 
+{% img http://www.codeshifterbook.com/img/codeshiftercover.png %}
+
 Twelve year old Eliza discovers she has the power to change a machine’s code just by touch. When the government’s evil artificial intelligence takes her brother away, she uses her new ability to fight back. Now she's on the run as an outlaw and her only hope to save him is to find the Underground Programmer’s Academy. She needs to learn how to control her powers and fast. If she doesn’t get her brother back in time, his brain could be scrambled forever. 
 
 Together, with her friends, Eliza sets out on an adventure that involves learning code, fighting robots, and finding out how strong she can be.
