@@ -64,7 +64,7 @@ There was much rejoicing.
 
 ## Didn't you want to get the book into bookstores?
 
-Of course. That would be incredibly cool. However, that requires getting into what they call _traditional publishing_ and it is a lot more work, time, and luck. If you go this route, you will need to budget at least six months to send out form letters to agencies to have them represent your work. Also beware of predatory services that take advantage of unsuspecting and wide eyed authors. If you are interested in this, you'll want to start looking for agents that are interested in your type of book. [Query Tracker](https://querytracker.net/) is a great place to start.
+Of course. That would be incredibly cool. However, that requires getting into what they call _traditional publishing_ and it is a lot more work, time, and luck. If you go this route, you will need to budget at least six months to send out form letters to agencies to have them represent your work. Also, beware of predatory services that take advantage of unsuspecting and wide eyed authors. If you are interested in this, you'll want to start looking for agents that are interested in your type of book. [Query Tracker](https://querytracker.net/) is a great place to start.
 
 ## Traditional publishing sounds hard. What about self publishing?
 
@@ -73,7 +73,7 @@ Self publishing is certainly an easier more direct way to bring your book to lif
 
 ### Publishing the book with Leanpub
 
-Actually publishing the finished copy was really easy with Leanpub. All I had to do was fill in some fields on the project page and push _Publish!_. The book was immediately ready to share with the world. Putting out an updated edition was as easy as pushing the button again. Leanpub provides online reading as well as all the ebook versions.
+Actually publishing the finished copy was really easy with Leanpub. All I had to do was fill in some fields on the project page and push _Publish!_ The book was immediately ready to share with the world. Putting out an updated edition was as easy as pushing the button again. Leanpub provides online reading as well as all the ebook versions.
 
 That was nice, but I really wanted a print copy too.
 
