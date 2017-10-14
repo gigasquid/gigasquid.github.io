@@ -14,11 +14,14 @@ I also enjoy talking and sharing my various enthusiams, which seem to
 be Clojure, Robots, and AI lately.
 
 ## Upcoming Talks
-* [Joy of Coding - June 2017](http://joyofcoding.org/) TBA
-* [Velocity Conf NY -  October 2017](https://conferences.oreilly.com/velocity/vl-ny) TBA
+
+
 
 
 ## Past Talks
+* [Clojure Conj 2017 - Deep Learning Needs Clojure](https://www.youtube.com/watch?v=eLl6_k_fZn4)
+* [Velocity Conf NY 2017 - Unconventional Programming Paradigms for the Future Now](https://conferences.oreilly.com/velocity/vl-ny)
+* [Joy of Coding - June 2017](http://joyofcoding.org/) The Joy of Gradient Descent
 * [Ohio DevFest 2016](https://ohiodevfest.com/) How to Train Your Computer to Talk To You
 * [EuroClojure 2016](http://euroclojure.org/) [Genetic Programming and Beyond with clojure.spec](https://www.youtube.com/watch?v=xvk-Gnydn54&t=7s)
 * [GeeCon 2016](http://2016.geecon.cz) Clojure, clojure.spec, and Beyond
