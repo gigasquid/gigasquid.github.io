@@ -10,6 +10,8 @@ categories:
 - AI
 ---
 
+__Update: Cortex has moved along since I first wrote this blog post, so if you are looking to run the examples, please go and clone the [Cortex](https://github.com/thinktopic/cortex) repo and look for the cats and dogs code in the examples directory.__
+
 There is an awesome new _Clojure-first_ machine learning library called [Cortex](https://github.com/thinktopic/cortex) that was open sourced recently. I've been exploring it lately and wanted to share my discoveries so far in this post. In our exploration, we are going to tackle one of the classic classification problems of the internet. How do you tell the difference between a cat and dog pic?
 
 ## Where to Start?
