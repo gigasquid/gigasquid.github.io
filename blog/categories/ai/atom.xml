@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AI | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/ai/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2017-05-27T19:47:37-04:00</updated>
+  <updated>2017-10-14T15:05:22-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -18,7 +18,9 @@
     <link href="http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex/"/>
     <updated>2016-12-27T10:44:00-05:00</updated>
     <id>http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex</id>
-    <content type="html"><![CDATA[<p>There is an awesome new <em>Clojure-first</em> machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> that was open sourced recently. I&rsquo;ve been exploring it lately and wanted to share my discoveries so far in this post. In our exploration, we are going to tackle one of the classic classification problems of the internet. How do you tell the difference between a cat and dog pic?</p>
+    <content type="html"><![CDATA[<p><strong>Update: Cortex has moved along since I first wrote this blog post, so if you are looking to run the examples, please go and clone the <a href="https://github.com/thinktopic/cortex">Cortex</a> repo and look for the cats and dogs code in the examples directory.</strong></p>
+
+<p>There is an awesome new <em>Clojure-first</em> machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> that was open sourced recently. I&rsquo;ve been exploring it lately and wanted to share my discoveries so far in this post. In our exploration, we are going to tackle one of the classic classification problems of the internet. How do you tell the difference between a cat and dog pic?</p>
 
 <h2>Where to Start?</h2>
 
