@@ -159,7 +159,7 @@ So keep an eye on Graal and Truffle for the future and wish the Oracle Labs team
 
 ### Footnotes
 
-If you are interested in playing with the code. I have a github repo here [graal-test](https://github.com/gigasquid/graal-test). If you are interested in watching a video, I really liked [this one](https://www.youtube.com/watch?v=TQMKPRc6cbE)
+If you are interested in playing with the code. I have a github repo here [graal-test](https://github.com/gigasquid/graal-test). If you are interested in watching a video, I really liked [this one](https://www.youtube.com/watch?v=TQMKPRc6cbE). There are also some really nice examples of running in polyglot mode with R and Java and JS here [https://github.com/graalvm/examples](https://github.com/graalvm/examples).
 
 
 
