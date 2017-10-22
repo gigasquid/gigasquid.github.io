@@ -435,12 +435,18 @@
         <lastmod>2017-05-27T18:39:55-04:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/
+        </loc>
+        <lastmod>2017-10-22T17:06:37-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://gigasquid.github.io/about/</loc>
         <lastmod>2016-12-16T10:52:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2017-10-14T14:58:42-04:00</lastmod>
+        <lastmod>2017-10-22T17:06:37-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/books/</loc>
@@ -448,7 +454,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2017-10-14T14:58:42-04:00</lastmod>
+        <lastmod>2017-10-22T17:06:37-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/robots.txt</loc>

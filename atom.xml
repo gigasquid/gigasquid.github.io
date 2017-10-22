@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2017-10-14T15:05:22-04:00</updated>
+  <updated>2017-10-22T17:06:38-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,213 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Embedded Interop between Clojure, R, and Python with GraalVM]]></title>
+    <link href="http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/"/>
+    <updated>2017-10-22T16:02:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm</id>
+    <content type="html"><![CDATA[<p><img src="https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg" title="" ></p>
+
+<p>In my talk at <a href="https://www.youtube.com/watch?v=eLl6_k_fZn4">Clojure Conj</a> I mentioned how a project from Oracle Labs named GraalVM might have to potential for Clojure to interop with Python on the same VM. At the time of the talk, I had just learned about it so I didn&rsquo;t have time to take a look at it. Over the last week, I&rsquo;ve managed to take it for a test drive and I wanted to share what I found.</p>
+
+<h3>Are you ready?</h3>
+
+<p>In this example, we will be using an ordinary Leinengen project and using the REPL we will interop with both R and python.</p>
+
+<p>But first will need a bit of setup.</p>
+
+<p>We will download the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Graal project</a> so we can use its <code>java</code> instead of our own.</p>
+
+<p>Once we have it downloaded we will configure our PATH to use Graal&rsquo;s java instead of our own.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># export PATH=/path/to/graalAndTruffle/bin:$PATH</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we can create a new lein project and run <code>lein repl</code> and begin the fun.</p>
+
+<h3>The Polyglot Context</h3>
+
+<p>In our new namespace, we just need to import the <a href="http://graalvm.github.io/graal/truffle/javadoc/org/graalvm/polyglot/Context.html">Polyglot Context</a> to get started:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">graal-test.core</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:import</span> <span class="p">(</span><span class="nf">org.graalvm.polyglot</span> <span class="nv">Context</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; note that is also supports Ruby, LLVM, and JS</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">context</span> <span class="p">(</span><span class="nf">Context/create</span> <span class="p">(</span><span class="nb">into-array </span><span class="p">[</span><span class="s">&quot;python&quot;</span> <span class="s">&quot;R&quot;</span><span class="p">])))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we are ready to actually try to run some R and Python code right in our REPL. Let&rsquo;s start first with R.</p>
+
+<h3>Interoping with R</h3>
+
+<p>The main function we are going to use is the <code>eval</code> function in the context. Let&rsquo;s start small with some basic math.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">3^2 + 2^2</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0x7ff40e4d &quot;13.0&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow! It actually did something. It returned something called a <a href="https://github.com/graalvm/graal/blob/master/sdk/src/org.graalvm.polyglot/src/org/graalvm/polyglot/Value.java">Polyglot Value</a> with what looks like the right answer in it.</p>
+
+<p>Emboldened by our early success, let&rsquo;s try something a little more complicated like calling a function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result1</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">sum.of.squares &lt;- function(x,y) {</span>
+</span><span class='line'><span class="s">  x^2 + y^2</span>
+</span><span class='line'><span class="s">}</span>
+</span><span class='line'><span class="s">sum.of.squares(3,4)</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0xc3edd92 &quot;25.0&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, it looks like it worked. Let&rsquo;s try to get the result back into Clojure as a value we can work with. We could ask the result what sort of type it is with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.isNumber</span> <span class="nv">result1</span><span class="p">)</span> <span class="c1">;=&gt; true </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>but let&rsquo;s just use <code>clojure.edn</code> to read the string and save some time.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-&gt;clojure</span> <span class="p">[</span><span class="nv">polyglot-value</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">polyglot-value</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.toString</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">clojure.edn/read-string</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">-&gt;clojure</span> <span class="nv">result1</span><span class="p">)</span> <span class="c1">;=&gt; 25</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It would be nice to have a easier way to export symbols and import symbols to and from the guest and host language. In fact, Graal provides a way to do this but to do this in Clojure, we would need something else called <a href="https://github.com/graalvm/graal/tree/master/truffle">Truffle</a>.</p>
+
+<p>Truffle is part of the Graal project and is a framework for implementing languages with the Graal compliler.
+There are quite a few languages implemented with the Truffle framework. R is one of them.</p>
+
+<p><img src="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615"></p>
+
+<p>My understanding is that if Clojure was implemented as a truffle lang, then interop could be much more seamless like this example in Ruby</p>
+
+<p><img src="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615"></p>
+
+<p>But let&rsquo;s continue in our exploration. What about doing something more interesting, like importing a useful R library and using it. How about the <a href="https://www.rdocumentation.org/packages/numDeriv/versions/2016.8-1">numDeriv</a> package that supports Accurate Numerical Derivatives?</p>
+
+<p>First we import the package using cran.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">install.packages(\&quot;numDeriv\&quot;, repos = \&quot;http://cran.case.edu/\&quot;)</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are doing this at your REPL, you can will see lots of text going on in your <code>lein repl</code> process at this point. It&rsquo;s going out and figuring out what deps you need and installing them in your <code>/graalvm-0.28.2/jre/languages/R</code> directory structure.</p>
+
+<p>After it is done, we can actually use it!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result2</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">library(numDeriv)</span>
+</span><span class='line'><span class="s">grad(sin, (0:10)*2*pi/10)</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="nv">result2</span> <span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0x76765898 &quot;c(1,</span>
+</span><span class='line'>        <span class="c1">;0.809016994367249, 0.309016994372158, -0.309016994373567,</span>
+</span><span class='line'>        <span class="c1">;-0.809016994368844, -0.999999999993381, -0.809016994370298,</span>
+</span><span class='line'>        <span class="c1">;-0.309016994373312, 0.309016994372042, 0.809016994369185,</span>
+</span><span class='line'>        <span class="c1">;0.999999999993381)&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This has a bit more interesting result as an array. But the Context has ways of dealing with it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.hasArrayElements</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
+</span><span class='line'><span class="p">(</span><span class="nf">.getArraySize</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; 11</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">range </span><span class="mi">10</span><span class="p">)]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">.getArrayElement</span> <span class="nv">result2</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nf">-&gt;clojure</span><span class="p">)))</span>
+</span><span class='line'><span class="c1">;=&gt; (1.0 0.8090169943672489 0.3090169943721585 -0.3090169943735675</span>
+</span><span class='line'><span class="c1">;-0.8090169943688436 -0.9999999999933814</span>
+</span><span class='line'><span class="c1">; -0.8090169943702977 -0.3090169943733122 0.30901699437204233</span>
+</span><span class='line'><span class="c1">; 0.8090169943691851)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So, we&rsquo;ve showed basic interop with R &ndash; which is pretty neat. What about Python?</p>
+
+<h3>Interoping with Python</h3>
+
+<p>Truffle is scheduled to fully support Python in 2018, but there is already an early alpha version in the Graal download that we can play with.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;python&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">import time;</span>
+</span><span class='line'><span class="s">time.clock()</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'> <span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0x4a6b3b70 &quot;1.508202803249E9&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Neat!</p>
+
+<p>It is still a long way for <code>import numpy</code> or <code>import tensorflow</code> but cPython compatibility is the goal. Although the c-extensions are the really tricky part.</p>
+
+<p>So keep an eye on Graal and Truffle for the future and wish the Oracle Labs team the best on their mission to make the JVM Polyglot.</p>
+
+<h3>Footnotes</h3>
+
+<p>If you are interested in playing with the code. I have a github repo here <a href="https://github.com/gigasquid/graal-test">graal-test</a>. If you are interested in watching a video, I really liked <a href="https://www.youtube.com/watch?v=TQMKPRc6cbE">this one</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Self Publishing for the Creative Coder]]></title>
@@ -3914,62 +4121,6 @@ They asked if I had any insights or tips having gone through the process as a fi
 <h3>Do It</h3>
 
 <p>Yes, you should write that book and share your knowledge.  Don&rsquo;t panic, remember to breathe, get some cheese and tea, and go for it!  It will be awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Partition with Game of Thrones Pugs]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs/"/>
-    <updated>2015-01-26T18:55:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/01/26/partition-with-game-of-thrones-pugs</id>
-    <content type="html"><![CDATA[<p>Clojure&rsquo;s <em>partition</em> and <em>partition-all</em> functions are very useful.
-However, I have been bitten a few times using <em>partition</em> when I
-really wanted <em>partition-all</em>.  So to help myself and all of you to
-remember it, I have made some diagrams with <a href="http://www.designswan.com/archives/the-pugs-of-westeros-cute-pugs-dressed-up-like-characters-in-game-of-thrones.html">pugs from the Game of Thrones</a></p>
-
-<p>In code, <a href="http://clojuredocs.org/clojure.core/partition">partition</a> takes a collection and returns a lazy sequence of
-lists, each containing n items.</p>
-
-<p>To demonstrate this with pugs, we will partition 5 pugs into groups of
-twos.</p>
-
-<p><img src="https://c4.staticflickr.com/8/7301/15757758964_570d260a31_c.jpg"></p>
-
-<p>This partition will give you two groups of two pugs.</p>
-
-<p><img src="https://c4.staticflickr.com/8/7350/16380203235_91c8c4e9ee_c.jpg"></p>
-
-<p>Notice, (and here is the important part), the last pug is missing.  The Joffrey pug is not included because <em>partition</em> will not include items that do not make a complete partition.  In this case, because there is no group of 2 pugs for the Joffrey pug to be in, it gets dropped.</p>
-
-<p><em>This is the thing that has bitten me in the past.</em></p>
-
-<p>A common use for wanting to partition things is to control the number
-of things that you process at one time.  An example of this is sending only 500 items to be processed in a batch job at one time.  If you have a few thousand items to be processed, partitioning them is a good way of chuncking.  However, if you have an arbitrary number of items, you most certainly want to process them <em>all</em> and not drop any.  This is where you should use <em>partition-all</em> instead.</p>
-
-<p><a href="http://clojuredocs.org/clojure.core/partition-all">Partition-all</a> chunks the items as well, but also includes any leftovers.  Demonstrating again with pugs.</p>
-
-<p><img src="https://c4.staticflickr.com/8/7427/15757758884_20bfd014eb_c.jpg"></p>
-
-<p>This <em>partition-all</em> will give you three groups of pugs.</p>
-
-<p><img src="https://c4.staticflickr.com/8/7323/16193980179_229343f7f3_c.jpg"></p>
-
-<p>This time pug Joffrey is not left out!</p>
-
-<p>Remember, think carefully before using <em>partition</em>.  Don&rsquo;t leave a pug out.</p>
-
-<p>By the way, I can&rsquo;t wait till the next season of Game of Thrones.  Until then ..</p>
-
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('2EoQCtPR2-I');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/2EoQCtPR2-I?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/2EoQCtPR2-I/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=2EoQCtPR2-I" id="2EoQCtPR2-I" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info"></div>
-</a>
-<div class="video-info" ></div>
-</div>
-
-
-
 ]]></content>
   </entry>
   

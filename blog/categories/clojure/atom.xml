@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Clojure | Squid's Blog]]></title>
+  <title><![CDATA[Category: Clojure, | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2017-10-14T15:05:22-04:00</updated>
+  <updated>2017-10-22T17:06:38-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -14,1476 +14,167 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Deep Learning in Clojure with Cortex]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex/"/>
-    <updated>2016-12-27T10:44:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex</id>
-    <content type="html"><![CDATA[<p><strong>Update: Cortex has moved along since I first wrote this blog post, so if you are looking to run the examples, please go and clone the <a href="https://github.com/thinktopic/cortex">Cortex</a> repo and look for the cats and dogs code in the examples directory.</strong></p>
+    <title type="html"><![CDATA[Embedded Interop between Clojure, R, and Python with GraalVM]]></title>
+    <link href="http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/"/>
+    <updated>2017-10-22T16:02:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg">https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg</a>" title="" ></p>
 
-<p>There is an awesome new <em>Clojure-first</em> machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> that was open sourced recently. I&rsquo;ve been exploring it lately and wanted to share my discoveries so far in this post. In our exploration, we are going to tackle one of the classic classification problems of the internet. How do you tell the difference between a cat and dog pic?</p>
+<p>In my talk at <a href="https://www.youtube.com/watch?v=eLl6_k_fZn4">Clojure Conj</a> I mentioned how a project from Oracle Labs named GraalVM might have to potential for Clojure to interop with Python on the same VM. At the time of the talk, I had just learned about it so I didn&rsquo;t have time to take a look at it. Over the last week, I&rsquo;ve managed to take it for a test drive and I wanted to share what I found.</p>
 
-<h2>Where to Start?</h2>
+<h3>Are you ready?</h3>
 
-<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
+<p>In this example, we will be using an ordinary Leinengen project and using the REPL we will interop with both R and python.</p>
 
-<p>For any machine learning problem, we&rsquo;re going to need data. For this, we can use Kaggle&rsquo;s data for the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Cats vs Dogs Challenge</a>.  The training data consists of 25,000 images of cats and dogs. That should be more than enough to train our computer to recognize cats from doggies.</p>
+<p>But first will need a bit of setup.</p>
 
-<p>We also need some idea of how to train against the data. Luckily, the Cortex project has a very nice set of examples to help you get started. In particular there is a <a href="https://github.com/thinktopic/cortex/tree/master/examples/suite-classification">suite classification example</a> using MNIST, (hand written digit), corpus. This example contains a number cutting edge features that we&rsquo;ll want to use:</p>
+<p>We will download the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Graal project</a> so we can use its <code>java</code> instead of our own.</p>
 
-<ul>
-<li>Uses GPU for <em>fast</em> computation.</li>
-<li>Uses a deep, multi-layered, convolutional layered network for feature recognition.</li>
-<li>Has &ldquo;forever&rdquo; training by image augmentation.</li>
-<li>Saves the network configuration as it trains to an external nippy file so that it can be imported later.</li>
-<li>Has a really nice ClojureScript front end to visualize the training progress with a confusion matrix.</li>
-<li>Has a way to import the saved nippy network configuration and perform inference on it to classify a new image.</li>
-</ul>
+<p>Once we have it downloaded we will configure our PATH to use Graal&rsquo;s java instead of our own.</p>
 
+<p>```</p>
 
-<p>Basically, it has everything we need to hit the ground running.</p>
+<h1>export PATH=/path/to/graalAndTruffle/bin:$PATH</h1>
 
-<h2>Data Wrangling</h2>
+<p>```</p>
 
-<p>To use the example&rsquo;s <em>forever</em> training, we need to get the data in the right form. We need all the images to be the same size as well as in a directory structure that is split up into the training and test images. Furthermore, we want all the dog images to be under a &ldquo;dog&rdquo; directory and the cat images under the &ldquo;cat&rdquo; directory so that the all the indexed images under them have the correct &ldquo;label&rdquo;.  It will look like this:</p>
+<p>Now, we can create a new lein project and run <code>lein repl</code> and begin the fun.</p>
+
+<h3>The Polyglot Context</h3>
+
+<p>In our new namespace, we just need to import the <a href="http://graalvm.github.io/graal/truffle/javadoc/org/graalvm/polyglot/Context.html">Polyglot Context</a> to get started:</p>
+
+<p>```clojure
+(ns graal-test.core
+  (:import (org.graalvm.polyglot Context)))</p>
+
+<p>;; note that is also supports Ruby, LLVM, and JS
+(def context (Context/create (into-array [&ldquo;python&rdquo; &ldquo;R&rdquo;])))
+```</p>
+
+<p>Now, we are ready to actually try to run some R and Python code right in our REPL. Let&rsquo;s start first with R.</p>
+
+<h3>Interoping with R</h3>
+
+<p>The main function we are going to use is the <code>eval</code> function in the context. Let&rsquo;s start small with some basic math.</p>
+
+<p><code>clojure
+(.eval context "R" "
+3^2 + 2^2
+")
+;=&gt; #object[org.graalvm.polyglot.Value 0x7ff40e4d "13.0"]
+</code></p>
+
+<p>Wow! It actually did something. It returned something called a <a href="https://github.com/graalvm/graal/blob/master/sdk/src/org.graalvm.polyglot/src/org/graalvm/polyglot/Value.java">Polyglot Value</a> with what looks like the right answer in it.</p>
+
+<p>Emboldened by our early success, let&rsquo;s try something a little more complicated like calling a function.</p>
+
+<p><code>clojure
+(def result1 (.eval context "R" "
+sum.of.squares &lt;- function(x,y) {
+  x^2 + y^2
+}
+sum.of.squares(3,4)
+"))
+;=&gt; #object[org.graalvm.polyglot.Value 0xc3edd92 "25.0"]
+</code></p>
+
+<p>Again, it looks like it worked. Let&rsquo;s try to get the result back into Clojure as a value we can work with. We could ask the result what sort of type it is with</p>
+
+<p><code>clojure
+(.isNumber result1) ;=&gt; true
+</code></p>
+
+<p>but let&rsquo;s just use <code>clojure.edn</code> to read the string and save some time.</p>
 
 <p>```
-&ndash; training
-  &ndash; cat</p>
+(defn &ndash;>clojure [polyglot-value]
+  (&ndash;> polyglot-value</p>
 
-<pre><code>- 1.png
-- 2.png
+<pre><code>  (.toString)
+  (clojure.edn/read-string)))
 </code></pre>
 
-<ul>
-<li>dog
-
-<ul>
-<li>1.png</li>
-<li>2.png
-```</li>
-</ul>
-</li>
-</ul>
-
-
-<p>For this task, we are going to use a couple image libraries to help us out:</p>
-
-<p><code>clojure
- [mikera.image.core :as imagez]
- [think.image.image :as image]
-</code></p>
-
-<p>We can resize and rewrite the original images into the form we want. For a image size, we&rsquo;re going to go with 52x52. The choice is arbitrary in that I wanted it bigger than the MNIST dataset which is 28x28 so it will be easier to see, but not so big that it kills my CPU. This is even more important since we want to use RGB colors which is 3 channels as opposed to the MNIST grey scale of 1.</p>
-
-<p>```clojure
-(def dataset-image-size 52)
-(def dataset-num-classes 2)
-(def dataset-num-channels 3)
-(def dataset-datatype :float)</p>
-
-<p>(defn resize-and-write-data
-  [output-dir [idx [file label]]]
-  (let [img-path (str output-dir &ldquo;/&rdquo; label &ldquo;/&rdquo; idx &ldquo;.png&rdquo; )]</p>
-
-<pre><code>(when-not (.exists (io/file img-path))
-  (io/make-parents img-path)
-  (-&gt; (imagez/load-image file)
-      (image/resize dataset-image-size dataset-image-size)
-      (imagez/save img-path)))
-nil))
-</code></pre>
-
-<p>```</p>
-
-<p>As far as the split between training images and testing images, we are going the go for an simple even split between testing and training data.</p>
-
-<h2>Network Configuration</h2>
-
-<p>The Network layer configuration is the meat of the whole thing. We are going to go with the exact same network description as the MNIST example:</p>
-
-<p><code>clojure
-(defn create-basic-network-description
-  []
-  [(desc/input dataset-image-size dataset-image-size dataset-num-channels)
-   (desc/convolutional 5 0 1 20)
-   (desc/max-pooling 2 0 2)
-   (desc/relu)
-   (desc/convolutional 5 0 1 50)
-   (desc/max-pooling 2 0 2)
-   (desc/relu)
-   (desc/convolutional 1 0 1 50)
-   (desc/relu)
-   (desc/linear-&gt;relu 1000)
-   (desc/dropout 0.5)
-   (desc/linear-&gt;softmax dataset-num-classes)])
-</code></p>
-
-<p>It uses a series of convolutional layers with max pooling for feature recognition. We&rsquo;ll see if it works for color versions of cats and dogs as well as street numbers.</p>
-
-<p>We&rsquo;ll also keep the image augmentation the same as in the example.</p>
-
-<p>```clojure
-(def max-image-rotation-degrees 25)</p>
-
-<p>(defn img-aug-pipeline
-  [img]
-  (&ndash;> img</p>
-
-<pre><code>  (image-aug/rotate (- (rand-int (* 2 max-image-rotation-degrees))
-                       max-image-rotation-degrees)
-                    false)
-  (image-aug/inject-noise (* 0.25 (rand)))))
-</code></pre>
-
-<p>(def ^:dynamic <em>num-augmented-images-per-file</em> 1)
+<p>(&ndash;>clojure result1) ;=> 25
 ```</p>
 
-<p>It injects one augmented image into our training data by slightly rotating it and adding noise.</p>
+<p>It would be nice to have a easier way to export symbols and import symbols to and from the guest and host language. In fact, Graal provides a way to do this but to do this in Clojure, we would need something else called <a href="https://github.com/graalvm/graal/tree/master/truffle">Truffle</a>.</p>
 
-<h3>Running it!</h3>
+<p>Truffle is part of the Graal project and is a framework for implementing languages with the Graal compliler.
+There are quite a few languages implemented with the Truffle framework. R is one of them.</p>
 
-<p>It&rsquo;s time to test it out. Using <code>lein run</code>, we&rsquo;ll launch the <code>train-forever</code> function:</p>
+<p><img class="<a" src="href="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615">https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615</a>"></p>
+
+<p>My understanding is that if Clojure was implemented as a truffle lang, then interop could be much more seamless like this example in Ruby</p>
+
+<p><img class="<a" src="href="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615">https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615</a>"></p>
+
+<p>But let&rsquo;s continue in our exploration. What about doing something more interesting, like importing a useful R library and using it. How about the <a href="https://www.rdocumentation.org/packages/numDeriv/versions/2016.8-1">numDeriv</a> package that supports Accurate Numerical Derivatives?</p>
+
+<p>First we import the package using cran.</p>
+
+<p><code>clojure
+(.eval context "R" "
+install.packages(\"numDeriv\", repos = \"http://cran.case.edu/\")
+")
+</code></p>
+
+<p>If you are doing this at your REPL, you can will see lots of text going on in your <code>lein repl</code> process at this point. It&rsquo;s going out and figuring out what deps you need and installing them in your <code>/graalvm-0.28.2/jre/languages/R</code> directory structure.</p>
+
+<p>After it is done, we can actually use it!</p>
 
 <p>```clojure
-(defn train-forever
-  []
-  (let [dataset (create-dataset)</p>
+(def result2 (.eval context &ldquo;R&rdquo; &ldquo;
+library(numDeriv)
+grad(sin, (0:10)<em>2</em>pi/10)
+&rdquo;))
+result2 ;=> #object[org.graalvm.polyglot.Value 0x76765898 &ldquo;c(1,</p>
 
-<pre><code>    initial-description (create-basic-network-description)
-    confusion-matrix-atom (display-dataset-and-model dataset initial-description)]
-(classification/train-forever dataset observation-&gt;image
-                              initial-description
-                              :confusion-matrix-atom confusion-matrix-atom)))
+<pre><code>    ;0.809016994367249, 0.309016994372158, -0.309016994373567,
+    ;-0.809016994368844, -0.999999999993381, -0.809016994370298,
+    ;-0.309016994373312, 0.309016994372042, 0.809016994369185,
+    ;0.999999999993381)"]
 </code></pre>
 
 <p>```</p>
 
-<p>This opens a port to a localhost webpage where we can view the progress <code>http://localhost:8091/</code></p>
-
-<p><img class="<a" src="href="http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg">http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg</a>"></p>
-
-<p>Below the confusion matrix is shown. This tracks the progress of the training in the classification. In particular, how many times it thought a cat was really a cat and how many times it got it wrong.</p>
-
-<p><img class="<a" src="href="http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg">http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg</a>"></p>
-
-<p>As we are training the data, the loss for each epoch is shown on the console as well as when it saves the network to the external file.</p>
-
-<p>After only thirty minutes of training on my Mac Book Pro, we get to some pretty good results, with the correct percentage in the 99s :</p>
-
-<p><img class="<a" src="href="http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg">http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg</a>"></p>
-
-<p>It&rsquo;s time to do some inference on our trained network.</p>
-
-<h2>Inference</h2>
-
-<p>Firing up a REPL we can connect to our namespace and use the <code>label-one</code> function from the cortex example to spot check our classification. It reads in the external nippy file that contains the trained network description, takes a random image from the testing directory, and classifies it.</p>
+<p>This has a bit more interesting result as an array. But the Context has ways of dealing with it.</p>
 
 <p>```clojure
-(defn label-one
-  &ldquo;Take an arbitrary image and label it.&rdquo;
-  []
-  (let [file-label-pairs (shuffle (classification/directory->file-label-seq testing-dir</p>
+(.hasArrayElements result2) ;=> true
+(.getArraySize result2) ;=> 11</p>
 
-<pre><code>                                                                        false))
-    [test-file test-label] (first file-label-pairs)
-    test-img (imagez/load-image test-file)
-    observation (png-&gt;observation dataset-datatype false test-img)]
-(imagez/show test-img)
-(infer/classify-one-observation (:network-description
-                                 (suite-io/read-nippy-file "trained-network.nippy"))
-                                observation
-                                (ds/create-image-shape dataset-num-channels
-                                                       dataset-image-size
-                                                       dataset-image-size)
-                                dataset-datatype
-                                (classification/get-class-names-from-directory testing-dir))))
-</code></pre>
-
-<p>```</p>
-
-<p>Running <code>(label-one)</code> gives us the picture:</p>
-
-<p><img class="<a" src="href="http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg">http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg</a>"></p>
-
-<p>and classifies it as a cat. Yipee!</p>
-
-<p><code>clojure
-{:probability-map {"cat" 0.9995587468147278, "dog" 4.4119369704276323E-4}, :classification "cat"}
-</code></p>
-
-<p>Not bad, but let&rsquo;s try it with something harder. Personally, I&rsquo;m not even sure whether this is a cat or a dog.</p>
-
-<p><img class="<a" src="href="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg">http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg</a>"></p>
-
-<p>Feeding it through the program &ndash; it says it is a cat.</p>
-
-<p><code>clojure
- {:probability-map {"cat" 0.9942012429237366, "dog" 0.005798777565360069}, :classification "cat"}
-</code></p>
-
-<p>After much <a href="http://www.today.com/pets/cat-or-dog-wild-eyed-cutie-has-us-all-confused-t104835">debate on the internet</a>, I think that is the best answer the humans got too :)</p>
-
-<h2>Kaggle it</h2>
-
-<p>So it seems like we have a pretty good model, why don&rsquo;t we submit our results to the Kaggle competition and see how it rates. All they need is to have us run the classification against their test data of 12,500 images and classify them as 1 = dog or 0 = cat in a csv format.</p>
-
-<p>We will take each image and resize it, then feed it into cortex&rsquo;s <code>infer-n-observations</code> function, to do all our classification as a batch.</p>
-
-<p>```clojure
- (infer/infer-n-observations (:network-description</p>
-
-<pre><code>                                         (suite-io/read-nippy-file "trained-network.nippy"))
-                                        observations
-                                        (ds/create-image-shape dataset-num-channels
-                                                               dataset-image-size
-                                                               dataset-image-size)
-                                        dataset-datatype)
-</code></pre>
-
-<p>```</p>
-
-<p>Finally, we just need to format our results to a csv file and export it:</p>
-
-<p>```clojure
-(defn write-kaggle-results [results]
-  (with-open [out-file (io/writer &ldquo;kaggle-results.csv&rdquo;)]</p>
-
-<pre><code>(csv/write-csv out-file
-               (into [["id" "label"]]
-                     (-&gt; (mapv (fn [[id class]] [(Integer/parseInt id) (if (= "dog" class) 1 0)]) results)
-                         (sort))))))
-</code></pre>
-
-<p>```</p>
-
-<p>After uploading the file to the Kaggle, I was pleased that the answer got in the top 91%! It made it on the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/leaderboard">Leaderboard</a>.</p>
-
-<h2>Conclusion</h2>
-
-<p>Using an example setup from the Cortex project and 30 minutes of processing time on my laptop, we were able to crunch through some significant data and come up with a trained classification model that was good enough to make the charts in the Kaggle competition. On top of it all, it is in pure Clojure.</p>
-
-<p>In my mind, this is truely impressive and even though the Cortex library is in it&rsquo;s early phases, it puts it on track to be as useful a tool as Tensor Flow for Machine Learning.</p>
-
-<p>Earlier this month, I watched an ACM Learning webcast with Peter Norvig speaking on AI. In it, he spoke of one of the next challenges of AI which is to combine <a href="https://twitter.com/gigasquid/status/806916856040689664?lang=en">symbolic with neural</a>. I can think of no better language than Clojure with it&rsquo;s simplicity, power, and rich LISP heritage to take on the challenge for the future. With the Cortex library, it&rsquo;s off to a great start.</p>
-
-<p><em>If want to see all the cats vs dog  Kaggle Code, it&rsquo;s out on github here <a href="https://github.com/gigasquid/kaggle-cats-dogs">https://github.com/gigasquid/kaggle-cats-dogs</a></em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Genetic Programming with clojure.spec]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec/"/>
-    <updated>2016-07-18T09:40:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg">http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg</a>"></p>
-
-<p><a href="http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec">Clojure.spec</a> is a new library for Clojure that enables you to write specifications for your program.  In an earlier <a href="http://gigasquidsoftware.com/blog/2016/05/29/one-fish-spec-fish/">post</a>, I showed off some of it&rsquo;s power to generate test data from your specifications.  It&rsquo;s a pretty cool feature.  Given some clojure.spec code, you can generate sample data for you based off of the specifications.  But what if you could write a program that would <em>generate</em> your clojure.spec program based off of data so that you could generate more test data?</p>
-
-<h2>Genetic programming</h2>
-
-<p>Here is where we embark for fun.  We are going to use genetic programming to generate clojure.spec <em>creatures</em> that contain a program.  Through successive generations, those creatures will breed, mutate, and evolve to fit the data that we are going to give it.  Going with our creature theme, we can say that it <em>eats</em> a sequence of data like this</p>
-
-<p><code>clojure
-["hi" true 5 10 "boo"]
-</code></p>
-
-<p>Each creature will be represented by a map that has information about two key pieces, its program and the <em>fitness</em> score.  Each program is going to start with a <a href="https://clojure.github.io/clojure/branch-master/clojure.spec-api.html#clojure.spec/cat">clojure.spec/cat</a>, (which is the spec to describe a sequence).  From here on out, I&rsquo;m going to refer to the clojure.spec namespace as <code>s/</code>.  So, a simple creature would look like this.</p>
-
-<p><code>clojure
-{:program (s/cat :0 int? :1 string?)
- :score 0}
-</code></p>
-
-<p>How do we figure out a score from the creature&rsquo;s spec?  We run the spec and see how much of the data that it can successfully consume.</p>
-
-<h3>Scoring a creature</h3>
-
-<p>To score a creature, we&rsquo;re going to use the clojure.spec <code>explain-data</code> function. It enables us to run a spec against some data and get back the problems in a data format that we can inspect.  If there are no problems and the spec passes, the result is nil.</p>
-
-<p><code>clojure
-(s/explain-data (s/cat :0 int? :1 string?)  [1 "hi"])
-;=&gt; nil
-</code></p>
-
-<p>However, if there is a problem, we can get information about what went wrong.  In particular, we can see <em>where</em> it went wrong in the sequence.</p>
-
-<p><code>clojure
-(s/explain-data (s/cat :0 int? :1 string?)  [1 true])
-;=&gt; #:clojure.spec{:problems [{:path [:1], :pred string?, :val true, :via [], :in [1]}]}
-</code></p>
-
-<p>In the above example, the <code>:in</code> key tells us that it fails at index 1. This gives us all the information we need to write a score function for our creature.</p>
-
-<p>```clojure
-(defn score [creature test-data]
-  (try
-   (let [problems (:clojure.spec/problems (s/explain-data (eval (:program creature)) test-data))]</p>
-
-<pre><code> (if problems
-   (assoc creature :score (get-in problems [0 :in 0]))
-   (assoc creature :score 100)))
-</code></pre>
-
-<p>   (catch Throwable e (assoc creature :score 0))))
+<p>(for [i (range 10)]
+  (&ndash;> (.getArrayElement result2 i) (&ndash;>clojure)))
+;=> (1.0 0.8090169943672489 0.3090169943721585 -0.3090169943735675
+;-0.8090169943688436 -0.9999999999933814
+; -0.8090169943702977 -0.3090169943733122 0.30901699437204233
+; 0.8090169943691851)
 ```</p>
 
-<p>This function tries to run the spec against the data.  If there are no problems, the creature gets a 100 score.  Otherwise, it records the farthest point in the sequence that it got.  Creatures with a higher score are considered more <em>fit</em>.</p>
+<p>So, we&rsquo;ve showed basic interop with R &ndash; which is pretty neat. What about Python?</p>
+
+<h3>Interoping with Python</h3>
+
+<p>Truffle is scheduled to fully support Python in 2018, but there is already an early alpha version in the Graal download that we can play with.</p>
 
 <p><code>clojure
-(score {:program '(s/cat :0 int? :1 string?)} [1 true])
-;=&gt; {:program (s/cat :0 int? :1 string?), :score 1}
+(.eval context "python" "
+import time;
+time.clock()
+")
+ ;=&gt; #object[org.graalvm.polyglot.Value 0x4a6b3b70 "1.508202803249E9"]
 </code></p>
 
-<p>Now that we have a fitness function to evaluate our creatures, we need a way to generate a random clojure.spec creature.</p>
+<p>Neat!</p>
 
-<p><img class="<a" src="href="http:////c1.staticflickr.com/9/8781/28071856800_0477b25fcc.jpg">http:////c1.staticflickr.com/9/8781/28071856800_0477b25fcc.jpg</a>"></p>
+<p>It is still a long way for <code>import numpy</code> or <code>import tensorflow</code> but cPython compatibility is the goal. Although the c-extensions are the really tricky part.</p>
 
-<h3>Create a random creature</h3>
+<p>So keep an eye on Graal and Truffle for the future and wish the Oracle Labs team the best on their mission to make the JVM Polyglot.</p>
 
-<p>This is where I really love Clojure.  Code is data, so we can create the programs as lists and they are just themselves.  To run the programs, we just need to call <code>eval</code> on them.  We are going to constrain the creatures somewhat.  They are all going to start out with <code>s/cat</code> and have a certain length of items in the sequence.  Also, we are going to allow the parts of the spec to be created with certain predicates.</p>
+<h3>Footnotes</h3>
 
-<p><code>clojure
-(def preds ['integer? 'string? 'boolean? '(s/and integer? even?) '(s/and integer? odd?)])
-</code></p>
-
-<p>Also allowing, composition with ands and ors and other sequences.</p>
-
-<p><code>clojure
-(def seqs ['s/+ 's/*])
-(def and-ors ['s/and 's/or])
-</code></p>
-
-<p>We are also going to have some probability knobs to control how the random creature is constructed.</p>
-
-<p><code>clojure
-(def seq-prob 0.3)
-(def nest-prob 0.00)
-(def max-depth 4)
-(def and-or-prob 0.85)
-</code></p>
-
-<p>The <code>seq-prob</code> is the probability that a new spec sub sequence will be constructed.  The <code>nest-prob</code> is set to zero right now, to keep things simple, but if turned up with increase the chance that a nested spec sequence would occur.  We are going to be writing a recursive function for generation, so we&rsquo;ll keep things to a limited depth with <code>max-depth</code>.  Finally, we have the chance that when constructing a spec sub sequence, that it will be an and/or with <code>and-or-prob</code>.  Putting it all together with code to construct a random arg.</p>
-
-<p>```clojure
-(defn make-random-arg [n]
-  (if (and (pos? n) (&lt; (rand) seq-prob))</p>
-
-<pre><code>(make-random-seq n)
-(rand-nth preds)))
-</code></pre>
-
-<p>```</p>
-
-<p>Also creating a random sub sequence.</p>
-
-<p>```clojure
-(defn make-random-seq [n]
-  (cond</p>
-
-<pre><code>(&lt; (rand) nest-prob)
-`(s/spec (~(rand-nth seqs) ~(make-random-arg (dec n))))
-
-(&lt; (rand) and-or-prob)
-`(~(rand-nth and-ors) ~(make-random-arg (dec n)) ~(make-random-arg (dec n)))
-
-:else
-`(~(rand-nth seqs) ~(make-random-arg (dec n)))))
-</code></pre>
-
-<p>```</p>
-
-<p>Finally, we can create a random <code>s/cat</code> spec with</p>
-
-<p>```clojure
-(defn make-random-cat [len]
-  (let [args (reduce (fn [r i]</p>
-
-<pre><code>                   (conj r (keyword (str i))
-                         (make-random-arg max-depth)))
-                 []
-                 (range len))]
-`(s/cat ~@args)))
-</code></pre>
-
-<p>```</p>
-
-<p>Let&rsquo;s see it in action.</p>
-
-<p><code>clojure
-(make-random-cat 3)
-;=&gt; (clojure.spec/cat :0 (s/and integer? odd?) :1 integer? :2 boolean?)
-</code></p>
-
-<p>We can make a batch of new creatures for our initial population using this function.</p>
-
-<p>```clojure
-(defn initial-population [popsize max-cat-length]
-  (for [i (range popsize)]</p>
-
-<pre><code>{:program (make-random-cat (inc (rand-int max-cat-length)))}))
-</code></pre>
-
-<p>```</p>
-
-<p>Great! Now we have a way to make new random spec creatures.  But, we need a way to alter them and let them evolve.  The first way to do this is with <em>mutation</em>.</p>
-
-<p><img class="<a" src="href="http://c2.staticflickr.com/9/8807/28275661121_94361d2fc4.jpg">http://c2.staticflickr.com/9/8807/28275661121_94361d2fc4.jpg</a>"></p>
-
-<h3>Mutating a creature</h3>
-
-<p>Mutation in our case, means changing part of the code tree of the creature&rsquo;s program.  To keep the program runnable, we don&rsquo;t want to be able to mutate every node, only specific ones.  We&rsquo;re going to control this by defining a <code>mutable</code> function that will only change nodes that start with our sequences or predicates.</p>
-
-<p>```clojure
-(defn mutable? [node]
-  (or (when (seq? node)</p>
-
-<pre><code>    (contains? (set/union (set seqs) #{'clojure.spec/spec}) (first node)))
-  (contains? (set preds) node)))
-</code></pre>
-
-<p>```</p>
-
-<p>Then, we can use <code>postwalk</code> to walk the code tree and alter a node by a mutation probability factor</p>
-
-<p>```clojure
-(def mutate-prob 0.1)</p>
-
-<p>(defn mutate [creature]
-  (let [program (:program creature)</p>
-
-<pre><code>    mutated-program (walk/postwalk
-                     (fn [x] (if (and (mutable? x) (&lt; (rand) mutate-prob))
-                              (make-random-arg max-depth)
-                              x)) program)]
-(assoc creature :program mutated-program)))
-</code></pre>
-
-<p>```</p>
-
-<p>Trying it on one of our creatures.</p>
-
-<p><code>clojure
-(mutate {:program '(clojure.spec/cat :0 (s/and integer? odd?) :1 integer?)})
-;=&gt; {:program (clojure.spec/cat :0 (s/or (s/and integer? even?)) :1 integer?)}
-</code></p>
-
-<p>We can change our creatures via mutation, but what about breeding it with other creatures?</p>
-
-<p><img class="<a" src="href="http://c8.staticflickr.com/9/8670/28354279095_25661401c0_z.jpg">http://c8.staticflickr.com/9/8670/28354279095_25661401c0_z.jpg</a>"></p>
-
-<h3>Crossovers with creatures</h3>
-
-<p>Crossover is another way to modify programs.  It takes two creatures and swaps a node from one creature to another. To accomplish this, we&rsquo;re going to use the <code>walk</code> function to select at a random probability the crossover node from the first node, then insert it into the second&rsquo;s creatures program at another random spot.</p>
-
-<p>```clojure
-(def crossover-prob 0.7)</p>
-
-<p>(defn crossover [creature1 creature2]
-  (let [program1 (:program creature1)</p>
-
-<pre><code>    program2 (:program creature2)
-    chosen-node (first (walk/walk
-                        #(when
-                             (and (&lt; (rand) crossover-prob)
-                                  (mutable? %))
-                           %)
-                        #(remove nil? %) program1))
-    crossed-over? (atom false)
-    crossover-program (if chosen-node
-                         (walk/postwalk
-                          (fn [x]
-                            (if (and (mutable? x)
-                                     (&lt; (rand) crossover-prob)
-                                     (not @crossed-over?))
-                              (do (reset! crossed-over? true) chosen-node)
-                              x))
-                          program2)
-                         program2)]
-{:program crossover-program}))
-</code></pre>
-
-<p>```</p>
-
-<p>Taking two creatures and putting them together.</p>
-
-<p>```clojure
-(crossover {:program &lsquo;(clojure.spec/cat :0 (s/and integer? odd?) :1 integer?)}</p>
-
-<pre><code>       {:program '(clojure.spec/cat :0 string? :1 boolean?)})
-</code></pre>
-
-<p>;=> {:program (clojure.spec/cat :0 (s/and integer? odd?) :1 boolean?)}
-```</p>
-
-<p>We have our ways to change our creatures to let them evolve and we have a way to rank them.  What we need now is to put it together in a way that will let them evolve to the solution.</p>
-
-<p><img class="<a" src="href="http://c5.staticflickr.com/9/8570/28320682956_2a301eea70_z.jpg">http://c5.staticflickr.com/9/8570/28320682956_2a301eea70_z.jpg</a>"></p>
-
-<h3>Evolving creatures</h3>
-
-<p>The process will be in general terms:</p>
-
-<ul>
-<li>Create initial population</li>
-<li>Rank them</li>
-<li>Take the top two best ones and carry them over (this is known as <em>elitism</em>)</li>
-<li>Create the next generation from by <em>selecting</em> creatures for crossover and mutation</li>
-<li>Repeat!</li>
-</ul>
-
-
-<p>So how do we select the best creatures for our next population?  This is an interesting question, there are many approaches.  The one that we&rsquo;re going to use is called <a href="https://en.wikipedia.org/wiki/Tournament_selection">tournament selection</a>.  It involves picking n creatures from the whole population and then, among those, picking the best scored one.  This will allow diversity in our population that is needed for proper evolution.</p>
-
-<p>```clojure
-(defn select-best [creatures tournament-size]
-  (let [selected (repeatedly tournament-size #(rand-nth creatures))]</p>
-
-<pre><code>(-&gt; (sort-by :score selected) reverse first)))
-</code></pre>
-
-<p>```</p>
-
-<p>We&rsquo;re now ready to write our evolve function.  In it, we pass in the population size, how many generations we want, the tournament size, and of course, our test data that our creatures are going to feed on.  The loop ends when it reaches a perfect fitting solution, (a creature with a score of 100), or the max generations.</p>
-
-<p>Note that we have a chance for a completely random creature to appear in the generations, to further encourage diversity.</p>
-
-<p>```clojure
-(defn perfect-fit [creatures]
-  (first (filter #(= 100 (:score %)) creatures)))</p>
-
-<p>(defn evolve [pop-size max-gen tournament-size test-data]
-  (loop [n max-gen</p>
-
-<pre><code>     creatures (initial-population pop-size (count test-data))]
-(println "generation " (- max-gen n))
-(let [scored-creatures (map (fn [creature] (score creature test-data)) creatures)]
- (if (or (zero? n) (perfect-fit scored-creatures))
-   scored-creatures
-   (let [elites (take 2 (reverse (sort-by :score scored-creatures)))
-         new-creatures (for [i (range (- (count creatures) 2))]
-                         ;; add a random node to improve diversity
-                         (if (&lt; (rand) new-node-prob)
-                           {:program (make-random-cat (count test-data))}
-                           (let [creature1 (select-best scored-creatures tournament-size)
-                                 creature2 (select-best scored-creatures tournament-size)]
-                             (mutate (crossover creature1 creature2)))))]
-     (println "best-scores" (map :score elites))
-     (recur (dec n) (into new-creatures elites)))))))
-</code></pre>
-
-<p>```</p>
-
-<p>Trying it out. We get a perfect clojure.spec creature!</p>
-
-<p>```clojure
-(def creature-specs (evolve 100 100 7 [&ldquo;hi&rdquo; true 5 10 &ldquo;boo&rdquo;]))
-  (perfect-fit creature-specs)
-  ;=>{:program (clojure.spec/cat :0 string? :1 boolean? :2 (s/and integer? odd?) :3 integer? :4 string?)</p>
-
-<pre><code>  :score 100}
-</code></pre>
-
-<p>```</p>
-
-<p>Of course, our clojure.spec creature can generate data on its own with the <code>exercise</code> function.  Let&rsquo;s have it generate 5 more examples of data that conform to its spec.</p>
-
-<p><code>clojure
-  (s/exercise (eval (:program (perfect-fit creature-specs))) 5)
-;; ([("" true -1 -1 "") {:0 "", :1 true, :2 -1, :3 -1, :4 ""}]
-;;  [("D" false -1 -1 "G") {:0 "D", :1 false, :2 -1, :3 -1, :4 "G"}]
-;;  [("12" false -1 0 "l0") {:0 "12", :1 false, :2 -1, :3 0, :4 "l0"}]
-;;  [("" false -1 -2 "") {:0 "", :1 false, :2 -1, :3 -2, :4 ""}]
-;;  [("2" false 1 0 "Jro") {:0 "2", :1 false, :2 1, :3 0, :4 "Jro"}])
-</code></p>
-
-<p>If we wanted to, we could adjust our evolve function and let it continue to evolve creatures and lots of different solutions to choose from. We could even take the generated data from the <code>exercise function</code> and let it generate more creatures who generate more data&hellip;&hellip;</p>
-
-<p>The mind boggles.</p>
-
-<p>We&rsquo;ll leave with a quick summary of Genetic Programming.</p>
-
-<ul>
-<li>Start with a way to generate random creatures</li>
-<li>Have a way to evaluate their fitness</li>
-<li>Create a way to change them for the next generations using
-
-<ul>
-<li>Mutation</li>
-<li>Crossover</li>
-</ul>
-</li>
-<li>Have an evolution process
-
-<ul>
-<li>Create an initial population</li>
-<li>Rank them</li>
-<li>Create the next generation using selection techniques and mutation/ crossovers</li>
-<li>Don&rsquo;t forget about diversity</li>
-</ul>
-</li>
-</ul>
-
-
-<p>Most importantly, have fun!</p>
-
-<p>If you want to play with the code, it&rsquo;s on github here <a href="https://github.com/gigasquid/genetic-programming-spec">https://github.com/gigasquid/genetic-programming-spec</a></p>
-
-<p>If you want to learn more about clojure.spec this <a href="https://www.youtube.com/watch?v=nqY4nUMfus8">video</a> is a great place to start.  The <a href="http://clojure.org/guides/spec">guide</a> is also a great reference with examples.</p>
-
-<p>If you want to learn more about genetic programming, there are a couple of books I would recommend: <a href="https://www.amazon.com/Programming-Collective-Intelligence-Building-Applications/dp/0596529325">Collective Intelligence</a> and <a href="https://www.amazon.com/Genetic-Algorithms-Structures-Evolution-Programs/dp/3540606769/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1468862704&amp;sr=1-1&amp;keywords=genetic+algorithms+data+structures">Genetic Algorithms + Data Structures = Evolution Programs</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[One Fish Spec Fish]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/"/>
-    <updated>2016-05-29T16:29:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg">https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg</a>"></p>
-
-<p><a href="http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec">Clojure.spec</a> is an exciting, new core library for Clojure.  It enables pragmatic specifications for functions and brings a new level of robustness to building software in Clojure, along with unexpected side benefits.  One of which is the ability to write specifications that generate Dr. Seuss inspired rhymes.</p>
-
-<p>In this blog post, we&rsquo;ll take a tour of writing specifications for a clojure function, as well as the power of data generation.  First, some inspirational words:</p>
-
-<p><code>
-One fish
-Two fish
-Red fish
-Blue fish
-</code></p>
-
-<p>The mere shape of these words brings a function to mind.  One that would take in a vector:</p>
-
-<p><code>clojure
-[1 2 "Red" "Blue"]
-</code></p>
-
-<p>and give us back a string of transformed items with the word <em>fish</em> added, of course.</p>
-
-<p>But, let us turn our attention the parameters of this function and see how we can further specify them.  Before we get started, make sure you use the latest version of clojure, currently <code>[org.clojure/clojure "1.9.0-alpha13"]</code>,  test.check <code>[org.clojure/test.check "0.9.0"]</code>, and add clojure.spec to your namespace.</p>
-
-<p><code>clojure
-(ns one-fish.core
-  (:require [clojure.spec :as s]))
-</code></p>
-
-<h3>Specifying the values of the parameters</h3>
-
-<p>Back to the parameters. The first two are integers, that&rsquo;s pretty easy, but we want to say more about them.  For example, we don&rsquo;t want them to be very big.  Having a child&rsquo;s poem with the <em>One Hundred Thousand and Thirty Three fish</em> really won&rsquo;t do.  In fact, what we really want is to say is there is finite notion of <em>fish-numbers</em> and it&rsquo;s a map of integer to string representation.</p>
-
-<p>```clojure
-(def fish-numbers {0 &ldquo;Zero&rdquo;</p>
-
-<pre><code>               1 "One"
-               2 "Two"})
-</code></pre>
-
-<p>```</p>
-
-<p>Then, we can use the <code>s/def</code> to register the spec we are going to define for global reuse.  We&rsquo;ll use a namespaced keyword <code>::fish-number</code> to express that our specification for a valid number is the keys of the <code>fish-numbers</code> map.</p>
-
-<p><code>clojure
-(s/def ::fish-number (set (keys fish-numbers)))
-</code></p>
-
-<p>Now that we have the specification, we can ask it if it&rsquo;s valid for a given value.</p>
-
-<p><code>clojure
-(s/valid? ::fish-number 1) ;=&gt; true
-(s/valid? ::fish-number 5) ;=&gt; false
-</code></p>
-
-<p>So <code>5</code> is not a valid number for us.  We can ask it to explain why not.</p>
-
-<p><code>clojure
-(s/explain ::fish-number 5)
-;;val: 5 fails spec: :one-fish.core/fish-number predicate: (set (keys fish-numbers))
-</code></p>
-
-<p>Which, of course,  totally makes sense because <code>5</code> is not in our <code>fish-numbers</code> map.  Now that we&rsquo;ve covered the numbers, let&rsquo;s look at the colors.  We&rsquo;ll use a finite set of colors for our specification.  In addition to the classic red and blue, we&rsquo;ll also add the color <em>dun</em>.</p>
-
-<p><code>clojure
-(s/def ::color #{"Red" "Blue" "Dun"})
-</code></p>
-
-<p><em>You may be asking yourself, &ldquo;Is dun really a color?&rdquo;.  The author can assure you that it is in fact a real color, like a <a href="http://www.dictionary.com/browse/dun">dun colored horse</a>.  Furthermore, the word has the very important characteristic of rhyming with number one, which the author spent way too much time trying to think of.</em></p>
-
-<h3>Specifying the sequences of the values</h3>
-
-<p>We&rsquo;re at the point where we can start specifying things about the sequence of values in the parameter vector.  We&rsquo;ll have two numbers followed by two colors.  Using the <code>s/cat</code>, which is a concatentation of predicates/patterns, we can specify it as the <code>::first-line</code></p>
-
-<p><code>clojure
-(s/def ::first-line (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color))
-</code></p>
-
-<p>What the spec is doing here is associating each <em>part</em> with a <em>tag</em>, to identify what was matched or not, and its predicate/pattern.  So, if we try to explain a failing spec, it will tell us where it went wrong.</p>
-
-<p><code>clojure
-(s/explain ::first-line  [1 2 "Red" "Black"])
-;; In: [3] val: "Black" fails spec: :one-fish.core/color
-;;   at: [:c2] predicate: #{"Blue" "Dun" "Red"}
-</code></p>
-
-<p>That&rsquo;s great, but there&rsquo;s more we can express about the sequence of values.  For example, the second number should be one bigger than the first number.  The input to the function is going to be the map of the destructured tag keys from the <code>::first-line</code></p>
-
-<p><code>
-(defn one-bigger? [{:keys [n1 n2]}]
-  (= n2 (inc n1)))
-</code></p>
-
-<p>Also, the colors should not be the same value.  We can add these additional specifications with <code>s/and</code>.</p>
-
-<p>```clojure
-(s/def ::first-line (s/and (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color)</p>
-
-<pre><code>                       one-bigger?
-                       #(not= (:c1 %) (:c2 %))))
-</code></pre>
-
-<p>```</p>
-
-<p>We can test if our data is valid.</p>
-
-<p><code>clojure
-(s/valid? ::first-line [1 2 "Red" "Blue"]) ;=&gt; true
-</code></p>
-
-<p>If we want to get the destructured, conformed values, we can use <code>s/conform</code>.  It will return the tags along with the values.</p>
-
-<p><code>clojure
-(s/conform ::first-line [1 2 "Red" "Blue"])
-;=&gt; {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}
-</code></p>
-
-<p>Failing values for the specification can be easily identified.</p>
-
-<p>```clojure
-(s/valid? ::first-line [2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;]) ;=> false
-(s/explain ::first-line [2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;])
-;; val: {:n1 2, :n2 1, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Blue&rdquo;}
-;; fails spec: :one-fish.core/first-line predicate: one-bigger?</p>
-
-<p>```</p>
-
-<p>With our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.</p>
-
-<h3>Generating test data &ndash; and poetry with specification</h3>
-
-<p>The <code>s/exercise</code> function will generate data for your specifications.  It does 10 items by default, but we can tell it to do only 5.  Let&rsquo;s see what it comes up with.</p>
-
-<p><code>clojure
-(s/exercise ::first-line 5)
-;; ([(0 1 "Dun" "Red") {:n1 0, :n2 1, :c1 "Dun", :c2 "Red"}]
-;;  [(0 1 "Blue" "Red") {:n1 0, :n2 1, :c1 "Blue", :c2 "Red"}]
-;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}]
-;;  [(1 2 "Blue" "Dun") {:n1 1, :n2 2, :c1 "Blue", :c2 "Dun"}]
-;;  [(1 2 "Dun" "Red") {:n1 1, :n2 2, :c1 "Dun", :c2 "Red"}])
-</code></p>
-
-<p>Hmmm&hellip; something&rsquo;s not quite right.  Looking at the first result <code>[0 1 "Dun" Red"]</code>, it would result in:</p>
-
-<p><code>
-Zero fish
-One fish
-Dun fish
-Red fish
-</code></p>
-
-<p>Although, it meets our criteria, it&rsquo;s missing one essential ingredient &ndash; rhyming!</p>
-
-<p>Let&rsquo;s fix this by adding an extra predicate <code>number-rhymes-with-color?</code>.</p>
-
-<p><code>clojure
-(defn fish-number-rhymes-with-color? [{n :n2 c :c2}]
-  (or
-   (= [n c] [2 "Blue"])
-   (= [n c] [1 "Dun"])))
-</code></p>
-
-<p>We&rsquo;ll add this to our definition of <code>::first-line</code>, stating that the second number parameter should rhyme with the second color parameter.</p>
-
-<p>```clojure
-(s/def ::first-line (s/and (s/cat :n1 ::fish-number :n2 ::fish-number :c1 ::color :c2 ::color)</p>
-
-<pre><code>                       one-bigger?
-                       #(not= (:c1 %) (:c2 %))
-                       fish-number-rhymes-with-color?))
-</code></pre>
-
-<p>(s/valid? ::first-line [1 2 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;]) ;=> true
-(s/explain ::first-line [1 2 &ldquo;Red&rdquo; &ldquo;Dun&rdquo;])
-;;  {:n1 1, :n2 2, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Dun&rdquo;} fails spec:
-;;  :one-fish.core/first-line predicate: fish-number-rhymes-with-color?
-```</p>
-
-<p>Now, let&rsquo;s try the data generation again.</p>
-
-<p><code>clojure
-(s/exercise ::first-line)
-;; ([(1 2 "Red" "Blue") {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}]
-;;  [(1 2 "Red" "Blue") {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}]
-;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}]
-;;  [(1 2 "Dun" "Blue") {:n1 1, :n2 2, :c1 "Dun", :c2 "Blue"}]
-;;  [(1 2 "Dun" "Blue") {:n1 1, :n2 2, :c1 "Dun", :c2 "Blue"}]
-;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}]
-;;  [(1 2 "Red" "Blue") {:n1 1, :n2 2, :c1 "Red", :c2 "Blue"}]
-;;  [(0 1 "Red" "Dun") {:n1 0, :n2 1, :c1 "Red", :c2 "Dun"}]
-;;  [(0 1 "Red" "Dun") {:n1 0, :n2 1, :c1 "Red", :c2 "Dun"}]
-;;  [(0 1 "Blue" "Dun") {:n1 0, :n2 1, :c1 "Blue", :c2 "Dun"}])
-</code></p>
-
-<p>Much better.  To finish things off, let&rsquo;s finally create a function to create a string for our mini-poem from our data.  While  we&rsquo;re at it, we can use our spec with <code>s/fdef</code>, to validate that the parameters are indeed in the form of <code>::first-line</code>.</p>
-
-<h3>Using spec with functions</h3>
-
-<p>Here&rsquo;s our function <code>fish-line</code> that takes in our values as a parameters.</p>
-
-<p>```clojure
-(defn fish-line [n1 n2 c1 c2]
-  (clojure.string/join &ldquo; &rdquo;</p>
-
-<pre><code>(map #(str % " fish.")
-  [(get fish-numbers n1)
-   (get fish-numbers n2)
-   c1
-   c2])))
-</code></pre>
-
-<p>```</p>
-
-<p>We can specify that the args for this function be validated with <code>::first-line</code> and the return value is a string.</p>
-
-<p>```clojure
-(s/fdef fish-line</p>
-
-<pre><code>    :args ::first-line
-    :ret  string?)
-</code></pre>
-
-<p>```</p>
-
-<p>Now, we turn on the instrumentation of the validation for functions and see what happens. To enable this, we need to add the <code>spec.test</code> namespace to our requires:</p>
-
-<p>```clojure
-(ns one-fish.core
-  (:require [clojure.spec :as s]</p>
-
-<pre><code>        [clojure.spec.test :as stest]))
-</code></pre>
-
-<p>```</p>
-
-<p>The instrument function takes a fully-qualified symbol so add ` before the function name  to resolve it in the context of the current namespace.</p>
-
-<p><code>``clojure
-(stest/instrument</code>fish-line)</p>
-
-<p>(fish-line 1 2 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)
-;&ndash;> &ldquo;One fish. Two fish. Red fish. Blue fish.&rdquo;</p>
-
-<p>```</p>
-
-<p>But what about with bad data?</p>
-
-<p>```clojure
-(fish-line 2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)</p>
-
-<p> ;; Call to #&lsquo;one-fish.core/fish-line did not conform to spec: val:
- ;;   {:n1 2, :n2 1, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Blue&rdquo;} fails at: [:args] predicate:
- ;;   one-bigger? :clojure.spec/args (2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)</p>
-
-<p> ;;   {:clojure.spec/problems
- ;;    {[:args]
- ;;     {:pred one-bigger?,
- ;;      :val {:n1 2, :n2 1, :c1 &ldquo;Red&rdquo;, :c2 &ldquo;Blue&rdquo;},
- ;;      :via [],
- ;;      :in []}},
- ;;    :clojure.spec/args (2 1 &ldquo;Red&rdquo; &ldquo;Blue&rdquo;)}</p>
-
-<p>```</p>
-
-<p>Ah, yes &ndash; the first number must be one smaller than the second number.</p>
-
-<h3>Wrap up</h3>
-
-<p>I hope you&rsquo;ve enjoyed this brief tour of clojure.spec.  If you&rsquo;re interested in learning more, you should check out the <a href="http://clojure.org/guides/spec">spec.guide</a>.  It really is an exciting, new feature to Clojure.</p>
-
-<p>In the meantime, I&rsquo;ll leave you with one of our generated lines, sure to be a big hit with future generations.</p>
-
-<p><code>
-Zero fish
-One fish
-Red fish
-Dun fish
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ Kolmogorov-Uspensky Machine]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine/"/>
-    <updated>2016-03-16T18:19:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/03/16/kolmogorov-uspensky-machine</id>
-    <content type="html"><![CDATA[<p>It happened again.  I was sitting down reading a paper and I came across the phrase <em>Kolmogorov-Uspensky machine</em> and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn&rsquo;t important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared <em>again</em>.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn&rsquo;t even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was <em>once more</em>.  This time right in the same paragraph, silently mocking me.  I knew I had to do something so I strode to my computer and pulled the thread.</p>
-
-<h2>What is a Kolmogorov-Uspensky machine?</h2>
-
-<p>The first thing I found is that the Kolmogorov-Uspensky machine, (also referred to as KUM), is very similar to the <a href="https://en.wikipedia.org/wiki/Turing_machine">Turing machine</a>.  In fact, it shares the same computational class of being Turing-complete.</p>
-
-<p><img class="<a" src="href="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Turing_machine_2b.svg/320px-Turing_machine_2b.svg.png">https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Turing_machine_2b.svg/320px-Turing_machine_2b.svg.png</a>"></p>
-
-<p>The Turing machine operates on a tape divided into cells.  The head can move along the tape and read and write to it.  The tape is the storage for the machine.  Its movements are controlled by a collection of instructions which will be executed if certain prerequisites are met. The difference between the Turing machine  and a Kolmogorov-Uspensky machine is that the KUM has a tape that can change topology.  It&rsquo;s a graph.</p>
-
-<p>The graph of a KUM machine is not just any graph.  It&rsquo;s a particular kind of graph.  It must have the property that if you start at a one vertex, all the other vertexes are uniquely addressable.  The graph also has a active node which, in turn, has a active neighborhood of other nodes associated with it.  This is not unlike the Turing machine&rsquo;s head that points to the current cell.  To figure out what do, the KUM machine looks at the graph to decide on what instruction to execute.  The instructions can consist of adding a node or edge to the active neighborhood, removing a node or edge from the active neighborhood, or halting.</p>
-
-<p>After spending some time reading and researching, I felt like a had some idea of what a Kolmogorov-Uspensky machine was but it was still a bit fuzzy.  I wanted to really dig in and experience it by trying to implement one.  I found an esoteric programming language called <a href="https://esolangs.org/wiki/Eodermdrome">Eodermdrome</a> that fit the bill and set to work building it out in Clojure.</p>
-
-<h2>Eodermdrome</h2>
-
-<p>An Eodermdrome program creates graphs from a string of letters.  For example the graph of <em>abcdae</em> would produce</p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/abcdae.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/abcdae.png?raw=true</a>"></p>
-
-<p>The program itself consists of series of commands or rules.  The command will be executed if the following prereqs are met:</p>
-
-<ul>
-<li>The match graph in the command is a subgraph of the system graph.</li>
-<li>If an input set is part of the command, the input character read of the system input must match it.</li>
-</ul>
-
-
-<p>A command is of the form:</p>
-
-<ul>
-<li><strong>match-graph graph-replacement</strong>
-
-<ul>
-<li>This will execute if the match-graph is a subgraph and then transform the match to the replacement.</li>
-<li>Example:<code>a abc</code></li>
-</ul>
-</li>
-<li><strong>(input-set) match-graph graph-replacement</strong>.
-
-<ul>
-<li>This will execute if the match is a subgraph and if the next character of the system input matches.  On executing, it will read one char from the input and then transform the match graph with the replacement.</li>
-<li>Example: <code>(1) a abc</code></li>
-</ul>
-</li>
-<li><strong>match-graph (output) graph-replacement.</strong>
-
-<ul>
-<li>This will execute if the match-graph is a subgraph. On executing, it will print the output to the system and transform the match with the replacement.</li>
-<li>Example: <code>a (1) abc</code></li>
-</ul>
-</li>
-<li><strong>(input-set) match-graph (output) graph-replacement.</strong>
-
-<ul>
-<li>This will execute if the match is a subgraph and if the next character of the system input matches.  On executing, it will read one char from the input, print the output to the system, and then transform the match graph with the replacement.</li>
-<li>Example: <code>(0) a (1) abc</code></li>
-</ul>
-</li>
-</ul>
-
-
-<p>Comments are also allowed as text in between commas.  In this implementation, they must be contained on a single line.  Example: <code>,this is a comment,(1) a abc</code></p>
-
-<p>The initial state of the graph with a program is the denoted by the graph string <em>thequickbrownfoxjumpsoverthelazydog</em>.</p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/thequickbrownfoxjumpsoverthelazydog.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/thequickbrownfoxjumpsoverthelazydog.png?raw=true</a>" title="" ></p>
-
-<p>We now have all we need to walk through an example program in the Kolmogorov-Uspensky machine.</p>
-
-<h3>An add program</h3>
-
-<p>Let&rsquo;s take program for adding two string of ones together separated by zeros.</p>
-
-<p><code>
-,takes input of ones separated by zeros and adds the ones, thequickbrownfoxjumpsoverthelazydog a
-(1) a ab
-(0) a a
-ab (1) a
-</code></p>
-
-<p>Given a system input of &ldquo;101&rdquo;, it will print out &ldquo;11&rdquo;.  Let&rsquo;s walk through what happens in the program.</p>
-
-<p><strong>Step 1</strong> &ndash; The program starts with our graph in the initial state of our beloved <em>thequickbrownfoxjumpsoverthelazydog</em> configuration.</p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/step-1.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/step-1.png?raw=true</a>" title="" ></p>
-
-<p><strong>Step 2</strong> &ndash; The first instruction matches <code>,takes input of ones separated by zeros and adds the ones, thequickbrownfoxjumpsoverthelazydog a</code> with he active subgraph being the whole graph. It is replaced by the single graph node <em>a</em>.</p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/step-2.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/step-2.png?raw=true</a>"></p>
-
-<p><strong>Step 3</strong> &ndash; The next instruction set <code>(1) a ab</code> <em>a</em> subgraph matches and takes a 1 off the input and transforms the graph to <em>ab</em>.</p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true</a>"></p>
-
-<p><strong>Step 4</strong> &ndash; The instruction set <code>(0) a a</code> also matches (since a is a subgraph of ab) and it takes a zero off the input and transforms back the <em>a</em> to <em>a</em> so the graph is still <em>ab</em>.</p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/step-4.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/step-4.png?raw=true</a>"></p>
-
-<p><strong>Step 5</strong> &ndash;  The instruction set <code>ab (1) a</code> now matches and a one prints out and the <em>ab</em> graph changes to <em>a</em>.</p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true</a>"></p>
-
-<p><strong>Step 6</strong> &ndash; Now, the <code>(1) a ab</code> instruction matches, it takes another 1 off the input (our last one) and transforms to <em>ab</em></p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true</a>"></p>
-
-<p><strong>Step 7</strong> &ndash; Finally, <code>ab (1) a</code> matches and it prints out a 1 and rewrites the graph to back to <em>a</em></p>
-
-<p><img class="<a" src="href="https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true">https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true</a>"></p>
-
-<p>There are no more matching subgraphs without input required for instructions, so the program ends.</p>
-
-<h2>Parting thoughts and threads</h2>
-
-<p>The Kolmogorov-Uspensky machine is quite interesting. Not only is the idea of graph storage and rewriting appealing, it is also pretty powerful compared to Turing machines.  In fact, Dima Grigoriev proved that Turing machines cannot simulate Kolmogorov machines in real time.</p>
-
-<p>It&rsquo;s been quite a fun and enriching jaunt.  The next time you see an unfamiliar term or concept, I encourage you to pull the thread. You never know where it will take you. It&rsquo;s a great way to enlarge your world.</p>
-
-<p>If you are interested in the code and hacking for yourself, here is the repo  <a href="https://github.com/gigasquid/eodermdrome">https://github.com/gigasquid/eodermdrome</a>.</p>
-
-<p>Other good resources on KUM:</p>
-
-<ul>
-<li><a href="http://research.microsoft.com/en-us/um/people/gurevich/opera/78.pdf">On Kolmogorov Machines And Related Issues</a></li>
-<li><a href="https://books.google.com/books?id=SpTv44Ia-J0C&amp;pg=PA284&amp;lpg=PA284&amp;dq=active+node+kolmogorov+uspensky+machine&amp;source=bl&amp;ots=uQQSLaaKOS&amp;sig=9-V_m8z-Yh9zlzy6vX9MplGMbjw&amp;hl=en&amp;sa=X&amp;ved=0ahUKEwjy8820rMDLAhVByYMKHWP5A8oQ6AEILDAC#v=onepage&amp;q=active%20node%20kolmogorov%20uspensky%20machine&amp;f=false">Kolmogorov&rsquo;s Heritage in Mathematics</a></li>
-<li><a href="http://dl.acm.org/citation.cfm?id=202846">What is a &ldquo;pointer machine&rdquo;</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Fairy Tale Word Vectors]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors/"/>
-    <updated>2016-02-10T21:27:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/02/10/fairy-tale-word-vectors</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg">http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg</a>"></p>
-
-<p>This post continues our exploration from the last blog post <a href="http://gigasquidsoftware.com/blog/2016/02/06/why-hyperdimensional-socks-never-match/">Why Hyperdimensional Socks Never Match</a>.  We are still working our way through <a href="http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf">Kanerva&rsquo;s paper</a>.  This time, with the basics of hypervectors under our belts, we&rsquo;re ready to explore how words can be expressed as context vectors.  Once in a high dimensional form, you can compare two words to see how similar they are and even perform reasoning.</p>
-
-<p>To kick off our word vector adventure, we need some words.  Preferring whimsy over the Google news, our text will be taken from ten freely available fairy tale books on <a href="http://www.gutenberg.org/">http://www.gutenberg.org/</a>.</p>
-
-<h3>Gather ye nouns</h3>
-
-<p>Our goal is to assemble a frequency matrix, with all the different nouns as the rows and the columns will be the counts of if the word appears or not in the document.  Our matrix will be binary with just 1s and 0s.  The <em>document</em> will be a sentence or fragment of words.  A small visualization is below.</p>
-
-<table>
-<thead>
-<tr>
-<th></th>
-<th> Noun          </th>
-<th align="center"> Doc1</th>
-<th> Doc2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td> flower        </td>
-<td align="center"> 1   </td>
-<td>0</td>
-</tr>
-<tr>
-<td></td>
-<td> king          </td>
-<td align="center"> 0   </td>
-<td>1</td>
-</tr>
-<tr>
-<td></td>
-<td> fairy         </td>
-<td align="center"> 1   </td>
-<td>0</td>
-</tr>
-<tr>
-<td></td>
-<td> gold          </td>
-<td align="center"> 1   </td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
-
-
-<p>The size of the matrix will be big enough to support hypervector behavior, but not so big as to make computation too annoyingly slow.  It will be nouns x 10,000.</p>
-
-<p>The first task is to get a set of nouns to fill out the rows.  Although, there are numerous online sources for linguistic nouns, they unfortunately do not cover the same language spectrum as old fairy tale books.  So we are going to collect our own.  Using <a href="http://stanfordnlp.github.io/CoreNLP/">Stanford CoreNLP</a>, we can collect a set of nouns using Grimm&rsquo;s Book as a guide.  There are about 2500 nouns there to give us a nice sample to play with.  This makes our total matrix size ~ 2500 x 10,000.</p>
-
-<p>Now that we have our nouns, let&rsquo;s get down to business.  We want to create an index to row to make a <code>noun-idx</code> and then create a sparse matrix for our word frequency matrix.</p>
-
-<p>```clojure
-(ns hyperdimensional-playground.context-vectors
-  (:require [clojure.core.matrix :as m]</p>
-
-<pre><code>        [clojure.core.matrix.linear :as ml]
-        [clojure.string :as string]
-        [hyperdimensional-playground.core :refer [rand-hv cosine-sim mean-add inverse xor-mul]]
-        [hyperdimensional-playground.fairytale-nouns :refer [fairy-tales-nouns book-list]]))
-</code></pre>
-
-<p>(m/set-current-implementation :vectorz)
-;; size of the hypervectors and freq matrix columns
-(def sz 10000)
-;; The nouns come from a sampling of Grimm&rsquo;s fairy tale nouns these will
-;; make up the rows in the frequency matrix
-(def noun-idx (zipmap fairy-tales-nouns (range)))
-(def freq-matrix (m/new-sparse-array [(count fairy-tales-nouns) sz]))
-```</p>
-
-<p>The next thing we need to do is to have some functions to take a book, read it in, split it into documents and then update the frequency matrix.</p>
-
-<h3>Random indexing for the win</h3>
-
-<p>The interesting thing about the update method is that we can use <em>random indexing</em>.  We don&rsquo;t need to worry about having a column for each document.  Because of the nature of hyperdimensions, we can randomly assign 10 columns for each document.</p>
-
-<p>```clojure
-(defn update-doc!
-  &ldquo;Given a document &ndash; upate the frequency matrix using random indexing&rdquo;
-  [doc]
-  (let [known-nouns (clojure.set/intersection fairy-tales-nouns (set doc))]</p>
-
-<pre><code>; use positive random indexing
-(doall (repeatedly 10 #(doseq [noun known-nouns]
-                   (m/mset! freq-matrix (get noun-idx noun) (rand-int sz) 1))))))
-</code></pre>
-
-<p>```</p>
-
-<p>The whole book is processed by slurping in the contents and using a regex to split it up into docs to update the matrix.</p>
-
-<p>```clojure
-(defn process-book
-  &ldquo;Load a book and break it into sentence like documents and update the frequency matrix&rdquo;
-  [book-str]
-  (let [book-text (slurp book-str)</p>
-
-<pre><code>    docs (partition 25 (map string/lower-case
-                            (string/split book-text #"\s|\.|\,|\;|\!|\?")))
-    doc-count (count docs)]
-(println "processing:" book-str "(with" doc-count "docs)")
-(doall (map-indexed (fn [idx doc]
-                      (when (zero? (mod idx 1000)) (println "doc:" idx))
-                      (update-doc! doc))
-                    docs))
-(println "DONE with " book-str)))
-</code></pre>
-
-<p>```</p>
-
-<p>We can now run the whole processing with:</p>
-
-<p>```clojure
-(doseq [book book-list]</p>
-
-<pre><code>(process-book book))
-</code></pre>
-
-<p>```</p>
-
-<p>On my system, it only takes about 3 seconds.</p>
-
-<p>Great!  Now we have hypervectors associated with word frequencies.  They are now <em>context word vectors</em>.  What can we do with them.</p>
-
-<h3>How close is a king to a goat?</h3>
-
-<p>One of the things that we can do with them is find out a measure of how closely related the context of two words are by a measure of their cosine similarity.  First, we need a handy function to turn a string word into a word vector by getting it out of our frequency matrix.</p>
-
-<p>```clojure
-(defn wv [word]
-  &ldquo;Get a hypervector for the word from the frequency matrix&rdquo;
-  (let [i (get noun-idx word)]</p>
-
-<pre><code>(assert (not (nil? i)) (str word " not found"))
-(m/slice freq-matrix i)))
-</code></pre>
-
-<p>```</p>
-
-<p>Then we can make another nice function to compare two words and give a informational map back.</p>
-
-<p>```clojure
-(defn compare-wvs
-  &ldquo;Compare two words and give the cosine distance info map&rdquo;
-  [word1 word2]
-  (let [wv1 (wv word1)</p>
-
-<pre><code>    wv2 (wv word2)]
-(when (not= word1 word2)
-  {:word1 word1
-   :word2 word2
-   :cosine (cosine-sim wv1 wv2)})))
-</code></pre>
-
-<p>```</p>
-
-<p>Let&rsquo;s take a look at the similarities of some words to <em>king</em>.</p>
-
-<p>```clojure
-(sort-by :cosine[(compare-wvs &ldquo;king&rdquo; &ldquo;queen&rdquo;)</p>
-
-<pre><code>             (compare-wvs "king" "prince")
-             (compare-wvs "king" "princess")
-             (compare-wvs "king" "guard")
-             (compare-wvs "king" "goat")])
-</code></pre>
-
-<p>  ;; ({:word1 &ldquo;king&rdquo;, :word2 &ldquo;goat&rdquo;, :cosine 0.1509151478896664}
-  ;;  {:word1 &ldquo;king&rdquo;, :word2 &ldquo;guard&rdquo;, :cosine 0.16098893367403827}
-  ;;  {:word1 &ldquo;king&rdquo;, :word2 &ldquo;queen&rdquo;, :cosine 0.49470535530616655}
-  ;;  {:word1 &ldquo;king&rdquo;, :word2 &ldquo;prince&rdquo;, :cosine 0.5832521795716931}
-  ;;  {:word1 &ldquo;king&rdquo;, :word2 &ldquo;princess&rdquo;, :cosine 0.5836922474743367})
-```</p>
-
-<p>As expected, the royal family is closer to the king then a guard or goat is.</p>
-
-<p>One of the interesting things is that now we can do addition and subtraction with these word vectors and see how it affects the relation with other words.</p>
-
-<h3>Boy + Gold = King, Boy + Giant = Jack</h3>
-
-<p>We can take a look at how close <em>boy</em> and <em>king</em> are together by themselves.</p>
-
-<p><code>clojure
-(cosine-sim (wv "boy") (wv "king")) ;=&gt; 0.42996397142253145
-</code></p>
-
-<p>Now we can add some gold to the boy and that new word vector will be closer to king than boy was alone.</p>
-
-<p>```clojure
-(cosine-sim (mean-add (wv &ldquo;boy&rdquo;) (wv &ldquo;gold&rdquo;))</p>
-
-<pre><code>          (wv "king")) ;=&gt; 0.5876251031366048
-</code></pre>
-
-<p>```</p>
-
-<p>Doing the same for <em>boy</em> and <em>jack</em>, we find that adding a giant moves the context closer.</p>
-
-<p>```clojure
-(cosine-sim (wv &ldquo;boy&rdquo;) (wv &ldquo;jack&rdquo;)) ;=> 0.33102858702785953
-;; boy + giant = jack
-(cosine-sim (mean-add (wv &ldquo;giant&rdquo;) (wv &ldquo;boy&rdquo;))</p>
-
-<pre><code>          (wv "jack")) ;=&gt;0.4491473187787431
-</code></pre>
-
-<p>```</p>
-
-<p>Amusingly, a frog and a princess make a prince.</p>
-
-<p><code>clojure
-;;; frog + princess = prince
-  (cosine-sim (wv-add "frog" "princess") (wv "prince")) ;=&gt; 0.5231641991974249
-</code></p>
-
-<p>We can take this even farther by subtracting words and adding others.  For example a similarity to the word queen can be obtained by subtracting man from king and adding woman.</p>
-
-<p>```clojure
-;;; queen= (king-man) + woman
-  (cosine-sim (wv &ldquo;queen&rdquo;)</p>
-
-<pre><code>          (mean-add (wv "woman") (wv-subtract "king" "man"))) ;=&gt;0.5659832204544486
-</code></pre>
-
-<p>```</p>
-
-<p>Similarly, a contextual closeness to father can be gotten from subtracting woman from mother and adding man.</p>
-
-<p>```clojure
-(cosine-sim (wv &ldquo;father&rdquo;)</p>
-
-<pre><code>          (mean-add (wv "man") (wv-subtract "mother" "woman"))) ;=&gt;0.5959841177719538
-</code></pre>
-
-<p>```</p>
-
-<p>But wait, that&rsquo;s not all.  We can also do express facts with these word vectors and <em>reason</em> about them.</p>
-
-<h3>Reasoning with word vector with the database as a hyperdimensional value</h3>
-
-<p>The curious nature of hypervectors allows the storage of multiple entity, attributes in it and allow the retrieval of the likeness of them later by simple linear math &ndash; using only xor multiplication and addition.  This gives us the <em>database as a value</em> in the form of a high dimensional vector.</p>
-
-<p>For an example, say we want to express the fact that Hansel is a brother of Gretel.  We can do this by adding the xor product of brother with hansel and the product of brother with Gretel.</p>
-
-<p>```clojure
-;; hansel is the brother of gretel
-;; B<em>H + B</em>G
-(def hansel-brother-of-gretel
-   (mean-add</p>
-
-<pre><code>(xor-mul (wv "brother") (wv "hansel"))
-(xor-mul (wv "brother") (wv "gretel"))))
-</code></pre>
-
-<p>```</p>
-
-<p>Also we can express that Jack is a brother of Hansel.</p>
-
-<p>```clojure
-(def jack-brother-of-hansel
-  (mean-add</p>
-
-<pre><code> (xor-mul (wv "brother") (wv "jack"))
- (xor-mul (wv "brother") (wv "hansel"))))
-</code></pre>
-
-<p>```</p>
-
-<p>We can add these two facts together to make a new hypervector value.</p>
-
-<p>```clojure
-(def facts (mean-add hansel-brother-of-gretel</p>
-
-<pre><code>                   jack-brother-of-hansel))
-</code></pre>
-
-<p>```</p>
-
-<p>Now we can actually <em>reason</em> about them and ask questions.  Is Jack a brother of Hansel?  With a high cosine similarity, we can assume the answer is likely.</p>
-
-<p>```clojure
- ;; is jack the brother of hansel?
-  (cosine-sim
-   (wv &ldquo;jack&rdquo;)
-   (xor-mul (mean-add (wv &ldquo;brother&rdquo;) (wv &ldquo;gretel&rdquo;))</p>
-
-<pre><code>        facts)) ;=&gt;0.8095270629815969
-</code></pre>
-
-<p>```</p>
-
-<p>What about someone unrelated.  Is Cinderella the brother of Gretel? &ndash; No</p>
-
-<p>```clojure
- ;; is cinderella the brother of gretel ?
-  (cosine-sim
-   (wv &ldquo;cinderella&rdquo;)
-   (xor-mul (mean-add (wv &ldquo;brother&rdquo;) (wv &ldquo;gretel&rdquo;))</p>
-
-<pre><code>        facts)) ;=&gt;0.1451799916656951
-</code></pre>
-
-<p>```</p>
-
-<p>Is Jack the brother of Gretel &ndash; Yes</p>
-
-<p>```clojure
- ;; is jack the brother of gretel ?
-  (cosine-sim
-   (wv &ldquo;jack&rdquo;)
-   (xor-mul (mean-add (wv &ldquo;brother&rdquo;) (wv &ldquo;gretel&rdquo;))</p>
-
-<pre><code>        facts)) ;=&gt; 0.8095270629815969
-</code></pre>
-
-<p>```</p>
-
-<p>We can take this further by adding more facts and inventing a relation of our own.</p>
-
-<h3>Siblings in Hyperspace</h3>
-
-<p>Let&rsquo;s invent a new word vector that is not in our nouns &ndash; <em>siblings</em>.  We are going to create new random hypervector to represent it.</p>
-
-<p><code>clojure
-(def siblings (rand-hv))
-</code></p>
-
-<p>We will define it in terms of word vectors that we already have.  That is, siblings will be a the sum of brother + sister.  We XOR multiply it by siblings to associate it with the hypervector.</p>
-
-<p>```clojure
-(def siblings-brother-sister</p>
-
-<pre><code>(mean-add (xor-mul siblings (wv "brother")) (xor-mul siblings (wv "sister"))))
-</code></pre>
-
-<p>```</p>
-
-<p>Now we can add some more facts.  Gretel is a sister of Hansel.</p>
-
-<p>```clojure
- ;; gretel is the sister of hansel
-  ;; S<em>G + S</em>H
-  (def gretel-sister-of-hansel</p>
-
-<pre><code>(mean-add
- (xor-mul (wv "sister") (wv "gretel"))
- (xor-mul (wv "sister") (wv "hansel"))))
-</code></pre>
-
-<p>```</p>
-
-<p>Gretel is also a sister of Jack.</p>
-
-<p>```clojure
-  ;; gretel is the sister of jack
-  ; S<em>G + S</em>H
-  (def gretel-sister-of-jack</p>
-
-<pre><code>(mean-add
- (xor-mul (wv "sister") (wv "gretel"))
- (xor-mul (wv "sister") (wv "jack"))))
-</code></pre>
-
-<p>```</p>
-
-<p>Collecting all of our facts into one hypervector (as a database).</p>
-
-<p>```clojure
- (def facts (mean-add hansel-brother-of-gretel</p>
-
-<pre><code>                   jack-brother-of-hansel
-                   gretel-sister-of-jack
-                   gretel-sister-of-hansel
-                   siblings-brother-sister))
-</code></pre>
-
-<p>```</p>
-
-<p>Now we can ask some for questions.</p>
-
-<p>Are Hansel and Gretel siblings? &ndash; Yes</p>
-
-<p><code>clojure
-;; are hansel and gretel siblings?
-  (cosine-sim
-   (mean-add (wv "hansel") (wv "gretel"))
-   (xor-mul siblings facts)) ;=&gt;0.627015379034067
-</code></p>
-
-<p>Are John and Roland siblings &ndash; No</p>
-
-<p><code>clojure
-;; are john and roland siblings?
-  (cosine-sim
-   (mean-add (wv "roland") (wv "john"))
-   (xor-mul siblings facts)) ;=&gt; 0.1984017637065277
-</code></p>
-
-<p>Are Jack and Hansel siblings? &ndash; Yes</p>
-
-<p>```clojure
-  (cosine-sim</p>
-
-<pre><code>(mean-add (wv "jack") (wv "hansel"))
-(xor-mul siblings facts)) ;=&gt;0.48003572523507465
-</code></pre>
-
-<p>```</p>
-
-<p>It is interesting to think of that nothing is stopping us at this point from <em>retracting</em> facts by simply subtracting the fact encoded word vectors from our &ldquo;database&rdquo; value and making a new value from it.</p>
-
-<h3>Conclusions</h3>
-
-<p>In this fun, but casual exploration of word vector we have seen the potential for reasoning about language in a way that uses nothing more complicated than addition and multiplication.  The ability to store dense information in hypervectors, extract it with simple methods, and flexibly collect it randomly, shows its versatility and power.  Hyperdimensional vectors  might hold the key to unlocking a deeper understanding of cognitive computing or perhaps even true artificial intelligence.</p>
-
-<p>It is interesting to note that this technique is not limited to words. Other applications can be done the same way.  For example a video recommendation using a hypervector with movie titles.  Or perhaps even anomaly detection using sensor readings over a regular weekly time period.</p>
-
-<p>Looking over our journey with word vectors.  At the beginning it seemed that word vectors were magical.  Now, after an understanding of the basics, it still seems like magic.</p>
-
-<p>If you are interested in exploring further, feel free to use my github <a href="https://github.com/gigasquid/hyperdimensional-playground">hyperdimensional-playground</a> as a starting point.</p>
+<p>If you are interested in playing with the code. I have a github repo here <a href="https://github.com/gigasquid/graal-test">graal-test</a>. If you are interested in watching a video, I really liked <a href="https://www.youtube.com/watch?v=TQMKPRc6cbE">this one</a></p>
 ]]></content>
   </entry>
   

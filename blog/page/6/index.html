@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Nov 25th, 2012 Tags: All, Clojure, John McCarthy Papers This holiday edition blog post covers two McCarthy papers instead of just one &hellip;">
+	<meta name="description" content="Published on: Dec 26th, 2012 Tags: All, Clojure I spend most of my work day in Ruby and CoffeeScript. However, my true love belongs to Clojure, &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,78 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/12/26/hobby-languages-for-clojurists/">
+		
+			Hobby Languages for Clojurists</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-26T16:58:43-05:00" pubdate data-updated="true">Dec 26<span>th</span>, 2012</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p>I spend most of my work day in Ruby and CoffeeScript. However, my true love belongs to Clojure, which I consider my &ldquo;hobby&rdquo; language right now. I started to wonder, what are the &ldquo;hobby&rdquo; languages for people who spend most of their work day with Clojure. My informal twitter poll revealed selection as diverse and interesting as the Clojurists themselves.</p>
+
+<p><strong>Developers Who Enjoy Clojure Also Enjoy: </strong>
+<em>(In no particular order)</em></p>
+
+<ul>
+<li><p><a href="http://golang.org/">Go</a> (adorable mascot)</p></li>
+<li><p><a href="http://ocaml.org/">OCaml</a></p></li>
+<li><p><a href="http://factorcode.org/">Factor</a></p></li>
+<li><p><a href="http://www.haskell.org/haskellwiki/Haskell">Haskell</a></p></li>
+<li><p><a href="http://www.scala-lang.org/">Scala</a></p></li>
+<li><p><a href="http://julialang.org/">Julia</a></p></li>
+<li><p><a href="http://www.bayfronttechnologies.com/metaii.html">MetaII</a></p></li>
+<li><p><a href="https://github.com/Fogus/caerbannog">caerbannog</a></p></li>
+<li><p><a href="http://www.jsoftware.com/">J</a></p></li>
+<li><p><a href="http://boo.codehaus.org/">Boo</a> (.Net)</p></li>
+<li><p>JavaScript / Bash</p></li>
+</ul>
+
+
+<p>and of course <strong>MORE Clojure</strong></p>
+
+<ul>
+<li><p><a href="https://github.com/clojure/clojurescript">ClojureScript</a></p></li>
+<li><p><a href="https://github.com/clojure/core.logic">core.logic</a></p></li>
+<li><p><a href="http://overtone.github.com">Overtone</a></p></li>
+<li><p><a href="https://github.com/quil/quil">Quil</a></p></li>
+</ul>
+
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2012/12/26/hobby-languages-for-clojurists//blog/page/6/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -981,82 +1053,6 @@ More about <a href="http://en.wikipedia.org/wiki/Baba_Yaga">Baba Yaga Russian Fa
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2012/07/07/baba-yaga-and-the-clojure-reducers//blog/page/6/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/07/07/how-to-include-non-clojars-clojure-version-in-your-lein-project/">
-		
-			How to Include Non Clojars/maven Clojure Version in Your Lein Project</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-07T15:02:33-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2012</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
-
-
-</div>
-    </div>
-		<p>Do you need to have a specific version of Clojure in your leiningen project that you can&rsquo;t get from Clojars?</p>
-
-<p>I ran into this problem when I wanted to run a sample project on Clojure&rsquo;s reducers &ndash; which is not in the current Clojars version of 1.4.0.  I needed to use the most recent version, (unreleased), of 1.5.0.  These are the steps to get you running.</p>
-
-<ul>
-<li><p>Clone the <a href="https://github.com/clojure/clojure/">clojure git repository </a></p></li>
-<li><p>In the project directory &ndash; run ant to build the jar</p></li>
-<li><p>Install the jar into your local maven repo</p></li>
-</ul>
-
-
-<p><code>mvn install:install-file -DgroupId=org.clojure -DartifactId=clojure -Dfile=clojure-1.5.0-master-SNAPSHOT.jar -DpomFile=pom.xml</code></p>
-
-<ul>
-<li>Now you can update your lein project.clj with</li>
-</ul>
-
-
-<p><code>(defproject reducers "1.0.0-SNAPSHOT"
-:description "FIXME: write description"
-:dependencies [[org.clojure/clojure "1.5.0-master-SNAPSHOT"]])</code>
-Run lein deps and you should be all set.</p>
-
-<p>This trick also works with running leiningen projects with<a href="http://datomic.com/"> Datomic</a>.  In this case &ndash; download the Datomic library and from the root directory run
-<code> mvn install:install-file -DgroupId=com.datomic -DartifactId=datomic -Dfile=datomic-0.1.3164.jar -DpomFile=pom.xml</code></p>
-
-<p><strong><strong><strong><em> Update </em></strong></strong></strong>
-I found out that there is already an alpha version of Clojure on Maven.  So you don&rsquo;t need to do the build.  <a href="http://mvnrepository.com/artifact/org.clojure/clojure/1.5.0-alpha2">http://mvnrepository.com/artifact/org.clojure/clojure/1.5.0-alpha2</a></p>
-
-<p>It would simply be
-<code>(defproject reducers "1.0.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :dependencies [[org.clojure/clojure "1.5.0-alpha2"]])</code></p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2012/07/07/how-to-include-non-clojars-clojure-version-in-your-lein-project//blog/page/6/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

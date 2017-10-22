@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: May 5th, 2011 Tags: All, JavaScript I have been happily using Jasmine and Jasmine-JQuery on a project with great success. However, I &hellip;">
+	<meta name="description" content="Published on: Jun 11th, 2011 Tags: All, Clojure, Development Deploying Clojure apps with a single command to the cloud is now possible with Heroku &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,88 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/06/11/super-easy-clojure-web-apps-with-heroku-cedar/">
+		
+			Super Easy Clojure Web Apps With Heroku Cedar</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-11T19:57:52-04:00" pubdate data-updated="true">Jun 11<span>th</span>, 2011</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/development/'>Development</a>
+
+
+</div>
+    </div>
+		<p>Deploying Clojure apps with a single command to the cloud is now possible with Heroku Cedar and let me tell you, it is pure joy.</p>
+
+<p>I experimented with this the other day by creating a Compojure web application that compares the followers that two twitter users have in common.</p>
+
+<p>Here is the secret sauce you need to push your apps to Heroku:</p>
+
+<p>1) <strong>Procfile: </strong>
+You need to create a file in the root of your directory that contains the way to start up your application:</p>
+
+<pre><code> web: lein run -m ring-twitter-common.core
+</code></pre>
+
+<p>2) The application must have the project.clj setup correctly so that you can just run:</p>
+
+<pre><code>lein deps
+</code></pre>
+
+<p>3) You need to install the <a href="https://github.com/heroku/heroku">Heroku gem</a></p>
+
+<p>Once you have this setup you simply do:</p>
+
+<pre><code>heroku create --stack cedar
+
+
+
+
+git push heroku master
+</code></pre>
+
+<p>That&rsquo;s it. Your webapp will auto-magically be created, and deployed and be available for your viewing pleasure.</p>
+
+<p>You can check out  my sample Twitter Heroku app here:
+<a href="http://ring-twitter-common.herokuapp.com/">http://ring-twitter-common.herokuapp.com/</a></p>
+
+<p>But wait, you say&hellip; wouldn&rsquo;t it be awesome if you could just write your Clojure app and say lein deploy and have it all work? Wouldn&rsquo;t it be super awesome if there was some command to generate a skeleton for your Compojure app? The solution is actually in the planning stages by James Reeves (weavejester)!  Hooray!</p>
+
+<p><a href="http://groups.google.com/group/leiningen/browse_thread/thread/1f3fbb808542adc6">Leiningen Google Group Text</a></p>
+
+<p>In summary:  Developing Clojure Web Apps just got easier and the future is only looking up :)</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2011/06/11/super-easy-clojure-web-apps-with-heroku-cedar//blog/page/8/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -837,62 +919,6 @@ java.lang.StackOverflowError (NO_SOURCE_FILE:0)
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2010/12/07/123//blog/page/8/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/11/19/zen-and-zombies/">
-		
-			Zen and Zombies - Adventures in Ruby</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-19T23:06:07-05:00" pubdate data-updated="true">Nov 19<span>th</span>, 2010</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
-
-
-</div>
-    </div>
-		<p>What do Zen and Zombies have in common?  You probably got the beginning with the letter “Z”, but did you also guess Ruby?  This blog post is to share two awesome and fun filled ways to learn Ruby and Ruby and Rails.</p>
-
-<p>First, let&rsquo;s start with the Zen.  <a href="http://edgecase.com/">Edgecase </a>created a great way of learning Ruby.  It is through <a href="http://rubykoans.com/">Ruby Koans </a>.   Koans are a way of teaching Zen through questions.  The master asks the student a question.  The student then meditates on it until they come to the answer , eventually leading to enlightenment.  The Ruby Koans are cleverly designed to teach bite size tidbits of the Ruby language through the completion of unfinished test cases.  Each test case is a Koan.  Every time you fix the test case by filling in the blanks, you are gaining a deeper understanding of the language.  The main path_to_enlightment.rb file leads you through test cases that explore many areas of the languages such as Strings, Classes, Methods, and Exceptions.  Enlightenment has never been so much fun.</p>
-
-<p>Moving from enlightenment to tasty brains for Zombies, we have Rails for Zombies <a href="http://railsforzombies.org/">http://railsforzombies.org</a>.  <a href="http://envylabs.com/">Envy Labs </a> has raised the bar in online tutorials.   The traditional way to learn Ruby on Rails is to download the programs, struggle a bit as you figure out how to install it and then work through exercises locally through a book, website guide or podcast.  Rails for Zombies takes out all the pain of the traditional way and replaces it with enjoyment.  Everything is done in the browser, including code.  The format is to watch a video with Zombies and Rails code and then take what you learned by completing a lab exercise in the browser.  After you complete the lab, you unlock the next video.  Over the course of five labs, you create a Twitter web app for the Zombie hoard.  It&rsquo;s a win for you and the Zombies.</p>
-
-<p>So if you are curious about Ruby, these are two great ways to try it out.  I promise you that will have fun learning.  Although, some people may also experience occasional uncontrollable desire to eat brains&hellip;.</p>
-
-<p><em>Photo Credits</em></p>
-
-<p><em>Zen: </em><a href="http://www.flickr.com/photos/shebalso/121744939/">http://www.flickr.com/photos/shebalso/121744939/</a></p>
-
-<p>Zombie: <a href="http://www.flickr.com/photos/70109407@N00/5188908499/">http://www.flickr.com/photos/70109407@N00/5188908499/</a></p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2010/11/19/zen-and-zombies//blog/page/8/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

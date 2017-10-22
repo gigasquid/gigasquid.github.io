@@ -1,0 +1,356 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Embedded Interop between Clojure, R, and Python with GraalVM - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="In my talk at Clojure Conj I mentioned how a project from Oracle Labs named GraalVM might have to potential for Clojure to interop with Python on &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/books/index.html">Books</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Embedded Interop Between Clojure, R, and Python With GraalVM</h2>
+	<div class="entry-content"><p><img src="https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg" title="" ></p>
+
+<p>In my talk at <a href="https://www.youtube.com/watch?v=eLl6_k_fZn4">Clojure Conj</a> I mentioned how a project from Oracle Labs named GraalVM might have to potential for Clojure to interop with Python on the same VM. At the time of the talk, I had just learned about it so I didn&rsquo;t have time to take a look at it. Over the last week, I&rsquo;ve managed to take it for a test drive and I wanted to share what I found.</p>
+
+<h3>Are you ready?</h3>
+
+<p>In this example, we will be using an ordinary Leinengen project and using the REPL we will interop with both R and python.</p>
+
+<p>But first will need a bit of setup.</p>
+
+<p>We will download the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Graal project</a> so we can use its <code>java</code> instead of our own.</p>
+
+<p>Once we have it downloaded we will configure our PATH to use Graal&rsquo;s java instead of our own.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># export PATH=/path/to/graalAndTruffle/bin:$PATH</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we can create a new lein project and run <code>lein repl</code> and begin the fun.</p>
+
+<h3>The Polyglot Context</h3>
+
+<p>In our new namespace, we just need to import the <a href="http://graalvm.github.io/graal/truffle/javadoc/org/graalvm/polyglot/Context.html">Polyglot Context</a> to get started:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">graal-test.core</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:import</span> <span class="p">(</span><span class="nf">org.graalvm.polyglot</span> <span class="nv">Context</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; note that is also supports Ruby, LLVM, and JS</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">context</span> <span class="p">(</span><span class="nf">Context/create</span> <span class="p">(</span><span class="nb">into-array </span><span class="p">[</span><span class="s">&quot;python&quot;</span> <span class="s">&quot;R&quot;</span><span class="p">])))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we are ready to actually try to run some R and Python code right in our REPL. Let&rsquo;s start first with R.</p>
+
+<h3>Interoping with R</h3>
+
+<p>The main function we are going to use is the <code>eval</code> function in the context. Let&rsquo;s start small with some basic math.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">3^2 + 2^2</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0x7ff40e4d &quot;13.0&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow! It actually did something. It returned something called a <a href="https://github.com/graalvm/graal/blob/master/sdk/src/org.graalvm.polyglot/src/org/graalvm/polyglot/Value.java">Polyglot Value</a> with what looks like the right answer in it.</p>
+
+<p>Emboldened by our early success, let&rsquo;s try something a little more complicated like calling a function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result1</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">sum.of.squares &lt;- function(x,y) {</span>
+</span><span class='line'><span class="s">  x^2 + y^2</span>
+</span><span class='line'><span class="s">}</span>
+</span><span class='line'><span class="s">sum.of.squares(3,4)</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0xc3edd92 &quot;25.0&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, it looks like it worked. Let&rsquo;s try to get the result back into Clojure as a value we can work with. We could ask the result what sort of type it is with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.isNumber</span> <span class="nv">result1</span><span class="p">)</span> <span class="c1">;=&gt; true </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>but let&rsquo;s just use <code>clojure.edn</code> to read the string and save some time.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-&gt;clojure</span> <span class="p">[</span><span class="nv">polyglot-value</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">polyglot-value</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.toString</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">clojure.edn/read-string</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">-&gt;clojure</span> <span class="nv">result1</span><span class="p">)</span> <span class="c1">;=&gt; 25</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It would be nice to have a easier way to export symbols and import symbols to and from the guest and host language. In fact, Graal provides a way to do this but to do this in Clojure, we would need something else called <a href="https://github.com/graalvm/graal/tree/master/truffle">Truffle</a>.</p>
+
+<p>Truffle is part of the Graal project and is a framework for implementing languages with the Graal compliler.
+There are quite a few languages implemented with the Truffle framework. R is one of them.</p>
+
+<p><img src="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615"></p>
+
+<p>My understanding is that if Clojure was implemented as a truffle lang, then interop could be much more seamless like this example in Ruby</p>
+
+<p><img src="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615"></p>
+
+<p>But let&rsquo;s continue in our exploration. What about doing something more interesting, like importing a useful R library and using it. How about the <a href="https://www.rdocumentation.org/packages/numDeriv/versions/2016.8-1">numDeriv</a> package that supports Accurate Numerical Derivatives?</p>
+
+<p>First we import the package using cran.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">install.packages(\&quot;numDeriv\&quot;, repos = \&quot;http://cran.case.edu/\&quot;)</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are doing this at your REPL, you can will see lots of text going on in your <code>lein repl</code> process at this point. It&rsquo;s going out and figuring out what deps you need and installing them in your <code>/graalvm-0.28.2/jre/languages/R</code> directory structure.</p>
+
+<p>After it is done, we can actually use it!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result2</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">library(numDeriv)</span>
+</span><span class='line'><span class="s">grad(sin, (0:10)*2*pi/10)</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="nv">result2</span> <span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0x76765898 &quot;c(1,</span>
+</span><span class='line'>        <span class="c1">;0.809016994367249, 0.309016994372158, -0.309016994373567,</span>
+</span><span class='line'>        <span class="c1">;-0.809016994368844, -0.999999999993381, -0.809016994370298,</span>
+</span><span class='line'>        <span class="c1">;-0.309016994373312, 0.309016994372042, 0.809016994369185,</span>
+</span><span class='line'>        <span class="c1">;0.999999999993381)&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This has a bit more interesting result as an array. But the Context has ways of dealing with it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.hasArrayElements</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
+</span><span class='line'><span class="p">(</span><span class="nf">.getArraySize</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; 11</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">range </span><span class="mi">10</span><span class="p">)]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">.getArrayElement</span> <span class="nv">result2</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nf">-&gt;clojure</span><span class="p">)))</span>
+</span><span class='line'><span class="c1">;=&gt; (1.0 0.8090169943672489 0.3090169943721585 -0.3090169943735675</span>
+</span><span class='line'><span class="c1">;-0.8090169943688436 -0.9999999999933814</span>
+</span><span class='line'><span class="c1">; -0.8090169943702977 -0.3090169943733122 0.30901699437204233</span>
+</span><span class='line'><span class="c1">; 0.8090169943691851)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So, we&rsquo;ve showed basic interop with R &ndash; which is pretty neat. What about Python?</p>
+
+<h3>Interoping with Python</h3>
+
+<p>Truffle is scheduled to fully support Python in 2018, but there is already an early alpha version in the Graal download that we can play with.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;python&quot;</span> <span class="s">&quot;</span>
+</span><span class='line'><span class="s">import time;</span>
+</span><span class='line'><span class="s">time.clock()</span>
+</span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'> <span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0x4a6b3b70 &quot;1.508202803249E9&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Neat!</p>
+
+<p>It is still a long way for <code>import numpy</code> or <code>import tensorflow</code> but cPython compatibility is the goal. Although the c-extensions are the really tricky part.</p>
+
+<p>So keep an eye on Graal and Truffle for the future and wish the Oracle Labs team the best on their mission to make the JVM Polyglot.</p>
+
+<h3>Footnotes</h3>
+
+<p>If you are interested in playing with the code. I have a github repo here <a href="https://github.com/gigasquid/graal-test">graal-test</a>. If you are interested in watching a video, I really liked <a href="https://www.youtube.com/watch?v=TQMKPRc6cbE">this one</a></p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2017
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>
