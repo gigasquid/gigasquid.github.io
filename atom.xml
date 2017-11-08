@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2017-10-22T19:52:40-04:00</updated>
+  <updated>2017-11-07T19:37:32-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,120 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cats and Dogs with Cortex Redux]]></title>
+    <link href="http://gigasquid.github.io/blog/2017/11/07/cats-and-dogs-with-cortex-redux/"/>
+    <updated>2017-11-07T18:51:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2017/11/07/cats-and-dogs-with-cortex-redux</id>
+    <content type="html"><![CDATA[<p>I wrote a <a href="http://gigasquidsoftware.com/blog/2016/12/27/deep-learning-in-clojure-with-cortex/">blog post</a> a while back about using a Clojure machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> to do the Kaggle Cats and Dogs classification challenge.</p>
+
+<p>I wanted to revisit it for a few reasons. The first one is that the Cortex library has progressed and improved considerably over the last year. It&rsquo;s still not at version 1.0, but it my eyes, it&rsquo;s really starting to shine. The second reason is that they recently published an <a href="https://github.com/thinktopic/cortex/tree/master/examples/resnet-retrain">example</a> of using the RESNET50 model, (I&rsquo;ll explain later on), to do fine-tuning or transfer learning. The third reason, is that there is a great new plugin for leiningen the supports using <a href="https://github.com/didiercrunch/lein-jupyter">Jupyter notebooks with Clojure projects</a>. These notebooks are a great way of doing walkthroughs and tutorials.</p>
+
+<p>Putting all these things together, I felt like I was finally at a stage where I could somewhat replicate the first lesson in the <a href="https://github.com/fastai/courses/blob/master/deeplearning1/nbs/dogs_cats_redux.ipynb">Practical Deep Learning Course for Coders</a> with Cats and Dogs &ndash; although this time all in Clojure!</p>
+
+<h2>Where to Start?</h2>
+
+<p><img src="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg"></p>
+
+<p>In the last blog post, we created our deep learning network and trained the data on scaled down images (like 50x50) from scratch. This time we are much smarter.</p>
+
+<p>We are still of course going to have to get a hold of all the training data from <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Kaggle Cats vs Dogs Challenge</a>. The big difference is this time, we are just going to have to train our model for <em>1 epoch</em>. What&rsquo;s more, the results will be way better than before.</p>
+
+<p>How is this possible? We are going to use an already trained model, RESNET50. This model has already been painstakingly trained with a gigantic network that is 50 layers deep on the ImageNet challenge. That&rsquo;s a challenge that has models try to classify a 1000 different categories. The theory is that the inner layers of the network have already learned about the features that make up cats and dogs, all we would need to do is peel off the final layer of the network and graft on a new layers that just learns the final classification for our 2 categories of cats and dogs. This is called <em>transfer learning</em> or <em>retraining</em>.</p>
+
+<h2>Plan of Action</h2>
+
+<ul>
+<li>Get all the cats and dogs pictures in the right directory format for training</li>
+<li>Train the model with all but the last layer in the RESNET model. The last layer we are going to replace with our own layer that will finetune it to classify only cats and dogs</li>
+<li>Run the test data and come up with a spreadsheet of results to submit to Kaggle.</li>
+</ul>
+
+
+<h3>Getting all the data pictures in the right format</h3>
+
+<p>This is the generally the most time consuming step of most deep learning. I&rsquo;ll spare you the gritty details but we want to get all the pictures from the <code>train.zip</code> into the format</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-data
+</span><span class='line'>  -cats-dogs-training
+</span><span class='line'>      -cat
+</span><span class='line'>          1110.png
+</span><span class='line'>          ...
+</span><span class='line'>      -dog
+</span><span class='line'>          12416.png
+</span><span class='line'>          ...
+</span><span class='line'>  -cats-dogs-testing
+</span><span class='line'>      -cat
+</span><span class='line'>          11.png
+</span><span class='line'>          ...
+</span><span class='line'>      -dog
+</span><span class='line'>          12.png
+</span><span class='line'>          ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The image sizes must also all be resized to match the input of the RESNET50. That means they all have to be 224x224.</p>
+
+<h3>Train the model</h3>
+
+<p>The cortex functions allow you to load the resnet50 model, remove the last layer, freeze all the other layers so that they will not be retrained, and add new layers.</p>
+
+<p>I was surprised that I could actually train the model with all the images at 224x244 with the huge RESNET50 model. I built the uberjar and ran it which helped the performance.</p>
+
+<p><code>lein uberjar</code></p>
+
+<p><code>java -jar target/cats-dogs-cortex-redux.jar</code></p>
+
+<p>Training one epoch took me approximately 6 minutes. Not bad, especially considering that&rsquo;s all the training I really needed to do.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Loss for epoch 1: (current) 0.05875186542016347 (best) null
+</span><span class='line'>Saving network to trained-network.nippy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The key point is that it saved the fine tuned network to trained-network.nippy</p>
+
+<h3>Run the Kaggle test results and submit the results</h3>
+
+<p>You will need to do a bit more setup for this. First, you need to get the Kaggle test images for classification. There are 12500 of these in the test.zip file from the site. Under the data directory, create a new directory called kaggle-test. Now unzip the contents of test.zip inside that folder. The full directory with all the test images should now be:</p>
+
+<p><code>data/kaggle-test/test</code></p>
+
+<p>This step takes a long time and you might have to tweak the batch size again depending on your memory. There are 12500 predications to be made. The main logic for this is in function called <code>(kaggle-results batch-size)</code>. It will take a long time to run. It will print the results as it goes along to the kaggle-results.csv file. If you want to check progress you can do wc -l kaggle-results.csv</p>
+
+<p>For me locally, with <code>(cats-dogs/kaggle-results 100)</code> it took me 28 minutes locally.</p>
+
+<h3>Compare the results</h3>
+
+<p><img src="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg"></p>
+
+<p>My one epoch of fine tuning beat my best results of going through the Practical Deep Learning exercise with the fine tuning the VGG16 model. Not bad at all.</p>
+
+<h2>Summary</h2>
+
+<p>For those of you that are interested in checking out the code, it&rsquo;s out there on <a href="https://github.com/gigasquid/cats-dogs-cortex-redux">github</a></p>
+
+<p>Even more exciting, there is a <a href="https://github.com/gigasquid/cats-dogs-cortex-redux/blob/master/Cats%20and%20Dogs%20in%20Cortex%20(Redux).ipynb">walkthrough in a jupyter notebook</a> with a lein-jupyter plugin.</p>
+
+<p>The Deep Learning world in Clojure is an exciting place to be and gaining tools and traction more and more.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Embedded Interop between Clojure, R, and Python with GraalVM]]></title>
@@ -3958,169 +4072,6 @@ couldn&rsquo;t draw horses.</p>
 
 <p>Limits or constraints cannot hold back creativity.  But it can help
 mold it in surprising directions.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How Not to Panic While Writing a Clojure Book]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book/"/>
-    <updated>2015-05-22T09:11:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book</id>
-    <content type="html"><![CDATA[<p>I made it to that magical moment when the Clojure book I had been working on so long was published and I could actually hold it in my hand.</p>
-
-<p><img src="https://pbs.twimg.com/media/CDWsQPCUgAERViK.jpg"></p>
-
-<p>It was an immense project and I am very happy that it is finally done.  Since then, I met some people that are interested in writing books as well.
-They asked if I had any insights or tips having gone through the process as a first time author.  I have collected them in this post in hopes that they will be helpful to those going through the process themselves.</p>
-
-<p>The very first thing to do is to get an outline for your book.</p>
-
-<h3>Start with an Outline</h3>
-
-<p>Ideas are soft and squishy.  They drift into different shapes like clouds, and can melt away just as quickly.  One of the hardest things to do was trying to arrange all those ideas in my head into an initial form that would serve as the structure for the entire book.  I would pick up a pen and paper, start feeling overwhelmed, and suddenly remember I had something else very pressing to do.  I successfully avoided starting a book for quite a while, until one day I cornered myself.  I decided that I write my book outline on a long plane flight.  With salted peanuts as fuel, and nowhere to escape, I finally wrote an outline.  It wasn&rsquo;t perfect but it was a start and looking back and it was not too far off.  Here it is in all of its original roughness.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Title: Living Clojure
-</span><span class='line'>
-</span><span class='line'>From beginning steps to thriving in a functional world
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>(Each Chapter will follow quotes from Alice in Wonderland and very use ideas from some examples)
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>Book 1 - Beginner steps
-</span><span class='line'>
-</span><span class='line'>Chapter 1 - Are you comfortable?  Talk about how OO is comfortable but there is another world out there and new way of thinking functionally.
-</span><span class='line'>            White Rabbit goes by
-</span><span class='line'>Chapter 2 - Forms & Functions - Falling down the rabbit hole
-</span><span class='line'>Chapter 3 - Functional Transformations - Growing bigger and smaller - Key to thinking functionally is about transforming data from one shape to another shape.
-</span><span class='line'>            Map & Reduce
-</span><span class='line'>Chapter 4 - Embracing side effects  - Clojure is impure functional language (The rabbit's glove)  - Cover do and io stuff. Also basic stuff about 
-</span><span class='line'>            STM atoms and agents/ Protocols
-</span><span class='line'>Chapter 5 - Libraries, Libraries  - - how to use Leiningen
-</span><span class='line'>            build system. Where to find clojure libraries, how to use
-</span><span class='line'>            Serpents - camel-snake-kebab
-</span><span class='line'>Chapter 6 - core.asyc - Tea Party introduction to the core.async library
-</span><span class='line'>Chapter 7 - Clojure web - Chesire cat  - introduction to Ring, Cheshire library, ClojureScript and OM 
-</span><span class='line'>
-</span><span class='line'>Book 2 - From here to there - thriving in a functional world
-</span><span class='line'>
-</span><span class='line'>Training plan for thriving in a functional world.
-</span><span class='line'>
-</span><span class='line'>Chapter 8 - Join the community - Surround yourself with other Clojure enthusiats
-</span><span class='line'>  - Twitter clojure
-</span><span class='line'>  - Github account
-</span><span class='line'>  - Clojure mailing list
-</span><span class='line'>  - Prismatic clojure news
-</span><span class='line'>  - Meetup for local community group.  If there is not one in your area. start one!
-</span><span class='line'>  - Attend a Clojure conj
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>Chatpter 9 - Practice and build up 
-</span><span class='line'>Like Couch to 5K 7 week training program to work up to
-</span><span class='line'>practicing Clojure
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that I had an outline.  I just needed to figure out how long it would take me to write the book.</p>
-
-<h3>However Long You Think It Will Take &ndash; You Are Wrong</h3>
-
-<p>Having never written a book before, I had <em>no idea</em> how much work it would be.  The closest thing I had to compare it to was writing a blog post.  I figured writing a chapter would be roughly equivalent to writing a blog post.  If I could go back in time, this is the moment where my future self would pour a glass of ice water on my past self.  Writing a book is nothing like that.  It is a lot of time and work.  If I <em>had</em> to compare it now to writing blog posts, the process would be this.</p>
-
-<pre><code>- You write a blog post.
-- You rewrite the blog post.
-- You write a second blog post.
-- You rewrite that blog post and the first one too.
-- You write another blog post.
-- You rewrite all three post .....
-</code></pre>
-
-<p>So, if you have to commit to deadlines, make sure you remember how hard it will be, and then double the number.</p>
-
-<p>Speaking of deadlines, they suck, but you should have them.</p>
-
-<h3>Make Deadlines</h3>
-
-<p>Deadlines are not fun.  In fact, deadlines might even be a source of potential panic.  But for me, they were necessary evil.  There were a few beautiful times when inspiration came knocking at my door and I couldn&rsquo;t wait to start writing.  But most of the time, inspiration was off somewhere else eating biscuits.  The only thing that actually moved the book along was me knowing that I needed to get the next chunk done by a certain date.</p>
-
-<p>I found the best thing to do was to set aside a small bit of time on a daily basis to write something.</p>
-
-<h3>Routine, Routine, Routine</h3>
-
-<p>A daily routine was the most crucial thing for me.  Life is really busy with work and family.  It is so easy to get overwhelmed with daily life.  I decided that mornings would work best for me.  So I would stumble in to my computer an hour before work, with a hot cup of tea in hand, and write something.  Some days I actually did quite a bit.  Other days, I would write one sentence and declare it done.  But, I would always do <em>something</em>.  Even though those small slices of time didn&rsquo;t seem like a lot, they added up over the course of a week.</p>
-
-<p>Another curious thing happens when you do something, even a little bit, day after day.  You start to get better at it.</p>
-
-<h3>Writing is a Different Skill from Coding</h3>
-
-<p>I was used to writing code all day.  I found that the code writing skills are not the same as writing about code.  In fact, I found it really hard to do at the start.  But, just like writing code, you get better with practice.  And to get better at anything, feedback is really important.</p>
-
-<h3>Get and Trust Feedback</h3>
-
-<p>After each chapter, I would get feedback from my editor.  She was awesome and provided ways for me to improve the experience for the reader.  I lost track of how many times I rewrote that first chapter, but each time it would get a bit better and I would improve as well.  After the book was about half done it was sent out to others for technical review.  They provided feedback not only on the writing style but also the technical content, making sure that it all made sense.</p>
-
-<p>The feedback loop is much slower for writing a book than writing code, but it is just as vital.  The great people providing feedback are you closest partners in this.  You need to trust them.  Especially during the roughest time, the middle of the book.</p>
-
-<h3>The Middle Bit is the Hardest</h3>
-
-<p>I found the hardest time was about halfway through the book.  The initial excitement of the new endeavor had long since worn off.  It seemed like such a mountain of a task, with no end in sight.  I questioned my decision to continue with it daily.  My routine and deadlines kept me moving forward.  But my circle of friends and family kept me sane.  It was great to have an outlet, not only to vent my frustration with my slow progress, but to get kind encouragement to keep my spirits up.</p>
-
-<p>During these dark days, I also ate cheese.</p>
-
-<h3>Celebrate Your Small Victories</h3>
-
-<p>At the end of every chapter or deadline I would fix myself a nice plate of cheese and crackers.  You have to celebrate the small wins.  Cheese is also very tasty.</p>
-
-<p>When the book was finally done.  I had a really tasty plate, complete with Stilton, Brie, and a dependable Cheddar.  I was incredibly happy to be finished. But I knew that I definitely could have not done it without the help of others.</p>
-
-<h3>Thank Everyone that Supported You</h3>
-
-<p>Writing a book is a huge undertaking that is utterly impossible to do alone.  I could have not done it without the help and support of my editor, reviewers, family, friends, as well as the entire Clojure Community.  I am so thankful to all of you that helped my in this project.  You are great.</p>
-
-<p>So, should you go ahead and write that book?</p>
-
-<h3>Do It</h3>
-
-<p>Yes, you should write that book and share your knowledge.  Don&rsquo;t panic, remember to breathe, get some cheese and tea, and go for it!  It will be awesome.</p>
 ]]></content>
   </entry>
   

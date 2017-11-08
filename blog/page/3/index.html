@@ -6,8 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Jan 26th, 2015 Tags: All, Clojure Clojure&rsquo;s partition and partition-all functions are very useful.
-However, I have been bitten a &hellip;">
+	<meta name="description" content="Published on: May 22nd, 2015 Tags: All, Clojure I made it to that magical moment when the Clojure book I had been working on so long was published &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -74,6 +73,204 @@ However, I have been bitten a &hellip;">
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book/">
+		
+			How Not to Panic While Writing a Clojure Book</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-22T09:11:00-04:00" pubdate data-updated="true">May 22<span>nd</span>, 2015</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+
+
+</div>
+    </div>
+		<p>I made it to that magical moment when the Clojure book I had been working on so long was published and I could actually hold it in my hand.</p>
+
+<p><img src="https://pbs.twimg.com/media/CDWsQPCUgAERViK.jpg"></p>
+
+<p>It was an immense project and I am very happy that it is finally done.  Since then, I met some people that are interested in writing books as well.
+They asked if I had any insights or tips having gone through the process as a first time author.  I have collected them in this post in hopes that they will be helpful to those going through the process themselves.</p>
+
+<p>The very first thing to do is to get an outline for your book.</p>
+
+<h3>Start with an Outline</h3>
+
+<p>Ideas are soft and squishy.  They drift into different shapes like clouds, and can melt away just as quickly.  One of the hardest things to do was trying to arrange all those ideas in my head into an initial form that would serve as the structure for the entire book.  I would pick up a pen and paper, start feeling overwhelmed, and suddenly remember I had something else very pressing to do.  I successfully avoided starting a book for quite a while, until one day I cornered myself.  I decided that I write my book outline on a long plane flight.  With salted peanuts as fuel, and nowhere to escape, I finally wrote an outline.  It wasn&rsquo;t perfect but it was a start and looking back and it was not too far off.  Here it is in all of its original roughness.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Title: Living Clojure
+</span><span class='line'>
+</span><span class='line'>From beginning steps to thriving in a functional world
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>(Each Chapter will follow quotes from Alice in Wonderland and very use ideas from some examples)
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Book 1 - Beginner steps
+</span><span class='line'>
+</span><span class='line'>Chapter 1 - Are you comfortable?  Talk about how OO is comfortable but there is another world out there and new way of thinking functionally.
+</span><span class='line'>            White Rabbit goes by
+</span><span class='line'>Chapter 2 - Forms & Functions - Falling down the rabbit hole
+</span><span class='line'>Chapter 3 - Functional Transformations - Growing bigger and smaller - Key to thinking functionally is about transforming data from one shape to another shape.
+</span><span class='line'>            Map & Reduce
+</span><span class='line'>Chapter 4 - Embracing side effects  - Clojure is impure functional language (The rabbit's glove)  - Cover do and io stuff. Also basic stuff about 
+</span><span class='line'>            STM atoms and agents/ Protocols
+</span><span class='line'>Chapter 5 - Libraries, Libraries  - - how to use Leiningen
+</span><span class='line'>            build system. Where to find clojure libraries, how to use
+</span><span class='line'>            Serpents - camel-snake-kebab
+</span><span class='line'>Chapter 6 - core.asyc - Tea Party introduction to the core.async library
+</span><span class='line'>Chapter 7 - Clojure web - Chesire cat  - introduction to Ring, Cheshire library, ClojureScript and OM 
+</span><span class='line'>
+</span><span class='line'>Book 2 - From here to there - thriving in a functional world
+</span><span class='line'>
+</span><span class='line'>Training plan for thriving in a functional world.
+</span><span class='line'>
+</span><span class='line'>Chapter 8 - Join the community - Surround yourself with other Clojure enthusiats
+</span><span class='line'>  - Twitter clojure
+</span><span class='line'>  - Github account
+</span><span class='line'>  - Clojure mailing list
+</span><span class='line'>  - Prismatic clojure news
+</span><span class='line'>  - Meetup for local community group.  If there is not one in your area. start one!
+</span><span class='line'>  - Attend a Clojure conj
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Chatpter 9 - Practice and build up 
+</span><span class='line'>Like Couch to 5K 7 week training program to work up to
+</span><span class='line'>practicing Clojure
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that I had an outline.  I just needed to figure out how long it would take me to write the book.</p>
+
+<h3>However Long You Think It Will Take &ndash; You Are Wrong</h3>
+
+<p>Having never written a book before, I had <em>no idea</em> how much work it would be.  The closest thing I had to compare it to was writing a blog post.  I figured writing a chapter would be roughly equivalent to writing a blog post.  If I could go back in time, this is the moment where my future self would pour a glass of ice water on my past self.  Writing a book is nothing like that.  It is a lot of time and work.  If I <em>had</em> to compare it now to writing blog posts, the process would be this.</p>
+
+<pre><code>- You write a blog post.
+- You rewrite the blog post.
+- You write a second blog post.
+- You rewrite that blog post and the first one too.
+- You write another blog post.
+- You rewrite all three post .....
+</code></pre>
+
+<p>So, if you have to commit to deadlines, make sure you remember how hard it will be, and then double the number.</p>
+
+<p>Speaking of deadlines, they suck, but you should have them.</p>
+
+<h3>Make Deadlines</h3>
+
+<p>Deadlines are not fun.  In fact, deadlines might even be a source of potential panic.  But for me, they were necessary evil.  There were a few beautiful times when inspiration came knocking at my door and I couldn&rsquo;t wait to start writing.  But most of the time, inspiration was off somewhere else eating biscuits.  The only thing that actually moved the book along was me knowing that I needed to get the next chunk done by a certain date.</p>
+
+<p>I found the best thing to do was to set aside a small bit of time on a daily basis to write something.</p>
+
+<h3>Routine, Routine, Routine</h3>
+
+<p>A daily routine was the most crucial thing for me.  Life is really busy with work and family.  It is so easy to get overwhelmed with daily life.  I decided that mornings would work best for me.  So I would stumble in to my computer an hour before work, with a hot cup of tea in hand, and write something.  Some days I actually did quite a bit.  Other days, I would write one sentence and declare it done.  But, I would always do <em>something</em>.  Even though those small slices of time didn&rsquo;t seem like a lot, they added up over the course of a week.</p>
+
+<p>Another curious thing happens when you do something, even a little bit, day after day.  You start to get better at it.</p>
+
+<h3>Writing is a Different Skill from Coding</h3>
+
+<p>I was used to writing code all day.  I found that the code writing skills are not the same as writing about code.  In fact, I found it really hard to do at the start.  But, just like writing code, you get better with practice.  And to get better at anything, feedback is really important.</p>
+
+<h3>Get and Trust Feedback</h3>
+
+<p>After each chapter, I would get feedback from my editor.  She was awesome and provided ways for me to improve the experience for the reader.  I lost track of how many times I rewrote that first chapter, but each time it would get a bit better and I would improve as well.  After the book was about half done it was sent out to others for technical review.  They provided feedback not only on the writing style but also the technical content, making sure that it all made sense.</p>
+
+<p>The feedback loop is much slower for writing a book than writing code, but it is just as vital.  The great people providing feedback are you closest partners in this.  You need to trust them.  Especially during the roughest time, the middle of the book.</p>
+
+<h3>The Middle Bit is the Hardest</h3>
+
+<p>I found the hardest time was about halfway through the book.  The initial excitement of the new endeavor had long since worn off.  It seemed like such a mountain of a task, with no end in sight.  I questioned my decision to continue with it daily.  My routine and deadlines kept me moving forward.  But my circle of friends and family kept me sane.  It was great to have an outlet, not only to vent my frustration with my slow progress, but to get kind encouragement to keep my spirits up.</p>
+
+<p>During these dark days, I also ate cheese.</p>
+
+<h3>Celebrate Your Small Victories</h3>
+
+<p>At the end of every chapter or deadline I would fix myself a nice plate of cheese and crackers.  You have to celebrate the small wins.  Cheese is also very tasty.</p>
+
+<p>When the book was finally done.  I had a really tasty plate, complete with Stilton, Brie, and a dependable Cheddar.  I was incredibly happy to be finished. But I knew that I definitely could have not done it without the help of others.</p>
+
+<h3>Thank Everyone that Supported You</h3>
+
+<p>Writing a book is a huge undertaking that is utterly impossible to do alone.  I could have not done it without the help and support of my editor, reviewers, family, friends, as well as the entire Clojure Community.  I am so thankful to all of you that helped my in this project.  You are great.</p>
+
+<p>So, should you go ahead and write that book?</p>
+
+<h3>Do It</h3>
+
+<p>Yes, you should write that book and share your knowledge.  Don&rsquo;t panic, remember to breathe, get some cheese and tea, and go for it!  It will be awesome.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book//blog/page/3/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1190,380 +1387,6 @@ blank canvas, ready for your thoughts and code.</p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2014/07/06/love-songs-through-history-and-why-you-should-create//blog/page/3/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/06/11/a-taste-of-the-star-programming-language/">
-		
-			A Taste of the Star Programming Language</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-11T10:38:00-04:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/star/'>Star</a>
-
-
-</div>
-    </div>
-		<p>A while ago, I was <a href="http://gigasquidsoftware.com/blog/2013/05/01/growing-a-language-with-haskell-and-instaparse/">exploring creating a programming language with
-Instaparse</a>.
-I ended up exploring some concepts of Speech Acts proposed by John
-McCarthy by creating my first toy language called
-<a href="http://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/">Babar</a>.
-Shortly after posting a blog about it, I got an email from someone
-saying that I might be interested in a full blown, real programming
-language that also incorporated Speech Acts.  I happily started
-composing an reply to the email that started off with</p>
-
-<pre><code>That is so cool! ...
-</code></pre>
-
-<p>Then I realized that the author of the email and language was none
-other than
-Frank McCabe,
-one of the designers of the
-<a href="http://bit.ly/1pJtG0x">Go! programming language</a>
-(not to be confused with Google Go).  My brain froze
-while it was thinking</p>
-
-<pre><code>"OMG!!!! Frank McCabe, a real language designer, just emailed me!".
-</code></pre>
-
-<p>This unfortunately, made the rest of my email reply sound something like
-this</p>
-
-<pre><code>Frank,
-That is so cool!  herp derp derp Speech Acts herp derp John
-McCarthy derp...
-</code></pre>
-
-<p>His programming language is the Star
-Programming Language.  It was originally developed for use at a company that he
-worked at called Starview.  It has since been open sourced and moved
-to <a href="https://github.com/fmccabe/star">git</a>.  I finally had a bit a
-spare time and I had been itching to give
-Star a look.  To my pleasant surprise, despite my initial fumbling
-email impression,  Frank was open a friendly to
-get me started in it.
-I have only scratched the surface in exploring the language, but I
-wanted to share my initial impressions, as well as point you to some
-<a href="https://github.com/gigasquid/star-lang-katas">beginner katas</a> that I
-put together, so that you could join in the fun.</p>
-
-<h2>Crash Overview</h2>
-
-<p>Star is a strongly typed, functional language. It is not a pure
-functional language because is allows assignment and stateful objects,
-but the language is designed in a way that immutable functional
-programming is encouraged. The feel of the language is concise but
-human readable.</p>
-
-<blockquote><p>Star is a coherent, general-purpose programming language that<br/>    combines elements from a wide variety of existing languages as<br/>    well as adding innovative elements of its own. Star inherits func-<br/>    tional programming in general, a Haskell-style type system, an F#-<br/>    style monad for parallel computations, and Concurrent ML for or-<br/>    chestrating concurrent and parallel applications.</p><footer><strong>Feel different on the Java platform: the star programming language</strong> <cite><a href='http://dl.acm.org/citation.cfm?id=2500837&dl=ACM&coll=DL&CFID=354902651&CFTOKEN=90319052'>dl.acm.org/&hellip;</a></cite></footer></blockquote>
-
-
-<h3>Hello World</h3>
-
-<p>The best way to get a feel for it is to look at a few examples.  Of
-course, let&rsquo;s start off with Hello World.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">main</span><span class="nb">()</span> <span class="kr">do</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s">&quot;Hello World&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Another way of doing our Hello World is in a worksheet.
-This feature is still in the works, but it will likely turn into a
-replacement for a REPL, being integrated into the editor.  The import
-statement will also soon not be required.  But a nice feature of using
-the worksheeet is that is a combined module and transcript of the
-session.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">import</span> <span class="nn">worksheet</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">worksheet</span><span class="p">{</span>
-</span><span class='line'>  <span class="n">show</span> <span class="s">&quot;hello world&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here is what the output looks like:</p>
-
-<pre><code>Jun 11, 2014 11:21:09 AM  
-INFO: "hello world" -&gt; "hello world" at 4
-info: execution took 0.053684428
-</code></pre>
-
-<h3>Pattern Matching</h3>
-
-<p>Let&rsquo;s take a look at another example.  This time a naive fib function
-with pattern matching.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">import</span> <span class="nn">worksheet</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">worksheet</span><span class="p">{</span>
-</span><span class='line'>  <span class="n">fib</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">is</span> <span class="mi">0</span>
-</span><span class='line'>  <span class="n">fib</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">is</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="n">is</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">fib</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="ow">=</span><span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">fib</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="ow">=</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">fib</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="ow">=</span><span class="mi">2</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">fib</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="ow">=</span><span class="mi">55</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice how the fib function is defined with pattern matching.  Also
-how the keyword &ldquo;is&rdquo; is used instead of an &ldquo;=&rdquo; to make the code flow
-more readable (IMO).</p>
-
-<p>The output of running the program is:</p>
-
-<pre><code>Jun 11, 2014 3:32:38 PM  
-INFO: fib(0) = 0 ok at 9
-Jun 11, 2014 3:32:38 PM  
-INFO: fib(1) = 1 ok at 10
-Jun 11, 2014 3:32:38 PM  
-INFO: fib(3) = 2 ok at 11
-Jun 11, 2014 3:32:38 PM  
-INFO: fib(10) = 55 ok at 12
-info: execution took 0.039725132
-</code></pre>
-
-<h3>Pattern Matching with Guards</h3>
-
-<p>The declaration of pattern matching for functions can also include
-guards like in this fizzbuzz example</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fizzbuzz</span> <span class="n">has</span> <span class="kr">type</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">string</span>
-</span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">3</span><span class="ow">=</span><span class="mi">0</span> <span class="n">and</span> <span class="kt">N</span><span class="o">%</span><span class="mi">5</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;fizzbuzz&quot;</span>
-</span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">3</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;fizz&quot;</span>
-</span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">5</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;buzz&quot;</span>
-</span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">default</span> <span class="n">is</span> <span class="s">&quot;$N&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Also note the type declaration.  The type declaration is optional.
-The complier is smart enough to figure it out.  Sometimes it is more
-readable to include the type declaration.  But, it can be left out for
-more concise code.</p>
-
-<h3>Cons Lists</h3>
-
-<p>One of the important collection types are cons lists. These are lists
-that you add to the front of and are destructed as the first element
-and then the rest of the list. To construct a cons list:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'> <span class="n">testNumbers</span> <span class="n">is</span> <span class="n">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">;</span><span class="mi">3</span><span class="p">;</span><span class="mi">4</span><span class="p">;</span><span class="mi">5</span><span class="p">;</span><span class="mi">6</span><span class="p">;</span><span class="mi">7</span><span class="p">;</span><span class="mi">8</span><span class="p">;</span><span class="mi">9</span><span class="p">;</span><span class="mi">10</span><span class="p">;</span><span class="mi">11</span><span class="p">;</span><span class="mi">12</span><span class="p">;</span><span class="mi">13</span><span class="p">;</span><span class="mi">14</span><span class="p">;</span><span class="mi">15</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To use a cons list in a function with pattern matching:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">listFizzBuzz</span> <span class="n">has</span> <span class="kr">type</span> <span class="p">(</span><span class="n">cons</span> <span class="kr">of</span> <span class="n">integer</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">cons</span> <span class="kr">of</span> <span class="n">string</span>
-</span><span class='line'><span class="nf">listFizzBuzz</span><span class="p">(</span><span class="n">nil</span><span class="p">)</span> <span class="n">is</span> <span class="n">nil</span>
-</span><span class='line'><span class="nf">listFizzBuzz</span><span class="p">(</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xs</span><span class="p">))</span> <span class="n">is</span> <span class="n">cons</span><span class="p">(</span><span class="n">fizzbuzz</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">listFizzBuzz</span><span class="p">(</span><span class="n">xs</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The function listFizzBuzz takes in a list of integers and turns it
-into a list of strings using the fizzbuzz function. If we evaluate:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">testNumbers</span> <span class="n">is</span> <span class="n">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">;</span><span class="mi">3</span><span class="p">;</span><span class="mi">4</span><span class="p">;</span><span class="mi">5</span><span class="p">;</span><span class="mi">6</span><span class="p">;</span><span class="mi">7</span><span class="p">;</span><span class="mi">8</span><span class="p">;</span><span class="mi">9</span><span class="p">;</span><span class="mi">10</span><span class="p">;</span><span class="mi">11</span><span class="p">;</span><span class="mi">12</span><span class="p">;</span><span class="mi">13</span><span class="p">;</span><span class="mi">14</span><span class="p">;</span><span class="mi">15</span><span class="p">}</span>
-</span><span class='line'><span class="nf">result</span> <span class="n">is</span> <span class="n">listFizzBuzz</span><span class="p">(</span><span class="n">testNumbers</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The result will look like</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="s">&quot;1&quot;</span><span class="p">;</span><span class="s">&quot;2&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;4&quot;</span><span class="p">;</span><span class="s">&quot;buzz&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;7&quot;</span><span class="p">;</span><span class="s">&quot;8&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;buzz&quot;</span><span class="p">;</span><span class="s">&quot;11&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;13&quot;</span><span class="p">;</span><span class="s">&quot;14&quot;</span><span class="p">;</span><span class="s">&quot;fizzbuzz&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are other collection types such as arrays and relations, (which
-are really cool &ndash; you can do queries on them like a database), but I haven&rsquo;t explored them well enough to really
-talk about yet.</p>
-
-<h3>Actors and Speech Acts</h3>
-
-<p>Star has actors that use three Speech Acts: Notify, Request, and
-Query.  The actors themselves can also be concurrent. I explored the
-Speech Act/ Actor model with an example from John McCarthy&rsquo;s
-<a href="http://www-formal.stanford.edu/jmc/elephant/elephant.html">Elephant 2000 paper</a>,
-which is a Airline Reservation system.</p>
-
-<p>To use the notify speech act, you need to define what type the
-notifications are on the actors channel.  In my case, the
-notifications are either going to be a book(string) method, or a
-cancel(string) method.  To book a reservation for a person or cancel
-it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">type</span> <span class="n">tx</span> <span class="n">is</span> <span class="n">book</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="n">or</span> <span class="n">cancel</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The actor is defined using:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">flight</span><span class="p">((</span><span class="kt">FlightName</span> <span class="n">has</span> <span class="kr">type</span> <span class="n">string</span><span class="p">),</span> <span class="p">(</span><span class="kt">MaxPeople</span> <span class="n">has</span> <span class="kr">type</span> <span class="n">integer</span><span class="p">))</span> <span class="n">is</span> <span class="n">actor</span><span class="p">{</span>
-</span><span class='line'>    <span class="n">var</span> <span class="n">flightStatus</span> <span class="kt">:=</span> <span class="s">&quot;open&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">setFlightStatus</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="kr">do</span> <span class="p">{</span> <span class="n">flightStatus</span> <span class="kt">:=</span> <span class="n">s</span> <span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">on</span> <span class="n">book</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">do</span>
-</span><span class='line'>        <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span><span class="s">&quot;booking $pname on #FlightName&#39;s flight: max #MaxPeople current $(size(plist))&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">on</span> <span class="n">book</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">where</span> <span class="n">size</span><span class="p">(</span><span class="n">plist</span><span class="p">)</span> <span class="o">&lt;</span> <span class="kt">MaxPeople</span> <span class="kr">do</span>
-</span><span class='line'>      <span class="n">extend</span> <span class="n">plist</span> <span class="n">with</span> <span class="n">pname</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">on</span> <span class="n">book</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">where</span> <span class="n">size</span><span class="p">(</span><span class="n">plist</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="kt">MaxPeople</span> <span class="kr">do</span>
-</span><span class='line'>      <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s">&quot;sorry .. the flight is full&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">on</span> <span class="n">book</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">where</span> <span class="n">flightStatus</span> <span class="o">!=</span> <span class="s">&quot;open&quot;</span> <span class="kr">do</span>
-</span><span class='line'>      <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s">&quot;sorry .. the flight is no longer open&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">on</span> <span class="n">cancel</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">do</span>
-</span><span class='line'>      <span class="n">delete</span> <span class="p">(</span><span class="kt">X</span> <span class="kr">where</span> <span class="kt">X</span> <span class="ow">=</span> <span class="n">pname</span><span class="p">)</span> <span class="kr">in</span> <span class="n">plist</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">getPassengerList</span> <span class="n">has</span> <span class="kr">type</span> <span class="nb">()</span> <span class="ow">=&gt;</span> <span class="n">list</span> <span class="kr">of</span> <span class="n">string</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">getPassengerList</span><span class="nb">()</span> <span class="n">is</span> <span class="n">plist</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There is some extra things in the code, but for right now, look at the
-book and cancel methods.  These are the functions that will be called
-when the actor is notified like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kt">F</span> <span class="n">is</span> <span class="n">flight</span><span class="p">(</span><span class="s">&quot;flight123&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="nf">notify</span> <span class="kt">F</span> <span class="n">with</span> <span class="n">book</span><span class="p">(</span><span class="s">&quot;Carin&quot;</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span>
-</span><span class='line'><span class="nf">notify</span> <span class="kt">F</span> <span class="n">with</span> <span class="n">book</span><span class="p">(</span><span class="s">&quot;Bob&quot;</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To query the actor we use :</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'> <span class="n">x</span> <span class="n">is</span> <span class="n">query</span> <span class="kt">F&#39;s</span> <span class="n">getPassengerList</span> <span class="n">with</span> <span class="n">getPassengerList</span><span class="nb">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To use a request with the actor we use</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'> <span class="n">request</span> <span class="kt">F&#39;s</span> <span class="n">setFlightStatus</span> <span class="n">to</span> <span class="n">setFlightStatus</span><span class="p">(</span><span class="s">&quot;closed&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Go Explore</h2>
-
-<p>I have only scratched the surface of the language, but I have had a
-great time.  I invite you to come take a look.</p>
-
-<p>Warning.  Only the brave need apply.  There is no StackOverflow.
-There is no user group or IRC channel yet.  These are green fields to
-be discovered in the Open Source world.  If it appeals to you as much
-as me, jump on in.  Here are a few resources to get you going:</p>
-
-<ul>
-<li><p><a href="https://github.com/gigasquid/star-lang-katas">Star-Lang Katas</a>:
-Clone the repo or fork the repos.  It has a shell script
-to compile and run the star programs.  It also has a emacs mode
-plugin and a reference pdf. The most important part is that it has a
-template of katas ready for your to solve.  Your challenge:
-uncomment the assertion and make the code pass.  My solutions are in
-the solutions branch when you are done.  If you finish all of them
-and want more, consider creating some and submitting a pull request :)</p></li>
-<li><p>I mentioned it earlier, but there is a great overview paper on the
-language itself
-<a href="http://www.deinprogramm.de/sperber/papers/star.pdf">here</a>.</p></li>
-<li><p>Finally, here is the repo of the Star Language itself
-<a href="https://github.com/fmccabe/star">https://github.com/fmccabe/star</a>.
-Checkout out the tests.  There are tons of sample star programs
-that cover the language&rsquo;s features.</p></li>
-</ul>
-
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2014/06/11/a-taste-of-the-star-programming-language//blog/page/3/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
