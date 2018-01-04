@@ -12,7 +12,7 @@ So, you have an idea for a fiction book. First, let me tell you that it's a good
 
 ## So how do you know about self publishing?
 
-Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like _Hunger Games_ and _Divergent_. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she _coding super powers_. The idea for [Code Shifter](http://www.codeshifterbook.com/) was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a _learning how to code_ book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn't, it would lay the positive groundwork to have them be more open to it later.
+Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like _Hunger Games_ and _Divergent_. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she had _coding super powers_. The idea for [Code Shifter](http://www.codeshifterbook.com/) was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a _learning how to code_ book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn't, it would lay the positive groundwork to have them be more open to it later.
 
 Books, like software, always take longer than you plan. My daughter and I enjoyed working on it together and over time it grew into a book that we could share with others. Along the way, I learned quite a bit about writing books, publishing, and other things that I wish I had known beforehand.
 
@@ -115,7 +115,7 @@ Authors in general, are much harder pressed to make livings than software develo
 
 ## Any last words of advice?
 
-There is an great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.
+There is a great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.
 
 
 
