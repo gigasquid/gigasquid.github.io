@@ -432,7 +432,7 @@
         <loc>
             http://gigasquid.github.io/blog/2017/05/27/self-publishing-for-the-creative-coder/
         </loc>
-        <lastmod>2017-05-27T18:39:55-04:00</lastmod>
+        <lastmod>2018-01-04T10:30:59-05:00</lastmod>
     </url>
     <url>
         <loc>
@@ -445,27 +445,31 @@
         <lastmod>2017-11-07T19:37:24-05:00</lastmod>
     </url>
     <url>
-        <loc>http://gigasquid.github.io/about/</loc>
-        <lastmod>2016-12-16T10:52:36-05:00</lastmod>
+        <loc>http://gigasquid.github.io/blog/2018/03/04/on-staying-technical/</loc>
+        <lastmod>2018-03-04T11:06:47-05:00</lastmod>
     </url>
     <url>
-        <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2017-11-07T19:37:24-05:00</lastmod>
+        <loc>http://gigasquid.github.io/</loc>
+        <lastmod>2018-03-04T11:06:47-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://gigasquid.github.io/about/</loc>
+        <lastmod>2016-12-16T10:52:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/books/</loc>
         <lastmod>2017-05-27T19:47:36-04:00</lastmod>
     </url>
     <url>
-        <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2017-11-07T19:37:24-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://gigasquid.github.io/robots.txt</loc>
-        <lastmod>2016-12-16T10:52:36-05:00</lastmod>
+        <loc>http://gigasquid.github.io/blog/archives/</loc>
+        <lastmod>2018-03-04T11:06:47-05:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/search.html</loc>
+        <lastmod>2016-12-16T10:52:36-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://gigasquid.github.io/robots.txt</loc>
         <lastmod>2016-12-16T10:52:36-05:00</lastmod>
     </url>
     <url>

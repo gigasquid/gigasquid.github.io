@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: all | Squid's Blog]]></title>
+  <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2017-11-07T19:40:52-05:00</updated>
+  <updated>2018-03-04T11:06:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -14,267 +14,966 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Self Publishing for the Creative Coder]]></title>
-    <link href="http://gigasquid.github.io/blog/2017/05/27/self-publishing-for-the-creative-coder/"/>
-    <updated>2017-05-27T14:11:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2017/05/27/self-publishing-for-the-creative-coder</id>
-    <content type="html"><![CDATA[<p>So, you have an idea for a fiction book. First, let me tell you that it&rsquo;s a good idea and it&rsquo;s a great thing that you are a coder. Quite a few successful authors have a background in software development. <a href="http://www.imdb.com/title/tt2543164/">Arrival</a>, (which is a fabulous movie), comes from the book, <a href="https://www.amazon.com/Stories-Your-Life-Others-Chiang/dp/1101972122">Stories of your Life</a>,  written by a fellow programmer <a href="https://en.wikipedia.org/wiki/Ted_Chiang">Ted Chiang</a>. <a href="https://en.wikipedia.org/wiki/Charles_Stross">Charlie Stross</a> is another fine example. One of my favorites is <a href="https://en.wikipedia.org/wiki/Daniel_Suarez_(author">Daniel Suarez</a>, the author of the<a href="https://www.amazon.com/DAEMON-Daniel-Suarez/dp/0451228731"> Daemon</a> and more recently <a href="https://www.amazon.com/Change-Agent-Novel-Daniel-Suarez/dp/110198466X/">Change Agent</a>. So yes, you can write a fiction book and you&rsquo;re in good company. This post is dedicated to help make it happen.</p>
+    <title type="html"><![CDATA[Cats and Dogs with Cortex Redux]]></title>
+    <link href="http://gigasquid.github.io/blog/2017/11/07/cats-and-dogs-with-cortex-redux/"/>
+    <updated>2017-11-07T18:51:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2017/11/07/cats-and-dogs-with-cortex-redux</id>
+    <content type="html"><![CDATA[<p>I wrote a <a href="http://gigasquidsoftware.com/blog/2016/12/27/deep-learning-in-clojure-with-cortex/">blog post</a> a while back about using a Clojure machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> to do the Kaggle Cats and Dogs classification challenge.</p>
 
-<h2>So how do you know about self publishing?</h2>
+<p>I wanted to revisit it for a few reasons. The first one is that the Cortex library has progressed and improved considerably over the last year. It&rsquo;s still not at version 1.0, but it my eyes, it&rsquo;s really starting to shine. The second reason is that they recently published an <a href="https://github.com/thinktopic/cortex/tree/master/examples/resnet-retrain">example</a> of using the RESNET50 model, (I&rsquo;ll explain later on), to do fine-tuning or transfer learning. The third reason, is that there is a great new plugin for leiningen the supports using <a href="https://github.com/didiercrunch/lein-jupyter">Jupyter notebooks with Clojure projects</a>. These notebooks are a great way of doing walkthroughs and tutorials.</p>
 
-<p>Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like <em>Hunger Games</em> and <em>Divergent</em>. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she <em>coding super powers</em>. The idea for <a href="http://www.codeshifterbook.com/">Code Shifter</a> was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a <em>learning how to code</em> book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn&rsquo;t, it would lay the positive groundwork to have them be more open to it later.</p>
+<p>Putting all these things together, I felt like I was finally at a stage where I could somewhat replicate the first lesson in the <a href="https://github.com/fastai/courses/blob/master/deeplearning1/nbs/dogs_cats_redux.ipynb">Practical Deep Learning Course for Coders</a> with Cats and Dogs &ndash; although this time all in Clojure!</p>
 
-<p>Books, like software, always take longer than you plan. My daughter and I enjoyed working on it together and over time it grew into a book that we could share with others. Along the way, I learned quite a bit about writing books, publishing, and other things that I wish I had known beforehand.</p>
+<h2>Where to Start?</h2>
 
-<h2>What did you use to write the book?</h2>
+<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
 
-<p>In the book world, your story is referred to as your <em>manuscript</em>. As a tool to produce it, I cannot speak highly enough of <a href="https://leanpub.com/">Leanpub</a>. I found it easy and productive to work in as a programmer. For example,  my setup was pretty painless.</p>
+<p>In the last blog post, we created our deep learning network and trained the data on scaled down images (like 50x50) from scratch. This time we are much smarter.</p>
 
-<p>In the repo, I had a <code>manuscript</code> directory, in which there was a <code>Book.txt</code> file that listed the chapter files.</p>
+<p>We are still of course going to have to get a hold of all the training data from <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Kaggle Cats vs Dogs Challenge</a>. The big difference is this time, we are just going to have to train our model for <em>1 epoch</em>. What&rsquo;s more, the results will be way better than before.</p>
 
-<p><code>
-chapter2.txt
-chapter3.txt
-chapter4.txt
-chapter5.txt
-</code></p>
+<p>How is this possible? We are going to use an already trained model, RESNET50. This model has already been painstakingly trained with a gigantic network that is 50 layers deep on the ImageNet challenge. That&rsquo;s a challenge that has models try to classify a 1000 different categories. The theory is that the inner layers of the network have already learned about the features that make up cats and dogs, all we would need to do is peel off the final layer of the network and graft on a new layers that just learns the final classification for our 2 categories of cats and dogs. This is called <em>transfer learning</em> or <em>retraining</em>.</p>
 
-<p>Each chapter file in turn was written in markdown. For example, <code>chapter2.txt</code> looked like this:</p>
-
-<p>```</p>
-
-<h1>1</h1>
-
-<h2>Flicker</h2>
-
-<p>Twelve-year-old Eliza knew that the next words were the result of computer program far more intelligent than any one of them. Standing next to her parents, she held her breath and watched as her brother touched his finger to the message on the wall screen.
-```</p>
-
-<p>From there, my process looked like:</p>
+<h2>Plan of Action</h2>
 
 <ul>
-<li>Write a bit in my favorite editor, (Emacs of course), and make a commit.</li>
-<li>Push the commit to github, which is registered with the Leanpub project</li>
-<li>Log onto the Leanpub project and hit the <em>preview</em> button. This would generate a pdf and ebook that I could share with my daughter for feedback.</li>
+<li>Get all the cats and dogs pictures in the right directory format for training</li>
+<li>Train the model with all but the last layer in the RESNET model. The last layer we are going to replace with our own layer that will finetune it to classify only cats and dogs</li>
+<li>Run the test data and come up with a spreadsheet of results to submit to Kaggle.</li>
 </ul>
 
 
-<p><img class="<a" src="href="http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg">http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg</a>"></p>
+<h3>Getting all the data pictures in the right format</h3>
 
-<h3>Advantages of Leanpub for development.</h3>
+<p>This is the generally the most time consuming step of most deep learning. I&rsquo;ll spare you the gritty details but we want to get all the pictures from the <code>train.zip</code> into the format</p>
 
-<p>As I said earlier, I&rsquo;m a fan. Using git for revisions is incredibly useful. I shudder to think of people writing in Word without version control. The ability to easily create PDF and ebook formats was also very convenient. The markdown format has excellent code support. There is also the option as publishing your work as you go. However, I think that this is more useful with a technical book than with fiction.</p>
+<p>```
+-data
+  -cats-dogs-training</p>
 
-<h3>Disadvantages of Leanpub for development</h3>
+<pre><code>  -cat
+      1110.png
+      ...
+  -dog
+      12416.png
+      ...
+</code></pre>
 
-<p>If you are going to work with an freelance editor or share your work with someone in the mainstream book world, they are not going to want pdf. They usually want a doc version. It took me a bit of research to find a good converter, <a href="http://pandoc.org/">pandoc</a>. With it, you can convert from markdown to Word with things looking pretty good. Don&rsquo;t try to do pdf to Word. I found it a big recipe for fail.</p>
+<p>  -cats-dogs-testing</p>
 
-<p>Finally, the book was considered done enough to think about publishing.</p>
+<pre><code>  -cat
+      11.png
+      ...
+  -dog
+      12.png
+      ...
+</code></pre>
 
-<p>There was much rejoicing.</p>
+<p>```</p>
 
-<h2>Didn&rsquo;t you want to get the book into bookstores?</h2>
+<p>The image sizes must also all be resized to match the input of the RESNET50. That means they all have to be 224x224.</p>
 
-<p>Of course. That would be incredibly cool. However, that requires getting into what they call <em>traditional publishing</em> and it is a lot more work, time, and luck. If you go this route, you will need to budget at least six months to send out form letters to agencies to have them represent your work. Also, beware of predatory services that take advantage of unsuspecting and wide eyed authors. If you are interested in this, you&rsquo;ll want to start looking for agents that are interested in your type of book. <a href="https://querytracker.net/">Query Tracker</a> is a great place to start.</p>
+<h3>Train the model</h3>
 
-<h2>Traditional publishing sounds hard. What about self publishing?</h2>
+<p>The cortex functions allow you to load the resnet50 model, remove the last layer, freeze all the other layers so that they will not be retrained, and add new layers.</p>
 
-<p>Self publishing is certainly an easier more direct way to bring your book to life. For me, it was the best way forward. Luckily, Leanpub made it pretty painless.</p>
+<p>I was surprised that I could actually train the model with all the images at 224x244 with the huge RESNET50 model. I built the uberjar and ran it which helped the performance.</p>
 
-<h3>Publishing the book with Leanpub</h3>
+<p><code>lein uberjar</code></p>
 
-<p>Actually publishing the finished copy was really easy with Leanpub. All I had to do was fill in some fields on the project page and push <em>Publish!</em> The book was immediately ready to share with the world. Putting out an updated edition was as easy as pushing the button again. Leanpub provides online reading as well as all the ebook versions.</p>
+<p><code>java -jar target/cats-dogs-cortex-redux.jar</code></p>
 
-<p>That was nice, but I really wanted a print copy too.</p>
+<p>Training one epoch took me approximately 6 minutes. Not bad, especially considering that&rsquo;s all the training I really needed to do.</p>
 
-<h3>Publishing with CreateSpace</h3>
+<p><code>
+Loss for epoch 1: (current) 0.05875186542016347 (best) null
+Saving network to trained-network.nippy
+</code></p>
 
-<p>Amazon&rsquo;s <a href="https://www.createspace.com/">CreateSpace</a> provides and excellent platform for on-demand print copies of books. This is where Leanpub comes in handy again. There is an <code>Export Option</code> that provides and unbranded pdf copy of your manuscript with all the correct formatting and margins required for CreateSpace. I simply exported the file and then uploaded it up to the project.</p>
+<p>The key point is that it saved the fine tuned network to trained-network.nippy</p>
 
-<p><img class="<a" src="href="http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg">http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg</a>"></p>
+<h3>Run the Kaggle test results and submit the results</h3>
 
-<p>The other thing that you will want is a nice cover. There are services through CreateSpace for cover creation that you can buy or you can upload your own file. I was lucky enough to have a talented graphic designer as sister, Kristin Allmyer,  who made me an awesome cover.</p>
+<p>You will need to do a bit more setup for this. First, you need to get the Kaggle test images for classification. There are 12500 of these in the test.zip file from the site. Under the data directory, create a new directory called kaggle-test. Now unzip the contents of test.zip inside that folder. The full directory with all the test images should now be:</p>
 
-<p>One of the confusing things was picking an ISBN for the print copy. You don&rsquo;t need to worry about this for ebook versions but you do for a physical copy. Your choices through CreateSpace are using a provided one for free or buying your own for $99. I chose my own so I could have flexibility of working with another publisher other than Amazon if I want. If you choose that option, you can also make up your own publisher name. Mine is <em>Gigasquid Books</em>.</p>
+<p><code>data/kaggle-test/test</code></p>
 
-<p><img class="<a" src="href="http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg">http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg</a>"></p>
+<p>This step takes a long time and you might have to tweak the batch size again depending on your memory. There are 12500 predications to be made. The main logic for this is in function called <code>(kaggle-results batch-size)</code>. It will take a long time to run. It will print the results as it goes along to the kaggle-results.csv file. If you want to check progress you can do wc -l kaggle-results.csv</p>
 
-<p>Once you have completed all the setup, they will send you a physical copy in the mail to approve. The moment you get to hold it in your hands is really magical.</p>
+<p>For me locally, with <code>(cats-dogs/kaggle-results 100)</code> it took me 28 minutes locally.</p>
 
-<p><img class="<a" src="href="https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large">https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large</a>"></p>
+<h3>Compare the results</h3>
 
-<p>If it looks alright, you hit the approve button and voilà &ndash; it&rsquo;s for sale on Amazon!</p>
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg">http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg</a>"></p>
 
-<h3>Publishing with Direct Kindle Publishing</h3>
+<p>My one epoch of fine tuning beat my best results of going through the Practical Deep Learning exercise with the fine tuning the VGG16 model. Not bad at all.</p>
 
-<p>With CreateSpace, you have the option of porting your book to a Kindle format as well. It will do most of the heavy lifting of converting the files for you and a few button clicks later you have both an Kindle and print version available for your readers.</p>
+<h2>Summary</h2>
 
-<p>If you need to update the text of the Kindle version, Leanpub also has an export option available to produce unbranded ebook files. Just take this and upload it to your KDP account and you are good to go.</p>
+<p>For those of you that are interested in checking out the code, it&rsquo;s out there on <a href="https://github.com/gigasquid/cats-dogs-cortex-redux">github</a></p>
 
-<h2>Did you run into any problems?</h2>
+<p>Even more exciting, there is a <a href="https://github.com/gigasquid/cats-dogs-cortex-redux/blob/master/Cats%20and%20Dogs%20in%20Cortex%20(Redux).ipynb">walkthrough in a jupyter notebook</a> with a lein-jupyter plugin.</p>
 
-<p>Of course I did. I was totally new to self publishing and I underestimated how hard copy editing is. Some errors unfortunately made it into the first version. Luckily, I had some really nice people that helped my fix it for later versions. Many thanks to Martin Plumb, Michael Daines, Paul Henrich, and S. Le Callonnec for editing help.</p>
-
-<p>This brings me to my next point. If I had to do it all over again, I would publish the book in a different order. Books are really no different than software. There are going to be bugs when you first release it in the wild. It is best to embrace this. In the future, I would publish the ebook versions first, which are much easier to update and then the print versions after that.</p>
-
-<h2>Did you make lots of money from the book sales?</h2>
-
-<p>Hahaha &hellip;  that&rsquo;s funny. If you are interested in making money, books are not the best way to go. The margins on Leanpub are definitely better than Amazon, but if I really was interested in making money, I would have been much better off using deep learning to make a stock market predictor or code up a startup that I could sell off.</p>
-
-<p>Authors in general, are much harder pressed to make livings than software developers. We should count our blessings.</p>
-
-<h2>Any last words of advice?</h2>
-
-<p>There is an great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.</p>
+<p>The Deep Learning world in Clojure is an exciting place to be and gaining tools and traction more and more.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Guide to Leaving your Mac Laptop]]></title>
-    <link href="http://gigasquid.github.io/blog/2013/12/26/guide-to-leaving-your-mac-laptop/"/>
-    <updated>2013-12-26T00:00:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2013/12/26/guide-to-leaving-your-mac-laptop</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg">http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg</a>"></p>
+    <title type="html"><![CDATA[Embedded Interop between Clojure, R, and Python with GraalVM]]></title>
+    <link href="http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/"/>
+    <updated>2017-10-22T16:02:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg">https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg</a>" title="" ></p>
 
-<p>I felt like I was in a controlling relationship headed downhill.
-After two custom laptops returned for defective hardware, I wanted to
-leave.  But leaving didn&rsquo;t seem so easy after living in the walled
-garden of Apple all those years.</p>
+<p>In my talk at <a href="https://www.youtube.com/watch?v=eLl6_k_fZn4">Clojure Conj</a> I mentioned how a project from Oracle Labs named GraalVM might have to potential for Clojure to interop with Python on the same VM. At the time of the talk, I had just learned about it so I didn&rsquo;t have time to take a look at it. Over the last week, I&rsquo;ve managed to take it for a test drive and I wanted to share what I found.</p>
 
-<p>This blog post is about how to leave your Mac and return to OSS.</p>
+<h3>Are you ready?</h3>
 
-<h2>Make a New Plan, Stan</h2>
+<p>In this example, we will be using an ordinary Leinengen project and using the REPL we will interop with both R and python.</p>
 
-<p>There are quite a few nice alternatives to the Mac Air out there.
-I decided to go with the new
-<a href="http://www.dell.com/us/business/p/xps-13-linux/pd">Sputnik 3</a>.
-Some of my reasons:</p>
+<p>But first will need a bit of setup.</p>
+
+<p>We will download the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Graal project</a> so we can use its <code>java</code> instead of our own.</p>
+
+<p>Once we have it downloaded we will configure our PATH to use Graal&rsquo;s java instead of our own.</p>
+
+<p>```</p>
+
+<h1>export PATH=/path/to/graalAndTruffle/bin:$PATH</h1>
+
+<p>```</p>
+
+<p>Now, we can create a new lein project and run <code>lein repl</code> and begin the fun.</p>
+
+<h3>The Polyglot Context</h3>
+
+<p>In our new namespace, we just need to import the <a href="http://graalvm.github.io/graal/truffle/javadoc/org/graalvm/polyglot/Context.html">Polyglot Context</a> to get started:</p>
+
+<p>```clojure
+(ns graal-test.core
+  (:import (org.graalvm.polyglot Context)))</p>
+
+<p>;; note that is also supports Ruby, LLVM, and JS
+(def context (Context/create (into-array [&ldquo;python&rdquo; &ldquo;R&rdquo;])))
+```</p>
+
+<p>Now, we are ready to actually try to run some R and Python code right in our REPL. Let&rsquo;s start first with R.</p>
+
+<h3>Interoping with R</h3>
+
+<p>The main function we are going to use is the <code>eval</code> function in the context. Let&rsquo;s start small with some basic math.</p>
+
+<p><code>clojure
+(.eval context "R" "
+3^2 + 2^2
+")
+;=&gt; #object[org.graalvm.polyglot.Value 0x7ff40e4d "13.0"]
+</code></p>
+
+<p>Wow! It actually did something. It returned something called a <a href="https://github.com/graalvm/graal/blob/master/sdk/src/org.graalvm.polyglot/src/org/graalvm/polyglot/Value.java">Polyglot Value</a> with what looks like the right answer in it.</p>
+
+<p>Emboldened by our early success, let&rsquo;s try something a little more complicated like calling a function.</p>
+
+<p><code>clojure
+(def result1 (.eval context "R" "
+sum.of.squares &lt;- function(x,y) {
+  x^2 + y^2
+}
+sum.of.squares(3,4)
+"))
+;=&gt; #object[org.graalvm.polyglot.Value 0xc3edd92 "25.0"]
+</code></p>
+
+<p>Again, it looks like it worked. Let&rsquo;s try to get the result back into Clojure as a value we can work with. We could ask the result what sort of type it is with</p>
+
+<p><code>clojure
+(.isNumber result1) ;=&gt; true
+</code></p>
+
+<p>but let&rsquo;s just use <code>clojure.edn</code> to read the string and save some time.</p>
+
+<p>```
+(defn &ndash;>clojure [polyglot-value]
+  (&ndash;> polyglot-value</p>
+
+<pre><code>  (.toString)
+  (clojure.edn/read-string)))
+</code></pre>
+
+<p>(&ndash;>clojure result1) ;=> 25
+```</p>
+
+<p>It would be nice to have a easier way to export symbols and import symbols to and from the guest and host language. In fact, Graal provides a way to do this but to do this in Clojure, we would need something else called <a href="https://github.com/graalvm/graal/tree/master/truffle">Truffle</a>.</p>
+
+<p>Truffle is part of the Graal project and is a framework for implementing languages with the Graal compliler.
+There are quite a few languages implemented with the Truffle framework. R is one of them.</p>
+
+<p><img class="<a" src="href="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615">https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615</a>"></p>
+
+<p>My understanding is that if Clojure was implemented as a truffle lang, then interop could be much more seamless like this example in Ruby</p>
+
+<p><img class="<a" src="href="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615">https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615</a>"></p>
+
+<p>But let&rsquo;s continue in our exploration. What about doing something more interesting, like importing a useful R library and using it. How about the <a href="https://www.rdocumentation.org/packages/numDeriv/versions/2016.8-1">numDeriv</a> package that supports Accurate Numerical Derivatives?</p>
+
+<p>First we import the package using cran.</p>
+
+<p><code>clojure
+(.eval context "R" "
+install.packages(\"numDeriv\", repos = \"http://cran.case.edu/\")
+")
+</code></p>
+
+<p>If you are doing this at your REPL, you can will see lots of text going on in your <code>lein repl</code> process at this point. It&rsquo;s going out and figuring out what deps you need and installing them in your <code>/graalvm-0.28.2/jre/languages/R</code> directory structure.</p>
+
+<p>After it is done, we can actually use it!</p>
+
+<p>```clojure
+(def result2 (.eval context &ldquo;R&rdquo; &ldquo;
+library(numDeriv)
+grad(sin, (0:10)<em>2</em>pi/10)
+&rdquo;))
+result2 ;=> #object[org.graalvm.polyglot.Value 0x76765898 &ldquo;c(1,</p>
+
+<pre><code>    ;0.809016994367249, 0.309016994372158, -0.309016994373567,
+    ;-0.809016994368844, -0.999999999993381, -0.809016994370298,
+    ;-0.309016994373312, 0.309016994372042, 0.809016994369185,
+    ;0.999999999993381)"]
+</code></pre>
+
+<p>```</p>
+
+<p>This has a bit more interesting result as an array. But the Context has ways of dealing with it.</p>
+
+<p>```clojure
+(.hasArrayElements result2) ;=> true
+(.getArraySize result2) ;=> 11</p>
+
+<p>(for [i (range 10)]
+  (&ndash;> (.getArrayElement result2 i) (&ndash;>clojure)))
+;=> (1.0 0.8090169943672489 0.3090169943721585 -0.3090169943735675
+;-0.8090169943688436 -0.9999999999933814
+; -0.8090169943702977 -0.3090169943733122 0.30901699437204233
+; 0.8090169943691851)
+```</p>
+
+<p>So, we&rsquo;ve showed basic interop with R &ndash; which is pretty neat. What about Python?</p>
+
+<h3>Interoping with Python</h3>
+
+<p>Truffle is scheduled to fully support Python in 2018, but there is already an early alpha version in the Graal download that we can play with.</p>
+
+<p><code>clojure
+(.eval context "python" "
+import time;
+time.clock()
+")
+ ;=&gt; #object[org.graalvm.polyglot.Value 0x4a6b3b70 "1.508202803249E9"]
+</code></p>
+
+<p>Neat!</p>
+
+<p>It is still a long way for <code>import numpy</code> or <code>import tensorflow</code> but cPython compatibility is the goal. Although the c-extensions are the really tricky part.</p>
+
+<p>So keep an eye on Graal and Truffle for the future and wish the Oracle Labs team the best on their mission to make the JVM Polyglot.</p>
+
+<h3>Footnotes</h3>
+
+<p>If you are interested in playing with the code. I have a github repo here <a href="https://github.com/gigasquid/graal-test">graal-test</a>. If you are interested in watching a video, I really liked <a href="https://www.youtube.com/watch?v=TQMKPRc6cbE">this one</a>. There are also some really nice examples of running in polyglot mode with R and Java and JS here <a href="https://github.com/graalvm/examples">https://github.com/graalvm/examples</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Deep Learning in Clojure with Cortex]]></title>
+    <link href="http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex/"/>
+    <updated>2016-12-27T10:44:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex</id>
+    <content type="html"><![CDATA[<p><strong>Update: Cortex has moved along since I first wrote this blog post, so if you are looking to run the examples, please go and clone the <a href="https://github.com/thinktopic/cortex">Cortex</a> repo and look for the cats and dogs code in the examples directory.</strong></p>
+
+<p>There is an awesome new <em>Clojure-first</em> machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> that was open sourced recently. I&rsquo;ve been exploring it lately and wanted to share my discoveries so far in this post. In our exploration, we are going to tackle one of the classic classification problems of the internet. How do you tell the difference between a cat and dog pic?</p>
+
+<h2>Where to Start?</h2>
+
+<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
+
+<p>For any machine learning problem, we&rsquo;re going to need data. For this, we can use Kaggle&rsquo;s data for the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Cats vs Dogs Challenge</a>.  The training data consists of 25,000 images of cats and dogs. That should be more than enough to train our computer to recognize cats from doggies.</p>
+
+<p>We also need some idea of how to train against the data. Luckily, the Cortex project has a very nice set of examples to help you get started. In particular there is a <a href="https://github.com/thinktopic/cortex/tree/master/examples/suite-classification">suite classification example</a> using MNIST, (hand written digit), corpus. This example contains a number cutting edge features that we&rsquo;ll want to use:</p>
 
 <ul>
-<li>Powerful &ndash; New Haswell processor</li>
-<li>13.3 inch touch display with 1920 x 1080 resolution</li>
-<li>Ships with Ubuntu 12.04 (64 bit)</li>
-<li>Nice design (yes looks are important)</li>
+<li>Uses GPU for <em>fast</em> computation.</li>
+<li>Uses a deep, multi-layered, convolutional layered network for feature recognition.</li>
+<li>Has &ldquo;forever&rdquo; training by image augmentation.</li>
+<li>Saves the network configuration as it trains to an external nippy file so that it can be imported later.</li>
+<li>Has a really nice ClojureScript front end to visualize the training progress with a confusion matrix.</li>
+<li>Has a way to import the saved nippy network configuration and perform inference on it to classify a new image.</li>
 </ul>
 
 
-<p>It arrived a couple of days before Christmas. The packaging itself
-was quite nice.  Here is a picture next
-to my 13 inch Mac Air.</p>
+<p>Basically, it has everything we need to hit the ground running.</p>
 
-<p><img class="<a" src="href="http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg">http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg</a>"></p>
+<h2>Data Wrangling</h2>
 
-<p>The best was that everything just &ldquo;worked&rdquo; out of the box.
-I had no problems configuring Ubuntu and getting the wireless network
-hooked up.  I could close the lid and reopen it and have &ldquo;instant on&rdquo;
-just like the Mac Air.  The keyboard is enjoyable to use and nicely
-backlit.  The sleek design and light weight of the laptop is very
-comparable to the Mac Air.</p>
+<p>To use the example&rsquo;s <em>forever</em> training, we need to get the data in the right form. We need all the images to be the same size as well as in a directory structure that is split up into the training and test images. Furthermore, we want all the dog images to be under a &ldquo;dog&rdquo; directory and the cat images under the &ldquo;cat&rdquo; directory so that the all the indexed images under them have the correct &ldquo;label&rdquo;.  It will look like this:</p>
 
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg">http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg</a>"></p>
+<p>```
+&ndash; training
+  &ndash; cat</p>
 
-<h2>Hop on the Bus, Gus</h2>
-
-<p>It took my about a day to set up all my programs that I use on a daily
-basis.
-Here is a overview:</p>
-
-<h4>Application Dock/ Organization &ndash; Dash</h4>
-
-<p>Ubuntu has a dock on the left hand side of the screen, that is very
-similar to the mac one.  You can right click and pin applications to
-the dock to keep them in there. Clicking into the dash option, you can
-browse your applications that are installed.</p>
-
-<h4>Getting New Apps &ndash; Ubuntu Software Center or apt-get</h4>
-
-<p>You can install new applications easily by using the Ubuntu Software
-Center.  Browsing the applications and installing them is point and
-click easy. If you don&rsquo;t see the one you need or need a more recent
-version, you can always install via the command line with</p>
-
-<pre><code>sudo apt-get install package-name
+<pre><code>- 1.png
+- 2.png
 </code></pre>
 
-<h4>Browser &ndash; Firefox or Chromium</h4>
+<ul>
+<li>dog
 
-<p>Ubuntu comes with Firefox and Chromium installed.
-You can also go with Chrome of course.</p>
+<ul>
+<li>1.png</li>
+<li>2.png
+```</li>
+</ul>
+</li>
+</ul>
 
-<h4>Mail &ndash; Thunderbird</h4>
 
-<p>Ubuntu comes with Thunderbird mail ready to go.
-I was pleasantly surprised by how easy it was to setup Thunderbird
-Mail.  You simply put in your email and password.  Ubuntu keeps a
-configuration list of commonly used email providers.  It automagically
-figured out the correct domains and ports to use. On the downside, it
-doesn&rsquo;t do anything magic with your contacts. So you are on your own
-there.  I also just found out about
-<a href="http://www.omgubuntu.co.uk/2013/10/geary-0-4-released-with-new-look-new-features">Geary</a>,
-which looks pretty sweet.</p>
+<p>For this task, we are going to use a couple image libraries to help us out:</p>
 
-<h4>Password Management &ndash; 1 Password Anywhere + Dropbox / LastPass</h4>
+<p><code>clojure
+ [mikera.image.core :as imagez]
+ [think.image.image :as image]
+</code></p>
 
-<p>There is not a linux client for 1Password. I can still use it by using
-<a href="http://help.agilebits.com/1Password3/1passwordanywhere.html">1PasswordAnywhere</a>.
-I just have a bookmark to the 1PasswordAnyway link and I haz my
-logins. I am switching over to LastPass though, so you can edit / add
-new passwords. There is also an import utility to move stuff over from 1Password.</p>
+<p>We can resize and rewrite the original images into the form we want. For a image size, we&rsquo;re going to go with 52x52. The choice is arbitrary in that I wanted it bigger than the MNIST dataset which is 28x28 so it will be easier to see, but not so big that it kills my CPU. This is even more important since we want to use RGB colors which is 3 channels as opposed to the MNIST grey scale of 1.</p>
 
-<h4>Emacs</h4>
+<p>```clojure
+(def dataset-image-size 52)
+(def dataset-num-classes 2)
+(def dataset-num-channels 3)
+(def dataset-datatype :float)</p>
 
-<p>Emacs just works :)
-It might be just me, but I think it is happier back on Ubuntu.
-I did an apt-get to get the 24 version.</p>
+<p>(defn resize-and-write-data
+  [output-dir [idx [file label]]]
+  (let [img-path (str output-dir &ldquo;/&rdquo; label &ldquo;/&rdquo; idx &ldquo;.png&rdquo; )]</p>
 
-<h4>Git Client</h4>
+<pre><code>(when-not (.exists (io/file img-path))
+  (io/make-parents img-path)
+  (-&gt; (imagez/load-image file)
+      (image/resize dataset-image-size dataset-image-size)
+      (imagez/save img-path)))
+nil))
+</code></pre>
 
-<p>I went with gitg for a graphical Git client. It seems to have all the
-things you need.</p>
+<p>```</p>
 
-<h4>Terminal &ndash; Byobu</h4>
+<p>As far as the split between training images and testing images, we are going the go for an simple even split between testing and training data.</p>
 
-<p><a href="http://byobu.co/">Byobu Terminal</a> comes already installed in Ubuntu. I have been taking
-it for a test drive and really like some of the features of easily
-adding new tabs, splitting screens and re-attaching to sessions.</p>
+<h2>Network Configuration</h2>
 
-<h4>Evernote/ Everpad</h4>
+<p>The Network layer configuration is the meat of the whole thing. We are going to go with the exact same network description as the MNIST example:</p>
 
-<p>With
-<a href="http://www.omgubuntu.co.uk/2012/09/use-evernote-in-ubuntu-with-everpad">Everpad</a>,
-I can still use all my evernote stuff too.</p>
+<p><code>clojure
+(defn create-basic-network-description
+  []
+  [(desc/input dataset-image-size dataset-image-size dataset-num-channels)
+   (desc/convolutional 5 0 1 20)
+   (desc/max-pooling 2 0 2)
+   (desc/relu)
+   (desc/convolutional 5 0 1 50)
+   (desc/max-pooling 2 0 2)
+   (desc/relu)
+   (desc/convolutional 1 0 1 50)
+   (desc/relu)
+   (desc/linear-&gt;relu 1000)
+   (desc/dropout 0.5)
+   (desc/linear-&gt;softmax dataset-num-classes)])
+</code></p>
 
-<h4>Presentations &ndash; LibreOffice / Reveal.js</h4>
+<p>It uses a series of convolutional layers with max pooling for feature recognition. We&rsquo;ll see if it works for color versions of cats and dogs as well as street numbers.</p>
 
-<p>I have used Keynote heavily on the Mac.  For existing presentations, I
-can convert them to ppt format and then modify or run in LibreOffice
-Impress. Most likely with all my new presentations, I will just use a
-JavaScript framework like <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a></p>
+<p>We&rsquo;ll also keep the image augmentation the same as in the example.</p>
 
-<h4>Communication &ndash; Hipchat / Skype/ Google Hangouts / Campfire</h4>
+<p>```clojure
+(def max-image-rotation-degrees 25)</p>
 
-<p>We use Hipchat for messaging at work.  Hipchat has a linux client
-that works just the same.  Skype also has a linux client.  Of course,
-Google Hangouts is just fine on the web.  I also use Campfire
-sometimes. There are a couple of linux clients out there, but I
-haven&rsquo;t tried them yet.  The web version works fine for me right now.</p>
+<p>(defn img-aug-pipeline
+  [img]
+  (&ndash;> img</p>
 
-<h4>iPhone</h4>
+<pre><code>  (image-aug/rotate (- (rand-int (* 2 max-image-rotation-degrees))
+                       max-image-rotation-degrees)
+                    false)
+  (image-aug/inject-noise (* 0.25 (rand)))))
+</code></pre>
 
-<p>On my mac, I used to plug in my phone and sync to my dropbox.  I tried
-plugging in my phone, but unfortunately, iOS7 put in a security
-feature to that prevents having the phone connect properly.  The
-solution for me is to just use the phone dropbox app to sync the
-pictures automatically to my Dropbox.</p>
+<p>(def ^:dynamic <em>num-augmented-images-per-file</em> 1)
+```</p>
 
-<h2>Get Yourself Free</h2>
+<p>It injects one augmented image into our training data by slightly rotating it and adding noise.</p>
 
-<p>I don&rsquo;t expect the road to free of bumps.  I have only been using my
-new laptop for a week.  But so far, it has been an enjoyable switch.
-The hardware is really impressive, and it feels good getting back to
-OSS.</p>
+<h3>Running it!</h3>
 
-<p>Best of all, I set myself free.</p>
+<p>It&rsquo;s time to test it out. Using <code>lein run</code>, we&rsquo;ll launch the <code>train-forever</code> function:</p>
+
+<p>```clojure
+(defn train-forever
+  []
+  (let [dataset (create-dataset)</p>
+
+<pre><code>    initial-description (create-basic-network-description)
+    confusion-matrix-atom (display-dataset-and-model dataset initial-description)]
+(classification/train-forever dataset observation-&gt;image
+                              initial-description
+                              :confusion-matrix-atom confusion-matrix-atom)))
+</code></pre>
+
+<p>```</p>
+
+<p>This opens a port to a localhost webpage where we can view the progress <code>http://localhost:8091/</code></p>
+
+<p><img class="<a" src="href="http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg">http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg</a>"></p>
+
+<p>Below the confusion matrix is shown. This tracks the progress of the training in the classification. In particular, how many times it thought a cat was really a cat and how many times it got it wrong.</p>
+
+<p><img class="<a" src="href="http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg">http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg</a>"></p>
+
+<p>As we are training the data, the loss for each epoch is shown on the console as well as when it saves the network to the external file.</p>
+
+<p>After only thirty minutes of training on my Mac Book Pro, we get to some pretty good results, with the correct percentage in the 99s :</p>
+
+<p><img class="<a" src="href="http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg">http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg</a>"></p>
+
+<p>It&rsquo;s time to do some inference on our trained network.</p>
+
+<h2>Inference</h2>
+
+<p>Firing up a REPL we can connect to our namespace and use the <code>label-one</code> function from the cortex example to spot check our classification. It reads in the external nippy file that contains the trained network description, takes a random image from the testing directory, and classifies it.</p>
+
+<p>```clojure
+(defn label-one
+  &ldquo;Take an arbitrary image and label it.&rdquo;
+  []
+  (let [file-label-pairs (shuffle (classification/directory->file-label-seq testing-dir</p>
+
+<pre><code>                                                                        false))
+    [test-file test-label] (first file-label-pairs)
+    test-img (imagez/load-image test-file)
+    observation (png-&gt;observation dataset-datatype false test-img)]
+(imagez/show test-img)
+(infer/classify-one-observation (:network-description
+                                 (suite-io/read-nippy-file "trained-network.nippy"))
+                                observation
+                                (ds/create-image-shape dataset-num-channels
+                                                       dataset-image-size
+                                                       dataset-image-size)
+                                dataset-datatype
+                                (classification/get-class-names-from-directory testing-dir))))
+</code></pre>
+
+<p>```</p>
+
+<p>Running <code>(label-one)</code> gives us the picture:</p>
+
+<p><img class="<a" src="href="http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg">http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg</a>"></p>
+
+<p>and classifies it as a cat. Yipee!</p>
+
+<p><code>clojure
+{:probability-map {"cat" 0.9995587468147278, "dog" 4.4119369704276323E-4}, :classification "cat"}
+</code></p>
+
+<p>Not bad, but let&rsquo;s try it with something harder. Personally, I&rsquo;m not even sure whether this is a cat or a dog.</p>
+
+<p><img class="<a" src="href="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg">http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg</a>"></p>
+
+<p>Feeding it through the program &ndash; it says it is a cat.</p>
+
+<p><code>clojure
+ {:probability-map {"cat" 0.9942012429237366, "dog" 0.005798777565360069}, :classification "cat"}
+</code></p>
+
+<p>After much <a href="http://www.today.com/pets/cat-or-dog-wild-eyed-cutie-has-us-all-confused-t104835">debate on the internet</a>, I think that is the best answer the humans got too :)</p>
+
+<h2>Kaggle it</h2>
+
+<p>So it seems like we have a pretty good model, why don&rsquo;t we submit our results to the Kaggle competition and see how it rates. All they need is to have us run the classification against their test data of 12,500 images and classify them as 1 = dog or 0 = cat in a csv format.</p>
+
+<p>We will take each image and resize it, then feed it into cortex&rsquo;s <code>infer-n-observations</code> function, to do all our classification as a batch.</p>
+
+<p>```clojure
+ (infer/infer-n-observations (:network-description</p>
+
+<pre><code>                                         (suite-io/read-nippy-file "trained-network.nippy"))
+                                        observations
+                                        (ds/create-image-shape dataset-num-channels
+                                                               dataset-image-size
+                                                               dataset-image-size)
+                                        dataset-datatype)
+</code></pre>
+
+<p>```</p>
+
+<p>Finally, we just need to format our results to a csv file and export it:</p>
+
+<p>```clojure
+(defn write-kaggle-results [results]
+  (with-open [out-file (io/writer &ldquo;kaggle-results.csv&rdquo;)]</p>
+
+<pre><code>(csv/write-csv out-file
+               (into [["id" "label"]]
+                     (-&gt; (mapv (fn [[id class]] [(Integer/parseInt id) (if (= "dog" class) 1 0)]) results)
+                         (sort))))))
+</code></pre>
+
+<p>```</p>
+
+<p>After uploading the file to the Kaggle, I was pleased that the answer got in the top 91%! It made it on the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/leaderboard">Leaderboard</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>Using an example setup from the Cortex project and 30 minutes of processing time on my laptop, we were able to crunch through some significant data and come up with a trained classification model that was good enough to make the charts in the Kaggle competition. On top of it all, it is in pure Clojure.</p>
+
+<p>In my mind, this is truely impressive and even though the Cortex library is in it&rsquo;s early phases, it puts it on track to be as useful a tool as Tensor Flow for Machine Learning.</p>
+
+<p>Earlier this month, I watched an ACM Learning webcast with Peter Norvig speaking on AI. In it, he spoke of one of the next challenges of AI which is to combine <a href="https://twitter.com/gigasquid/status/806916856040689664?lang=en">symbolic with neural</a>. I can think of no better language than Clojure with it&rsquo;s simplicity, power, and rich LISP heritage to take on the challenge for the future. With the Cortex library, it&rsquo;s off to a great start.</p>
+
+<p><em>If want to see all the cats vs dog  Kaggle Code, it&rsquo;s out on github here <a href="https://github.com/gigasquid/kaggle-cats-dogs">https://github.com/gigasquid/kaggle-cats-dogs</a></em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Genetic Programming with clojure.spec]]></title>
+    <link href="http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec/"/>
+    <updated>2016-07-18T09:40:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2016/07/18/genetic-programming-with-clojure-dot-spec</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg">http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg</a>"></p>
+
+<p><a href="http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec">Clojure.spec</a> is a new library for Clojure that enables you to write specifications for your program.  In an earlier <a href="http://gigasquidsoftware.com/blog/2016/05/29/one-fish-spec-fish/">post</a>, I showed off some of it&rsquo;s power to generate test data from your specifications.  It&rsquo;s a pretty cool feature.  Given some clojure.spec code, you can generate sample data for you based off of the specifications.  But what if you could write a program that would <em>generate</em> your clojure.spec program based off of data so that you could generate more test data?</p>
+
+<h2>Genetic programming</h2>
+
+<p>Here is where we embark for fun.  We are going to use genetic programming to generate clojure.spec <em>creatures</em> that contain a program.  Through successive generations, those creatures will breed, mutate, and evolve to fit the data that we are going to give it.  Going with our creature theme, we can say that it <em>eats</em> a sequence of data like this</p>
+
+<p><code>clojure
+["hi" true 5 10 "boo"]
+</code></p>
+
+<p>Each creature will be represented by a map that has information about two key pieces, its program and the <em>fitness</em> score.  Each program is going to start with a <a href="https://clojure.github.io/clojure/branch-master/clojure.spec-api.html#clojure.spec/cat">clojure.spec/cat</a>, (which is the spec to describe a sequence).  From here on out, I&rsquo;m going to refer to the clojure.spec namespace as <code>s/</code>.  So, a simple creature would look like this.</p>
+
+<p><code>clojure
+{:program (s/cat :0 int? :1 string?)
+ :score 0}
+</code></p>
+
+<p>How do we figure out a score from the creature&rsquo;s spec?  We run the spec and see how much of the data that it can successfully consume.</p>
+
+<h3>Scoring a creature</h3>
+
+<p>To score a creature, we&rsquo;re going to use the clojure.spec <code>explain-data</code> function. It enables us to run a spec against some data and get back the problems in a data format that we can inspect.  If there are no problems and the spec passes, the result is nil.</p>
+
+<p><code>clojure
+(s/explain-data (s/cat :0 int? :1 string?)  [1 "hi"])
+;=&gt; nil
+</code></p>
+
+<p>However, if there is a problem, we can get information about what went wrong.  In particular, we can see <em>where</em> it went wrong in the sequence.</p>
+
+<p><code>clojure
+(s/explain-data (s/cat :0 int? :1 string?)  [1 true])
+;=&gt; #:clojure.spec{:problems [{:path [:1], :pred string?, :val true, :via [], :in [1]}]}
+</code></p>
+
+<p>In the above example, the <code>:in</code> key tells us that it fails at index 1. This gives us all the information we need to write a score function for our creature.</p>
+
+<p>```clojure
+(defn score [creature test-data]
+  (try
+   (let [problems (:clojure.spec/problems (s/explain-data (eval (:program creature)) test-data))]</p>
+
+<pre><code> (if problems
+   (assoc creature :score (get-in problems [0 :in 0]))
+   (assoc creature :score 100)))
+</code></pre>
+
+<p>   (catch Throwable e (assoc creature :score 0))))
+```</p>
+
+<p>This function tries to run the spec against the data.  If there are no problems, the creature gets a 100 score.  Otherwise, it records the farthest point in the sequence that it got.  Creatures with a higher score are considered more <em>fit</em>.</p>
+
+<p><code>clojure
+(score {:program '(s/cat :0 int? :1 string?)} [1 true])
+;=&gt; {:program (s/cat :0 int? :1 string?), :score 1}
+</code></p>
+
+<p>Now that we have a fitness function to evaluate our creatures, we need a way to generate a random clojure.spec creature.</p>
+
+<p><img class="<a" src="href="http:////c1.staticflickr.com/9/8781/28071856800_0477b25fcc.jpg">http:////c1.staticflickr.com/9/8781/28071856800_0477b25fcc.jpg</a>"></p>
+
+<h3>Create a random creature</h3>
+
+<p>This is where I really love Clojure.  Code is data, so we can create the programs as lists and they are just themselves.  To run the programs, we just need to call <code>eval</code> on them.  We are going to constrain the creatures somewhat.  They are all going to start out with <code>s/cat</code> and have a certain length of items in the sequence.  Also, we are going to allow the parts of the spec to be created with certain predicates.</p>
+
+<p><code>clojure
+(def preds ['integer? 'string? 'boolean? '(s/and integer? even?) '(s/and integer? odd?)])
+</code></p>
+
+<p>Also allowing, composition with ands and ors and other sequences.</p>
+
+<p><code>clojure
+(def seqs ['s/+ 's/*])
+(def and-ors ['s/and 's/or])
+</code></p>
+
+<p>We are also going to have some probability knobs to control how the random creature is constructed.</p>
+
+<p><code>clojure
+(def seq-prob 0.3)
+(def nest-prob 0.00)
+(def max-depth 4)
+(def and-or-prob 0.85)
+</code></p>
+
+<p>The <code>seq-prob</code> is the probability that a new spec sub sequence will be constructed.  The <code>nest-prob</code> is set to zero right now, to keep things simple, but if turned up with increase the chance that a nested spec sequence would occur.  We are going to be writing a recursive function for generation, so we&rsquo;ll keep things to a limited depth with <code>max-depth</code>.  Finally, we have the chance that when constructing a spec sub sequence, that it will be an and/or with <code>and-or-prob</code>.  Putting it all together with code to construct a random arg.</p>
+
+<p>```clojure
+(defn make-random-arg [n]
+  (if (and (pos? n) (&lt; (rand) seq-prob))</p>
+
+<pre><code>(make-random-seq n)
+(rand-nth preds)))
+</code></pre>
+
+<p>```</p>
+
+<p>Also creating a random sub sequence.</p>
+
+<p>```clojure
+(defn make-random-seq [n]
+  (cond</p>
+
+<pre><code>(&lt; (rand) nest-prob)
+`(s/spec (~(rand-nth seqs) ~(make-random-arg (dec n))))
+
+(&lt; (rand) and-or-prob)
+`(~(rand-nth and-ors) ~(make-random-arg (dec n)) ~(make-random-arg (dec n)))
+
+:else
+`(~(rand-nth seqs) ~(make-random-arg (dec n)))))
+</code></pre>
+
+<p>```</p>
+
+<p>Finally, we can create a random <code>s/cat</code> spec with</p>
+
+<p>```clojure
+(defn make-random-cat [len]
+  (let [args (reduce (fn [r i]</p>
+
+<pre><code>                   (conj r (keyword (str i))
+                         (make-random-arg max-depth)))
+                 []
+                 (range len))]
+`(s/cat ~@args)))
+</code></pre>
+
+<p>```</p>
+
+<p>Let&rsquo;s see it in action.</p>
+
+<p><code>clojure
+(make-random-cat 3)
+;=&gt; (clojure.spec/cat :0 (s/and integer? odd?) :1 integer? :2 boolean?)
+</code></p>
+
+<p>We can make a batch of new creatures for our initial population using this function.</p>
+
+<p>```clojure
+(defn initial-population [popsize max-cat-length]
+  (for [i (range popsize)]</p>
+
+<pre><code>{:program (make-random-cat (inc (rand-int max-cat-length)))}))
+</code></pre>
+
+<p>```</p>
+
+<p>Great! Now we have a way to make new random spec creatures.  But, we need a way to alter them and let them evolve.  The first way to do this is with <em>mutation</em>.</p>
+
+<p><img class="<a" src="href="http://c2.staticflickr.com/9/8807/28275661121_94361d2fc4.jpg">http://c2.staticflickr.com/9/8807/28275661121_94361d2fc4.jpg</a>"></p>
+
+<h3>Mutating a creature</h3>
+
+<p>Mutation in our case, means changing part of the code tree of the creature&rsquo;s program.  To keep the program runnable, we don&rsquo;t want to be able to mutate every node, only specific ones.  We&rsquo;re going to control this by defining a <code>mutable</code> function that will only change nodes that start with our sequences or predicates.</p>
+
+<p>```clojure
+(defn mutable? [node]
+  (or (when (seq? node)</p>
+
+<pre><code>    (contains? (set/union (set seqs) #{'clojure.spec/spec}) (first node)))
+  (contains? (set preds) node)))
+</code></pre>
+
+<p>```</p>
+
+<p>Then, we can use <code>postwalk</code> to walk the code tree and alter a node by a mutation probability factor</p>
+
+<p>```clojure
+(def mutate-prob 0.1)</p>
+
+<p>(defn mutate [creature]
+  (let [program (:program creature)</p>
+
+<pre><code>    mutated-program (walk/postwalk
+                     (fn [x] (if (and (mutable? x) (&lt; (rand) mutate-prob))
+                              (make-random-arg max-depth)
+                              x)) program)]
+(assoc creature :program mutated-program)))
+</code></pre>
+
+<p>```</p>
+
+<p>Trying it on one of our creatures.</p>
+
+<p><code>clojure
+(mutate {:program '(clojure.spec/cat :0 (s/and integer? odd?) :1 integer?)})
+;=&gt; {:program (clojure.spec/cat :0 (s/or (s/and integer? even?)) :1 integer?)}
+</code></p>
+
+<p>We can change our creatures via mutation, but what about breeding it with other creatures?</p>
+
+<p><img class="<a" src="href="http://c8.staticflickr.com/9/8670/28354279095_25661401c0_z.jpg">http://c8.staticflickr.com/9/8670/28354279095_25661401c0_z.jpg</a>"></p>
+
+<h3>Crossovers with creatures</h3>
+
+<p>Crossover is another way to modify programs.  It takes two creatures and swaps a node from one creature to another. To accomplish this, we&rsquo;re going to use the <code>walk</code> function to select at a random probability the crossover node from the first node, then insert it into the second&rsquo;s creatures program at another random spot.</p>
+
+<p>```clojure
+(def crossover-prob 0.7)</p>
+
+<p>(defn crossover [creature1 creature2]
+  (let [program1 (:program creature1)</p>
+
+<pre><code>    program2 (:program creature2)
+    chosen-node (first (walk/walk
+                        #(when
+                             (and (&lt; (rand) crossover-prob)
+                                  (mutable? %))
+                           %)
+                        #(remove nil? %) program1))
+    crossed-over? (atom false)
+    crossover-program (if chosen-node
+                         (walk/postwalk
+                          (fn [x]
+                            (if (and (mutable? x)
+                                     (&lt; (rand) crossover-prob)
+                                     (not @crossed-over?))
+                              (do (reset! crossed-over? true) chosen-node)
+                              x))
+                          program2)
+                         program2)]
+{:program crossover-program}))
+</code></pre>
+
+<p>```</p>
+
+<p>Taking two creatures and putting them together.</p>
+
+<p>```clojure
+(crossover {:program &lsquo;(clojure.spec/cat :0 (s/and integer? odd?) :1 integer?)}</p>
+
+<pre><code>       {:program '(clojure.spec/cat :0 string? :1 boolean?)})
+</code></pre>
+
+<p>;=> {:program (clojure.spec/cat :0 (s/and integer? odd?) :1 boolean?)}
+```</p>
+
+<p>We have our ways to change our creatures to let them evolve and we have a way to rank them.  What we need now is to put it together in a way that will let them evolve to the solution.</p>
+
+<p><img class="<a" src="href="http://c5.staticflickr.com/9/8570/28320682956_2a301eea70_z.jpg">http://c5.staticflickr.com/9/8570/28320682956_2a301eea70_z.jpg</a>"></p>
+
+<h3>Evolving creatures</h3>
+
+<p>The process will be in general terms:</p>
+
+<ul>
+<li>Create initial population</li>
+<li>Rank them</li>
+<li>Take the top two best ones and carry them over (this is known as <em>elitism</em>)</li>
+<li>Create the next generation from by <em>selecting</em> creatures for crossover and mutation</li>
+<li>Repeat!</li>
+</ul>
+
+
+<p>So how do we select the best creatures for our next population?  This is an interesting question, there are many approaches.  The one that we&rsquo;re going to use is called <a href="https://en.wikipedia.org/wiki/Tournament_selection">tournament selection</a>.  It involves picking n creatures from the whole population and then, among those, picking the best scored one.  This will allow diversity in our population that is needed for proper evolution.</p>
+
+<p>```clojure
+(defn select-best [creatures tournament-size]
+  (let [selected (repeatedly tournament-size #(rand-nth creatures))]</p>
+
+<pre><code>(-&gt; (sort-by :score selected) reverse first)))
+</code></pre>
+
+<p>```</p>
+
+<p>We&rsquo;re now ready to write our evolve function.  In it, we pass in the population size, how many generations we want, the tournament size, and of course, our test data that our creatures are going to feed on.  The loop ends when it reaches a perfect fitting solution, (a creature with a score of 100), or the max generations.</p>
+
+<p>Note that we have a chance for a completely random creature to appear in the generations, to further encourage diversity.</p>
+
+<p>```clojure
+(defn perfect-fit [creatures]
+  (first (filter #(= 100 (:score %)) creatures)))</p>
+
+<p>(defn evolve [pop-size max-gen tournament-size test-data]
+  (loop [n max-gen</p>
+
+<pre><code>     creatures (initial-population pop-size (count test-data))]
+(println "generation " (- max-gen n))
+(let [scored-creatures (map (fn [creature] (score creature test-data)) creatures)]
+ (if (or (zero? n) (perfect-fit scored-creatures))
+   scored-creatures
+   (let [elites (take 2 (reverse (sort-by :score scored-creatures)))
+         new-creatures (for [i (range (- (count creatures) 2))]
+                         ;; add a random node to improve diversity
+                         (if (&lt; (rand) new-node-prob)
+                           {:program (make-random-cat (count test-data))}
+                           (let [creature1 (select-best scored-creatures tournament-size)
+                                 creature2 (select-best scored-creatures tournament-size)]
+                             (mutate (crossover creature1 creature2)))))]
+     (println "best-scores" (map :score elites))
+     (recur (dec n) (into new-creatures elites)))))))
+</code></pre>
+
+<p>```</p>
+
+<p>Trying it out. We get a perfect clojure.spec creature!</p>
+
+<p>```clojure
+(def creature-specs (evolve 100 100 7 [&ldquo;hi&rdquo; true 5 10 &ldquo;boo&rdquo;]))
+  (perfect-fit creature-specs)
+  ;=>{:program (clojure.spec/cat :0 string? :1 boolean? :2 (s/and integer? odd?) :3 integer? :4 string?)</p>
+
+<pre><code>  :score 100}
+</code></pre>
+
+<p>```</p>
+
+<p>Of course, our clojure.spec creature can generate data on its own with the <code>exercise</code> function.  Let&rsquo;s have it generate 5 more examples of data that conform to its spec.</p>
+
+<p><code>clojure
+  (s/exercise (eval (:program (perfect-fit creature-specs))) 5)
+;; ([("" true -1 -1 "") {:0 "", :1 true, :2 -1, :3 -1, :4 ""}]
+;;  [("D" false -1 -1 "G") {:0 "D", :1 false, :2 -1, :3 -1, :4 "G"}]
+;;  [("12" false -1 0 "l0") {:0 "12", :1 false, :2 -1, :3 0, :4 "l0"}]
+;;  [("" false -1 -2 "") {:0 "", :1 false, :2 -1, :3 -2, :4 ""}]
+;;  [("2" false 1 0 "Jro") {:0 "2", :1 false, :2 1, :3 0, :4 "Jro"}])
+</code></p>
+
+<p>If we wanted to, we could adjust our evolve function and let it continue to evolve creatures and lots of different solutions to choose from. We could even take the generated data from the <code>exercise function</code> and let it generate more creatures who generate more data&hellip;&hellip;</p>
+
+<p>The mind boggles.</p>
+
+<p>We&rsquo;ll leave with a quick summary of Genetic Programming.</p>
+
+<ul>
+<li>Start with a way to generate random creatures</li>
+<li>Have a way to evaluate their fitness</li>
+<li>Create a way to change them for the next generations using
+
+<ul>
+<li>Mutation</li>
+<li>Crossover</li>
+</ul>
+</li>
+<li>Have an evolution process
+
+<ul>
+<li>Create an initial population</li>
+<li>Rank them</li>
+<li>Create the next generation using selection techniques and mutation/ crossovers</li>
+<li>Don&rsquo;t forget about diversity</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Most importantly, have fun!</p>
+
+<p>If you want to play with the code, it&rsquo;s on github here <a href="https://github.com/gigasquid/genetic-programming-spec">https://github.com/gigasquid/genetic-programming-spec</a></p>
+
+<p>If you want to learn more about clojure.spec this <a href="https://www.youtube.com/watch?v=nqY4nUMfus8">video</a> is a great place to start.  The <a href="http://clojure.org/guides/spec">guide</a> is also a great reference with examples.</p>
+
+<p>If you want to learn more about genetic programming, there are a couple of books I would recommend: <a href="https://www.amazon.com/Programming-Collective-Intelligence-Building-Applications/dp/0596529325">Collective Intelligence</a> and <a href="https://www.amazon.com/Genetic-Algorithms-Structures-Evolution-Programs/dp/3540606769/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1468862704&amp;sr=1-1&amp;keywords=genetic+algorithms+data+structures">Genetic Algorithms + Data Structures = Evolution Programs</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hello World for the Next Generation]]></title>
+    <link href="http://gigasquid.github.io/blog/2016/07/03/hello-world/"/>
+    <updated>2016-07-03T15:01:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2016/07/03/hello-world</id>
+    <content type="html"><![CDATA[<p>I sit next to my daughter, showing her programming for the first time.</p>
+
+<p><code>clojure
+(+ 1 1)
+</code></p>
+
+<p>&ldquo;Now press enter.&rdquo;</p>
+
+<p><code>clojure
+2
+</code></p>
+
+<p>&ldquo;Pretty cool, huh?&rdquo;</p>
+
+<p>She looks unimpressed.  I fear I&rsquo;m losing her.  How can I explain that this is just a small tip of something so much bigger?</p>
+
+<h3>You can make the code sing to you.</h3>
+
+<p>You can take these numbers, turn them into notes, and line them up with the beat of your heart. Bring in the melody and chorus and build them up to a crescendo. Let it crash in waves and then</p>
+
+<h3>You can make the code dance for you.</h3>
+
+<p>You can create delicate swirls and patterns with mathematical expressions.  Have them pulse to the music in a never ending prism of fractals, flexing your control with confidence because</p>
+
+<h3>You can make the code lift you up.</h3>
+
+<p>It doesn&rsquo;t matter if you don&rsquo;t look like them.  It doesn&rsquo;t matter if they think you don&rsquo;t belong. They can&rsquo;t hold you back. You&rsquo;re smart and strong and</p>
+
+<h3>You can make the code create your life.</h3>
+
+<p>You can solve problems for people.  Make things work better and faster.  Keep the data flowing.  Make a company for yourself.  Watch that company and your power and influence in the world grow until nothing feels out of reach and then, if you&rsquo;re not careful</p>
+
+<h3>You can make the code hard and cruel.</h3>
+
+<p>You can automate hate.  Use the latest AI to keep them in control.  Watch them with never sleeping eyes.  Steal their money and point guns at them with armed robots.  Then, late at night, you can think how</p>
+
+<h3>You can let the code control you.</h3>
+
+<p>You can forget the important things in life.  Turn away from family and friends.  Lose yourself in some self created digital representation of yourself that never feels smart enough and leaves you grasping for more.  Until that day, when you walk the streets with a deadened heart and you see the sad faces all around and you remember that</p>
+
+<h3>You can let the code make them smile.</h3>
+
+<p>You can use your skills to brighten dark days.  Use your programs to make them laugh.  When you have their attention, inspire them to dream with you of a better world and next</p>
+
+<h3>You can make the code save lives.</h3>
+
+<p>You can turn those algorithms to heal.  Dive in and join the battle against death and disease.  Make sense of all the data.  Then lift your head to the sky and</p>
+
+<h3>You can make the code reach the stars.</h3>
+
+<p>You can see the surface of Mars.  Pick up a rock from a planet that was unimaginable generations before.  Look out at what is beyond our solar system and peer into the mysteries of the beginning of time.</p>
+
+<h3>You can.</h3>
+
+<p>All these things are yours now.  The terrible and beautiful power of it.</p>
+
+<p>I reach down to type the code that distills my hopes and fears for the next generation.</p>
+
+<p><code>clojure
+(println "Hello World")
+</code></p>
+
+<p>Then I slide the keyboard over to her, a tear sliding down my cheek, and lean over to whisper the only advice that I can form into words,</p>
+
+<p>&ldquo;Don&rsquo;t forget the closing parens.&rdquo;</p>
 ]]></content>
   </entry>
   

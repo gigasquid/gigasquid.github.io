@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2017-11-07T19:40:52-05:00</updated>
+  <updated>2018-03-04T11:06:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[On Staying Technical]]></title>
+    <link href="http://gigasquid.github.io/blog/2018/03/04/on-staying-technical/"/>
+    <updated>2018-03-04T11:03:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2018/03/04/on-staying-technical</id>
+    <content type="html"><![CDATA[<p>I was 10 years into my career when I met her. I could count the number of other women programmers I had worked with on one hand and none of them had young children at home like me. She was not only incredibly experienced and competent, but also had a son in college. I was incredibly curious about her career path so I asked her one day at lunch why she was still programming and hadn’t become a manager instead.</p>
+
+<p>She smiled at me kindly and replied, &ldquo;I’ve worked very hard to stay exactly where I am&rdquo;,  and I was enlightened.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Cats and Dogs with Cortex Redux]]></title>
@@ -343,7 +354,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 
 <h2>So how do you know about self publishing?</h2>
 
-<p>Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like <em>Hunger Games</em> and <em>Divergent</em>. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she <em>coding super powers</em>. The idea for <a href="http://www.codeshifterbook.com/">Code Shifter</a> was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a <em>learning how to code</em> book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn&rsquo;t, it would lay the positive groundwork to have them be more open to it later.</p>
+<p>Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like <em>Hunger Games</em> and <em>Divergent</em>. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she had <em>coding super powers</em>. The idea for <a href="http://www.codeshifterbook.com/">Code Shifter</a> was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a <em>learning how to code</em> book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn&rsquo;t, it would lay the positive groundwork to have them be more open to it later.</p>
 
 <p>Books, like software, always take longer than you plan. My daughter and I enjoyed working on it together and over time it grew into a book that we could share with others. Along the way, I learned quite a bit about writing books, publishing, and other things that I wish I had known beforehand.</p>
 
@@ -454,7 +465,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 
 <h2>Any last words of advice?</h2>
 
-<p>There is an great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.</p>
+<p>There is a great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.</p>
 ]]></content>
   </entry>
   
@@ -4043,35 +4054,6 @@ I am interested in having you work with me every day, but first I want to unders
 the conversation idea :)</em></p>
 
 <p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Wild Horses, Things, and Creativity]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/05/30/wilds-horses-things-and-creativity/"/>
-    <updated>2015-05-30T10:53:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/05/30/wilds-horses-things-and-creativity</id>
-    <content type="html"><![CDATA[<p><img src="https://nmbdesigner.files.wordpress.com/2012/05/where-the-wild-things-are-2.jpeg"></p>
-
-<p>Sometimes I want to create something and I run into a limitation or
-constraint. It is at this point where I am tempted to give up and say
-that I just <em>can&rsquo;t</em> do that.</p>
-
-<p>At this time,  I remember Maurice Sendak and the origins of <em>Where
-the Wild Things Are</em>.  In this <a href="http://www.pbs.org/now/arts/sendak.html">interview with Bill Moyers</a>, he explains
-how the book was originally titled <em>Where the Wild Horses Are</em>, but he
-couldn&rsquo;t draw horses.</p>
-
-<blockquote><p>She was this torrential woman, passionate woman, who could spot talent 10 miles away. I had no education. I did not go to art school. My drawing was so crude. I had shines on shoes like in Mutt &lsquo;n&rsquo; Jeff in Walt Disney. And she saw through that monstrous crudity and cultivated me, really made me grow up. And then, it was time to do my own picture book.</p>
-
-<p>And I came to her with a title that was &ldquo;Where the Wild Horses Are.&rdquo; And she just loved that. It was so poetic and evocative. And she gave me a contract based on &ldquo;Where the Wild Horses Are.&rdquo; And then, it turned out after some very few months to her chagrin and anger, I couldn&rsquo;t draw horses. The whole book would have to be full of horses to make the book make sense.</p>
-
-<p>And when I tried a number of things, I remember the acid tones. She said, &ldquo;Maurice, what can you draw?&rdquo; Okay. Cause she was investing in a full color picture book. That was an enormous thing back then.</p>
-
-<p>And so, I thought well things, things.</p></blockquote>
-
-<p>Limits or constraints cannot hold back creativity.  But it can help
-mold it in surprising directions.</p>
 ]]></content>
   </entry>
   

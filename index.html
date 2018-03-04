@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Nov 7th, 2017 Tags: AI, All, Clojure, Machine Learning I wrote a blog post a while back about using a Clojure machine learning library &hellip;">
+	<meta name="description" content="Published on: Mar 4th, 2018 Tags: all I was 10 years into my career when I met her. I could count the number of other women programmers I had worked &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,52 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/03/04/on-staying-technical/">
+		
+			On Staying Technical</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-04T11:03:00-05:00" pubdate data-updated="true">Mar 4<span>th</span>, 2018</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>all</a>
+
+
+</div>
+    </div>
+		<p>I was 10 years into my career when I met her. I could count the number of other women programmers I had worked with on one hand and none of them had young children at home like me. She was not only incredibly experienced and competent, but also had a son in college. I was incredibly curious about her career path so I asked her one day at lunch why she was still programming and hadn’t become a manager instead.</p>
+
+<p>She smiled at me kindly and replied, &ldquo;I’ve worked very hard to stay exactly where I am&rdquo;,  and I was enlightened.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2018/03/04/on-staying-technical//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -500,7 +546,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 
 <h2>So how do you know about self publishing?</h2>
 
-<p>Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like <em>Hunger Games</em> and <em>Divergent</em>. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she <em>coding super powers</em>. The idea for <a href="http://www.codeshifterbook.com/">Code Shifter</a> was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a <em>learning how to code</em> book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn&rsquo;t, it would lay the positive groundwork to have them be more open to it later.</p>
+<p>Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like <em>Hunger Games</em> and <em>Divergent</em>. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she had <em>coding super powers</em>. The idea for <a href="http://www.codeshifterbook.com/">Code Shifter</a> was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a <em>learning how to code</em> book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn&rsquo;t, it would lay the positive groundwork to have them be more open to it later.</p>
 
 <p>Books, like software, always take longer than you plan. My daughter and I enjoyed working on it together and over time it grew into a book that we could share with others. Along the way, I learned quite a bit about writing books, publishing, and other things that I wish I had known beforehand.</p>
 
@@ -611,7 +657,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 
 <h2>Any last words of advice?</h2>
 
-<p>There is an great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.</p>
+<p>There is a great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.</p>
 
 		
 		
@@ -2241,539 +2287,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2016/02/10/fairy-tale-word-vectors/">
-		
-			Fairy Tale Word Vectors</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-02-10T21:27:00-05:00" pubdate data-updated="true">Feb 10<span>th</span>, 2016</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
-
-
-</div>
-    </div>
-		<p><img src="http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg"></p>
-
-<p>This post continues our exploration from the last blog post <a href="http://gigasquidsoftware.com/blog/2016/02/06/why-hyperdimensional-socks-never-match/">Why Hyperdimensional Socks Never Match</a>.  We are still working our way through <a href="http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf">Kanerva&rsquo;s paper</a>.  This time, with the basics of hypervectors under our belts, we&rsquo;re ready to explore how words can be expressed as context vectors.  Once in a high dimensional form, you can compare two words to see how similar they are and even perform reasoning.</p>
-
-<p>To kick off our word vector adventure, we need some words.  Preferring whimsy over the Google news, our text will be taken from ten freely available fairy tale books on <a href="http://www.gutenberg.org/">http://www.gutenberg.org/</a>.</p>
-
-<h3>Gather ye nouns</h3>
-
-<p>Our goal is to assemble a frequency matrix, with all the different nouns as the rows and the columns will be the counts of if the word appears or not in the document.  Our matrix will be binary with just 1s and 0s.  The <em>document</em> will be a sentence or fragment of words.  A small visualization is below.</p>
-
-<table>
-<thead>
-<tr>
-<th></th>
-<th> Noun          </th>
-<th align="center"> Doc1</th>
-<th> Doc2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td> flower        </td>
-<td align="center"> 1   </td>
-<td>0</td>
-</tr>
-<tr>
-<td></td>
-<td> king          </td>
-<td align="center"> 0   </td>
-<td>1</td>
-</tr>
-<tr>
-<td></td>
-<td> fairy         </td>
-<td align="center"> 1   </td>
-<td>0</td>
-</tr>
-<tr>
-<td></td>
-<td> gold          </td>
-<td align="center"> 1   </td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
-
-
-<p>The size of the matrix will be big enough to support hypervector behavior, but not so big as to make computation too annoyingly slow.  It will be nouns x 10,000.</p>
-
-<p>The first task is to get a set of nouns to fill out the rows.  Although, there are numerous online sources for linguistic nouns, they unfortunately do not cover the same language spectrum as old fairy tale books.  So we are going to collect our own.  Using <a href="http://stanfordnlp.github.io/CoreNLP/">Stanford CoreNLP</a>, we can collect a set of nouns using Grimm&rsquo;s Book as a guide.  There are about 2500 nouns there to give us a nice sample to play with.  This makes our total matrix size ~ 2500 x 10,000.</p>
-
-<p>Now that we have our nouns, let&rsquo;s get down to business.  We want to create an index to row to make a <code>noun-idx</code> and then create a sparse matrix for our word frequency matrix.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">hyperdimensional-playground.context-vectors</span>
-</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.matrix</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">]</span>
-</span><span class='line'>            <span class="p">[</span><span class="nv">clojure.core.matrix.linear</span> <span class="ss">:as</span> <span class="nv">ml</span><span class="p">]</span>
-</span><span class='line'>            <span class="p">[</span><span class="nv">clojure.string</span> <span class="ss">:as</span> <span class="nv">string</span><span class="p">]</span>
-</span><span class='line'>            <span class="p">[</span><span class="nv">hyperdimensional-playground.core</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">rand-hv</span> <span class="nv">cosine-sim</span> <span class="nv">mean-add</span> <span class="nv">inverse</span> <span class="nv">xor-mul</span><span class="p">]]</span>
-</span><span class='line'>            <span class="p">[</span><span class="nv">hyperdimensional-playground.fairytale-nouns</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">fairy-tales-nouns</span> <span class="nv">book-list</span><span class="p">]]))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">m/set-current-implementation</span> <span class="ss">:vectorz</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; size of the hypervectors and freq matrix columns</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sz</span> <span class="mi">10000</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; The nouns come from a sampling of Grimm&#39;s fairy tale nouns these will</span>
-</span><span class='line'><span class="c1">;; make up the rows in the frequency matrix</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">noun-idx</span> <span class="p">(</span><span class="nb">zipmap </span><span class="nv">fairy-tales-nouns</span> <span class="p">(</span><span class="nf">range</span><span class="p">)))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">freq-matrix</span> <span class="p">(</span><span class="nf">m/new-sparse-array</span> <span class="p">[(</span><span class="nb">count </span><span class="nv">fairy-tales-nouns</span><span class="p">)</span> <span class="nv">sz</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The next thing we need to do is to have some functions to take a book, read it in, split it into documents and then update the frequency matrix.</p>
-
-<h3>Random indexing for the win</h3>
-
-<p>The interesting thing about the update method is that we can use <em>random indexing</em>.  We don&rsquo;t need to worry about having a column for each document.  Because of the nature of hyperdimensions, we can randomly assign 10 columns for each document.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">update-doc!</span>
-</span><span class='line'>  <span class="s">&quot;Given a document - upate the frequency matrix using random indexing&quot;</span>
-</span><span class='line'>  <span class="p">[</span><span class="nv">doc</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">known-nouns</span> <span class="p">(</span><span class="nf">clojure.set/intersection</span> <span class="nv">fairy-tales-nouns</span> <span class="p">(</span><span class="nb">set </span><span class="nv">doc</span><span class="p">))]</span>
-</span><span class='line'>    <span class="c1">; use positive random indexing</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">doall </span><span class="p">(</span><span class="nf">repeatedly</span> <span class="mi">10</span> <span class="o">#</span><span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">noun</span> <span class="nv">known-nouns</span><span class="p">]</span>
-</span><span class='line'>                       <span class="p">(</span><span class="nf">m/mset!</span> <span class="nv">freq-matrix</span> <span class="p">(</span><span class="nb">get </span><span class="nv">noun-idx</span> <span class="nv">noun</span><span class="p">)</span> <span class="p">(</span><span class="nb">rand-int </span><span class="nv">sz</span><span class="p">)</span> <span class="mi">1</span><span class="p">))))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The whole book is processed by slurping in the contents and using a regex to split it up into docs to update the matrix.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">process-book</span>
-</span><span class='line'>  <span class="s">&quot;Load a book and break it into sentence like documents and update the frequency matrix&quot;</span>
-</span><span class='line'>  <span class="p">[</span><span class="nv">book-str</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">book-text</span> <span class="p">(</span><span class="nb">slurp </span><span class="nv">book-str</span><span class="p">)</span>
-</span><span class='line'>        <span class="nv">docs</span> <span class="p">(</span><span class="nf">partition</span> <span class="mi">25</span> <span class="p">(</span><span class="nb">map </span><span class="nv">string/lower-case</span>
-</span><span class='line'>                                <span class="p">(</span><span class="nf">string/split</span> <span class="nv">book-text</span> <span class="o">#</span><span class="s">&quot;\s|\.|\,|\;|\!|\?&quot;</span><span class="p">)))</span>
-</span><span class='line'>        <span class="nv">doc-count</span> <span class="p">(</span><span class="nb">count </span><span class="nv">docs</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;processing:&quot;</span> <span class="nv">book-str</span> <span class="s">&quot;(with&quot;</span> <span class="nv">doc-count</span> <span class="s">&quot;docs)&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">doall </span><span class="p">(</span><span class="nf">map-indexed</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">idx</span> <span class="nv">doc</span><span class="p">]</span>
-</span><span class='line'>                          <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">zero? </span><span class="p">(</span><span class="nf">mod</span> <span class="nv">idx</span> <span class="mi">1000</span><span class="p">))</span> <span class="p">(</span><span class="nb">println </span><span class="s">&quot;doc:&quot;</span> <span class="nv">idx</span><span class="p">))</span>
-</span><span class='line'>                          <span class="p">(</span><span class="nf">update-doc!</span> <span class="nv">doc</span><span class="p">))</span>
-</span><span class='line'>                        <span class="nv">docs</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;DONE with &quot;</span> <span class="nv">book-str</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can now run the whole processing with:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">book</span> <span class="nv">book-list</span><span class="p">]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">process-book</span> <span class="nv">book</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>On my system, it only takes about 3 seconds.</p>
-
-<p>Great!  Now we have hypervectors associated with word frequencies.  They are now <em>context word vectors</em>.  What can we do with them.</p>
-
-<h3>How close is a king to a goat?</h3>
-
-<p>One of the things that we can do with them is find out a measure of how closely related the context of two words are by a measure of their cosine similarity.  First, we need a handy function to turn a string word into a word vector by getting it out of our frequency matrix.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">wv</span> <span class="p">[</span><span class="nv">word</span><span class="p">]</span>
-</span><span class='line'>  <span class="s">&quot;Get a hypervector for the word from the frequency matrix&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">get </span><span class="nv">noun-idx</span> <span class="nv">word</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">assert </span><span class="p">(</span><span class="nb">not </span><span class="p">(</span><span class="nb">nil? </span><span class="nv">i</span><span class="p">))</span> <span class="p">(</span><span class="nb">str </span><span class="nv">word</span> <span class="s">&quot; not found&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">m/slice</span> <span class="nv">freq-matrix</span> <span class="nv">i</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then we can make another nice function to compare two words and give a informational map back.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">compare-wvs</span>
-</span><span class='line'>  <span class="s">&quot;Compare two words and give the cosine distance info map&quot;</span>
-</span><span class='line'>  <span class="p">[</span><span class="nv">word1</span> <span class="nv">word2</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">wv1</span> <span class="p">(</span><span class="nf">wv</span> <span class="nv">word1</span><span class="p">)</span>
-</span><span class='line'>        <span class="nv">wv2</span> <span class="p">(</span><span class="nf">wv</span> <span class="nv">word2</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">not= </span><span class="nv">word1</span> <span class="nv">word2</span><span class="p">)</span>
-</span><span class='line'>      <span class="p">{</span><span class="ss">:word1</span> <span class="nv">word1</span>
-</span><span class='line'>       <span class="ss">:word2</span> <span class="nv">word2</span>
-</span><span class='line'>       <span class="ss">:cosine</span> <span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">wv1</span> <span class="nv">wv2</span><span class="p">)})))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s take a look at the similarities of some words to <em>king</em>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">sort-by </span><span class="ss">:cosine</span><span class="p">[(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;queen&quot;</span><span class="p">)</span>
-</span><span class='line'>                 <span class="p">(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;prince&quot;</span><span class="p">)</span>
-</span><span class='line'>                 <span class="p">(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;princess&quot;</span><span class="p">)</span>
-</span><span class='line'>                 <span class="p">(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;guard&quot;</span><span class="p">)</span>
-</span><span class='line'>                 <span class="p">(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;goat&quot;</span><span class="p">)])</span>
-</span><span class='line'>  <span class="c1">;; ({:word1 &quot;king&quot;, :word2 &quot;goat&quot;, :cosine 0.1509151478896664}</span>
-</span><span class='line'>  <span class="c1">;;  {:word1 &quot;king&quot;, :word2 &quot;guard&quot;, :cosine 0.16098893367403827}</span>
-</span><span class='line'>  <span class="c1">;;  {:word1 &quot;king&quot;, :word2 &quot;queen&quot;, :cosine 0.49470535530616655}</span>
-</span><span class='line'>  <span class="c1">;;  {:word1 &quot;king&quot;, :word2 &quot;prince&quot;, :cosine 0.5832521795716931}</span>
-</span><span class='line'>  <span class="c1">;;  {:word1 &quot;king&quot;, :word2 &quot;princess&quot;, :cosine 0.5836922474743367})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As expected, the royal family is closer to the king then a guard or goat is.</p>
-
-<p>One of the interesting things is that now we can do addition and subtraction with these word vectors and see how it affects the relation with other words.</p>
-
-<h3>Boy + Gold = King, Boy + Giant = Jack</h3>
-
-<p>We can take a look at how close <em>boy</em> and <em>king</em> are together by themselves.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;king&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.42996397142253145</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we can add some gold to the boy and that new word vector will be closer to king than boy was alone.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gold&quot;</span><span class="p">))</span>
-</span><span class='line'>              <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;king&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.5876251031366048</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Doing the same for <em>boy</em> and <em>jack</em>, we find that adding a giant moves the context closer.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.33102858702785953</span>
-</span><span class='line'><span class="c1">;; boy + giant = jack</span>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;giant&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">))</span>
-</span><span class='line'>              <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">))</span> <span class="c1">;=&gt;0.4491473187787431</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Amusingly, a frog and a princess make a prince.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;; frog + princess = prince</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv-add</span> <span class="s">&quot;frog&quot;</span> <span class="s">&quot;princess&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;prince&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.5231641991974249</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can take this even farther by subtracting words and adding others.  For example a similarity to the word queen can be obtained by subtracting man from king and adding woman.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;; queen= (king-man) + woman</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;queen&quot;</span><span class="p">)</span>
-</span><span class='line'>              <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;woman&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv-subtract</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;man&quot;</span><span class="p">)))</span> <span class="c1">;=&gt;0.5659832204544486</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Similarly, a contextual closeness to father can be gotten from subtracting woman from mother and adding man.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;father&quot;</span><span class="p">)</span>
-</span><span class='line'>              <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;man&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv-subtract</span> <span class="s">&quot;mother&quot;</span> <span class="s">&quot;woman&quot;</span><span class="p">)))</span> <span class="c1">;=&gt;0.5959841177719538</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>But wait, that&rsquo;s not all.  We can also do express facts with these word vectors and <em>reason</em> about them.</p>
-
-<h3>Reasoning with word vector with the database as a hyperdimensional value</h3>
-
-<p>The curious nature of hypervectors allows the storage of multiple entity, attributes in it and allow the retrieval of the likeness of them later by simple linear math &ndash; using only xor multiplication and addition.  This gives us the <em>database as a value</em> in the form of a high dimensional vector.</p>
-
-<p>For an example, say we want to express the fact that Hansel is a brother of Gretel.  We can do this by adding the xor product of brother with hansel and the product of brother with Gretel.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; hansel is the brother of gretel</span>
-</span><span class='line'><span class="c1">;; B*H + B*G</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">hansel-brother-of-gretel</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">mean-add</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;hansel&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Also we can express that Jack is a brother of Hansel.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">jack-brother-of-hansel</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">mean-add</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">))</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;hansel&quot;</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can add these two facts together to make a new hypervector value.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">facts</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">hansel-brother-of-gretel</span>
-</span><span class='line'>                       <span class="nv">jack-brother-of-hansel</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we can actually <em>reason</em> about them and ask questions.  Is Jack a brother of Hansel?  With a high cosine similarity, we can assume the answer is likely.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="c1">;; is jack the brother of hansel?</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">)</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
-</span><span class='line'>            <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt;0.8095270629815969</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>What about someone unrelated.  Is Cinderella the brother of Gretel? &ndash; No</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="c1">;; is cinderella the brother of gretel ?</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;cinderella&quot;</span><span class="p">)</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
-</span><span class='line'>            <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt;0.1451799916656951</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Is Jack the brother of Gretel &ndash; Yes</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="c1">;; is jack the brother of gretel ?</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">)</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
-</span><span class='line'>            <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt; 0.8095270629815969</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can take this further by adding more facts and inventing a relation of our own.</p>
-
-<h3>Siblings in Hyperspace</h3>
-
-<p>Let&rsquo;s invent a new word vector that is not in our nouns &ndash; <em>siblings</em>.  We are going to create new random hypervector to represent it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">siblings</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We will define it in terms of word vectors that we already have.  That is, siblings will be a the sum of brother + sister.  We XOR multiply it by siblings to associate it with the hypervector.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">siblings-brother-sister</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">))</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;sister&quot;</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we can add some more facts.  Gretel is a sister of Hansel.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="c1">;; gretel is the sister of hansel</span>
-</span><span class='line'>  <span class="c1">;; S*G + S*H</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">gretel-sister-of-hansel</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">mean-add</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;sister&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;sister&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;hansel&quot;</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Gretel is also a sister of Jack.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="c1">;; gretel is the sister of jack</span>
-</span><span class='line'>  <span class="c1">; S*G + S*H</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">gretel-sister-of-jack</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">mean-add</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;sister&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;sister&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Collecting all of our facts into one hypervector (as a database).</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">facts</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">hansel-brother-of-gretel</span>
-</span><span class='line'>                       <span class="nv">jack-brother-of-hansel</span>
-</span><span class='line'>                       <span class="nv">gretel-sister-of-jack</span>
-</span><span class='line'>                       <span class="nv">gretel-sister-of-hansel</span>
-</span><span class='line'>                       <span class="nv">siblings-brother-sister</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we can ask some for questions.</p>
-
-<p>Are Hansel and Gretel siblings? &ndash; Yes</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; are hansel and gretel siblings?</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;hansel&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt;0.627015379034067</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Are John and Roland siblings &ndash; No</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; are john and roland siblings?</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;roland&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;john&quot;</span><span class="p">))</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt; 0.1984017637065277</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Are Jack and Hansel siblings? &ndash; Yes</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;hansel&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt;0.48003572523507465</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It is interesting to think of that nothing is stopping us at this point from <em>retracting</em> facts by simply subtracting the fact encoded word vectors from our &ldquo;database&rdquo; value and making a new value from it.</p>
-
-<h3>Conclusions</h3>
-
-<p>In this fun, but casual exploration of word vector we have seen the potential for reasoning about language in a way that uses nothing more complicated than addition and multiplication.  The ability to store dense information in hypervectors, extract it with simple methods, and flexibly collect it randomly, shows its versatility and power.  Hyperdimensional vectors  might hold the key to unlocking a deeper understanding of cognitive computing or perhaps even true artificial intelligence.</p>
-
-<p>It is interesting to note that this technique is not limited to words. Other applications can be done the same way.  For example a video recommendation using a hypervector with movie titles.  Or perhaps even anomaly detection using sensor readings over a regular weekly time period.</p>
-
-<p>Looking over our journey with word vectors.  At the beginning it seemed that word vectors were magical.  Now, after an understanding of the basics, it still seems like magic.</p>
-
-<p>If you are interested in exploring further, feel free to use my github <a href="https://github.com/gigasquid/hyperdimensional-playground">hyperdimensional-playground</a> as a starting point.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2016/02/10/fairy-tale-word-vectors//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
     
@@ -2785,7 +2298,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
     </div>
     <footer id="footer">
     <div style="display:inline">
-    Copyright &copy; 2017
+    Copyright &copy; 2018
 
     Carin Meier
 . Powered by <a href="http://octopress.org">Octopress</a> | 
