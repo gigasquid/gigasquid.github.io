@@ -19,5 +19,5 @@ When I am left to daydream, I think of the dynamics of flocks of birds, what the
 
 * I have a [Github](https://github.com/gigasquid)
 * and a [Linked In Page](http://www.linkedin.com/in/carinmeier)
-* and a [Twitter Account](http://twitter.com/#!/gigasquid)
+* and a [Twitter Account](http://twitter.com/gigasquid)
 

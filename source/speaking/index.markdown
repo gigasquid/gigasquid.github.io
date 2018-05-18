@@ -19,6 +19,7 @@ be Clojure, Robots, and AI lately.
 
 
 ## Past Talks
+* [Craft Conf 2018 - Unconvential Programming with Chemical Computing](https://craft-conf.com/)
 * [Clojure Conj 2017 - Deep Learning Needs Clojure](https://www.youtube.com/watch?v=eLl6_k_fZn4)
 * [Velocity Conf NY 2017 - Unconventional Programming Paradigms for the Future Now](https://conferences.oreilly.com/velocity/vl-ny)
 * [Joy of Coding - June 2017](http://joyofcoding.org/) The Joy of Gradient Descent
