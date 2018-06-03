@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2018-06-03T17:22:16-04:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Meet Clojure MXNet - NDArray]]></title>
+    <link href="http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray/"/>
+    <updated>2018-06-03T16:13:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg">https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg</a>"></p>
+
+<p>This is the beginning of a series of blog posts to get to know the <a href="https://mxnet.apache.org/">Apache MXNet</a> Deep Learning project and the new Clojure library <a href="https://github.com/gigasquid/clojure-mxnet">clojure-mxnet</a>.</p>
+
+<p>MXNet is a first class, modern deep learning library that AWS has officially picked as its chosen library. It supports multiple languages on a first class basis and is incubating as an Apache project.</p>
+
+<p>The motivation for creating a Clojure package is to be able to open the deep learning library to the Clojure ecosystem and build bridges for future development and innovation for the community. It provides all the needed tools including low level and high level apis, dynamic graphs, and things like GAN and natural language support.</p>
+
+<p>So let&rsquo;s get on with our introduction with one of the basic building blocks of MXNet, the <code>NDArray</code>.</p>
+
+<h2>Meet NDArray</h2>
+
+<p>The <code>NDArray</code> is the tensor data structure in MXNet. Let&rsquo;s start of by creating one. First we need to require the <code>ndarray</code> namespace:</p>
+
+<p><code>clojure
+(ns tutorial.ndarray
+  (:require [org.apache.clojure-mxnet.ndarray :as ndarray]))
+</code></p>
+
+<p>Now let&rsquo;s create an all zero array of dimension 100 x 50</p>
+
+<p><code>clojure
+(ndarray/zeros [100 50])
+;=&gt; #object[org.apache.mxnet.NDArray 0x3e396d0 "org.apache.mxnet.NDArray@aeea40b6"]
+</code></p>
+
+<p>We can check the shape of this by using <code>shape-vec</code></p>
+
+<p><code>clojure
+(ndarray/shape-vec (ndarray/zeros [100 50]))
+;=&gt; [100 50]
+</code></p>
+
+<p>There is also a quick way to create an ndarray of ones with the <code>ones</code> function:</p>
+
+<p><code>clojure
+(ndarray/ones [256 32 128 1])
+</code></p>
+
+<p>Ones and zeros are nice, but what an array with specific contents? There is an <code>array</code> function for that. Specific the contents of the array first and the shape second:</p>
+
+<p><code>clojure
+(def c (ndarray/array [1 2 3 4 5 6] [2 3]))
+(ndarray/shape-vec c)  ;=&gt; [2 3]
+</code></p>
+
+<p>To convert it back to a vector format, we can use the <code>-&gt;vec</code> function.</p>
+
+<p><code>clojure
+(ndarray/-&gt;vec c)
+;=&gt; [1.0 2.0 3.0 4.0 5.0 6.0]
+</code></p>
+
+<p>Now that we know how to create NDArrays, we can get to do something interesting like operations on them.</p>
+
+<h3>Operations</h3>
+
+<p>There are all the standard arithmetic operations:</p>
+
+<p><code>clojure
+(def a (ndarray/ones [1 5]))
+(def b (ndarray/ones [1 5]))
+(-&gt; (ndarray/+ a b) (ndarray/-&gt;vec))
+;=&gt;  [2.0 2.0 2.0 2.0 2.0]
+</code></p>
+
+<p>Note that the original ndarrays are unchanged.</p>
+
+<p><code>clojure
+(ndarray/-&gt;vec a) ;=&gt; [1.0 1.0 1.0 1.0 1.0]
+(ndarray/-&gt;vec b) ;=&gt; [1.0 1.0 1.0 1.0 1.0]
+</code></p>
+
+<p>But, we can change that if we use the inplace operators:</p>
+
+<p><code>clojure
+(ndarray/+= a b)
+(ndarray/-&gt;vec a) ;=&gt;  [2.0 2.0 2.0 2.0 2.0]
+</code></p>
+
+<p>There are many more operations, but just to give you a taste, we&rsquo;ll take a look a the <code>dot</code> product operation:</p>
+
+<p><code>clojure
+(def arr1 (ndarray/array [1 2] [1 2]))
+(def arr2 (ndarray/array [3 4] [2 1]))
+(def res (ndarray/dot arr1 arr2))
+(ndarray/shape-vec res) ;=&gt; [1 1]
+(ndarray/-&gt;vec res) ;=&gt; [11.0]
+</code></p>
+
+<p>If you are curious about the other operators available in NDArray API check out the <a href="https://mxnet.incubator.apache.org/api/python/ndarray/ndarray.html">MXNet project documentation page</a></p>
+
+<p>Now that we have ndarrays and can do calculations on them, we might want to save and load them.</p>
+
+<h3>Saving and Loading</h3>
+
+<p>You can save ndarrays with a name as a map like:</p>
+
+<p><code>clojure
+(ndarray/save "filename" {"arr1" arr1 "arr2" arr2})
+</code></p>
+
+<p>To load them, you just specify the filename and the map is returned.</p>
+
+<p><code>clojure
+(ndarray/load "filename")
+;=&gt; {"arr1" #object[org.apache.mxnet.NDArray 0x1b629ff4 "org.apache.mxnet.NDArray@63da08cb"]
+;=&gt;  "arr2" #object[org.apache.mxnet.NDArray 0x25d994e3 "org.apache.mxnet.NDArray@5bbaf2c3"]}
+</code></p>
+
+<p>One more cool thing, we can even due our operations on the cpu or gpu.</p>
+
+<h3>Multi-Device Support</h3>
+
+<p>When creating an <code>ndarray</code> you can use a context argument to specify the device. To do this, we will need the help of the <code>context</code> namespace.</p>
+
+<p><code>clojure
+(require '[org.apache.clojure-mxnet.context :as context])
+</code></p>
+
+<p>By default, the <code>ndarray</code> is created on the cpu context.</p>
+
+<p><code>clojure
+(def cpu-a (ndarray/zeros [100 200]))
+(ndarray/context cpu-a)
+;=&gt; #object[ml.dmlc.mxnet.Context 0x3f376123 "cpu(0)"]
+</code></p>
+
+<p>But we can specify the gpu instead, (if we have a gpu enabled build).</p>
+
+<p><code>clojure
+(def gpu-b (ndarray/zeros [100 200] {:ctx (context/gpu 0)}))
+</code></p>
+
+<p><em>Note: Operations among different contexts are currently not allowed, but there is a <code>copy-to</code> function that can help copy the content from one device to another and then continue on with the computation.</em></p>
+
+<h2>Wrap up</h2>
+
+<p>I hope you&rsquo;ve enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found <a href="https://github.com/gigasquid/clojure-mxnet/blob/master/examples/tutorial/src/tutorial/ndarray.clj">here</a>.</p>
+
+<p><em>Please remember that he library is in a very <strong>alpha</strong> state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :).</em></p>
+]]></content>
+  </entry>
+  
+</feed>

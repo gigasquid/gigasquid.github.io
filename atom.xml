@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2018-05-18T08:53:12-04:00</updated>
+  <updated>2018-06-03T17:22:16-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,188 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Meet Clojure MXNet - NDArray]]></title>
+    <link href="http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray/"/>
+    <updated>2018-06-03T16:13:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray</id>
+    <content type="html"><![CDATA[<p><img src="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg"></p>
+
+<p>This is the beginning of a series of blog posts to get to know the <a href="https://mxnet.apache.org/">Apache MXNet</a> Deep Learning project and the new Clojure library <a href="https://github.com/gigasquid/clojure-mxnet">clojure-mxnet</a>.</p>
+
+<p>MXNet is a first class, modern deep learning library that AWS has officially picked as its chosen library. It supports multiple languages on a first class basis and is incubating as an Apache project.</p>
+
+<p>The motivation for creating a Clojure package is to be able to open the deep learning library to the Clojure ecosystem and build bridges for future development and innovation for the community. It provides all the needed tools including low level and high level apis, dynamic graphs, and things like GAN and natural language support.</p>
+
+<p>So let&rsquo;s get on with our introduction with one of the basic building blocks of MXNet, the <code>NDArray</code>.</p>
+
+<h2>Meet NDArray</h2>
+
+<p>The <code>NDArray</code> is the tensor data structure in MXNet. Let&rsquo;s start of by creating one. First we need to require the <code>ndarray</code> namespace:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">tutorial.ndarray</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.ndarray</span> <span class="ss">:as</span> <span class="nv">ndarray</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now let&rsquo;s create an all zero array of dimension 100 x 50</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.NDArray 0x3e396d0 &quot;org.apache.mxnet.NDArray@aeea40b6&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can check the shape of this by using <code>shape-vec</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">]))</span>
+</span><span class='line'><span class="c1">;=&gt; [100 50]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is also a quick way to create an ndarray of ones with the <code>ones</code> function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">256</span> <span class="mi">32</span> <span class="mi">128</span> <span class="mi">1</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ones and zeros are nice, but what an array with specific contents? There is an <code>array</code> function for that. Specific the contents of the array first and the shape second:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">3</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">c</span><span class="p">)</span>  <span class="c1">;=&gt; [2 3]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To convert it back to a vector format, we can use the <code>-&gt;vec</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">c</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; [1.0 2.0 3.0 4.0 5.0 6.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we know how to create NDArrays, we can get to do something interesting like operations on them.</p>
+
+<h3>Operations</h3>
+
+<p>There are all the standard arithmetic operations:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">ndarray/+</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the original ndarrays are unchanged.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But, we can change that if we use the inplace operators:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/+=</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are many more operations, but just to give you a taste, we&rsquo;ll take a look a the <code>dot</code> product operation:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr1</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr2</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">res</span> <span class="p">(</span><span class="nf">ndarray/dot</span> <span class="nv">arr1</span> <span class="nv">arr2</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">res</span><span class="p">)</span> <span class="c1">;=&gt; [1 1]</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">res</span><span class="p">)</span> <span class="c1">;=&gt; [11.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are curious about the other operators available in NDArray API check out the <a href="https://mxnet.incubator.apache.org/api/python/ndarray/ndarray.html">MXNet project documentation page</a></p>
+
+<p>Now that we have ndarrays and can do calculations on them, we might want to save and load them.</p>
+
+<h3>Saving and Loading</h3>
+
+<p>You can save ndarrays with a name as a map like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/save</span> <span class="s">&quot;filename&quot;</span> <span class="p">{</span><span class="s">&quot;arr1&quot;</span> <span class="nv">arr1</span> <span class="s">&quot;arr2&quot;</span> <span class="nv">arr2</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To load them, you just specify the filename and the map is returned.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/load</span> <span class="s">&quot;filename&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; {&quot;arr1&quot; #object[org.apache.mxnet.NDArray 0x1b629ff4 &quot;org.apache.mxnet.NDArray@63da08cb&quot;]</span>
+</span><span class='line'><span class="c1">;=&gt;  &quot;arr2&quot; #object[org.apache.mxnet.NDArray 0x25d994e3 &quot;org.apache.mxnet.NDArray@5bbaf2c3&quot;]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One more cool thing, we can even due our operations on the cpu or gpu.</p>
+
+<h3>Multi-Device Support</h3>
+
+<p>When creating an <code>ndarray</code> you can use a context argument to specify the device. To do this, we will need the help of the <code>context</code> namespace.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">org.apache.clojure-mxnet.context</span> <span class="ss">:as</span> <span class="nv">context</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, the <code>ndarray</code> is created on the cpu context.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">cpu-a</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/context</span> <span class="nv">cpu-a</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; #object[ml.dmlc.mxnet.Context 0x3f376123 &quot;cpu(0)&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But we can specify the gpu instead, (if we have a gpu enabled build).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">gpu-b</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]</span> <span class="p">{</span><span class="ss">:ctx</span> <span class="p">(</span><span class="nf">context/gpu</span> <span class="mi">0</span><span class="p">)}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Note: Operations among different contexts are currently not allowed, but there is a <code>copy-to</code> function that can help copy the content from one device to another and then continue on with the computation.</em></p>
+
+<h2>Wrap up</h2>
+
+<p>I hope you&rsquo;ve enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found <a href="https://github.com/gigasquid/clojure-mxnet/blob/master/examples/tutorial/src/tutorial/ndarray.clj">here</a>.</p>
+
+<p><em>Please remember that he library is in a very <strong>alpha</strong> state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :).</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[On Staying Technical]]></title>
@@ -3580,478 +3762,6 @@ I am interested in having you work with me every day, but first I want to unders
 <p><strong>Datomic:</strong> Certainly. I would love that.  Do you want to talk about it now, or have another cookie break first?</p>
 
 <p><strong>Human:</strong> Now that you mention cookies&hellip; Let&rsquo;s take a short break and we will talk again soon.</p>
-
-<p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Conversations with Datomic]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/"/>
-    <updated>2015-08-15T10:29:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic</id>
-    <content type="html"><![CDATA[<p><img src="https://avatars0.githubusercontent.com/u/1478702?v=3&s=200"></p>
-
-<p><strong>Human:</strong> Hi <a href="http://www.datomic.com/">Datomic</a>.   I have been hearing good things about you.  I would like to talk to you and get to know you.  Is that alright?</p>
-
-<p><strong>Datomic:</strong> Sure!  I would be happy to talk with you.  What language would you like to converse in?</p>
-
-<p><strong>Human:</strong>  I like Clojure.</p>
-
-<p><strong>Datomic:</strong>  That is one of my favorites too.  You know how to setup a Leiningen project right?</p>
-
-<p><strong>Human:</strong> Oh yes.  What dependency should I use?</p>
-
-<p><strong>Datomic:</strong> Just use <code>[com.datomic/datomic-free "0.9.5206"]</code>.</p>
-
-<p><strong>Human:</strong> Got it.  Do you mind if I record our conversation in a namespaced file, so that I can refer back to it later?</p>
-
-<p><strong>Datomic:</strong>  Not a problem.  Make sure to require <code>datomic.api</code> when you set it up.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">conversations.datomic</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">require</span> <span class="p">[</span><span class="nv">datomic.api</span> <span class="ss">:as</span> <span class="nv">d</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  All right.  I am all setup up.  I don&rsquo;t really know where to start, so maybe you can tell me a little about yourself.</p>
-
-<p><strong>Datomic:</strong>  I would be happy to.  I am a database of facts.  Would you like to create a database with me?</p>
-
-<p><strong>Human:</strong>  Sure.  How do I do that?</p>
-
-<p><strong>Datomic:</strong> For a casual conversation like this, we can use a in memory database with a uri like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">uri</span> <span class="s">&quot;datomic:mem://first-conversation&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then we can create the database and simply connect to it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/create-database</span> <span class="nv">uri</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">conn</span> <span class="p">(</span><span class="nf">d/connect</span> <span class="nv">uri</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong> So, being a database, obviously you store things.  What sort of things to you store?</p>
-
-<p><strong>Datomic:</strong>  I store facts about things, which I call <em>datoms</em>.</p>
-
-<p><strong>Human:</strong>  That sound neat.  How do I tell you a fact to store?  For example, what if I want you to store a fact about a dog, like its name?</p>
-
-<p><strong>Datomic:</strong>  Ah.  Well the name of a dog is an attribute.  First, you need to tell me about the name attribute, so that I can use it to store the fact for you .  You can describe the attribute in the form of a map like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/name</span>
-</span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'> <span class="ss">:db/unique</span> <span class="ss">:db.unique/identity</span>
-</span><span class='line'> <span class="ss">:db/doc</span> <span class="s">&quot;Name of the Dog&quot;</span>
-</span><span class='line'> <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p> This map is a set of facts, (called <em>datoms</em>),  about an entity.  In this
- case, the entity is an attribute. Attributes, in turn, can be used to describe other entities, like a dog. I will explain the different parts to you.</p>
-
-<ul>
-<li><code>db/id</code> is the internal id of the fact. With <code>(d/tempid :db.part/db)</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li>
-<li><code>db/ident</code> is the human readable reference for it. While I am fine just referring to the attribute by an id, humans prefer text.  This says that you can refer to this attribute by the namespaced keyword <code>:dog/name</code>.</li>
-<li><code>db/valueType</code> tells me the type of the attribute.  The dog&rsquo;s name is a string.</li>
-<li><code>db/cardinality</code> lets me know if there is a one-to-one relationship with the entity or not. In our case, a dog has only one name.</li>
-<li><code>db/unique</code> is if that attribute is unique for an entity.  In our example case, we are saying that a dog can be uniquely identified by its name.</li>
-<li><code>db/doc</code> is some documentation for humans that explains a bit more about the attribute.</li>
-<li><code>db.install/_attribute</code> tells me that this is an schema attribute that I should store with the other things like it.</li>
-</ul>
-
-
-<p><strong>Human:</strong> I think I understand. Let me try one out for myself.  So dog breed would be this?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/breed</span>
-</span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'> <span class="ss">:db/doc</span> <span class="s">&quot;Breed of the Dog&quot;</span>
-</span><span class='line'> <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  Yes!  I think you got it.  Let&rsquo;s try one more.</p>
-
-<p><strong>Human:</strong> Ok.  How about the dog&rsquo;s favorite treat?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/favorite-treat</span>
-</span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'> <span class="ss">:db/doc</span> <span class="s">&quot;Dog&#39;s Favorite Treat to Eat&quot;</span>
-</span><span class='line'> <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong> You got it.  Now, that you have these attributes, you can give them to me using a transaction with the connection.</p>
-
-<p><strong>Human:</strong> Ok.  Do you want that in a specific format?</p>
-
-<p><strong>Datomic:</strong>  Yes.  Please send it to me using the form:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[</span><span class="nv">....facts....</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong> Sounds good.  I will put the dog schema datoms we discussed in a vector and call it <code>dog-schema</code> and then send it to you.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dog-schema</span>  <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/name</span>
-</span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'>                   <span class="ss">:db/unique</span> <span class="ss">:db.unique/identity</span>
-</span><span class='line'>                   <span class="ss">:db/doc</span> <span class="s">&quot;Name of the Dog&quot;</span>
-</span><span class='line'>                   <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/breed</span>
-</span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'>                   <span class="ss">:db/doc</span> <span class="s">&quot;Breed of the Dog&quot;</span>
-</span><span class='line'>                   <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/favorite-treat</span>
-</span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'>                   <span class="ss">:db/doc</span> <span class="s">&quot;Dog&#39;s Favorite Treat to Eat&quot;</span>
-</span><span class='line'>                   <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}])</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="nv">dog-schema</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong> The transaction was fine.  I know all about those dog attributes now.</p>
-
-<p><strong>Human:</strong>  I would like to also add a schema for owners for the dogs now.  I think I know how to describe the name of the owner, but I don&rsquo;t know how to express how the owner has dogs.</p>
-
-<p><strong>Datomic:</strong> Ah. I that case you can specify the <code>db:valueType</code> as a <code>ref</code> type.  This lets me know that it references another entity.</p>
-
-<p><strong>Human:</strong>  Do I need to tell you that is a type of dog somehow?</p>
-
-<p><strong>Datomic:</strong> No.  I am pretty smart that way.  I will figure it out
-  once you try to tell me about some real entities.  In fact, entities don&rsquo;t have types. A ref attribute can reference <em>any</em> entity.</p>
-
-<p><strong>Human:</strong>  Cool.  Well, in that case, here is the owner schema.  The owner has a name and some dogs.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">owner-schema</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                    <span class="ss">:db/ident</span> <span class="ss">:owner/name</span>
-</span><span class='line'>                    <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'>                    <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'>                    <span class="ss">:db/unique</span> <span class="ss">:db.unique/identity</span>
-</span><span class='line'>                    <span class="ss">:db/doc</span> <span class="s">&quot;Name of the Owner&quot;</span>
-</span><span class='line'>                    <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                   <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                    <span class="ss">:db/ident</span> <span class="ss">:owner/dogs</span>
-</span><span class='line'>                    <span class="ss">:db/valueType</span> <span class="ss">:db.type/ref</span>
-</span><span class='line'>                    <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/many</span>
-</span><span class='line'>                    <span class="ss">:db/doc</span> <span class="s">&quot;Dogs of the Owner&quot;</span>
-</span><span class='line'>                    <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}])</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="nv">owner-schema</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  The transaction is fine.  I now know about the attributes that dogs and owners have.  Would you like to tell me some facts about specific dogs and owners?</p>
-
-<p><strong>Human:</strong>  Yes. Bob is an owner.  He has two dogs. Fluffy is a poodle whose favorite treat is cheese, and Fido is a mixed breed, whose favorite treat is a bone.  Lucy is also an owner who has one dog named Tiny.  Tiny is a Great Dane whose favorite treat is cheese.</p>
-
-<p>I am a bit confused how to represent the dogs of the owners. How do I do that?</p>
-
-<p><strong>Datomic:</strong>  That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them.  Each dog or owner will by its own map.  Use <code>:db/id</code> set to <code>(d/tempid :db.part/user)</code> so I can generate it for you.  Then use each attribute from the schema as the key and let me know the value.</p>
-
-<p><strong>Human:</strong>  Like this?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:owner/name</span> <span class="s">&quot;Bob&quot;</span>
-</span><span class='line'>                   <span class="ss">:owner/dogs</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Fluffy&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Poodle&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
-</span><span class='line'>                                <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Mix&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Bone&quot;</span><span class="p">}]}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:owner/name</span> <span class="s">&quot;Lucy&quot;</span>
-</span><span class='line'>                   <span class="ss">:owner/dogs</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}]}])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  Exactly right.  I now know the facts about Bob and Lucy and their dogs.</p>
-
-<p><strong>Human:</strong>  Umm, how do I query you about the facts that your know?  For example, how do I ask you about the dog named Tiny?</p>
-
-<p><strong>Datomic:</strong>  There are a couple a ways to inquire about facts I know.  To find out about the attributes of a specific dog, or entity, I would recommend using <code>d/pull</code>.  You can ask me in the form of this to get all the attributes for a given dog name.  Note that this works since the dog name is a way to uniquely identify the dog:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  What is the <code>(d/db conn)</code> all about?</p>
-
-<p><strong>Datomic:</strong>  That function returns the current database value of the connection. The facts I know change during time.  Every time there is a transaction, I consider the time to be different and there is a new database value.  The <code>d/db</code> function gives you the most recent value that I know about.</p>
-
-<p><strong>Human:</strong> I am assuming the <code>[*]</code> is a wildcard that means give me all the attributes for that dog?</p>
-
-<p><strong>Datomic:</strong>  Exactly right.</p>
-
-<p><strong>Human:</strong> Ok.  Tell me about Tiny.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045424</span>
-</span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
-</span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
-</span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Tiny is a Great Dane that has a favorite treat of Cheese.</p>
-
-<p><strong>Human:</strong>  This is fun.  What about more complicated questions.  How do I ask about the name of the owner of the dog &ldquo;Tiny&rdquo;?</p>
-
-<p><strong>Datomic:</strong>  For that I would ask using the <em>datalog</em> query <code>d/q</code>.  It uses logic to unify your query with all of my facts and give you the result.  The query itself would be a vector with logic statements inside like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
-</span><span class='line'>  <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  Whoa.  What is the deal with those question marks?</p>
-
-<p><strong>Datomic:</strong> The things with the question marks are considered as variables that we will <em>unify</em> to find the answer.  For example, we are looking for something that we are going to call <code>?owner-name</code>. I am going the use the following constraints with my facts to try to find the answer:</p>
-
-<ul>
-<li>There is an entity that we are going to call <code>?dog</code> that has the attribute <code>:dog/name</code> that is &ldquo;Tiny&rdquo;</li>
-<li>There is an entity that we are going to call <code>?owner</code> that has an attribute <code>:owner/dogs</code> that is the same as the <code>?dog</code> entity</li>
-<li>That same <code>?owner</code> entity also has an attribute <code>:owner/name</code> that has the value <code>?owner-name</code></li>
-</ul>
-
-
-<p><strong>Human:</strong>  Alright, so when I ask for this query, do I need to give you a database value too?</p>
-
-<p><strong>Datomic:</strong>  Yes.  They should have the form of:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">datalog-query</span><span class="p">]</span> <span class="nv">db-value</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Remember, to get the current db value use <code>(d/db conn)</code>.</p>
-
-<p><strong>Human:</strong>  Ok.  Here we go.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong></p>
-
-<p>The answer is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">#</span><span class="p">{[</span><span class="s">&quot;Lucy&quot;</span><span class="p">]}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  What if I want to pass the dog name as a parameter?  How do I communicate that to you?</p>
-
-<p><strong>Datomic:</strong>  You will need to use an <code>in</code> clause in the query like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="p">[</span><span class="nv">blah</span><span class="p">]</span>
-</span><span class='line'>   <span class="ss">:in</span> <span class="nv">$</span> <span class="nv">?dog-name</span>
-</span><span class='line'>   <span class="ss">:where</span> <span class="p">[</span><span class="nv">blah</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The $ is shorthand for the database value and the <code>?dog-name</code> is what you will pass in as a parameter in the query after the db-value.</p>
-
-<p><strong>Human:</strong>  Like this?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
-</span><span class='line'>       <span class="ss">:in</span> <span class="nv">$</span> <span class="nv">?dog-name</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="nv">?dog-name</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="s">&quot;Tiny&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  Exactly right.  The answer is Lucy again.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">#</span><span class="p">{[</span><span class="s">&quot;Lucy&quot;</span><span class="p">]}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  I think I am getting the hang of this!  Another quick question.  How would I go about asking you which dogs have cheese as their favorite treat?  I would want the dog&rsquo;s name and breed back.</p>
-
-<p><strong>Datomic:</strong>  You would simply construct another datalog query.  This time I would recommend that you combine the <code>pull</code> syntax within the <code>find</code> part of the query.  The <code>pull</code> syntax is great at selecting attributes from an entity.  So the <code>find</code> part would look something like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[(</span><span class="nf">pull</span> <span class="nv">?dog</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="ss">:dog/breed</span><span class="p">])</span> <span class="nv">...</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will return the attributes of the <code>:dog/name</code> and the <code>:dog/breed</code>.  The three dots on the end will let me know that you want a collection returned, so I will give you back a simple vector with the entity attributes requested, instead of the set of vectors I normally give back.</p>
-
-<p>The <code>where</code> section of the query is going to look for the <code>?dog</code> entity that matches the <code>:dog/favorite-treat</code> attribute with &ldquo;Cheese&rdquo;.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="p">[(</span><span class="nf">pull</span> <span class="nv">?dog</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="ss">:dog/breed</span><span class="p">])</span> <span class="nv">...</span><span class="p">]</span>
-</span><span class='line'>  <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  Then I put it together with the current database value in a <code>d/q</code> function?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="p">[(</span><span class="nf">pull</span> <span class="nv">?dog</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="ss">:dog/breed</span><span class="p">])</span> <span class="nv">...</span><span class="p">]</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">]]</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong> Yup.  The answer is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[{</span><span class="ss">:dog/name</span> <span class="s">&quot;Fluffy&quot;</span>, <span class="ss">:dog/breed</span> <span class="s">&quot;Poodle&quot;</span><span class="p">}</span>
-</span><span class='line'> <span class="p">{</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>, <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span><span class="p">}]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  Thanks so much.  I think I beginning to get the hang of schemas and queries.  What other things do I need to know about you?</p>
-
-<p><strong>Datomic:</strong>  Well, you have just scratched the surface really.  One of the most interesting things about me is that I never forget facts.  You can add new facts, like Tiny&rsquo;s favorite food is now hotdogs, but I won&rsquo;t forget that he liked cheese at another point in time.</p>
-
-<p><strong>Human:</strong> That sounds really interesting.  I think I need some tea and cookies before I delve into that.  Let&rsquo;s take a short break and talk again soon.</p>
-
-<p><strong>Datomic:</strong>  My pleasure.  I look forward to it.</p>
-
-<p><em>Special thanks to <a href="https://twitter.com/ohpauleez">Paul deGrandis</a> for
-the conversation idea :)</em></p>
 
 <p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
 ]]></content>

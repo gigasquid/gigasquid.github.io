@@ -1,0 +1,331 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Meet Clojure MXNet - NDArray - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="This is the beginning of a series of blog posts to get to know the Apache MXNet Deep Learning project and the new Clojure library clojure-mxnet. &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/books/index.html">Books</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Meet Clojure MXNet - NDArray</h2>
+	<div class="entry-content"><p><img src="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg"></p>
+
+<p>This is the beginning of a series of blog posts to get to know the <a href="https://mxnet.apache.org/">Apache MXNet</a> Deep Learning project and the new Clojure library <a href="https://github.com/gigasquid/clojure-mxnet">clojure-mxnet</a>.</p>
+
+<p>MXNet is a first class, modern deep learning library that AWS has officially picked as its chosen library. It supports multiple languages on a first class basis and is incubating as an Apache project.</p>
+
+<p>The motivation for creating a Clojure package is to be able to open the deep learning library to the Clojure ecosystem and build bridges for future development and innovation for the community. It provides all the needed tools including low level and high level apis, dynamic graphs, and things like GAN and natural language support.</p>
+
+<p>So let&rsquo;s get on with our introduction with one of the basic building blocks of MXNet, the <code>NDArray</code>.</p>
+
+<h2>Meet NDArray</h2>
+
+<p>The <code>NDArray</code> is the tensor data structure in MXNet. Let&rsquo;s start of by creating one. First we need to require the <code>ndarray</code> namespace:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">tutorial.ndarray</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.ndarray</span> <span class="ss">:as</span> <span class="nv">ndarray</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now let&rsquo;s create an all zero array of dimension 100 x 50</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.NDArray 0x3e396d0 &quot;org.apache.mxnet.NDArray@aeea40b6&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can check the shape of this by using <code>shape-vec</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">]))</span>
+</span><span class='line'><span class="c1">;=&gt; [100 50]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is also a quick way to create an ndarray of ones with the <code>ones</code> function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">256</span> <span class="mi">32</span> <span class="mi">128</span> <span class="mi">1</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ones and zeros are nice, but what an array with specific contents? There is an <code>array</code> function for that. Specific the contents of the array first and the shape second:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">3</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">c</span><span class="p">)</span>  <span class="c1">;=&gt; [2 3]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To convert it back to a vector format, we can use the <code>-&gt;vec</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">c</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; [1.0 2.0 3.0 4.0 5.0 6.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we know how to create NDArrays, we can get to do something interesting like operations on them.</p>
+
+<h3>Operations</h3>
+
+<p>There are all the standard arithmetic operations:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">ndarray/+</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the original ndarrays are unchanged.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But, we can change that if we use the inplace operators:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/+=</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are many more operations, but just to give you a taste, we&rsquo;ll take a look a the <code>dot</code> product operation:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr1</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr2</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">res</span> <span class="p">(</span><span class="nf">ndarray/dot</span> <span class="nv">arr1</span> <span class="nv">arr2</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">res</span><span class="p">)</span> <span class="c1">;=&gt; [1 1]</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">res</span><span class="p">)</span> <span class="c1">;=&gt; [11.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are curious about the other operators available in NDArray API check out the <a href="https://mxnet.incubator.apache.org/api/python/ndarray/ndarray.html">MXNet project documentation page</a></p>
+
+<p>Now that we have ndarrays and can do calculations on them, we might want to save and load them.</p>
+
+<h3>Saving and Loading</h3>
+
+<p>You can save ndarrays with a name as a map like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/save</span> <span class="s">&quot;filename&quot;</span> <span class="p">{</span><span class="s">&quot;arr1&quot;</span> <span class="nv">arr1</span> <span class="s">&quot;arr2&quot;</span> <span class="nv">arr2</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To load them, you just specify the filename and the map is returned.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/load</span> <span class="s">&quot;filename&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; {&quot;arr1&quot; #object[org.apache.mxnet.NDArray 0x1b629ff4 &quot;org.apache.mxnet.NDArray@63da08cb&quot;]</span>
+</span><span class='line'><span class="c1">;=&gt;  &quot;arr2&quot; #object[org.apache.mxnet.NDArray 0x25d994e3 &quot;org.apache.mxnet.NDArray@5bbaf2c3&quot;]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One more cool thing, we can even due our operations on the cpu or gpu.</p>
+
+<h3>Multi-Device Support</h3>
+
+<p>When creating an <code>ndarray</code> you can use a context argument to specify the device. To do this, we will need the help of the <code>context</code> namespace.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">org.apache.clojure-mxnet.context</span> <span class="ss">:as</span> <span class="nv">context</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, the <code>ndarray</code> is created on the cpu context.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">cpu-a</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/context</span> <span class="nv">cpu-a</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; #object[ml.dmlc.mxnet.Context 0x3f376123 &quot;cpu(0)&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But we can specify the gpu instead, (if we have a gpu enabled build).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">gpu-b</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]</span> <span class="p">{</span><span class="ss">:ctx</span> <span class="p">(</span><span class="nf">context/gpu</span> <span class="mi">0</span><span class="p">)}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Note: Operations among different contexts are currently not allowed, but there is a <code>copy-to</code> function that can help copy the content from one device to another and then continue on with the computation.</em></p>
+
+<h2>Wrap up</h2>
+
+<p>I hope you&rsquo;ve enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found <a href="https://github.com/gigasquid/clojure-mxnet/blob/master/examples/tutorial/src/tutorial/ndarray.clj">here</a>.</p>
+
+<p><em>Please remember that he library is in a very <strong>alpha</strong> state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :).</em></p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2018/06/03/meet-clojure-mxnet-ndarray/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2018
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

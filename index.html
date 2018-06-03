@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Mar 4th, 2018 Tags: all I was 10 years into my career when I met her. I could count the number of other women programmers I had worked &hellip;">
+	<meta name="description" content="Published on: Jun 3rd, 2018 Tags: All, Clojure, Deep Learning This is the beginning of a series of blog posts to get to know the Apache MXNet Deep &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,223 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/06/03/meet-clojure-mxnet-ndarray/">
+		
+			Meet Clojure MXNet - NDArray</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-06-03T16:13:00-04:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2018</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/deep-learning/'>Deep Learning</a>
+
+
+</div>
+    </div>
+		<p><img src="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg"></p>
+
+<p>This is the beginning of a series of blog posts to get to know the <a href="https://mxnet.apache.org/">Apache MXNet</a> Deep Learning project and the new Clojure library <a href="https://github.com/gigasquid/clojure-mxnet">clojure-mxnet</a>.</p>
+
+<p>MXNet is a first class, modern deep learning library that AWS has officially picked as its chosen library. It supports multiple languages on a first class basis and is incubating as an Apache project.</p>
+
+<p>The motivation for creating a Clojure package is to be able to open the deep learning library to the Clojure ecosystem and build bridges for future development and innovation for the community. It provides all the needed tools including low level and high level apis, dynamic graphs, and things like GAN and natural language support.</p>
+
+<p>So let&rsquo;s get on with our introduction with one of the basic building blocks of MXNet, the <code>NDArray</code>.</p>
+
+<h2>Meet NDArray</h2>
+
+<p>The <code>NDArray</code> is the tensor data structure in MXNet. Let&rsquo;s start of by creating one. First we need to require the <code>ndarray</code> namespace:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">tutorial.ndarray</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.ndarray</span> <span class="ss">:as</span> <span class="nv">ndarray</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now let&rsquo;s create an all zero array of dimension 100 x 50</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.NDArray 0x3e396d0 &quot;org.apache.mxnet.NDArray@aeea40b6&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can check the shape of this by using <code>shape-vec</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">]))</span>
+</span><span class='line'><span class="c1">;=&gt; [100 50]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is also a quick way to create an ndarray of ones with the <code>ones</code> function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">256</span> <span class="mi">32</span> <span class="mi">128</span> <span class="mi">1</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ones and zeros are nice, but what an array with specific contents? There is an <code>array</code> function for that. Specific the contents of the array first and the shape second:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">3</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">c</span><span class="p">)</span>  <span class="c1">;=&gt; [2 3]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To convert it back to a vector format, we can use the <code>-&gt;vec</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">c</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; [1.0 2.0 3.0 4.0 5.0 6.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we know how to create NDArrays, we can get to do something interesting like operations on them.</p>
+
+<h3>Operations</h3>
+
+<p>There are all the standard arithmetic operations:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">ndarray/+</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the original ndarrays are unchanged.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But, we can change that if we use the inplace operators:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/+=</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are many more operations, but just to give you a taste, we&rsquo;ll take a look a the <code>dot</code> product operation:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr1</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr2</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">res</span> <span class="p">(</span><span class="nf">ndarray/dot</span> <span class="nv">arr1</span> <span class="nv">arr2</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">res</span><span class="p">)</span> <span class="c1">;=&gt; [1 1]</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">res</span><span class="p">)</span> <span class="c1">;=&gt; [11.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are curious about the other operators available in NDArray API check out the <a href="https://mxnet.incubator.apache.org/api/python/ndarray/ndarray.html">MXNet project documentation page</a></p>
+
+<p>Now that we have ndarrays and can do calculations on them, we might want to save and load them.</p>
+
+<h3>Saving and Loading</h3>
+
+<p>You can save ndarrays with a name as a map like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/save</span> <span class="s">&quot;filename&quot;</span> <span class="p">{</span><span class="s">&quot;arr1&quot;</span> <span class="nv">arr1</span> <span class="s">&quot;arr2&quot;</span> <span class="nv">arr2</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To load them, you just specify the filename and the map is returned.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/load</span> <span class="s">&quot;filename&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; {&quot;arr1&quot; #object[org.apache.mxnet.NDArray 0x1b629ff4 &quot;org.apache.mxnet.NDArray@63da08cb&quot;]</span>
+</span><span class='line'><span class="c1">;=&gt;  &quot;arr2&quot; #object[org.apache.mxnet.NDArray 0x25d994e3 &quot;org.apache.mxnet.NDArray@5bbaf2c3&quot;]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One more cool thing, we can even due our operations on the cpu or gpu.</p>
+
+<h3>Multi-Device Support</h3>
+
+<p>When creating an <code>ndarray</code> you can use a context argument to specify the device. To do this, we will need the help of the <code>context</code> namespace.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">org.apache.clojure-mxnet.context</span> <span class="ss">:as</span> <span class="nv">context</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, the <code>ndarray</code> is created on the cpu context.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">cpu-a</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">ndarray/context</span> <span class="nv">cpu-a</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;=&gt; #object[ml.dmlc.mxnet.Context 0x3f376123 &quot;cpu(0)&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But we can specify the gpu instead, (if we have a gpu enabled build).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">gpu-b</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]</span> <span class="p">{</span><span class="ss">:ctx</span> <span class="p">(</span><span class="nf">context/gpu</span> <span class="mi">0</span><span class="p">)}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Note: Operations among different contexts are currently not allowed, but there is a <code>copy-to</code> function that can help copy the content from one device to another and then continue on with the computation.</em></p>
+
+<h2>Wrap up</h2>
+
+<p>I hope you&rsquo;ve enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found <a href="https://github.com/gigasquid/clojure-mxnet/blob/master/examples/tutorial/src/tutorial/ndarray.clj">here</a>.</p>
+
+<p><em>Please remember that he library is in a very <strong>alpha</strong> state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :).</em></p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2018/06/03/meet-clojure-mxnet-ndarray//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -2108,181 +2325,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2016/05/29/one-fish-spec-fish//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2016/03/16/kolmogorov-uspensky-machine/">
-		
-			Kolmogorov-Uspensky Machine</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-03-16T18:19:00-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2016</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
-
-
-</div>
-    </div>
-		<p>It happened again.  I was sitting down reading a paper and I came across the phrase <em>Kolmogorov-Uspensky machine</em> and I had no idea what it was.  My initial reaction was just to move on.  It probably wasn&rsquo;t important, I told myself, just a detail that I could skim over.  I took a sip of my tea and continued on. The next paragraph it appeared <em>again</em>.  It was just sticking up like a thread waiting to be pulled. Still, I resisted.  After all, I wasn&rsquo;t even near my computer.  I would have to get up an walk into the other room.   After considering it for a moment, inertia won out and I continued my reading.  There it was <em>once more</em>.  This time right in the same paragraph, silently mocking me.  I knew I had to do something so I strode to my computer and pulled the thread.</p>
-
-<h2>What is a Kolmogorov-Uspensky machine?</h2>
-
-<p>The first thing I found is that the Kolmogorov-Uspensky machine, (also referred to as KUM), is very similar to the <a href="https://en.wikipedia.org/wiki/Turing_machine">Turing machine</a>.  In fact, it shares the same computational class of being Turing-complete.</p>
-
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Turing_machine_2b.svg/320px-Turing_machine_2b.svg.png"></p>
-
-<p>The Turing machine operates on a tape divided into cells.  The head can move along the tape and read and write to it.  The tape is the storage for the machine.  Its movements are controlled by a collection of instructions which will be executed if certain prerequisites are met. The difference between the Turing machine  and a Kolmogorov-Uspensky machine is that the KUM has a tape that can change topology.  It&rsquo;s a graph.</p>
-
-<p>The graph of a KUM machine is not just any graph.  It&rsquo;s a particular kind of graph.  It must have the property that if you start at a one vertex, all the other vertexes are uniquely addressable.  The graph also has a active node which, in turn, has a active neighborhood of other nodes associated with it.  This is not unlike the Turing machine&rsquo;s head that points to the current cell.  To figure out what do, the KUM machine looks at the graph to decide on what instruction to execute.  The instructions can consist of adding a node or edge to the active neighborhood, removing a node or edge from the active neighborhood, or halting.</p>
-
-<p>After spending some time reading and researching, I felt like a had some idea of what a Kolmogorov-Uspensky machine was but it was still a bit fuzzy.  I wanted to really dig in and experience it by trying to implement one.  I found an esoteric programming language called <a href="https://esolangs.org/wiki/Eodermdrome">Eodermdrome</a> that fit the bill and set to work building it out in Clojure.</p>
-
-<h2>Eodermdrome</h2>
-
-<p>An Eodermdrome program creates graphs from a string of letters.  For example the graph of <em>abcdae</em> would produce</p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/abcdae.png?raw=true"></p>
-
-<p>The program itself consists of series of commands or rules.  The command will be executed if the following prereqs are met:</p>
-
-<ul>
-<li>The match graph in the command is a subgraph of the system graph.</li>
-<li>If an input set is part of the command, the input character read of the system input must match it.</li>
-</ul>
-
-
-<p>A command is of the form:</p>
-
-<ul>
-<li><strong>match-graph graph-replacement</strong>
-
-<ul>
-<li>This will execute if the match-graph is a subgraph and then transform the match to the replacement.</li>
-<li>Example:<code>a abc</code></li>
-</ul>
-</li>
-<li><strong>(input-set) match-graph graph-replacement</strong>.
-
-<ul>
-<li>This will execute if the match is a subgraph and if the next character of the system input matches.  On executing, it will read one char from the input and then transform the match graph with the replacement.</li>
-<li>Example: <code>(1) a abc</code></li>
-</ul>
-</li>
-<li><strong>match-graph (output) graph-replacement.</strong>
-
-<ul>
-<li>This will execute if the match-graph is a subgraph. On executing, it will print the output to the system and transform the match with the replacement.</li>
-<li>Example: <code>a (1) abc</code></li>
-</ul>
-</li>
-<li><strong>(input-set) match-graph (output) graph-replacement.</strong>
-
-<ul>
-<li>This will execute if the match is a subgraph and if the next character of the system input matches.  On executing, it will read one char from the input, print the output to the system, and then transform the match graph with the replacement.</li>
-<li>Example: <code>(0) a (1) abc</code></li>
-</ul>
-</li>
-</ul>
-
-
-<p>Comments are also allowed as text in between commas.  In this implementation, they must be contained on a single line.  Example: <code>,this is a comment,(1) a abc</code></p>
-
-<p>The initial state of the graph with a program is the denoted by the graph string <em>thequickbrownfoxjumpsoverthelazydog</em>.</p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/thequickbrownfoxjumpsoverthelazydog.png?raw=true" title="" ></p>
-
-<p>We now have all we need to walk through an example program in the Kolmogorov-Uspensky machine.</p>
-
-<h3>An add program</h3>
-
-<p>Let&rsquo;s take program for adding two string of ones together separated by zeros.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>,takes input of ones separated by zeros and adds the ones, thequickbrownfoxjumpsoverthelazydog a
-</span><span class='line'>(1) a ab
-</span><span class='line'>(0) a a
-</span><span class='line'>ab (1) a</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Given a system input of &ldquo;101&rdquo;, it will print out &ldquo;11&rdquo;.  Let&rsquo;s walk through what happens in the program.</p>
-
-<p><strong>Step 1</strong> &ndash; The program starts with our graph in the initial state of our beloved <em>thequickbrownfoxjumpsoverthelazydog</em> configuration.</p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-1.png?raw=true" title="" ></p>
-
-<p><strong>Step 2</strong> &ndash; The first instruction matches <code>,takes input of ones separated by zeros and adds the ones, thequickbrownfoxjumpsoverthelazydog a</code> with he active subgraph being the whole graph. It is replaced by the single graph node <em>a</em>.</p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-2.png?raw=true"></p>
-
-<p><strong>Step 3</strong> &ndash; The next instruction set <code>(1) a ab</code> <em>a</em> subgraph matches and takes a 1 off the input and transforms the graph to <em>ab</em>.</p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true"></p>
-
-<p><strong>Step 4</strong> &ndash; The instruction set <code>(0) a a</code> also matches (since a is a subgraph of ab) and it takes a zero off the input and transforms back the <em>a</em> to <em>a</em> so the graph is still <em>ab</em>.</p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-4.png?raw=true"></p>
-
-<p><strong>Step 5</strong> &ndash;  The instruction set <code>ab (1) a</code> now matches and a one prints out and the <em>ab</em> graph changes to <em>a</em>.</p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true"></p>
-
-<p><strong>Step 6</strong> &ndash; Now, the <code>(1) a ab</code> instruction matches, it takes another 1 off the input (our last one) and transforms to <em>ab</em></p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true"></p>
-
-<p><strong>Step 7</strong> &ndash; Finally, <code>ab (1) a</code> matches and it prints out a 1 and rewrites the graph to back to <em>a</em></p>
-
-<p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true"></p>
-
-<p>There are no more matching subgraphs without input required for instructions, so the program ends.</p>
-
-<h2>Parting thoughts and threads</h2>
-
-<p>The Kolmogorov-Uspensky machine is quite interesting. Not only is the idea of graph storage and rewriting appealing, it is also pretty powerful compared to Turing machines.  In fact, Dima Grigoriev proved that Turing machines cannot simulate Kolmogorov machines in real time.</p>
-
-<p>It&rsquo;s been quite a fun and enriching jaunt.  The next time you see an unfamiliar term or concept, I encourage you to pull the thread. You never know where it will take you. It&rsquo;s a great way to enlarge your world.</p>
-
-<p>If you are interested in the code and hacking for yourself, here is the repo  <a href="https://github.com/gigasquid/eodermdrome">https://github.com/gigasquid/eodermdrome</a>.</p>
-
-<p>Other good resources on KUM:</p>
-
-<ul>
-<li><a href="http://research.microsoft.com/en-us/um/people/gurevich/opera/78.pdf">On Kolmogorov Machines And Related Issues</a></li>
-<li><a href="https://books.google.com/books?id=SpTv44Ia-J0C&amp;pg=PA284&amp;lpg=PA284&amp;dq=active+node+kolmogorov+uspensky+machine&amp;source=bl&amp;ots=uQQSLaaKOS&amp;sig=9-V_m8z-Yh9zlzy6vX9MplGMbjw&amp;hl=en&amp;sa=X&amp;ved=0ahUKEwjy8820rMDLAhVByYMKHWP5A8oQ6AEILDAC#v=onepage&amp;q=active%20node%20kolmogorov%20uspensky%20machine&amp;f=false">Kolmogorov&rsquo;s Heritage in Mathematics</a></li>
-<li><a href="http://dl.acm.org/citation.cfm?id=202846">What is a &ldquo;pointer machine&rdquo;</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2016/03/16/kolmogorov-uspensky-machine//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
