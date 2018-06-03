@@ -150,5 +150,5 @@ _Note: Operations among different contexts are currently not allowed, but there 
 
 I hope you've enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found [here](https://github.com/gigasquid/clojure-mxnet/blob/master/examples/tutorial/src/tutorial/ndarray.clj).
 
-_Please remember that he library is in a very **alpha** state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :)._
+_Please remember that the library is in a very **alpha** state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :)._
 
