@@ -7,11 +7,12 @@ categories:
 - All
 - Clojure
 - Deep Learning
+- MXNet
 ---
 
 {% img https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg %}
 
-This is the beginning of a series of blog posts to get to know the [Apache MXNet](https://mxnet.apache.org/) Deep Learning project and the new Clojure library [clojure-mxnet](https://github.com/gigasquid/clojure-mxnet).
+This is the beginning of a series of blog posts to get to know the [Apache MXNet](https://mxnet.apache.org/) Deep Learning project and the new Clojure language binding [clojure-package](https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package)
 
 MXNet is a first class, modern deep learning library that AWS has officially picked as its chosen library. It supports multiple languages on a first class basis and is incubating as an Apache project.
 
@@ -148,7 +149,7 @@ _Note: Operations among different contexts are currently not allowed, but there 
 
 ## Wrap up
 
-I hope you've enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found [here](https://github.com/gigasquid/clojure-mxnet/blob/master/examples/tutorial/src/tutorial/ndarray.clj).
+I hope you've enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found [here](https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial)
 
-_Please remember that the library is in a very **alpha** state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :)._
+_Please remember that the library is in a experimential state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :)._
 
