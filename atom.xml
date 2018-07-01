@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2018-06-03T17:30:13-04:00</updated>
+  <updated>2018-07-01T11:43:03-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -14,13 +14,49 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Clojure MXNet Joins the Apache MXNet Project]]></title>
+    <link href="http://gigasquid.github.io/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/"/>
+    <updated>2018-07-01T10:44:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project</id>
+    <content type="html"><![CDATA[<p><img src="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg"></p>
+
+<p>I&rsquo;m delighted to share the news that the Clojure package for <a href="https://mxnet.apache.org/">MXNet</a> has now joined the main Apache MXNet project. A big thank you to the efforts of everyone involved to make this possible. Having it as part of the main project is a great place for growth and collaboration that will benefit both MXNet and the Clojure community.</p>
+
+<h2>Invitation to Join and Contribute</h2>
+
+<p>The Clojure package has been brought in as a <em>contrib</em> <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">clojure-package</a>. It is still very new and will go through a period of feedback, stabilization, and improvement before it graduates out of contrib.</p>
+
+<p>We welcome contributors and people getting involved to make it better.</p>
+
+<p>Are you interested in Deep Learning and Clojure? Great &ndash; Join us!</p>
+
+<p>There are a few ways to get involved.</p>
+
+<ul>
+<li>Check out the current state of the Clojure package some contribution needs here <a href="https://cwiki.apache.org/confluence/display/MXNET/Clojure+Package+Contribution+Needs">https://cwiki.apache.org/confluence/display/MXNET/Clojure+Package+Contribution+Needs</a></li>
+<li>Join the Clojurian Slack #mxnet channel</li>
+<li>Join the <a href="https://lists.apache.org/list.html?dev@mxnet.apache.org">MXNet dev mailing list</a> by sending an email to <code>dev-subscribe@mxnet.apache.org.</code>.</li>
+<li>Join the MXNET Slack channel &ndash; You have to join the MXnet dev mailing list first, but after that says you would like to join the slack and someone will add you.</li>
+<li>Join the <a href="https://discuss.mxnet.io/">MXNet Discussion Forum</a></li>
+</ul>
+
+
+<h3>Want to Learn More?</h3>
+
+<p>There are lots of examples in the package to check out, but a good place to start are the tutorials here <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial">https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial</a></p>
+
+<p>There is a blog walkthough here as well &ndash; <a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Meet Clojure MXNet NDArray</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Meet Clojure MXNet - NDArray]]></title>
     <link href="http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray/"/>
     <updated>2018-06-03T16:13:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray</id>
     <content type="html"><![CDATA[<p><img src="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg"></p>
 
-<p>This is the beginning of a series of blog posts to get to know the <a href="https://mxnet.apache.org/">Apache MXNet</a> Deep Learning project and the new Clojure library <a href="https://github.com/gigasquid/clojure-mxnet">clojure-mxnet</a>.</p>
+<p>This is the beginning of a series of blog posts to get to know the <a href="https://mxnet.apache.org/">Apache MXNet</a> Deep Learning project and the new Clojure language binding <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">clojure-package</a></p>
 
 <p>MXNet is a first class, modern deep learning library that AWS has officially picked as its chosen library. It supports multiple languages on a first class basis and is incubating as an Apache project.</p>
 
@@ -189,9 +225,9 @@
 
 <h2>Wrap up</h2>
 
-<p>I hope you&rsquo;ve enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found <a href="https://github.com/gigasquid/clojure-mxnet/blob/master/examples/tutorial/src/tutorial/ndarray.clj">here</a>.</p>
+<p>I hope you&rsquo;ve enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial">here</a></p>
 
-<p><em>Please remember that the library is in a very <strong>alpha</strong> state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :).</em></p>
+<p><em>Please remember that the library is in a experimential state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :).</em></p>
 ]]></content>
   </entry>
   
@@ -3510,260 +3546,6 @@ I am interested in having you work with me every day, but first I want to unders
 <p><strong>Human:</strong> Thanks again Datomic!  I will grab another cookie and check it out!</p>
 
 <p><strong>Datomic:</strong> What is it with humans and cookies?&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Conversations with Datomic Part 2]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/08/19/conversations-with-datomic-part-2/"/>
-    <updated>2015-08-19T08:56:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/08/19/conversations-with-datomic-part-2</id>
-    <content type="html"><![CDATA[<p><img src="https://avatars0.githubusercontent.com/u/1478702?v=3&s=200"></p>
-
-<p><em>The following is a continuation of the first <a href="http://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/">conversation</a> which touched on schema creation and querying.  This conversation includes learning new facts, time, and the sometimes unfortunate reality of lawyers.</em></p>
-
-<p><strong>Human:</strong>  Hi <a href="http://www.datomic.com/">Datomic</a>.  I am back from my tea and cookies break.  I really enjoyed talking with you, could we continue our conversation?</p>
-
-<p><strong>Datomic:</strong> Certainly.  Let me see, where did we leave off?</p>
-
-<p><strong>Human:</strong> Let me check my <a href="https://gist.github.com/gigasquid/92a1effb14fe4f6ced59">notes</a>.  Oh yes, we had created a database and filled it with facts about some dogs and owners.  You showed me how to ask you things about the facts, like which dogs liked cheese.</p>
-
-<p><strong>Datomic:</strong> Ah yes.  We were just getting to the really interesting part about how I learn new facts without forgetting the past ones.</p>
-
-<p><strong>Human:</strong> Can you please explain a bit more about how you learn new facts?</p>
-
-<p><strong>Datomic:</strong> Sure.  I learn facts when you tell me to <em>add</em> a new fact about some entity, or to <em>retract</em> a fact about it.  It will probably make more sense with an example.  Let&rsquo;s take the dog with the name &ldquo;Tiny&rdquo; that I know about.  Could you please ask me about the dog and all of the attributes?</p>
-
-<p><strong>Human:</strong> Alright.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>
-</span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
-</span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
-</span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane and his favorite-treat is Cheese.  I am not really sure why the Cheese is capitalized, but I am sure it makes sense to a human.</p>
-
-<p><strong>Human:</strong> Oh right.  Well, now that you mention it, I am not really sure about the cheese thing either. Can I just remove that fact?</p>
-
-<p><strong>Datomic:</strong> Well, you can tell me to <em>retract</em> that fact by sending me a transaction in the form of <code>[:db/retract entity-id attribute value]</code>.  In the case of the dog, since the name attribute is unique, you can just give me the selector for Tiny like this <code>[:dog/name "Tiny"]</code>.</p>
-
-<p><strong>Human:</strong> Like this?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[[</span><span class="ss">:db/retract</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong> Exactly.  I have retracted that fact about &ldquo;Tiny&rdquo;.  Go ahead and ask me about all of Tiny&rsquo;s attributes again.</p>
-
-<p><strong>Human:</strong>  Ok.  I use <code>(d/db conn)</code> for the current database value right?</p>
-
-<p><strong>Datomic:</strong> Yes. But if you are going to be asking me multiple questions about this database value, you should not repeat the <code>(d/db conn)</code> all the time.</p>
-
-<p><strong>Human:</strong> Oh. What should I do instead?</p>
-
-<p><strong>Datomic:</strong> The connection with me is like a ref.  Just like other refs, you should deref it once to get the database value and then use the value repeatedly. This single database value will provide consistency for all your queries.</p>
-
-<p><strong>Human:</strong> That makes sense.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">db-tiny-no-cheese</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="nv">db-tiny-no-cheese</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>, <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>, <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Tiny is a Great Dane.</p>
-
-<p><strong>Human:</strong> So you don&rsquo;t know anything about the <code>:dog/favorite-treat</code> for &ldquo;Tiny&rdquo;?</p>
-
-<p><strong>Datomic:</strong> At this particular time, I do not have anything to assert about the favorite-treat of Tiny.  However, I still remember everything about all the facts that you have told me.  For each transaction that you send me, I have a notion of a point in time like <em>t0</em>, <em>t1</em>, <em>t2</em>.  I have a complete database value for each one of those points in time.  In fact, you can look at <em>all</em> of my assertions and retractions that I have learned about using the <code>d/history</code> function on the database value.  This asks me to expose my history, which is normally hidden in favor of the <em>present</em>. I will return back a special database containing all the assertions and retractions across time.  Any queries that you ask me will have a fifth <em>datom</em> field to help you distinguish the difference.</p>
-
-<p><strong>Human:</strong>  A fifth datom field?</p>
-
-<p><strong>Datomic:</strong> A <em>datom</em> consists of the following parts: the entity, the attribute, the value, transaction, and an operation which tells you if the fact was added or retracted (e a v tx op).  Why don&rsquo;t you try using the <code>d/history</code> function to ask me about all the facts having to do with Tiny?  I suggest using the datalog query</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span>
-</span><span class='line'>  <span class="ss">:in</span> <span class="nv">$</span>
-</span><span class='line'>  <span class="ss">:where</span> <span class="p">[</span><span class="nv">?e</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">[</span><span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>which will return all the entity, attribute, value, transaction, and operation facts I ever knew about Tiny.</p>
-
-<p><strong>Human:</strong> Ok.  Here goes.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span>
-</span><span class='line'>       <span class="ss">:in</span> <span class="nv">$</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?e</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
-</span><span class='line'>       <span class="p">[</span><span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span><span class="p">]]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">d/history</span> <span class="nv">db-tiny-no-cheese</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">#</span><span class="p">{[</span><span class="mi">17592186045423</span> <span class="mi">63</span> <span class="s">&quot;Tiny&quot;</span>       <span class="mi">13194139534314</span> <span class="nv">true</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">[</span><span class="mi">17592186045423</span> <span class="mi">64</span> <span class="s">&quot;Great Dane&quot;</span> <span class="mi">13194139534314</span> <span class="nv">true</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">[</span><span class="mi">17592186045423</span> <span class="mi">65</span> <span class="s">&quot;Cheese&quot;</span>     <span class="mi">13194139534314</span> <span class="nv">true</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">[</span><span class="mi">17592186045423</span> <span class="mi">65</span> <span class="s">&quot;Cheese&quot;</span>     <span class="mi">13194139534320</span> <span class="nv">false</span><span class="p">]}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>During one transaction, you told me to add three facts about an entity:</p>
-
-<ul>
-<li>The <code>:dog/name</code> attribute, (which I refer to as 63), has the value of &ldquo;Tiny&rdquo;.</li>
-<li>The <code>:dog/breed</code> attribute, (which I refer to as 64), has the value of &ldquo;Great Dane&rdquo;.</li>
-<li>The <code>:dog/favorite-treat</code> attribute, (which I refer to as 65), has the value of &ldquo;Cheese&rdquo;.</li>
-</ul>
-
-
-<p>During another transaction, you told me to retract a fact regarding the attribute <code>:dog/favorite-treat</code> about the same entity.</p>
-
-<p><strong>Human:</strong> Wow, that is really cool.  Is there a way that I can <em>travel back in time</em> to see the world as it was during that first transaction?</p>
-
-<p><strong>Datomic:</strong> Yes.  I am practically a Tardis.  You can use the <code>d/as-of</code> function with a database value and the transaction number and you can time travel.  Using that <em>time traveled</em> database value, you can ask me about all the facts I knew as of that time.</p>
-
-<p><strong>Human:</strong> I can&rsquo;t wait to try this.  Ok, let&rsquo;s go back to the time when I first asserted the fact that Tiny liked cheese.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/as-of</span> <span class="nv">db-tiny-no-cheese</span> <span class="mi">13194139534314</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  Hold on.  We are time traveling!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>
-</span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
-</span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
-</span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Tiny is a Great Dane whose favorite treat is Cheese.</p>
-
-<p><strong>Human:</strong> Fantastic! Let&rsquo;s go back to the future now, ummm I mean present. Time is a bit wibbly wobbly.</p>
-
-<p><strong>Datomic:</strong> Just take the <code>as-of</code> function off of the database value and you will be back in the <em>present</em>.</p>
-
-<p><strong>Human:</strong> Hmmm&hellip; Do I have to do a <em>retract</em> every time I want to change a value?  For example, the dog named Fido has a favorite treat of a Bone right now, right?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="nv">db-tiny-no-cheese</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045421</span>
-</span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span>
-</span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Mix&quot;</span>
-</span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Bone&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Yes, it is a &ldquo;Bone&rdquo;.</p>
-
-<p><strong>Human:</strong> So, if I want to change it to be &ldquo;Eggs&rdquo;,  do I need to retract the current value of &ldquo;Bone&rdquo; first and then add the fact of &ldquo;Eggs&rdquo;?</p>
-
-<p><strong>Datomic:</strong> You certainly could do that and I would understand you perfectly.  However, if you simply assert a new value for an existing attribute, I will automatically add the retraction for you.</p>
-
-<p><strong>Human:</strong> Cool.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span><span class="p">]</span>
-</span><span class='line'>                   <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Eggs&quot;</span><span class="p">}])</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045421</span>
-</span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span>
-</span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Mix&quot;</span>
-</span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Eggs&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Fido now has a favorite-treat of &ldquo;Eggs&rdquo;.</p>
-
-<p><strong>Human:</strong> This is really neat.  You <em>never</em> forget any facts?</p>
-
-<p><strong>Datomic:</strong> Nope. Well, except in really exceptional circumstances that usually involve lawyers.</p>
-
-<p><strong>Human:</strong> Lawyers?</p>
-
-<p><strong>Datomic:</strong> Sigh.  Yes, well in some unique situations, you might be under a legal obligation to really <em>forget</em> certain facts and totally remove them from the database. There is a special tool that you can use to <em>excise</em> the data.  However, I will store a fact that <em>something</em> was deleted at that time. I just won&rsquo;t be able to remember <em>what</em>.</p>
-
-<p><strong>Human:</strong> That doesn&rsquo;t sound fun.</p>
-
-<p><strong>Datomic:</strong> I prefer to keep all my facts intact.</p>
-
-<p><strong>Human:</strong> I can definitely see that. Well, on a happier subject, I have been very impressed with you during our conversations.  Having a time traveling database that can reason about facts seems like a really useful thing.  Also, you are also really nice.</p>
-
-<p><strong>Datomic:</strong> Awww shucks, thanks.  For a human, you are really nice too.</p>
-
-<p><strong>Human:</strong> I was thinking about the possibility of you coming and working with me every day. Would you mind chatting some more to me about your architecture?  I want to understand how your would fit with our other systems.</p>
-
-<p><strong>Datomic:</strong> Certainly. I would love that.  Do you want to talk about it now, or have another cookie break first?</p>
-
-<p><strong>Human:</strong> Now that you mention cookies&hellip; Let&rsquo;s take a short break and we will talk again soon.</p>
-
-<p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
 ]]></content>
   </entry>
   
