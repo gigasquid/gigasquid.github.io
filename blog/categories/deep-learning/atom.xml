@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2018-07-05T19:49:02-04:00</updated>
+  <updated>2018-07-05T19:53:27-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -22,7 +22,7 @@
 
 <p>This is an introduction to the high level Clojure API for deep learning library <a href="http://mxnet.incubator.apache.org/">MXNet</a>.</p>
 
-<p>The module API provides an intermediate and high-level interface for performing computation with neural networks in MXNet. Module wraps a Symbol and one or more Executors. It has both a high level and intermediate level api.</p>
+<p>The module API provides an intermediate and high-level interface for performing computation with neural networks in MXNet.</p>
 
 <p>To follow along with this documentation, you can use this namespace to with the needed requires:</p>
 
@@ -253,7 +253,7 @@
 
 <p>To resume training from a saved checkpoint, instead of calling <code>set-params</code>, directly call <code>fit</code>, passing the loaded parameters, so that <code>fit</code> knows to start from those parameters instead of initializing randomly</p>
 
-<p>Create fit-params, and then use it to set <code>begin-epoch</code> so that fit() knows to resume from a saved epoch.</p>
+<p>Create fit-params, and then use it to set <code>begin-epoch</code> so that <code>fit</code> knows to resume from a saved epoch.</p>
 
 <p>```clojure
 ;; reset the training data before calling fit or you will get an error
