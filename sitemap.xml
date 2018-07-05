@@ -459,8 +459,12 @@
         <lastmod>2018-07-01T11:40:40-04:00</lastmod>
     </url>
     <url>
+        <loc>http://gigasquid.github.io/blog/2018/07/05/clojure-mxnet-the-module-api/</loc>
+        <lastmod>2018-07-05T19:46:30-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2018-07-01T11:40:40-04:00</lastmod>
+        <lastmod>2018-07-05T19:46:30-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/about/</loc>
@@ -472,7 +476,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2018-07-01T11:40:40-04:00</lastmod>
+        <lastmod>2018-07-05T19:46:30-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/search.html</loc>

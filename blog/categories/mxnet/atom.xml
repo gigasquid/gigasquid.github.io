@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MXNet | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/mxnet/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2018-07-01T11:43:03-04:00</updated>
+  <updated>2018-07-05T19:49:02-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,272 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure MXNet - The Module API]]></title>
+    <link href="http://gigasquid.github.io/blog/2018/07/05/clojure-mxnet-the-module-api/"/>
+    <updated>2018-07-05T19:39:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2018/07/05/clojure-mxnet-the-module-api</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg">https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg</a>"></p>
+
+<p>This is an introduction to the high level Clojure API for deep learning library <a href="http://mxnet.incubator.apache.org/">MXNet</a>.</p>
+
+<p>The module API provides an intermediate and high-level interface for performing computation with neural networks in MXNet. Module wraps a Symbol and one or more Executors. It has both a high level and intermediate level api.</p>
+
+<p>To follow along with this documentation, you can use this namespace to with the needed requires:</p>
+
+<p>```clojure
+(ns docs.module
+  (:require [clojure.java.io :as io]</p>
+
+<pre><code>        [clojure.java.shell :refer [sh]]
+        [org.apache.clojure-mxnet.eval-metric :as eval-metric]
+        [org.apache.clojure-mxnet.io :as mx-io]
+        [org.apache.clojure-mxnet.module :as m]
+        [org.apache.clojure-mxnet.symbol :as sym]
+        [org.apache.clojure-mxnet.ndarray :as ndarray]))
+</code></pre>
+
+<p>```</p>
+
+<h2>Prepare the Data</h2>
+
+<p>In this example, we are going to use the MNIST data set. If you have cloned the MXNet repo and <code>cd contrib/clojure-package</code>, we can run some helper scripts to download the data for us.</p>
+
+<p>```clojure
+(def data-dir &ldquo;data/&rdquo;)</p>
+
+<p>(when-not (.exists (io/file (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)))
+  (sh &ldquo;../../scripts/get_mnist_data.sh&rdquo;))
+```</p>
+
+<p>MXNet provides function in the <code>io</code> namespace to load the MNIST datasets into training and test data iterators that we can use with our module.</p>
+
+<p>```clojure
+(def train-data (mx-io/mnist-iter {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
+
+<pre><code>                               :label (str data-dir "train-labels-idx1-ubyte")
+                               :label-name "softmax_label"
+                               :input-shape [784]
+                               :batch-size 10
+                               :shuffle true
+                               :flat true
+                               :silent false
+                               :seed 10}))
+</code></pre>
+
+<p>(def test-data (mx-io/mnist-iter {:image (str data-dir &ldquo;t10k-images-idx3-ubyte&rdquo;)</p>
+
+<pre><code>                              :label (str data-dir "t10k-labels-idx1-ubyte")
+                              :input-shape [784]
+                              :batch-size 10
+                              :flat true
+                              :silent false}))
+</code></pre>
+
+<p>```</p>
+
+<h2>Preparing a Module for Computation</h2>
+
+<p>To construct a module, we need to have a symbol as input. This symbol takes input data in the first layer and then has subsequent layers of fully connected and relu activation layers, ending up in a softmax layer for output.</p>
+
+<p>```clojure
+(let [data (sym/variable &ldquo;data&rdquo;)</p>
+
+<pre><code>  fc1 (sym/fully-connected "fc1" {:data data :num-hidden 128})
+  act1 (sym/activation "relu1" {:data fc1 :act-type "relu"})
+  fc2 (sym/fully-connected "fc2" {:data act1 :num-hidden 64})
+  act2 (sym/activation "relu2" {:data fc2 :act-type "relu"})
+  fc3 (sym/fully-connected "fc3" {:data act2 :num-hidden 10})
+  out (sym/softmax-output "softmax" {:data fc3})]
+</code></pre>
+
+<p>  out)
+  ;=>#object[org.apache.mxnet.Symbol 0x1f43a406 &ldquo;org.apache.mxnet.Symbol@1f43a406&rdquo;]
+```</p>
+
+<p>You can also write this with the <code>as-&gt;</code> threading macro.</p>
+
+<p>```clojure
+(def out (as-> (sym/variable &ldquo;data&rdquo;) data</p>
+
+<pre><code>       (sym/fully-connected "fc1" {:data data :num-hidden 128})
+       (sym/activation "relu1" {:data data :act-type "relu"})
+       (sym/fully-connected "fc2" {:data data :num-hidden 64})
+       (sym/activation "relu2" {:data data :act-type "relu"})
+       (sym/fully-connected "fc3" {:data data :num-hidden 10})
+       (sym/softmax-output "softmax" {:data data})))
+</code></pre>
+
+<p>;=> #&lsquo;tutorial.module/out
+```</p>
+
+<p>By default, <code>context</code> is the CPU. If you need data parallelization, you can specify a GPU context or an array of GPU contexts like this <code>(m/module out {:contexts [(context/gpu)]})</code></p>
+
+<p>Before you can compute with a module, you need to call <code>bind</code> to allocate the device memory and <code>init-params</code> or <code>set-params</code> to initialize the parameters. If you simply want to fit a module, you don’t need to call <code>bind</code> and <code>init-params</code> explicitly, because the <code>fit</code> function automatically calls them if they are needed.</p>
+
+<p>```clojure
+(let [mod (m/module out)]
+  (&ndash;> mod</p>
+
+<pre><code>  (m/bind {:data-shapes (mx-io/provide-data train-data)
+           :label-shapes (mx-io/provide-label train-data)})
+  (m/init-params)))
+</code></pre>
+
+<p>```</p>
+
+<p>Now you can compute with the module using functions like <code>forward</code>, <code>backward</code>, etc.</p>
+
+<h2>Training and Predicting</h2>
+
+<p>Modules provide high-level APIs for training, predicting, and evaluating. To fit a module, call the <code>fit</code> function with some data iterators:</p>
+
+<p><code>clojure
+(def mod (m/fit (m/module out) {:train-data train-data :eval-data test-data :num-epoch 1}))
+;; Epoch  0  Train- [accuracy 0.12521666]
+;; Epoch  0  Time cost- 8392
+;; Epoch  0  Validation-  [accuracy 0.2227]
+</code></p>
+
+<p>You can pass in batch-end callbacks using batch-end-callback and epoch-end callbacks using epoch-end-callback in the <code>fit-params</code>. You can also set parameters using functions like in the fit-params like optimizer and eval-metric. To learn more about the fit-params, see the fit-param function options. To predict with a module, call <code>predict</code> with a DataIter:</p>
+
+<p>```clojure
+(def results (m/predict mod {:eval-data test-data}))
+(first results) ;=>#object[org.apache.mxnet.NDArray 0x3540b6d3 &ldquo;org.apache.mxnet.NDArray@a48686ec&rdquo;]</p>
+
+<p>(first (ndarray/&ndash;>vec (first results))) ;=>0.08261358
+```</p>
+
+<p>The module collects and returns all of the prediction results. For more details about the format of the return values, see the documentation for the <code>predict</code> function.</p>
+
+<p>When prediction results might be too large to fit in memory, use the <code>predict-every-batch</code> API.</p>
+
+<p>```clojure
+(let [preds (m/predict-every-batch mod {:eval-data test-data})]
+  (mx-io/reduce-batches test-data</p>
+
+<pre><code>                    (fn [i batch]
+                      (println (str "pred is " (first (get preds i))))
+                      (println (str "label is " (mx-io/batch-label batch)))
+                      ;;; do something
+                      (inc i))))
+</code></pre>
+
+<p>```</p>
+
+<p>If you need to evaluate on a test set and don’t need the prediction output, call the <code>score</code> function with a data iterator and an eval metric:</p>
+
+<p><code>clojure
+(m/score mod {:eval-data test-data :eval-metric (eval-metric/accuracy)}) ;=&gt;["accuracy" 0.2227]
+</code></p>
+
+<p>This runs predictions on each batch in the provided data iterator and computes the evaluation score using the provided eval metric. The evaluation results are stored in metric so that you can query later.</p>
+
+<h2>Saving and Loading</h2>
+
+<p>To save the module parameters in each training epoch, use a <code>checkpoint</code> function:</p>
+
+<p>```clojure
+(let [save-prefix &ldquo;my-model&rdquo;]
+  (doseq [epoch-num (range 3)]</p>
+
+<pre><code>(mx-io/do-batches train-data (fn [batch
+                                      ;; do something
+</code></pre>
+
+<p>]))</p>
+
+<pre><code>(m/save-checkpoint mod {:prefix save-prefix :epoch epoch-num :save-opt-states true})))
+</code></pre>
+
+<p>;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0000.params
+;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0000.states
+;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0001.params
+;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0001.states
+;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0002.params
+;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0002.states</p>
+
+<p>```</p>
+
+<p>To load the saved module parameters, call the <code>load-checkpoint</code> function:</p>
+
+<p>```clojure
+(def new-mod (m/load-checkpoint {:prefix &ldquo;my-model&rdquo; :epoch 1 :load-optimizer-states true}))</p>
+
+<p>new-mod ;=> #object[org.apache.mxnet.module.Module 0x5304d0f4 &ldquo;org.apache.mxnet.module.Module@5304d0f4&rdquo;]
+```</p>
+
+<p>To initialize parameters, Bind the symbols to construct executors first with bind function. Then, initialize the parameters and auxiliary states by calling <code>init-params</code> function.</p>
+
+<p>```clojure
+(&ndash;> new-mod</p>
+
+<pre><code>(m/bind {:data-shapes (mx-io/provide-data train-data) :label-shapes (mx-io/provide-label train-data)})
+(m/init-params))
+</code></pre>
+
+<p>```</p>
+
+<p>To get current parameters, use <code>params</code></p>
+
+<p>```clojure</p>
+
+<p>(let [[arg-params aux-params] (m/params new-mod)]
+  {:arg-params arg-params
+   :aux-params aux-params})</p>
+
+<p>;; {:arg-params
+;;  {&ldquo;fc3_bias&rdquo;
+;;   #object[org.apache.mxnet.NDArray 0x39adc3b0 &ldquo;org.apache.mxnet.NDArray@49caf426&rdquo;],
+;;   &ldquo;fc2_weight&rdquo;
+;;   #object[org.apache.mxnet.NDArray 0x25baf623 &ldquo;org.apache.mxnet.NDArray@a6c8f9ac&rdquo;],
+;;   &ldquo;fc1_bias&rdquo;
+;;   #object[org.apache.mxnet.NDArray 0x6e089973 &ldquo;org.apache.mxnet.NDArray@9f91d6eb&rdquo;],
+;;   &ldquo;fc3_weight&rdquo;
+;;   #object[org.apache.mxnet.NDArray 0x756fd109 &ldquo;org.apache.mxnet.NDArray@2dd0fe3c&rdquo;],
+;;   &ldquo;fc2_bias&rdquo;
+;;   #object[org.apache.mxnet.NDArray 0x1dc69c8b &ldquo;org.apache.mxnet.NDArray@d128f73d&rdquo;],
+;;   &ldquo;fc1_weight&rdquo;
+;;   #object[org.apache.mxnet.NDArray 0x20abc769 &ldquo;org.apache.mxnet.NDArray@b8e1c5e8&rdquo;]},
+;;  :aux-params {}}</p>
+
+<p>```</p>
+
+<p>To assign parameter and aux state values, use <code>set-params</code> function.</p>
+
+<p><code>clojure
+(m/set-params new-mod {:arg-params (m/arg-params new-mod) :aux-params (m/aux-params new-mod)})
+;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 "org.apache.mxnet.module.Module@5304d0f4"]
+</code></p>
+
+<p>To resume training from a saved checkpoint, instead of calling <code>set-params</code>, directly call <code>fit</code>, passing the loaded parameters, so that <code>fit</code> knows to start from those parameters instead of initializing randomly</p>
+
+<p>Create fit-params, and then use it to set <code>begin-epoch</code> so that fit() knows to resume from a saved epoch.</p>
+
+<p>```clojure
+;; reset the training data before calling fit or you will get an error
+(mx-io/reset train-data)
+(mx-io/reset test-data)</p>
+
+<p>(m/fit new-mod {:train-data train-data :eval-data test-data :num-epoch 2</p>
+
+<pre><code>            :fit-params (-&gt; (m/fit-params {:begin-epoch 1}))})
+</code></pre>
+
+<p>```</p>
+
+<p>If you are interested in checking out MXNet and exploring on your own, check out the main page <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">here</a> with instructions on how to install and other information.</p>
+
+<h3>See other blog posts about MXNet</h3>
+
+<ul>
+<li><a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Clojure MXNet &ndash; NDArray</a></li>
+<li><a href="http://gigasquidsoftware.com/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/">Clojure MXNet Joins Apache MXNet</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure MXNet Joins the Apache MXNet Project]]></title>

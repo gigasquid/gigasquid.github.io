@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2018-07-01T11:43:03-04:00</updated>
+  <updated>2018-07-05T19:49:02-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,349 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure MXNet - The Module API]]></title>
+    <link href="http://gigasquid.github.io/blog/2018/07/05/clojure-mxnet-the-module-api/"/>
+    <updated>2018-07-05T19:39:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2018/07/05/clojure-mxnet-the-module-api</id>
+    <content type="html"><![CDATA[<p><img src="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg"></p>
+
+<p>This is an introduction to the high level Clojure API for deep learning library <a href="http://mxnet.incubator.apache.org/">MXNet</a>.</p>
+
+<p>The module API provides an intermediate and high-level interface for performing computation with neural networks in MXNet. Module wraps a Symbol and one or more Executors. It has both a high level and intermediate level api.</p>
+
+<p>To follow along with this documentation, you can use this namespace to with the needed requires:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">docs.module</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.java.io</span> <span class="ss">:as</span> <span class="nv">io</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">clojure.java.shell</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">sh</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.eval-metric</span> <span class="ss">:as</span> <span class="nv">eval-metric</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.io</span> <span class="ss">:as</span> <span class="nv">mx-io</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.module</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.symbol</span> <span class="ss">:as</span> <span class="nv">sym</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.ndarray</span> <span class="ss">:as</span> <span class="nv">ndarray</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Prepare the Data</h2>
+
+<p>In this example, we are going to use the MNIST data set. If you have cloned the MXNet repo and <code>cd contrib/clojure-package</code>, we can run some helper scripts to download the data for us.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">data-dir</span> <span class="s">&quot;data/&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">when-not </span><span class="p">(</span><span class="nf">.exists</span> <span class="p">(</span><span class="nf">io/file</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">sh</span> <span class="s">&quot;../../scripts/get_mnist_data.sh&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>MXNet provides function in the <code>io</code> namespace to load the MNIST datasets into training and test data iterators that we can use with our module.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                                   <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                                   <span class="ss">:label-name</span> <span class="s">&quot;softmax_label&quot;</span>
+</span><span class='line'>                                   <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>                                   <span class="ss">:batch-size</span> <span class="mi">10</span>
+</span><span class='line'>                                   <span class="ss">:shuffle</span> <span class="nv">true</span>
+</span><span class='line'>                                   <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>                                   <span class="ss">:silent</span> <span class="nv">false</span>
+</span><span class='line'>                                   <span class="ss">:seed</span> <span class="mi">10</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">test-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                                  <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                                  <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>                                  <span class="ss">:batch-size</span> <span class="mi">10</span>
+</span><span class='line'>                                  <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>                                  <span class="ss">:silent</span> <span class="nv">false</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Preparing a Module for Computation</h2>
+
+<p>To construct a module, we need to have a symbol as input. This symbol takes input data in the first layer and then has subsequent layers of fully connected and relu activation layers, ending up in a softmax layer for output.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">data</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="nv">fc1</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">128</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">act1</span> <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">fc1</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">fc2</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">act1</span> <span class="ss">:num-hidden</span> <span class="mi">64</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">act2</span> <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">fc2</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">fc3</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc3&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">act2</span> <span class="ss">:num-hidden</span> <span class="mi">10</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">out</span> <span class="p">(</span><span class="nf">sym/softmax-output</span> <span class="s">&quot;softmax&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">fc3</span><span class="p">})]</span>
+</span><span class='line'>  <span class="nv">out</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1">;=&gt;#object[org.apache.mxnet.Symbol 0x1f43a406 &quot;org.apache.mxnet.Symbol@1f43a406&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also write this with the <code>as-&gt;</code> threading macro.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">out</span> <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">128</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">64</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc3&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">10</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/softmax-output</span> <span class="s">&quot;softmax&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span><span class="p">})))</span>
+</span><span class='line'><span class="c1">;=&gt; #&#39;tutorial.module/out</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, <code>context</code> is the CPU. If you need data parallelization, you can specify a GPU context or an array of GPU contexts like this <code>(m/module out {:contexts [(context/gpu)]})</code></p>
+
+<p>Before you can compute with a module, you need to call <code>bind</code> to allocate the device memory and <code>init-params</code> or <code>set-params</code> to initialize the parameters. If you simply want to fit a module, you don’t need to call <code>bind</code> and <code>init-params</code> explicitly, because the <code>fit</code> function automatically calls them if they are needed.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">mod</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-data</span> <span class="nv">train-data</span><span class="p">)</span>
+</span><span class='line'>               <span class="ss">:label-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-label</span> <span class="nv">train-data</span><span class="p">)})</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/init-params</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can compute with the module using functions like <code>forward</code>, <code>backward</code>, etc.</p>
+
+<h2>Training and Predicting</h2>
+
+<p>Modules provide high-level APIs for training, predicting, and evaluating. To fit a module, call the <code>fit</code> function with some data iterators:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/fit</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)</span> <span class="p">{</span><span class="ss">:train-data</span> <span class="nv">train-data</span> <span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:num-epoch</span> <span class="mi">1</span><span class="p">}))</span>
+</span><span class='line'><span class="c1">;; Epoch  0  Train- [accuracy 0.12521666]</span>
+</span><span class='line'><span class="c1">;; Epoch  0  Time cost- 8392</span>
+</span><span class='line'><span class="c1">;; Epoch  0  Validation-  [accuracy 0.2227]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can pass in batch-end callbacks using batch-end-callback and epoch-end callbacks using epoch-end-callback in the <code>fit-params</code>. You can also set parameters using functions like in the fit-params like optimizer and eval-metric. To learn more about the fit-params, see the fit-param function options. To predict with a module, call <code>predict</code> with a DataIter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">results</span> <span class="p">(</span><span class="nf">m/predict</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">}))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">first </span><span class="nv">results</span><span class="p">)</span> <span class="c1">;=&gt;#object[org.apache.mxnet.NDArray 0x3540b6d3 &quot;org.apache.mxnet.NDArray@a48686ec&quot;]</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="p">(</span><span class="nb">first </span><span class="nv">results</span><span class="p">)))</span> <span class="c1">;=&gt;0.08261358</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The module collects and returns all of the prediction results. For more details about the format of the return values, see the documentation for the <code>predict</code> function.</p>
+
+<p>When prediction results might be too large to fit in memory, use the <code>predict-every-batch</code> API.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-every-batch</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">})]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/reduce-batches</span> <span class="nv">test-data</span>
+</span><span class='line'>                        <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">i</span> <span class="nv">batch</span><span class="p">]</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;pred is &quot;</span> <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nb">get </span><span class="nv">preds</span> <span class="nv">i</span><span class="p">))))</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;label is &quot;</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">batch</span><span class="p">)))</span>
+</span><span class='line'>                          <span class="c1">;;; do something</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">inc </span><span class="nv">i</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you need to evaluate on a test set and don’t need the prediction output, call the <code>score</code> function with a data iterator and an eval metric:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/score</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:eval-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">)})</span> <span class="c1">;=&gt;[&quot;accuracy&quot; 0.2227]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This runs predictions on each batch in the provided data iterator and computes the evaluation score using the provided eval metric. The evaluation results are stored in metric so that you can query later.</p>
+
+<h2>Saving and Loading</h2>
+
+<p>To save the module parameters in each training epoch, use a <code>checkpoint</code> function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">save-prefix</span> <span class="s">&quot;my-model&quot;</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">3</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span> <span class="nv">train-data</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span>
+</span><span class='line'>                                          <span class="c1">;; do something</span>
+</span><span class='line'><span class="p">]))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="nv">save-prefix</span> <span class="ss">:epoch</span> <span class="nv">epoch-num</span> <span class="ss">:save-opt-states</span> <span class="nv">true</span><span class="p">})))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0000.params</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0000.states</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0001.params</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0001.states</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0002.params</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0002.states</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To load the saved module parameters, call the <code>load-checkpoint</code> function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-mod</span> <span class="p">(</span><span class="nf">m/load-checkpoint</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;my-model&quot;</span> <span class="ss">:epoch</span> <span class="mi">1</span> <span class="ss">:load-optimizer-states</span> <span class="nv">true</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">new-mod</span> <span class="c1">;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 &quot;org.apache.mxnet.module.Module@5304d0f4&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To initialize parameters, Bind the symbols to construct executors first with bind function. Then, initialize the parameters and auxiliary states by calling <code>init-params</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">new-mod</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-data</span> <span class="nv">train-data</span><span class="p">)</span> <span class="ss">:label-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-label</span> <span class="nv">train-data</span><span class="p">)})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">m/init-params</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To get current parameters, use <code>params</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">arg-params</span> <span class="nv">aux-params</span><span class="p">]</span> <span class="p">(</span><span class="nf">m/params</span> <span class="nv">new-mod</span><span class="p">)]</span>
+</span><span class='line'>  <span class="p">{</span><span class="ss">:arg-params</span> <span class="nv">arg-params</span>
+</span><span class='line'>   <span class="ss">:aux-params</span> <span class="nv">aux-params</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; {:arg-params</span>
+</span><span class='line'><span class="c1">;;  {&quot;fc3_bias&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x39adc3b0 &quot;org.apache.mxnet.NDArray@49caf426&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc2_weight&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x25baf623 &quot;org.apache.mxnet.NDArray@a6c8f9ac&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc1_bias&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x6e089973 &quot;org.apache.mxnet.NDArray@9f91d6eb&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc3_weight&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x756fd109 &quot;org.apache.mxnet.NDArray@2dd0fe3c&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc2_bias&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x1dc69c8b &quot;org.apache.mxnet.NDArray@d128f73d&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc1_weight&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x20abc769 &quot;org.apache.mxnet.NDArray@b8e1c5e8&quot;]},</span>
+</span><span class='line'><span class="c1">;;  :aux-params {}}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To assign parameter and aux state values, use <code>set-params</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/set-params</span> <span class="nv">new-mod</span> <span class="p">{</span><span class="ss">:arg-params</span> <span class="p">(</span><span class="nf">m/arg-params</span> <span class="nv">new-mod</span><span class="p">)</span> <span class="ss">:aux-params</span> <span class="p">(</span><span class="nf">m/aux-params</span> <span class="nv">new-mod</span><span class="p">)})</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 &quot;org.apache.mxnet.module.Module@5304d0f4&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To resume training from a saved checkpoint, instead of calling <code>set-params</code>, directly call <code>fit</code>, passing the loaded parameters, so that <code>fit</code> knows to start from those parameters instead of initializing randomly</p>
+
+<p>Create fit-params, and then use it to set <code>begin-epoch</code> so that fit() knows to resume from a saved epoch.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; reset the training data before calling fit or you will get an error</span>
+</span><span class='line'><span class="p">(</span><span class="nf">mx-io/reset</span> <span class="nv">train-data</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">mx-io/reset</span> <span class="nv">test-data</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">m/fit</span> <span class="nv">new-mod</span> <span class="p">{</span><span class="ss">:train-data</span> <span class="nv">train-data</span> <span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:num-epoch</span> <span class="mi">2</span>
+</span><span class='line'>                <span class="ss">:fit-params</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/fit-params</span> <span class="p">{</span><span class="ss">:begin-epoch</span> <span class="mi">1</span><span class="p">}))})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are interested in checking out MXNet and exploring on your own, check out the main page <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">here</a> with instructions on how to install and other information.</p>
+
+<h3>See other blog posts about MXNet</h3>
+
+<ul>
+<li><a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Clojure MXNet &ndash; NDArray</a></li>
+<li><a href="http://gigasquidsoftware.com/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/">Clojure MXNet Joins Apache MXNet</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure MXNet Joins the Apache MXNet Project]]></title>
@@ -3428,124 +3771,6 @@ Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles
 <p>Want more?  Check out the code <a href="https://github.com/gigasquid/speech-acts-classifier">https://github.com/gigasquid/speech-acts-classifier</a>.</p>
 
 <p><em>Special thanks to <a href="https://twitter.com/ohpauleez">Paul deGrandis</a> for allowing me to pick his awesome brain on AI things</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Conversations with Datomic - Part 3]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3/"/>
-    <updated>2015-08-25T10:28:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3</id>
-    <content type="html"><![CDATA[<p><img src="https://avatars0.githubusercontent.com/u/1478702?v=3&s=200"></p>
-
-<p><em>This is a continuation of the <a href="http://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/">first</a> and
-<a href="http://gigasquidsoftware.com/blog/2015/08/19/conversations-with-datomic-part-2/">second</a> conversations in which topics such as creating databases,
-learning facts, querying, and time traveling were discussed.  Today&rsquo;s topics include architecture, caching, and scaling.</em></p>
-
-<p><strong>Human:</strong>  Hello again <a href="http://www.datomic.com/">Datomic</a>. Ready to talk again?</p>
-
-<p><strong>Datomic:</strong> Sure.  I think you wanted to ask me some questions about how I would fit in with your other systems.</p>
-
-<p><strong>Human:</strong> Yes.  Like I was saying earlier, I think your abilities to learn facts, reason about them, and keep track of the history of all those facts is really great.
-I am interested in having you work with me every day, but first I want to understand your components so that I can make sure you are a good fit for us.</p>
-
-<p><strong>Datomic:</strong> I would be happy to explain my architecture to you.  Perhaps showing you this picture is the best way to start.</p>
-
-<p><img src="http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg"></p>
-
-<p>I am made of three main parts: my <em>transactors</em>, my <em>peers</em>, and my <em>storage</em>.</p>
-
-<p><strong>Human</strong>:  What is a <em>peer</em>?</p>
-
-<p><strong>Datomic</strong>:  A <em>peer</em> is an application that is using the peer library.  In our last conversations,  we were talking through the Clojure api with <code>datomic.api</code>.  The application, or process, that is running this api is called a peer.  There can be many of these, all having conversations with me.</p>
-
-<p><strong>Human</strong>: The peers then talk to your <em>transactor</em>?</p>
-
-<p><strong>Datomic</strong> Yes. The peers talk to my transactor whenever you call <code>transact</code> with the peer library.  It is the central coordinator between all the peers and processes the requests using <em>ACID</em> transactions, and then sends the facts off to storage.</p>
-
-<p><strong>Human:</strong>  Could you remind me what <em>ACID</em> stands for again?  I always forget.  The first one is <em>Atomic</em> right?</p>
-
-<p><strong>Datomic:</strong> That is right.  I am <em>Atomic</em> in that every transaction you send to me is all or nothing.  If for some reason, one part of it fails, I will reject the entire transaction and leave my database unchanged.</p>
-
-<p>The C is for <em>Consistency</em>.  This means that I provide every peer with a consistent view of facts over time and transactions.  I provide a global ordering of transactions across all the peers with my transactor and peers will always see all the transactions up to their current time without any gaps.</p>
-
-<p><strong>Human:</strong> What if a peer is behind the global time?  How do they catch up to know about the new facts that were transacted by a different peer?</p>
-
-<p><strong>Datomic:</strong> After one peer sends me a successful transaction with some new facts, I will notify all the peers about them.</p>
-
-<p><strong>Human:</strong> Cool. That takes care of the A and C in ACID. What about the I?</p>
-
-<p><strong>Datomic:</strong> It stands for Isolated.  It makes sure that even through there are many peers having conversations with me, transactions are executed serially.  This happens naturally with my transactor.  Since there is only one transactor, transactions are always executed serially.</p>
-
-<p><strong>Human</strong>:  In the picture, why are there are two transactors then?</p>
-
-<p><strong>Datomic</strong>:  Oh, that is for High Availability.  When I startup my system, I can launch two running transactors, but hold one in reserve.  Just on the off chance something happens to the main one, I will swap in the failover one to keep things running smoothly.</p>
-
-<p>The final D in <em>ACID</em> is for Durability.  Once a transaction has been committed by my transactor, it is shipped off to storage for safe keeping.</p>
-
-<p><strong>Human:</strong> What exactly is this storage?</p>
-
-<p><strong>Datomic:</strong> Instead of storing datoms, I send <em>segments</em>, which are closely related datoms,  to storage.  I have quite a few options for storage:</p>
-
-<ul>
-<li>Dev mode &ndash; which just runs within my transactor and writes to the local file system.</li>
-<li>SQL database</li>
-<li>DynamoDB</li>
-<li>Cassandra</li>
-<li>Riak</li>
-<li>Couchbase</li>
-<li>Infinispan memory cluster</li>
-</ul>
-
-
-<p><strong>Human:</strong> Which one is the best to use?</p>
-
-<p><strong>Datomic:</strong> <em>The best one to use is the one that you are already have in place at work</em>.  This way, I can integrate seamlessly with your other systems.</p>
-
-<p><strong>Human:</strong> Oh, we didn&rsquo;t really talk about caching.  Can you explain how you do that?</p>
-
-<p><strong>Datomic:</strong> Certainly.  It is even worth another picture.</p>
-
-<p><img src="http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg"></p>
-
-<p>Each peer has a its own <em>working set</em> of recent datoms along with a index to all the rest of the datoms in storage in memory.  When the peer has a query for a datom, it first checks to see if it has it locally in its memory cache.  If it can&rsquo;t find it there, then it will ask for a segment of that datom from storage.  Storage will return that datom along with other related datoms in that segment so that the peer can cache that in memory to make it faster for the next query.</p>
-
-<p><strong>Human:</strong> That seems really different from other databases, where the client constantly requests queries from a server.</p>
-
-<p><strong>Datomic:</strong> Yes.  When most questions can be answered from the local memory, responses are really fast.  You don&rsquo;t need to hit storage unless you really need too.  You can even add an extra layer of caching with memcached.</p>
-
-<p><strong>Human:</strong> That sounds great.  I can&rsquo;t wait tell you about all of our data.  We talked a bit about your querying ability earlier, can you do the same queries that our other standard relational databases do, like joins?</p>
-
-<p><strong>Datomic:</strong> Oh yes.  In fact, with me, you don&rsquo;t need to specify your joins explicitly.  I use <em>Datalog</em>, which is based on logic, so my joins are implicit.  I will figure out exactly what I need to put together to answer your query without you having to spell it out for me.</p>
-
-<p><strong>Human:</strong> Ok.  I know that I can map some of my data that is already in other database tables to you.  What about other types of irregular data, like graphs, or sparse data.</p>
-
-<p><strong>Datomic:</strong> I am actually very proud of my data model.  It is extremely flexible.  Since I store things on such a granular datom level, you don&rsquo;t need to map your logical data model to my physical model.  I can handle <em>rectangular</em> table shaped data quite happily along with graph data, sparse data, or other <em>non-rectangular</em> data.</p>
-
-<p><strong>Human:</strong> That sounds great.  What do I need to know about your scaling?</p>
-
-<p><strong>Datomic:</strong> I really excel at reads.  All you have to do is elastically add another peer to me for querying.  I am not really a good fit for write scale, like big data, or log file analysis.  You will find me most happy with data that is valuable information of record and has history that is important, like transaction, medical, or inventory data.  I am also really good at being flexible for development and operations since I can use many different types of storage.  I have worked with many web and cloud apps.</p>
-
-<p><strong>Human:</strong> Thanks for answering all my questions.  I think you might fit in quite well with our other systems.</p>
-
-<p><strong>Datomic:</strong> Great!</p>
-
-<p><strong>Human:</strong> One more thing, this conversation has been great, but do you have any training resources for me and my other human coworkers?</p>
-
-<p><strong>Datomic:</strong> Sure thing. There are a few really good resources on the <a href="http://www.datomic.com/training.html">Datomic Training Site</a>.  I would suggest watching the videos there and pairing them with:</p>
-
-<ul>
-<li><a href="https://github.com/stuarthalloway/presentations/blob/master/Nov2014/DayOfDatomicNov2014.pdf?raw=true">The slides for the videos</a> which have the labs to work through form the videos.</li>
-<li><a href="https://github.com/Datomic/day-of-datomic">The Day of Datomic Repo</a> which has lots of great examples to play with.</li>
-<li><a href="http://docs.datomic.com/">Tne Datomic Development Resources</a>, which include the docs on the <a href="http://docs.datomic.com/clojure/index.html">Clojure API</a></li>
-</ul>
-
-
-<p>Also, if you want to confirm that your data is good fit for me, I suggest you describe your data to the <a href="https://groups.google.com/forum/#!forum/datomic">Datomic Google Group</a>.  They are nice and knowledgeable group of humans.</p>
-
-<p><strong>Human:</strong> Thanks again Datomic!  I will grab another cookie and check it out!</p>
-
-<p><strong>Datomic:</strong> What is it with humans and cookies?&hellip;</p>
 ]]></content>
   </entry>
   

@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Jul 1st, 2018 Tags: All, Clojure, Deep Learning, MXNet I&rsquo;m delighted to share the news that the Clojure package for MXNet has &hellip;">
+	<meta name="description" content="Published on: Jul 5th, 2018 Tags: All, Clojure, Deep Learning, MXNet This is an introduction to the high level Clojure API for deep learning library &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,384 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/07/05/clojure-mxnet-the-module-api/">
+		
+			Clojure MXNet - the Module API</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-07-05T19:39:00-04:00" pubdate data-updated="true">Jul 5<span>th</span>, 2018</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/deep-learning/'>Deep Learning</a>, <a class='category' href='/blog/categories/mxnet/'>MXNet</a>
+
+
+</div>
+    </div>
+		<p><img src="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg"></p>
+
+<p>This is an introduction to the high level Clojure API for deep learning library <a href="http://mxnet.incubator.apache.org/">MXNet</a>.</p>
+
+<p>The module API provides an intermediate and high-level interface for performing computation with neural networks in MXNet. Module wraps a Symbol and one or more Executors. It has both a high level and intermediate level api.</p>
+
+<p>To follow along with this documentation, you can use this namespace to with the needed requires:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">docs.module</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.java.io</span> <span class="ss">:as</span> <span class="nv">io</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">clojure.java.shell</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">sh</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.eval-metric</span> <span class="ss">:as</span> <span class="nv">eval-metric</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.io</span> <span class="ss">:as</span> <span class="nv">mx-io</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.module</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.symbol</span> <span class="ss">:as</span> <span class="nv">sym</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.ndarray</span> <span class="ss">:as</span> <span class="nv">ndarray</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Prepare the Data</h2>
+
+<p>In this example, we are going to use the MNIST data set. If you have cloned the MXNet repo and <code>cd contrib/clojure-package</code>, we can run some helper scripts to download the data for us.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">data-dir</span> <span class="s">&quot;data/&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">when-not </span><span class="p">(</span><span class="nf">.exists</span> <span class="p">(</span><span class="nf">io/file</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">sh</span> <span class="s">&quot;../../scripts/get_mnist_data.sh&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>MXNet provides function in the <code>io</code> namespace to load the MNIST datasets into training and test data iterators that we can use with our module.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                                   <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                                   <span class="ss">:label-name</span> <span class="s">&quot;softmax_label&quot;</span>
+</span><span class='line'>                                   <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>                                   <span class="ss">:batch-size</span> <span class="mi">10</span>
+</span><span class='line'>                                   <span class="ss">:shuffle</span> <span class="nv">true</span>
+</span><span class='line'>                                   <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>                                   <span class="ss">:silent</span> <span class="nv">false</span>
+</span><span class='line'>                                   <span class="ss">:seed</span> <span class="mi">10</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">test-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                                  <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                                  <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>                                  <span class="ss">:batch-size</span> <span class="mi">10</span>
+</span><span class='line'>                                  <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>                                  <span class="ss">:silent</span> <span class="nv">false</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Preparing a Module for Computation</h2>
+
+<p>To construct a module, we need to have a symbol as input. This symbol takes input data in the first layer and then has subsequent layers of fully connected and relu activation layers, ending up in a softmax layer for output.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">data</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="nv">fc1</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">128</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">act1</span> <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">fc1</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">fc2</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">act1</span> <span class="ss">:num-hidden</span> <span class="mi">64</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">act2</span> <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">fc2</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">fc3</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc3&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">act2</span> <span class="ss">:num-hidden</span> <span class="mi">10</span><span class="p">})</span>
+</span><span class='line'>      <span class="nv">out</span> <span class="p">(</span><span class="nf">sym/softmax-output</span> <span class="s">&quot;softmax&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">fc3</span><span class="p">})]</span>
+</span><span class='line'>  <span class="nv">out</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1">;=&gt;#object[org.apache.mxnet.Symbol 0x1f43a406 &quot;org.apache.mxnet.Symbol@1f43a406&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also write this with the <code>as-&gt;</code> threading macro.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">out</span> <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">128</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">64</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc3&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">10</span><span class="p">})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">sym/softmax-output</span> <span class="s">&quot;softmax&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span><span class="p">})))</span>
+</span><span class='line'><span class="c1">;=&gt; #&#39;tutorial.module/out</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, <code>context</code> is the CPU. If you need data parallelization, you can specify a GPU context or an array of GPU contexts like this <code>(m/module out {:contexts [(context/gpu)]})</code></p>
+
+<p>Before you can compute with a module, you need to call <code>bind</code> to allocate the device memory and <code>init-params</code> or <code>set-params</code> to initialize the parameters. If you simply want to fit a module, you don’t need to call <code>bind</code> and <code>init-params</code> explicitly, because the <code>fit</code> function automatically calls them if they are needed.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">mod</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-data</span> <span class="nv">train-data</span><span class="p">)</span>
+</span><span class='line'>               <span class="ss">:label-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-label</span> <span class="nv">train-data</span><span class="p">)})</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/init-params</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can compute with the module using functions like <code>forward</code>, <code>backward</code>, etc.</p>
+
+<h2>Training and Predicting</h2>
+
+<p>Modules provide high-level APIs for training, predicting, and evaluating. To fit a module, call the <code>fit</code> function with some data iterators:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/fit</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)</span> <span class="p">{</span><span class="ss">:train-data</span> <span class="nv">train-data</span> <span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:num-epoch</span> <span class="mi">1</span><span class="p">}))</span>
+</span><span class='line'><span class="c1">;; Epoch  0  Train- [accuracy 0.12521666]</span>
+</span><span class='line'><span class="c1">;; Epoch  0  Time cost- 8392</span>
+</span><span class='line'><span class="c1">;; Epoch  0  Validation-  [accuracy 0.2227]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can pass in batch-end callbacks using batch-end-callback and epoch-end callbacks using epoch-end-callback in the <code>fit-params</code>. You can also set parameters using functions like in the fit-params like optimizer and eval-metric. To learn more about the fit-params, see the fit-param function options. To predict with a module, call <code>predict</code> with a DataIter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">results</span> <span class="p">(</span><span class="nf">m/predict</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">}))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">first </span><span class="nv">results</span><span class="p">)</span> <span class="c1">;=&gt;#object[org.apache.mxnet.NDArray 0x3540b6d3 &quot;org.apache.mxnet.NDArray@a48686ec&quot;]</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="p">(</span><span class="nb">first </span><span class="nv">results</span><span class="p">)))</span> <span class="c1">;=&gt;0.08261358</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The module collects and returns all of the prediction results. For more details about the format of the return values, see the documentation for the <code>predict</code> function.</p>
+
+<p>When prediction results might be too large to fit in memory, use the <code>predict-every-batch</code> API.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-every-batch</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">})]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/reduce-batches</span> <span class="nv">test-data</span>
+</span><span class='line'>                        <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">i</span> <span class="nv">batch</span><span class="p">]</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;pred is &quot;</span> <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nb">get </span><span class="nv">preds</span> <span class="nv">i</span><span class="p">))))</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;label is &quot;</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">batch</span><span class="p">)))</span>
+</span><span class='line'>                          <span class="c1">;;; do something</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">inc </span><span class="nv">i</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you need to evaluate on a test set and don’t need the prediction output, call the <code>score</code> function with a data iterator and an eval metric:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/score</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:eval-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">)})</span> <span class="c1">;=&gt;[&quot;accuracy&quot; 0.2227]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This runs predictions on each batch in the provided data iterator and computes the evaluation score using the provided eval metric. The evaluation results are stored in metric so that you can query later.</p>
+
+<h2>Saving and Loading</h2>
+
+<p>To save the module parameters in each training epoch, use a <code>checkpoint</code> function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">save-prefix</span> <span class="s">&quot;my-model&quot;</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">3</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span> <span class="nv">train-data</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span>
+</span><span class='line'>                                          <span class="c1">;; do something</span>
+</span><span class='line'><span class="p">]))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="nv">save-prefix</span> <span class="ss">:epoch</span> <span class="nv">epoch-num</span> <span class="ss">:save-opt-states</span> <span class="nv">true</span><span class="p">})))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0000.params</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0000.states</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0001.params</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0001.states</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0002.params</span>
+</span><span class='line'><span class="c1">;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0002.states</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To load the saved module parameters, call the <code>load-checkpoint</code> function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-mod</span> <span class="p">(</span><span class="nf">m/load-checkpoint</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;my-model&quot;</span> <span class="ss">:epoch</span> <span class="mi">1</span> <span class="ss">:load-optimizer-states</span> <span class="nv">true</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">new-mod</span> <span class="c1">;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 &quot;org.apache.mxnet.module.Module@5304d0f4&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To initialize parameters, Bind the symbols to construct executors first with bind function. Then, initialize the parameters and auxiliary states by calling <code>init-params</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">new-mod</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-data</span> <span class="nv">train-data</span><span class="p">)</span> <span class="ss">:label-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-label</span> <span class="nv">train-data</span><span class="p">)})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">m/init-params</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To get current parameters, use <code>params</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">arg-params</span> <span class="nv">aux-params</span><span class="p">]</span> <span class="p">(</span><span class="nf">m/params</span> <span class="nv">new-mod</span><span class="p">)]</span>
+</span><span class='line'>  <span class="p">{</span><span class="ss">:arg-params</span> <span class="nv">arg-params</span>
+</span><span class='line'>   <span class="ss">:aux-params</span> <span class="nv">aux-params</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; {:arg-params</span>
+</span><span class='line'><span class="c1">;;  {&quot;fc3_bias&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x39adc3b0 &quot;org.apache.mxnet.NDArray@49caf426&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc2_weight&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x25baf623 &quot;org.apache.mxnet.NDArray@a6c8f9ac&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc1_bias&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x6e089973 &quot;org.apache.mxnet.NDArray@9f91d6eb&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc3_weight&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x756fd109 &quot;org.apache.mxnet.NDArray@2dd0fe3c&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc2_bias&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x1dc69c8b &quot;org.apache.mxnet.NDArray@d128f73d&quot;],</span>
+</span><span class='line'><span class="c1">;;   &quot;fc1_weight&quot;</span>
+</span><span class='line'><span class="c1">;;   #object[org.apache.mxnet.NDArray 0x20abc769 &quot;org.apache.mxnet.NDArray@b8e1c5e8&quot;]},</span>
+</span><span class='line'><span class="c1">;;  :aux-params {}}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To assign parameter and aux state values, use <code>set-params</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/set-params</span> <span class="nv">new-mod</span> <span class="p">{</span><span class="ss">:arg-params</span> <span class="p">(</span><span class="nf">m/arg-params</span> <span class="nv">new-mod</span><span class="p">)</span> <span class="ss">:aux-params</span> <span class="p">(</span><span class="nf">m/aux-params</span> <span class="nv">new-mod</span><span class="p">)})</span>
+</span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 &quot;org.apache.mxnet.module.Module@5304d0f4&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To resume training from a saved checkpoint, instead of calling <code>set-params</code>, directly call <code>fit</code>, passing the loaded parameters, so that <code>fit</code> knows to start from those parameters instead of initializing randomly</p>
+
+<p>Create fit-params, and then use it to set <code>begin-epoch</code> so that fit() knows to resume from a saved epoch.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; reset the training data before calling fit or you will get an error</span>
+</span><span class='line'><span class="p">(</span><span class="nf">mx-io/reset</span> <span class="nv">train-data</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">mx-io/reset</span> <span class="nv">test-data</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">m/fit</span> <span class="nv">new-mod</span> <span class="p">{</span><span class="ss">:train-data</span> <span class="nv">train-data</span> <span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:num-epoch</span> <span class="mi">2</span>
+</span><span class='line'>                <span class="ss">:fit-params</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/fit-params</span> <span class="p">{</span><span class="ss">:begin-epoch</span> <span class="mi">1</span><span class="p">}))})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are interested in checking out MXNet and exploring on your own, check out the main page <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">here</a> with instructions on how to install and other information.</p>
+
+<h3>See other blog posts about MXNet</h3>
+
+<ul>
+<li><a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Clojure MXNet &ndash; NDArray</a></li>
+<li><a href="http://gigasquidsoftware.com/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/">Clojure MXNet Joins Apache MXNet</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2018/07/05/clojure-mxnet-the-module-api//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1905,98 +2283,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2016/07/03/hello-world//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2016/06/19/book-writing-for-the-busy-programmer/">
-		
-			Book Writing for the Busy Programmer</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-06-19T09:22:00-04:00" pubdate data-updated="true">Jun 19<span>th</span>, 2016</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/all/'>All</a>
-
-
-</div>
-    </div>
-		<p><img src="http://c5.staticflickr.com/8/7302/27492453220_eecdf6dee1.jpg"></p>
-
-<p>So you want to write a book?  Awesome.  I&rsquo;ve been working on one too for the last year.</p>
-
-<p>No, it&rsquo;s not really a programming book, but it does have code in it.  It&rsquo;s a sci-fi/fantasy book written for my ten year daughter, but this post isn&rsquo;t about that.  It&rsquo;s about sharing the tools and setup that I&rsquo;ve found work best for me.</p>
-
-<h2>Tools for Writing</h2>
-
-<p>If the first thing you think of when you want to write a book is creating some really cool tools to help you, I can totally relate.  It&rsquo;s a programmer thing.</p>
-
-<p>Hold on though, there&rsquo;s another way.</p>
-
-<p>Starting out with only my book idea, I spent some time looking at the best authoring tools out there.  I knew that I wanted to able to write in an editor that I was comfortable in and in a terse format like Markdown.  I also wanted to be able to use git for revision management.  After searching, I settled on <a href="https://leanpub.com/">Leanpub</a></p>
-
-<p>Leanpub is a free service for authoring that has <a href="https://leanpub.com/help/getting_started_sync_github">Git integration</a> in <a href="https://leanpub.com/help">Markdown format</a>.  With it, I was able to write in my favorite text editor, (Emacs of course), commit and push my changes to my git repo, and then generate PDF and e-book formats.  The multiple formats were important to me because it allowed me to share my chapters and get feedback.</p>
-
-<h2>Tools for Feedback</h2>
-
-<p>Since I was writing a book with my daughter in mind, the most important feedback was from her.  After every chapter was done.  I would either print her out a copy or download it to her Kindle for review.  She actually really enjoyed reading it on her Kindle because it made it for more <em>real</em> to her.  My son also got interested in the story and before long, I had them both getting in heated debates about which direction the story should go.</p>
-
-<p>After my kids reviewed the chapters, I also sought some professional writing advice from a free-lance editor.  I highly recommend getting this sort of feedback from an editor, writing group, or trusted friend to help you grow and improve. The one catch is that most of the writing world works with Microsoft Word, so I needed to convert my chapters to that format.</p>
-
-<p>From my experience, all PDF to Word converters are full of fail.  The formatting goes all over the place and your writing ends up looking like some horrible abstract text art experiment gone wrong.  So far, the best converter I&rsquo;ve found is <a href="http://pandoc.org/">pandoc</a>.  It allows you to take your Markdown files and turn them into quite presentable Word documents.</p>
-
-<p>If you have a Mac, it&rsquo;s as simple as <code>brew install pandoc</code>.  Then, you can create a simple script to convert all your chapters,(or a selection) into a properly formatted Word Doc.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
-</span><span class='line'>rm ./all.md
-</span><span class='line'>for i in `cat ./Book.txt`; do  cat $i &gt;&gt; all.md; echo "  " &gt;&gt; all.md ; done
-</span><span class='line'>pandoc -o all.docx -f markdown -t docx ./all.md</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you write your manuscript, (what the publishing world calls your book text), revise it, copy edit it, and walk backwards in a circle three times, you&rsquo;re ready to publish.</p>
-
-<h2>Tools for Publishing</h2>
-
-<p>I don&rsquo;t have any real firm advice in this area yet since I&rsquo;m still in the midst of it, but I&rsquo;ll share the two options that I&rsquo;m looking at &ndash; traditional publishing and self publishing.</p>
-
-<p>Self publishing is more easily understood of the two.  You can put your book up for sale at any time through Leanpub or Amazon.  For better or worse, you have complete control of the content, display, marketing, and revenue of your book.</p>
-
-<p>Traditional publishing involves finding an literary agent and/or publisher to work with.  This route involves pitching your manuscript to someone to represent it through a <a href="http://nybookeditors.com/2015/12/how-to-write-a-darn-good-query-letter/">query</a>.  The advantages of this are that, (if you find a good match), you will have a team of people helping you make your book the best it can be and have the possibility of getting it on the shelf in a bookstore.  One of the downsides is that the traditional publishing world takes a lot longer than pushing the self publish button.</p>
-
-<p>With any luck, I&rsquo;ll have a clearer picture of this all in a bit and be able to share my experiences.  In the meantime, I encourage you to grab your keyboard and bring your book ideas to life.</p>
-
-<p>No matter the outcome, it&rsquo;s a rewarding journey.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2016/06/19/book-writing-for-the-busy-programmer//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
