@@ -14,7 +14,7 @@ categories:
 
 This is an introduction to the high level Clojure API for deep learning library [MXNet](http://mxnet.incubator.apache.org/).
 
-The module API provides an intermediate and high-level interface for performing computation with neural networks in MXNet. Module wraps a Symbol and one or more Executors. It has both a high level and intermediate level api.
+The module API provides an intermediate and high-level interface for performing computation with neural networks in MXNet.
 
 To follow along with this documentation, you can use this namespace to with the needed requires:
 
@@ -220,7 +220,7 @@ To assign parameter and aux state values, use `set-params` function.
 
 To resume training from a saved checkpoint, instead of calling `set-params`, directly call `fit`, passing the loaded parameters, so that `fit` knows to start from those parameters instead of initializing randomly
 
-Create fit-params, and then use it to set `begin-epoch` so that fit() knows to resume from a saved epoch.
+Create fit-params, and then use it to set `begin-epoch` so that `fit` knows to resume from a saved epoch.
 
 ```clojure
 ;; reset the training data before calling fit or you will get an error
