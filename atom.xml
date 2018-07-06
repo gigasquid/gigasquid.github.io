@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2018-07-05T19:53:27-04:00</updated>
+  <updated>2018-07-05T20:06:19-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -388,7 +388,7 @@
 
 <p>There are lots of examples in the package to check out, but a good place to start are the tutorials here <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial">https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial</a></p>
 
-<p>There is a blog walkthough here as well &ndash; <a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Meet Clojure MXNet NDArray</a></p>
+<p>There is a blog walkthough here as well &ndash; <a href="http://gigasquidsoftware.com/blog/2018/07/05/clojure-mxnet-the-module-api/">Clojure MXNet Module API</a></p>
 ]]></content>
   </entry>
   
