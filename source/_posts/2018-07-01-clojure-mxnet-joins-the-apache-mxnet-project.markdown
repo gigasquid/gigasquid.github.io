@@ -34,5 +34,5 @@ There are a few ways to get involved.
 
 There are lots of examples in the package to check out, but a good place to start are the tutorials here [https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial](https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial)
 
-There is a blog walkthough here as well - [Meet Clojure MXNet NDArray](http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/)
+There is a blog walkthough here as well - [Clojure MXNet Module API](http://gigasquidsoftware.com/blog/2018/07/05/clojure-mxnet-the-module-api/)
 
