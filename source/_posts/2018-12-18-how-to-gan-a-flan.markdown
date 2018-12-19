@@ -16,7 +16,7 @@ It's holiday time and that means parties and getting together with friends. Brin
 
 That is exactly what we are going to do. We are going to create a _flan_
 
-![Photo by Lucia Sanchez on Flick](https://c1.staticflickr.com/5/4065/4339500429_aa9c55f246_n.jpg)
+![Photo by Lucia Sanchez on Flickr](https://c1.staticflickr.com/5/4065/4339500429_aa9c55f246_n.jpg)
 
 
 If you've never had a flan before, it's a yummy dessert made of a baked custard with caramel sauce on it.
