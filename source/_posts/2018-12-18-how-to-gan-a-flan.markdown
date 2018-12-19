@@ -141,7 +141,7 @@ Here comes the fun part, watching it train and learn:
 
 ### Epoch 0
 
-{% img ../images/flan-random-128-0-0.jpg %}
+<img src="{{ root_url }}/images/flan-random-128-0-0.jpg" />
 
 In the beginning there was nothing but random noise.
 
