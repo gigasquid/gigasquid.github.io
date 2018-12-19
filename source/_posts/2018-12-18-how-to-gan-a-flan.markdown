@@ -126,7 +126,7 @@ Next, we iterate through all of our training images in our `flan-iter` with `red
 
 The whole code is [here](https://github.com/gigasquid/mxnet-gan-flan) for reference, but let's skip forward and run it and see what happens.
 
-{% img ../images/gout-96-0.jpg %}
+![]({{ site.url }}/images/gout-96-0.jpg)
 
 FLANS!! Well, they could be flans if you squint a bit.
 
