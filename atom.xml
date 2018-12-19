@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2018-12-19T11:33:21-05:00</updated>
+  <updated>2018-12-19T12:04:08-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -22,7 +22,7 @@
 
 <p>That is exactly what we are going to do. We are going to create a <em>flan</em></p>
 
-<p><img src="https://c1.staticflickr.com/5/4065/4339500429_aa9c55f246_n.jpg" alt="Photo by Lucia Sanchez on Flick" /></p>
+<p><img src="https://c1.staticflickr.com/5/4065/4339500429_aa9c55f246_n.jpg" alt="Photo by Lucia Sanchez on Flickr" /></p>
 
 <p>If you&rsquo;ve never had a flan before, it&rsquo;s a yummy dessert made of a baked custard with caramel sauce on it.</p>
 
@@ -170,7 +170,7 @@
 
 <p>The whole code is <a href="https://github.com/gigasquid/mxnet-gan-flan">here</a> for reference, but let&rsquo;s skip forward and run it and see what happens.</p>
 
-<p><img src="../images/gout-96-0.jpg"></p>
+<p><img src="http://gigasquid.github.io/images/gout-96-0.jpg" alt="" /></p>
 
 <p>FLANS!! Well, they could be flans if you squint a bit.</p>
 
