@@ -19,7 +19,7 @@ be Clojure, Robots, and AI lately.
 
 
 ## Past Talks
-* [Clojure Conj 2018 - Can you Gan?](https://www.youtube.com/watch?v=yzfnlcHtwiY)
+* [Clojure Conj 2018 - Can you GAN?](https://www.youtube.com/watch?v=yzfnlcHtwiY)
 * [Craft Conf 2018 - Unconvential Programming with Chemical Computing](https://craft-conf.com/)
 * [Clojure Conj 2017 - Deep Learning Needs Clojure](https://www.youtube.com/watch?v=eLl6_k_fZn4)
 * [Velocity Conf NY 2017 - Unconventional Programming Paradigms for the Future Now](https://conferences.oreilly.com/velocity/vl-ny)

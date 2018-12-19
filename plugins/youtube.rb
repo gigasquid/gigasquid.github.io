@@ -60,9 +60,10 @@ class YouTube < Liquid::Tag
     end
 
     # extract video information using a REST command
-    response = Net::HTTP.get_response("gdata.youtube.com","/feeds/api/videos/#{@id}?v=2&alt=jsonc")
-    data = response.body
-    result = JSON.parse(data)
+    #response = Net::HTTP.get_response("gdata.youtube.com","/feeds/api/videos/#{@id}?v=2&alt=jsonc")
+    #data = response.body
+    #result = JSON.parse(data)
+    result={}
 
     # if the hash has 'Error' as a key, we raise an error
     if result.has_key? 'Error'
@@ -71,9 +72,12 @@ class YouTube < Liquid::Tag
 
 
     # extract the title and description from the json string
-    @title = if result["data"] then result["data"]["title"] else "" end
-    @description = if result["data"] then result["data"]["description"] else "" end
+    #@title = if result["data"] then result["data"]["title"] else "" end
+    #@description = if result["data"] then result["data"]["description"] else "" end
 
+    @title=""
+    @description=""
+    
     puts " title #{@title}"
 
     @style = "width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/#{@id}/0.jpg) center center no-repeat;background-size:contain;position:absolute"
