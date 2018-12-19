@@ -1,0 +1,385 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>How to GAN a Flan - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="It&rsquo;s holiday time and that means parties and getting together with friends. Bringing a baked good or dessert to a gathering is a time honored &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/books/index.html">Books</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">How to GAN a Flan</h2>
+	<div class="entry-content"><p>It&rsquo;s holiday time and that means parties and getting together with friends. Bringing a baked good or dessert to a gathering is a time honored tradition. But what if this year, you could take it to the next level? Everyone brings actual food. But with the help of Deep Learning, you can bring something completely different &ndash;  you can bring the <em>image</em> of baked good! I&rsquo;m not talking about just any old image that someone captured with a camera or created with a pen and paper. I&rsquo;m talking about the computer itself <strong>creating</strong>. This image would be never before seen, totally unique, and crafted by the creative process of the machine.</p>
+
+<p>That is exactly what we are going to do. We are going to create a <em>flan</em></p>
+
+<p><img src="https://c1.staticflickr.com/5/4065/4339500429_aa9c55f246_n.jpg" alt="Photo by Lucia Sanchez on Flick" /></p>
+
+<p>If you&rsquo;ve never had a flan before, it&rsquo;s a yummy dessert made of a baked custard with caramel sauce on it.</p>
+
+<p>&ldquo;Why a flan?&rdquo;, you may ask. There are quite a few reasons:</p>
+
+<ul>
+<li>It&rsquo;s tasty in real life.</li>
+<li>Flan rhymes with GAN, <em>(unless you pronounce it &ldquo;Gaaahn&rdquo;)</em>.</li>
+<li>Why not?</li>
+</ul>
+
+
+<p>Onto the recipe. How are we actually going to make this work? We need some ingredients:</p>
+
+<ul>
+<li><a href="https://clojure.org/">Clojure</a> &ndash; the most advanced programming language to create generative desserts.</li>
+<li><a href="https://mxnet.apache.org">Apache MXNet</a> &ndash; a flexible and efficient deep learning library that has a Clojure package.</li>
+<li>1000-5000 pictures of flans &ndash; for Deep Learning you need data!</li>
+</ul>
+
+
+<h2>Gather Flan Pictures</h2>
+
+<p>The first thing you want to do is gather your 1000 or more images with a <a href="https://github.com/montoyamoraga/scrapers">scraper</a>. The scraper will crawl google, bing, or instagram and download pictures of <em>mostly</em> flans to your computer. You may have to eyeball and remove any clearly wrong ones from your stash.</p>
+
+<p>Next, you need to gather all these images in a directory and run a tool called <a href="https://github.com/apache/incubator-mxnet/blob/master/tools/im2rec.py">im2rec.py</a> on them to turn them into an <a href="https://mxnet.incubator.apache.org/tutorials/basic/data.html#loading-data-using-image-iterators">image record iterator</a> for use with MXNet. This will produce an optimized format that will allow our deep learning program to efficiently cycle through them.</p>
+
+<p>Run:</p>
+
+<pre><code>python3 im2rec.py --resize 28 root flan
+</code></pre>
+
+<p>to produce a <code>flan.rec</code> file with images resized to 28x28 that we can use next.</p>
+
+<h2>Load Flan Pictures into MXNet</h2>
+
+<p>The next step is to import the image record iterator into the MXNet with the <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">Clojure API</a>. We can do this with the <code>io</code> namespace.</p>
+
+<p>Add this to your require:</p>
+
+<pre><code>[org.apache.clojure-mxnet.io :as mx-io]
+</code></pre>
+
+<p>Now, we can load our images:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">flan-iter</span> <span class="p">(</span><span class="nf">mx-io/image-record-iter</span> <span class="p">{</span><span class="ss">:path-imgrec</span> <span class="s">&quot;flan.rec&quot;</span>
+</span><span class='line'>                                         <span class="ss">:data-shape</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]</span>
+</span><span class='line'>                                         <span class="ss">:batch-size</span> <span class="nv">batch-size</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, that we have the images, we need to create our <code>model</code>. This is what is actually going to do the learning and creating of images.</p>
+
+<h2>Creating a GAN model.</h2>
+
+<p>GAN stands for <em>Generative Adversarial Network</em>. This is a incredibly cool deep learning technique that has two different models pitted against each, yet both learning and getting better at the same time. The two models are a generator and a discriminator. The generator model creates a new image from a random noise vector. The discriminator then tries to tell whether the image is a real image or a fake image. We need to create both of these models for our network.</p>
+
+<p>First, the discriminator model. We are going to use the <code>symbol</code> namespace for the clojure package:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">discriminator</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/convolution</span> <span class="s">&quot;d1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>
+</span><span class='line'>                           <span class="ss">:kernel</span> <span class="p">[</span><span class="mi">4</span> <span class="mi">4</span><span class="p">]</span>
+</span><span class='line'>                           <span class="ss">:pad</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">3</span><span class="p">]</span>
+</span><span class='line'>                           <span class="ss">:stride</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">2</span><span class="p">]</span>
+</span><span class='line'>                           <span class="ss">:num-filter</span> <span class="nv">ndf</span>
+</span><span class='line'>                           <span class="ss">:no-bias</span> <span class="nv">true</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/batch-norm</span> <span class="s">&quot;dbn1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:fix-gamma</span> <span class="nv">true</span> <span class="ss">:eps</span> <span class="nv">eps</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/leaky-re-lu</span> <span class="s">&quot;dact1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;leaky&quot;</span> <span class="ss">:slope</span> <span class="mf">0.2</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is a variable for the <code>data</code> coming in, (which is the picture of the flan), it then flows through the other layers which consist of convolutions, normalization, and activation layers. The last three layers actually repeat another two times before ending in the output, which tells whether it thinks the image was a fake or not.</p>
+
+<p>The generator model looks similar:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">generator</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;rand&quot;</span><span class="p">)</span> <span class="nv">data</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/deconvolution</span> <span class="s">&quot;g1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>
+</span><span class='line'>                             <span class="ss">:kernel</span> <span class="p">[</span><span class="mi">4</span> <span class="mi">4</span><span class="p">]</span>
+</span><span class='line'>                             <span class="ss">:pad</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span><span class="p">]</span>
+</span><span class='line'>                             <span class="ss">:stride</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>                             <span class="ss">:num-filter</span>
+</span><span class='line'>                             <span class="p">(</span><span class="nb">* </span><span class="mi">4</span> <span class="nv">ndf</span><span class="p">)</span> <span class="ss">:no-bias</span> <span class="nv">true</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/batch-norm</span> <span class="s">&quot;gbn1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:fix-gamma</span> <span class="nv">true</span> <span class="ss">:eps</span> <span class="nv">eps</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;gact1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nv">...</span>
+</span><span class='line'>  
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is a variable for the <code>data</code> coming in, but this time it is a random noise vector. Another interesting point that is is using a <code>deconvolution</code> layer instead of a <code>convolution</code> layer. The generator is basically the inverse of the discriminator. It starts with a random noise vector, but that is translated up through the layers until it is expanded to a image output.</p>
+
+<p>Next, we iterate through all of our training images in our <code>flan-iter</code> with <code>reduce-batches</code>. Here is just an excerpt where we get a random noise vector and have the generator run the data through and produce the output image:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">mx-io/reduce-batches</span>
+</span><span class='line'>       <span class="nv">flan-iter</span>
+</span><span class='line'>       <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">n</span> <span class="nv">batch</span><span class="p">]</span>
+</span><span class='line'>         <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">rbatch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">rand-noise-iter</span><span class="p">)</span>
+</span><span class='line'>               <span class="nv">dbatch</span> <span class="p">(</span><span class="nf">mapv</span> <span class="nv">normalize-rgb-ndarray</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">))</span>
+</span><span class='line'>               <span class="nv">out-g</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">mod-g</span>
+</span><span class='line'>                         <span class="p">(</span><span class="nf">m/forward</span> <span class="nv">rbatch</span><span class="p">)</span>
+</span><span class='line'>                         <span class="p">(</span><span class="nf">m/outputs</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The whole code is <a href="https://github.com/gigasquid/mxnet-gan-flan">here</a> for reference, but let&rsquo;s skip forward and run it and see what happens.</p>
+
+<p><img src="../images/gout-96-0.jpg"></p>
+
+<p>FLANS!! Well, they could be flans if you squint a bit.</p>
+
+<p>Now that we have them kinda working for a small image size 28x28, let&rsquo;s biggerize it.</p>
+
+<h2>Turn on the Oven and Bake</h2>
+
+<p>Turning up the size to 128x128 requires some alterations in the layers&#8217; parameters to make sure that it processes and generates the correct size, but other than that we are good to go.</p>
+
+<p>Here comes the fun part, watching it train and learn:</p>
+
+<h3>Epoch 0</h3>
+
+<p><img src="http://gigasquid.github.io/images/flan-random-128-0-0.jpg" alt="" /></p>
+
+<p>In the beginning there was nothing but random noise.</p>
+
+<h3>Epoch 10</h3>
+
+<p><img src="http://gigasquid.github.io/images/flan-random-128-10-0.jpg" alt="" /></p>
+
+<p>It&rsquo;s beginning to learn colors! Red, yellow, brown seem to be important to flans.</p>
+
+<h3>Epoch 23</h3>
+
+<p><img src="http://gigasquid.github.io/images/flan-random-128-23-0.jpg" alt="" /></p>
+
+<p>It&rsquo;s learning shapes! It has learned that flans seem to be blob shaped.</p>
+
+<h3>Epoch 33</h3>
+
+<p><img src="http://gigasquid.github.io/images/flan-random-128-33-0.jpg" alt="" /></p>
+
+<p>It is moving into its surreal phase. Salvidor Dali would be proud of these flans.</p>
+
+<h3>Epoch 45</h3>
+
+<p><img src="http://gigasquid.github.io/images/flan-random-128-45.jpg" alt="" /></p>
+
+<p>Things take a weird turn. Does that flan have eyes?</p>
+
+<h3>Epoch 68</h3>
+
+<p><img src="http://gigasquid.github.io/images/flan-random-128-68-0.jpg" alt="" /></p>
+
+<p>Even worse. Are those demonic flans? Should we even continue down this path?</p>
+
+<p>Answer: Yes &ndash; <strong>the training must go on..</strong></p>
+
+<h3>Epoch 161</h3>
+
+<p><img src="http://gigasquid.github.io/images/flan-random-161-0.jpg" alt="" /></p>
+
+<p>Big moment here. It looks like something that could possibly be edible.</p>
+
+<h3>Epoch 170</h3>
+
+<p><img src="http://gigasquid.github.io/images/flan-random-170-0.jpg" alt="" /></p>
+
+<p>Ick! Green Flans! No one is going to want that.</p>
+
+<h3>Epoch 195</h3>
+
+<p><img src="http://gigasquid.github.io/images/explore-195.jpg" alt="" /></p>
+
+<p>We&rsquo;ve achieved maximum flan, (for the time being).</p>
+
+<h2>Explore</h2>
+
+<p>If you are interested in playing around with the pretrained model, you can check it out <a href="https://github.com/gigasquid/mxnet-gan-flan/blob/master/src/mxnet_gan_flan/gan.clj#L355">here with the pretrained function</a>.
+It will load up the trained model and generate flans for you to explore and bring to your dinner parties.</p>
+
+<p>Wrapping up, training GANs is a <em>lot</em> of fun. With MXNet, you can bring the fun with you to Clojure.</p>
+
+<p>Want more, check out this Clojure Conj video &ndash;  <a href="https://www.youtube.com/watch?v=yzfnlcHtwiY">Can You GAN?</a>.</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2018/12/18/how-to-gan-a-flan/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2018
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2018/12/18/how-to-gan-a-flan/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2018/12/18/how-to-gan-a-flan/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>
