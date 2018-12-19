@@ -6,7 +6,7 @@
 	<title>Squid's Blog</title>
     <meta name="author" content="Carin Meier">
     
-	<meta name="description" content="Published on: Aug 17th, 2010 Tags: All, Development I am cruising along in my morning. I have a cup of tea in my hand and a good outlook on my tasks &hellip;">
+	<meta name="description" content="Published on: Aug 19th, 2010 Tags: All, Ruby In honor of the Ruby Why Day, I was inspired to dabble in Ruby Blocks after being reading &ldquo;Fox In &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +73,74 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/08/19/fox-in-socks-blocks/">
+		
+			Fox in Socks Blocks</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-19T22:43:34-04:00" pubdate data-updated="true">Aug 19<span>th</span>, 2010</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+
+
+</div>
+    </div>
+		<p>In honor of the Ruby <a href="http://www.globalnerdy.com/2010/08/19/whyday-today-august-19th/">Why Day</a>, I was inspired to dabble in Ruby Blocks after being reading &ldquo;Fox In Socks&rdquo; multiple times to my children before bed.  For all of you parents out there that have read the book many, many times while your children are giggling at your pronunciation difficulties, I am sure this bit will be familiar:</p>
+
+<pre><code>def fox_in_socks_blocks
+  chicks_bricks = ["Chicks","bricks","blocks","clocks"]
+  yield chicks_bricks[0..1]
+  yield [chicks_bricks[0],chicks_bricks[2]]
+  yield chicks_bricks
+end
+
+fox_in_socks_blocks do |sillywords|
+  puts "#{sillywords[0]} with #{sillywords[1]} come." if sillywords.size &lt; 3
+  puts "#{sillywords[0]} with #{sillywords[1]} and #{sillywords[2]} and #{sillywords[3]} come." if sillywords.size &gt;= 3
+end
+</code></pre>
+
+<p>That&rsquo;s right &ndash; the output is:
+<code>
+Chicks with bricks come.
+Chicks with blocks come.
+Chicks with bricks and blocks and clocks come.
+</code></p>
+
+<p>Is your tongue numb?</p>
+
+<p>Happy Why Day!</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2010/08/19/fox-in-socks-blocks//blog/page/10/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
