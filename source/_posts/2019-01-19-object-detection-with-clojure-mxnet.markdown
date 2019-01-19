@@ -10,7 +10,7 @@ categories:
 - MXNet
 ---
 
-![]({{ site.url }}/images/object-detection-dog.jpg)
+![](https://c1.staticflickr.com/8/7837/32928474208_4960caafb3.jpg)
 
 Object detection just landed in MXNet thanks to the work of contributors [Kedar Bellare](https://github.com/kedarbellare) and [Nicolas Modrzyk](https://github.com/hellonico/). Kedar ported over the `infer` package to Clojure, making inference and prediction much easier for users and Nicolas integrated in his [Origami](https://github.com/hellonico/origami) OpenCV library into the the examples to make the visualizations happen.
 
@@ -85,7 +85,7 @@ which you can then use to draw bounding boxes on the image.
 
 ### Try Running the Example
 
-![]({{ site.url }}/images/object-detection-bike-dog.jpg)
+![](https://c1.staticflickr.com/8/7804/31862638207_61be3a6e3c_b.jpg)
 
 One of the best ways to explore using it is with the [object detection example](https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/infer/objectdetector) in the MXNet repo. It will be coming out officially in the `1.5.0` release, but you can get an early peek at it by building the project and running the example with the nightly snapshot.
 
