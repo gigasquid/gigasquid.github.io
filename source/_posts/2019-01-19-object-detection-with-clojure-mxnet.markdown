@@ -134,7 +134,7 @@ Next, go ahead and do `lein test` to make sure that everything builds ok. If you
 
 After that do a `lein install` to install the `clojure-mxnet` jar to your local maven. Now you are ready to `cd examples/infer/object-detection` to try it out. Refer to the README for more details.
 
-If you run into any problems getting started, feel free to reach out in the Clojarian #mxnet slack room or open an issue at the MXNet project. We are a friendly group and happy to help out.
+If you run into any problems getting started, feel free to reach out in the Clojurian #mxnet slack room or open an issue at the MXNet project. We are a friendly group and happy to help out.
 
 Thanks again to the community for the contributions to make this possible. It's great seeing new things coming to life.
 
