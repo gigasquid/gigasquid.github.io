@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MXNet | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/mxnet/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-01-19T15:27:01-05:00</updated>
+  <updated>2019-01-19T16:31:02-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -50,7 +50,7 @@
 <p>```</p>
 
 <ul>
-<li>The shape is going to be <code>[1 3 512 513]</code>.
+<li>The shape is going to be <code>[1 3 512 512]</code>.
 
 <ul>
 <li>The <code>1</code> is for the batch size which in our case is a single image.</li>
