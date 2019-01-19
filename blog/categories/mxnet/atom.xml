@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MXNet | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/mxnet/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-01-19T15:03:44-05:00</updated>
+  <updated>2019-01-19T15:27:01-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -22,7 +22,7 @@
 
 <p>Object detection just landed in MXNet thanks to the work of contributors <a href="https://github.com/kedarbellare">Kedar Bellare</a> and <a href="https://github.com/hellonico/">Nicolas Modrzyk</a>. Kedar ported over the <code>infer</code> package to Clojure, making inference and prediction much easier for users and Nicolas integrated in his <a href="https://github.com/hellonico/origami">Origami</a> OpenCV library into the the examples to make the visualizations happen.</p>
 
-<p>We&rsquo;ll walk through the main steps to use the <code>infer</code> objection which include creating the detector with a model and then loading the image and running the inference on it.</p>
+<p>We&rsquo;ll walk through the main steps to use the <code>infer</code> object detection which include creating the detector with a model and then loading the image and running the inference on it.</p>
 
 <h3>Creating the Detector</h3>
 
