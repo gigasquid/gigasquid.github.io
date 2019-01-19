@@ -36,7 +36,7 @@ In the code below, we are going to be giving it an color image of size 512 x 512
     (infer/create-object-detector factory)))
 ```
 
- * The shape is going to be `[1 3 512 513]`. 
+ * The shape is going to be `[1 3 512 512]`. 
     * The `1` is for the batch size which in our case is a single image.
     * The `3` is for the channels in the image which for a RGB image is `3`
     * The `512` is for the image height and width.
