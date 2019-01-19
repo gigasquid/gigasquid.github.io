@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-01-19T16:31:02-05:00</updated>
+  <updated>2019-01-19T16:41:42-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -165,7 +165,7 @@ If you are running on linux, you should change the</code>mxnet-full_2.11-osx-x86
 
 <p>After that do a <code>lein install</code> to install the <code>clojure-mxnet</code> jar to your local maven. Now you are ready to <code>cd examples/infer/object-detection</code> to try it out. Refer to the README for more details.</p>
 
-<p>If you run into any problems getting started, feel free to reach out in the Clojarian #mxnet slack room or open an issue at the MXNet project. We are a friendly group and happy to help out.</p>
+<p>If you run into any problems getting started, feel free to reach out in the Clojurian #mxnet slack room or open an issue at the MXNet project. We are a friendly group and happy to help out.</p>
 
 <p>Thanks again to the community for the contributions to make this possible. It&rsquo;s great seeing new things coming to life.</p>
 
