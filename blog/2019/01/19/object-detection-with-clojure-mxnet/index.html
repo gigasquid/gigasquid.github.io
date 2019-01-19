@@ -1,0 +1,350 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Object Detection with Clojure MXNet - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="Object detection just landed in MXNet thanks to the work of contributors Kedar Bellare and Nicolas Modrzyk. Kedar ported over the infer package to &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/books/index.html">Books</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Object Detection With Clojure MXNet</h2>
+	<div class="entry-content"><p><img src="http://gigasquid.github.io/images/object-detection-dog.jpg" alt="" /></p>
+
+<p>Object detection just landed in MXNet thanks to the work of contributors <a href="https://github.com/kedarbellare">Kedar Bellare</a> and <a href="https://github.com/hellonico/">Nicolas Modrzyk</a>. Kedar ported over the <code>infer</code> package to Clojure, making inference and prediction much easier for users and Nicolas integrated in his <a href="https://github.com/hellonico/origami">Origami</a> OpenCV library into the the examples to make the visualizations happen.</p>
+
+<p>We&rsquo;ll walk through the main steps to use the <code>infer</code> objection which include creating the detector with a model and then loading the image and running the inference on it.</p>
+
+<h3>Creating the Detector</h3>
+
+<p>To create the detector you need to define a couple of things:</p>
+
+<ul>
+<li>How big is your image?</li>
+<li>What model are you going to be using for object detection?</li>
+</ul>
+
+
+<p>In the code below, we are going to be giving it an color image of size 512 x 512.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">create-detector</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">descriptors</span> <span class="p">[{</span><span class="ss">:name</span> <span class="s">&quot;data&quot;</span>
+</span><span class='line'>                      <span class="ss">:shape</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">3</span> <span class="mi">512</span> <span class="mi">512</span><span class="p">]</span>
+</span><span class='line'>                      <span class="ss">:layout</span> <span class="nv">layout/NCHW</span>
+</span><span class='line'>                      <span class="ss">:dtype</span> <span class="nv">dtype/FLOAT32</span><span class="p">}]</span>
+</span><span class='line'>        <span class="nv">factory</span> <span class="p">(</span><span class="nf">infer/model-factory</span> <span class="nv">model-path-prefix</span> <span class="nv">descriptors</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">infer/create-object-detector</span> <span class="nv">factory</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>The shape is going to be <code>[1 3 512 513]</code>.
+
+<ul>
+<li>The <code>1</code> is for the batch size which in our case is a single image.</li>
+<li>The <code>3</code> is for the channels in the image which for a RGB image is <code>3</code></li>
+<li>The <code>512</code> is for the image height and width.</li>
+</ul>
+</li>
+<li>The <code>layout</code> specifies that the shape given is in terms of <code>NCHW</code> which is batch size, channel size, height, and width.</li>
+<li>The <code>dtype</code> is the image data type which will be the standard <code>FLOAT32</code></li>
+<li>The <code>model-path-prefix</code> points to the place where the trained model we are using for object detection lives.</li>
+</ul>
+
+
+<p>The model we are going to use is the <a href="https://arxiv.org/abs/1512.02325">Single Shot Multiple Box Object Detector (SSD)</a>. You can download the model yourself using this <a href="https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/examples/infer/objectdetector/scripts/get_ssd_data.sh">script</a>.</p>
+
+<h3>How to Load an Image and Run the Detector</h3>
+
+<p>Now that we have a model and a detector, we can load an image up and run the object detection.</p>
+
+<p>To load the image use <code>load-image</code> which will load the image from the path.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">infer/load-image-from-file</span> <span class="nv">input-image</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then run the detection using <code>infer/detect-objects</code> which will give you the top five predictions by default.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">infer/detect-objects</span> <span class="nv">detector</span> <span class="nv">image</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It will give an output something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[[{</span><span class="ss">:class</span> <span class="s">&quot;person&quot;</span>,
+</span><span class='line'>   <span class="ss">:prob</span> <span class="mf">0.9657765</span>,
+</span><span class='line'>   <span class="ss">:x-min</span> <span class="mf">0.021868259</span>,
+</span><span class='line'>   <span class="ss">:y-min</span> <span class="mf">0.049295247</span>,
+</span><span class='line'>   <span class="ss">:x-max</span> <span class="mf">0.9975169</span>,
+</span><span class='line'>   <span class="ss">:y-max</span> <span class="mf">0.9734151</span><span class="p">}</span>
+</span><span class='line'>  <span class="p">{</span><span class="ss">:class</span> <span class="s">&quot;dog&quot;</span>,
+</span><span class='line'>   <span class="ss">:prob</span> <span class="mf">0.17513266</span>,
+</span><span class='line'>   <span class="ss">:x-min</span> <span class="mf">0.16772352</span>,
+</span><span class='line'>   <span class="ss">:y-min</span> <span class="mf">0.45792937</span>,
+</span><span class='line'>   <span class="ss">:x-max</span> <span class="mf">0.55409217</span>,
+</span><span class='line'>   <span class="ss">:y-max</span> <span class="mf">0.72507095</span><span class="p">}</span>
+</span><span class='line'>   <span class="nv">...</span>
+</span><span class='line'><span class="p">]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>which you can then use to draw bounding boxes on the image.</p>
+
+<h3>Try Running the Example</h3>
+
+<p><img src="http://gigasquid.github.io/images/object-detection-bike-dog.jpg" alt="" /></p>
+
+<p>One of the best ways to explore using it is with the <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/infer/objectdetector">object detection example</a> in the MXNet repo. It will be coming out officially in the <code>1.5.0</code> release, but you can get an early peek at it by building the project and running the example with the nightly snapshot.</p>
+
+<p>You can do this by cloning the <a href="https://github.com/apache/incubator-mxnet">MXNet Repo</a> and changing directory to <code>contrib/clojure-package</code>.</p>
+
+<p>Next, edit the <code>project.clj</code> to look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defproject </span><span class="nv">org.apache.mxnet.contrib.clojure/clojure-mxnet</span> <span class="s">&quot;1.5.0-SNAPSHOT&quot;</span>
+</span><span class='line'>  <span class="ss">:description</span> <span class="s">&quot;Clojure package for MXNet&quot;</span>
+</span><span class='line'>  <span class="ss">:url</span> <span class="s">&quot;https://github.com/apache/incubator-mxnet&quot;</span>
+</span><span class='line'>  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Apache License&quot;</span>
+</span><span class='line'>            <span class="ss">:url</span> <span class="s">&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">org.clojure/clojure</span> <span class="s">&quot;1.9.0&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">t6/from-scala</span> <span class="s">&quot;0.3.0&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>                 <span class="c1">;; To use with nightly snapshot</span>
+</span><span class='line'>                 <span class="c1">;[org.apache.mxnet/mxnet-full_2.11-osx-x86_64-cpu &quot;&lt;insert-snapshot-version&gt;&quot;]</span>
+</span><span class='line'>                 <span class="c1">;[org.apache.mxnet/mxnet-full_2.11-linux-x86_64-cpu &quot;&lt;insert-snapshot-version&gt;&quot;]</span>
+</span><span class='line'>                 <span class="c1">;[org.apache.mxnet/mxnet-full_2.11-linux-x86_64-gpu &quot;&lt;insert-snapshot-version&quot;]</span>
+</span><span class='line'>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.apache.mxnet/mxnet-full_2.11-osx-x86_64-cpu</span> <span class="s">&quot;1.5.0-SNAPSHOT&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>                 <span class="c1">;;; CI</span>
+</span><span class='line'>                 <span class="o">#</span><span class="nv">_</span><span class="p">[</span><span class="nv">org.apache.mxnet/mxnet-full_2.11</span> <span class="s">&quot;INTERNAL&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.clojure/tools.logging</span> <span class="s">&quot;0.4.0&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.apache.logging.log4j/log4j-core</span> <span class="s">&quot;2.8.1&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.apache.logging.log4j/log4j-api</span> <span class="s">&quot;2.8.1&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.slf4j/slf4j-log4j12</span> <span class="s">&quot;1.7.25&quot;</span> <span class="ss">:exclusions</span> <span class="p">[</span><span class="nv">org.slf4j/slf4j-api</span><span class="p">]]]</span>
+</span><span class='line'>  <span class="ss">:pedantic?</span> <span class="ss">:skip</span>
+</span><span class='line'>  <span class="ss">:plugins</span> <span class="p">[[</span><span class="nv">lein-codox</span> <span class="s">&quot;0.10.3&quot;</span> <span class="ss">:exclusions</span> <span class="p">[</span><span class="nv">org.clojure/clojure</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">lein-cloverage</span> <span class="s">&quot;1.0.10&quot;</span> <span class="ss">:exclusions</span> <span class="p">[</span><span class="nv">org.clojure/clojure</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">lein-cljfmt</span> <span class="s">&quot;0.5.7&quot;</span><span class="p">]]</span>
+</span><span class='line'>  <span class="ss">:codox</span> <span class="p">{</span><span class="ss">:namespaces</span> <span class="p">[</span><span class="o">#</span><span class="s">&quot;^org\.apache\.clojure-mxnet\.(?!gen).*&quot;</span><span class="p">]}</span>
+</span><span class='line'>  <span class="ss">:aot</span> <span class="p">[</span><span class="nv">dev.generator</span><span class="p">]</span>
+</span><span class='line'>  <span class="ss">:repositories</span> <span class="p">[[</span><span class="s">&quot;staging&quot;</span> <span class="p">{</span><span class="ss">:url</span> <span class="s">&quot;https://repository.apache.org/content/repositories/staging&quot;</span>                  <span class="ss">:snapshots</span> <span class="nv">true</span>
+</span><span class='line'>                             <span class="ss">:update</span> <span class="ss">:always</span><span class="p">}]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="s">&quot;snapshots&quot;</span> <span class="p">{</span><span class="ss">:url</span> <span class="s">&quot;https://repository.apache.org/content/repositories/snapshots&quot;</span>               <span class="ss">:snapshots</span> <span class="nv">true</span>
+</span><span class='line'>                              <span class="ss">:update</span> <span class="ss">:always</span><span class="p">}]])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are running on linux, you should change the <code>mxnet-full_2.11-osx-x86_64-cpu</code> to <code>mxnet-full_2.11-linux-x86_64-cpu</code>.</p>
+
+<p>Next, go ahead and do <code>lein test</code> to make sure that everything builds ok. If you run into any trouble please refer to <a href="https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/README.md">README</a> for any missing dependencies.</p>
+
+<p>After that do a <code>lein install</code> to install the <code>clojure-mxnet</code> jar to your local maven. Now you are ready to <code>cd examples/infer/object-detection</code> to try it out. Refer to the README for more details.</p>
+
+<p>If you run into any problems getting started, feel free to reach out in the Clojarian #mxnet slack room or open an issue at the MXNet project. We are a friendly group and happy to help out.</p>
+
+<p>Thanks again to the community for the contributions to make this possible. It&rsquo;s great seeing new things coming to life.</p>
+
+<p>Happy Object Detecting!</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2019/01/19/object-detection-with-clojure-mxnet/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2019
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2019/01/19/object-detection-with-clojure-mxnet/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2019/01/19/object-detection-with-clojure-mxnet/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

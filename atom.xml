@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2018-12-19T12:04:08-05:00</updated>
+  <updated>2019-01-19T14:46:06-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,207 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Object Detection with Clojure MXNet]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/01/19/object-detection-with-clojure-mxnet/"/>
+    <updated>2019-01-19T13:34:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/01/19/object-detection-with-clojure-mxnet</id>
+    <content type="html"><![CDATA[<p><img src="http://gigasquid.github.io/images/object-detection-dog.jpg" alt="" /></p>
+
+<p>Object detection just landed in MXNet thanks to the work of contributors <a href="https://github.com/kedarbellare">Kedar Bellare</a> and <a href="https://github.com/hellonico/">Nicolas Modrzyk</a>. Kedar ported over the <code>infer</code> package to Clojure, making inference and prediction much easier for users and Nicolas integrated in his <a href="https://github.com/hellonico/origami">Origami</a> OpenCV library into the the examples to make the visualizations happen.</p>
+
+<p>We&rsquo;ll walk through the main steps to use the <code>infer</code> objection which include creating the detector with a model and then loading the image and running the inference on it.</p>
+
+<h3>Creating the Detector</h3>
+
+<p>To create the detector you need to define a couple of things:</p>
+
+<ul>
+<li>How big is your image?</li>
+<li>What model are you going to be using for object detection?</li>
+</ul>
+
+
+<p>In the code below, we are going to be giving it an color image of size 512 x 512.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">create-detector</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">descriptors</span> <span class="p">[{</span><span class="ss">:name</span> <span class="s">&quot;data&quot;</span>
+</span><span class='line'>                      <span class="ss">:shape</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">3</span> <span class="mi">512</span> <span class="mi">512</span><span class="p">]</span>
+</span><span class='line'>                      <span class="ss">:layout</span> <span class="nv">layout/NCHW</span>
+</span><span class='line'>                      <span class="ss">:dtype</span> <span class="nv">dtype/FLOAT32</span><span class="p">}]</span>
+</span><span class='line'>        <span class="nv">factory</span> <span class="p">(</span><span class="nf">infer/model-factory</span> <span class="nv">model-path-prefix</span> <span class="nv">descriptors</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">infer/create-object-detector</span> <span class="nv">factory</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>The shape is going to be <code>[1 3 512 513]</code>.
+
+<ul>
+<li>The <code>1</code> is for the batch size which in our case is a single image.</li>
+<li>The <code>3</code> is for the channels in the image which for a RGB image is <code>3</code></li>
+<li>The <code>512</code> is for the image height and width.</li>
+</ul>
+</li>
+<li>The <code>layout</code> specifies that the shape given is in terms of <code>NCHW</code> which is batch size, channel size, height, and width.</li>
+<li>The <code>dtype</code> is the image data type which will be the standard <code>FLOAT32</code></li>
+<li>The <code>model-path-prefix</code> points to the place where the trained model we are using for object detection lives.</li>
+</ul>
+
+
+<p>The model we are going to use is the <a href="https://arxiv.org/abs/1512.02325">Single Shot Multiple Box Object Detector (SSD)</a>. You can download the model yourself using this <a href="https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/examples/infer/objectdetector/scripts/get_ssd_data.sh">script</a>.</p>
+
+<h3>How to Load an Image and Run the Detector</h3>
+
+<p>Now that we have a model and a detector, we can load an image up and run the object detection.</p>
+
+<p>To load the image use <code>load-image</code> which will load the image from the path.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">infer/load-image-from-file</span> <span class="nv">input-image</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then run the detection using <code>infer/detect-objects</code> which will give you the top five predictions by default.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">infer/detect-objects</span> <span class="nv">detector</span> <span class="nv">image</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It will give an output something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[[{</span><span class="ss">:class</span> <span class="s">&quot;person&quot;</span>,
+</span><span class='line'>   <span class="ss">:prob</span> <span class="mf">0.9657765</span>,
+</span><span class='line'>   <span class="ss">:x-min</span> <span class="mf">0.021868259</span>,
+</span><span class='line'>   <span class="ss">:y-min</span> <span class="mf">0.049295247</span>,
+</span><span class='line'>   <span class="ss">:x-max</span> <span class="mf">0.9975169</span>,
+</span><span class='line'>   <span class="ss">:y-max</span> <span class="mf">0.9734151</span><span class="p">}</span>
+</span><span class='line'>  <span class="p">{</span><span class="ss">:class</span> <span class="s">&quot;dog&quot;</span>,
+</span><span class='line'>   <span class="ss">:prob</span> <span class="mf">0.17513266</span>,
+</span><span class='line'>   <span class="ss">:x-min</span> <span class="mf">0.16772352</span>,
+</span><span class='line'>   <span class="ss">:y-min</span> <span class="mf">0.45792937</span>,
+</span><span class='line'>   <span class="ss">:x-max</span> <span class="mf">0.55409217</span>,
+</span><span class='line'>   <span class="ss">:y-max</span> <span class="mf">0.72507095</span><span class="p">}</span>
+</span><span class='line'>   <span class="nv">...</span>
+</span><span class='line'><span class="p">]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>which you can then use to draw bounding boxes on the image.</p>
+
+<h3>Try Running the Example</h3>
+
+<p><img src="http://gigasquid.github.io/images/object-detection-bike-dog.jpg" alt="" /></p>
+
+<p>One of the best ways to explore using it is with the <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/infer/objectdetector">object detection example</a> in the MXNet repo. It will be coming out officially in the <code>1.5.0</code> release, but you can get an early peek at it by building the project and running the example with the nightly snapshot.</p>
+
+<p>You can do this by cloning the <a href="https://github.com/apache/incubator-mxnet">MXNet Repo</a> and changing directory to <code>contrib/clojure-package</code>.</p>
+
+<p>Next, edit the <code>project.clj</code> to look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defproject </span><span class="nv">org.apache.mxnet.contrib.clojure/clojure-mxnet</span> <span class="s">&quot;1.5.0-SNAPSHOT&quot;</span>
+</span><span class='line'>  <span class="ss">:description</span> <span class="s">&quot;Clojure package for MXNet&quot;</span>
+</span><span class='line'>  <span class="ss">:url</span> <span class="s">&quot;https://github.com/apache/incubator-mxnet&quot;</span>
+</span><span class='line'>  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Apache License&quot;</span>
+</span><span class='line'>            <span class="ss">:url</span> <span class="s">&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">org.clojure/clojure</span> <span class="s">&quot;1.9.0&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">t6/from-scala</span> <span class="s">&quot;0.3.0&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>                 <span class="c1">;; To use with nightly snapshot</span>
+</span><span class='line'>                 <span class="c1">;[org.apache.mxnet/mxnet-full_2.11-osx-x86_64-cpu &quot;&lt;insert-snapshot-version&gt;&quot;]</span>
+</span><span class='line'>                 <span class="c1">;[org.apache.mxnet/mxnet-full_2.11-linux-x86_64-cpu &quot;&lt;insert-snapshot-version&gt;&quot;]</span>
+</span><span class='line'>                 <span class="c1">;[org.apache.mxnet/mxnet-full_2.11-linux-x86_64-gpu &quot;&lt;insert-snapshot-version&quot;]</span>
+</span><span class='line'>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.apache.mxnet/mxnet-full_2.11-osx-x86_64-cpu</span> <span class="s">&quot;1.5.0-SNAPSHOT&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>                 <span class="c1">;;; CI</span>
+</span><span class='line'>                 <span class="o">#</span><span class="nv">_</span><span class="p">[</span><span class="nv">org.apache.mxnet/mxnet-full_2.11</span> <span class="s">&quot;INTERNAL&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.clojure/tools.logging</span> <span class="s">&quot;0.4.0&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.apache.logging.log4j/log4j-core</span> <span class="s">&quot;2.8.1&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.apache.logging.log4j/log4j-api</span> <span class="s">&quot;2.8.1&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.slf4j/slf4j-log4j12</span> <span class="s">&quot;1.7.25&quot;</span> <span class="ss">:exclusions</span> <span class="p">[</span><span class="nv">org.slf4j/slf4j-api</span><span class="p">]]]</span>
+</span><span class='line'>  <span class="ss">:pedantic?</span> <span class="ss">:skip</span>
+</span><span class='line'>  <span class="ss">:plugins</span> <span class="p">[[</span><span class="nv">lein-codox</span> <span class="s">&quot;0.10.3&quot;</span> <span class="ss">:exclusions</span> <span class="p">[</span><span class="nv">org.clojure/clojure</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">lein-cloverage</span> <span class="s">&quot;1.0.10&quot;</span> <span class="ss">:exclusions</span> <span class="p">[</span><span class="nv">org.clojure/clojure</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">lein-cljfmt</span> <span class="s">&quot;0.5.7&quot;</span><span class="p">]]</span>
+</span><span class='line'>  <span class="ss">:codox</span> <span class="p">{</span><span class="ss">:namespaces</span> <span class="p">[</span><span class="o">#</span><span class="s">&quot;^org\.apache\.clojure-mxnet\.(?!gen).*&quot;</span><span class="p">]}</span>
+</span><span class='line'>  <span class="ss">:aot</span> <span class="p">[</span><span class="nv">dev.generator</span><span class="p">]</span>
+</span><span class='line'>  <span class="ss">:repositories</span> <span class="p">[[</span><span class="s">&quot;staging&quot;</span> <span class="p">{</span><span class="ss">:url</span> <span class="s">&quot;https://repository.apache.org/content/repositories/staging&quot;</span>                  <span class="ss">:snapshots</span> <span class="nv">true</span>
+</span><span class='line'>                             <span class="ss">:update</span> <span class="ss">:always</span><span class="p">}]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="s">&quot;snapshots&quot;</span> <span class="p">{</span><span class="ss">:url</span> <span class="s">&quot;https://repository.apache.org/content/repositories/snapshots&quot;</span>               <span class="ss">:snapshots</span> <span class="nv">true</span>
+</span><span class='line'>                              <span class="ss">:update</span> <span class="ss">:always</span><span class="p">}]])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are running on linux, you should change the <code>mxnet-full_2.11-osx-x86_64-cpu</code> to <code>mxnet-full_2.11-linux-x86_64-cpu</code>.</p>
+
+<p>Next, go ahead and do <code>lein test</code> to make sure that everything builds ok. If you run into any trouble please refer to <a href="https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/README.md">README</a> for any missing dependencies.</p>
+
+<p>After that do a <code>lein install</code> to install the <code>clojure-mxnet</code> jar to your local maven. Now you are ready to <code>cd examples/infer/object-detection</code> to try it out. Refer to the README for more details.</p>
+
+<p>If you run into any problems getting started, feel free to reach out in the Clojarian #mxnet slack room or open an issue at the MXNet project. We are a friendly group and happy to help out.</p>
+
+<p>Thanks again to the community for the contributions to make this possible. It&rsquo;s great seeing new things coming to life.</p>
+
+<p>Happy Object Detecting!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to GAN a Flan]]></title>
@@ -3533,69 +3734,6 @@ Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles
 <p>The best feedback systems are distributed and multi-layered. A single market feedback signal to the CEO is good, but much better is one that gets shared among the many facets of a company.  A distributed and interconnected network of feedback will help companies and projects be responsive, fast, nimble, and resilient.</p>
 
 <p>The next time you hear, &ldquo;How can we go faster&rdquo;?&ldquo; ask the question &#8220;How can we increase feedback?&rdquo;  You&rsquo;ll be on the right track to fly.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Gigasquid's Radar 2015]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/12/08/gigasquids-radar-2015/"/>
-    <updated>2015-12-08T17:36:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/12/08/gigasquids-radar-2015</id>
-    <content type="html"><![CDATA[<p><img src="http://c1.staticflickr.com/1/627/23249736219_dfa625309b_c.jpg"></p>
-
-<p>It&rsquo;s that time of the year again for <em>radars</em>.  Since I made <a href="http://gigasquidsoftware.com/blog/2014/12/17/gigasquids-radar-2014/">one last year</a>, I decided to continue the tradition and make one this year.</p>
-
-<h2>Languages</h2>
-
-<p>No changes from last year for Clojure and Pixie.</p>
-
-<ul>
-<li><em>Adopt</em>: Clojure &ndash; It is fantastic language.</li>
-<li><em>Trial</em>: <a href="https://github.com/pixie-lang/pixie">Pixie</a> &ndash; The language continues to grow and improve and has a great community &ndash; and it is a LISP.</li>
-<li><em>Assess</em>: <a href="http://elixir-lang.org/">Elixir</a> &ndash; Another great functional language leveraging the Erlang VM.   It has a lot of energy in the community.</li>
-<li><em>Hold</em>: Java &ndash; There are plenty of other great alternatives out there on the JVM.</li>
-</ul>
-
-
-<h2>Cute Animals</h2>
-
-<p>Alpacas have moved up from <em>trial</em> last year, and Llamas to <em>hold</em>.  Alpacas are clearly more fluffy.</p>
-
-<ul>
-<li><em>Adopt</em>: <a href="http://www.preciousanimals.com/wp-content/plugins/woo-tumblog/functions/thumb.php?src=wp-content/uploads/2012/03/Cute-Animals-4e41e26ba45d7.jpg&amp;w=530&amp;h=&amp;zc=1&amp;q=90">Alpacas</a> &ndash; Like llamas only fluffier.</li>
-<li><em>Trial</em>: <a href="http://www.animalfactguide.com/wp-content/uploads/2013/08/quokka1.jpg">Quokkas</a> &ndash; Where does Australia get this <a href="https://en.wikipedia.org/wiki/Quokka">cutie</a>?</li>
-<li><em>Assess</em>: <a href="http://apod.nasa.gov/apod/image/1303/tardigrade_eyeofscience_1024.jpg">Tardigrades &ndash; or Water Bear</a> &ndash; They are the cutest microscopic creature out there.</li>
-<li><em>Hold</em>: <a href="http://www.llamas.org/imgs/corner.jpg">Llamas</a> &ndash; Not as fluffy as they could be.</li>
-</ul>
-
-
-<h2>Artificial Intelligence</h2>
-
-<p>I haven&rsquo;t been too into robots this year, so the category has been changed to AI.</p>
-
-<ul>
-<li><em>Adopt</em>: <a href="http://www.cs.waikato.ac.nz/~ml/weka/">Weka</a> &ndash; A collection of machine learning algorithms and explorers.  I was very impressed with it when I tried it on a <a href="http://gigasquidsoftware.com/blog/2015/10/20/speech-act-classification-for-text-with-clojure/">speech acts classifier project</a>.</li>
-<li><em>Trial</em>: <a href="http://deeplearning4j.org/word2vec.html">Word Vectors</a> &ndash; A way to encode words and leverage training so that you can see the relation between them.  For example, a dog is closer to the word wolf than cat.</li>
-<li><em>Assess</em>: <a href="https://www.tensorflow.org/">Tensor Flow</a> &ndash; I have only scratched the surface with this, but it is an exciting open source computational pipeline for machine learning (and other things).  The tutorials are pretty amazing in quality alone.</li>
-<li><em>Hold</em>: <a href="https://en.wikipedia.org/wiki/Inference#Automatic_logical_inference">Logical Inference</a> &ndash; This is pretty bold, but I base it on Professor Geoff Hinton&rsquo;s Deep Learning <a href="https://www.youtube.com/watch?v=IcOMKXAw5VA&amp;feature=youtu.be">talk</a> (at 33:00)  where he explains that thought vectors, (made from word vectors), will be able to perform natural reasoning with only linear algebra.  The grand dream of old fashioned strong AI, will then be realized in a completely different way.</li>
-</ul>
-
-
-<h2>Tasty Food</h2>
-
-<ul>
-<li><em>Adopt</em>: <a href="http://www.murrayscheese.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/b/l/blue_stilton_colston_bassett.jpg">Stilton Cheese</a> &ndash; The king of cheeses.</li>
-<li><em>Trial</em>: <a href="http://www.seriouseats.com/images/20100603-nibs-500.jpg">Cocoa Nibs</a> &ndash;  I have to admit I am getting into crunching on some nibs in the afternoon.  Best of all, no sugar!</li>
-<li><em>Assess</em>: <a href="http://www.ahisushi.com/images/gallery/gallery-cold-sake.jpg">Cold Sake</a> &ndash; I was firmly in the warm sake camp, until I tried some very nice cold sakes.  However, in the winter, warm is so nice &hellip;</li>
-<li><em>Hold</em>: <a href="https://cbshouston.files.wordpress.com/2012/12/fruitcake9.jpg?w=360">Fruit Cake</a> &ndash; Traditions are important, but sometimes you need to let it go.</li>
-</ul>
-
-
-<h3>Special Thanks</h3>
-
-<p>The radar this year was generated by a cool <a href="https://github.com/thefourhorsemen/radar">github project</a> that uses Clojure and Quill to generate the image based off of a json config file.  So go out there and make a radar of your own.</p>
-
-<p>Happy Holidays!</p>
 ]]></content>
   </entry>
   
