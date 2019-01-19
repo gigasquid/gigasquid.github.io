@@ -14,7 +14,7 @@ categories:
 
 Object detection just landed in MXNet thanks to the work of contributors [Kedar Bellare](https://github.com/kedarbellare) and [Nicolas Modrzyk](https://github.com/hellonico/). Kedar ported over the `infer` package to Clojure, making inference and prediction much easier for users and Nicolas integrated in his [Origami](https://github.com/hellonico/origami) OpenCV library into the the examples to make the visualizations happen.
 
-We'll walk through the main steps to use the `infer` objection which include creating the detector with a model and then loading the image and running the inference on it.
+We'll walk through the main steps to use the `infer` object detection which include creating the detector with a model and then loading the image and running the inference on it.
 
 
 ### Creating the Detector
