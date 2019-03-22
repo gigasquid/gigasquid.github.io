@@ -1,0 +1,252 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Clojure MXNet March Update - Squid's Blog</title>
+    <meta name="author" content="Carin Meier">
+    
+	<meta name="description" content="I&rsquo;m starting a monthly update for Clojure MXNet. The goal is to share the progress and exiting things that are happening in the project and our &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated">
+    <div id="headerbg">
+        Squid's Blog
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/about/index.html">About</a></li>
+	<li id="ajax"><a href="/speaking/index.html">Speaking</a></li>
+	<li id="ajax"><a href="/books/index.html">Books</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Clojure MXNet March Update</h2>
+	<div class="entry-content"><p>I&rsquo;m starting a monthly update for <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. The goal is to share the progress and exiting things that are happening in the project and our community.</p>
+
+<p>Here&rsquo;s some highlights for the month of March.</p>
+
+<h2>Shipped</h2>
+
+<p>Under the shipped heading, the 1.4.0 release of MXNet has been released, along with the <a href="https://search.maven.org/search?q=clojure%20mxnet">Clojure MXNet Jars</a>. There have been improvements to the JVM memory managment and an Image API addition. You can see the full list of changes <a href="https://github.com/apache/incubator-mxnet/releases/tag/1.4.0#clojure">here</a></p>
+
+<h2>Clojure MXNet Made Simple Article Series</h2>
+
+<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> authored a really nice series of blog posts to help get people started with Clojure MXNet.</p>
+
+<ul>
+<li><a href="https://arthurcaillau.com/mxnet-clojure-aws/">Getting started with Clojure and MXNet on AWS</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-ndarrays-api/">MXNet made simple: Clojure NDArray API</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-symbol-api/">MXNet made simple: Clojure Symbol API</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-module-api/">MXNet made simple: Clojure Module API</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-symbol-visualization/">MXNet made simple: Clojure Symbol Visualization API</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-image-manipulation/">MXNet made simple: Image Manipulation with OpenCV and MXNet</a></li>
+</ul>
+
+
+<h2>Lein Template &amp; Docker file</h2>
+
+<p><a href="https://github.com/hellonico/">Nicolas Modrzyk</a> created a Leiningen template that allows you to easily get a MXNet project started &ndash; with a notebook too! It&rsquo;s a great way to take Clojure MXNet for a spin</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># create project
+</span><span class='line'>lein new clj-mxnet hello
+</span><span class='line'>
+</span><span class='line'># run included sample
+</span><span class='line'>lein run
+</span><span class='line'>
+</span><span class='line'># start notebook engine
+</span><span class='line'>lein notebook
+</span><span class='line'>
+</span><span class='line'># open notebook
+</span><span class='line'>http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj
+</span><span class='line'># open empty notebook with all namespaces
+</span><span class='line'>http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There also is a docker file as well</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>docker run -it -p 10000:10000 hellonico/mxnet
+</span><span class='line'>
+</span><span class='line'>After starting the container, you can open the same notebooks as above:
+</span><span class='line'>
+</span><span class='line'># open notebook
+</span><span class='line'>http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj
+</span><span class='line'># open empty notebook with all namespaces
+</span><span class='line'>http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Cool Stuff in Development</h2>
+
+<p>There are a few really interesting things cooking for the future.</p>
+
+<p>One is a <a href="https://github.com/apache/incubator-mxnet/pull/14372">PR for memory fixes</a> from the Scala team that is getting really close to merging. This will be a solution to some the the memory problems that were encountered by early adopters of the Module API.</p>
+
+<p>Another, is the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> that is being spear headed by Kedar Bellare</p>
+
+<p>Finally, work is being started to create a <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103089990">Gluon API for the Clojure package</a> which is quite exciting.</p>
+
+<h2>Get Involved</h2>
+
+<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip.</p>
+
+<h2>Cat Picture of the Month</h2>
+
+<p>There is no better way to close out an update than a cat picture, so here is a picture of our family cat, Otto, watching birds at the window.</p>
+
+<p><img src="https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg"></p>
+
+<p>Have a great rest of March!</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2019/03/22/clojure-mxnet-march-update/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2019
+
+    Carin Meier
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2019/03/22/clojure-mxnet-march-update/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2019/03/22/clojure-mxnet-march-update/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

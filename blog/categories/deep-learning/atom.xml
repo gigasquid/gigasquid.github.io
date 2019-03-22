@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-01-19T16:41:42-05:00</updated>
+  <updated>2019-03-22T11:13:24-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure MXNet March Update]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/03/22/clojure-mxnet-march-update/"/>
+    <updated>2019-03-22T10:42:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/03/22/clojure-mxnet-march-update</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m starting a monthly update for <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. The goal is to share the progress and exiting things that are happening in the project and our community.</p>
+
+<p>Here&rsquo;s some highlights for the month of March.</p>
+
+<h2>Shipped</h2>
+
+<p>Under the shipped heading, the 1.4.0 release of MXNet has been released, along with the <a href="https://search.maven.org/search?q=clojure%20mxnet">Clojure MXNet Jars</a>. There have been improvements to the JVM memory managment and an Image API addition. You can see the full list of changes <a href="https://github.com/apache/incubator-mxnet/releases/tag/1.4.0#clojure">here</a></p>
+
+<h2>Clojure MXNet Made Simple Article Series</h2>
+
+<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> authored a really nice series of blog posts to help get people started with Clojure MXNet.</p>
+
+<ul>
+<li><a href="https://arthurcaillau.com/mxnet-clojure-aws/">Getting started with Clojure and MXNet on AWS</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-ndarrays-api/">MXNet made simple: Clojure NDArray API</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-symbol-api/">MXNet made simple: Clojure Symbol API</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-module-api/">MXNet made simple: Clojure Module API</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-symbol-visualization/">MXNet made simple: Clojure Symbol Visualization API</a></li>
+<li><a href="https://arthurcaillau.com/mxnet-made-simple-image-manipulation/">MXNet made simple: Image Manipulation with OpenCV and MXNet</a></li>
+</ul>
+
+
+<h2>Lein Template &amp; Docker file</h2>
+
+<p><a href="https://github.com/hellonico/">Nicolas Modrzyk</a> created a Leiningen template that allows you to easily get a MXNet project started &ndash; with a notebook too! It&rsquo;s a great way to take Clojure MXNet for a spin</p>
+
+<p>```</p>
+
+<h1>create project</h1>
+
+<p>lein new clj-mxnet hello</p>
+
+<h1>run included sample</h1>
+
+<p>lein run</p>
+
+<h1>start notebook engine</h1>
+
+<p>lein notebook</p>
+
+<h1>open notebook</h1>
+
+<p><a href="http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj">http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj</a></p>
+
+<h1>open empty notebook with all namespaces</h1>
+
+<p><a href="http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj">http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj</a>
+```</p>
+
+<p>There also is a docker file as well</p>
+
+<p>```
+docker run -it -p 10000:10000 hellonico/mxnet</p>
+
+<p>After starting the container, you can open the same notebooks as above:</p>
+
+<h1>open notebook</h1>
+
+<p><a href="http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj">http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj</a></p>
+
+<h1>open empty notebook with all namespaces</h1>
+
+<p><a href="http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj">http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj</a>
+```</p>
+
+<h2>Cool Stuff in Development</h2>
+
+<p>There are a few really interesting things cooking for the future.</p>
+
+<p>One is a <a href="https://github.com/apache/incubator-mxnet/pull/14372">PR for memory fixes</a> from the Scala team that is getting really close to merging. This will be a solution to some the the memory problems that were encountered by early adopters of the Module API.</p>
+
+<p>Another, is the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> that is being spear headed by Kedar Bellare</p>
+
+<p>Finally, work is being started to create a <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103089990">Gluon API for the Clojure package</a> which is quite exciting.</p>
+
+<h2>Get Involved</h2>
+
+<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip.</p>
+
+<h2>Cat Picture of the Month</h2>
+
+<p>There is no better way to close out an update than a cat picture, so here is a picture of our family cat, Otto, watching birds at the window.</p>
+
+<p><img class="<a" src="href="https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg">https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg</a>"></p>
+
+<p>Have a great rest of March!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Object Detection with Clojure MXNet]]></title>
@@ -683,155 +777,6 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>There are lots of examples in the package to check out, but a good place to start are the tutorials here <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial">https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial</a></p>
 
 <p>There is a blog walkthough here as well &ndash; <a href="http://gigasquidsoftware.com/blog/2018/07/05/clojure-mxnet-the-module-api/">Clojure MXNet Module API</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meet Clojure MXNet - NDArray]]></title>
-    <link href="http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray/"/>
-    <updated>2018-06-03T16:13:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2018/06/03/meet-clojure-mxnet-ndarray</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg">https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg</a>"></p>
-
-<p>This is the beginning of a series of blog posts to get to know the <a href="https://mxnet.apache.org/">Apache MXNet</a> Deep Learning project and the new Clojure language binding <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">clojure-package</a></p>
-
-<p>MXNet is a first class, modern deep learning library that AWS has officially picked as its chosen library. It supports multiple languages on a first class basis and is incubating as an Apache project.</p>
-
-<p>The motivation for creating a Clojure package is to be able to open the deep learning library to the Clojure ecosystem and build bridges for future development and innovation for the community. It provides all the needed tools including low level and high level apis, dynamic graphs, and things like GAN and natural language support.</p>
-
-<p>So let&rsquo;s get on with our introduction with one of the basic building blocks of MXNet, the <code>NDArray</code>.</p>
-
-<h2>Meet NDArray</h2>
-
-<p>The <code>NDArray</code> is the tensor data structure in MXNet. Let&rsquo;s start of by creating one. First we need to require the <code>ndarray</code> namespace:</p>
-
-<p><code>clojure
-(ns tutorial.ndarray
-  (:require [org.apache.clojure-mxnet.ndarray :as ndarray]))
-</code></p>
-
-<p>Now let&rsquo;s create an all zero array of dimension 100 x 50</p>
-
-<p><code>clojure
-(ndarray/zeros [100 50])
-;=&gt; #object[org.apache.mxnet.NDArray 0x3e396d0 "org.apache.mxnet.NDArray@aeea40b6"]
-</code></p>
-
-<p>We can check the shape of this by using <code>shape-vec</code></p>
-
-<p><code>clojure
-(ndarray/shape-vec (ndarray/zeros [100 50]))
-;=&gt; [100 50]
-</code></p>
-
-<p>There is also a quick way to create an ndarray of ones with the <code>ones</code> function:</p>
-
-<p><code>clojure
-(ndarray/ones [256 32 128 1])
-</code></p>
-
-<p>Ones and zeros are nice, but what an array with specific contents? There is an <code>array</code> function for that. Specific the contents of the array first and the shape second:</p>
-
-<p><code>clojure
-(def c (ndarray/array [1 2 3 4 5 6] [2 3]))
-(ndarray/shape-vec c)  ;=&gt; [2 3]
-</code></p>
-
-<p>To convert it back to a vector format, we can use the <code>-&gt;vec</code> function.</p>
-
-<p><code>clojure
-(ndarray/-&gt;vec c)
-;=&gt; [1.0 2.0 3.0 4.0 5.0 6.0]
-</code></p>
-
-<p>Now that we know how to create NDArrays, we can get to do something interesting like operations on them.</p>
-
-<h3>Operations</h3>
-
-<p>There are all the standard arithmetic operations:</p>
-
-<p><code>clojure
-(def a (ndarray/ones [1 5]))
-(def b (ndarray/ones [1 5]))
-(-&gt; (ndarray/+ a b) (ndarray/-&gt;vec))
-;=&gt;  [2.0 2.0 2.0 2.0 2.0]
-</code></p>
-
-<p>Note that the original ndarrays are unchanged.</p>
-
-<p><code>clojure
-(ndarray/-&gt;vec a) ;=&gt; [1.0 1.0 1.0 1.0 1.0]
-(ndarray/-&gt;vec b) ;=&gt; [1.0 1.0 1.0 1.0 1.0]
-</code></p>
-
-<p>But, we can change that if we use the inplace operators:</p>
-
-<p><code>clojure
-(ndarray/+= a b)
-(ndarray/-&gt;vec a) ;=&gt;  [2.0 2.0 2.0 2.0 2.0]
-</code></p>
-
-<p>There are many more operations, but just to give you a taste, we&rsquo;ll take a look a the <code>dot</code> product operation:</p>
-
-<p><code>clojure
-(def arr1 (ndarray/array [1 2] [1 2]))
-(def arr2 (ndarray/array [3 4] [2 1]))
-(def res (ndarray/dot arr1 arr2))
-(ndarray/shape-vec res) ;=&gt; [1 1]
-(ndarray/-&gt;vec res) ;=&gt; [11.0]
-</code></p>
-
-<p>If you are curious about the other operators available in NDArray API check out the <a href="https://mxnet.incubator.apache.org/api/python/ndarray/ndarray.html">MXNet project documentation page</a></p>
-
-<p>Now that we have ndarrays and can do calculations on them, we might want to save and load them.</p>
-
-<h3>Saving and Loading</h3>
-
-<p>You can save ndarrays with a name as a map like:</p>
-
-<p><code>clojure
-(ndarray/save "filename" {"arr1" arr1 "arr2" arr2})
-</code></p>
-
-<p>To load them, you just specify the filename and the map is returned.</p>
-
-<p><code>clojure
-(ndarray/load "filename")
-;=&gt; {"arr1" #object[org.apache.mxnet.NDArray 0x1b629ff4 "org.apache.mxnet.NDArray@63da08cb"]
-;=&gt;  "arr2" #object[org.apache.mxnet.NDArray 0x25d994e3 "org.apache.mxnet.NDArray@5bbaf2c3"]}
-</code></p>
-
-<p>One more cool thing, we can even due our operations on the cpu or gpu.</p>
-
-<h3>Multi-Device Support</h3>
-
-<p>When creating an <code>ndarray</code> you can use a context argument to specify the device. To do this, we will need the help of the <code>context</code> namespace.</p>
-
-<p><code>clojure
-(require '[org.apache.clojure-mxnet.context :as context])
-</code></p>
-
-<p>By default, the <code>ndarray</code> is created on the cpu context.</p>
-
-<p><code>clojure
-(def cpu-a (ndarray/zeros [100 200]))
-(ndarray/context cpu-a)
-;=&gt; #object[ml.dmlc.mxnet.Context 0x3f376123 "cpu(0)"]
-</code></p>
-
-<p>But we can specify the gpu instead, (if we have a gpu enabled build).</p>
-
-<p><code>clojure
-(def gpu-b (ndarray/zeros [100 200] {:ctx (context/gpu 0)}))
-</code></p>
-
-<p><em>Note: Operations among different contexts are currently not allowed, but there is a <code>copy-to</code> function that can help copy the content from one device to another and then continue on with the computation.</em></p>
-
-<h2>Wrap up</h2>
-
-<p>I hope you&rsquo;ve enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial">here</a></p>
-
-<p><em>Please remember that the library is in a experimential state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :).</em></p>
 ]]></content>
   </entry>
   
