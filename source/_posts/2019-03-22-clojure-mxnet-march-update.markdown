@@ -10,13 +10,13 @@ categories:
 - Deep Learning
 ---
 
-I'm starting a monthly update for [Clojure MXNet](http://mxnet.incubator.apache.org/). The goal is to share the progress and exiting things that are happening in the project and our community.
+I'm starting a monthly update for [Clojure MXNet](http://mxnet.incubator.apache.org/). The goal is to share the progress and exciting things that are happening in the project and our community.
 
 Here's some highlights for the month of March.
 
 ## Shipped
 
-Under the shipped heading, the 1.4.0 release of MXNet has been released, along with the [Clojure MXNet Jars](https://search.maven.org/search?q=clojure%20mxnet). There have been improvements to the JVM memory managment and an Image API addition. You can see the full list of changes [here](https://github.com/apache/incubator-mxnet/releases/tag/1.4.0#clojure)
+Under the shipped heading, the 1.4.0 release of MXNet has been released, along with the [Clojure MXNet Jars](https://search.maven.org/search?q=clojure%20mxnet). There have been improvements to the JVM memory management and an Image API addition. You can see the full list of changes [here](https://github.com/apache/incubator-mxnet/releases/tag/1.4.0#clojure)
 
 ## Clojure MXNet Made Simple Article Series
 [Arthur Caillau](https://arthurcaillau.com/about/) authored a really nice series of blog posts to help get people started with Clojure MXNet.
@@ -68,7 +68,7 @@ There are a few really interesting things cooking for the future.
 
 One is a [PR for memory fixes](https://github.com/apache/incubator-mxnet/pull/14372) from the Scala team that is getting really close to merging. This will be a solution to some the the memory problems that were encountered by early adopters of the Module API.
 
-Another, is the [new version of the API for the Clojure NDArray and Symbol APIs](https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678) that is being spear headed by Kedar Bellare
+Another, is the [new version of the API for the Clojure NDArray and Symbol APIs](https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678) that is being spearheaded by Kedar Bellare
 
 Finally, work is being started to create a [Gluon API for the Clojure package](https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103089990) which is quite exciting.
 
