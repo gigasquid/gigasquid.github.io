@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-03-22T11:30:22-04:00</updated>
+  <updated>2019-03-22T14:21:06-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -99,7 +99,7 @@ docker run -it -p 10000:10000 hellonico/mxnet</p>
 
 <h2>Cat Picture of the Month</h2>
 
-<p>There is no better way to close out an update than a cat picture, so here is a picture of our family cat, Otto, watching birds at the window.</p>
+<p>There is no better way to close out an update than a cat picture, so here is a picture of my family cat, Otto, watching birds at the window.</p>
 
 <p><img class="<a" src="href="https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg">https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg</a>"></p>
 
