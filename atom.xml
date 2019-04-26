@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-03-22T14:21:06-04:00</updated>
+  <updated>2019-04-26T16:41:12-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,154 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure MXNet April Update]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/"/>
+    <updated>2019-04-26T15:51:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update</id>
+    <content type="html"><![CDATA[<p>Spring is bringing some beautiful new things to the  <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. Here are some highlights for the month of April.</p>
+
+<h2>Shipped</h2>
+
+<p>We&rsquo;ve merged <a href="https://github.com/apache/incubator-mxnet/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Aclosed+clojure">10 PRs</a> over the last month. Many of them focus on core improvements to documentation and usability which is very important.</p>
+
+<p>The MXNet project is also preparing a new release <code>1.4.1</code>, so keep on the lookout for that to hit in the near future.</p>
+
+<h2>Clojure MXNet Made Simple Article Series</h2>
+
+<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> added another post to his fantastic series &ndash; <a href="https://arthurcaillau.com/mxnet-made-simple-pretrained-models/">MXNet made simple: Pretrained Models for image classification &ndash; Inception and VGG</a></p>
+
+<h2>Cool Stuff in Development</h2>
+
+<h3>New APIs</h3>
+
+<p>Great progress was made on the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> by <a href="https://github.com/kedarbellare">Kedar Bellare</a>. We now have an experimental new version of the apis that are generated more directly from the C code so that we can have more control over the output.</p>
+
+<p>For example the new version of the generated api for NDArray looks like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defn</span>
+</span><span class='line'> <span class="nv">activation</span>
+</span><span class='line'> <span class="s">&quot;Applies an activation function element-wise to the input.</span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  The following activation functions are supported:</span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  - `relu`: Rectified Linear Unit, :math:`y = max(x, 0)`</span>
+</span><span class='line'><span class="s">  - `sigmoid`: :math:`y = \\frac{1}{1 + exp(-x)}`</span>
+</span><span class='line'><span class="s">  - `tanh`: Hyperbolic tangent, :math:`y = \\frac{exp(x) - exp(-x)}{exp(x) + exp(-x)}`</span>
+</span><span class='line'><span class="s">  - `softrelu`: Soft ReLU, or SoftPlus, :math:`y = log(1 + exp(x))`</span>
+</span><span class='line'><span class="s">  - `softsign`: :math:`y = \\frac{x}{1 + abs(x)}`</span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  Defined in src/operator/nn/activation.cc:L167</span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  `data`: The input array.</span>
+</span><span class='line'><span class="s">  `act-type`: Activation function to be applied.</span>
+</span><span class='line'><span class="s">  `out`: Output array. (optional)&quot;</span>
+</span><span class='line'> <span class="p">([</span><span class="nv">data</span> <span class="nv">act-type</span><span class="p">]</span> <span class="p">(</span><span class="nf">activation</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>, <span class="ss">:act-type</span> <span class="nv">act-type</span><span class="p">}))</span>
+</span><span class='line'> <span class="p">([{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">data</span> <span class="nv">act-type</span> <span class="nv">out</span><span class="p">]</span>, <span class="ss">:or</span> <span class="p">{</span><span class="nv">out</span> <span class="nv">nil</span><span class="p">}</span>, <span class="ss">:as</span> <span class="nv">opts</span><span class="p">}]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">util/coerce-return</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">NDArrayAPI/Activation</span> <span class="nv">data</span> <span class="nv">act-type</span> <span class="p">(</span><span class="nf">util/-&gt;option</span> <span class="nv">out</span><span class="p">)))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>as opposed to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defn</span>
+</span><span class='line'> <span class="nv">activation</span>
+</span><span class='line'> <span class="p">([</span><span class="o">&amp;</span> <span class="nv">nd-array-and-params</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">util/coerce-return</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">NDArray/Activation</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">util/coerce-param</span>
+</span><span class='line'>     <span class="nv">nd-array-and-params</span>
+</span><span class='line'>     <span class="o">#</span><span class="p">{</span><span class="s">&quot;scala.collection.Seq&quot;</span><span class="p">})))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So much nicer!!!</p>
+
+<h3>BERT (State of the Art for NLP)</h3>
+
+<p>We also have some really exciting examples for BERT in a <a href="https://github.com/apache/incubator-mxnet/pull/14769">PR</a> that will be merged soon. If you are not familiar with BERT, this <a href="http://jalammar.github.io/illustrated-bert/">blog post</a> is a good overview. Basically, it&rsquo;s the state of the art in NLP right now. With the help of exported models from <a href="https://github.com/dmlc/gluon-nlp">GluonNLP</a>, we can do both inference and fine tuning of BERT models in MXNet with Clojure! This is an excellent example of cross fertilization across the GluonNLP, Scala, and Clojure MXNet projects.</p>
+
+<p>There are two examples.</p>
+
+<p>1) BERT question and answer inference based off of a fine tuned model of the <a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD Dataset</a> in GluonNLP which is then exported. It allows one to actually do some natural language question and answering like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Question</span> <span class="nv">Answer</span> <span class="nv">Data</span>
+</span><span class='line'><span class="p">{</span><span class="ss">:input-answer</span>
+</span><span class='line'> <span class="s">&quot;Rich Hickey is the creator of the Clojure language. Before Clojure, he developed dotLisp, a similar project based on the .NET platform, and three earlier attempts to provide interoperability between Lisp and Java: a Java foreign language interface for Common Lisp, A Foreign Object Interface for Lisp, and a Lisp-friendly interface to Java Servlets.&quot;</span>,
+</span><span class='line'> <span class="ss">:input-question</span> <span class="s">&quot;Who created Clojure?&quot;</span>,
+</span><span class='line'> <span class="ss">:ground-truth-answers</span> <span class="p">[</span><span class="s">&quot;rich&quot;</span> <span class="s">&quot;hickey&quot;</span><span class="p">]}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">Predicted</span> <span class="nv">Answer</span><span class="err">:</span>  <span class="p">[</span><span class="nv">rich</span> <span class="nv">hickey</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2) The second example is using the exported BERT base model and then fine tuning it in Clojure to do a task with sentence pair classification to see if two sentences are equivalent or not.</p>
+
+<p>The nice thing about this is that we were able to convert the existing <a href="https://gluon-nlp.mxnet.io/examples/sentence_embedding/bert.html">tutorial in GluonNLP</a> over to a Clojure Jupyter notebook with the <code>lein-jupyter</code> plugin. I didn&rsquo;t realize that there is a nifty <code>save-as</code> command in Jupyter that can generate a markdown file, which makes for very handy documentation. Take a peek at the tutorial <a href="https://github.com/apache/incubator-mxnet/blob/d062d46f1c351dc9b70a038511b564dab5c43266/contrib/clojure-package/examples/bert/fine-tune-bert.md">here</a>. It might make its way into a blog post on its own in the next week or two.</p>
+
+<h2>Upcoming Events</h2>
+
+<ul>
+<li><p>I&rsquo;ll be speaking about Clojure MXNet at the next <a href="https://twitter.com/scicloj">Scicloj Event</a> on May 15th at 10PM UTC. Please join us and get involved in making Clojure a great place for Data Science.</p></li>
+<li><p>I&rsquo;m also really excited to attend <a href="https://iclr.cc/">ICLR</a> in a couple weeks. It is a <em>huge conference</em> that I&rsquo;m sure will melt my mind with the latest research in Deep Learning. If anyone else is planning to attend, please say hi :)</p></li>
+</ul>
+
+
+<h2>Get Involved</h2>
+
+<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip</p>
+
+<h2>Cat Picture of the Month</h2>
+
+<p>To close out, let&rsquo;s take a lesson from my cats Otto and Pi and don&rsquo;t forget the importance of naps.</p>
+
+<p><img src="https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg"></p>
+
+<p>Have a great rest of April!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure MXNet March Update]]></title>
@@ -3764,43 +3912,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <p><em>A month after the NPM Node repository burst its banks in the year of 2015, a wondrous creature appeared from the JavaScript ecosystem.  Found dead after the raging subsided, was in this shape and form and is painted here.</em></p>
 
 <p>For more information about this remarkable book visit <a href="http://www.taschen.com/pages/en/catalogue/classics/all/03107/facts.the_book_of_miracles.htm">Book of Software Miracles</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Can a Programming Language Make You Smarter?]]></title>
-    <link href="http://gigasquid.github.io/blog/2015/12/20/can-a-programming-language-make-you-smarter/"/>
-    <updated>2015-12-20T11:16:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2015/12/20/can-a-programming-language-make-you-smarter</id>
-    <content type="html"><![CDATA[<p><img src="http://c1.staticflickr.com/1/34/118425909_86f332f075_z.jpg?zz=1"></p>
-
-<p>All programming languages are not created equal.  Some clearly excel at solving different problems.  There are languages that are great for scalability and others that are great for proving correctness.  But what about one that that will make you smarter?  To look for this answer, I am going to turn to a different language, our human language, and research from the field of linguistics and cognitive development.</p>
-
-<h3>A new language is born</h3>
-
-<p>Up until the late 1970s, there was no school for the deaf In Nicaragua.  Being deaf before then meant only developing crude signs with your family and friends.  Beyond that there was nothing.  Finally, the wife of the dictator set up a special school for them.  This was the first time that the children were brought together in one place rather than being scattered about.  For most of them, it was the first time that they had ever met another deaf person.  There were about fifty kids in that first class and they came together with fifty different ways of communication with crude gestures.  But after awhile, something amazing happened. They started to converge into a common system &ndash; a language was born. For scientists, this was an incredible opportunity to watch a new language develop.  One of the fascinating insights had to do with how the this sign language evolved over the generations of children entering the school.  One in particular, was a study about how words in a language can actually increase your cognitive capacity and make people <em>smarter</em>.</p>
-
-<p>The study involved a test that was performed on different generations of students from the school, including the very first students who were now grown and younger children.  A comic strip shown to the participants. In it there are two brothers.  The big brother is playing with the train and the little brother wants the play with it.  The big brother puts it under the bed and goes out to the kitchen to get a sandwich.  While the big brother is gone, the little brother takes out the train and hides it in the toy box.  The question for the test subjects is, &ldquo;When the big brother comes back, where is he going to look for the train?&rdquo;</p>
-
-<h3>Thinking about thinking</h3>
-
-<p>For most kids over the age of five, the answer will be that the big brother will look under the bed because he doesn&rsquo;t know that it has been moved to the toy box.  The interesting thing was that the first generation of kids that went through the school, now thirty five years old, failed this simple test.  The younger ones all passed.  What was going on?</p>
-
-<p>To find out, the scientists looked a differences in the language over the generations and found that the older signers lacked words for the concept of thinking.  The earlier generation just had one word for <em>think</em>, while the later generations had evolved ten or twelve.  Words that expressed concepts like <em>understand</em> and <em>believe</em>.  It seems that having words gave them access to a concept that otherwise would have been really hard to think about.  It increased their cognitive capacity.  It enabled them to <em>think about thinking</em>.</p>
-
-<h3>Thinking about programming programs</h3>
-
-<p>Programming languages allow us to translate our human thoughts and instructions to machines.  We have words to express simple concepts like adding two numbers together with <code>+</code> or finding how many elements are in a list with <code>count</code>, but what about harder concepts that are more difficult to access?  Is there an analogy to having words to <em>think about thinking</em> that some programming languages have that others don&rsquo;t?  I believe there is.  It&rsquo;s having a way to think about a <em>program programming itself</em> with self modifying code or <em>macros</em>.</p>
-
-<p>In Clojure, macros are way to do <em>meta-programming</em>.  This involves ability to treat the program as data, allowing a program to modify another program &ndash; even its own.  It gives Clojure the capability to implement language features, make code more concise, and encapsulate patterns and repetitive code.  It is a powerful feature and more to the point of our current line of inquiry, it is a pretty friggin difficult concept to grok.  In fact, before I was exposed to a language that had macros in it, I doubt that I would have been able to think about it.  For the sake of argument, let&rsquo;s go back to the comic strip story with the two brothers.  But this time, the train is a function and the little brother uses a macro on it when the big brother gets a snack in the kitchen.  What does the big brother expect the result of the program to be when he gets back in the room.  Prior to my exposure to Clojure and macros, I am sure I would have failed the test.</p>
-
-<h3>Conclusion</h3>
-
-<p>So yes, I do think that a programming language can increase your cognitive capacity and make you smarter.  I certainly feel that my exposure had expanded my world and given me access to programming concepts that I did not have with my other programming experience.  I also feel certain that there are other languages out there, both existing and yet to be invented, that have words to express concepts that am not even aware of.  Languages that are just waiting for me to expand my horizons.</p>
-
-<p>And that certainty makes me incredibly happy and grateful to be a programmer.</p>
-
-<p><em>Listen to whole fascinating story of Ann Senghas studying sign language that born in Nicaragua on <a href="http://www.radiolab.org/story/91730-new-words-new-world/">Radiolab</a></em></p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-03-22T14:21:06-04:00</updated>
+  <updated>2019-04-26T16:41:12-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,120 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure MXNet April Update]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/"/>
+    <updated>2019-04-26T15:51:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update</id>
+    <content type="html"><![CDATA[<p>Spring is bringing some beautiful new things to the  <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. Here are some highlights for the month of April.</p>
+
+<h2>Shipped</h2>
+
+<p>We&rsquo;ve merged <a href="https://github.com/apache/incubator-mxnet/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Aclosed+clojure">10 PRs</a> over the last month. Many of them focus on core improvements to documentation and usability which is very important.</p>
+
+<p>The MXNet project is also preparing a new release <code>1.4.1</code>, so keep on the lookout for that to hit in the near future.</p>
+
+<h2>Clojure MXNet Made Simple Article Series</h2>
+
+<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> added another post to his fantastic series &ndash; <a href="https://arthurcaillau.com/mxnet-made-simple-pretrained-models/">MXNet made simple: Pretrained Models for image classification &ndash; Inception and VGG</a></p>
+
+<h2>Cool Stuff in Development</h2>
+
+<h3>New APIs</h3>
+
+<p>Great progress was made on the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> by <a href="https://github.com/kedarbellare">Kedar Bellare</a>. We now have an experimental new version of the apis that are generated more directly from the C code so that we can have more control over the output.</p>
+
+<p>For example the new version of the generated api for NDArray looks like:</p>
+
+<p>```clojure
+(defn
+ activation
+ &ldquo;Applies an activation function element-wise to the input.</p>
+
+<p>  The following activation functions are supported:</p>
+
+<ul>
+<li><code>relu</code>: Rectified Linear Unit, :math:<code>y = max(x, 0)</code></li>
+<li><code>sigmoid</code>: :math:<code>y = \\frac{1}{1 + exp(-x)}</code></li>
+<li><code>tanh</code>: Hyperbolic tangent, :math:<code>y = \\frac{exp(x) - exp(-x)}{exp(x) + exp(-x)}</code></li>
+<li><code>softrelu</code>: Soft ReLU, or SoftPlus, :math:<code>y = log(1 + exp(x))</code></li>
+<li><code>softsign</code>: :math:<code>y = \\frac{x}{1 + abs(x)}</code></li>
+</ul>
+
+
+<p>  Defined in src/operator/nn/activation.cc:L167</p>
+
+<p>  <code>data</code>: The input array.
+  <code>act-type</code>: Activation function to be applied.
+  <code>out</code>: Output array. (optional)&ldquo;
+ ([data act-type] (activation {:data data, :act-type act-type}))
+ ([{:keys [data act-type out], :or {out nil}, :as opts}]
+  (util/coerce-return
+   (NDArrayAPI/Activation data act-type (util/&ndash;>option out)))))
+```</p>
+
+<p>as opposed to:</p>
+
+<p>```clojure
+(defn
+ activation
+ ([&amp; nd-array-and-params]
+  (util/coerce-return
+   (NDArray/Activation</p>
+
+<pre><code>(util/coerce-param
+ nd-array-and-params
+ #{"scala.collection.Seq"})))))
+</code></pre>
+
+<p>```</p>
+
+<p>So much nicer!!!</p>
+
+<h3>BERT (State of the Art for NLP)</h3>
+
+<p>We also have some really exciting examples for BERT in a <a href="https://github.com/apache/incubator-mxnet/pull/14769">PR</a> that will be merged soon. If you are not familiar with BERT, this <a href="http://jalammar.github.io/illustrated-bert/">blog post</a> is a good overview. Basically, it&rsquo;s the state of the art in NLP right now. With the help of exported models from <a href="https://github.com/dmlc/gluon-nlp">GluonNLP</a>, we can do both inference and fine tuning of BERT models in MXNet with Clojure! This is an excellent example of cross fertilization across the GluonNLP, Scala, and Clojure MXNet projects.</p>
+
+<p>There are two examples.</p>
+
+<p>1) BERT question and answer inference based off of a fine tuned model of the <a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD Dataset</a> in GluonNLP which is then exported. It allows one to actually do some natural language question and answering like:</p>
+
+<p>```
+Question Answer Data
+{:input-answer
+ &ldquo;Rich Hickey is the creator of the Clojure language. Before Clojure, he developed dotLisp, a similar project based on the .NET platform, and three earlier attempts to provide interoperability between Lisp and Java: a Java foreign language interface for Common Lisp, A Foreign Object Interface for Lisp, and a Lisp-friendly interface to Java Servlets.&rdquo;,
+ :input-question &ldquo;Who created Clojure?&rdquo;,
+ :ground-truth-answers [&ldquo;rich&rdquo; &ldquo;hickey&rdquo;]}</p>
+
+<p>  Predicted Answer:  [rich hickey]
+```</p>
+
+<p>2) The second example is using the exported BERT base model and then fine tuning it in Clojure to do a task with sentence pair classification to see if two sentences are equivalent or not.</p>
+
+<p>The nice thing about this is that we were able to convert the existing <a href="https://gluon-nlp.mxnet.io/examples/sentence_embedding/bert.html">tutorial in GluonNLP</a> over to a Clojure Jupyter notebook with the <code>lein-jupyter</code> plugin. I didn&rsquo;t realize that there is a nifty <code>save-as</code> command in Jupyter that can generate a markdown file, which makes for very handy documentation. Take a peek at the tutorial <a href="https://github.com/apache/incubator-mxnet/blob/d062d46f1c351dc9b70a038511b564dab5c43266/contrib/clojure-package/examples/bert/fine-tune-bert.md">here</a>. It might make its way into a blog post on its own in the next week or two.</p>
+
+<h2>Upcoming Events</h2>
+
+<ul>
+<li><p>I&rsquo;ll be speaking about Clojure MXNet at the next <a href="https://twitter.com/scicloj">Scicloj Event</a> on May 15th at 10PM UTC. Please join us and get involved in making Clojure a great place for Data Science.</p></li>
+<li><p>I&rsquo;m also really excited to attend <a href="https://iclr.cc/">ICLR</a> in a couple weeks. It is a <em>huge conference</em> that I&rsquo;m sure will melt my mind with the latest research in Deep Learning. If anyone else is planning to attend, please say hi :)</p></li>
+</ul>
+
+
+<h2>Get Involved</h2>
+
+<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip</p>
+
+<h2>Cat Picture of the Month</h2>
+
+<p>To close out, let&rsquo;s take a lesson from my cats Otto and Pi and don&rsquo;t forget the importance of naps.</p>
+
+<p><img class="<a" src="href="https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg">https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg</a>"></p>
+
+<p>Have a great rest of April!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure MXNet March Update]]></title>
@@ -741,42 +855,6 @@ It will load up the trained model and generate flans for you to explore and brin
 <li><a href="http://gigasquidsoftware.com/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/">Clojure MXNet Joins Apache MXNet</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Clojure MXNet Joins the Apache MXNet Project]]></title>
-    <link href="http://gigasquid.github.io/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/"/>
-    <updated>2018-07-01T10:44:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg">https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg</a>"></p>
-
-<p>I&rsquo;m delighted to share the news that the Clojure package for <a href="https://mxnet.apache.org/">MXNet</a> has now joined the main Apache MXNet project. A big thank you to the efforts of everyone involved to make this possible. Having it as part of the main project is a great place for growth and collaboration that will benefit both MXNet and the Clojure community.</p>
-
-<h2>Invitation to Join and Contribute</h2>
-
-<p>The Clojure package has been brought in as a <em>contrib</em> <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">clojure-package</a>. It is still very new and will go through a period of feedback, stabilization, and improvement before it graduates out of contrib.</p>
-
-<p>We welcome contributors and people getting involved to make it better.</p>
-
-<p>Are you interested in Deep Learning and Clojure? Great &ndash; Join us!</p>
-
-<p>There are a few ways to get involved.</p>
-
-<ul>
-<li>Check out the current state of the Clojure package some contribution needs here <a href="https://cwiki.apache.org/confluence/display/MXNET/Clojure+Package+Contribution+Needs">https://cwiki.apache.org/confluence/display/MXNET/Clojure+Package+Contribution+Needs</a></li>
-<li>Join the Clojurian Slack #mxnet channel</li>
-<li>Join the <a href="https://lists.apache.org/list.html?dev@mxnet.apache.org">MXNet dev mailing list</a> by sending an email to <code>dev-subscribe@mxnet.apache.org.</code>.</li>
-<li>Join the MXNET Slack channel &ndash; You have to join the MXnet dev mailing list first, but after that says you would like to join the slack and someone will add you.</li>
-<li>Join the <a href="https://discuss.mxnet.io/">MXNet Discussion Forum</a></li>
-</ul>
-
-
-<h3>Want to Learn More?</h3>
-
-<p>There are lots of examples in the package to check out, but a good place to start are the tutorials here <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial">https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial</a></p>
-
-<p>There is a blog walkthough here as well &ndash; <a href="http://gigasquidsoftware.com/blog/2018/07/05/clojure-mxnet-the-module-api/">Clojure MXNet Module API</a></p>
 ]]></content>
   </entry>
   
