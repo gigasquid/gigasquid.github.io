@@ -51,7 +51,7 @@ We also load up the corresponding test data.
                                   :shuffle true}))
 ```
 
-When we are working with deep learning models we keep the training and the test data separate. When we train the model, it we won't use the test data. That way we can test and evaluate it later on unseen test data.
+When we are working with deep learning models we keep the training and the test data separate. When we train the model, we won't use the test data. That way we can evaluate it later on the unseen test data.
 
 
 ### The Model
@@ -164,7 +164,7 @@ For each batch of 100 images it is doing the following:
 * Do the backward computation
 * Update the model according to the optimizer and the forward/backward computation.
 
-Let's train it for 3 epoch.
+Let's train it for 3 epochs.
 
 ```
 starting epoch  0
