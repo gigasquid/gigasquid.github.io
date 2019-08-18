@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Development | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-08-18T12:42:05-04:00</updated>
+  <updated>2019-08-18T14:12:08-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -90,7 +90,7 @@ reaching for something better.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Controlling Multiple Drones with Clojure and Goals and Beliefs]]></title>
+    <title type="html"><![CDATA[Controlling Multiple Drones With Clojure and Goals and Beliefs]]></title>
     <link href="http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs/"/>
     <updated>2013-09-05T15:35:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs</id>
@@ -269,7 +269,7 @@ with their navigation data.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Babar - A Little Language with Speech Acts for Machines]]></title>
+    <title type="html"><![CDATA[Babar - a Little Language With Speech Acts for Machines]]></title>
     <link href="http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/"/>
     <updated>2013-06-04T14:57:52-04:00</updated>
     <id>http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines</id>
@@ -493,7 +493,7 @@ request *end-navstream when #done fn [] (end-navstream).
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[7 John McCarthy Papers in 7 weeks – #1 How My Thermostat has Beliefs and Goals]]></title>
+    <title type="html"><![CDATA[7 John McCarthy Papers in 7 Weeks – #1 How My Thermostat Has Beliefs and Goals]]></title>
     <link href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/"/>
     <updated>2012-09-20T09:03:36-04:00</updated>
     <id>http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1</id>
@@ -634,7 +634,7 @@ It is in fact, turtles all the way down :)</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[7 John McCarthy Papers in 7 weeks - Prologue]]></title>
+    <title type="html"><![CDATA[7 John McCarthy Papers in 7 Weeks - Prologue]]></title>
     <link href="http://gigasquid.github.io/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue/"/>
     <updated>2012-09-18T21:50:08-04:00</updated>
     <id>http://gigasquid.github.io/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue</id>
