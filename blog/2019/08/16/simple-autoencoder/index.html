@@ -151,11 +151,9 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
 </span><span class='line'>                                   <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
 </span><span class='line'>                                   <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
-</span><span class='line'>                                   <span class="ss">:label-shape</span> <span class="p">[</span><span class="mi">10</span><span class="p">]</span>
 </span><span class='line'>                                   <span class="ss">:flat</span> <span class="nv">true</span>
 </span><span class='line'>                                   <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
 </span><span class='line'>                                   <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
