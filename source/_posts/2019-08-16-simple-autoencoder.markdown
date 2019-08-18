@@ -13,7 +13,7 @@ categories:
 
 <a data-flickr-embed="true"  href="https://www.flickr.com/photos/horlik/2901925672/in/photolist-5qr8pf-qkv3m8-32RwmC-dZBC2B-ja8ch-48vDg-f56TGS-oUfNKn-652ZqG-QnCrbX-y3C828-jeGkmu-dxwE9L-jKaGtZ-haQ6j3-61w8UJ-WmitYz-tLymA-dZCHC4-CGvx3R-CC3GPE-BSxzda-eu625R-vHAgnk-cR7WAE-jZiLgu-BsZwLP-fhfvPT-dN1Rf9-o8Mkby-8zDocw-5DvC7S-CEij58-oaw922-akUgeW-ayQiGU-aay1vS-2fVFske-2eoRpCe-rqwa4o-9VJPtv-opgEcq-MDfFe-9yzUaK-4is9Z9-cutXnm-f9U23-L7hpoe-3i3H-enSJKf" title="Perfect mirror"><img src="https://live.staticflickr.com/3274/2901925672_325f5faeb8.jpg" width="500" height="364" alt="Perfect mirror"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>
 
-_If you look long enough into the encoder, it looks back at you._
+_If you look long enough into the autoencoder, it looks back at you._
 
 The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.
 
