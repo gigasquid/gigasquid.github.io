@@ -88,7 +88,7 @@ Now we need to define the layers of the model. We know we are going to have an i
 
 From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:
 
-784 (image) -> 100 -> 50 -> 100 -> 784 (output)
+784 (image) -> 100 -> 50 -> 50 -> 100 -> 784 (output)
 
 We can now construct the full model with the _module_ api from clojure-mxnet.
 
