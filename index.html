@@ -221,7 +221,7 @@
 
 <p>From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:</p>
 
-<p>784 (image) &ndash;> 100 &ndash;> 50 &ndash;> 100 &ndash;> 784 (output)</p>
+<p>784 (image) &ndash;> 100 &ndash;> 50 &ndash;> 50 &ndash;> 100 &ndash;> 784 (output)</p>
 
 <p>We can now construct the full model with the <em>module</em> api from clojure-mxnet.</p>
 

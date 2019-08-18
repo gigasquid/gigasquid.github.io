@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-08-18T16:22:12-04:00</updated>
+  <updated>2019-08-18T18:59:56-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -102,7 +102,7 @@
 
 <p>From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:</p>
 
-<p>784 (image) &ndash;> 100 &ndash;> 50 &ndash;> 100 &ndash;> 784 (output)</p>
+<p>784 (image) &ndash;> 100 &ndash;> 50 &ndash;> 50 &ndash;> 100 &ndash;> 784 (output)</p>
 
 <p>We can now construct the full model with the <em>module</em> api from clojure-mxnet.</p>
 
