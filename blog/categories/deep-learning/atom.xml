@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-04-26T16:41:12-04:00</updated>
+  <updated>2019-08-18T12:37:17-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,214 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Autoencoder]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/"/>
+    <updated>2019-08-16T16:16:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder</id>
+    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/horlik/2901925672/in/photolist-5qr8pf-qkv3m8-32RwmC-dZBC2B-ja8ch-48vDg-f56TGS-oUfNKn-652ZqG-QnCrbX-y3C828-jeGkmu-dxwE9L-jKaGtZ-haQ6j3-61w8UJ-WmitYz-tLymA-dZCHC4-CGvx3R-CC3GPE-BSxzda-eu625R-vHAgnk-cR7WAE-jZiLgu-BsZwLP-fhfvPT-dN1Rf9-o8Mkby-8zDocw-5DvC7S-CEij58-oaw922-akUgeW-ayQiGU-aay1vS-2fVFske-2eoRpCe-rqwa4o-9VJPtv-opgEcq-MDfFe-9yzUaK-4is9Z9-cutXnm-f9U23-L7hpoe-3i3H-enSJKf" title="Perfect mirror"><img src="https://live.staticflickr.com/3274/2901925672_325f5faeb8.jpg" width="500" height="364" alt="Perfect mirror"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p><em>If you look long enough into the encoder, it looks back at you.</em></p>
+
+<p>The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.</p>
+
+<p>It&rsquo;s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a <em>latent space representation</em> and the encoder translating that back to a regular images that we can view.</p>
+
+<p><img src="https://camo.githubusercontent.com/1ab40362a922059fa3686914cf5cff803ba7dd43/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f3830302f312a4c53594e57356d33544e377852583631425a686f5a412e706e67" alt="" /></p>
+
+<p>We are going to make a simple autoencoder with Clojure MXNet for handwritten digits using the MNIST dataset.</p>
+
+<h3>The Dataset</h3>
+
+<p>We first load up the training data into an iterator that will allow us to cycle through all the images.</p>
+
+<p>```clojure
+(def train-data (mx-io/mnist-iter {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
+
+<pre><code>                               :label (str data-dir "train-labels-idx1-ubyte")
+                               :input-shape [784]
+                               :label-shape [10]
+                               :flat true
+                               :batch-size batch-size
+                               :shuffle true}))
+</code></pre>
+
+<p>```</p>
+
+<p>Notice there the the input shape is 784. We are purposely flattening out our 28x28 image of a number to just be a one dimensional flat array. The reason is so that we can use a simpler model for the autoencoder.</p>
+
+<p>We also load up the corresponding test data.</p>
+
+<p>```clojure
+(def test-data (mx-io/mnist-iter {:image (str data-dir &ldquo;t10k-images-idx3-ubyte&rdquo;)</p>
+
+<pre><code>                              :label (str data-dir "t10k-labels-idx1-ubyte")
+                              :input-shape [784]
+                              :batch-size batch-size
+                              :flat true
+                              :shuffle true}))
+</code></pre>
+
+<p>```</p>
+
+<p>When we are working with deep learning models we keep the training and the test data separate. When we train the model, we won&rsquo;t use the test data. That way we can evaluate it later on the unseen test data.</p>
+
+<h3>The Model</h3>
+
+<p>Now we need to define the layers of the model. We know we are going to have an input and an output. The input will be the array that represents the image of the digit and the output will also be an array which is reconstruction of that image.</p>
+
+<p>```clojure
+(def input (sym/variable &ldquo;input&rdquo;))
+(def output (sym/variable &ldquo;input_&rdquo;))</p>
+
+<p>(defn get-symbol []
+  (as-> input data</p>
+
+<pre><code>;; encode
+(sym/fully-connected "encode1" {:data data :num-hidden 100})
+(sym/activation "sigmoid1" {:data data :act-type "sigmoid"})
+
+;; encode
+(sym/fully-connected "encode2" {:data data :num-hidden 50})
+(sym/activation "sigmoid2" {:data data :act-type "sigmoid"})
+
+;; decode
+(sym/fully-connected "decode1" {:data data :num-hidden 50})
+(sym/activation "sigmoid3" {:data data :act-type "sigmoid"})
+
+;; decode
+(sym/fully-connected "decode2" {:data data :num-hidden 100})
+(sym/activation "sigmoid4" {:data data :act-type "sigmoid"})
+
+;;output
+(sym/fully-connected "result" {:data data :num-hidden 784})
+(sym/activation "sigmoid5" {:data data :act-type "sigmoid"})
+
+(sym/linear-regression-output {:data data :label output})))
+</code></pre>
+
+<p>```</p>
+
+<p>From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:</p>
+
+<p>784 (image) &ndash;> 100 &ndash;> 50 &ndash;> 100 &ndash;> 784 (output)</p>
+
+<p>We can now construct the full model with the <em>module</em> api from clojure-mxnet.</p>
+
+<p>```clojure
+(def data-desc (first (mx-io/provide-data-desc train-data)))</p>
+
+<p>(def model (&ndash;> (m/module (get-symbol) {:data-names [&ldquo;input&rdquo;] :label-names [&ldquo;input_&rdquo;]})</p>
+
+<pre><code>           (m/bind {:data-shapes [(assoc data-desc :name "input")]
+                    :label-shapes [(assoc data-desc :name "input_")]})
+           (m/init-params {:initializer  (initializer/uniform 1)})
+           (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
+</code></pre>
+
+<p>```</p>
+
+<p>Notice that when we are binding the <code>data-shapes</code> and <code>label-shapes</code> we are using only the <code>data</code> from our handwritten digit dataset, (the images), and not the labels. This will ensure that as it trains it will seek to recreate the input image for the output image.</p>
+
+<h3>Before Training</h3>
+
+<p>Before we start our training, let&rsquo;s get a baseline of what the original images look like and what the output of the untrained model is.</p>
+
+<p>To look at the original images we can take the first training batch of 100 images and visualize them. Since we are initially using the flattened <code>[784]</code> image representation. We need to reshape it to the 28x28 image that we can recognize.</p>
+
+<p><code>clojure
+(def my-batch (mx-io/next train-data))
+(def images (mx-io/batch-data my-batch))
+(ndarray/shape (ndarray/reshape (first images) [100 1 28 28]))
+(viz/im-sav {:title "originals" :output-path "results/" :x (ndarray/reshape (first images) [100 1 28 28])})
+</code></p>
+
+<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567560737/in/dateposted-public/" title="originals"><img src="https://live.staticflickr.com/65535/48567560737_672d065ac2.jpg" width="420" height="420" alt="originals"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>We can also do the same visualization with the test batch of data images by putting them into the <code>predict-batch</code> and using our model.</p>
+
+<p><code>clojure
+;;; before training
+ (def my-test-batch (mx-io/next test-data))
+ (def test-images (mx-io/batch-data my-test-batch))
+ (def preds (m/predict-batch model {:data test-images} ))
+ (viz/im-sav {:title "before-training-preds" :output-path "results/" :x (ndarray/reshape (first preds) [100 1 28 28])})
+</code></p>
+
+<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567589067/in/dateposted-public/" title="before-training-preds"><img src="https://live.staticflickr.com/65535/48567589067_e44eeda1a9.jpg" width="420" height="420" alt="before-training-preds"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>They are not anything close to recognizable as numbers.</p>
+
+<h3>Training</h3>
+
+<p>The next step is to train the model on the data. We set up a training function to step through all the batches of data.</p>
+
+<p>```clojure
+(def my-metric (eval-metric/mse))</p>
+
+<p>(defn train [num-epochs]
+  (doseq [epoch-num (range 0 num-epochs)]</p>
+
+<pre><code>(println "starting epoch " epoch-num)
+(mx-io/do-batches
+ train-data
+ (fn [batch]
+   (-&gt; model
+       (m/forward {:data (mx-io/batch-data batch) :label (mx-io/batch-data batch)})
+       (m/update-metric my-metric (mx-io/batch-data batch))
+       (m/backward)
+       (m/update))))
+(println "result for epoch " epoch-num " is " (eval-metric/get-and-reset my-metric))))
+</code></pre>
+
+<p>```</p>
+
+<p>For each batch of 100 images it is doing the following:</p>
+
+<ul>
+<li>Run the forward pass of the model with both the data and label being the image</li>
+<li>Update the accuracy of the model with the <code>mse</code> (mean squared error metric)</li>
+<li>Do the backward computation</li>
+<li>Update the model according to the optimizer and the forward/backward computation.</li>
+</ul>
+
+
+<p>Let&rsquo;s train it for 3 epochs.</p>
+
+<p><code>
+starting epoch  0
+result for epoch  0  is  [mse 0.06460866]
+starting epoch  1
+result for epoch  1  is  [mse 0.033874355]
+starting epoch  2
+result for epoch  2  is  [mse 0.027255038]
+</code></p>
+
+<h3>After training</h3>
+
+<p>We can check the test images again and see if they look better.</p>
+
+<p><code>clojure
+;;; after training
+(def my-test-batch (mx-io/next test-data))
+(def test-images (mx-io/batch-data my-test-batch))
+(def preds (m/predict-batch model {:data test-images} ))
+(viz/im-sav {:title "after-training-preds" :output-path "results/" :x (ndarray/reshape (first preds) [100 1 28 28])})
+</code>
+<a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567523206/in/dateposted-public/" title="after-training-preds"><img src="https://live.staticflickr.com/65535/48567523206_d78480012f.jpg" width="420" height="420" alt="after-training-preds"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>Much improved! They definitely look like numbers.</p>
+
+<h3>Wrap up</h3>
+
+<p>We&rsquo;ve made a simple autoencoder that can take images of digits and compress them down to a latent space representation the can later be decoded into the same image.</p>
+
+<p>If you want to check out the full code for this example, you can find it <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder">here</a>.</p>
+
+<p>Stay tuned. We&rsquo;ll take this example and build on it in future posts.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure MXNet April Update]]></title>
@@ -589,272 +797,6 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>Wrapping up, training GANs is a <em>lot</em> of fun. With MXNet, you can bring the fun with you to Clojure.</p>
 
 <p>Want more, check out this Clojure Conj video &ndash;  <a href="https://www.youtube.com/watch?v=yzfnlcHtwiY">Can You GAN?</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Clojure MXNet - The Module API]]></title>
-    <link href="http://gigasquid.github.io/blog/2018/07/05/clojure-mxnet-the-module-api/"/>
-    <updated>2018-07-05T19:39:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2018/07/05/clojure-mxnet-the-module-api</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg">https://cdn-images-1.medium.com/max/800/1*OoqsrMD7JzXAvRUGx_8_fg.jpeg</a>"></p>
-
-<p>This is an introduction to the high level Clojure API for deep learning library <a href="http://mxnet.incubator.apache.org/">MXNet</a>.</p>
-
-<p>The module API provides an intermediate and high-level interface for performing computation with neural networks in MXNet.</p>
-
-<p>To follow along with this documentation, you can use this namespace to with the needed requires:</p>
-
-<p>```clojure
-(ns docs.module
-  (:require [clojure.java.io :as io]</p>
-
-<pre><code>        [clojure.java.shell :refer [sh]]
-        [org.apache.clojure-mxnet.eval-metric :as eval-metric]
-        [org.apache.clojure-mxnet.io :as mx-io]
-        [org.apache.clojure-mxnet.module :as m]
-        [org.apache.clojure-mxnet.symbol :as sym]
-        [org.apache.clojure-mxnet.ndarray :as ndarray]))
-</code></pre>
-
-<p>```</p>
-
-<h2>Prepare the Data</h2>
-
-<p>In this example, we are going to use the MNIST data set. If you have cloned the MXNet repo and <code>cd contrib/clojure-package</code>, we can run some helper scripts to download the data for us.</p>
-
-<p>```clojure
-(def data-dir &ldquo;data/&rdquo;)</p>
-
-<p>(when-not (.exists (io/file (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)))
-  (sh &ldquo;../../scripts/get_mnist_data.sh&rdquo;))
-```</p>
-
-<p>MXNet provides function in the <code>io</code> namespace to load the MNIST datasets into training and test data iterators that we can use with our module.</p>
-
-<p>```clojure
-(def train-data (mx-io/mnist-iter {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>                               :label (str data-dir "train-labels-idx1-ubyte")
-                               :label-name "softmax_label"
-                               :input-shape [784]
-                               :batch-size 10
-                               :shuffle true
-                               :flat true
-                               :silent false
-                               :seed 10}))
-</code></pre>
-
-<p>(def test-data (mx-io/mnist-iter {:image (str data-dir &ldquo;t10k-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>                              :label (str data-dir "t10k-labels-idx1-ubyte")
-                              :input-shape [784]
-                              :batch-size 10
-                              :flat true
-                              :silent false}))
-</code></pre>
-
-<p>```</p>
-
-<h2>Preparing a Module for Computation</h2>
-
-<p>To construct a module, we need to have a symbol as input. This symbol takes input data in the first layer and then has subsequent layers of fully connected and relu activation layers, ending up in a softmax layer for output.</p>
-
-<p>```clojure
-(let [data (sym/variable &ldquo;data&rdquo;)</p>
-
-<pre><code>  fc1 (sym/fully-connected "fc1" {:data data :num-hidden 128})
-  act1 (sym/activation "relu1" {:data fc1 :act-type "relu"})
-  fc2 (sym/fully-connected "fc2" {:data act1 :num-hidden 64})
-  act2 (sym/activation "relu2" {:data fc2 :act-type "relu"})
-  fc3 (sym/fully-connected "fc3" {:data act2 :num-hidden 10})
-  out (sym/softmax-output "softmax" {:data fc3})]
-</code></pre>
-
-<p>  out)
-  ;=>#object[org.apache.mxnet.Symbol 0x1f43a406 &ldquo;org.apache.mxnet.Symbol@1f43a406&rdquo;]
-```</p>
-
-<p>You can also write this with the <code>as-&gt;</code> threading macro.</p>
-
-<p>```clojure
-(def out (as-> (sym/variable &ldquo;data&rdquo;) data</p>
-
-<pre><code>       (sym/fully-connected "fc1" {:data data :num-hidden 128})
-       (sym/activation "relu1" {:data data :act-type "relu"})
-       (sym/fully-connected "fc2" {:data data :num-hidden 64})
-       (sym/activation "relu2" {:data data :act-type "relu"})
-       (sym/fully-connected "fc3" {:data data :num-hidden 10})
-       (sym/softmax-output "softmax" {:data data})))
-</code></pre>
-
-<p>;=> #&lsquo;tutorial.module/out
-```</p>
-
-<p>By default, <code>context</code> is the CPU. If you need data parallelization, you can specify a GPU context or an array of GPU contexts like this <code>(m/module out {:contexts [(context/gpu)]})</code></p>
-
-<p>Before you can compute with a module, you need to call <code>bind</code> to allocate the device memory and <code>init-params</code> or <code>set-params</code> to initialize the parameters. If you simply want to fit a module, you don’t need to call <code>bind</code> and <code>init-params</code> explicitly, because the <code>fit</code> function automatically calls them if they are needed.</p>
-
-<p>```clojure
-(let [mod (m/module out)]
-  (&ndash;> mod</p>
-
-<pre><code>  (m/bind {:data-shapes (mx-io/provide-data train-data)
-           :label-shapes (mx-io/provide-label train-data)})
-  (m/init-params)))
-</code></pre>
-
-<p>```</p>
-
-<p>Now you can compute with the module using functions like <code>forward</code>, <code>backward</code>, etc.</p>
-
-<h2>Training and Predicting</h2>
-
-<p>Modules provide high-level APIs for training, predicting, and evaluating. To fit a module, call the <code>fit</code> function with some data iterators:</p>
-
-<p><code>clojure
-(def mod (m/fit (m/module out) {:train-data train-data :eval-data test-data :num-epoch 1}))
-;; Epoch  0  Train- [accuracy 0.12521666]
-;; Epoch  0  Time cost- 8392
-;; Epoch  0  Validation-  [accuracy 0.2227]
-</code></p>
-
-<p>You can pass in batch-end callbacks using batch-end-callback and epoch-end callbacks using epoch-end-callback in the <code>fit-params</code>. You can also set parameters using functions like in the fit-params like optimizer and eval-metric. To learn more about the fit-params, see the fit-param function options. To predict with a module, call <code>predict</code> with a DataIter:</p>
-
-<p>```clojure
-(def results (m/predict mod {:eval-data test-data}))
-(first results) ;=>#object[org.apache.mxnet.NDArray 0x3540b6d3 &ldquo;org.apache.mxnet.NDArray@a48686ec&rdquo;]</p>
-
-<p>(first (ndarray/&ndash;>vec (first results))) ;=>0.08261358
-```</p>
-
-<p>The module collects and returns all of the prediction results. For more details about the format of the return values, see the documentation for the <code>predict</code> function.</p>
-
-<p>When prediction results might be too large to fit in memory, use the <code>predict-every-batch</code> API.</p>
-
-<p>```clojure
-(let [preds (m/predict-every-batch mod {:eval-data test-data})]
-  (mx-io/reduce-batches test-data</p>
-
-<pre><code>                    (fn [i batch]
-                      (println (str "pred is " (first (get preds i))))
-                      (println (str "label is " (mx-io/batch-label batch)))
-                      ;;; do something
-                      (inc i))))
-</code></pre>
-
-<p>```</p>
-
-<p>If you need to evaluate on a test set and don’t need the prediction output, call the <code>score</code> function with a data iterator and an eval metric:</p>
-
-<p><code>clojure
-(m/score mod {:eval-data test-data :eval-metric (eval-metric/accuracy)}) ;=&gt;["accuracy" 0.2227]
-</code></p>
-
-<p>This runs predictions on each batch in the provided data iterator and computes the evaluation score using the provided eval metric. The evaluation results are stored in metric so that you can query later.</p>
-
-<h2>Saving and Loading</h2>
-
-<p>To save the module parameters in each training epoch, use a <code>checkpoint</code> function:</p>
-
-<p>```clojure
-(let [save-prefix &ldquo;my-model&rdquo;]
-  (doseq [epoch-num (range 3)]</p>
-
-<pre><code>(mx-io/do-batches train-data (fn [batch
-                                      ;; do something
-</code></pre>
-
-<p>]))</p>
-
-<pre><code>(m/save-checkpoint mod {:prefix save-prefix :epoch epoch-num :save-opt-states true})))
-</code></pre>
-
-<p>;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0000.params
-;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0000.states
-;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0001.params
-;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0001.states
-;; INFO  org.apache.mxnet.module.Module: Saved checkpoint to my-model-0002.params
-;; INFO  org.apache.mxnet.module.Module: Saved optimizer state to my-model-0002.states</p>
-
-<p>```</p>
-
-<p>To load the saved module parameters, call the <code>load-checkpoint</code> function:</p>
-
-<p>```clojure
-(def new-mod (m/load-checkpoint {:prefix &ldquo;my-model&rdquo; :epoch 1 :load-optimizer-states true}))</p>
-
-<p>new-mod ;=> #object[org.apache.mxnet.module.Module 0x5304d0f4 &ldquo;org.apache.mxnet.module.Module@5304d0f4&rdquo;]
-```</p>
-
-<p>To initialize parameters, Bind the symbols to construct executors first with bind function. Then, initialize the parameters and auxiliary states by calling <code>init-params</code> function.</p>
-
-<p>```clojure
-(&ndash;> new-mod</p>
-
-<pre><code>(m/bind {:data-shapes (mx-io/provide-data train-data) :label-shapes (mx-io/provide-label train-data)})
-(m/init-params))
-</code></pre>
-
-<p>```</p>
-
-<p>To get current parameters, use <code>params</code></p>
-
-<p>```clojure</p>
-
-<p>(let [[arg-params aux-params] (m/params new-mod)]
-  {:arg-params arg-params
-   :aux-params aux-params})</p>
-
-<p>;; {:arg-params
-;;  {&ldquo;fc3_bias&rdquo;
-;;   #object[org.apache.mxnet.NDArray 0x39adc3b0 &ldquo;org.apache.mxnet.NDArray@49caf426&rdquo;],
-;;   &ldquo;fc2_weight&rdquo;
-;;   #object[org.apache.mxnet.NDArray 0x25baf623 &ldquo;org.apache.mxnet.NDArray@a6c8f9ac&rdquo;],
-;;   &ldquo;fc1_bias&rdquo;
-;;   #object[org.apache.mxnet.NDArray 0x6e089973 &ldquo;org.apache.mxnet.NDArray@9f91d6eb&rdquo;],
-;;   &ldquo;fc3_weight&rdquo;
-;;   #object[org.apache.mxnet.NDArray 0x756fd109 &ldquo;org.apache.mxnet.NDArray@2dd0fe3c&rdquo;],
-;;   &ldquo;fc2_bias&rdquo;
-;;   #object[org.apache.mxnet.NDArray 0x1dc69c8b &ldquo;org.apache.mxnet.NDArray@d128f73d&rdquo;],
-;;   &ldquo;fc1_weight&rdquo;
-;;   #object[org.apache.mxnet.NDArray 0x20abc769 &ldquo;org.apache.mxnet.NDArray@b8e1c5e8&rdquo;]},
-;;  :aux-params {}}</p>
-
-<p>```</p>
-
-<p>To assign parameter and aux state values, use <code>set-params</code> function.</p>
-
-<p><code>clojure
-(m/set-params new-mod {:arg-params (m/arg-params new-mod) :aux-params (m/aux-params new-mod)})
-;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 "org.apache.mxnet.module.Module@5304d0f4"]
-</code></p>
-
-<p>To resume training from a saved checkpoint, instead of calling <code>set-params</code>, directly call <code>fit</code>, passing the loaded parameters, so that <code>fit</code> knows to start from those parameters instead of initializing randomly</p>
-
-<p>Create fit-params, and then use it to set <code>begin-epoch</code> so that <code>fit</code> knows to resume from a saved epoch.</p>
-
-<p>```clojure
-;; reset the training data before calling fit or you will get an error
-(mx-io/reset train-data)
-(mx-io/reset test-data)</p>
-
-<p>(m/fit new-mod {:train-data train-data :eval-data test-data :num-epoch 2</p>
-
-<pre><code>            :fit-params (-&gt; (m/fit-params {:begin-epoch 1}))})
-</code></pre>
-
-<p>```</p>
-
-<p>If you are interested in checking out MXNet and exploring on your own, check out the main page <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">here</a> with instructions on how to install and other information.</p>
-
-<h3>See other blog posts about MXNet</h3>
-
-<ul>
-<li><a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Clojure MXNet &ndash; NDArray</a></li>
-<li><a href="http://gigasquidsoftware.com/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/">Clojure MXNet Joins Apache MXNet</a></li>
-</ul>
-
 ]]></content>
   </entry>
   
