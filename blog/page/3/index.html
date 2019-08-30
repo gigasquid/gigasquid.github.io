@@ -95,6 +95,298 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-02-06T14:26:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat  6 Feb 2016,  2:26 PM</time>
+        
+           | <a href="/blog/2016/02/06/why-hyperdimensional-socks-never-match/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2016/02/06/why-hyperdimensional-socks-never-match/" itemprop="url">Why Hyperdimensional Socks Never Match</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><img src="http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg"></p>
+
+<p>The nature of computing in hyperdimensions is a strange and wonderful place.   I have only started to scratch the surface by reading a paper by <a href="http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf">Kanerva</a>. Not only is it interesting from a computer science standpoint, it&rsquo;s also interesting from a cognitive science point of view.  In fact, it could hold the key to better model AI and general reasoning.  This blog is a casual stroll through some of the main points of Kanerva&rsquo;s paper along with examples in Clojure to make it tangible.  First things first, what is a hyperdimension?</p>
+
+<h3>What is a Hyperdimension and Where Are My Socks?</h3>
+
+<p>When we are talking about hyperdimensions, we are really talking about <em>lots</em> of dimensions.  A vector has dimensions.  A regular vector could have three dimensions <code>[0 1 1]</code>, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors <em>hypervectors</em> for short, which makes them sound really cool. Although the vectors could be made up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use <em>sparse</em> vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The <a href="https://github.com/mikera/core.matrix">core.matrix</a> project from Mike Anderson is what we will use in our examples.  Let&rsquo;s go ahead and make some random hypervectors.</p>
+
+<p>First we import the core.matrix libraries and set the implementation to vectorz which provides fast double precision vector math.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">hyperdimensional-playground.core</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.matrix</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">clojure.core.matrix.linear</span> <span class="ss">:as</span> <span class="nv">ml</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">m/set-current-implementation</span> <span class="ss">:vectorz</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next we set the sz of our hypervectors to be 100,000.  We also create a function to generate a random sparse hypervector by choosing to put ones in about 10% of the space.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sz</span> <span class="mi">100000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rand-hv</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">hv</span> <span class="p">(</span><span class="nf">m/new-sparse-array</span> <span class="p">[</span><span class="nv">sz</span><span class="p">])</span>
+</span><span class='line'>        <span class="nv">n</span> <span class="p">(</span><span class="nb">* </span><span class="mf">0.1</span> <span class="nv">sz</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">dotimes </span><span class="p">[</span><span class="nv">i</span> <span class="nv">n</span><span class="p">]</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/mset!</span> <span class="nv">hv</span> <span class="p">(</span><span class="nb">rand-int </span><span class="nv">sz</span><span class="p">)</span> <span class="mi">1</span><span class="p">))</span>
+</span><span class='line'>    <span class="nv">hv</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can generate some.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">d</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">a</span> <span class="c1">;=&gt; #vectorz/vector Large vector with shape: [100000]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can think of each of this hypervectors as random hyperdimensional sock, or hypersock, because that sounds cooler.  These hypersocks, have curious properties.  One of which is that they will ~never match.</p>
+
+<h3>Hypersocks never match</h3>
+
+<p>Because we are dealing with huge amount of dimensions, a mathematically peculiar probability distribution occurs.  We can take a random hypervector to represent something, then take another one and they will different from each by about 100 STD. We can take another one and it too, will be 100 STD from the other ones.  For practical purposes, we will run out of time before we will run of vectors that are unrelated.  Because of this, any two hypersocks will never match each other.</p>
+
+<p>How can we tell how similar two hypersocks are?  The cosine to tell the similarity between two vectors.  This is determined by the dot product.  We can construct a <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity</a> function to give us a value from -1 to 1 to measure how alike they are with 1 being the same and -1 being the complete opposite.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">cosine-sim</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nf">m/dot</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nf">ml/norm</span> <span class="nv">v1</span><span class="p">)</span> <span class="p">(</span><span class="nf">ml/norm</span> <span class="nv">v2</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If we look at the similarity of a hypervector with itself, the result is ~1.  With the other random hypervectors, it is ~0.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  1.0</span>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">d</span> <span class="nv">d</span><span class="p">)</span> <span class="c1">;=&gt; 1.0</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt;  0.0859992468320239</span>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">b</span> <span class="nv">c</span><span class="p">)</span> <span class="c1">;=&gt; 0.09329186588790261</span>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">c</span><span class="p">)</span> <span class="c1">;=&gt; 0.08782018973001954</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are other cool things we can do with hypervectors, like do math with them.</p>
+
+<h3>The Hamming Distance of Two Hypersocks</h3>
+
+<p>We can add hypervectors together with a sum mean vector. We add the vector of 1s and 0s together then we divide the resulting vector by the number of total vectors.  Finally, to get back to our 1s and 0s, we round the result.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">mean-add</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">hvs</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">m/emap</span> <span class="o">#</span><span class="p">(</span><span class="nf">Math/round</span> <span class="p">(</span><span class="nb">double </span><span class="nv">%</span><span class="p">))</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">m/div</span> <span class="p">(</span><span class="nb">apply </span><span class="nv">m/add</span> <span class="nv">hvs</span><span class="p">)</span> <span class="p">(</span><span class="nb">count </span><span class="nv">hvs</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The interesting thing about addition is that the result is similar to all the vectors in it.  For example, if we add a and b together to make x, <code>x = a + b</code>, then x will be similar to a and similar to b.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; x = a + b</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0.7234734658023224</span>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">x</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt; 0.7252586504505658</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also do a very simple form of multiplication on vectors with 1s and 0s with using <em>XOR</em>.  We can do this by add the two vectors together and then mapping <code>mod 2</code> on each of the elements.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">xor-mul</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">m/add</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/emap</span> <span class="o">#</span><span class="p">(</span><span class="nf">mod</span> <span class="nv">%</span> <span class="mi">2</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can actually use this <code>xor-mul</code> to calculate the <a href="https://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a>, which is an important measure of error detection.  The Hamming distance is simply the sum of all of the xor multiplied elements.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">hamming-dist</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">m/esum</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">])</span> <span class="c1">;=&gt; 0</span>
+</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">])</span> <span class="c1">;=&gt; 2</span>
+</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">a</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This illustrates a point that xor multiplication randomizes the hypervector, but preserves the distance.  In the following example, we xor multiply two random hypervectors by another and the hamming distance stays the same.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; xa = x * a</span>
+</span><span class='line'><span class="c1">; ya = y * a</span>
+</span><span class='line'><span class="c1">; hamming distance of xa is the same as ya</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; multiplication randomizes but preserves the distance</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">y</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">xa</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">ya</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">y</span> <span class="nv">a</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">xa</span> <span class="nv">ya</span><span class="p">)</span> <span class="c1">;=&gt; 1740.0</span>
+</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)</span> <span class="c1">;=&gt; 1740.0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So you can xor multiply your two hypersocks and move them to a different point in hyperspace, but they will still be the same distance apart.</p>
+
+<p>Another great party trick in hyperspace, is the ability to bind and unbind hypervectors for use as map like pairs.</p>
+
+<h3>Using Hypervectors to Represent Maps</h3>
+
+<p>A map of pairs is a very important data structure.  It gives the ability to bind symbols to values and then retrieve those values.  We can do this with hypervectors too.  Consider the following structure:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Gigasquid&quot;</span>
+</span><span class='line'> <span class="ss">:cute-animal</span> <span class="s">&quot;duck&quot;</span>
+</span><span class='line'> <span class="ss">:favorite-sock</span> <span class="s">&quot;red plaid&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can now create hypervectors to represent each of these values.  Then we can xor the hypervector symbol to the hypervector value and sum them up.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; data records with bound pairs</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; favorite-sock</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">y</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; cute-animal</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">z</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; name</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; red-plaid</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; duck</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; gigasquid</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;H = X * A + Y * B + Z * C</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">h</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">)</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">y</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">z</span> <span class="nv">c</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we have a sum of all these things and we want to find the value of the <em>favorite sock</em>.  We can <em>unbind</em> it from the sum by xor multiplying the favorite-sock hypervector <code>x</code>.  Because of the property that xor multiplication both distributes and cancels itself out.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">))</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can compare the result with the known values and find the closest match.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">a</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1462.0  ;; closest to &quot;red-plaid&quot;</span>
+</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">b</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1721.0</span>
+</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">c</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1736.0</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 0.3195059768353112 ;; closest to &quot;red-plaid&quot;</span>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">b</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 0.1989075567830733</span>
+</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">c</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 0.18705233578983288</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Conclusion</h3>
+
+<p>We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva&rsquo;s paper on your own and to find comfort in that when you can&rsquo;t find one of your socks, it&rsquo;s not your fault. It most likely has something to do with the curious nature of hyperspace.</p>
+
+<p><em>Thanks to <a href="https://twitter.com/ross_gayler">Ross Gayler</a> for bringing the paper to my attention and to <a href="https://twitter.com/solussd">Joe Smith</a> for the great conversations on SDM</em></p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-01-16T22:09:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 16 Jan 2016, 10:09 PM</time>
         
            | <a href="/blog/2016/01/16/book-of-software-miracles/#disqus_thread" itemprop="discussionUrl"
@@ -1799,200 +2091,6 @@ couldn&rsquo;t draw horses.</p>
 
 <p>Limits or constraints cannot hold back creativity.  But it can help
 mold it in surprising directions.</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-05-22T09:11:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 22 May 2015,  9:11 AM</time>
-        
-           | <a href="/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book/#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book/">Comments</a>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/05/22/how-not-to-panic-while-writing-a-clojure-book/" itemprop="url">How Not to Panic While Writing a Clojure Book</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>I made it to that magical moment when the Clojure book I had been working on so long was published and I could actually hold it in my hand.</p>
-
-<p><img src="https://pbs.twimg.com/media/CDWsQPCUgAERViK.jpg"></p>
-
-<p>It was an immense project and I am very happy that it is finally done.  Since then, I met some people that are interested in writing books as well.
-They asked if I had any insights or tips having gone through the process as a first time author.  I have collected them in this post in hopes that they will be helpful to those going through the process themselves.</p>
-
-<p>The very first thing to do is to get an outline for your book.</p>
-
-<h3>Start with an Outline</h3>
-
-<p>Ideas are soft and squishy.  They drift into different shapes like clouds, and can melt away just as quickly.  One of the hardest things to do was trying to arrange all those ideas in my head into an initial form that would serve as the structure for the entire book.  I would pick up a pen and paper, start feeling overwhelmed, and suddenly remember I had something else very pressing to do.  I successfully avoided starting a book for quite a while, until one day I cornered myself.  I decided that I write my book outline on a long plane flight.  With salted peanuts as fuel, and nowhere to escape, I finally wrote an outline.  It wasn&rsquo;t perfect but it was a start and looking back and it was not too far off.  Here it is in all of its original roughness.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Title: Living Clojure
-</span><span class='line'>
-</span><span class='line'>From beginning steps to thriving in a functional world
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>(Each Chapter will follow quotes from Alice in Wonderland and very use ideas from some examples)
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>Book 1 - Beginner steps
-</span><span class='line'>
-</span><span class='line'>Chapter 1 - Are you comfortable?  Talk about how OO is comfortable but there is another world out there and new way of thinking functionally.
-</span><span class='line'>            White Rabbit goes by
-</span><span class='line'>Chapter 2 - Forms & Functions - Falling down the rabbit hole
-</span><span class='line'>Chapter 3 - Functional Transformations - Growing bigger and smaller - Key to thinking functionally is about transforming data from one shape to another shape.
-</span><span class='line'>            Map & Reduce
-</span><span class='line'>Chapter 4 - Embracing side effects  - Clojure is impure functional language (The rabbit's glove)  - Cover do and io stuff. Also basic stuff about 
-</span><span class='line'>            STM atoms and agents/ Protocols
-</span><span class='line'>Chapter 5 - Libraries, Libraries  - - how to use Leiningen
-</span><span class='line'>            build system. Where to find clojure libraries, how to use
-</span><span class='line'>            Serpents - camel-snake-kebab
-</span><span class='line'>Chapter 6 - core.asyc - Tea Party introduction to the core.async library
-</span><span class='line'>Chapter 7 - Clojure web - Chesire cat  - introduction to Ring, Cheshire library, ClojureScript and OM 
-</span><span class='line'>
-</span><span class='line'>Book 2 - From here to there - thriving in a functional world
-</span><span class='line'>
-</span><span class='line'>Training plan for thriving in a functional world.
-</span><span class='line'>
-</span><span class='line'>Chapter 8 - Join the community - Surround yourself with other Clojure enthusiats
-</span><span class='line'>  - Twitter clojure
-</span><span class='line'>  - Github account
-</span><span class='line'>  - Clojure mailing list
-</span><span class='line'>  - Prismatic clojure news
-</span><span class='line'>  - Meetup for local community group.  If there is not one in your area. start one!
-</span><span class='line'>  - Attend a Clojure conj
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>Chatpter 9 - Practice and build up 
-</span><span class='line'>Like Couch to 5K 7 week training program to work up to
-</span><span class='line'>practicing Clojure
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that I had an outline.  I just needed to figure out how long it would take me to write the book.</p>
-
-<h3>However Long You Think It Will Take &ndash; You Are Wrong</h3>
-
-<p>Having never written a book before, I had <em>no idea</em> how much work it would be.  The closest thing I had to compare it to was writing a blog post.  I figured writing a chapter would be roughly equivalent to writing a blog post.  If I could go back in time, this is the moment where my future self would pour a glass of ice water on my past self.  Writing a book is nothing like that.  It is a lot of time and work.  If I <em>had</em> to compare it now to writing blog posts, the process would be this.</p>
-
-<pre><code>- You write a blog post.
-- You rewrite the blog post.
-- You write a second blog post.
-- You rewrite that blog post and the first one too.
-- You write another blog post.
-- You rewrite all three post .....
-</code></pre>
-
-<p>So, if you have to commit to deadlines, make sure you remember how hard it will be, and then double the number.</p>
-
-<p>Speaking of deadlines, they suck, but you should have them.</p>
-
-<h3>Make Deadlines</h3>
-
-<p>Deadlines are not fun.  In fact, deadlines might even be a source of potential panic.  But for me, they were necessary evil.  There were a few beautiful times when inspiration came knocking at my door and I couldn&rsquo;t wait to start writing.  But most of the time, inspiration was off somewhere else eating biscuits.  The only thing that actually moved the book along was me knowing that I needed to get the next chunk done by a certain date.</p>
-
-<p>I found the best thing to do was to set aside a small bit of time on a daily basis to write something.</p>
-
-<h3>Routine, Routine, Routine</h3>
-
-<p>A daily routine was the most crucial thing for me.  Life is really busy with work and family.  It is so easy to get overwhelmed with daily life.  I decided that mornings would work best for me.  So I would stumble in to my computer an hour before work, with a hot cup of tea in hand, and write something.  Some days I actually did quite a bit.  Other days, I would write one sentence and declare it done.  But, I would always do <em>something</em>.  Even though those small slices of time didn&rsquo;t seem like a lot, they added up over the course of a week.</p>
-
-<p>Another curious thing happens when you do something, even a little bit, day after day.  You start to get better at it.</p>
-
-<h3>Writing is a Different Skill from Coding</h3>
-
-<p>I was used to writing code all day.  I found that the code writing skills are not the same as writing about code.  In fact, I found it really hard to do at the start.  But, just like writing code, you get better with practice.  And to get better at anything, feedback is really important.</p>
-
-<h3>Get and Trust Feedback</h3>
-
-<p>After each chapter, I would get feedback from my editor.  She was awesome and provided ways for me to improve the experience for the reader.  I lost track of how many times I rewrote that first chapter, but each time it would get a bit better and I would improve as well.  After the book was about half done it was sent out to others for technical review.  They provided feedback not only on the writing style but also the technical content, making sure that it all made sense.</p>
-
-<p>The feedback loop is much slower for writing a book than writing code, but it is just as vital.  The great people providing feedback are you closest partners in this.  You need to trust them.  Especially during the roughest time, the middle of the book.</p>
-
-<h3>The Middle Bit is the Hardest</h3>
-
-<p>I found the hardest time was about halfway through the book.  The initial excitement of the new endeavor had long since worn off.  It seemed like such a mountain of a task, with no end in sight.  I questioned my decision to continue with it daily.  My routine and deadlines kept me moving forward.  But my circle of friends and family kept me sane.  It was great to have an outlet, not only to vent my frustration with my slow progress, but to get kind encouragement to keep my spirits up.</p>
-
-<p>During these dark days, I also ate cheese.</p>
-
-<h3>Celebrate Your Small Victories</h3>
-
-<p>At the end of every chapter or deadline I would fix myself a nice plate of cheese and crackers.  You have to celebrate the small wins.  Cheese is also very tasty.</p>
-
-<p>When the book was finally done.  I had a really tasty plate, complete with Stilton, Brie, and a dependable Cheddar.  I was incredibly happy to be finished. But I knew that I definitely could have not done it without the help of others.</p>
-
-<h3>Thank Everyone that Supported You</h3>
-
-<p>Writing a book is a huge undertaking that is utterly impossible to do alone.  I could have not done it without the help and support of my editor, reviewers, family, friends, as well as the entire Clojure Community.  I am so thankful to all of you that helped my in this project.  You are great.</p>
-
-<p>So, should you go ahead and write that book?</p>
-
-<h3>Do It</h3>
-
-<p>Yes, you should write that book and share your knowledge.  Don&rsquo;t panic, remember to breathe, get some cheese and tea, and go for it!  It will be awesome.</p>
 </div>
   
   

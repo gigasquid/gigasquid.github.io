@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-08-18T18:59:56-04:00</updated>
+  <updated>2019-08-30T11:10:32-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,316 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Focus on the Discriminator]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator/"/>
+    <updated>2019-08-30T10:16:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator</id>
+    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/marcomagrini/698692268/in/photolist-24JYSq-hTTAJN-4gjQW9-9GRKCW-4gfNhz-x2yZ-6Nnwy1-6Lm68p-66BVjW-8hawRk-4sE2Jz-5Z6uvQ-6B4iH3-qzDvGU-aNpvLT-9UFZLh-egKvNt-bMh6PR-ceG9AL-gDqtze-96JhRW-7EWMH6-3MTfDt-9rUJ4W-dFPssj-8LLrys-aDAda3-9rUJ45-7xLAFR-prSHik-7yDFHC-7erqEc-6YJx8e-39SyR4-dkQnGi-7hy6zT-4UokrH-hkMoBr-9tBN3K-jq8Bpu-aDMSk2-pwQdmt-9tFrUD-6TzF6G-WDAsCC-8Mm4tD-8M8hyS-4yzkGK-67MPUw-crfg" title="sunflowers"><img src="https://live.staticflickr.com/1007/698692268_b31d429272.jpg" width="500" height="325" alt="sunflowers"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>In the <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">last post</a>, we took a look at a simple autoencoder. The autoencoder is a deep learning model that takes in an image and, (through an encoder and decoder), works to produce the same image. In short:</p>
+
+<ul>
+<li>Autoencoder: image &ndash;> image</li>
+</ul>
+
+
+<p>For a discriminator, we are going to focus on only the first half on the autoencoder.</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647347383_9577b7b672_b.jpg" alt="discriminator" /></p>
+
+<p>Why only half? We want a different transformation. We are going to want to take an image as input and then do some <em>discrimination</em> of the image and classify what type of image it is. In our case, the model is going to input an image of a handwritten digit and attempt to decide which number it is.</p>
+
+<ul>
+<li>Discriminator: image &ndash;> label</li>
+</ul>
+
+
+<p>As always, with deep learning. To do anything, we need data.</p>
+
+<h3>MNIST Data</h3>
+
+<p>Nothing changes here from the autoencoder code. We are still using the MNIST dataset for handwritten digits.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;; Load the MNIST datasets</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/mnist-iter</span>
+</span><span class='line'>   <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>    <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>    <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
+</span><span class='line'>    <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">test-data</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/mnist-iter</span>
+</span><span class='line'>   <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>    <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
+</span><span class='line'>    <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>    <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The model will change since we want a different output.</p>
+
+<h3>The Model</h3>
+
+<p>We are still taking in the image as input, and using the same encoder layers from the autoencoder model. However, at the end, we use a fully connected layer that has 10 hidden nodes &ndash; one for each label of the digits 0-9. Then we use a softmax for the classification output.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">input</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">output</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input_&quot;</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">get-symbol</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="nv">input</span> <span class="nv">data</span>
+</span><span class='line'>    <span class="c1">;; encode</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;encode1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">100</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">;; encode</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;encode2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">50</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">;;; this last bit changed from autoencoder</span>
+</span><span class='line'>    <span class="c1">;;output</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;result&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">10</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/softmax-output</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:label</span> <span class="nv">output</span><span class="p">})))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the autoencoder, we were never actually using the label, but we will certainly need to use it this time. It is reflected in the model&rsquo;s bindings with the data and label shapes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">model</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/module</span> <span class="p">(</span><span class="nf">get-symbol</span><span class="p">)</span> <span class="p">{</span><span class="ss">:data-names</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]</span> <span class="ss">:label-names</span> <span class="p">[</span><span class="s">&quot;input_&quot;</span><span class="p">]})</span>
+</span><span class='line'>               <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">data-desc</span> <span class="ss">:name</span> <span class="s">&quot;input&quot;</span><span class="p">)]</span>
+</span><span class='line'>                        <span class="ss">:label-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">label-desc</span> <span class="ss">:name</span> <span class="s">&quot;input_&quot;</span><span class="p">)]})</span>
+</span><span class='line'>               <span class="p">(</span><span class="nf">m/init-params</span> <span class="p">{</span><span class="ss">:initializer</span> <span class="p">(</span><span class="nf">initializer/uniform</span> <span class="mi">1</span><span class="p">)})</span>
+</span><span class='line'>               <span class="p">(</span><span class="nf">m/init-optimizer</span> <span class="p">{</span><span class="ss">:optimizer</span> <span class="p">(</span><span class="nf">optimizer/adam</span> <span class="p">{</span><span class="ss">:learning-rage</span> <span class="mf">0.001</span><span class="p">})})))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For the evaluation metric, we are also going to use an accuracy metric vs a mean squared error (mse) metric</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">my-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With these items in place, we are ready to train the model.</p>
+
+<h3>Training</h3>
+
+<p>The training from the autoencoder needs to changes to use the real label for the the forward pass and updating the metric.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">0</span> <span class="nv">num-epochs</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;starting epoch &quot;</span> <span class="nv">epoch-num</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span>
+</span><span class='line'>     <span class="nv">train-data</span>
+</span><span class='line'>     <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span><span class="p">]</span>
+</span><span class='line'>       <span class="c1">;;; here we make sure to use the label</span>
+</span><span class='line'>       <span class="c1">;;; now for forward and update-metric</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">model</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/forward</span> <span class="p">{</span><span class="ss">:data</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">)</span>
+</span><span class='line'>                       <span class="ss">:label</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">batch</span><span class="p">)})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/update-metric</span> <span class="nv">my-metric</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">batch</span><span class="p">))</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/backward</span><span class="p">)</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/update</span><span class="p">))))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">{</span><span class="ss">:epoch</span> <span class="nv">epoch-num</span>
+</span><span class='line'>              <span class="ss">:metric</span> <span class="p">(</span><span class="nf">eval-metric/get-and-reset</span> <span class="nv">my-metric</span><span class="p">)})))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Let&rsquo;s Run Things</h3>
+
+<p>It&rsquo;s always a good idea to take a look at things before you start training.</p>
+
+<p>The first batch of the training data looks like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">my-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">train-data</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-batch</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;originals&quot;</span>
+</span><span class='line'>               <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
+</span><span class='line'>               <span class="ss">:x</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">images</span>
+</span><span class='line'>                      <span class="nv">first</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]))})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://live.staticflickr.com/65535/48648000857_fb17f0de66.jpg" alt="training-batch" /></p>
+
+<p>Before training, if we take the first batch from the test data and predict what the labels are:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">test-images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-test-batch</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;test-images&quot;</span>
+</span><span class='line'>               <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
+</span><span class='line'>               <span class="ss">:x</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">test-images</span>
+</span><span class='line'>                      <span class="nv">first</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]))})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://live.staticflickr.com/65535/48647524478_ca35bef78f.jpg" alt="test-batch" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">preds</span>
+</span><span class='line'>       <span class="nv">first</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/argmax-channel</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">take </span><span class="mi">10</span><span class="p">))</span>
+</span><span class='line'> <span class="c1">;=&gt; (1.0 8.0 8.0 8.0 8.0 8.0 2.0 8.0 8.0 1.0)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yeah, not even close. The real first line of the images is <code>6 1 0 0 3 1 4 8 0 9</code></p>
+
+<p>Let&rsquo;s Train!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">train</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; starting epoch  0</span>
+</span><span class='line'><span class="c1">;; {:epoch 0, :metric [accuracy 0.83295]}</span>
+</span><span class='line'><span class="c1">;; starting epoch  1</span>
+</span><span class='line'><span class="c1">;; {:epoch 1, :metric [accuracy 0.9371333]}</span>
+</span><span class='line'><span class="c1">;; starting epoch  2</span>
+</span><span class='line'><span class="c1">;; {:epoch 2, :metric [accuracy 0.9547667]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After the training, let&rsquo;s have another look at the predicted labels.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">preds</span>
+</span><span class='line'>       <span class="nv">first</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/argmax-channel</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">take </span><span class="mi">10</span><span class="p">))</span>
+</span><span class='line'> <span class="c1">;=&gt; (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Predicted = <code>(6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</code></li>
+<li>Actual = <code>6 1 0 0 3 1 4 8 0 9</code></li>
+</ul>
+
+
+<p>Rock on!</p>
+
+<h3>Closing</h3>
+
+<p>In this post, we focused on the first half of the autoencoder and made a discriminator model that took in an image and gave us a label.</p>
+
+<p>Don&rsquo;t forget to save the trained model for later, we&rsquo;ll be using it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;model/discriminator&quot;</span>
+</span><span class='line'>                            <span class="ss">:epoch</span> <span class="mi">2</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Until then, here is a picture of Otto the cat in a basket to keep you going.</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg" alt="Otto in basket" /></p>
+
+<p><em>P.S. If you want to run all the code for yourself. It is <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/discriminator.clj">here</a></em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Simple Autoencoder]]></title>
@@ -3892,267 +4202,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <p>Looking over our journey with word vectors.  At the beginning it seemed that word vectors were magical.  Now, after an understanding of the basics, it still seems like magic.</p>
 
 <p>If you are interested in exploring further, feel free to use my github <a href="https://github.com/gigasquid/hyperdimensional-playground">hyperdimensional-playground</a> as a starting point.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why Hyperdimensional Socks Never Match]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match/"/>
-    <updated>2016-02-06T14:26:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/02/06/why-hyperdimensional-socks-never-match</id>
-    <content type="html"><![CDATA[<p><img src="http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg"></p>
-
-<p>The nature of computing in hyperdimensions is a strange and wonderful place.   I have only started to scratch the surface by reading a paper by <a href="http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf">Kanerva</a>. Not only is it interesting from a computer science standpoint, it&rsquo;s also interesting from a cognitive science point of view.  In fact, it could hold the key to better model AI and general reasoning.  This blog is a casual stroll through some of the main points of Kanerva&rsquo;s paper along with examples in Clojure to make it tangible.  First things first, what is a hyperdimension?</p>
-
-<h3>What is a Hyperdimension and Where Are My Socks?</h3>
-
-<p>When we are talking about hyperdimensions, we are really talking about <em>lots</em> of dimensions.  A vector has dimensions.  A regular vector could have three dimensions <code>[0 1 1]</code>, but a hyperdimensional vector has tons more, like 10,000 or 100,000.  We call these big vectors <em>hypervectors</em> for short, which makes them sound really cool. Although the vectors could be made up of anything, we are going to use vectors made up of zeros and ones.  To handle big computing with big vectors in a reasonable amount of time, we are also going to use <em>sparse</em> vectors.  What makes them sparse is that most of the space is empty, (zeros).  In fact, Clojure has a nice library to handle these sparse vectors.  The <a href="https://github.com/mikera/core.matrix">core.matrix</a> project from Mike Anderson is what we will use in our examples.  Let&rsquo;s go ahead and make some random hypervectors.</p>
-
-<p>First we import the core.matrix libraries and set the implementation to vectorz which provides fast double precision vector math.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">hyperdimensional-playground.core</span>
-</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.matrix</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">]</span>
-</span><span class='line'>            <span class="p">[</span><span class="nv">clojure.core.matrix.linear</span> <span class="ss">:as</span> <span class="nv">ml</span><span class="p">]))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">m/set-current-implementation</span> <span class="ss">:vectorz</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Next we set the sz of our hypervectors to be 100,000.  We also create a function to generate a random sparse hypervector by choosing to put ones in about 10% of the space.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sz</span> <span class="mi">100000</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rand-hv</span> <span class="p">[]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">hv</span> <span class="p">(</span><span class="nf">m/new-sparse-array</span> <span class="p">[</span><span class="nv">sz</span><span class="p">])</span>
-</span><span class='line'>        <span class="nv">n</span> <span class="p">(</span><span class="nb">* </span><span class="mf">0.1</span> <span class="nv">sz</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">dotimes </span><span class="p">[</span><span class="nv">i</span> <span class="nv">n</span><span class="p">]</span>
-</span><span class='line'>      <span class="p">(</span><span class="nf">m/mset!</span> <span class="nv">hv</span> <span class="p">(</span><span class="nb">rand-int </span><span class="nv">sz</span><span class="p">)</span> <span class="mi">1</span><span class="p">))</span>
-</span><span class='line'>    <span class="nv">hv</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we can generate some.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">d</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">a</span> <span class="c1">;=&gt; #vectorz/vector Large vector with shape: [100000]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can think of each of this hypervectors as random hyperdimensional sock, or hypersock, because that sounds cooler.  These hypersocks, have curious properties.  One of which is that they will ~never match.</p>
-
-<h3>Hypersocks never match</h3>
-
-<p>Because we are dealing with huge amount of dimensions, a mathematically peculiar probability distribution occurs.  We can take a random hypervector to represent something, then take another one and they will different from each by about 100 STD. We can take another one and it too, will be 100 STD from the other ones.  For practical purposes, we will run out of time before we will run of vectors that are unrelated.  Because of this, any two hypersocks will never match each other.</p>
-
-<p>How can we tell how similar two hypersocks are?  The cosine to tell the similarity between two vectors.  This is determined by the dot product.  We can construct a <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity</a> function to give us a value from -1 to 1 to measure how alike they are with 1 being the same and -1 being the complete opposite.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">cosine-sim</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nf">m/dot</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
-</span><span class='line'>     <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nf">ml/norm</span> <span class="nv">v1</span><span class="p">)</span> <span class="p">(</span><span class="nf">ml/norm</span> <span class="nv">v2</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If we look at the similarity of a hypervector with itself, the result is ~1.  With the other random hypervectors, it is ~0.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  1.0</span>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">d</span> <span class="nv">d</span><span class="p">)</span> <span class="c1">;=&gt; 1.0</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt;  0.0859992468320239</span>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">b</span> <span class="nv">c</span><span class="p">)</span> <span class="c1">;=&gt; 0.09329186588790261</span>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">c</span><span class="p">)</span> <span class="c1">;=&gt; 0.08782018973001954</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are other cool things we can do with hypervectors, like do math with them.</p>
-
-<h3>The Hamming Distance of Two Hypersocks</h3>
-
-<p>We can add hypervectors together with a sum mean vector. We add the vector of 1s and 0s together then we divide the resulting vector by the number of total vectors.  Finally, to get back to our 1s and 0s, we round the result.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">mean-add</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">hvs</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">m/emap</span> <span class="o">#</span><span class="p">(</span><span class="nf">Math/round</span> <span class="p">(</span><span class="nb">double </span><span class="nv">%</span><span class="p">))</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">m/div</span> <span class="p">(</span><span class="nb">apply </span><span class="nv">m/add</span> <span class="nv">hvs</span><span class="p">)</span> <span class="p">(</span><span class="nb">count </span><span class="nv">hvs</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The interesting thing about addition is that the result is similar to all the vectors in it.  For example, if we add a and b together to make x, <code>x = a + b</code>, then x will be similar to a and similar to b.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; x = a + b</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0.7234734658023224</span>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">x</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt; 0.7252586504505658</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can also do a very simple form of multiplication on vectors with 1s and 0s with using <em>XOR</em>.  We can do this by add the two vectors together and then mapping <code>mod 2</code> on each of the elements.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">xor-mul</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">m/add</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
-</span><span class='line'>      <span class="p">(</span><span class="nf">m/emap</span> <span class="o">#</span><span class="p">(</span><span class="nf">mod</span> <span class="nv">%</span> <span class="mi">2</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can actually use this <code>xor-mul</code> to calculate the <a href="https://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a>, which is an important measure of error detection.  The Hamming distance is simply the sum of all of the xor multiplied elements.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">hamming-dist</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">m/esum</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">])</span> <span class="c1">;=&gt; 0</span>
-</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">])</span> <span class="c1">;=&gt; 2</span>
-</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">a</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This illustrates a point that xor multiplication randomizes the hypervector, but preserves the distance.  In the following example, we xor multiply two random hypervectors by another and the hamming distance stays the same.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; xa = x * a</span>
-</span><span class='line'><span class="c1">; ya = y * a</span>
-</span><span class='line'><span class="c1">; hamming distance of xa is the same as ya</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;; multiplication randomizes but preserves the distance</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">y</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">xa</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">ya</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">y</span> <span class="nv">a</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">xa</span> <span class="nv">ya</span><span class="p">)</span> <span class="c1">;=&gt; 1740.0</span>
-</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)</span> <span class="c1">;=&gt; 1740.0</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So you can xor multiply your two hypersocks and move them to a different point in hyperspace, but they will still be the same distance apart.</p>
-
-<p>Another great party trick in hyperspace, is the ability to bind and unbind hypervectors for use as map like pairs.</p>
-
-<h3>Using Hypervectors to Represent Maps</h3>
-
-<p>A map of pairs is a very important data structure.  It gives the ability to bind symbols to values and then retrieve those values.  We can do this with hypervectors too.  Consider the following structure:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Gigasquid&quot;</span>
-</span><span class='line'> <span class="ss">:cute-animal</span> <span class="s">&quot;duck&quot;</span>
-</span><span class='line'> <span class="ss">:favorite-sock</span> <span class="s">&quot;red plaid&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can now create hypervectors to represent each of these values.  Then we can xor the hypervector symbol to the hypervector value and sum them up.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; data records with bound pairs</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; favorite-sock</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">y</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; cute-animal</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">z</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; name</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; red-plaid</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; duck</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; gigasquid</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;H = X * A + Y * B + Z * C</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">h</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">)</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">y</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">z</span> <span class="nv">c</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, we have a sum of all these things and we want to find the value of the <em>favorite sock</em>.  We can <em>unbind</em> it from the sum by xor multiplying the favorite-sock hypervector <code>x</code>.  Because of the property that xor multiplication both distributes and cancels itself out.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">))</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can compare the result with the known values and find the closest match.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">a</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1462.0  ;; closest to &quot;red-plaid&quot;</span>
-</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">b</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1721.0</span>
-</span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">c</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1736.0</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 0.3195059768353112 ;; closest to &quot;red-plaid&quot;</span>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">b</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 0.1989075567830733</span>
-</span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">c</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 0.18705233578983288</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Conclusion</h3>
-
-<p>We have seen that the nature of higher dimensional representation leads to some very interesting properties with both representing data and computing with it.  These properties and others form the foundation of exciting advancements in Cognitive Computing like word vectors.  Future posts will delve further into these interesting areas.  In the meantime, I encourage you to read Kanerva&rsquo;s paper on your own and to find comfort in that when you can&rsquo;t find one of your socks, it&rsquo;s not your fault. It most likely has something to do with the curious nature of hyperspace.</p>
-
-<p><em>Thanks to <a href="https://twitter.com/ross_gayler">Ross Gayler</a> for bringing the paper to my attention and to <a href="https://twitter.com/solussd">Joe Smith</a> for the great conversations on SDM</em></p>
 ]]></content>
   </entry>
   

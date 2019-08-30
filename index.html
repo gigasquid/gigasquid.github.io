@@ -95,6 +95,347 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-08-30T10:16:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 30 Aug 2019, 10:16 AM</time>
+        
+           | <a href="/blog/2019/08/30/focus-on-the-discriminator/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2019/08/30/focus-on-the-discriminator/" itemprop="url">Focus on the Discriminator</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/marcomagrini/698692268/in/photolist-24JYSq-hTTAJN-4gjQW9-9GRKCW-4gfNhz-x2yZ-6Nnwy1-6Lm68p-66BVjW-8hawRk-4sE2Jz-5Z6uvQ-6B4iH3-qzDvGU-aNpvLT-9UFZLh-egKvNt-bMh6PR-ceG9AL-gDqtze-96JhRW-7EWMH6-3MTfDt-9rUJ4W-dFPssj-8LLrys-aDAda3-9rUJ45-7xLAFR-prSHik-7yDFHC-7erqEc-6YJx8e-39SyR4-dkQnGi-7hy6zT-4UokrH-hkMoBr-9tBN3K-jq8Bpu-aDMSk2-pwQdmt-9tFrUD-6TzF6G-WDAsCC-8Mm4tD-8M8hyS-4yzkGK-67MPUw-crfg" title="sunflowers"><img src="https://live.staticflickr.com/1007/698692268_b31d429272.jpg" width="500" height="325" alt="sunflowers"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>In the <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">last post</a>, we took a look at a simple autoencoder. The autoencoder is a deep learning model that takes in an image and, (through an encoder and decoder), works to produce the same image. In short:</p>
+
+<ul>
+<li>Autoencoder: image &ndash;> image</li>
+</ul>
+
+
+<p>For a discriminator, we are going to focus on only the first half on the autoencoder.</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647347383_9577b7b672_b.jpg" alt="discriminator" /></p>
+
+<p>Why only half? We want a different transformation. We are going to want to take an image as input and then do some <em>discrimination</em> of the image and classify what type of image it is. In our case, the model is going to input an image of a handwritten digit and attempt to decide which number it is.</p>
+
+<ul>
+<li>Discriminator: image &ndash;> label</li>
+</ul>
+
+
+<p>As always, with deep learning. To do anything, we need data.</p>
+
+<h3>MNIST Data</h3>
+
+<p>Nothing changes here from the autoencoder code. We are still using the MNIST dataset for handwritten digits.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;; Load the MNIST datasets</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/mnist-iter</span>
+</span><span class='line'>   <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>    <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>    <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
+</span><span class='line'>    <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">test-data</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/mnist-iter</span>
+</span><span class='line'>   <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>    <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
+</span><span class='line'>    <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>    <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The model will change since we want a different output.</p>
+
+<h3>The Model</h3>
+
+<p>We are still taking in the image as input, and using the same encoder layers from the autoencoder model. However, at the end, we use a fully connected layer that has 10 hidden nodes &ndash; one for each label of the digits 0-9. Then we use a softmax for the classification output.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">input</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">output</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input_&quot;</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">get-symbol</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="nv">input</span> <span class="nv">data</span>
+</span><span class='line'>    <span class="c1">;; encode</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;encode1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">100</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">;; encode</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;encode2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">50</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">;;; this last bit changed from autoencoder</span>
+</span><span class='line'>    <span class="c1">;;output</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;result&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">10</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/softmax-output</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:label</span> <span class="nv">output</span><span class="p">})))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the autoencoder, we were never actually using the label, but we will certainly need to use it this time. It is reflected in the model&rsquo;s bindings with the data and label shapes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">model</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/module</span> <span class="p">(</span><span class="nf">get-symbol</span><span class="p">)</span> <span class="p">{</span><span class="ss">:data-names</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]</span> <span class="ss">:label-names</span> <span class="p">[</span><span class="s">&quot;input_&quot;</span><span class="p">]})</span>
+</span><span class='line'>               <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">data-desc</span> <span class="ss">:name</span> <span class="s">&quot;input&quot;</span><span class="p">)]</span>
+</span><span class='line'>                        <span class="ss">:label-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">label-desc</span> <span class="ss">:name</span> <span class="s">&quot;input_&quot;</span><span class="p">)]})</span>
+</span><span class='line'>               <span class="p">(</span><span class="nf">m/init-params</span> <span class="p">{</span><span class="ss">:initializer</span> <span class="p">(</span><span class="nf">initializer/uniform</span> <span class="mi">1</span><span class="p">)})</span>
+</span><span class='line'>               <span class="p">(</span><span class="nf">m/init-optimizer</span> <span class="p">{</span><span class="ss">:optimizer</span> <span class="p">(</span><span class="nf">optimizer/adam</span> <span class="p">{</span><span class="ss">:learning-rage</span> <span class="mf">0.001</span><span class="p">})})))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For the evaluation metric, we are also going to use an accuracy metric vs a mean squared error (mse) metric</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">my-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With these items in place, we are ready to train the model.</p>
+
+<h3>Training</h3>
+
+<p>The training from the autoencoder needs to changes to use the real label for the the forward pass and updating the metric.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">0</span> <span class="nv">num-epochs</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;starting epoch &quot;</span> <span class="nv">epoch-num</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span>
+</span><span class='line'>     <span class="nv">train-data</span>
+</span><span class='line'>     <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span><span class="p">]</span>
+</span><span class='line'>       <span class="c1">;;; here we make sure to use the label</span>
+</span><span class='line'>       <span class="c1">;;; now for forward and update-metric</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">model</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/forward</span> <span class="p">{</span><span class="ss">:data</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">)</span>
+</span><span class='line'>                       <span class="ss">:label</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">batch</span><span class="p">)})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/update-metric</span> <span class="nv">my-metric</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">batch</span><span class="p">))</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/backward</span><span class="p">)</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/update</span><span class="p">))))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">{</span><span class="ss">:epoch</span> <span class="nv">epoch-num</span>
+</span><span class='line'>              <span class="ss">:metric</span> <span class="p">(</span><span class="nf">eval-metric/get-and-reset</span> <span class="nv">my-metric</span><span class="p">)})))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Let&rsquo;s Run Things</h3>
+
+<p>It&rsquo;s always a good idea to take a look at things before you start training.</p>
+
+<p>The first batch of the training data looks like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">my-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">train-data</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-batch</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;originals&quot;</span>
+</span><span class='line'>               <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
+</span><span class='line'>               <span class="ss">:x</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">images</span>
+</span><span class='line'>                      <span class="nv">first</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]))})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://live.staticflickr.com/65535/48648000857_fb17f0de66.jpg" alt="training-batch" /></p>
+
+<p>Before training, if we take the first batch from the test data and predict what the labels are:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">test-images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-test-batch</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;test-images&quot;</span>
+</span><span class='line'>               <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
+</span><span class='line'>               <span class="ss">:x</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">test-images</span>
+</span><span class='line'>                      <span class="nv">first</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]))})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://live.staticflickr.com/65535/48647524478_ca35bef78f.jpg" alt="test-batch" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">preds</span>
+</span><span class='line'>       <span class="nv">first</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/argmax-channel</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">take </span><span class="mi">10</span><span class="p">))</span>
+</span><span class='line'> <span class="c1">;=&gt; (1.0 8.0 8.0 8.0 8.0 8.0 2.0 8.0 8.0 1.0)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yeah, not even close. The real first line of the images is <code>6 1 0 0 3 1 4 8 0 9</code></p>
+
+<p>Let&rsquo;s Train!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">train</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; starting epoch  0</span>
+</span><span class='line'><span class="c1">;; {:epoch 0, :metric [accuracy 0.83295]}</span>
+</span><span class='line'><span class="c1">;; starting epoch  1</span>
+</span><span class='line'><span class="c1">;; {:epoch 1, :metric [accuracy 0.9371333]}</span>
+</span><span class='line'><span class="c1">;; starting epoch  2</span>
+</span><span class='line'><span class="c1">;; {:epoch 2, :metric [accuracy 0.9547667]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After the training, let&rsquo;s have another look at the predicted labels.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">preds</span>
+</span><span class='line'>       <span class="nv">first</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/argmax-channel</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">take </span><span class="mi">10</span><span class="p">))</span>
+</span><span class='line'> <span class="c1">;=&gt; (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Predicted = <code>(6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</code></li>
+<li>Actual = <code>6 1 0 0 3 1 4 8 0 9</code></li>
+</ul>
+
+
+<p>Rock on!</p>
+
+<h3>Closing</h3>
+
+<p>In this post, we focused on the first half of the autoencoder and made a discriminator model that took in an image and gave us a label.</p>
+
+<p>Don&rsquo;t forget to save the trained model for later, we&rsquo;ll be using it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;model/discriminator&quot;</span>
+</span><span class='line'>                            <span class="ss">:epoch</span> <span class="mi">2</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Until then, here is a picture of Otto the cat in a basket to keep you going.</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg" alt="Otto in basket" /></p>
+
+<p><em>P.S. If you want to run all the code for yourself. It is <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/discriminator.clj">here</a></em></p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-08-16T16:16:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 16 Aug 2019,  4:16 PM</time>
         
            | <a href="/blog/2019/08/16/simple-autoencoder/#disqus_thread" itemprop="discussionUrl"
@@ -1877,151 +2218,6 @@ It will load up the trained model and generate flans for you to explore and brin
   <div class="entry-content clearfix" itemprop="articleBody description"><p>I was 10 years into my career when I met her. I could count the number of other women programmers I had worked with on one hand and none of them had young children at home like me. She was not only incredibly experienced and competent, but also had a son in college. I was curious about her career path so I asked her one day at lunch why she was still programming and hadn’t become a manager instead.</p>
 
 <p>She smiled at me kindly and replied, &ldquo;I’ve worked very hard to stay exactly where I am&rdquo;,  and I was enlightened.</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2017-11-07T18:51:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Tue  7 Nov 2017,  6:51 PM</time>
-        
-           | <a href="/blog/2017/11/07/cats-and-dogs-with-cortex-redux/#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io/blog/2017/11/07/cats-and-dogs-with-cortex-redux/">Comments</a>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2017/11/07/cats-and-dogs-with-cortex-redux/" itemprop="url">Cats and Dogs With Cortex Redux</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>I wrote a <a href="http://gigasquidsoftware.com/blog/2016/12/27/deep-learning-in-clojure-with-cortex/">blog post</a> a while back about using a Clojure machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> to do the Kaggle Cats and Dogs classification challenge.</p>
-
-<p>I wanted to revisit it for a few reasons. The first one is that the Cortex library has progressed and improved considerably over the last year. It&rsquo;s still not at version 1.0, but it my eyes, it&rsquo;s really starting to shine. The second reason is that they recently published an <a href="https://github.com/thinktopic/cortex/tree/master/examples/resnet-retrain">example</a> of using the RESNET50 model, (I&rsquo;ll explain later on), to do fine-tuning or transfer learning. The third reason, is that there is a great new plugin for leiningen the supports using <a href="https://github.com/didiercrunch/lein-jupyter">Jupyter notebooks with Clojure projects</a>. These notebooks are a great way of doing walkthroughs and tutorials.</p>
-
-<p>Putting all these things together, I felt like I was finally at a stage where I could somewhat replicate the first lesson in the <a href="https://github.com/fastai/courses/blob/master/deeplearning1/nbs/dogs_cats_redux.ipynb">Practical Deep Learning Course for Coders</a> with Cats and Dogs &ndash; although this time all in Clojure!</p>
-
-<h2>Where to Start?</h2>
-
-<p><img src="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg"></p>
-
-<p>In the last blog post, we created our deep learning network and trained the data on scaled down images (like 50x50) from scratch. This time we are much smarter.</p>
-
-<p>We are still of course going to have to get a hold of all the training data from <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Kaggle Cats vs Dogs Challenge</a>. The big difference is this time, we are just going to have to train our model for <em>1 epoch</em>. What&rsquo;s more, the results will be way better than before.</p>
-
-<p>How is this possible? We are going to use an already trained model, RESNET50. This model has already been painstakingly trained with a gigantic network that is 50 layers deep on the ImageNet challenge. That&rsquo;s a challenge that has models try to classify a 1000 different categories. The theory is that the inner layers of the network have already learned about the features that make up cats and dogs, all we would need to do is peel off the final layer of the network and graft on a new layers that just learns the final classification for our 2 categories of cats and dogs. This is called <em>transfer learning</em> or <em>retraining</em>.</p>
-
-<h2>Plan of Action</h2>
-
-<ul>
-<li>Get all the cats and dogs pictures in the right directory format for training</li>
-<li>Train the model with all but the last layer in the RESNET model. The last layer we are going to replace with our own layer that will finetune it to classify only cats and dogs</li>
-<li>Run the test data and come up with a spreadsheet of results to submit to Kaggle.</li>
-</ul>
-
-
-<h3>Getting all the data pictures in the right format</h3>
-
-<p>This is the generally the most time consuming step of most deep learning. I&rsquo;ll spare you the gritty details but we want to get all the pictures from the <code>train.zip</code> into the format</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-data
-</span><span class='line'>  -cats-dogs-training
-</span><span class='line'>      -cat
-</span><span class='line'>          1110.png
-</span><span class='line'>          ...
-</span><span class='line'>      -dog
-</span><span class='line'>          12416.png
-</span><span class='line'>          ...
-</span><span class='line'>  -cats-dogs-testing
-</span><span class='line'>      -cat
-</span><span class='line'>          11.png
-</span><span class='line'>          ...
-</span><span class='line'>      -dog
-</span><span class='line'>          12.png
-</span><span class='line'>          ...</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The image sizes must also all be resized to match the input of the RESNET50. That means they all have to be 224x224.</p>
-
-<h3>Train the model</h3>
-
-<p>The cortex functions allow you to load the resnet50 model, remove the last layer, freeze all the other layers so that they will not be retrained, and add new layers.</p>
-
-<p>I was surprised that I could actually train the model with all the images at 224x244 with the huge RESNET50 model. I built the uberjar and ran it which helped the performance.</p>
-
-<p><code>lein uberjar</code></p>
-
-<p><code>java -jar target/cats-dogs-cortex-redux.jar</code></p>
-
-<p>Training one epoch took me approximately 6 minutes. Not bad, especially considering that&rsquo;s all the training I really needed to do.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Loss for epoch 1: (current) 0.05875186542016347 (best) null
-</span><span class='line'>Saving network to trained-network.nippy</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The key point is that it saved the fine tuned network to trained-network.nippy</p>
-
-<h3>Run the Kaggle test results and submit the results</h3>
-
-<p>You will need to do a bit more setup for this. First, you need to get the Kaggle test images for classification. There are 12500 of these in the test.zip file from the site. Under the data directory, create a new directory called kaggle-test. Now unzip the contents of test.zip inside that folder. The full directory with all the test images should now be:</p>
-
-<p><code>data/kaggle-test/test</code></p>
-
-<p>This step takes a long time and you might have to tweak the batch size again depending on your memory. There are 12500 predications to be made. The main logic for this is in function called <code>(kaggle-results batch-size)</code>. It will take a long time to run. It will print the results as it goes along to the kaggle-results.csv file. If you want to check progress you can do wc -l kaggle-results.csv</p>
-
-<p>For me locally, with <code>(cats-dogs/kaggle-results 100)</code> it took me 28 minutes locally.</p>
-
-<h3>Compare the results</h3>
-
-<p><img src="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg"></p>
-
-<p>My one epoch of fine tuning beat my best results of going through the Practical Deep Learning exercise with the fine tuning the VGG16 model. Not bad at all.</p>
-
-<h2>Summary</h2>
-
-<p>For those of you that are interested in checking out the code, it&rsquo;s out there on <a href="https://github.com/gigasquid/cats-dogs-cortex-redux">github</a></p>
-
-<p>Even more exciting, there is a <a href="https://github.com/gigasquid/cats-dogs-cortex-redux/blob/master/Cats%20and%20Dogs%20in%20Cortex%20(Redux).ipynb">walkthrough in a jupyter notebook</a> with a lein-jupyter plugin.</p>
-
-<p>The Deep Learning world in Clojure is an exciting place to be and gaining tools and traction more and more.</p>
 </div>
   
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-08-18T18:59:56-04:00</updated>
+  <updated>2019-08-30T11:10:32-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,251 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Focus on the Discriminator]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator/"/>
+    <updated>2019-08-30T10:16:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator</id>
+    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/marcomagrini/698692268/in/photolist-24JYSq-hTTAJN-4gjQW9-9GRKCW-4gfNhz-x2yZ-6Nnwy1-6Lm68p-66BVjW-8hawRk-4sE2Jz-5Z6uvQ-6B4iH3-qzDvGU-aNpvLT-9UFZLh-egKvNt-bMh6PR-ceG9AL-gDqtze-96JhRW-7EWMH6-3MTfDt-9rUJ4W-dFPssj-8LLrys-aDAda3-9rUJ45-7xLAFR-prSHik-7yDFHC-7erqEc-6YJx8e-39SyR4-dkQnGi-7hy6zT-4UokrH-hkMoBr-9tBN3K-jq8Bpu-aDMSk2-pwQdmt-9tFrUD-6TzF6G-WDAsCC-8Mm4tD-8M8hyS-4yzkGK-67MPUw-crfg" title="sunflowers"><img src="https://live.staticflickr.com/1007/698692268_b31d429272.jpg" width="500" height="325" alt="sunflowers"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>In the <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">last post</a>, we took a look at a simple autoencoder. The autoencoder is a deep learning model that takes in an image and, (through an encoder and decoder), works to produce the same image. In short:</p>
+
+<ul>
+<li>Autoencoder: image &ndash;> image</li>
+</ul>
+
+
+<p>For a discriminator, we are going to focus on only the first half on the autoencoder.</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647347383_9577b7b672_b.jpg" alt="discriminator" /></p>
+
+<p>Why only half? We want a different transformation. We are going to want to take an image as input and then do some <em>discrimination</em> of the image and classify what type of image it is. In our case, the model is going to input an image of a handwritten digit and attempt to decide which number it is.</p>
+
+<ul>
+<li>Discriminator: image &ndash;> label</li>
+</ul>
+
+
+<p>As always, with deep learning. To do anything, we need data.</p>
+
+<h3>MNIST Data</h3>
+
+<p>Nothing changes here from the autoencoder code. We are still using the MNIST dataset for handwritten digits.</p>
+
+<p>```clojure
+;;; Load the MNIST datasets
+(def train-data
+  (mx-io/mnist-iter
+   {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
+
+<pre><code>:label (str data-dir "train-labels-idx1-ubyte")
+:input-shape [784]
+:flat true
+:batch-size batch-size
+:shuffle true}))
+</code></pre>
+
+<p>(def test-data
+  (mx-io/mnist-iter
+   {:image (str data-dir &ldquo;t10k-images-idx3-ubyte&rdquo;)</p>
+
+<pre><code>:label (str data-dir "t10k-labels-idx1-ubyte")
+:input-shape [784]
+:batch-size batch-size
+:flat true
+:shuffle true}))
+</code></pre>
+
+<p>```</p>
+
+<p>The model will change since we want a different output.</p>
+
+<h3>The Model</h3>
+
+<p>We are still taking in the image as input, and using the same encoder layers from the autoencoder model. However, at the end, we use a fully connected layer that has 10 hidden nodes &ndash; one for each label of the digits 0-9. Then we use a softmax for the classification output.</p>
+
+<p>```clojure
+(def input (sym/variable &ldquo;input&rdquo;))
+(def output (sym/variable &ldquo;input_&rdquo;))</p>
+
+<p>(defn get-symbol []
+  (as-> input data</p>
+
+<pre><code>;; encode
+(sym/fully-connected "encode1" {:data data :num-hidden 100})
+(sym/activation "sigmoid1" {:data data :act-type "sigmoid"})
+
+;; encode
+(sym/fully-connected "encode2" {:data data :num-hidden 50})
+(sym/activation "sigmoid2" {:data data :act-type "sigmoid"})
+
+;;; this last bit changed from autoencoder
+;;output
+(sym/fully-connected "result" {:data data :num-hidden 10})
+(sym/softmax-output {:data data :label output})))
+</code></pre>
+
+<p>```</p>
+
+<p>In the autoencoder, we were never actually using the label, but we will certainly need to use it this time. It is reflected in the model&rsquo;s bindings with the data and label shapes.</p>
+
+<p>```clojure
+(def model (&ndash;> (m/module (get-symbol) {:data-names [&ldquo;input&rdquo;] :label-names [&ldquo;input_&rdquo;]})</p>
+
+<pre><code>           (m/bind {:data-shapes [(assoc data-desc :name "input")]
+                    :label-shapes [(assoc label-desc :name "input_")]})
+           (m/init-params {:initializer (initializer/uniform 1)})
+           (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
+</code></pre>
+
+<p>```</p>
+
+<p>For the evaluation metric, we are also going to use an accuracy metric vs a mean squared error (mse) metric</p>
+
+<p><code>clojure
+(def my-metric (eval-metric/accuracy))
+</code></p>
+
+<p>With these items in place, we are ready to train the model.</p>
+
+<h3>Training</h3>
+
+<p>The training from the autoencoder needs to changes to use the real label for the the forward pass and updating the metric.</p>
+
+<p>```clojure
+(defn train [num-epochs]
+  (doseq [epoch-num (range 0 num-epochs)]</p>
+
+<pre><code>(println "starting epoch " epoch-num)
+(mx-io/do-batches
+ train-data
+ (fn [batch]
+   ;;; here we make sure to use the label
+   ;;; now for forward and update-metric
+   (-&gt; model
+       (m/forward {:data (mx-io/batch-data batch)
+                   :label (mx-io/batch-label batch)})
+       (m/update-metric my-metric (mx-io/batch-label batch))
+       (m/backward)
+       (m/update))))
+(println {:epoch epoch-num
+          :metric (eval-metric/get-and-reset my-metric)})))
+</code></pre>
+
+<p>```</p>
+
+<h3>Let&rsquo;s Run Things</h3>
+
+<p>It&rsquo;s always a good idea to take a look at things before you start training.</p>
+
+<p>The first batch of the training data looks like:</p>
+
+<p>```clojure
+  (def my-batch (mx-io/next train-data))
+  (def images (mx-io/batch-data my-batch))
+  (viz/im-sav {:title &ldquo;originals&rdquo;</p>
+
+<pre><code>           :output-path "results/"
+           :x (-&gt; images
+                  first
+                  (ndarray/reshape [100 1 28 28]))})
+</code></pre>
+
+<p>```</p>
+
+<p><img src="https://live.staticflickr.com/65535/48648000857_fb17f0de66.jpg" alt="training-batch" /></p>
+
+<p>Before training, if we take the first batch from the test data and predict what the labels are:</p>
+
+<p>```clojure
+  (def my-test-batch (mx-io/next test-data))
+  (def test-images (mx-io/batch-data my-test-batch))
+  (viz/im-sav {:title &ldquo;test-images&rdquo;</p>
+
+<pre><code>           :output-path "results/"
+           :x (-&gt; test-images
+                  first
+                  (ndarray/reshape [100 1 28 28]))})
+</code></pre>
+
+<p>```</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647524478_ca35bef78f.jpg" alt="test-batch" /></p>
+
+<p>```clojure
+  (def preds (m/predict-batch model {:data test-images} ))
+  (&ndash;>> preds</p>
+
+<pre><code>   first
+   (ndarray/argmax-channel)
+   (ndarray/-&gt;vec)
+   (take 10))
+</code></pre>
+
+<p> ;=> (1.0 8.0 8.0 8.0 8.0 8.0 2.0 8.0 8.0 1.0)
+```</p>
+
+<p>Yeah, not even close. The real first line of the images is <code>6 1 0 0 3 1 4 8 0 9</code></p>
+
+<p>Let&rsquo;s Train!</p>
+
+<p>```clojure
+  (train 3)</p>
+
+<p>;; starting epoch  0
+;; {:epoch 0, :metric [accuracy 0.83295]}
+;; starting epoch  1
+;; {:epoch 1, :metric [accuracy 0.9371333]}
+;; starting epoch  2
+;; {:epoch 2, :metric [accuracy 0.9547667]}</p>
+
+<p>```</p>
+
+<p>After the training, let&rsquo;s have another look at the predicted labels.</p>
+
+<p>```clojure
+  (def preds (m/predict-batch model {:data test-images} ))
+  (&ndash;>> preds</p>
+
+<pre><code>   first
+   (ndarray/argmax-channel)
+   (ndarray/-&gt;vec)
+   (take 10))
+</code></pre>
+
+<p> ;=> (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)
+```</p>
+
+<ul>
+<li>Predicted = <code>(6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</code></li>
+<li>Actual = <code>6 1 0 0 3 1 4 8 0 9</code></li>
+</ul>
+
+
+<p>Rock on!</p>
+
+<h3>Closing</h3>
+
+<p>In this post, we focused on the first half of the autoencoder and made a discriminator model that took in an image and gave us a label.</p>
+
+<p>Don&rsquo;t forget to save the trained model for later, we&rsquo;ll be using it.</p>
+
+<p>```clojure
+  (m/save-checkpoint model {:prefix &ldquo;model/discriminator&rdquo;</p>
+
+<pre><code>                        :epoch 2})
+</code></pre>
+
+<p>```</p>
+
+<p>Until then, here is a picture of Otto the cat in a basket to keep you going.</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg" alt="Otto in basket" /></p>
+
+<p><em>P.S. If you want to run all the code for yourself. It is <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/discriminator.clj">here</a></em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Simple Autoencoder]]></title>
@@ -585,217 +830,6 @@ If you are running on linux, you should change the</code>mxnet-full_2.11-osx-x86
 <p>Thanks again to the community for the contributions to make this possible. It&rsquo;s great seeing new things coming to life.</p>
 
 <p>Happy Object Detecting!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to GAN a Flan]]></title>
-    <link href="http://gigasquid.github.io/blog/2018/12/18/how-to-gan-a-flan/"/>
-    <updated>2018-12-18T16:34:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2018/12/18/how-to-gan-a-flan</id>
-    <content type="html"><![CDATA[<p>It&rsquo;s holiday time and that means parties and getting together with friends. Bringing a baked good or dessert to a gathering is a time honored tradition. But what if this year, you could take it to the next level? Everyone brings actual food. But with the help of Deep Learning, you can bring something completely different &ndash;  you can bring the <em>image</em> of baked good! I&rsquo;m not talking about just any old image that someone captured with a camera or created with a pen and paper. I&rsquo;m talking about the computer itself <strong>creating</strong>. This image would be never before seen, totally unique, and crafted by the creative process of the machine.</p>
-
-<p>That is exactly what we are going to do. We are going to create a <em>flan</em></p>
-
-<p><img src="https://c1.staticflickr.com/5/4065/4339500429_aa9c55f246_n.jpg" alt="Photo by Lucia Sanchez on Flickr" /></p>
-
-<p>If you&rsquo;ve never had a flan before, it&rsquo;s a yummy dessert made of a baked custard with caramel sauce on it.</p>
-
-<p>&ldquo;Why a flan?&rdquo;, you may ask. There are quite a few reasons:</p>
-
-<ul>
-<li>It&rsquo;s tasty in real life.</li>
-<li>Flan rhymes with GAN, <em>(unless you pronounce it &ldquo;Gaaahn&rdquo;)</em>.</li>
-<li>Why not?</li>
-</ul>
-
-
-<p>Onto the recipe. How are we actually going to make this work? We need some ingredients:</p>
-
-<ul>
-<li><a href="https://clojure.org/">Clojure</a> &ndash; the most advanced programming language to create generative desserts.</li>
-<li><a href="https://mxnet.apache.org">Apache MXNet</a> &ndash; a flexible and efficient deep learning library that has a Clojure package.</li>
-<li>1000-5000 pictures of flans &ndash; for Deep Learning you need data!</li>
-</ul>
-
-
-<h2>Gather Flan Pictures</h2>
-
-<p>The first thing you want to do is gather your 1000 or more images with a <a href="https://github.com/montoyamoraga/scrapers">scraper</a>. The scraper will crawl google, bing, or instagram and download pictures of <em>mostly</em> flans to your computer. You may have to eyeball and remove any clearly wrong ones from your stash.</p>
-
-<p>Next, you need to gather all these images in a directory and run a tool called <a href="https://github.com/apache/incubator-mxnet/blob/master/tools/im2rec.py">im2rec.py</a> on them to turn them into an <a href="https://mxnet.incubator.apache.org/tutorials/basic/data.html#loading-data-using-image-iterators">image record iterator</a> for use with MXNet. This will produce an optimized format that will allow our deep learning program to efficiently cycle through them.</p>
-
-<p>Run:</p>
-
-<pre><code>python3 im2rec.py --resize 28 root flan
-</code></pre>
-
-<p>to produce a <code>flan.rec</code> file with images resized to 28x28 that we can use next.</p>
-
-<h2>Load Flan Pictures into MXNet</h2>
-
-<p>The next step is to import the image record iterator into the MXNet with the <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package">Clojure API</a>. We can do this with the <code>io</code> namespace.</p>
-
-<p>Add this to your require:</p>
-
-<pre><code>[org.apache.clojure-mxnet.io :as mx-io]
-</code></pre>
-
-<p>Now, we can load our images:</p>
-
-<p>```clojure
-(def flan-iter (mx-io/image-record-iter {:path-imgrec &ldquo;flan.rec&rdquo;</p>
-
-<pre><code>                                     :data-shape [3 28 28]
-                                     :batch-size batch-size}))
-</code></pre>
-
-<p>```</p>
-
-<p>Now, that we have the images, we need to create our <code>model</code>. This is what is actually going to do the learning and creating of images.</p>
-
-<h2>Creating a GAN model.</h2>
-
-<p>GAN stands for <em>Generative Adversarial Network</em>. This is a incredibly cool deep learning technique that has two different models pitted against each, yet both learning and getting better at the same time. The two models are a generator and a discriminator. The generator model creates a new image from a random noise vector. The discriminator then tries to tell whether the image is a real image or a fake image. We need to create both of these models for our network.</p>
-
-<p>First, the discriminator model. We are going to use the <code>symbol</code> namespace for the clojure package:</p>
-
-<p>```clojure
-(defn discriminator []
-  (as-> (sym/variable &ldquo;data&rdquo;) data</p>
-
-<pre><code>(sym/convolution "d1" {:data data
-                       :kernel [4 4]
-                       :pad [3 3]
-                       :stride [2 2]
-                       :num-filter ndf
-                       :no-bias true})
-(sym/batch-norm "dbn1" {:data data :fix-gamma true :eps eps})
-(sym/leaky-re-lu "dact1" {:data data :act-type "leaky" :slope 0.2})
-
-...
-</code></pre>
-
-<p>```</p>
-
-<p>There is a variable for the <code>data</code> coming in, (which is the picture of the flan), it then flows through the other layers which consist of convolutions, normalization, and activation layers. The last three layers actually repeat another two times before ending in the output, which tells whether it thinks the image was a fake or not.</p>
-
-<p>The generator model looks similar:</p>
-
-<p>```clojure
-(defn generator []
-  (as-> (sym/variable &ldquo;rand&rdquo;) data</p>
-
-<pre><code>(sym/deconvolution "g1" {:data data
-                         :kernel [4 4]
-                         :pad [0 0]
-                         :stride [1 1]
-                         :num-filter
-                         (* 4 ndf) :no-bias true})
-(sym/batch-norm "gbn1" {:data data :fix-gamma true :eps eps})
-(sym/activation "gact1" {:data data :act-type "relu"})
-
-...
-</code></pre>
-
-<p>```</p>
-
-<p>There is a variable for the <code>data</code> coming in, but this time it is a random noise vector. Another interesting point that is is using a <code>deconvolution</code> layer instead of a <code>convolution</code> layer. The generator is basically the inverse of the discriminator. It starts with a random noise vector, but that is translated up through the layers until it is expanded to a image output.</p>
-
-<p>Next, we iterate through all of our training images in our <code>flan-iter</code> with <code>reduce-batches</code>. Here is just an excerpt where we get a random noise vector and have the generator run the data through and produce the output image:</p>
-
-<p>```clojure
-(mx-io/reduce-batches</p>
-
-<pre><code>   flan-iter
-   (fn [n batch]
-     (let [rbatch (mx-io/next rand-noise-iter)
-           dbatch (mapv normalize-rgb-ndarray (mx-io/batch-data batch))
-           out-g (-&gt; mod-g
-                     (m/forward rbatch)
-                     (m/outputs))
-</code></pre>
-
-<p>```</p>
-
-<p>The whole code is <a href="https://github.com/gigasquid/mxnet-gan-flan">here</a> for reference, but let&rsquo;s skip forward and run it and see what happens.</p>
-
-<p><img src="/images/gout-96-0.jpg" alt="" /></p>
-
-<p>FLANS!! Well, they could be flans if you squint a bit.</p>
-
-<p>Now that we have them kinda working for a small image size 28x28, let&rsquo;s biggerize it.</p>
-
-<h2>Turn on the Oven and Bake</h2>
-
-<p>Turning up the size to 128x128 requires some alterations in the layers' parameters to make sure that it processes and generates the correct size, but other than that we are good to go.</p>
-
-<p>Here comes the fun part, watching it train and learn:</p>
-
-<h3>Epoch 0</h3>
-
-<p><img src="/images/flan-random-128-0-0.jpg" alt="" /></p>
-
-<p>In the beginning there was nothing but random noise.</p>
-
-<h3>Epoch 10</h3>
-
-<p><img src="/images/flan-random-128-10-0.jpg" alt="" /></p>
-
-<p>It&rsquo;s beginning to learn colors! Red, yellow, brown seem to be important to flans.</p>
-
-<h3>Epoch 23</h3>
-
-<p><img src="/images/flan-random-128-23-0.jpg" alt="" /></p>
-
-<p>It&rsquo;s learning shapes! It has learned that flans seem to be blob shaped.</p>
-
-<h3>Epoch 33</h3>
-
-<p><img src="/images/flan-random-128-33-0.jpg" alt="" /></p>
-
-<p>It is moving into its surreal phase. Salvidor Dali would be proud of these flans.</p>
-
-<h3>Epoch 45</h3>
-
-<p><img src="/images/flan-random-128-45.jpg" alt="" /></p>
-
-<p>Things take a weird turn. Does that flan have eyes?</p>
-
-<h3>Epoch 68</h3>
-
-<p><img src="/images/flan-random-128-68-0.jpg" alt="" /></p>
-
-<p>Even worse. Are those demonic flans? Should we even continue down this path?</p>
-
-<p>Answer: Yes &ndash; <strong>the training must go on..</strong></p>
-
-<h3>Epoch 161</h3>
-
-<p><img src="/images/flan-random-161-0.jpg" alt="" /></p>
-
-<p>Big moment here. It looks like something that could possibly be edible.</p>
-
-<h3>Epoch 170</h3>
-
-<p><img src="/images/flan-random-170-0.jpg" alt="" /></p>
-
-<p>Ick! Green Flans! No one is going to want that.</p>
-
-<h3>Epoch 195</h3>
-
-<p><img src="/images/explore-195.jpg" alt="" /></p>
-
-<p>We&rsquo;ve achieved maximum flan, (for the time being).</p>
-
-<h2>Explore</h2>
-
-<p>If you are interested in playing around with the pretrained model, you can check it out <a href="https://github.com/gigasquid/mxnet-gan-flan/blob/master/src/mxnet_gan_flan/gan.clj#L355">here with the pretrained function</a>.
-It will load up the trained model and generate flans for you to explore and bring to your dinner parties.</p>
-
-<p>Wrapping up, training GANs is a <em>lot</em> of fun. With MXNet, you can bring the fun with you to Clojure.</p>
-
-<p>Want more, check out this Clojure Conj video &ndash;  <a href="https://www.youtube.com/watch?v=yzfnlcHtwiY">Can You GAN?</a>.</p>
 ]]></content>
   </entry>
   
