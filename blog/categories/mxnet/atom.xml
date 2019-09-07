@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MXNet | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/mxnet/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-09-03T16:11:55-04:00</updated>
+  <updated>2019-09-06T20:11:06-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,197 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Focus on the Generator]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/09/06/focus-on-the-generator/"/>
+    <updated>2019-09-06T18:07:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/09/06/focus-on-the-generator</id>
+    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/smigla-bobinski/19705409981/in/album-72157647756733695/" title="SIMULACRA by Karina Smigla-Bobinski"><img src="https://live.staticflickr.com/330/19705409981_4e0ae93572.jpg" width="500" height="267" alt="SIMULACRA by Karina Smigla-Bobinski"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>In this first post of this series, we took a look at a <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">simple autoencoder</a>. It took and image and transformed it back to an image. Then, we <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">focused in on the disciminator</a> portion of the model, where we took an image and transformed it to a label. Now, we focus in on the generator portion of the model do the inverse operation: we transform a label to an image. In recap:</p>
+
+<ul>
+<li>Autoencoder: image &ndash;> image</li>
+<li>Discriminator: image &ndash;> label</li>
+<li>Generator: label &ndash;> image (This is what we are doing now!)</li>
+</ul>
+
+
+<p><img src="https://live.staticflickr.com/65535/48689260086_11fe4b089b_b.jpg" alt="generator" /></p>
+
+<h2>Still Need Data of Course</h2>
+
+<p>Nothing changes here. We are still using the MNIST handwritten digit set and have an input and out to our model.</p>
+
+<p>```clojure
+(def
+  train-data
+  (mx-io/mnist-iter {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
+
+<pre><code>                 :label (str data-dir "train-labels-idx1-ubyte")
+                 :input-shape [784]
+                 :flat true
+                 :batch-size batch-size
+                 :shuffle true}))
+</code></pre>
+
+<p>(def
+  test-data (mx-io/mnist-iter</p>
+
+<pre><code>         {:image (str data-dir "t10k-images-idx3-ubyte")
+          :label (str data-dir "t10k-labels-idx1-ubyte")
+          :input-shape [784]
+          :batch-size batch-size
+          :flat true
+          :shuffle true}))
+</code></pre>
+
+<p>(def input (sym/variable &ldquo;input&rdquo;))
+(def output (sym/variable &ldquo;input_&rdquo;))
+```</p>
+
+<h2>The Generator Model</h2>
+
+<p>The model does change to one hot encode the label for the number. Other than that, it&rsquo;s pretty much the exact same second half of the autoencoder model.</p>
+
+<p>```clojure
+(defn get-symbol []
+  (as-> input data</p>
+
+<pre><code>(sym/one-hot "onehot" {:indices data :depth 10})
+;; decode
+(sym/fully-connected "decode1" {:data data :num-hidden 50})
+(sym/activation "sigmoid3" {:data data :act-type "sigmoid"})
+
+;; decode
+(sym/fully-connected "decode2" {:data data :num-hidden 100})
+(sym/activation "sigmoid4" {:data data :act-type "sigmoid"})
+
+;;output
+(sym/fully-connected "result" {:data data :num-hidden 784})
+(sym/activation "sigmoid5" {:data data :act-type "sigmoid"})
+
+(sym/linear-regression-output {:data data :label output})))
+</code></pre>
+
+<p>(def data-desc
+  (first
+   (mx-io/provide-data-desc train-data)))
+(def label-desc
+  (first
+   (mx-io/provide-label-desc train-data)))
+```</p>
+
+<p>When binding the shapes to the model, we now need to specify that the input data shapes is the label instead of the image and the output of the model is going to be the image.</p>
+
+<p>```clojure
+(def
+  model
+  ;;; change data shapes to label shapes
+  (&ndash;> (m/module (get-symbol) {:data-names [&ldquo;input&rdquo;] :label-names [&ldquo;input_&rdquo;]})</p>
+
+<pre><code>  (m/bind {:data-shapes [(assoc label-desc :name "input")]
+           :label-shapes [(assoc data-desc :name "input_")]})
+  (m/init-params {:initializer  (initializer/uniform 1)})
+  (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
+</code></pre>
+
+<p>(def my-metric (eval-metric/mse))
+```</p>
+
+<h2>Training</h2>
+
+<p>The training of the model is pretty straight forward. Just being mindful that we are using hte batch-label, (number label),  as the input and and validating with the batch-data, (image).</p>
+
+<p>```clojure
+(defn train [num-epochs]
+  (doseq [epoch-num (range 0 num-epochs)]</p>
+
+<pre><code>(println "starting epoch " epoch-num)
+(mx-io/do-batches
+ train-data
+ (fn [batch]
+   ;;; change input to be the label
+   (-&gt; model
+       (m/forward {:data (mx-io/batch-label batch)
+                   :label (mx-io/batch-data batch)})
+       (m/update-metric my-metric (mx-io/batch-data batch))
+       (m/backward)
+       (m/update))))
+(println "result for epoch " epoch-num " is "
+         (eval-metric/get-and-reset my-metric))))
+</code></pre>
+
+<p>```</p>
+
+<h2>Results Before Training</h2>
+
+<p>```clojure
+(def my-test-batch (mx-io/next test-data))
+  ;;; change to input labels
+  (def test-labels (mx-io/batch-label my-test-batch))
+  (def preds (m/predict-batch model {:data test-labels} ))
+  (viz/im-sav {:title &ldquo;before-training-preds&rdquo;</p>
+
+<pre><code>           :output-path "results/"
+           :x (ndarray/reshape (first preds) [100 1 28 28])})
+</code></pre>
+
+<p>  (&ndash;>> test-labels first ndarray/&ndash;>vec (take 10))
+  ;=> (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)
+```</p>
+
+<p><img src="http://live.staticflickr.com/65535/48689304281_a41bf39353.jpg" alt="before training" /></p>
+
+<p>Not very impressive&hellip; Let&rsquo;s train</p>
+
+<p>```clojure
+(train 3)</p>
+
+<p>starting epoch  0
+result for epoch  0  is<br/>
+[mse 0.0723091]
+starting epoch  1
+result for epoch  1  is  [mse 0.053891845]
+starting epoch  2
+result for epoch  2  is  [mse 0.05337505]
+```</p>
+
+<h2>Results After Training</h2>
+
+<p>```clojure
+ (def my-test-batch (mx-io/next test-data))
+  (def test-labels (mx-io/batch-label my-test-batch))
+  (def preds (m/predict-batch model {:data test-labels}))
+  (viz/im-sav {:title &ldquo;after-training-preds&rdquo;</p>
+
+<pre><code>           :output-path "results/"
+           :x (ndarray/reshape (first preds) [100 1 28 28])})
+</code></pre>
+
+<p>  (&ndash;>> test-labels first ndarray/&ndash;>vec (take 10))</p>
+
+<p>  ;=>   (9.0 5.0 7.0 1.0 8.0 6.0 6.0 0.0 8.0 1.0)
+```</p>
+
+<p><img src="https://live.staticflickr.com/65535/48689328481_338416ba7c.jpg" alt="after training" /></p>
+
+<p>Cool! The first row is indeed</p>
+
+<p><code>(9.0 5.0 7.0 1.0 8.0 6.0 6.0 0.0 8.0 1.0)</code></p>
+
+<h2>Save Your Model</h2>
+
+<p>Don&rsquo;t forget to save the generator model off &ndash; we are going to use it next time.</p>
+
+<p><code>clojure
+(m/save-checkpoint model {:prefix "model/generator" :epoch 2})
+</code></p>
+
+<p>Happy Deep Learning until next time &hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Focus on the Discriminator]]></title>
@@ -670,166 +861,6 @@ docker run -it -p 10000:10000 hellonico/mxnet</p>
 <p><img class="<a" src="href="https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg">https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg</a>"></p>
 
 <p>Have a great rest of March!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Object Detection With Clojure MXNet]]></title>
-    <link href="http://gigasquid.github.io/blog/2019/01/19/object-detection-with-clojure-mxnet/"/>
-    <updated>2019-01-19T13:34:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2019/01/19/object-detection-with-clojure-mxnet</id>
-    <content type="html"><![CDATA[<p><img src="https://c1.staticflickr.com/8/7837/32928474208_4960caafb3.jpg" alt="" /></p>
-
-<p>Object detection just landed in MXNet thanks to the work of contributors <a href="https://github.com/kedarbellare">Kedar Bellare</a> and <a href="https://github.com/hellonico/">Nicolas Modrzyk</a>. Kedar ported over the <code>infer</code> package to Clojure, making inference and prediction much easier for users and Nicolas integrated in his <a href="https://github.com/hellonico/origami">Origami</a> OpenCV library into the the examples to make the visualizations happen.</p>
-
-<p>We&rsquo;ll walk through the main steps to use the <code>infer</code> object detection which include creating the detector with a model and then loading the image and running the inference on it.</p>
-
-<h3>Creating the Detector</h3>
-
-<p>To create the detector you need to define a couple of things:</p>
-
-<ul>
-<li>How big is your image?</li>
-<li>What model are you going to be using for object detection?</li>
-</ul>
-
-
-<p>In the code below, we are going to be giving it an color image of size 512 x 512.</p>
-
-<p>```clojure
-(defn create-detector []
-  (let [descriptors [{:name &ldquo;data&rdquo;</p>
-
-<pre><code>                  :shape [1 3 512 512]
-                  :layout layout/NCHW
-                  :dtype dtype/FLOAT32}]
-    factory (infer/model-factory model-path-prefix descriptors)]
-(infer/create-object-detector factory)))
-</code></pre>
-
-<p>```</p>
-
-<ul>
-<li>The shape is going to be <code>[1 3 512 512]</code>.
-
-<ul>
-<li>The <code>1</code> is for the batch size which in our case is a single image.</li>
-<li>The <code>3</code> is for the channels in the image which for a RGB image is <code>3</code></li>
-<li>The <code>512</code> is for the image height and width.</li>
-</ul>
-</li>
-<li>The <code>layout</code> specifies that the shape given is in terms of <code>NCHW</code> which is batch size, channel size, height, and width.</li>
-<li>The <code>dtype</code> is the image data type which will be the standard <code>FLOAT32</code></li>
-<li>The <code>model-path-prefix</code> points to the place where the trained model we are using for object detection lives.</li>
-</ul>
-
-
-<p>The model we are going to use is the <a href="https://arxiv.org/abs/1512.02325">Single Shot Multiple Box Object Detector (SSD)</a>. You can download the model yourself using this <a href="https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/examples/infer/objectdetector/scripts/get_ssd_data.sh">script</a>.</p>
-
-<h3>How to Load an Image and Run the Detector</h3>
-
-<p>Now that we have a model and a detector, we can load an image up and run the object detection.</p>
-
-<p>To load the image use <code>load-image</code> which will load the image from the path.</p>
-
-<p><code>clojure
-(infer/load-image-from-file input-image)
-</code></p>
-
-<p>Then run the detection using <code>infer/detect-objects</code> which will give you the top five predictions by default.</p>
-
-<p><code>clojure
-(infer/detect-objects detector image)
-</code></p>
-
-<p>It will give an output something like this:</p>
-
-<p><code>clojure
-[[{:class "person",
-   :prob 0.9657765,
-   :x-min 0.021868259,
-   :y-min 0.049295247,
-   :x-max 0.9975169,
-   :y-max 0.9734151}
-  {:class "dog",
-   :prob 0.17513266,
-   :x-min 0.16772352,
-   :y-min 0.45792937,
-   :x-max 0.55409217,
-   :y-max 0.72507095}
-   ...
-]]
-</code></p>
-
-<p>which you can then use to draw bounding boxes on the image.</p>
-
-<h3>Try Running the Example</h3>
-
-<p><img src="https://c1.staticflickr.com/8/7804/31862638207_61be3a6e3c_b.jpg" alt="" /></p>
-
-<p>One of the best ways to explore using it is with the <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/infer/objectdetector">object detection example</a> in the MXNet repo. It will be coming out officially in the <code>1.5.0</code> release, but you can get an early peek at it by building the project and running the example with the nightly snapshot.</p>
-
-<p>You can do this by cloning the <a href="https://github.com/apache/incubator-mxnet">MXNet Repo</a> and changing directory to <code>contrib/clojure-package</code>.</p>
-
-<p>Next, edit the <code>project.clj</code> to look like this:</p>
-
-<p>```clojure
-(defproject org.apache.mxnet.contrib.clojure/clojure-mxnet &ldquo;1.5.0-SNAPSHOT&rdquo;
-  :description &ldquo;Clojure package for MXNet&rdquo;
-  :url &ldquo;<a href="https://github.com/apache/incubator-mxnet">https://github.com/apache/incubator-mxnet</a>&rdquo;
-  :license {:name &ldquo;Apache License&rdquo;</p>
-
-<pre><code>        :url "http://www.apache.org/licenses/LICENSE-2.0"}
-</code></pre>
-
-<p>  :dependencies [[org.clojure/clojure &ldquo;1.9.0&rdquo;]</p>
-
-<pre><code>             [t6/from-scala "0.3.0"]
-
-             ;; To use with nightly snapshot
-             ;[org.apache.mxnet/mxnet-full_2.11-osx-x86_64-cpu "&lt;insert-snapshot-version&gt;"]
-             ;[org.apache.mxnet/mxnet-full_2.11-linux-x86_64-cpu "&lt;insert-snapshot-version&gt;"]
-             ;[org.apache.mxnet/mxnet-full_2.11-linux-x86_64-gpu "&lt;insert-snapshot-version"]
-
-             [org.apache.mxnet/mxnet-full_2.11-osx-x86_64-cpu "1.5.0-SNAPSHOT"]
-
-             ;;; CI
-             #_[org.apache.mxnet/mxnet-full_2.11 "INTERNAL"]
-
-             [org.clojure/tools.logging "0.4.0"]
-             [org.apache.logging.log4j/log4j-core "2.8.1"]
-             [org.apache.logging.log4j/log4j-api "2.8.1"]
-             [org.slf4j/slf4j-log4j12 "1.7.25" :exclusions [org.slf4j/slf4j-api]]]
-</code></pre>
-
-<p>  :pedantic? :skip
-  :plugins [[lein-codox &ldquo;0.10.3&rdquo; :exclusions [org.clojure/clojure]]</p>
-
-<pre><code>        [lein-cloverage "1.0.10" :exclusions [org.clojure/clojure]]
-        [lein-cljfmt "0.5.7"]]
-</code></pre>
-
-<p>  :codox {:namespaces [#&ldquo;^org.apache.clojure-mxnet.(?!gen).*&rdquo;]}
-  :aot [dev.generator]
-  :repositories [[&ldquo;staging&rdquo; {:url &ldquo;<a href="https://repository.apache.org/content/repositories/staging">https://repository.apache.org/content/repositories/staging</a>&rdquo;                  :snapshots true</p>
-
-<pre><code>                         :update :always}]
-             ["snapshots" {:url "https://repository.apache.org/content/repositories/snapshots"               :snapshots true
-                          :update :always}]])
-</code></pre>
-
-<p><code>``
-If you are running on linux, you should change the</code>mxnet-full_2.11-osx-x86_64-cpu<code>to</code>mxnet-full_2.11-linux-x86_64-cpu`.</p>
-
-<p>Next, go ahead and do <code>lein test</code> to make sure that everything builds ok. If you run into any trouble please refer to <a href="https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/README.md">README</a> for any missing dependencies.</p>
-
-<p>After that do a <code>lein install</code> to install the <code>clojure-mxnet</code> jar to your local maven. Now you are ready to <code>cd examples/infer/object-detection</code> to try it out. Refer to the README for more details.</p>
-
-<p>If you run into any problems getting started, feel free to reach out in the Clojurian #mxnet slack room or open an issue at the MXNet project. We are a friendly group and happy to help out.</p>
-
-<p>Thanks again to the community for the contributions to make this possible. It&rsquo;s great seeing new things coming to life.</p>
-
-<p>Happy Object Detecting!</p>
 ]]></content>
   </entry>
   

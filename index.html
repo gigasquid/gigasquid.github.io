@@ -95,6 +95,309 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-09-06T18:07:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri  6 Sep 2019,  6:07 PM</time>
+        
+           | <a href="/blog/2019/09/06/focus-on-the-generator/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2019/09/06/focus-on-the-generator/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2019/09/06/focus-on-the-generator/" itemprop="url">Focus on the Generator</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/smigla-bobinski/19705409981/in/album-72157647756733695/" title="SIMULACRA by Karina Smigla-Bobinski"><img src="https://live.staticflickr.com/330/19705409981_4e0ae93572.jpg" width="500" height="267" alt="SIMULACRA by Karina Smigla-Bobinski"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>In this first post of this series, we took a look at a <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">simple autoencoder</a>. It took and image and transformed it back to an image. Then, we <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">focused in on the disciminator</a> portion of the model, where we took an image and transformed it to a label. Now, we focus in on the generator portion of the model do the inverse operation: we transform a label to an image. In recap:</p>
+
+<ul>
+<li>Autoencoder: image &ndash;> image</li>
+<li>Discriminator: image &ndash;> label</li>
+<li>Generator: label &ndash;> image (This is what we are doing now!)</li>
+</ul>
+
+
+<p><img src="https://live.staticflickr.com/65535/48689260086_11fe4b089b_b.jpg" alt="generator" /></p>
+
+<h2>Still Need Data of Course</h2>
+
+<p>Nothing changes here. We are still using the MNIST handwritten digit set and have an input and out to our model.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def</span>
+</span><span class='line'>  <span class="nv">train-data</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                     <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>                     <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>                     <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>                     <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
+</span><span class='line'>                     <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">def</span>
+</span><span class='line'>  <span class="nv">test-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span>
+</span><span class='line'>             <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>              <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-labels-idx1-ubyte&quot;</span><span class="p">)</span>
+</span><span class='line'>              <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
+</span><span class='line'>              <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
+</span><span class='line'>              <span class="ss">:flat</span> <span class="nv">true</span>
+</span><span class='line'>              <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">input</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">output</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input_&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The Generator Model</h2>
+
+<p>The model does change to one hot encode the label for the number. Other than that, it&rsquo;s pretty much the exact same second half of the autoencoder model.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">get-symbol</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="nv">input</span> <span class="nv">data</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/one-hot</span> <span class="s">&quot;onehot&quot;</span> <span class="p">{</span><span class="ss">:indices</span> <span class="nv">data</span> <span class="ss">:depth</span> <span class="mi">10</span><span class="p">})</span>
+</span><span class='line'>    <span class="c1">;; decode</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;decode1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">50</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid3&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">;; decode</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;decode2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">100</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid4&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">;;output</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;result&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">784</span><span class="p">})</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid5&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">(</span><span class="nf">sym/linear-regression-output</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:label</span> <span class="nv">output</span><span class="p">})))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">data-desc</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">first</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">mx-io/provide-data-desc</span> <span class="nv">train-data</span><span class="p">)))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">label-desc</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">first</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">mx-io/provide-label-desc</span> <span class="nv">train-data</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When binding the shapes to the model, we now need to specify that the input data shapes is the label instead of the image and the output of the model is going to be the image.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def</span>
+</span><span class='line'>  <span class="nv">model</span>
+</span><span class='line'>  <span class="c1">;;; change data shapes to label shapes</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/module</span> <span class="p">(</span><span class="nf">get-symbol</span><span class="p">)</span> <span class="p">{</span><span class="ss">:data-names</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]</span> <span class="ss">:label-names</span> <span class="p">[</span><span class="s">&quot;input_&quot;</span><span class="p">]})</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">label-desc</span> <span class="ss">:name</span> <span class="s">&quot;input&quot;</span><span class="p">)]</span>
+</span><span class='line'>               <span class="ss">:label-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">data-desc</span> <span class="ss">:name</span> <span class="s">&quot;input_&quot;</span><span class="p">)]})</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/init-params</span> <span class="p">{</span><span class="ss">:initializer</span>  <span class="p">(</span><span class="nf">initializer/uniform</span> <span class="mi">1</span><span class="p">)})</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/init-optimizer</span> <span class="p">{</span><span class="ss">:optimizer</span> <span class="p">(</span><span class="nf">optimizer/adam</span> <span class="p">{</span><span class="ss">:learning-rage</span> <span class="mf">0.001</span><span class="p">})})))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">my-metric</span> <span class="p">(</span><span class="nf">eval-metric/mse</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Training</h2>
+
+<p>The training of the model is pretty straight forward. Just being mindful that we are using hte batch-label, (number label),  as the input and and validating with the batch-data, (image).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">0</span> <span class="nv">num-epochs</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;starting epoch &quot;</span> <span class="nv">epoch-num</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span>
+</span><span class='line'>     <span class="nv">train-data</span>
+</span><span class='line'>     <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span><span class="p">]</span>
+</span><span class='line'>       <span class="c1">;;; change input to be the label</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">model</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/forward</span> <span class="p">{</span><span class="ss">:data</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">batch</span><span class="p">)</span>
+</span><span class='line'>                       <span class="ss">:label</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">)})</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/update-metric</span> <span class="nv">my-metric</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">))</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/backward</span><span class="p">)</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">m/update</span><span class="p">))))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;result for epoch &quot;</span> <span class="nv">epoch-num</span> <span class="s">&quot; is &quot;</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">eval-metric/get-and-reset</span> <span class="nv">my-metric</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Results Before Training</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
+</span><span class='line'>  <span class="c1">;;; change to input labels</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">test-labels</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">my-test-batch</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-labels</span><span class="p">}</span> <span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;before-training-preds&quot;</span>
+</span><span class='line'>               <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
+</span><span class='line'>               <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">preds</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">test-labels</span> <span class="nb">first </span><span class="nv">ndarray/-&gt;vec</span> <span class="p">(</span><span class="nb">take </span><span class="mi">10</span><span class="p">))</span>
+</span><span class='line'>  <span class="c1">;=&gt; (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://live.staticflickr.com/65535/48689304281_a41bf39353.jpg" alt="before training" /></p>
+
+<p>Not very impressive&hellip; Let&rsquo;s train</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">train</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">0</span>
+</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">0</span>  <span class="nv">is</span>
+</span><span class='line'><span class="p">[</span><span class="nv">mse</span> <span class="mf">0.0723091</span><span class="p">]</span>
+</span><span class='line'><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">1</span>
+</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">1</span>  <span class="nv">is</span>  <span class="p">[</span><span class="nv">mse</span> <span class="mf">0.053891845</span><span class="p">]</span>
+</span><span class='line'><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">2</span>
+</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">2</span>  <span class="nv">is</span>  <span class="p">[</span><span class="nv">mse</span> <span class="mf">0.05337505</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Results After Training</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">test-labels</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">my-test-batch</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-labels</span><span class="p">}))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;after-training-preds&quot;</span>
+</span><span class='line'>               <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
+</span><span class='line'>               <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">preds</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">test-labels</span> <span class="nb">first </span><span class="nv">ndarray/-&gt;vec</span> <span class="p">(</span><span class="nb">take </span><span class="mi">10</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">;=&gt;   (9.0 5.0 7.0 1.0 8.0 6.0 6.0 0.0 8.0 1.0)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://live.staticflickr.com/65535/48689328481_338416ba7c.jpg" alt="after training" /></p>
+
+<p>Cool! The first row is indeed</p>
+
+<p><code>(9.0 5.0 7.0 1.0 8.0 6.0 6.0 0.0 8.0 1.0)</code></p>
+
+<h2>Save Your Model</h2>
+
+<p>Don&rsquo;t forget to save the generator model off &ndash; we are going to use it next time.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;model/generator&quot;</span> <span class="ss">:epoch</span> <span class="mi">2</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Happy Deep Learning until next time &hellip;</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-08-30T10:16:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 30 Aug 2019, 10:16 AM</time>
         
            | <a href="/blog/2019/08/30/focus-on-the-discriminator/#disqus_thread" itemprop="discussionUrl"
@@ -2179,45 +2482,6 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>I hope you&rsquo;ve enjoyed the brief introduction to the MXNet library, there is much more to explore in future posts. If you are interested in giving it a try, there are native jars for OSX cpu and Linux cpu/gpu available and the code for the ndarray tutorial can be found <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial">here</a></p>
 
 <p><em>Please remember that the library is in a experimential state, so if you encounter any problems or have any other feedback, please log an issue so bugs and rough edges can be fixed :).</em></p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2018-03-04T11:03:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sun  4 Mar 2018, 11:03 AM</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2018/03/04/on-staying-technical/" itemprop="url">On Staying Technical</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>I was 10 years into my career when I met her. I could count the number of other women programmers I had worked with on one hand and none of them had young children at home like me. She was not only incredibly experienced and competent, but also had a son in college. I was curious about her career path so I asked her one day at lunch why she was still programming and hadn’t become a manager instead.</p>
-
-<p>She smiled at me kindly and replied, &ldquo;I’ve worked very hard to stay exactly where I am&rdquo;,  and I was enlightened.</p>
 </div>
   
   
