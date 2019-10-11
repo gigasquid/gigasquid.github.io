@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MXNet | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/mxnet/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-09-06T20:12:07-04:00</updated>
+  <updated>2019-10-11T16:18:44-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,282 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Integrating Deep Learning With clojure.spec]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/10/11/integrating-deep-learning-with-clojure-dot-spec/"/>
+    <updated>2019-10-11T13:51:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/10/11/integrating-deep-learning-with-clojure-dot-spec</id>
+    <content type="html"><![CDATA[<p>clojure.spec allows you to write specifications for data and use them for validation. It also provides a generative aspect that allows for robust testing as well as an additional way to understand your data through manual inspection. The dual nature of validation and generation is a natural fit for deep learning models that consist of paired discriminator/generator models.</p>
+
+<br>
+
+
+<p><strong><strong>TLDR: In this post we show that you can leverage the dual nature of clojure.spec&rsquo;s validator/generator to incorporate a deep learning model&rsquo;s classifier/generator.</strong></strong></p>
+
+<br>
+
+
+<p>A common use of clojure.spec is at the boundaries to validate that incoming data is indeed in the expected form. Again, this is boundary is a fitting place to integrate models for the deep learning paradigm and our traditional software code.</p>
+
+<p>Before we get into the deep learning side of things, let&rsquo;s take a quick refresher on how to use clojure.spec.</p>
+
+<h2>quick view of clojure.spec</h2>
+
+<p>To create a simple spec for keywords that are cat sounds, we can use <code>s/def</code>.</p>
+
+<p><code>clojure
+(s/def ::cat-sounds #{:meow :purr :hiss})
+</code></p>
+
+<p>To do the validation, you can use the <code>s/valid?</code> function.</p>
+
+<p><code>clojure
+(s/valid? ::cat-sounds :meow) ;=&gt; true
+(s/valid? ::cat-sounds :bark) ;=&gt; false
+</code></p>
+
+<p>For the generation side of things, we can turn the spec into generator and sample it.</p>
+
+<p><code>clojure
+(gen/sample (s/gen ::cat-sounds))
+;=&gt;(:hiss :hiss :hiss :meow :meow :purr :hiss :meow :meow :meow)
+</code></p>
+
+<p>There is the ability to compose specs by adding them together with <code>s/and</code>.</p>
+
+<p><code>clojure
+(s/def ::even-number (s/and int? even?))
+(gen/sample (s/gen ::even-number))
+;=&gt; (0 0 -2 2 0 10 -4 8 6 8)
+</code></p>
+
+<p>We can also control the generation by creating a custom generator using <code>s/with-gen</code>.
+In the following the spec is only that the data be a general string, but using the custom generator, we can restrict the output to only be a certain set of example cat names.</p>
+
+<p>```clojure
+(s/def ::cat-name
+  (s/with-gen</p>
+
+<pre><code>string?
+#(s/gen #{"Suki" "Bill" "Patches" "Sunshine"})))
+</code></pre>
+
+<p>(s/valid? ::cat-name &ldquo;Peaches&rdquo;) ;=> true
+(gen/sample (s/gen ::cat-name))
+;; (&ldquo;Patches&rdquo; &ldquo;Sunshine&rdquo; &ldquo;Sunshine&rdquo; &ldquo;Suki&rdquo; &ldquo;Suki&rdquo; &ldquo;Sunshine&rdquo;
+;;  &ldquo;Suki&rdquo; &ldquo;Patches&rdquo; &ldquo;Sunshine&rdquo; &ldquo;Suki&rdquo;)
+```</p>
+
+<p>For further information on clojure.spec, I whole-heartedly recommend the <a href="https://clojure.org/guides/spec">spec Guide</a>. But, now with a basic overview of spec, we can move on to creating specs for our Deep Learning models.</p>
+
+<h2>Creating specs for Deep Learning Models</h2>
+
+<p>In previous posts, we covered making <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">simple autoencoders for handwritten digits</a>.</p>
+
+<p><img src="http://live.staticflickr.com/65535/48647524478_ca35bef78f_n.jpg" alt="handwritten digits" /></p>
+
+<p>Then, we made models that would:</p>
+
+<ul>
+<li>Take an image of a digit and give you back the string value (ex: &ldquo;2&rdquo;) &ndash; <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">post</a></li>
+<li>Take a string number value and give you back a digit image. &ndash; <a href="https://gigasquidsoftware.com/blog/2019/09/06/focus-on-the-generator/">post</a></li>
+</ul>
+
+
+<p>We will use both of the models to make a spec with a custom generator.</p>
+
+<br>
+
+
+<p><em>Note: For the sake of simplicity, some of the supporting code is left out. But if you want to see the whole code, it is on <a href="(https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/model_specs.clj">github</a>)</em></p>
+
+<br>
+
+
+<p>With the help of the trained discriminator model, we can make a function that takes in an image and returns the number string value.</p>
+
+<p>```clojure
+(defn discriminate [image]
+  (&ndash;> (m/forward discriminator-model {:data [image]})</p>
+
+<pre><code>  (m/outputs)
+  (ffirst)
+  (ndarray/argmax-channel)
+  (ndarray/-&gt;vec)
+  (first)
+  (int)))
+</code></pre>
+
+<p>```</p>
+
+<p>Let&rsquo;s test it out with a test-image:</p>
+
+<p><img src="http://live.staticflickr.com/65535/48881532151_251e30840e_s.jpg" alt="test-discriminator-image" /></p>
+
+<p><code>clojure
+(discriminate my-test-image) ;=&gt; 6
+</code></p>
+
+<p>Likewise, with the trained generator model, we can make a function that takes a string number and returns the corresponding image.</p>
+
+<p>```clojure
+(defn generate [label]
+  (&ndash;> (m/forward generator-model {:data [(ndarray/array [label] [batch-size])]})</p>
+
+<pre><code>  (m/outputs)
+  (ffirst)))
+</code></pre>
+
+<p>```</p>
+
+<p>Giving it a test drive as well:</p>
+
+<p>```clojure
+(def generated-test-image (generate 3))
+(viz/im-sav {:title &ldquo;generated-image&rdquo;</p>
+
+<pre><code>         :output-path "results/"
+         :x (ndarray/reshape generated-test-image [batch-size 1 28 28])})
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http://live.staticflickr.com/65535/48881532451_023de68ddb_s.jpg" alt="generated-test-image" /></p>
+
+<p>Great! Let&rsquo;s go ahead and start writing specs. First let&rsquo;s make a quick spec to describe a MNIST number &ndash; which is a single digit between 0 and 9.</p>
+
+<p><code>clojure
+(s/def ::mnist-number (s/and int? #(&lt;= 0 % 9)))
+(s/valid? ::mnist-number 3) ;=&gt; true
+(s/valid? ::mnist-number 11) ;=&gt; false
+(gen/sample (s/gen ::mnist-number))
+;=&gt; (0 1 0 3 5 3 7 5 0 1)
+</code></p>
+
+<p>We now have both parts to validate and generate and can create a spec for it.</p>
+
+<p>```clojure
+(s/def ::mnist-image</p>
+
+<pre><code>(s/with-gen
+  #(s/valid? ::mnist-number (discriminate %))
+  #(gen/fmap (fn [n]
+               (do (ndarray/copy (generate n))))
+             (s/gen ::mnist-number))))
+</code></pre>
+
+<p>```</p>
+
+<p>The <code>::mnist-number</code> spec is used for the validation after the <code>discriminate</code> model is used. On the generator side, we use the generator for the <code>::mnist-number</code> spec and feed that into the deep learning generator model to get sample images.</p>
+
+<p>We have a test function that will help us test out this new spec, called <code>test-model-spec</code>. It will return a map with the following form:</p>
+
+<p><code>
+{:spec name-of-the-spec
+ :valid? whether or not the `s/valid?` called on the test value is true or not
+ :sample-values This calls the discriminator model on the generated values
+ }
+</code>
+It will also write an image of all the sample images to a file named <code>sample-spec-name</code></p>
+
+<p>Let&rsquo;s try it on our test image:</p>
+
+<p><img src="http://live.staticflickr.com/65535/48881532151_251e30840e_s.jpg" alt="test-discriminator-image" /></p>
+
+<p>```clojure
+(s/valid? ::mnist-image my-test-image) ;=> true</p>
+
+<p>(test-model-spec ::mnist-image my-test-image)
+;; {:spec &ldquo;mnist-image&rdquo;
+;;  :valid? true
+;;  :sample-values [0 0 0 1 3 1 0 2 7 3]}
+```</p>
+
+<p><img src="http://live.staticflickr.com/65535/48882235262_1e0dd7b758_q.jpg" alt="sample-mnist-image" /></p>
+
+<p>Pretty cool!</p>
+
+<p>Let&rsquo;s do some more specs. But first, our spec is going to be a bit repetitive, so we&rsquo;ll make a quick macro to make things easier.</p>
+
+<p>```clojure
+(defmacro def-model-spec [spec-key spec discriminate-fn generate-fn]</p>
+
+<pre><code>`(s/def ~spec-key
+   (s/with-gen
+     #(s/valid? ~spec (~discriminate-fn %))
+     #(gen/fmap (fn [n#]
+                  (do (ndarray/copy (~generate-fn n#))))
+                (s/gen ~spec)))))
+</code></pre>
+
+<p>```</p>
+
+<h3>More Specs &ndash; More Fun</h3>
+
+<p>This time let&rsquo;s define an even mnist image spec</p>
+
+<p>```clojure
+ (def-model-spec ::even-mnist-image</p>
+
+<pre><code>(s/and ::mnist-number even?)
+discriminate
+generate)
+</code></pre>
+
+<p>  (test-model-spec ::even-mnist-image my-test-image)</p>
+
+<p>  ;; {:spec &ldquo;even-mnist-image&rdquo;
+  ;;  :valid? true
+  ;;  :sample-values [0 0 2 0 8 2 2 2 0 0]}
+```</p>
+
+<p><img src="http://live.staticflickr.com/65535/48882253157_02e45d3132_q.jpg" alt="sample-even-mnist-image" /></p>
+
+<p>And Odds</p>
+
+<p>```clojure
+  (def-model-spec ::odd-mnist-image</p>
+
+<pre><code>(s/and ::mnist-number odd?)
+discriminate
+generate)
+</code></pre>
+
+<p>  (test-model-spec ::odd-mnist-image my-test-image)</p>
+
+<p>  ;; {:spec &ldquo;odd-mnist-image&rdquo;
+  ;;  :valid? false
+  ;;  :sample-values [5 1 5 1 3 3 3 1 1 1]}
+```
+<img src="http://live.staticflickr.com/65535/48881548138_c18850f806_q.jpg" alt="sample-odd-mnist-image" /></p>
+
+<p>Finally, let&rsquo;s do Odds that are over 2!</p>
+
+<p>```clojure
+  (def-model-spec ::odd-over-2-mnist-image</p>
+
+<pre><code>(s/and ::mnist-number odd? #(&gt; % 2))
+discriminate
+generate)
+</code></pre>
+
+<p>  (test-model-spec ::odd-over-2-mnist-image my-test-image)</p>
+
+<p>  ;; {:spec &ldquo;odd-over-2-mnist-image&rdquo;
+  ;;  :valid? false
+  ;;  :sample-values [3 3 3 5 3 5 7 7 7 3]}
+```</p>
+
+<p><img src="http://live.staticflickr.com/65535/48882089776_6f55416418_q.jpg" alt="sample-odd-over-2-mnist-image" /></p>
+
+<h2>Conclusion</h2>
+
+<p>We have shown some of the potential of integrating deep learning models with Clojure. clojure.spec is a powerful tool and it can be leveraged in new and interesting ways for both deep learning and AI more generally.</p>
+
+<p>I hope that more people are intrigued to experiment and take a further look into what we can do in this area.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Focus on the Generator]]></title>
@@ -767,100 +1043,6 @@ Question Answer Data
 <p><img class="<a" src="href="https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg">https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg</a>"></p>
 
 <p>Have a great rest of April!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Clojure MXNet March Update]]></title>
-    <link href="http://gigasquid.github.io/blog/2019/03/22/clojure-mxnet-march-update/"/>
-    <updated>2019-03-22T10:42:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2019/03/22/clojure-mxnet-march-update</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m starting a monthly update for <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. The goal is to share the progress and exciting things that are happening in the project and our community.</p>
-
-<p>Here&rsquo;s some highlights for the month of March.</p>
-
-<h2>Shipped</h2>
-
-<p>Under the shipped heading, the 1.4.0 release of MXNet has been released, along with the <a href="https://search.maven.org/search?q=clojure%20mxnet">Clojure MXNet Jars</a>. There have been improvements to the JVM memory management and an Image API addition. You can see the full list of changes <a href="https://github.com/apache/incubator-mxnet/releases/tag/1.4.0#clojure">here</a></p>
-
-<h2>Clojure MXNet Made Simple Article Series</h2>
-
-<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> authored a really nice series of blog posts to help get people started with Clojure MXNet.</p>
-
-<ul>
-<li><a href="https://arthurcaillau.com/mxnet-clojure-aws/">Getting started with Clojure and MXNet on AWS</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-ndarrays-api/">MXNet made simple: Clojure NDArray API</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-symbol-api/">MXNet made simple: Clojure Symbol API</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-module-api/">MXNet made simple: Clojure Module API</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-symbol-visualization/">MXNet made simple: Clojure Symbol Visualization API</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-image-manipulation/">MXNet made simple: Image Manipulation with OpenCV and MXNet</a></li>
-</ul>
-
-
-<h2>Lein Template &amp; Docker file</h2>
-
-<p><a href="https://github.com/hellonico/">Nicolas Modrzyk</a> created a Leiningen template that allows you to easily get a MXNet project started &ndash; with a notebook too! It&rsquo;s a great way to take Clojure MXNet for a spin</p>
-
-<p>```</p>
-
-<h1>create project</h1>
-
-<p>lein new clj-mxnet hello</p>
-
-<h1>run included sample</h1>
-
-<p>lein run</p>
-
-<h1>start notebook engine</h1>
-
-<p>lein notebook</p>
-
-<h1>open notebook</h1>
-
-<p><a href="http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj">http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj</a></p>
-
-<h1>open empty notebook with all namespaces</h1>
-
-<p><a href="http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj">http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj</a>
-```</p>
-
-<p>There also is a docker file as well</p>
-
-<p>```
-docker run -it -p 10000:10000 hellonico/mxnet</p>
-
-<p>After starting the container, you can open the same notebooks as above:</p>
-
-<h1>open notebook</h1>
-
-<p><a href="http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj">http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj</a></p>
-
-<h1>open empty notebook with all namespaces</h1>
-
-<p><a href="http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj">http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj</a>
-```</p>
-
-<h2>Cool Stuff in Development</h2>
-
-<p>There are a few really interesting things cooking for the future.</p>
-
-<p>One is a <a href="https://github.com/apache/incubator-mxnet/pull/14372">PR for memory fixes</a> from the Scala team that is getting really close to merging. This will be a solution to some the the memory problems that were encountered by early adopters of the Module API.</p>
-
-<p>Another, is the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> that is being spearheaded by Kedar Bellare</p>
-
-<p>Finally, work is being started to create a <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103089990">Gluon API for the Clojure package</a> which is quite exciting.</p>
-
-<h2>Get Involved</h2>
-
-<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip.</p>
-
-<h2>Cat Picture of the Month</h2>
-
-<p>There is no better way to close out an update than a cat picture, so here is a picture of my family cat, Otto, watching birds at the window.</p>
-
-<p><img class="<a" src="href="https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg">https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg</a>"></p>
-
-<p>Have a great rest of March!</p>
 ]]></content>
   </entry>
   

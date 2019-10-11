@@ -95,6 +95,140 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2011-01-17T22:01:47-05:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 17 Jan 2011, 10:01 PM</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2011/01/17/vampire-slaying-in-clojure-with-stm-part-2/" itemprop="url">Vampire Slaying in Clojure With STM - Part 2</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>In Part 1, we used defrecords to create a vampire slayer named “Buffy” and a few vampires for her to kick around.  Today we are going to use Buffy and her vampires to explore STM (Software Transactional Memory) in Clojure for managing state.</p>
+
+<p>Recap</p>
+
+<pre><code>(defrecord Vampire [name, health])
+(def vampire1 (Vampire. "Stu" 50))
+(def vampire2 (Vampire. "Vance" 100))
+(def vampire3 (Vampire. "Izzy" 75))
+
+(defrecord Slayer [name, weapon])
+(def kungfu 25)
+(def buffy (Slayer. "Buffy" kungfu))
+
+(defn hit [vampire, hitpoints]
+  (- (:health vampire) hitpoints))
+
+;vampires don't fight back but it takes time to kill them
+(def combat-time 20)
+
+(defn hit-vampire [vampire, slayer]
+  (Thread/sleep (* combat-time 10))
+  (assoc vampire :health (hit vampire (:weapon slayer))))
+
+(defn kill-vampire [vampire, slayer]
+  (if (&gt; (:health vampire) 1)
+    (recur (hit-vampire vampire slayer) slayer)
+    (assoc vampire :health 0)))
+</code></pre>
+
+<p>Let&rsquo;s take our vampires and stand them up in a line for Buffy to fight.  We are also going to create a function that just has Buffy killing a vampire, rather then a generic slayer.</p>
+
+<pre><code>(def vampire-line [vampire1 vampire2 vampire3])
+
+(defn buffy-kill-vampire [vampire]
+  (kill-vampire vampire buffy))
+</code></pre>
+
+<p>Test Buffy killing vampire1</p>
+
+<pre><code>(buffy-kill-vampire vampire1)
+#:user.Vampire{:name "Stu", :health 0}
+</code></pre>
+
+<p>Now we can use the map function to apply the buffy-kill-vampire function to every vampire in our vampire line.</p>
+
+<pre><code>(map buffy-kill-vampire vampire-line)
+(#:user.Vampire{:name "Stu", :health 0} #:user.Vampire{:name "Vance", :health 0} #:user.Vampire{:name "Izzy", :health 0})
+</code></pre>
+
+<p>This is also a good time to bring up pmap (pmap f coll).  The pmap is the same as the map execpt that it applys the function to the collection in parallel.  It is useful when the time to process each function is computationally intensive.  To show the difference between map and pmap let&rsquo;s change the combat-time to be 200ms instead of 20ms and time each way.  We need a dorun to force the function to not be lazy.</p>
+
+<pre><code>(def combat-time 200)
+
+(time (dorun (map buffy-kill-vampire vampire-line)))
+"Elapsed time: 18002.67764 msecs"
+
+(time (dorun (pmap buffy-kill-vampire vampire-line)))
+"Elapsed time: 8001.808821 msecs
+</code></pre>
+
+<p>Now if you notice, even though we have be killing the vampire line over and over again.  They don&rsquo;t stay dead</p>
+
+<pre><code>vampire-line
+[#:user.Vampire{:name "Stu", :health 50} #:user.Vampire{:name "Vance", :health 100} #:user.Vampire{:name "Izzy", :health 75}]
+</code></pre>
+
+<p>We need to involve some state so that our vampire-line will reflect the health of zero for all of the vampires once Buffy slays them.  In Clojure, state is handled by Software Transactional Memory (STM).  You can use Refs for coordinated and synchronous updates, Atoms for Uncoordinated and Synchronous updates, or Agents for asynchronous updates.  In our example, we are going to use the Atom, since it is lighter weight and we just want to maintain the state of the vampire-line.</p>
+
+<p>Let&rsquo;s refine the vampire-line as an atom.  We</p>
+
+<pre><code>(def vampire-line (atom [vampire1 vampire2 vampire3]))
+</code></pre>
+
+<p>We need to deference it now to know it&rsquo;s value</p>
+
+<pre><code>@vampire-line
+[#:user.Vampire{:name "Stu", :health 50} #:user.Vampire{:name "Vance", :health 100} #:user.Vampire{:name "Izzy", :health 75}]
+</code></pre>
+
+<p>Now we are going to redefine the buffy-destroy-all-vampires function to use the reset! function to update its value.  We also need to convert the result to a vector before calling reset!  Also note that we need to deference the vampire-line value when call using map.</p>
+
+<pre><code>(defn buffy-destroy-all-vampires []
+  (reset! vampire-line (vec (map buffy-kill-vampire @vampire-line))))
+</code></pre>
+
+<p>Now let&rsquo;s see what happens when Buffy kills them</p>
+
+<pre><code> @vampire-line
+[#:user.Vampire{:name "Stu", :health 0} #:user.Vampire{:name "Vance", :health 0} #:user.Vampire{:name "Izzy", :health 0}]
+
+(buffy-destroy-all-vampires)
+[#:user.Vampire{:name "Stu", :health 0} #:user.Vampire{:name "Vance", :health 0} #:user.Vampire{:name "Izzy", :health 0}]
+
+ @vampire-line
+[#:user.Vampire{:name "Stu", :health 0} #:user.Vampire{:name "Vance", :health 0} #:user.Vampire{:name "Izzy", :health 0}]
+</code></pre>
+
+<p>The vampires are finally dead and staying dead!  Score one for the good guys!</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2011-01-11T22:33:43-05:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 11 Jan 2011, 10:33 PM</time>
         
       </p>
@@ -832,71 +966,6 @@ Chicks with bricks and blocks and clocks come.
 <p>I was so jazzed up about it, that I decided that I was going to continue in my Open Source contribution quest on a limited time budget, by declaring that my Wednesday night is my Open Source night.  It might only be 15 or 30 min, but I will be doing something and feeling that contribution buzz goodness.</p>
 
 <p>I encourage everyone that has been struggling to find time for Open Source to just schedule one night a week.  Just do something for 15 min and see what flows …</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-07-07T23:33:20-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed  7 Jul 2010, 11:33 PM</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/07/07/hello-world-in-rdf/" itemprop="url">Hello World in RDF</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>I decided to start playing with RDFs to start me on the road to understanding and programming Semantic Web.  As always, the first step it to start with a “Hello World” type of exercise.  In my case, I had armed myself with a good cappuccino at Starbucks and decided to set myself with a purl link and FOAF page.
-<a href="https://secure.wikimedia.org/wikipedia/en/wiki/FOAF_%28software%29">
-FOAF (Friend of a Friend)</a> is one of the most popular vocabularies out there for RDF (Resource Description Framework).  It expresses relationships in a machine readable format and is considered one of the first social Semantic Web applications.</p>
-
-<p>When you look at a foaf.rdf file, it is basically just an file with xml tags:</p>
-
-<pre><code>&lt;foaf:Person rdf:ID="me"&gt;
-&lt;foaf:name&gt;Carin Meier&lt;/foaf:name&gt;
-&lt;foaf:givenname&gt;Carin&lt;/foaf:givenname&gt;
-&lt;foaf:family_name&gt;Meier&lt;/foaf:family_name&gt;
-&lt;foaf:nick&gt;squid&lt;/foaf:nick&gt;
-</code></pre>
-
-<p>Not too much fun to start coding by hand though.  Luckily, there is a handy dandy generator &ndash; <a href="http://www.ldodds.com/foaf/foaf-a-matic">FOAF-a-matic.</a> Just fill in the form and you can easily generate the basic foaf rdf file for yourself.  You can always add to it later.  Save the file as foaf.rdf somewhere on your website for indexing.</p>
-
-<p>Now you can do some fun stuff with it.  You can check and visualize your RDF document with <a href="http://www.w3.org/RDF/Validator/">http://www.w3.org/RDF/Validator/</a>.  Or you can use a<a href="http://foaf-visualizer.org/?uri=http://gigasquidsoftware.com/foaf/foaf.rdf"> FOAF visualizer</a>.</p>
-
-<p>The final part is to set yourself up with a purl address.  <a href="http://www.purl.org/docs/index.html">Purl.org</a> is a website that is dedicated to providing web endpoints or addresses that can be indentifiers for individuals.  It provides a layer of indirection that is very useful in the changing world of the web.  For example, if I use my work web page link as my identifier in my RDF and then I change jobs, all my FOAF links will be broken.  However, I can use my purl address and set up my identifier as my webpage and then change it when then need arises.   So logon to purl.org and set yourself up with an account.
-When other people &ldquo;know&rdquo; you in FOAF, they can use your purl link:</p>
-
-<blockquote><p>&lt;foaf:Person>
-&lt;foaf:name>Carin Meier&lt;/foaf:name>
-&lt;rdfs:seeAlso rdf:resource=&ldquo;<a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier</a>&rdquo;/>
-&lt;/foaf:Person></p></blockquote>
-
-<p>My FOAF is <a href="http://gigasquidsoftware.com/foaf/foaf.rdf">http://gigasquidsoftware.com/foaf/foaf.rdf</a>
-My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier</a></p>
-
-<p>That&rsquo;s it!  Hello World in FOAF!</p>
 </div>
   
   
