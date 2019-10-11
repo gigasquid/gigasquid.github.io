@@ -77,13 +77,16 @@ In previous posts, we covered making [simple autoencoders for handwritten digits
 
 Then, we made models that would:
 
-* [Take an image of a digit and give you back the string value (ex: "2")]((https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/model_specs.clj).)
-* [Take a string number value and give you back a digit image.]((https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/) on it for more details).)
+* Take an image of a digit and give you back the string value (ex: "2") - [post](https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/)
+* Take a string number value and give you back a digit image. - [post](https://gigasquidsoftware.com/blog/2019/09/06/focus-on-the-generator/)
 
 We will use both of the models to make a spec with a custom generator.
 
-_For the sake of simplicity, some of the supporting code is left out._
+<br>
 
+_Note: For the sake of simplicity, some of the supporting code is left out. But if you want to see the whole code, it is on [github]((https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/model_specs.clj))_
+
+<br>
 
 With the help of the trained discriminator model, we can make a function that takes in an image and returns the number string value.
 
