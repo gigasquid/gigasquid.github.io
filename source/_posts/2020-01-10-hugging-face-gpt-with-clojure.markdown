@@ -13,9 +13,10 @@ categories:
 
 A new age in Clojure has dawned. We now have interop access to any python library with [libpython-clj](https://github.com/cnuernber/libpython-clj).
 
-<br>
+
 
 Let me pause a minute to repeat.
+
 
 <br>
 
@@ -25,13 +26,13 @@ Let me pause a minute to repeat.
 
 I know. It's overwhelming. It took a bit for me to come to grips with it too.
 
-<br>
+
 
 Let's take an example of something that I've _always_ wanted to do and have struggled with mightly finding a way to do it in Clojure:  
 I want to use the latest cutting edge GPT2 code out there to generate text.  
 
 Right now, that library is [Hugging Face Transformers](https://github.com/huggingface/transformers).  
-<br>
+
 
 Get ready. We will wrap that sweet hugging face code in Clojure parens!  
 
@@ -39,25 +40,25 @@ Get ready. We will wrap that sweet hugging face code in Clojure parens!
 
 The first thing you will need to do is to have python3 installed and the two libraries that we need:
 
-<br>
+
 
 * pytorch - `sudo pip3 install torch`
 * hugging face transformers - `sudo pip3 install transformers`
 
-<br>
+
 
 Right now, some of you may not want to proceed. You might have had a bad relationship with Python in the past. It's ok, remember that some of us had bad relationships with Java, but still lead a happy and fulfilled life with Clojure and still can enjoy it from interop. The same is true with Python. Keep an open mind.
 
-<br>
+
 
 
 There might be some others that don't want to have anything to do with Python and want to keep your Clojure pure. Well, that is a valid choice. But you are missing out on what the big, vibrant, and chaotic Python Deep Learning ecosystem has to offer. 
 
-<br>
+
 
 For those of you that are still along for the ride, let's dive in.
 
-<br>
+
 
 Your deps file should have just a single extra dependency in it:
 
@@ -86,7 +87,7 @@ It has a very nice `require-python` syntax that we will use to load the python l
 Here we are going to follow along with the OpenAI GPT-2 tutorial and translate it into interop code.
 The original tutorial is [here](https://huggingface.co/transformers/quickstart.html)
 
-<br>
+
 
 Let's take the python side first:
 
@@ -106,7 +107,7 @@ This is going to translate in our interop code to:
 
 The `py/$a` function is used to call attributes on a Python object. We get the `transformers/GPTTokenizer` object that we have available to use and call `from_pretrained` on it with the string argument `"gpt2"`
 
-<br>
+
 
 
 
@@ -138,15 +139,15 @@ tokens-tensor
 
 Here we are again using `py/$a` to call the `encode` method on the text. However, when we are just calling a function, we can do so directly with `(torch/tensor [indexed-tokens])`. We can even directly use vectors. 
 
-<br>
+
 
 Again, you are doing this in the REPL, so you have full power for inspection and display of the python objects. It is a great interop experience - (cider even has doc information on the python functions in the minibuffer)!
 
-<br>
+
 
 The next part is to load the model itself. This will take a few minutes, since it has to download a big file from s3 and load it up.
 
-<br>
+
 
 In Python:
 
@@ -166,11 +167,11 @@ In Clojure:
 
 The next part is to run the model with the tokens and make the predictions.
 
-<br>
+
 
 Here the code starts to diverge a tiny bit.
 
-<br>
+
 
 Python:
 
@@ -226,7 +227,7 @@ The main differences is that we are obviously not using the python array syntax 
 
 The next example in the tutorial goes on to cover generating longer text. 
 
-<br>
+
 
 Python
 
@@ -307,21 +308,6 @@ The great thing is once we have it embedded in our code, there is no stopping. W
 And finally we can generate some fun text!
 
 ```clojure
-(defn generate-text [starting-text num-of-words-to-predict]
-  (let [tokens (into [] (py/$a tokenizer encode starting-text))
-        context (torch/tensor [tokens])
-        result (reduce
-                (fn [r i]
-                  (println i)
-                  (generate-sequence-step r))
-
-                {:generated-tokens tokens
-                 :context context
-                 :past nil}
-
-                (range num-of-words-to-predict))]
-    (decode-sequence result)))
-
 (generate-text "Clojure is a dynamic, general purpose programming language, combining the approachability and interactive" 20)
 
 ;=> "Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone"
@@ -329,7 +315,7 @@ And finally we can generate some fun text!
 
 **Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone**
 
-<br>
+
 
 So true GPT2! So true!
 
@@ -339,11 +325,11 @@ So true GPT2! So true!
 
 libpython-clj is a really powerful tool that will allow Clojurists to better explore, leverage, and integrate Python libraries into their code. 
 
-<br>
+
 
 I've been really impressed with it so far and I encourage you to check it out.
 
-<br>
+
 
 There is a [repo with the examples](https://github.com/gigasquid/libpython-clj-examples) out there if you want to check them out. There is also an example of doing MXNet MNIST classification there as well.
 
