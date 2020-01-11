@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2019-10-11T16:18:44-04:00</updated>
+  <updated>2020-01-10T20:41:54-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,390 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hugging Face GPT With Clojure]]></title>
+    <link href="http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/"/>
+    <updated>2020-01-10T19:33:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure</id>
+    <content type="html"><![CDATA[<p><img src="https://live.staticflickr.com/65535/49364554561_6e4f4d0a51_w.jpg" alt="" /></p>
+
+<p>A new age in Clojure has dawned. We now have interop access to any python library with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>.</p>
+
+<br>
+
+
+<p>Let me pause a minute to repeat.</p>
+
+<br>
+
+
+<p><strong> You can now interop with ANY python library. </strong></p>
+
+<br>
+
+
+<p>I know. It&rsquo;s overwhelming. It took a bit for me to come to grips with it too.</p>
+
+<br>
+
+
+<p>Let&rsquo;s take an example of something that I&rsquo;ve <em>always</em> wanted to do and have struggled with mightly finding a way to do it in Clojure:<br/>
+I want to use the latest cutting edge GPT2 code out there to generate text.</p>
+
+<p>Right now, that library is <a href="https://github.com/huggingface/transformers">Hugging Face Transformers</a>.</p>
+
+<br>
+
+
+<p>Get ready. We will wrap that sweet hugging face code in Clojure parens!</p>
+
+<h3>The setup</h3>
+
+<p>The first thing you will need to do is to have python3 installed and the two libraries that we need:</p>
+
+<br>
+
+
+<ul>
+<li>pytorch &ndash; <code>sudo pip3 install torch</code></li>
+<li>hugging face transformers &ndash; <code>sudo pip3 install transformers</code></li>
+</ul>
+
+
+<br>
+
+
+<p>Right now, some of you may not want to proceed. You might have had a bad relationship with Python in the past. It&rsquo;s ok, remember that some of us had bad relationships with Java, but still lead a happy and fulfilled life with Clojure and still can enjoy it from interop. The same is true with Python. Keep an open mind.</p>
+
+<br>
+
+
+<p>There might be some others that don&rsquo;t want to have anything to do with Python and want to keep your Clojure pure. Well, that is a valid choice. But you are missing out on what the big, vibrant, and chaotic Python Deep Learning ecosystem has to offer.</p>
+
+<br>
+
+
+<p>For those of you that are still along for the ride, let&rsquo;s dive in.</p>
+
+<br>
+
+
+<p>Your deps file should have just a single extra dependency in it:</p>
+
+<p>```clojure
+:deps {org.clojure/clojure {:mvn/version &ldquo;1.10.1&rdquo;}</p>
+
+<pre><code>    cnuernber/libpython-clj {:mvn/version "1.30"}}
+</code></pre>
+
+<p>```</p>
+
+<h3>Diving Into Interop</h3>
+
+<p>The first thing that we need to do is require the libpython library.</p>
+
+<p>```clojure
+(ns gigasquid.gpt2
+  (:require [libpython-clj.require :refer [require-python]]</p>
+
+<pre><code>        [libpython-clj.python :as py]))
+</code></pre>
+
+<p>```</p>
+
+<p>It has a very nice <code>require-python</code> syntax that we will use to load the python libraries so that we can use them in our Clojure code.</p>
+
+<p><code>clojure
+(require-python '(transformers))
+(require-python '(torch))
+</code></p>
+
+<p>Here we are going to follow along with the OpenAI GPT-2 tutorial and translate it into interop code.
+The original tutorial is <a href="https://huggingface.co/transformers/quickstart.html">here</a></p>
+
+<br>
+
+
+<p>Let&rsquo;s take the python side first:</p>
+
+<p>```python
+import torch
+from transformers import GPT2Tokenizer, GPT2LMHeadModel</p>
+
+<h1>Load pre-trained model tokenizer (vocabulary)</h1>
+
+<p>tokenizer = GPT2Tokenizer.from_pretrained(&lsquo;gpt2&rsquo;)
+```</p>
+
+<p>This is going to translate in our interop code to:</p>
+
+<p><code>clojure
+(def tokenizer (py/$a transformers/GPT2Tokenizer from_pretrained "gpt2"))
+</code></p>
+
+<p>The <code>py/$a</code> function is used to call attributes on a Python object. We get the <code>transformers/GPTTokenizer</code> object that we have available to use and call <code>from_pretrained</code> on it with the string argument <code>"gpt2"</code></p>
+
+<br>
+
+
+<p>Next in the Python tutorial is:</p>
+
+<p>```python</p>
+
+<h1>Encode a text inputs</h1>
+
+<p>text = &ldquo;Who was Jim Henson ? Jim Henson was a&rdquo;
+indexed_tokens = tokenizer.encode(text)</p>
+
+<h1>Convert indexed tokens in a PyTorch tensor</h1>
+
+<p>tokens_tensor = torch.tensor([indexed_tokens])
+```</p>
+
+<p>This is going to translate to Clojure:</p>
+
+<p>```clojure
+(def text &ldquo;Who was Jim Henson ? Jim Henson was a&rdquo;)
+;; encode text input
+(def indexed-tokens  (py/$a tokenizer encode text))
+indexed-tokens ;=>[8241, 373, 5395, 367, 19069, 5633, 5395, 367, 19069, 373, 257]</p>
+
+<p>;; convert indexed tokens to pytorch tensor
+(def tokens-tensor (torch/tensor [indexed-tokens]))
+tokens-tensor
+;; ([[ 8241,   373,  5395,   367, 19069,  5633,  5395,   367, 19069,   373,
+;;    257]])
+```</p>
+
+<p>Here we are again using <code>py/$a</code> to call the <code>encode</code> method on the text. However, when we are just calling a function, we can do so directly with <code>(torch/tensor [indexed-tokens])</code>. We can even directly use vectors.</p>
+
+<br>
+
+
+<p>Again, you are doing this in the REPL, so you have full power for inspection and display of the python objects. It is a great interop experience &ndash; (cider even has doc information on the python functions in the minibuffer)!</p>
+
+<br>
+
+
+<p>The next part is to load the model itself. This will take a few minutes, since it has to download a big file from s3 and load it up.</p>
+
+<br>
+
+
+<p>In Python:</p>
+
+<p>```python</p>
+
+<h1>Load pre-trained model (weights)</h1>
+
+<p>model = GPT2LMHeadModel.from_pretrained(&lsquo;gpt2&rsquo;)
+```</p>
+
+<p>In Clojure:</p>
+
+<p><code>clojure
+;;; Load pre-trained model (weights)
+;;; Note: this will take a few minutes to download everything
+(def model (py/$a transformers/GPT2LMHeadModel from_pretrained "gpt2"))
+</code></p>
+
+<p>The next part is to run the model with the tokens and make the predictions.</p>
+
+<br>
+
+
+<p>Here the code starts to diverge a tiny bit.</p>
+
+<br>
+
+
+<p>Python:</p>
+
+<p>```python</p>
+
+<h1>Set the model in evaluation mode to deactivate the DropOut modules</h1>
+
+<h1>This is IMPORTANT to have reproducible results during evaluation!</h1>
+
+<p>model.eval()</p>
+
+<h1>If you have a GPU, put everything on cuda</h1>
+
+<p>tokens_tensor = tokens_tensor.to(&lsquo;cuda&rsquo;)
+model.to(&lsquo;cuda&rsquo;)</p>
+
+<h1>Predict all tokens</h1>
+
+<p>with torch.no_grad():</p>
+
+<pre><code>outputs = model(tokens_tensor)
+predictions = outputs[0]
+</code></pre>
+
+<h1>get the predicted next sub-word (in our case, the word &lsquo;man&rsquo;)</h1>
+
+<p>predicted_index = torch.argmax(predictions[0, -1, :]).item()
+predicted_text = tokenizer.decode(indexed_tokens + [predicted_index])
+assert predicted_text == &lsquo;Who was Jim Henson? Jim Henson was a man&rsquo;
+```</p>
+
+<p>And Clojure</p>
+
+<p>```clojure
+;;; Set the model in evaluation mode to deactivate the DropOut modules
+;;; This is IMPORTANT to have reproducible results during evaluation!
+(py/$a model eval)</p>
+
+<p>;;; Predict all tokens
+(def predictions (py/with [r (torch/no_grad)]</p>
+
+<pre><code>                      (first (model tokens-tensor))))
+</code></pre>
+
+<p>;;; get the predicted next sub-word"
+(def predicted-index (let [last-word-predictions (&ndash;> predictions first last)</p>
+
+<pre><code>                       arg-max (torch/argmax last-word-predictions)]
+                   (py/$a arg-max item)))
+</code></pre>
+
+<p>predicted-index ;=>582</p>
+
+<p>(py/$a tokenizer decode (&ndash;> (into [] indexed-tokens)</p>
+
+<pre><code>                        (conj predicted-index)))
+</code></pre>
+
+<p>;=> &ldquo;Who was Jim Henson? Jim Henson was a man&rdquo;
+```</p>
+
+<p>The main differences is that we are obviously not using the python array syntax in our code to manipulate the lists. For example, instead of using <code>outputs[0]</code>, we are going to use <code>(first outputs)</code>. But, other than that, it is a pretty good match, even with the <code>py/with</code>.</p>
+
+<h3>Doing Longer Sequences</h3>
+
+<p>The next example in the tutorial goes on to cover generating longer text.</p>
+
+<br>
+
+
+<p>Python</p>
+
+<p>```python
+tokenizer = GPT2Tokenizer.from_pretrained(&ldquo;gpt2&rdquo;)
+model = GPT2LMHeadModel.from_pretrained(&lsquo;gpt2&rsquo;)</p>
+
+<p>generated = tokenizer.encode(&ldquo;The Manhattan bridge&rdquo;)
+context = torch.tensor([generated])
+past = None</p>
+
+<p>for i in range(100):</p>
+
+<pre><code>print(i)
+output, past = model(context, past=past)
+token = torch.argmax(output[0, :])
+
+generated += [token.tolist()]
+context = token.unsqueeze(0)
+</code></pre>
+
+<p>sequence = tokenizer.decode(generated)</p>
+
+<p>print(sequence)</p>
+
+<p>```</p>
+
+<p>And Clojure</p>
+
+<p>```clojure
+(def tokenizer (py/$a transformers/GPT2Tokenizer from_pretrained &ldquo;gpt2&rdquo;))
+(def model (py/$a transformers/GPT2LMHeadModel from_pretrained &ldquo;gpt2&rdquo;))</p>
+
+<p>(def generated (into [] (py/$a tokenizer encode &ldquo;The Manhattan bridge&rdquo;)))
+(def context (torch/tensor [generated]))</p>
+
+<p>(defn generate-sequence-step [{:keys [generated-tokens context past]}]
+  (let [[output past] (model context :past past)</p>
+
+<pre><code>    token (-&gt; (torch/argmax (first output)))
+    new-generated  (conj generated-tokens (py/$a token tolist))]
+{:generated-tokens new-generated
+ :context (py/$a token unsqueeze 0)
+ :past past
+ :token token}))
+</code></pre>
+
+<p>(defn decode-sequence [{:keys [generated-tokens]}]
+  (py/$a tokenizer decode generated-tokens))</p>
+
+<p>(loop [step {:generated-tokens generated</p>
+
+<pre><code>         :context context
+         :past nil}
+   i 10]
+</code></pre>
+
+<p>  (if (pos? i)</p>
+
+<pre><code>(recur (generate-sequence-step step) (dec i))
+(decode-sequence step)))
+</code></pre>
+
+<p>;=> &ldquo;The Manhattan bridge\n\nThe Manhattan bridge is a major artery for&rdquo;
+```</p>
+
+<p>The great thing is once we have it embedded in our code, there is no stopping. We can create a nice function:</p>
+
+<p>```clojure
+(defn generate-text [starting-text num-of-words-to-predict]
+  (let [tokens (into [] (py/$a tokenizer encode starting-text))</p>
+
+<pre><code>    context (torch/tensor [tokens])
+    result (reduce
+            (fn [r i]
+              (println i)
+              (generate-sequence-step r))
+
+            {:generated-tokens tokens
+             :context context
+             :past nil}
+
+            (range num-of-words-to-predict))]
+(decode-sequence result)))
+</code></pre>
+
+<p>```</p>
+
+<p>And finally we can generate some fun text!</p>
+
+<p>```clojure
+(generate-text &ldquo;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive&rdquo; 20)</p>
+
+<p>;=> &ldquo;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone&rdquo;
+```</p>
+
+<p><strong>Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone</strong></p>
+
+<br>
+
+
+<p>So true GPT2! So true!</p>
+
+<h3>Wrap-up</h3>
+
+<p>libpython-clj is a really powerful tool that will allow Clojurists to better explore, leverage, and integrate Python libraries into their code.</p>
+
+<br>
+
+
+<p>I&rsquo;ve been really impressed with it so far and I encourage you to check it out.</p>
+
+<br>
+
+
+<p>There is a <a href="https://github.com/gigasquid/libpython-clj-examples">repo with the examples</a> out there if you want to check them out. There is also an example of doing MXNet MNIST classification there as well.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Integrating Deep Learning With clojure.spec]]></title>
@@ -929,120 +1313,6 @@ result for epoch  2  is  [mse 0.027255038]
 <p>If you want to check out the full code for this example, you can find it <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder">here</a>.</p>
 
 <p>Stay tuned. We&rsquo;ll take this example and build on it in future posts.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Clojure MXNet April Update]]></title>
-    <link href="http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/"/>
-    <updated>2019-04-26T15:51:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update</id>
-    <content type="html"><![CDATA[<p>Spring is bringing some beautiful new things to the  <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. Here are some highlights for the month of April.</p>
-
-<h2>Shipped</h2>
-
-<p>We&rsquo;ve merged <a href="https://github.com/apache/incubator-mxnet/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Aclosed+clojure">10 PRs</a> over the last month. Many of them focus on core improvements to documentation and usability which is very important.</p>
-
-<p>The MXNet project is also preparing a new release <code>1.4.1</code>, so keep on the lookout for that to hit in the near future.</p>
-
-<h2>Clojure MXNet Made Simple Article Series</h2>
-
-<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> added another post to his fantastic series &ndash; <a href="https://arthurcaillau.com/mxnet-made-simple-pretrained-models/">MXNet made simple: Pretrained Models for image classification &ndash; Inception and VGG</a></p>
-
-<h2>Cool Stuff in Development</h2>
-
-<h3>New APIs</h3>
-
-<p>Great progress was made on the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> by <a href="https://github.com/kedarbellare">Kedar Bellare</a>. We now have an experimental new version of the apis that are generated more directly from the C code so that we can have more control over the output.</p>
-
-<p>For example the new version of the generated api for NDArray looks like:</p>
-
-<p>```clojure
-(defn
- activation
- &ldquo;Applies an activation function element-wise to the input.</p>
-
-<p>  The following activation functions are supported:</p>
-
-<ul>
-<li><code>relu</code>: Rectified Linear Unit, :math:<code>y = max(x, 0)</code></li>
-<li><code>sigmoid</code>: :math:<code>y = \\frac{1}{1 + exp(-x)}</code></li>
-<li><code>tanh</code>: Hyperbolic tangent, :math:<code>y = \\frac{exp(x) - exp(-x)}{exp(x) + exp(-x)}</code></li>
-<li><code>softrelu</code>: Soft ReLU, or SoftPlus, :math:<code>y = log(1 + exp(x))</code></li>
-<li><code>softsign</code>: :math:<code>y = \\frac{x}{1 + abs(x)}</code></li>
-</ul>
-
-
-<p>  Defined in src/operator/nn/activation.cc:L167</p>
-
-<p>  <code>data</code>: The input array.
-  <code>act-type</code>: Activation function to be applied.
-  <code>out</code>: Output array. (optional)&ldquo;
- ([data act-type] (activation {:data data, :act-type act-type}))
- ([{:keys [data act-type out], :or {out nil}, :as opts}]
-  (util/coerce-return
-   (NDArrayAPI/Activation data act-type (util/&ndash;>option out)))))
-```</p>
-
-<p>as opposed to:</p>
-
-<p>```clojure
-(defn
- activation
- ([&amp; nd-array-and-params]
-  (util/coerce-return
-   (NDArray/Activation</p>
-
-<pre><code>(util/coerce-param
- nd-array-and-params
- #{"scala.collection.Seq"})))))
-</code></pre>
-
-<p>```</p>
-
-<p>So much nicer!!!</p>
-
-<h3>BERT (State of the Art for NLP)</h3>
-
-<p>We also have some really exciting examples for BERT in a <a href="https://github.com/apache/incubator-mxnet/pull/14769">PR</a> that will be merged soon. If you are not familiar with BERT, this <a href="http://jalammar.github.io/illustrated-bert/">blog post</a> is a good overview. Basically, it&rsquo;s the state of the art in NLP right now. With the help of exported models from <a href="https://github.com/dmlc/gluon-nlp">GluonNLP</a>, we can do both inference and fine tuning of BERT models in MXNet with Clojure! This is an excellent example of cross fertilization across the GluonNLP, Scala, and Clojure MXNet projects.</p>
-
-<p>There are two examples.</p>
-
-<p>1) BERT question and answer inference based off of a fine tuned model of the <a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD Dataset</a> in GluonNLP which is then exported. It allows one to actually do some natural language question and answering like:</p>
-
-<p>```
-Question Answer Data
-{:input-answer
- &ldquo;Rich Hickey is the creator of the Clojure language. Before Clojure, he developed dotLisp, a similar project based on the .NET platform, and three earlier attempts to provide interoperability between Lisp and Java: a Java foreign language interface for Common Lisp, A Foreign Object Interface for Lisp, and a Lisp-friendly interface to Java Servlets.&rdquo;,
- :input-question &ldquo;Who created Clojure?&rdquo;,
- :ground-truth-answers [&ldquo;rich&rdquo; &ldquo;hickey&rdquo;]}</p>
-
-<p>  Predicted Answer:  [rich hickey]
-```</p>
-
-<p>2) The second example is using the exported BERT base model and then fine tuning it in Clojure to do a task with sentence pair classification to see if two sentences are equivalent or not.</p>
-
-<p>The nice thing about this is that we were able to convert the existing <a href="https://gluon-nlp.mxnet.io/examples/sentence_embedding/bert.html">tutorial in GluonNLP</a> over to a Clojure Jupyter notebook with the <code>lein-jupyter</code> plugin. I didn&rsquo;t realize that there is a nifty <code>save-as</code> command in Jupyter that can generate a markdown file, which makes for very handy documentation. Take a peek at the tutorial <a href="https://github.com/apache/incubator-mxnet/blob/d062d46f1c351dc9b70a038511b564dab5c43266/contrib/clojure-package/examples/bert/fine-tune-bert.md">here</a>. It might make its way into a blog post on its own in the next week or two.</p>
-
-<h2>Upcoming Events</h2>
-
-<ul>
-<li><p>I&rsquo;ll be speaking about Clojure MXNet at the next <a href="https://twitter.com/scicloj">Scicloj Event</a> on May 15th at 10PM UTC. Please join us and get involved in making Clojure a great place for Data Science.</p></li>
-<li><p>I&rsquo;m also really excited to attend <a href="https://iclr.cc/">ICLR</a> in a couple weeks. It is a <em>huge conference</em> that I&rsquo;m sure will melt my mind with the latest research in Deep Learning. If anyone else is planning to attend, please say hi :)</p></li>
-</ul>
-
-
-<h2>Get Involved</h2>
-
-<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip</p>
-
-<h2>Cat Picture of the Month</h2>
-
-<p>To close out, let&rsquo;s take a lesson from my cats Otto and Pi and don&rsquo;t forget the importance of naps.</p>
-
-<p><img class="<a" src="href="https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg">https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg</a>"></p>
-
-<p>Have a great rest of April!</p>
 ]]></content>
   </entry>
   
