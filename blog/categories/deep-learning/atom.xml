@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-01-10T20:52:37-05:00</updated>
+  <updated>2020-01-10T20:54:20-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -369,24 +369,7 @@ context = token.unsqueeze(0)
 <p>And finally we can generate some fun text!</p>
 
 <p>```clojure
-(defn generate-text [starting-text num-of-words-to-predict]
-  (let [tokens (into [] (py/$a tokenizer encode starting-text))</p>
-
-<pre><code>    context (torch/tensor [tokens])
-    result (reduce
-            (fn [r i]
-              (println i)
-              (generate-sequence-step r))
-
-            {:generated-tokens tokens
-             :context context
-             :past nil}
-
-            (range num-of-words-to-predict))]
-(decode-sequence result)))
-</code></pre>
-
-<p>(generate-text &ldquo;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive&rdquo; 20)</p>
+(generate-text &ldquo;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive&rdquo; 20)</p>
 
 <p>;=> &ldquo;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone&rdquo;
 ```</p>

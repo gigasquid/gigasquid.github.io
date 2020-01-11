@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-01-10T20:52:37-05:00</updated>
+  <updated>2020-01-10T20:54:20-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -465,37 +465,7 @@ The original tutorial is <a href="https://huggingface.co/transformers/quickstart
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">generate-text</span> <span class="p">[</span><span class="nv">starting-text</span> <span class="nv">num-of-words-to-predict</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">tokens</span> <span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">tokenizer</span> <span class="nv">encode</span> <span class="nv">starting-text</span><span class="p">))</span>
-</span><span class='line'>        <span class="nv">context</span> <span class="p">(</span><span class="nf">torch/tensor</span> <span class="p">[</span><span class="nv">tokens</span><span class="p">])</span>
-</span><span class='line'>        <span class="nv">result</span> <span class="p">(</span><span class="nf">reduce</span>
-</span><span class='line'>                <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">r</span> <span class="nv">i</span><span class="p">]</span>
-</span><span class='line'>                  <span class="p">(</span><span class="nb">println </span><span class="nv">i</span><span class="p">)</span>
-</span><span class='line'>                  <span class="p">(</span><span class="nf">generate-sequence-step</span> <span class="nv">r</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="p">{</span><span class="ss">:generated-tokens</span> <span class="nv">tokens</span>
-</span><span class='line'>                 <span class="ss">:context</span> <span class="nv">context</span>
-</span><span class='line'>                 <span class="ss">:past</span> <span class="nv">nil</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="p">(</span><span class="nb">range </span><span class="nv">num-of-words-to-predict</span><span class="p">))]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">decode-sequence</span> <span class="nv">result</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">generate-text</span> <span class="s">&quot;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive&quot;</span> <span class="mi">20</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">generate-text</span> <span class="s">&quot;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive&quot;</span> <span class="mi">20</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">;=&gt; &quot;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
