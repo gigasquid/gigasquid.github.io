@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-01-10T20:54:20-05:00</updated>
+  <updated>2020-01-11T11:53:23-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -271,6 +271,8 @@ assert predicted_text == &lsquo;Who was Jim Henson? Jim Henson was a man&rsquo;
 ```</p>
 
 <p>The main differences is that we are obviously not using the python array syntax in our code to manipulate the lists. For example, instead of using <code>outputs[0]</code>, we are going to use <code>(first outputs)</code>. But, other than that, it is a pretty good match, even with the <code>py/with</code>.</p>
+
+<p>Also note that we are not making the call to configure it with GPU. This is intentionally left out to keep things simple for people to try it out. Sometimes, GPU configuration can be a bit tricky to set up depending on your system. For this example, you definitely won&rsquo;t need it since it runs fast enough on cpu. If you do want to do something more complicated later, like fine tuning, you will need to invest some time to get it set up.</p>
 
 <h3>Doing Longer Sequences</h3>
 
