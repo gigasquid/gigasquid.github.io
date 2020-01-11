@@ -133,31 +133,16 @@
 
 <p>A new age in Clojure has dawned. We now have interop access to any python library with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>.</p>
 
-<br>
-
-
 <p>Let me pause a minute to repeat.</p>
-
-<br>
-
 
 <p><strong> You can now interop with ANY python library. </strong></p>
 
-<br>
-
-
 <p>I know. It&rsquo;s overwhelming. It took a bit for me to come to grips with it too.</p>
-
-<br>
-
 
 <p>Let&rsquo;s take an example of something that I&rsquo;ve <em>always</em> wanted to do and have struggled with mightly finding a way to do it in Clojure:<br/>
 I want to use the latest cutting edge GPT2 code out there to generate text.</p>
 
 <p>Right now, that library is <a href="https://github.com/huggingface/transformers">Hugging Face Transformers</a>.</p>
-
-<br>
-
 
 <p>Get ready. We will wrap that sweet hugging face code in Clojure parens!</p>
 
@@ -165,32 +150,17 @@ I want to use the latest cutting edge GPT2 code out there to generate text.</p>
 
 <p>The first thing you will need to do is to have python3 installed and the two libraries that we need:</p>
 
-<br>
-
-
 <ul>
 <li>pytorch &ndash; <code>sudo pip3 install torch</code></li>
 <li>hugging face transformers &ndash; <code>sudo pip3 install transformers</code></li>
 </ul>
 
 
-<br>
-
-
 <p>Right now, some of you may not want to proceed. You might have had a bad relationship with Python in the past. It&rsquo;s ok, remember that some of us had bad relationships with Java, but still lead a happy and fulfilled life with Clojure and still can enjoy it from interop. The same is true with Python. Keep an open mind.</p>
-
-<br>
-
 
 <p>There might be some others that don&rsquo;t want to have anything to do with Python and want to keep your Clojure pure. Well, that is a valid choice. But you are missing out on what the big, vibrant, and chaotic Python Deep Learning ecosystem has to offer.</p>
 
-<br>
-
-
 <p>For those of you that are still along for the ride, let&rsquo;s dive in.</p>
-
-<br>
-
 
 <p>Your deps file should have just a single extra dependency in it:</p>
 
@@ -226,9 +196,6 @@ I want to use the latest cutting edge GPT2 code out there to generate text.</p>
 <p>Here we are going to follow along with the OpenAI GPT-2 tutorial and translate it into interop code.
 The original tutorial is <a href="https://huggingface.co/transformers/quickstart.html">here</a></p>
 
-<br>
-
-
 <p>Let&rsquo;s take the python side first:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -252,9 +219,6 @@ The original tutorial is <a href="https://huggingface.co/transformers/quickstart
 
 
 <p>The <code>py/$a</code> function is used to call attributes on a Python object. We get the <code>transformers/GPTTokenizer</code> object that we have available to use and call <code>from_pretrained</code> on it with the string argument <code>"gpt2"</code></p>
-
-<br>
-
 
 <p>Next in the Python tutorial is:</p>
 
@@ -300,18 +264,9 @@ The original tutorial is <a href="https://huggingface.co/transformers/quickstart
 
 <p>Here we are again using <code>py/$a</code> to call the <code>encode</code> method on the text. However, when we are just calling a function, we can do so directly with <code>(torch/tensor [indexed-tokens])</code>. We can even directly use vectors.</p>
 
-<br>
-
-
 <p>Again, you are doing this in the REPL, so you have full power for inspection and display of the python objects. It is a great interop experience &ndash; (cider even has doc information on the python functions in the minibuffer)!</p>
 
-<br>
-
-
 <p>The next part is to load the model itself. This will take a few minutes, since it has to download a big file from s3 and load it up.</p>
-
-<br>
-
 
 <p>In Python:</p>
 
@@ -335,13 +290,7 @@ The original tutorial is <a href="https://huggingface.co/transformers/quickstart
 
 <p>The next part is to run the model with the tokens and make the predictions.</p>
 
-<br>
-
-
 <p>Here the code starts to diverge a tiny bit.</p>
-
-<br>
-
 
 <p>Python:</p>
 
@@ -432,9 +381,6 @@ The original tutorial is <a href="https://huggingface.co/transformers/quickstart
 <h3>Doing Longer Sequences</h3>
 
 <p>The next example in the tutorial goes on to cover generating longer text.</p>
-
-<br>
-
 
 <p>Python</p>
 
@@ -584,22 +530,13 @@ The original tutorial is <a href="https://huggingface.co/transformers/quickstart
 
 <p><strong>Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone</strong></p>
 
-<br>
-
-
 <p>So true GPT2! So true!</p>
 
 <h3>Wrap-up</h3>
 
 <p>libpython-clj is a really powerful tool that will allow Clojurists to better explore, leverage, and integrate Python libraries into their code.</p>
 
-<br>
-
-
 <p>I&rsquo;ve been really impressed with it so far and I encourage you to check it out.</p>
-
-<br>
-
 
 <p>There is a <a href="https://github.com/gigasquid/libpython-clj-examples">repo with the examples</a> out there if you want to check them out. There is also an example of doing MXNet MNIST classification there as well.</p>
 </div>
