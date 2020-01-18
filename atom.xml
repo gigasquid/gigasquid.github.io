@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-01-11T11:53:23-05:00</updated>
+  <updated>2020-01-18T16:32:59-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,263 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Parens for Pyplot]]></title>
+    <link href="http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/"/>
+    <updated>2020-01-18T15:39:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a> has opened the door for Clojure to directly interop with Python libraries. That means we can take just about any Python library and directly use it in our Clojure REPL. But what about <a href="https://matplotlib.org/">matplotlib</a>?</p>
+
+<p>Matplotlib.pyplot is a standard fixture in most tutorials and python data science code. How do we interop with a python graphics library?</p>
+
+<h2>How do you interop?</h2>
+
+<p>It turns out that matplotlib has a headless mode where we can export the graphics and then display it using any method that we would normally use to display a .png file. In my case, I made a quick macro for it using the shell <code>open</code>. I&rsquo;m sure that someone out that could improve upon it, (and maybe even make it a cool utility lib), but it suits what I&rsquo;m doing so far:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="kd">ns </span><span class="nv">gigasquid.plot</span>
+</span><span class='line'><span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">libpython-clj.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]</span>
+</span><span class='line'><span class="p">[</span><span class="nv">libpython-clj.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]</span>
+</span><span class='line'><span class="p">[</span><span class="nv">clojure.java.shell</span> <span class="ss">:as</span> <span class="nv">sh</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;; This uses the headless version of matplotlib to generate a graph then copy it to the JVM</span>
+</span><span class='line'><span class="c1">;; where we can then print it</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;;; have to set the headless mode before requiring pyplot</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">mplt</span> <span class="p">(</span><span class="nf">py/import-module</span> <span class="s">&quot;matplotlib&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">py.</span> <span class="nv">mplt</span> <span class="s">&quot;use&quot;</span> <span class="s">&quot;Agg&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="ss">&#39;matplotlib.pyplot</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="ss">&#39;matplotlib.backends.backend_agg</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="ss">&#39;numpy</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defmacro </span><span class="nv">with-show</span>
+</span><span class='line'>  <span class="s">&quot;Takes forms with mathplotlib.pyplot to then show locally&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="o">&amp;</span> <span class="nv">body</span><span class="p">]</span>
+</span><span class='line'>  <span class="o">`</span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">_#</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/clf</span><span class="p">)</span>
+</span><span class='line'>         <span class="nv">fig#</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/figure</span><span class="p">)</span>
+</span><span class='line'>         <span class="nv">agg-canvas#</span> <span class="p">(</span><span class="nf">matplotlib.backends.backend_agg/FigureCanvasAgg</span> <span class="nv">fig#</span><span class="p">)]</span>
+</span><span class='line'>     <span class="o">~</span><span class="p">(</span><span class="nb">cons </span><span class="ss">&#39;do</span> <span class="nv">body</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">py.</span> <span class="nv">agg-canvas#</span> <span class="s">&quot;draw&quot;</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">matplotlib.pyplot/savefig</span> <span class="s">&quot;temp.png&quot;</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">sh/sh</span> <span class="s">&quot;open&quot;</span> <span class="s">&quot;temp.png&quot;</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Parens for Pyplot!</h2>
+
+<p>Now that we have our wrapper let&rsquo;s take it for a spin. We&rsquo;ll be following along more or less this <a href="http://cs231n.github.io/python-numpy-tutorial/#matplotlib-plotting">tutorial for numpy plotting</a></p>
+
+<p>For setup you will need the following installed in your python environment:</p>
+
+<ul>
+<li>numpy</li>
+<li>matplotlib</li>
+<li>pillow</li>
+</ul>
+
+
+<p>We are also going to use the latest and greatest syntax from libpython-clj so you are going to need to install the snapshot version locally until the next version goes out:</p>
+
+<ul>
+<li><code>git clone git@github.com:cnuernber/libpython-clj.git</code></li>
+<li><code>cd cd libpython-clj</code></li>
+<li><code>lein install</code></li>
+</ul>
+
+
+<p>After that is all setup we can require the libs we need in clojure.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.numpy-plot</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">libpython-clj.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">libpython-clj.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">gigasquid.plot</span> <span class="ss">:as</span> <span class="nv">plot</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>plot</code> namespace contains the macro for <code>with-show</code> above. The <code>py.</code> and others is the new and improved syntax for interop.</p>
+
+<h3>Simple Sin and Cos</h3>
+
+<p>Let&rsquo;s start off with a simple sine and cosine functions. This code will create a <code>x</code> numpy vector of a range from 0 to <code>3 * pi</code> in 0.1 increments and then create <code>y</code> numpy vector of the <code>sin</code> of that and plot it</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://live.staticflickr.com/65535/49405284796_014447588d_z.jpg" alt="sin" /></p>
+
+<p>Beautiful yes!</p>
+
+<p>Let&rsquo;s get a bit more complicated now and and plot both the sin and cosine as well as add labels, title, and legend.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y-sin</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y-cos</span> <span class="p">(</span><span class="nf">numpy/cos</span> <span class="nv">x</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y-sin</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y-cos</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/xlabel</span> <span class="s">&quot;x axis label&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/ylabel</span> <span class="s">&quot;y axis label&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/title</span> <span class="s">&quot;Sine and Cosine&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/legend</span> <span class="p">[</span><span class="s">&quot;Sine&quot;</span> <span class="s">&quot;Cosine&quot;</span><span class="p">])))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http:////live.staticflickr.com/65535/49405284806_1d04957bce_z.jpg" alt="sin and cos" /></p>
+
+<p>We can also add subplots. Subplots are when you divide the plots into different portions.
+It is a bit stateful and involves making one subplot <em>active</em> and making changes and then making the other subplot <em>active</em>. Again not too hard to do with Clojure.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y-sin</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y-cos</span> <span class="p">(</span><span class="nf">numpy/cos</span> <span class="nv">x</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="c1">;;; set up a subplot gird that has a height of 2 and width of 1</span>
+</span><span class='line'>      <span class="c1">;; and set the first such subplot as active</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">2</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y-sin</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/title</span> <span class="s">&quot;Sine&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">;;; set the second subplot as active and make the second plot</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">2</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y-cos</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/title</span> <span class="s">&quot;Cosine&quot;</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http:////live.staticflickr.com/65535/49405284836_8e49e4a6b8_z.jpg" alt="sin and cos subplots" /></p>
+
+<h3>Plotting with Images</h3>
+
+<p>Pyplot also has functions for working directly with images as well. Here we take a picture of my cat and create another version of it that is tinted.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">img</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/imread</span> <span class="s">&quot;resources/cat.jpg&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">img-tinted</span> <span class="p">(</span><span class="nf">numpy/multiply</span> <span class="nv">img</span> <span class="p">[</span><span class="mi">1</span> <span class="mf">0.95</span> <span class="mf">0.9</span><span class="p">])]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/imshow</span> <span class="nv">img</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/imshow</span> <span class="p">(</span><span class="nf">numpy/uint8</span> <span class="nv">img-tinted</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://live.staticflickr.com/65535/49404801993_ed398d5768_n.jpg" alt="cat tinted" /></p>
+
+<h3>Pie charts</h3>
+
+<p>Finally, we can show how to do a pie chart. I asked people in a <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a> what they wanted an example of in python interop and one of them was a pie chart. This is for you!</p>
+
+<p>The original code for this example came from this <a href="https://matplotlib.org/3.1.1/gallery/pie_and_polar_charts/pie_features.html">tutorial</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">labels</span> <span class="p">[</span><span class="s">&quot;Frogs&quot;</span> <span class="s">&quot;Hogs&quot;</span> <span class="s">&quot;Dogs&quot;</span> <span class="s">&quot;Logs&quot;</span><span class="p">]</span>
+</span><span class='line'>        <span class="nv">sizes</span> <span class="p">[</span><span class="mi">15</span> <span class="mi">30</span> <span class="mi">45</span> <span class="mi">10</span><span class="p">]</span>
+</span><span class='line'>        <span class="nv">explode</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.1</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]</span> <span class="c1">; only explode the 2nd slice (Hogs)</span>
+</span><span class='line'>        <span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">fig1</span> <span class="nv">ax1</span><span class="p">]</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/subplots</span><span class="p">)]</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">py.</span> <span class="nv">ax1</span> <span class="s">&quot;pie&quot;</span> <span class="nv">sizes</span> <span class="ss">:explode</span> <span class="nv">explode</span> <span class="ss">:labels</span> <span class="nv">labels</span> <span class="ss">:autopct</span> <span class="s">&quot;%1.1f%%&quot;</span>
+</span><span class='line'>                             <span class="ss">:shadow</span> <span class="nv">true</span> <span class="ss">:startangle</span> <span class="mi">90</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">py.</span> <span class="nv">ax1</span> <span class="s">&quot;axis&quot;</span> <span class="s">&quot;equal&quot;</span><span class="p">))</span> <span class="c1">;equal aspec ration ensures that pie is drawn as circle</span>
+</span><span class='line'>      <span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://live.staticflickr.com/65535/49404802008_7e84ceff76_z.jpg" alt="pie chart" /></p>
+
+<h3>Onwards and Upwards!</h3>
+
+<p>This is just the beginning. In upcoming posts, I will be showcasing examples of interop with different libraries from the python ecosystem. Part of the goal is to get people used to how to use interop but also to raise awareness of the capabilities of the python libraries out there right now since they have been historically out of our ecosystem.</p>
+
+<p>If you have any libraries that you would like examples of, I&rsquo;m taking requests. Feel free to leave them in the comments of the blog or in the <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a>.</p>
+
+<p>Until next time, happy interoping!</p>
+
+<p>PS All the code examples are here <a href="https://github.com/gigasquid/libpython-clj-examples">https://github.com/gigasquid/libpython-clj-examples</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hugging Face GPT With Clojure]]></title>
@@ -4247,63 +4504,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <p>Then I slide the keyboard over to her, a tear sliding down my cheek, and lean over to whisper the only advice that I can form into words,</p>
 
 <p>&ldquo;Don&rsquo;t forget the closing parens.&rdquo;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Book Writing for the Busy Programmer]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/06/19/book-writing-for-the-busy-programmer/"/>
-    <updated>2016-06-19T09:22:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/06/19/book-writing-for-the-busy-programmer</id>
-    <content type="html"><![CDATA[<p><img src="http://c5.staticflickr.com/8/7302/27492453220_eecdf6dee1.jpg"></p>
-
-<p>So you want to write a book?  Awesome.  I&rsquo;ve been working on one too for the last year.</p>
-
-<p>No, it&rsquo;s not really a programming book, but it does have code in it.  It&rsquo;s a sci-fi/fantasy book written for my ten year daughter, but this post isn&rsquo;t about that.  It&rsquo;s about sharing the tools and setup that I&rsquo;ve found work best for me.</p>
-
-<h2>Tools for Writing</h2>
-
-<p>If the first thing you think of when you want to write a book is creating some really cool tools to help you, I can totally relate.  It&rsquo;s a programmer thing.</p>
-
-<p>Hold on though, there&rsquo;s another way.</p>
-
-<p>Starting out with only my book idea, I spent some time looking at the best authoring tools out there.  I knew that I wanted to able to write in an editor that I was comfortable in and in a terse format like Markdown.  I also wanted to be able to use git for revision management.  After searching, I settled on <a href="https://leanpub.com/">Leanpub</a></p>
-
-<p>Leanpub is a free service for authoring that has <a href="https://leanpub.com/help/getting_started_sync_github">Git integration</a> in <a href="https://leanpub.com/help">Markdown format</a>.  With it, I was able to write in my favorite text editor, (Emacs of course), commit and push my changes to my git repo, and then generate PDF and e-book formats.  The multiple formats were important to me because it allowed me to share my chapters and get feedback.</p>
-
-<h2>Tools for Feedback</h2>
-
-<p>Since I was writing a book with my daughter in mind, the most important feedback was from her.  After every chapter was done.  I would either print her out a copy or download it to her Kindle for review.  She actually really enjoyed reading it on her Kindle because it made it for more <em>real</em> to her.  My son also got interested in the story and before long, I had them both getting in heated debates about which direction the story should go.</p>
-
-<p>After my kids reviewed the chapters, I also sought some professional writing advice from a free-lance editor.  I highly recommend getting this sort of feedback from an editor, writing group, or trusted friend to help you grow and improve. The one catch is that most of the writing world works with Microsoft Word, so I needed to convert my chapters to that format.</p>
-
-<p>From my experience, all PDF to Word converters are full of fail.  The formatting goes all over the place and your writing ends up looking like some horrible abstract text art experiment gone wrong.  So far, the best converter I&rsquo;ve found is <a href="http://pandoc.org/">pandoc</a>.  It allows you to take your Markdown files and turn them into quite presentable Word documents.</p>
-
-<p>If you have a Mac, it&rsquo;s as simple as <code>brew install pandoc</code>.  Then, you can create a simple script to convert all your chapters,(or a selection) into a properly formatted Word Doc.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
-</span><span class='line'>rm ./all.md
-</span><span class='line'>for i in `cat ./Book.txt`; do  cat $i &gt;&gt; all.md; echo "  " &gt;&gt; all.md ; done
-</span><span class='line'>pandoc -o all.docx -f markdown -t docx ./all.md</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you write your manuscript, (what the publishing world calls your book text), revise it, copy edit it, and walk backwards in a circle three times, you&rsquo;re ready to publish.</p>
-
-<h2>Tools for Publishing</h2>
-
-<p>I don&rsquo;t have any real firm advice in this area yet since I&rsquo;m still in the midst of it, but I&rsquo;ll share the two options that I&rsquo;m looking at &ndash; traditional publishing and self publishing.</p>
-
-<p>Self publishing is more easily understood of the two.  You can put your book up for sale at any time through Leanpub or Amazon.  For better or worse, you have complete control of the content, display, marketing, and revenue of your book.</p>
-
-<p>Traditional publishing involves finding an literary agent and/or publisher to work with.  This route involves pitching your manuscript to someone to represent it through a <a href="http://nybookeditors.com/2015/12/how-to-write-a-darn-good-query-letter/">query</a>.  The advantages of this are that, (if you find a good match), you will have a team of people helping you make your book the best it can be and have the possibility of getting it on the shelf in a bookstore.  One of the downsides is that the traditional publishing world takes a lot longer than pushing the self publish button.</p>
-
-<p>With any luck, I&rsquo;ll have a clearer picture of this all in a bit and be able to share my experiences.  In the meantime, I encourage you to grab your keyboard and bring your book ideas to life.</p>
-
-<p>No matter the outcome, it&rsquo;s a rewarding journey.</p>
 ]]></content>
   </entry>
   

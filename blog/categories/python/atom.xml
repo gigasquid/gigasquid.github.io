@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Python | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2020-01-18T16:32:59-05:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Parens for Pyplot]]></title>
+    <link href="http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/"/>
+    <updated>2020-01-18T15:39:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a> has opened the door for Clojure to directly interop with Python libraries. That means we can take just about any Python library and directly use it in our Clojure REPL. But what about <a href="https://matplotlib.org/">matplotlib</a>?</p>
+
+<p>Matplotlib.pyplot is a standard fixture in most tutorials and python data science code. How do we interop with a python graphics library?</p>
+
+<h2>How do you interop?</h2>
+
+<p>It turns out that matplotlib has a headless mode where we can export the graphics and then display it using any method that we would normally use to display a .png file. In my case, I made a quick macro for it using the shell <code>open</code>. I&rsquo;m sure that someone out that could improve upon it, (and maybe even make it a cool utility lib), but it suits what I&rsquo;m doing so far:</p>
+
+<p>```clojure
+ns gigasquid.plot
+(:require [libpython-clj.require :refer [require-python]]
+[libpython-clj.python :as py :refer [py. py.. py.&ndash;]]
+[clojure.java.shell :as sh])</p>
+
+<p>;;; This uses the headless version of matplotlib to generate a graph then copy it to the JVM
+;; where we can then print it</p>
+
+<p>;;;; have to set the headless mode before requiring pyplot
+(def mplt (py/import-module &ldquo;matplotlib&rdquo;))
+(py. mplt &ldquo;use&rdquo; &ldquo;Agg&rdquo;)</p>
+
+<p>(require-python &lsquo;matplotlib.pyplot)
+(require-python 'matplotlib.backends.backend_agg)
+(require-python 'numpy)</p>
+
+<p>(defmacro with-show
+  &ldquo;Takes forms with mathplotlib.pyplot to then show locally&rdquo;
+  [&amp; body]
+  `(let [_# (matplotlib.pyplot/clf)</p>
+
+<pre><code>     fig# (matplotlib.pyplot/figure)
+     agg-canvas# (matplotlib.backends.backend_agg/FigureCanvasAgg fig#)]
+ ~(cons 'do body)
+ (py. agg-canvas# "draw")
+ (matplotlib.pyplot/savefig "temp.png")
+ (sh/sh "open" "temp.png")))
+</code></pre>
+
+<p>```</p>
+
+<h2>Parens for Pyplot!</h2>
+
+<p>Now that we have our wrapper let&rsquo;s take it for a spin. We&rsquo;ll be following along more or less this <a href="http://cs231n.github.io/python-numpy-tutorial/#matplotlib-plotting">tutorial for numpy plotting</a></p>
+
+<p>For setup you will need the following installed in your python environment:</p>
+
+<ul>
+<li>numpy</li>
+<li>matplotlib</li>
+<li>pillow</li>
+</ul>
+
+
+<p>We are also going to use the latest and greatest syntax from libpython-clj so you are going to need to install the snapshot version locally until the next version goes out:</p>
+
+<ul>
+<li><code>git clone git@github.com:cnuernber/libpython-clj.git</code></li>
+<li><code>cd cd libpython-clj</code></li>
+<li><code>lein install</code></li>
+</ul>
+
+
+<p>After that is all setup we can require the libs we need in clojure.</p>
+
+<p>```clojure
+(ns gigasquid.numpy-plot
+  (:require [libpython-clj.require :refer [require-python]]</p>
+
+<pre><code>        [libpython-clj.python :as py :refer [py. py.. py.-]]
+        [gigasquid.plot :as plot]))
+</code></pre>
+
+<p>```</p>
+
+<p>The <code>plot</code> namespace contains the macro for <code>with-show</code> above. The <code>py.</code> and others is the new and improved syntax for interop.</p>
+
+<h3>Simple Sin and Cos</h3>
+
+<p>Let&rsquo;s start off with a simple sine and cosine functions. This code will create a <code>x</code> numpy vector of a range from 0 to <code>3 * pi</code> in 0.1 increments and then create <code>y</code> numpy vector of the <code>sin</code> of that and plot it</p>
+
+<p>```clojure
+(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
+
+<pre><code>    y (numpy/sin x)]
+(plot/with-show
+  (matplotlib.pyplot/plot x y)))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="https://live.staticflickr.com/65535/49405284796_014447588d_z.jpg" alt="sin" /></p>
+
+<p>Beautiful yes!</p>
+
+<p>Let&rsquo;s get a bit more complicated now and and plot both the sin and cosine as well as add labels, title, and legend.</p>
+
+<p>```clojure
+(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
+
+<pre><code>    y-sin (numpy/sin x)
+    y-cos (numpy/cos x)]
+(plot/with-show
+  (matplotlib.pyplot/plot x y-sin)
+  (matplotlib.pyplot/plot x y-cos)
+  (matplotlib.pyplot/xlabel "x axis label")
+  (matplotlib.pyplot/ylabel "y axis label")
+  (matplotlib.pyplot/title "Sine and Cosine")
+  (matplotlib.pyplot/legend ["Sine" "Cosine"])))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http:////live.staticflickr.com/65535/49405284806_1d04957bce_z.jpg" alt="sin and cos" /></p>
+
+<p>We can also add subplots. Subplots are when you divide the plots into different portions.
+It is a bit stateful and involves making one subplot <em>active</em> and making changes and then making the other subplot <em>active</em>. Again not too hard to do with Clojure.</p>
+
+<p>```clojure
+(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
+
+<pre><code>    y-sin (numpy/sin x)
+    y-cos (numpy/cos x)]
+(plot/with-show
+  ;;; set up a subplot gird that has a height of 2 and width of 1
+  ;; and set the first such subplot as active
+  (matplotlib.pyplot/subplot 2 1 1)
+  (matplotlib.pyplot/plot x y-sin)
+  (matplotlib.pyplot/title "Sine")
+
+  ;;; set the second subplot as active and make the second plot
+  (matplotlib.pyplot/subplot 2 1 2)
+  (matplotlib.pyplot/plot x y-cos)
+  (matplotlib.pyplot/title "Cosine")))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http:////live.staticflickr.com/65535/49405284836_8e49e4a6b8_z.jpg" alt="sin and cos subplots" /></p>
+
+<h3>Plotting with Images</h3>
+
+<p>Pyplot also has functions for working directly with images as well. Here we take a picture of my cat and create another version of it that is tinted.</p>
+
+<p>```clojure
+(let [img (matplotlib.pyplot/imread &ldquo;resources/cat.jpg&rdquo;)</p>
+
+<pre><code>    img-tinted (numpy/multiply img [1 0.95 0.9])]
+(plot/with-show
+  (matplotlib.pyplot/subplot 1 2 1)
+  (matplotlib.pyplot/imshow img)
+  (matplotlib.pyplot/subplot 1 2 2)
+  (matplotlib.pyplot/imshow (numpy/uint8 img-tinted))))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http://live.staticflickr.com/65535/49404801993_ed398d5768_n.jpg" alt="cat tinted" /></p>
+
+<h3>Pie charts</h3>
+
+<p>Finally, we can show how to do a pie chart. I asked people in a <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a> what they wanted an example of in python interop and one of them was a pie chart. This is for you!</p>
+
+<p>The original code for this example came from this <a href="https://matplotlib.org/3.1.1/gallery/pie_and_polar_charts/pie_features.html">tutorial</a>.</p>
+
+<p>```clojure
+(let [labels [&ldquo;Frogs&rdquo; &ldquo;Hogs&rdquo; &ldquo;Dogs&rdquo; &ldquo;Logs&rdquo;]</p>
+
+<pre><code>    sizes [15 30 45 10]
+    explode [0 0.1 0 0] ; only explode the 2nd slice (Hogs)
+    ]
+(plot/with-show
+  (let [[fig1 ax1] (matplotlib.pyplot/subplots)]
+    (py. ax1 "pie" sizes :explode explode :labels labels :autopct "%1.1f%%"
+                         :shadow true :startangle 90)
+    (py. ax1 "axis" "equal")) ;equal aspec ration ensures that pie is drawn as circle
+  ))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http://live.staticflickr.com/65535/49404802008_7e84ceff76_z.jpg" alt="pie chart" /></p>
+
+<h3>Onwards and Upwards!</h3>
+
+<p>This is just the beginning. In upcoming posts, I will be showcasing examples of interop with different libraries from the python ecosystem. Part of the goal is to get people used to how to use interop but also to raise awareness of the capabilities of the python libraries out there right now since they have been historically out of our ecosystem.</p>
+
+<p>If you have any libraries that you would like examples of, I&rsquo;m taking requests. Feel free to leave them in the comments of the blog or in the <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a>.</p>
+
+<p>Until next time, happy interoping!</p>
+
+<p>PS All the code examples are here <a href="https://github.com/gigasquid/libpython-clj-examples">https://github.com/gigasquid/libpython-clj-examples</a></p>
+]]></content>
+  </entry>
+  
+</feed>

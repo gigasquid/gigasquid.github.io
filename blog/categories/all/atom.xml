@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-01-11T11:53:23-05:00</updated>
+  <updated>2020-01-18T16:32:59-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,205 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Parens for Pyplot]]></title>
+    <link href="http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/"/>
+    <updated>2020-01-18T15:39:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a> has opened the door for Clojure to directly interop with Python libraries. That means we can take just about any Python library and directly use it in our Clojure REPL. But what about <a href="https://matplotlib.org/">matplotlib</a>?</p>
+
+<p>Matplotlib.pyplot is a standard fixture in most tutorials and python data science code. How do we interop with a python graphics library?</p>
+
+<h2>How do you interop?</h2>
+
+<p>It turns out that matplotlib has a headless mode where we can export the graphics and then display it using any method that we would normally use to display a .png file. In my case, I made a quick macro for it using the shell <code>open</code>. I&rsquo;m sure that someone out that could improve upon it, (and maybe even make it a cool utility lib), but it suits what I&rsquo;m doing so far:</p>
+
+<p>```clojure
+ns gigasquid.plot
+(:require [libpython-clj.require :refer [require-python]]
+[libpython-clj.python :as py :refer [py. py.. py.&ndash;]]
+[clojure.java.shell :as sh])</p>
+
+<p>;;; This uses the headless version of matplotlib to generate a graph then copy it to the JVM
+;; where we can then print it</p>
+
+<p>;;;; have to set the headless mode before requiring pyplot
+(def mplt (py/import-module &ldquo;matplotlib&rdquo;))
+(py. mplt &ldquo;use&rdquo; &ldquo;Agg&rdquo;)</p>
+
+<p>(require-python &lsquo;matplotlib.pyplot)
+(require-python 'matplotlib.backends.backend_agg)
+(require-python 'numpy)</p>
+
+<p>(defmacro with-show
+  &ldquo;Takes forms with mathplotlib.pyplot to then show locally&rdquo;
+  [&amp; body]
+  `(let [_# (matplotlib.pyplot/clf)</p>
+
+<pre><code>     fig# (matplotlib.pyplot/figure)
+     agg-canvas# (matplotlib.backends.backend_agg/FigureCanvasAgg fig#)]
+ ~(cons 'do body)
+ (py. agg-canvas# "draw")
+ (matplotlib.pyplot/savefig "temp.png")
+ (sh/sh "open" "temp.png")))
+</code></pre>
+
+<p>```</p>
+
+<h2>Parens for Pyplot!</h2>
+
+<p>Now that we have our wrapper let&rsquo;s take it for a spin. We&rsquo;ll be following along more or less this <a href="http://cs231n.github.io/python-numpy-tutorial/#matplotlib-plotting">tutorial for numpy plotting</a></p>
+
+<p>For setup you will need the following installed in your python environment:</p>
+
+<ul>
+<li>numpy</li>
+<li>matplotlib</li>
+<li>pillow</li>
+</ul>
+
+
+<p>We are also going to use the latest and greatest syntax from libpython-clj so you are going to need to install the snapshot version locally until the next version goes out:</p>
+
+<ul>
+<li><code>git clone git@github.com:cnuernber/libpython-clj.git</code></li>
+<li><code>cd cd libpython-clj</code></li>
+<li><code>lein install</code></li>
+</ul>
+
+
+<p>After that is all setup we can require the libs we need in clojure.</p>
+
+<p>```clojure
+(ns gigasquid.numpy-plot
+  (:require [libpython-clj.require :refer [require-python]]</p>
+
+<pre><code>        [libpython-clj.python :as py :refer [py. py.. py.-]]
+        [gigasquid.plot :as plot]))
+</code></pre>
+
+<p>```</p>
+
+<p>The <code>plot</code> namespace contains the macro for <code>with-show</code> above. The <code>py.</code> and others is the new and improved syntax for interop.</p>
+
+<h3>Simple Sin and Cos</h3>
+
+<p>Let&rsquo;s start off with a simple sine and cosine functions. This code will create a <code>x</code> numpy vector of a range from 0 to <code>3 * pi</code> in 0.1 increments and then create <code>y</code> numpy vector of the <code>sin</code> of that and plot it</p>
+
+<p>```clojure
+(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
+
+<pre><code>    y (numpy/sin x)]
+(plot/with-show
+  (matplotlib.pyplot/plot x y)))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="https://live.staticflickr.com/65535/49405284796_014447588d_z.jpg" alt="sin" /></p>
+
+<p>Beautiful yes!</p>
+
+<p>Let&rsquo;s get a bit more complicated now and and plot both the sin and cosine as well as add labels, title, and legend.</p>
+
+<p>```clojure
+(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
+
+<pre><code>    y-sin (numpy/sin x)
+    y-cos (numpy/cos x)]
+(plot/with-show
+  (matplotlib.pyplot/plot x y-sin)
+  (matplotlib.pyplot/plot x y-cos)
+  (matplotlib.pyplot/xlabel "x axis label")
+  (matplotlib.pyplot/ylabel "y axis label")
+  (matplotlib.pyplot/title "Sine and Cosine")
+  (matplotlib.pyplot/legend ["Sine" "Cosine"])))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http:////live.staticflickr.com/65535/49405284806_1d04957bce_z.jpg" alt="sin and cos" /></p>
+
+<p>We can also add subplots. Subplots are when you divide the plots into different portions.
+It is a bit stateful and involves making one subplot <em>active</em> and making changes and then making the other subplot <em>active</em>. Again not too hard to do with Clojure.</p>
+
+<p>```clojure
+(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
+
+<pre><code>    y-sin (numpy/sin x)
+    y-cos (numpy/cos x)]
+(plot/with-show
+  ;;; set up a subplot gird that has a height of 2 and width of 1
+  ;; and set the first such subplot as active
+  (matplotlib.pyplot/subplot 2 1 1)
+  (matplotlib.pyplot/plot x y-sin)
+  (matplotlib.pyplot/title "Sine")
+
+  ;;; set the second subplot as active and make the second plot
+  (matplotlib.pyplot/subplot 2 1 2)
+  (matplotlib.pyplot/plot x y-cos)
+  (matplotlib.pyplot/title "Cosine")))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http:////live.staticflickr.com/65535/49405284836_8e49e4a6b8_z.jpg" alt="sin and cos subplots" /></p>
+
+<h3>Plotting with Images</h3>
+
+<p>Pyplot also has functions for working directly with images as well. Here we take a picture of my cat and create another version of it that is tinted.</p>
+
+<p>```clojure
+(let [img (matplotlib.pyplot/imread &ldquo;resources/cat.jpg&rdquo;)</p>
+
+<pre><code>    img-tinted (numpy/multiply img [1 0.95 0.9])]
+(plot/with-show
+  (matplotlib.pyplot/subplot 1 2 1)
+  (matplotlib.pyplot/imshow img)
+  (matplotlib.pyplot/subplot 1 2 2)
+  (matplotlib.pyplot/imshow (numpy/uint8 img-tinted))))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http://live.staticflickr.com/65535/49404801993_ed398d5768_n.jpg" alt="cat tinted" /></p>
+
+<h3>Pie charts</h3>
+
+<p>Finally, we can show how to do a pie chart. I asked people in a <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a> what they wanted an example of in python interop and one of them was a pie chart. This is for you!</p>
+
+<p>The original code for this example came from this <a href="https://matplotlib.org/3.1.1/gallery/pie_and_polar_charts/pie_features.html">tutorial</a>.</p>
+
+<p>```clojure
+(let [labels [&ldquo;Frogs&rdquo; &ldquo;Hogs&rdquo; &ldquo;Dogs&rdquo; &ldquo;Logs&rdquo;]</p>
+
+<pre><code>    sizes [15 30 45 10]
+    explode [0 0.1 0 0] ; only explode the 2nd slice (Hogs)
+    ]
+(plot/with-show
+  (let [[fig1 ax1] (matplotlib.pyplot/subplots)]
+    (py. ax1 "pie" sizes :explode explode :labels labels :autopct "%1.1f%%"
+                         :shadow true :startangle 90)
+    (py. ax1 "axis" "equal")) ;equal aspec ration ensures that pie is drawn as circle
+  ))
+</code></pre>
+
+<p>```</p>
+
+<p><img src="http://live.staticflickr.com/65535/49404802008_7e84ceff76_z.jpg" alt="pie chart" /></p>
+
+<h3>Onwards and Upwards!</h3>
+
+<p>This is just the beginning. In upcoming posts, I will be showcasing examples of interop with different libraries from the python ecosystem. Part of the goal is to get people used to how to use interop but also to raise awareness of the capabilities of the python libraries out there right now since they have been historically out of our ecosystem.</p>
+
+<p>If you have any libraries that you would like examples of, I&rsquo;m taking requests. Feel free to leave them in the comments of the blog or in the <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a>.</p>
+
+<p>Until next time, happy interoping!</p>
+
+<p>PS All the code examples are here <a href="https://github.com/gigasquid/libpython-clj-examples">https://github.com/gigasquid/libpython-clj-examples</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hugging Face GPT With Clojure]]></title>
@@ -1108,213 +1307,6 @@ result for epoch  2  is  [mse 0.05337505]
 <p><img src="https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg" alt="Otto in basket" /></p>
 
 <p><em>P.S. If you want to run all the code for yourself. It is <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/discriminator.clj">here</a></em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Simple Autoencoder]]></title>
-    <link href="http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/"/>
-    <updated>2019-08-16T16:16:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder</id>
-    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/horlik/2901925672/in/photolist-5qr8pf-qkv3m8-32RwmC-dZBC2B-ja8ch-48vDg-f56TGS-oUfNKn-652ZqG-QnCrbX-y3C828-jeGkmu-dxwE9L-jKaGtZ-haQ6j3-61w8UJ-WmitYz-tLymA-dZCHC4-CGvx3R-CC3GPE-BSxzda-eu625R-vHAgnk-cR7WAE-jZiLgu-BsZwLP-fhfvPT-dN1Rf9-o8Mkby-8zDocw-5DvC7S-CEij58-oaw922-akUgeW-ayQiGU-aay1vS-2fVFske-2eoRpCe-rqwa4o-9VJPtv-opgEcq-MDfFe-9yzUaK-4is9Z9-cutXnm-f9U23-L7hpoe-3i3H-enSJKf" title="Perfect mirror"><img src="https://live.staticflickr.com/3274/2901925672_325f5faeb8.jpg" width="500" height="364" alt="Perfect mirror"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p><em>If you look long enough into the autoencoder, it looks back at you.</em></p>
-
-<p>The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.</p>
-
-<p>It&rsquo;s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a <em>latent space representation</em> and the encoder translating that back to a regular images that we can view.</p>
-
-<p><img src="https://camo.githubusercontent.com/1ab40362a922059fa3686914cf5cff803ba7dd43/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f3830302f312a4c53594e57356d33544e377852583631425a686f5a412e706e67" alt="" /></p>
-
-<p>We are going to make a simple autoencoder with Clojure MXNet for handwritten digits using the MNIST dataset.</p>
-
-<h3>The Dataset</h3>
-
-<p>We first load up the training data into an iterator that will allow us to cycle through all the images.</p>
-
-<p>```clojure
-(def train-data (mx-io/mnist-iter {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>                               :label (str data-dir "train-labels-idx1-ubyte")
-                               :input-shape [784]
-                               :flat true
-                               :batch-size batch-size
-                               :shuffle true}))
-</code></pre>
-
-<p>```</p>
-
-<p>Notice there the the input shape is 784. We are purposely flattening out our 28x28 image of a number to just be a one dimensional flat array. The reason is so that we can use a simpler model for the autoencoder.</p>
-
-<p>We also load up the corresponding test data.</p>
-
-<p>```clojure
-(def test-data (mx-io/mnist-iter {:image (str data-dir &ldquo;t10k-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>                              :label (str data-dir "t10k-labels-idx1-ubyte")
-                              :input-shape [784]
-                              :batch-size batch-size
-                              :flat true
-                              :shuffle true}))
-</code></pre>
-
-<p>```</p>
-
-<p>When we are working with deep learning models we keep the training and the test data separate. When we train the model, we won&rsquo;t use the test data. That way we can evaluate it later on the unseen test data.</p>
-
-<h3>The Model</h3>
-
-<p>Now we need to define the layers of the model. We know we are going to have an input and an output. The input will be the array that represents the image of the digit and the output will also be an array which is reconstruction of that image.</p>
-
-<p>```clojure
-(def input (sym/variable &ldquo;input&rdquo;))
-(def output (sym/variable &ldquo;input_&rdquo;))</p>
-
-<p>(defn get-symbol []
-  (as-> input data</p>
-
-<pre><code>;; encode
-(sym/fully-connected "encode1" {:data data :num-hidden 100})
-(sym/activation "sigmoid1" {:data data :act-type "sigmoid"})
-
-;; encode
-(sym/fully-connected "encode2" {:data data :num-hidden 50})
-(sym/activation "sigmoid2" {:data data :act-type "sigmoid"})
-
-;; decode
-(sym/fully-connected "decode1" {:data data :num-hidden 50})
-(sym/activation "sigmoid3" {:data data :act-type "sigmoid"})
-
-;; decode
-(sym/fully-connected "decode2" {:data data :num-hidden 100})
-(sym/activation "sigmoid4" {:data data :act-type "sigmoid"})
-
-;;output
-(sym/fully-connected "result" {:data data :num-hidden 784})
-(sym/activation "sigmoid5" {:data data :act-type "sigmoid"})
-
-(sym/linear-regression-output {:data data :label output})))
-</code></pre>
-
-<p>```</p>
-
-<p>From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:</p>
-
-<p>784 (image) &ndash;> 100 &ndash;> 50 &ndash;> 50 &ndash;> 100 &ndash;> 784 (output)</p>
-
-<p>We can now construct the full model with the <em>module</em> api from clojure-mxnet.</p>
-
-<p>```clojure
-(def data-desc (first (mx-io/provide-data-desc train-data)))</p>
-
-<p>(def model (&ndash;> (m/module (get-symbol) {:data-names [&ldquo;input&rdquo;] :label-names [&ldquo;input_&rdquo;]})</p>
-
-<pre><code>           (m/bind {:data-shapes [(assoc data-desc :name "input")]
-                    :label-shapes [(assoc data-desc :name "input_")]})
-           (m/init-params {:initializer  (initializer/uniform 1)})
-           (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
-</code></pre>
-
-<p>```</p>
-
-<p>Notice that when we are binding the <code>data-shapes</code> and <code>label-shapes</code> we are using only the <code>data</code> from our handwritten digit dataset, (the images), and not the labels. This will ensure that as it trains it will seek to recreate the input image for the output image.</p>
-
-<h3>Before Training</h3>
-
-<p>Before we start our training, let&rsquo;s get a baseline of what the original images look like and what the output of the untrained model is.</p>
-
-<p>To look at the original images we can take the first training batch of 100 images and visualize them. Since we are initially using the flattened <code>[784]</code> image representation. We need to reshape it to the 28x28 image that we can recognize.</p>
-
-<p><code>clojure
-(def my-batch (mx-io/next train-data))
-(def images (mx-io/batch-data my-batch))
-(ndarray/shape (ndarray/reshape (first images) [100 1 28 28]))
-(viz/im-sav {:title "originals" :output-path "results/" :x (ndarray/reshape (first images) [100 1 28 28])})
-</code></p>
-
-<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567560737/in/dateposted-public/" title="originals"><img src="https://live.staticflickr.com/65535/48567560737_672d065ac2.jpg" width="420" height="420" alt="originals"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>We can also do the same visualization with the test batch of data images by putting them into the <code>predict-batch</code> and using our model.</p>
-
-<p><code>clojure
-;;; before training
- (def my-test-batch (mx-io/next test-data))
- (def test-images (mx-io/batch-data my-test-batch))
- (def preds (m/predict-batch model {:data test-images} ))
- (viz/im-sav {:title "before-training-preds" :output-path "results/" :x (ndarray/reshape (first preds) [100 1 28 28])})
-</code></p>
-
-<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567589067/in/dateposted-public/" title="before-training-preds"><img src="https://live.staticflickr.com/65535/48567589067_e44eeda1a9.jpg" width="420" height="420" alt="before-training-preds"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>They are not anything close to recognizable as numbers.</p>
-
-<h3>Training</h3>
-
-<p>The next step is to train the model on the data. We set up a training function to step through all the batches of data.</p>
-
-<p>```clojure
-(def my-metric (eval-metric/mse))</p>
-
-<p>(defn train [num-epochs]
-  (doseq [epoch-num (range 0 num-epochs)]</p>
-
-<pre><code>(println "starting epoch " epoch-num)
-(mx-io/do-batches
- train-data
- (fn [batch]
-   (-&gt; model
-       (m/forward {:data (mx-io/batch-data batch) :label (mx-io/batch-data batch)})
-       (m/update-metric my-metric (mx-io/batch-data batch))
-       (m/backward)
-       (m/update))))
-(println "result for epoch " epoch-num " is " (eval-metric/get-and-reset my-metric))))
-</code></pre>
-
-<p>```</p>
-
-<p>For each batch of 100 images it is doing the following:</p>
-
-<ul>
-<li>Run the forward pass of the model with both the data and label being the image</li>
-<li>Update the accuracy of the model with the <code>mse</code> (mean squared error metric)</li>
-<li>Do the backward computation</li>
-<li>Update the model according to the optimizer and the forward/backward computation.</li>
-</ul>
-
-
-<p>Let&rsquo;s train it for 3 epochs.</p>
-
-<p><code>
-starting epoch  0
-result for epoch  0  is  [mse 0.06460866]
-starting epoch  1
-result for epoch  1  is  [mse 0.033874355]
-starting epoch  2
-result for epoch  2  is  [mse 0.027255038]
-</code></p>
-
-<h3>After training</h3>
-
-<p>We can check the test images again and see if they look better.</p>
-
-<p><code>clojure
-;;; after training
-(def my-test-batch (mx-io/next test-data))
-(def test-images (mx-io/batch-data my-test-batch))
-(def preds (m/predict-batch model {:data test-images} ))
-(viz/im-sav {:title "after-training-preds" :output-path "results/" :x (ndarray/reshape (first preds) [100 1 28 28])})
-</code>
-<a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567523206/in/dateposted-public/" title="after-training-preds"><img src="https://live.staticflickr.com/65535/48567523206_d78480012f.jpg" width="420" height="420" alt="after-training-preds"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>Much improved! They definitely look like numbers.</p>
-
-<h3>Wrap up</h3>
-
-<p>We&rsquo;ve made a simple autoencoder that can take images of digits and compress them down to a latent space representation the can later be decoded into the same image.</p>
-
-<p>If you want to check out the full code for this example, you can find it <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder">here</a>.</p>
-
-<p>Stay tuned. We&rsquo;ll take this example and build on it in future posts.</p>
 ]]></content>
   </entry>
   

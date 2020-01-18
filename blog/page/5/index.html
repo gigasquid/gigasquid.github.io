@@ -95,6 +95,295 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-06T15:47:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sat  6 Sep 2014,  3:47 PM</time>
+        
+           | <a href="/blog/2014/09/06/green-eggs-and-transducers/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2014/09/06/green-eggs-and-transducers/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/06/green-eggs-and-transducers/" itemprop="url">Green Eggs and Transducers</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><img src="http://upload.wikimedia.org/wikipedia/en/c/c2/Greenegg.gif"></p>
+
+<p>A quick tour of Clojure Transducers with core.async with Dr. Seuss as a guide.</p>
+
+<p>Follow along at home by:</p>
+
+<ul>
+<li><code>lein new green-eggs</code></li>
+<li>modify your project.clj to include the following:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defproject </span><span class="nv">green-eggs</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
+</span><span class='line'>  <span class="ss">:description</span> <span class="s">&quot;try them&quot;</span>
+</span><span class='line'>  <span class="ss">:url</span> <span class="s">&quot;http://en.wikipedia.org/wiki/Green_Eggs_and_Ham&quot;</span>
+</span><span class='line'>  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Eclipse Public License&quot;</span>
+</span><span class='line'>            <span class="ss">:url</span> <span class="s">&quot;http://www.eclipse.org/legal/epl-v10.html&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">org.clojure/clojure</span> <span class="s">&quot;1.7.0-alpha1&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">org.clojure/core.async</span> <span class="s">&quot;0.1.338.0-5c5012-alpha&quot;</span><span class="p">]])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Start up a repl and hack in!</li>
+</ul>
+
+
+<h2>Green Eggs and Ham</h2>
+
+<p>Transducers are a new feature of Clojure 1.7.  Instead of trying to explain them with words, let&rsquo;s take a look of them in action.  First we need some data.  Let&rsquo;s def a vector of all the places you could try green eggs and ham.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">green-eggs.core</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.async</span> <span class="ss">:as</span> <span class="nv">async</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">green-eggs-n-ham</span>
+</span><span class='line'>  <span class="p">[</span><span class="s">&quot;in the rain&quot;</span>
+</span><span class='line'>   <span class="s">&quot;on a train&quot;</span>
+</span><span class='line'>   <span class="s">&quot;in a box&quot;</span>
+</span><span class='line'>   <span class="s">&quot;with a fox&quot;</span>
+</span><span class='line'>   <span class="s">&quot;in a house&quot;</span>
+</span><span class='line'>   <span class="s">&quot;with a mouse&quot;</span>
+</span><span class='line'>   <span class="s">&quot;here or there&quot;</span>
+</span><span class='line'>   <span class="s">&quot;anywhere&quot;</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, let&rsquo;s create a function that will transform the places into a &ldquo;I would not eat them &hellip;&rdquo; sentence.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">i-do-not-like-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;I would not eat them %s.&quot;</span> <span class="nv">s</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">i-do-not-like-them</span> <span class="s">&quot;in the rain&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; &quot;I would not eat them in the rain.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We also need a function to take this result and actually try the green eggs and ham.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">try-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">clojure.string/replace</span> <span class="nv">s</span>  <span class="o">#</span><span class="s">&quot; not&quot;</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">try-them</span> <span class="s">&quot;I would not eat them in the rain.&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we have two transformations that we can apply to the vector of green-eggs-n-ham strings.
+One of the really nice things about transducers is that you can describe and compose this transformation without a data structure present.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-xform</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">comp</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">map </span><span class="nv">i-do-not-like-them</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">map </span><span class="nv">try-them</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can run the transformation of the transducers against the data in a few ways.</p>
+
+<ul>
+<li><em>into</em>: Non-lazy turn the transformation into a collection</li>
+<li><em>sequence</em>: Same thing but lazy</li>
+<li><em>transduce</em>: Acts like reduce on the all the transformed elements</li>
+<li>With <em>core.async</em> channels doing the transformations.</li>
+</ul>
+
+
+<p>Let&rsquo;s look at the green eggs and ham example for each one of these ways:</p>
+
+<h3>Into</h3>
+
+<p>Into takes a transducer and collection to work on and returns the vector we asked for:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; [&quot;I would eat them in the rain.&quot;</span>
+</span><span class='line'><span class="c1">;;     &quot;I would eat them on a train.&quot;</span>
+</span><span class='line'><span class="c1">;;     &quot;I would eat them in a box.&quot;</span>
+</span><span class='line'><span class="c1">;;     &quot;I would eat them with a fox.&quot;</span>
+</span><span class='line'><span class="c1">;;     &quot;I would eat them in a house.&quot;</span>
+</span><span class='line'><span class="c1">;;     &quot;I would eat them with a mouse.&quot;</span>
+</span><span class='line'><span class="c1">;;     &quot;I would eat them here or there.&quot;</span>
+</span><span class='line'><span class="c1">;;     &quot;I would eat them anywhere.&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Sequence</h3>
+
+<p>Sequence takes similar arguments, but as promised, returns a lazy sequence that we can interact with.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">class </span><span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;; -&gt; clojure.lang.LazyTransformer</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">1</span> <span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;; -&gt; (&quot;I would eat them in the rain.&quot;)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Transduce</h3>
+
+<p>If we want to finally arrange all our sentences in the vectors into one string, we would use reduce.  The way to do this with transducers is to use <em>transduce</em>.  It takes a function of two arguments to perform the reduce, as well as an initial data input.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">transduce</span> <span class="nv">sam-i-am-xform</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.</span>
+</span><span class='line'><span class="c1">;;     I would eat them on a train.</span>
+</span><span class='line'><span class="c1">;;     I would eat them in a box.</span>
+</span><span class='line'><span class="c1">;;     I would eat them with a fox.</span>
+</span><span class='line'><span class="c1">;;     I would eat them in a house.</span>
+</span><span class='line'><span class="c1">;;     I would eat them with a mouse.</span>
+</span><span class='line'><span class="c1">;;     I would eat them here or there.</span>
+</span><span class='line'><span class="c1">;;     I would eat them anywhere.&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;_note: In  1.7.0-alpha2, transduce changed and you need to use a</span>
+</span><span class='line'><span class="c1">;;(transduce sam-i-am-xform (completing #(str %1 %2 &quot; &quot;)) &quot;&quot; green-eggs-n-ham)</span>
+</span><span class='line'><span class="c1">;;instead.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Core.async</h3>
+
+<p>Core.async has a really nice way to define channels with a transducer that will transform each element on the channel.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-chan</span> <span class="p">(</span><span class="nf">async/chan</span> <span class="mi">1</span> <span class="nv">sam-i-am-xform</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s define another channel to reduce the results of the sam-i-am-chan to a string.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result-chan</span> <span class="p">(</span><span class="nf">async/reduce</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">sam-i-am-chan</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">async/onto-chan</span> <span class="nv">sam-i-am-chan</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At last,
+we can get our result off the result channel and revel in the beauty of asynchronous data transducers.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">i-like-them</span> <span class="p">(</span><span class="nf">async/&lt;!!</span> <span class="nv">result-chan</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">i-like-them</span>
+</span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.</span>
+</span><span class='line'><span class="c1">;;     I would eat them on a train.</span>
+</span><span class='line'><span class="c1">;;     I would eat them in a box.</span>
+</span><span class='line'><span class="c1">;;     I would eat them with a fox.</span>
+</span><span class='line'><span class="c1">;;     I would eat them in a house.</span>
+</span><span class='line'><span class="c1">;;     I would eat them with a mouse.</span>
+</span><span class='line'><span class="c1">;;     I would eat them here or there.</span>
+</span><span class='line'><span class="c1">;;     I would eat them anywhere.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Transducers are elegant and powerful, just like the rest of Clojure.  Try them, you will like them :)</p>
+
+<p><img src="http://ecx.images-amazon.com/images/I/51JqhoQCtgL.jpg"></p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-07-28T20:27:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 28 Jul 2014,  8:27 PM</time>
         
            | <a href="/blog/2014/07/28/the-proper-pronunciation-of-clojures-assoc/#disqus_thread" itemprop="discussionUrl"
@@ -1625,235 +1914,6 @@ important question.  But unfortunately, as she moved her hand, she
 accidentally pushed the big red <em>Source</em> button on the evaluator.
 Suddenly, she and Frank were swept up in a vortex that spun them
 around and sucked them down into the ground.</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-02-08T21:20:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat  8 Feb 2014,  9:20 PM</time>
-        
-           | <a href="/blog/2014/02/08/hitchhikers-guide-to-clojure-part2/#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io/blog/2014/02/08/hitchhikers-guide-to-clojure-part2/">Comments</a>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/02/08/hitchhikers-guide-to-clojure-part2/" itemprop="url">Hitchhiker&#8217;s Guide to Clojure - Part 2</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>Amy and Frank were hurtled quite rapidly through time and space after
-attaching themselves to a transaction headed through the
-<a href="http://docs.datomic.com/transactions.html">Datomic Transactor</a>. From
-there things slowed down a bit, then took a sharp left and
-ricocheted off again with incredible speed until they landed in another
-<a href="http://docs.datomic.com/architecture.html">Datomic Peer</a>, and finally
-appeared in the same room.  Amy was quite startled by the
-anti-climatic nature of the whole dematerializing and rematerializing
-in the same exact spot, and didn&rsquo;t really know what to do next.  She
-surveyed her office and found it exactly the same,
-except for two distinct details.  For one, the pistachio shells had
-disappeared, and for another, the date on the computer showed
-yesterday at 8:00 am.  She tried to connect these facts rationally
-with the pistachios in her pocket and finally said,</p>
-
-<p>&ldquo;I am about to come into work.&rdquo;</p>
-
-<p>Frank, who was busily hunting through his blue zippered pack around
-his waist, looked up briefly.</p>
-
-<p>&ldquo;Well, we better get out of here then, I only have a blue fanny pack.&rdquo;</p>
-
-<p><img src="http://img.rakuten.com/PIC/37504308/0/1/500/37504308.jpg"></p>
-
-<p><em>The Hitchhiker&rsquo;s Guide to Clojure explains that the &ldquo;fanny pack&rdquo;, or
-&ldquo;bum bag&rdquo;, is the symbol of a licensed Chrono-agent.  The rank of the
-Chrono-agent can be clearly determined by its color on the ROYGBIV
-scale.</em></p>
-
-<p><em>The origins of this licensing method can be traced to an embarrassing
-incident in human history known as &ldquo;The Great Flood&rdquo;. A junior
-Chrono-agent was trying to increase the yield of a tomato crop during
-a dry spell and was trying to do the following recursive function in his evaluator:</em></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">rain</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">days</span><span class="p">))))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">rain</span> <span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;;Output</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 4</span>
-</span><span class='line'><span class="c1">;;  Rain: 3</span>
-</span><span class='line'><span class="c1">;;  Rain: 2</span>
-</span><span class='line'><span class="c1">;;  Rain: 1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>Unfortunately, he made the rookie mistake of forgetting to decrement
-the days before passing it to the recursive function.</em></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">dec </span><span class="mi">5</span><span class="p">)</span> <span class="c1">;=&gt; 4</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>The result of which was severely overwatered tomatoes.</em></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">rain</span> <span class="nv">days</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">rain</span> <span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  ...(you get the idea)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>It is interesting to note that he could he written the same function with a
-<a href="http://clojuredocs.org/clojure_core/clojure.core/recur">recur</a> instead.</em></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">recur</span> <span class="nv">days</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">rain</span> <span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;;Output</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span><span class='line'><span class="c1">;;  Rain: 5</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>That would have had the nice effect of not consuming the stack, (which
-is fabulous for constructing those lovely fibonacci sea shells for beach
-vacations), but without decrementing the parameter in the recursive
-call, it wouldn&rsquo;t have really helped.</em></p>
-
-<p><em>A senior Chrono-agent was dispatched to sort out the mess.  By the
-time he got there and stopped the rain, there was not much left to
-work with. Thankfully, he was quite versed in lazy and infinite
-aspects of Clojure. For instance, take this vector of 2 chickens:</em></p>
-
-<p><img src="http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg"></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>It can be transformed into an infinite lazy list of chickens by using
-<a href="http://clojuredocs.org/clojure_core/clojure.core/cycle">cycle</a>.</em></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>What really set the senior Chrono-agent apart from his junior
-colleague, was that he did not put the infinite sequence in the
-evaluator. If he had, there would have been another embarrassing
-incident in human history, this time involving an over-abundance of poultry. Instead, he used
-<a href="http://clojuredocs.org/clojure_contrib/clojure.contrib.str-utils2/take">take</a>
-to get the first n infinite chickens.</em></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">5</span> <span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]))</span>
-</span><span class='line'><span class="c1">;;=&gt; (:hen :rooster :hen :rooster :hen)</span>
-</span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">10</span> <span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]))</span>
-</span><span class='line'><span class="c1">;;=&gt; (:hen :rooster :hen :rooster :hen :rooster :hen :rooster :hen</span>
-</span><span class='line'><span class="ss">:rooster</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>After that, the council of Chrono-agents, decided to license evaluator
-use. Low-level recursion requires the 2nd highest indigo level rank.
-The highest violet rank, of course, belonging only to the
-<a href="http://clojure.org/macros">Macro</a> Masters. All lower levels are
-required to stick to the safer, higher level abstractions like
-<a href="http://clojuredocs.org/clojure_core/clojure.core/for">for</a>,
-<a href="http://clojuredocs.org/clojure_core/clojure.core/map">map</a>, or
-<a href="http://clojuredocs.org/clojure_core/clojure.core/reduce">reduce</a>.</em></p>
-
-<p>Amy was still watching Frank busily rumaging through his pack in the
-office . Finally
-he found what he
-was looking for, his hand emerging triumphantly with a fistful of
-mini-marshmallows.</p>
-
-<p>&ldquo;Got it. Come on, let&rsquo;s go! Someone is trying to destroy the world and
-we need to see the otters.&rdquo;</p>
 </div>
   
   
