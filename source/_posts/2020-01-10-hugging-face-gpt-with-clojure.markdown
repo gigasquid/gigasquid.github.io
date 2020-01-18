@@ -222,6 +222,9 @@ predicted-index ;=>582
 The main differences is that we are obviously not using the python array syntax in our code to manipulate the lists. For example, instead of using `outputs[0]`, we are going to use `(first outputs)`. But, other than that, it is a pretty good match, even with the `py/with`.
 
 
+Also note that we are not making the call to configure it with GPU. This is intentionally left out to keep things simple for people to try it out. Sometimes, GPU configuration can be a bit tricky to set up depending on your system. For this example, you definitely won't need it since it runs fast enough on cpu. If you do want to do something more complicated later, like fine tuning, you will need to invest some time to get it set up. 
+
+
 ### Doing Longer Sequences
 
 The next example in the tutorial goes on to cover generating longer text. 
