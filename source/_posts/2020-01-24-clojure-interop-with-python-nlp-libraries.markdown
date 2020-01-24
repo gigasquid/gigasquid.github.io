@@ -219,7 +219,9 @@ We'll be following along this [tutorial](https://spacy.io/usage/spacy-101#annota
 
 We will, of course, need to load up the library
 
-`(require-python '([spacy :as spacy]))`
+```clojure
+(require-python '([spacy :as spacy]))
+```
 
 and its language model:
 
