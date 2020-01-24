@@ -12,7 +12,7 @@ categories:
 ![clojure-python](http:////live.staticflickr.com/65535/49435394578_400fdf1c7f_c.jpg)
 
 
-In this edition of the blog series of looking at examples of Clojure-Python interop with [libpython-clj](https://github.com/cnuernber/libpython-clj), we'll be taking a look at two popular Python NLP libraries: [NLTK](https://www.nltk.org/) and [SpaCy](https://spacy.io/).
+In this edition of the blog series of Clojure/Python interop with [libpython-clj](https://github.com/cnuernber/libpython-clj), we'll be taking a look at two popular Python NLP libraries: [NLTK](https://www.nltk.org/) and [SpaCy](https://spacy.io/).
 
 ## NLTK - Natural Language Toolkit
 
@@ -215,7 +215,7 @@ To install spaCy, you will need to do:
 * `pip3 install spacy`
 * ` python3 -m spacy download en_core_web_sm` to load up the small language model
 
-We'll be following alon the tutorial beginning at [https://spacy.io/usage/spacy-101#annotat]( https://spacy.io/usage/spacy-101#annotat)
+We'll be following along this [tutorial](https://spacy.io/usage/spacy-101#annotat)
 
 We will, of course, need to load up the library
 
