@@ -4,7 +4,7 @@
   <title><![CDATA[Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-01-24T17:10:51-05:00</updated>
+  <updated>2020-01-24T17:17:00-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -304,7 +304,10 @@ For example, the word <code>flying</code> has a stemmed word of <code>fli</code>
 
 <p>We will, of course, need to load up the library</p>
 
-<p><code>(require-python '([spacy :as spacy]))</code></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">spacy</span> <span class="ss">:as</span> <span class="nv">spacy</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>and its language model:</p>
 
