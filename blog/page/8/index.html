@@ -95,6 +95,102 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-09-29T12:00:36-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 29 Sep 2012, 12:00 PM</time>
+        
+           | <a href="/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2/" itemprop="url">7 John McCarthy Papers in 7 Weeks - #2</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>Well, life threw me for a bit of a loop and delayed my post on my second paper. So I am going to consider this a &ldquo;weekish&rdquo; period of time and just continue on.</p>
+
+<p>I read <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/towards/towards.html"> Towards a Mathematical Science of Computation</a>.  It is quite a meaty paper and was certainly a lot to digest.  Here are some highlights that I gleaned from it.</p>
+
+<h3>How can a Mathematical Science of Computation help in a practical way?</h3>
+
+<p>McCarthy points out that while it is hard to predict practical applications ahead of time.  A couple of could be</p>
+
+<ul>
+<li><p>Provide a systematic way to create of programming language.  Rather than just arguing and arbitrarily adding language features whilly nilly.</p></li>
+<li><p>&ldquo;It should be possible to eliminate debugging.  Debugging is the testing of a program on cases one hopes are typical, until it seems to work.  This frequently is in vain.&rdquo;</p></li>
+</ul>
+
+
+<p>This last point of being able to eliminate debugging really stuck with me.  Even with the best of TDD and test suites, we as developers still struggle with the testing of programs against what we hope is &ldquo;typical&rdquo;.  Over the past years we have improved our techniques and made our programs more robust, but it would certainly be nice to be able to prove a program correct.</p>
+
+<p>If fear that even if this was possible, it would not be enough. At least in my experience, a considerable amount of debugging happens at the human level:</p>
+
+<ul>
+<li><p>The translation of understanding of what the human product owner wants to what the software developer can understand.</p></li>
+<li><p>The human product owner&rsquo;s understanding of what they want in the first place.</p></li>
+</ul>
+
+
+<p>In my experience, we have just as much trouble (or even more) stating the problem for the program as we do in attempting to solve and prove that it works.</p>
+
+<h3>What we already know that can be applied to a Mathematical Science of Computation</h3>
+
+<ul>
+<li><p>The existence of Turing&rsquo;s Universal computers</p></li>
+<li><p>The existence of classes of unsolvable problems</p></li>
+</ul>
+
+
+<h3>Perhaps a sonic screwdriver will help?</h3>
+
+<p>McCarthy then goes on to add another tool to the Mathematical Science of computation toolbox. He shows that conditional expressions can be defined recursively.  Then he expands this to relate to programs/computers that can be defined recursively.</p>
+
+<h3>Can a man make a computer program that is as intelligent as him?</h3>
+
+<p>Here is the real question.  McCarthy has us consider the following problem of whether a program on a computers with unlimited memory will ever stop:</p>
+
+<p>A procedure does the following</p>
+
+<ol>
+<li><p> If the number is in a <a href="http://en.wikipedia.org/wiki/Creative_and_productive_sets">creative set</a> then return &ndash;> yes.
+If a number is not in a creative set then return &ndash;> no
+or it may run indefinitely</p></li>
+<li><p> There is no procedure while will always return &ndash;> yes when the answer is yes.  and return &ndash;> no when the answer is no</p></li>
+</ol>
+
+
+<p>It is a bit depressing that we can&rsquo;t figure out which ones that are really no and which ones run forever.  But don&rsquo;t give up.  We can just try to do the best we can.  <a href="http://en.wikipedia.org/wiki/Emil_Leon_Post">Emil Post</a> discovered that whenever we try to do the best we can, one can always improve upon it.  He showed that given any procedure, he could make a new procedure that solved all the previous cases plus some new ones. McCarthy pointed out that this process, even though it is really like trying to count the biggest ordinal number, can be mechanized.  So really there is no reason why a machine could not continually improve its own program.</p>
+
+<p>In summary, McCarthy&rsquo;s own words are the best:</p>
+
+<blockquote><p>&ldquo;In conclusion, let me re-assert that the question of whether there are limitations in principle of what problems man can make machines solve for him as compared to his own ability to solve problems, really is a technical question in recursive function theory.&rdquo;</p></blockquote>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-09-20T09:03:36-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu 20 Sep 2012,  9:03 AM</time>
         
            | <a href="/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/#disqus_thread" itemprop="discussionUrl"
@@ -940,49 +1036,6 @@ I found out that there is already an alpha version of Clojure on Maven.  So you 
 <p>The only downside of the conference was that it was hard to choose between the Open Spaces and the excellent talks going on. I did attend one that <a href="https://twitter.com/#!/searls">Justin Searls</a> hosted on Friday afternoon. It was a blast. People paired up creating a simple JavaScript To Do app from different frameworks. <a href="https://twitter.com/#!/xandrews">John Andrews </a>and I took the opportunity to explore <a href="https://github.com/clojure/clojurescript">ClojureScript.</a> In particular, we played around with the new <a href="http://clojurescriptone.com/">ClojureScript One</a> and also the <a href="https://github.com/ckirkendall/enfocus">Enfocus</a> library. At the end of the hour, we were having so much fun, I wished that we had another day just to continue.</p>
 
 <p>All in all, it was an awesome time and I recommend it highly. If I had to sum it up in a phrase it would be: Bacon for the Brain :)</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-01-09T22:09:20-05:00"  data-updated="true" itemprop="datePublished dateCreated">Mon  9 Jan 2012, 10:09 PM</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2012/01/09/getting-ready-for-codemash/" itemprop="url">Getting Ready for CodeMash</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>Only one more day until <a href="http://codemash.org/">CodeMash</a>.  I am really looking forward to my first one.  I have heard nothing but wonderful things about this conference that brings together developers, geeks and their families for a week in January in Sandusky, Ohio.</p>
-
-<p>I am also looking forward to the opportunity of presenting my &ldquo;Once Upon a Time in Clojureland&rdquo; talk.  It is an introduction to Clojure in a Fairy Tale format.  I am hoping to share my enthusiasm for the language and inspire others to try it out for themselves.</p>
-
-<p>If you haven&rsquo;t seen it, you should check out the <a href="http://www.mashedcodemagazine.com/">Mashed Code Magazine</a>.  It is full of awesome.  It also contains a piece that I wrote under my super secret identity.  Hint, it is about Monads :)</p>
-
-<p>Well off to pack and get things organized.  I&rsquo;ll post my full coverage in the following days &hellip;</p>
 </div>
   
   

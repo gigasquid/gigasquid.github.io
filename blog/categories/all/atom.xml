@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-01-18T16:32:59-05:00</updated>
+  <updated>2020-01-24T17:10:51-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,399 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure Interop With Python NLP Libraries]]></title>
+    <link href="http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/"/>
+    <updated>2020-01-24T15:34:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries</id>
+    <content type="html"><![CDATA[<p><img src="http:////live.staticflickr.com/65535/49435394578_400fdf1c7f_c.jpg" alt="clojure-python" /></p>
+
+<p>In this edition of the blog series of Clojure/Python interop with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>, we&rsquo;ll be taking a look at two popular Python NLP libraries: <a href="https://www.nltk.org/">NLTK</a> and <a href="https://spacy.io/">SpaCy</a>.</p>
+
+<h2>NLTK &ndash; Natural Language Toolkit</h2>
+
+<p>I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by <em>far</em> NLTK was the most requested library. After looking into it, I can see why. It&rsquo;s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching.</p>
+
+<h3>Installation</h3>
+
+<p>To use the NLTK toolkit you will need to install it. I use <code>sudo pip3 install nltk</code>, but libpython-clj now supports virtual environments with this <a href="https://github.com/cnuernber/libpython-clj/pull/53">PR</a>, so feel free to use whatever is best for you.</p>
+
+<h3>Features</h3>
+
+<p>We&rsquo;ll take a quick tour of the features of NLTK following along initially with the <a href="https://www.nltk.org/book/ch01.html">nltk official book</a> and then moving onto this more data task centered <a href="https://www.datacamp.com/community/tutorials/text-analytics-beginners-nltk">tutorial</a>.</p>
+
+<p>First, we need to require all of our things as usual:</p>
+
+<p>```clojure
+(ns gigasquid.nltk
+  (:require [libpython-clj.require :refer [require-python]]</p>
+
+<pre><code>        [libpython-clj.python :as py :refer [py. py.. py.-]]))
+</code></pre>
+
+<p>(require-python &lsquo;([nltk :as nltk]))
+```</p>
+
+<h4>Downloading packages</h4>
+
+<p>There are all sorts of packages available to download from NLTK. To start out and tour the library, I would go with a small one that has basic data for the nltk book tutorial.</p>
+
+<p><code>clojure
+ (nltk/download "book")
+  (require-python '([nltk.book :as book]))
+</code></p>
+
+<p>There are all other sorts of downloads as well, such as <code>(nltk/download "popular")</code> for most used ones. You can also download <code>"all"</code>, but beware that it is big.</p>
+
+<p>You can check out some of the texts it downloaded with:</p>
+
+<p>```clojure
+  (book/texts)</p>
+
+<p>  ;;; prints out in repl
+  ;; text1: Moby Dick by Herman Melville 1851
+  ;; text2: Sense and Sensibility by Jane Austen 1811
+  ;; text3: The Book of Genesis
+  ;; text4: Inaugural Address Corpus
+  ;; text5: Chat Corpus
+  ;; text6: Monty Python and the Holy Grail
+  ;; text7: Wall Street Journal
+  ;; text8: Personals Corpus
+  ;; text9: The Man Who Was Thursday by G . K . Chesterton 1908</p>
+
+<p>  book/text1 ;=>  &lt;Text: Moby Dick by Herman Melville 1851>
+  book/text2 ;=>  &lt;Text: Sense and Sensibility by Jane Austen 1811></p>
+
+<p>```</p>
+
+<p>  You can do fun things like see how many tokens are in a text</p>
+
+<p><code>clojure
+  (count (py.- book/text3 tokens))  ;=&gt; 44764
+</code></p>
+
+<p>  Or even see the lexical diversity, which is a measure of the richness of the text by looking at the unique set of word tokens against the total tokens.</p>
+
+<p>```clojure
+  (defn lexical-diversity [text]</p>
+
+<pre><code>(let [tokens (py.- text tokens)]
+  (/ (-&gt; tokens set count)
+     (* 1.0 (count tokens)))))
+</code></pre>
+
+<p>  (lexical-diversity book/text3) ;=> 0.06230453042623537
+  (lexical-diversity book/text5) ;=> 0.13477005109975562
+```</p>
+
+<p> This of course is all very interesting but I prefer to look at some more practical tasks, so we are going to look at some sentence tokenization.</p>
+
+<h4>Sentence Tokenization</h4>
+
+<p> Text can be broken up into individual word tokens or sentence tokens. Let&rsquo;s start off first with the token package</p>
+
+<p><code>clojure
+(require-python '([nltk.tokenize :as tokenize]))
+(def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+The sky is pinkish-blue. You shouldn't eat cardboard")
+</code></p>
+
+<p>To tokenize sentences, you take the text and use <code>tokenize/sent_tokenize</code>.</p>
+
+<p><code>clojure
+ (def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+The sky is pinkish-blue. You shouldn't eat cardboard")
+ (def tokenized-sent (tokenize/sent_tokenize text))
+ tokenized-sent
+ ;;=&gt; ['Hello Mr. Smith, how are you doing today?', 'The weather is great, and city is awesome.', 'The sky is pinkish-blue.', "You shouldn't eat cardboard"]
+</code></p>
+
+<p>Likewise, to tokenize words, you use <code>tokenize/word_tokenize</code>:</p>
+
+<p>```clojure
+ (def text &ldquo;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+The sky is pinkish-blue. You shouldn&rsquo;t eat cardboard&rdquo;)
+ (def tokenized-sent (tokenize/sent_tokenize text))
+ tokenized-sent
+ ;;=> [&lsquo;Hello Mr. Smith, how are you doing today?&rsquo;, &lsquo;The weather is great, and city is awesome.&rsquo;, &lsquo;The sky is pinkish-blue.&rsquo;, &ldquo;You shouldn&rsquo;t eat cardboard&rdquo;]</p>
+
+<p> (def tokenized-word (tokenize/word_tokenize text))
+ tokenized-word
+  ;;=> [&lsquo;Hello&rsquo;, &lsquo;Mr.&rsquo;, &lsquo;Smith&rsquo;, &lsquo;,&rsquo;, &lsquo;how&rsquo;, &lsquo;are&rsquo;, &lsquo;you&rsquo;, &lsquo;doing&rsquo;, &lsquo;today&rsquo;, &lsquo;?&rsquo;, &lsquo;The&rsquo;, &lsquo;weather&rsquo;, &lsquo;is&rsquo;, &lsquo;great&rsquo;, &lsquo;,&rsquo;, &lsquo;and&rsquo;, &lsquo;city&rsquo;, &lsquo;is&rsquo;, &lsquo;awesome&rsquo;, &lsquo;.&rsquo;, &lsquo;The&rsquo;, &lsquo;sky&rsquo;, &lsquo;is&rsquo;, &lsquo;pinkish-blue&rsquo;, &lsquo;.&rsquo;, &lsquo;You&rsquo;, &lsquo;should&rsquo;, &ldquo;n&rsquo;t&rdquo;, &lsquo;eat&rsquo;, &lsquo;cardboard&rsquo;]
+```</p>
+
+<h4>Frequency Distribution</h4>
+
+<p> You can also look at the frequency distribution of the words with using the probability package.</p>
+
+<p>```clojure
+ (require-python &lsquo;([nltk.probability :as probability]))</p>
+
+<p> (def fdist (probability/FreqDist tokenized-word))
+ fdist ;=> <FreqDist with 25 samples and 30 outcomes></p>
+
+<p> (py. fdist most_common)
+  ;=> [(&lsquo;is&rsquo;, 3), (&lsquo;,&rsquo;, 2), (&lsquo;The&rsquo;, 2), (&lsquo;.&rsquo;, 2), (&lsquo;Hello&rsquo;, 1), (&lsquo;Mr.&rsquo;, 1), (&lsquo;Smith&rsquo;, 1), (&lsquo;how&rsquo;, 1), (&lsquo;are&rsquo;, 1), (&lsquo;you&rsquo;, 1), (&lsquo;doing&rsquo;, 1), (&lsquo;today&rsquo;, 1), (&lsquo;?&rsquo;, 1), (&lsquo;weather&rsquo;, 1), (&lsquo;great&rsquo;, 1), (&lsquo;and&rsquo;, 1), (&lsquo;city&rsquo;, 1), (&lsquo;awesome&rsquo;, 1), (&lsquo;sky&rsquo;, 1), (&lsquo;pinkish-blue&rsquo;, 1), (&lsquo;You&rsquo;, 1), (&lsquo;should&rsquo;, 1), (&ldquo;n&rsquo;t&rdquo;, 1), (&lsquo;eat&rsquo;, 1), (&lsquo;cardboard&rsquo;, 1)]</p>
+
+<p>```</p>
+
+<h4>Stop Words</h4>
+
+<p>Stop words are considered noise in text and there are ways to use the library to remove them using the <code>nltk.corpus</code>.</p>
+
+<p><code>clojure
+(def stop-words (into #{} (py. corpus/stopwords words "english")))
+ stop-words
+  ;=&gt; #{"d" "itself" "more" "didn't" "ain" "won" "hers"....}
+</code></p>
+
+<p>Now that we have a collection of the stop words, we can filter them out of our text in the normal way in Clojure.</p>
+
+<p>```clojure
+(def filtered-sent (&ndash;>> tokenized-sent</p>
+
+<pre><code>                     (map tokenize/word_tokenize)
+                     (map #(remove stop-words %))))
+</code></pre>
+
+<p> filtered-sent
+ ;; ((&ldquo;Hello&rdquo; &ldquo;Mr.&rdquo; &ldquo;Smith&rdquo; &ldquo;,&rdquo; &ldquo;today&rdquo; &ldquo;?&rdquo;)
+ ;; (&ldquo;The&rdquo; &ldquo;weather&rdquo; &ldquo;great&rdquo; &ldquo;,&rdquo; &ldquo;city&rdquo; &ldquo;awesome&rdquo; &ldquo;.&rdquo;)
+ ;; (&ldquo;The&rdquo; &ldquo;sky&rdquo; &ldquo;pinkish-blue&rdquo; &ldquo;.&rdquo;)
+ ;; (&ldquo;You&rdquo; &ldquo;n&rsquo;t&rdquo; &ldquo;eat&rdquo; &ldquo;cardboard&rdquo;))
+```</p>
+
+<h4>Lexion Normalization and Lemmatization</h4>
+
+<p>Stemming and Lemmatization allow ways for the text to be reduced to base words and normalized.
+For example, the word <code>flying</code> has a stemmed word of <code>fli</code> and a lemma of <code>fly</code>.</p>
+
+<p>```clojure
+(require-python &lsquo;([nltk.stem :as stem]))
+(require-python &rsquo;([nltk.stem.wordnet :as wordnet]))</p>
+
+<p>(let [lem (wordnet/WordNetLemmatizer)</p>
+
+<pre><code>   stem (stem/PorterStemmer)
+   word "flying"]
+</code></pre>
+
+<p>   {:lemmatized-word (py. lem lemmatize word &ldquo;v&rdquo;)</p>
+
+<pre><code>:stemmed-word (py. stem stem word)})
+</code></pre>
+
+<p> ;=> {:lemmatized-word &ldquo;fly&rdquo;, :stemmed-word &ldquo;fli&rdquo;}
+```</p>
+
+<h4>POS Tagging</h4>
+
+<p>It also has support for Part-of-Speech (POS) Tagging. A quick example of that is:</p>
+
+<p>```clojure
+(let [sent &ldquo;Albert Einstein was born in Ulm, Germany in 1879.&rdquo;</p>
+
+<pre><code>   tokens (nltk/word_tokenize sent)]
+</code></pre>
+
+<p>   {:tokens tokens</p>
+
+<pre><code>:pos-tag (nltk/pos_tag tokens)})
+</code></pre>
+
+<p> ;; {:tokens
+ ;; [&lsquo;Albert&rsquo;, &lsquo;Einstein&rsquo;, &lsquo;was&rsquo;, &lsquo;born&rsquo;, &lsquo;in&rsquo;, &lsquo;Ulm&rsquo;, &lsquo;,&rsquo;, &lsquo;Germany&rsquo;, &lsquo;in&rsquo;, &lsquo;1879&rsquo;, &lsquo;.&rsquo;],
+ ;; :pos-tag
+ ;; [(&lsquo;Albert&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;Einstein&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;was&rsquo;, &lsquo;VBD&rsquo;), (&lsquo;born&rsquo;, &lsquo;VBN&rsquo;), (&lsquo;in&rsquo;, &lsquo;IN&rsquo;), (&lsquo;Ulm&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;,&rsquo;, &lsquo;,&rsquo;), (&lsquo;Germany&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;in&rsquo;, &lsquo;IN&rsquo;), (&lsquo;1879&rsquo;, &lsquo;CD&rsquo;), (&lsquo;.&rsquo;, &lsquo;.&rsquo;)]}
+```</p>
+
+<p>Phew! That&rsquo;s a brief overview of what NLTK can do, now what about the other library SpaCy?</p>
+
+<h2>SpaCy</h2>
+
+<p><a href="https://spacy.io/usage/spacy-101#whats-spacy">SpaCy</a> is the main competitor to NLTK. It has a more opinionated library which is more object oriented than NLTK which mainly processes text. It has better performance for tokenization and POS tagging and has support for word vectors, which NLTK does not.</p>
+
+<p>Let&rsquo;s dive in a take a look at it.</p>
+
+<h3>Installation</h3>
+
+<p>To install spaCy, you will need to do:</p>
+
+<ul>
+<li><code>pip3 install spacy</code></li>
+<li><code>python3 -m spacy download en_core_web_sm</code> to load up the small language model</li>
+</ul>
+
+
+<p>We&rsquo;ll be following along this <a href="https://spacy.io/usage/spacy-101#annotat">tutorial</a></p>
+
+<p>We will, of course, need to load up the library</p>
+
+<p><code>(require-python '([spacy :as spacy]))</code></p>
+
+<p>and its language model:</p>
+
+<p><code>clojure
+(def nlp (spacy/load "en_core_web_sm"))
+</code></p>
+
+<h4>Linguistic Annotations</h4>
+
+<p>There are many linguistic annotations that are available, from POS, lemmas, and more:</p>
+
+<p>```clojure
+(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
+  (map (fn [token]</p>
+
+<pre><code>     [(py.- token text) (py.- token pos_) (py.- token dep_)])
+   doc))
+</code></pre>
+
+<p>;; ([&ldquo;Apple&rdquo; &ldquo;PROPN&rdquo; &ldquo;nsubj&rdquo;]
+;;  [&ldquo;is&rdquo; &ldquo;AUX&rdquo; &ldquo;aux&rdquo;]
+;;  [&ldquo;looking&rdquo; &ldquo;VERB&rdquo; &ldquo;ROOT&rdquo;]
+;;  [&ldquo;at&rdquo; &ldquo;ADP&rdquo; &ldquo;prep&rdquo;]
+;;  [&ldquo;buying&rdquo; &ldquo;VERB&rdquo; &ldquo;pcomp&rdquo;]
+;;  [&ldquo;U.K.&rdquo; &ldquo;PROPN&rdquo; &ldquo;compound&rdquo;]
+;;  [&ldquo;startup&rdquo; &ldquo;NOUN&rdquo; &ldquo;dobj&rdquo;]
+;;  [&ldquo;for&rdquo; &ldquo;ADP&rdquo; &ldquo;prep&rdquo;]
+;;  [&ldquo;$&rdquo; &ldquo;SYM&rdquo; &ldquo;quantmod&rdquo;]
+;;  [&ldquo;1&rdquo; &ldquo;NUM&rdquo; &ldquo;compound&rdquo;]
+;;  [&ldquo;billion&rdquo; &ldquo;NUM&rdquo; &ldquo;pobj&rdquo;])
+```</p>
+
+<p>Here are some more:</p>
+
+<p>```clojure
+(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
+  (map (fn [token]</p>
+
+<pre><code>     {:text (py.- token text)
+      :lemma (py.- token lemma_)
+      :pos (py.- token pos_)
+      :tag (py.- token tag_)
+      :dep (py.- token dep_)
+      :shape (py.- token shape_)
+      :alpha (py.- token is_alpha)
+      :is_stop (py.- token is_stop)} )
+   doc))
+</code></pre>
+
+<p>;; ({:text &ldquo;Apple&rdquo;,
+;;   :lemma &ldquo;Apple&rdquo;,
+;;   :pos &ldquo;PROPN&rdquo;,
+;;   :tag &ldquo;NNP&rdquo;,
+;;   :dep &ldquo;nsubj&rdquo;,
+;;   :shape &ldquo;Xxxxx&rdquo;,
+;;   :alpha true,
+;;   :is_stop false}
+;;  {:text &ldquo;is&rdquo;,
+;;   :lemma &ldquo;be&rdquo;,
+;;   :pos &ldquo;AUX&rdquo;,
+;;   :tag &ldquo;VBZ&rdquo;,
+;;   :dep &ldquo;aux&rdquo;,
+;;   :shape &ldquo;xx&rdquo;,
+;;   :alpha true,
+;;   :is_stop true}
+;;  &hellip;
+```</p>
+
+<h3>Named Entities</h3>
+
+<p>It also handles named entities in the same fashion.</p>
+
+<p>```clojure
+(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
+  (map (fn [ent]</p>
+
+<pre><code>     {:text (py.- ent text)
+      :start-char (py.- ent start_char)
+      :end-char (py.- ent end_char)
+      :label (py.- ent label_)} )
+   (py.- doc ents)))
+</code></pre>
+
+<p>;; ({:text &ldquo;Apple&rdquo;, :start-char 0, :end-char 5, :label &ldquo;ORG&rdquo;}
+;;  {:text &ldquo;U.K.&rdquo;, :start-char 27, :end-char 31, :label &ldquo;GPE&rdquo;}
+;;  {:text &ldquo;$1 billion&rdquo;, :start-char 44, :end-char 54, :label &ldquo;MONEY&rdquo;})
+```</p>
+
+<p>As you can see, it can handle pretty much the same things as NLTK. But let&rsquo;s take a look at what it can do that NLTK and that is with word vectors.</p>
+
+<h4>Word Vectors</h4>
+
+<p>In order to use word vectors, you will have to load up a medium or large size data model because the small ones don&rsquo;t ship with word vectors. You can do that at the command line with:</p>
+
+<p><code>
+python3 -m spacy download en_core_web_md
+</code></p>
+
+<p>You will need to restart your repl and then load it with:</p>
+
+<p><code>clojure
+(require-python '([spacy :as spacy]))
+(def nlp (spacy/load "en_core_web_md"))
+</code></p>
+
+<p>Now you can see cool word vector stuff!</p>
+
+<p>```clojure
+(let [tokens (nlp &ldquo;dog cat banana afskfsd&rdquo;)]
+  (map (fn [token]</p>
+
+<pre><code>     {:text (py.- token text)
+      :has-vector (py.- token has_vector)
+      :vector_norm (py.- token vector_norm)
+      :is_oov (py.- token is_oov)} )
+   tokens))
+</code></pre>
+
+<p>;; ({:text &ldquo;dog&rdquo;,
+;;   :has-vector true,
+;;   :vector_norm 7.033673286437988,
+;;   :is_oov false}
+;;  {:text &ldquo;cat&rdquo;,
+;;   :has-vector true,
+;;   :vector_norm 6.680818557739258,
+;;   :is_oov false}
+;;  {:text &ldquo;banana&rdquo;,
+;;   :has-vector true,
+;;   :vector_norm 6.700014114379883,
+;;   :is_oov false}
+;;  {:text &ldquo;afskfsd&rdquo;, :has-vector false, :vector_norm 0.0, :is_oov true})
+```</p>
+
+<p>And find similarity between different words.</p>
+
+<p>```clojure
+(let [tokens (nlp &ldquo;dog cat banana&rdquo;)]
+  (for [token1 tokens</p>
+
+<pre><code>    token2 tokens]
+{:token1 (py.- token1 text)
+ :token2 (py.- token2 text)
+ :similarity (py. token1 similarity token2)}))
+</code></pre>
+
+<p>;; ({:token1 &ldquo;dog&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 1.0}
+;;  {:token1 &ldquo;dog&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 0.8016854524612427}
+;;  {:token1 &ldquo;dog&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 0.2432764321565628}
+;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 0.8016854524612427}
+;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 1.0}
+;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 0.28154364228248596}
+;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 0.2432764321565628}
+;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 0.28154364228248596}
+;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 1.0})
+```</p>
+
+<h2>Wrap up</h2>
+
+<p>We&rsquo;ve seen a grand tour of the two most popular natural language python libraries that you can now use through Clojure interop!</p>
+
+<p>I hope you&rsquo;ve enjoyed it and if you are interested in exploring yourself, the code examples are <a href="https://github.com/gigasquid/libpython-clj-examples">here</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Parens for Pyplot]]></title>
@@ -1062,251 +1455,6 @@ result for epoch  2  is  [mse 0.05337505]
 </code></p>
 
 <p>Happy Deep Learning until next time &hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Focus on the Discriminator]]></title>
-    <link href="http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator/"/>
-    <updated>2019-08-30T10:16:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator</id>
-    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/marcomagrini/698692268/in/photolist-24JYSq-hTTAJN-4gjQW9-9GRKCW-4gfNhz-x2yZ-6Nnwy1-6Lm68p-66BVjW-8hawRk-4sE2Jz-5Z6uvQ-6B4iH3-qzDvGU-aNpvLT-9UFZLh-egKvNt-bMh6PR-ceG9AL-gDqtze-96JhRW-7EWMH6-3MTfDt-9rUJ4W-dFPssj-8LLrys-aDAda3-9rUJ45-7xLAFR-prSHik-7yDFHC-7erqEc-6YJx8e-39SyR4-dkQnGi-7hy6zT-4UokrH-hkMoBr-9tBN3K-jq8Bpu-aDMSk2-pwQdmt-9tFrUD-6TzF6G-WDAsCC-8Mm4tD-8M8hyS-4yzkGK-67MPUw-crfg" title="sunflowers"><img src="https://live.staticflickr.com/1007/698692268_b31d429272.jpg" width="500" height="325" alt="sunflowers"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>In the <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">last post</a>, we took a look at a simple autoencoder. The autoencoder is a deep learning model that takes in an image and, (through an encoder and decoder), works to produce the same image. In short:</p>
-
-<ul>
-<li>Autoencoder: image &ndash;> image</li>
-</ul>
-
-
-<p>For a discriminator, we are going to focus on only the first half on the autoencoder.</p>
-
-<p><img src="https://live.staticflickr.com/65535/48647347383_9577b7b672_b.jpg" alt="discriminator" /></p>
-
-<p>Why only half? We want a different transformation. We are going to want to take an image as input and then do some <em>discrimination</em> of the image and classify what type of image it is. In our case, the model is going to input an image of a handwritten digit and attempt to decide which number it is.</p>
-
-<ul>
-<li>Discriminator: image &ndash;> label</li>
-</ul>
-
-
-<p>As always, with deep learning. To do anything, we need data.</p>
-
-<h3>MNIST Data</h3>
-
-<p>Nothing changes here from the autoencoder code. We are still using the MNIST dataset for handwritten digits.</p>
-
-<p>```clojure
-;;; Load the MNIST datasets
-(def train-data
-  (mx-io/mnist-iter
-   {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>:label (str data-dir "train-labels-idx1-ubyte")
-:input-shape [784]
-:flat true
-:batch-size batch-size
-:shuffle true}))
-</code></pre>
-
-<p>(def test-data
-  (mx-io/mnist-iter
-   {:image (str data-dir &ldquo;t10k-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>:label (str data-dir "t10k-labels-idx1-ubyte")
-:input-shape [784]
-:batch-size batch-size
-:flat true
-:shuffle true}))
-</code></pre>
-
-<p>```</p>
-
-<p>The model will change since we want a different output.</p>
-
-<h3>The Model</h3>
-
-<p>We are still taking in the image as input, and using the same encoder layers from the autoencoder model. However, at the end, we use a fully connected layer that has 10 hidden nodes &ndash; one for each label of the digits 0-9. Then we use a softmax for the classification output.</p>
-
-<p>```clojure
-(def input (sym/variable &ldquo;input&rdquo;))
-(def output (sym/variable &ldquo;input_&rdquo;))</p>
-
-<p>(defn get-symbol []
-  (as-> input data</p>
-
-<pre><code>;; encode
-(sym/fully-connected "encode1" {:data data :num-hidden 100})
-(sym/activation "sigmoid1" {:data data :act-type "sigmoid"})
-
-;; encode
-(sym/fully-connected "encode2" {:data data :num-hidden 50})
-(sym/activation "sigmoid2" {:data data :act-type "sigmoid"})
-
-;;; this last bit changed from autoencoder
-;;output
-(sym/fully-connected "result" {:data data :num-hidden 10})
-(sym/softmax-output {:data data :label output})))
-</code></pre>
-
-<p>```</p>
-
-<p>In the autoencoder, we were never actually using the label, but we will certainly need to use it this time. It is reflected in the model&rsquo;s bindings with the data and label shapes.</p>
-
-<p>```clojure
-(def model (&ndash;> (m/module (get-symbol) {:data-names [&ldquo;input&rdquo;] :label-names [&ldquo;input_&rdquo;]})</p>
-
-<pre><code>           (m/bind {:data-shapes [(assoc data-desc :name "input")]
-                    :label-shapes [(assoc label-desc :name "input_")]})
-           (m/init-params {:initializer (initializer/uniform 1)})
-           (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
-</code></pre>
-
-<p>```</p>
-
-<p>For the evaluation metric, we are also going to use an accuracy metric vs a mean squared error (mse) metric</p>
-
-<p><code>clojure
-(def my-metric (eval-metric/accuracy))
-</code></p>
-
-<p>With these items in place, we are ready to train the model.</p>
-
-<h3>Training</h3>
-
-<p>The training from the autoencoder needs to changes to use the real label for the the forward pass and updating the metric.</p>
-
-<p>```clojure
-(defn train [num-epochs]
-  (doseq [epoch-num (range 0 num-epochs)]</p>
-
-<pre><code>(println "starting epoch " epoch-num)
-(mx-io/do-batches
- train-data
- (fn [batch]
-   ;;; here we make sure to use the label
-   ;;; now for forward and update-metric
-   (-&gt; model
-       (m/forward {:data (mx-io/batch-data batch)
-                   :label (mx-io/batch-label batch)})
-       (m/update-metric my-metric (mx-io/batch-label batch))
-       (m/backward)
-       (m/update))))
-(println {:epoch epoch-num
-          :metric (eval-metric/get-and-reset my-metric)})))
-</code></pre>
-
-<p>```</p>
-
-<h3>Let&rsquo;s Run Things</h3>
-
-<p>It&rsquo;s always a good idea to take a look at things before you start training.</p>
-
-<p>The first batch of the training data looks like:</p>
-
-<p>```clojure
-  (def my-batch (mx-io/next train-data))
-  (def images (mx-io/batch-data my-batch))
-  (viz/im-sav {:title &ldquo;originals&rdquo;</p>
-
-<pre><code>           :output-path "results/"
-           :x (-&gt; images
-                  first
-                  (ndarray/reshape [100 1 28 28]))})
-</code></pre>
-
-<p>```</p>
-
-<p><img src="https://live.staticflickr.com/65535/48648000857_fb17f0de66.jpg" alt="training-batch" /></p>
-
-<p>Before training, if we take the first batch from the test data and predict what the labels are:</p>
-
-<p>```clojure
-  (def my-test-batch (mx-io/next test-data))
-  (def test-images (mx-io/batch-data my-test-batch))
-  (viz/im-sav {:title &ldquo;test-images&rdquo;</p>
-
-<pre><code>           :output-path "results/"
-           :x (-&gt; test-images
-                  first
-                  (ndarray/reshape [100 1 28 28]))})
-</code></pre>
-
-<p>```</p>
-
-<p><img src="https://live.staticflickr.com/65535/48647524478_ca35bef78f.jpg" alt="test-batch" /></p>
-
-<p>```clojure
-  (def preds (m/predict-batch model {:data test-images} ))
-  (&ndash;>> preds</p>
-
-<pre><code>   first
-   (ndarray/argmax-channel)
-   (ndarray/-&gt;vec)
-   (take 10))
-</code></pre>
-
-<p> ;=> (1.0 8.0 8.0 8.0 8.0 8.0 2.0 8.0 8.0 1.0)
-```</p>
-
-<p>Yeah, not even close. The real first line of the images is <code>6 1 0 0 3 1 4 8 0 9</code></p>
-
-<p>Let&rsquo;s Train!</p>
-
-<p>```clojure
-  (train 3)</p>
-
-<p>;; starting epoch  0
-;; {:epoch 0, :metric [accuracy 0.83295]}
-;; starting epoch  1
-;; {:epoch 1, :metric [accuracy 0.9371333]}
-;; starting epoch  2
-;; {:epoch 2, :metric [accuracy 0.9547667]}</p>
-
-<p>```</p>
-
-<p>After the training, let&rsquo;s have another look at the predicted labels.</p>
-
-<p>```clojure
-  (def preds (m/predict-batch model {:data test-images} ))
-  (&ndash;>> preds</p>
-
-<pre><code>   first
-   (ndarray/argmax-channel)
-   (ndarray/-&gt;vec)
-   (take 10))
-</code></pre>
-
-<p> ;=> (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)
-```</p>
-
-<ul>
-<li>Predicted = <code>(6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</code></li>
-<li>Actual = <code>6 1 0 0 3 1 4 8 0 9</code></li>
-</ul>
-
-
-<p>Rock on!</p>
-
-<h3>Closing</h3>
-
-<p>In this post, we focused on the first half of the autoencoder and made a discriminator model that took in an image and gave us a label.</p>
-
-<p>Don&rsquo;t forget to save the trained model for later, we&rsquo;ll be using it.</p>
-
-<p>```clojure
-  (m/save-checkpoint model {:prefix &ldquo;model/discriminator&rdquo;</p>
-
-<pre><code>                        :epoch 2})
-</code></pre>
-
-<p>```</p>
-
-<p>Until then, here is a picture of Otto the cat in a basket to keep you going.</p>
-
-<p><img src="https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg" alt="Otto in basket" /></p>
-
-<p><em>P.S. If you want to run all the code for yourself. It is <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/discriminator.clj">here</a></em></p>
 ]]></content>
   </entry>
   
