@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-01-24T17:17:00-05:00</updated>
+  <updated>2020-12-24T11:12:44-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Thoughts on AI Debate 2]]></title>
+    <link href="http://gigasquid.github.io/blog/2020/12/24/thoughts-on-ai-debate-2/"/>
+    <updated>2020-12-24T10:59:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2020/12/24/thoughts-on-ai-debate-2</id>
+    <content type="html"><![CDATA[<p><img src="https://montrealartificialintelligence.com/aidebate2mosaic1440x720v8.jpg" alt="" /></p>
+
+<h2>AI Debate 2 from Montreal.AI</h2>
+
+<p>I had the pleasure of watching the second AI debate from Montreal.AI last night. The first AI debate occurred last year between <a href="https://yoshuabengio.org/">Yoshua Bengio</a> and <a href="https://en.wikipedia.org/wiki/Gary_Marcus">Gary Marcus</a> entitled <a href="https://montrealartificialintelligence.com/aidebate.html">“The Best Way Forward for AI”</a> in which Yoshua argued that Deep Learning could achieve General AI through its own paradigm, while Marcus argued that Deep Learning alone was not sufficient and needed a hybrid approach involving symbolics and inspiration from other disciplines.</p>
+
+<br>
+
+
+<p>This interdisciplinary thread of Gary’s linked the two programs. The second AI debate was entitled <a href="https://montrealartificialintelligence.com/aidebate2.html">“Moving AI Forward: An Interdisciplinary Approach”</a> and reflected a broad panel that explored themes on architecture, neuroscience and psychology, and trust/ethics. The second program was not really a debate, but more of a showcase of ideas in the form of 3 minute presentations from the panelists and discussion around topics with Marcus serving as a capable moderator.</p>
+
+<br>
+
+
+<p>The program aired Wednesday night and was 3 hours long. I watched it live with an unavoidable break in the middle to fetch dinner for my family, but the whole recording is up now on the <a href="https://montrealartificialintelligence.com/aidebate2.html">website</a>. Some of the highlights for me were thoughts around System 1 and System 2,  reinforcement learning, and the properties of evolution.</p>
+
+<br>
+
+
+<p>There was much discussion around System 1 and System 2 in relation to AI. One of the author’s of the recently published paper <a href="https://arxiv.org/pdf/2010.06002.pdf">“Thinking Fast and Slow in AI”</a>, <a href="https://researcher.watson.ibm.com/researcher/view.php?person=ibm-Francesca.Rossi2">Francesca Rossi</a> was a panelist as well as <a href="https://en.wikipedia.org/wiki/Daniel_Kahneman">Danny Kahneman</a> the author of “Thinking Fast and Slow”. Applying the abstraction of these sysems to AI with Deep Learning being System 1 is very appealing, however as Kahneman pointed out in his talk, this abstraction is leaky at its heart as the human System 1 encompasses much more than current AI system 1, (like a model of the world). It is interesting to think of one of the differences in human System 1 and System 2 in relation to one being fast and concurrent while the other is slower and sequential and laden with attention. Why is this so? Is this a constraint and design feature that we should bring to our AI design?</p>
+
+<br>
+
+
+<p><a href="http://www.incompleteideas.net/">Richard Sutton</a> gave a thought provoking talk on how reinforcement learning is the first fully implemented computational theory of intelligence. He pointed to <a href="https://apsc450computationalneuroscience.wordpress.com/marrs-three-levels-of-inquiry/">Marr’s three levels</a>  at which any information processing machine must be understood: hardware implementation, representation/algorithm, and finally the high level theory. That is: what is the goal of the computation? What logic can the strategy be carried out? AI has made great strides due to this computational theory. However, it is only one theory. We need more. I personally think that innovation and exploration in this area could lead to an exciting future in AI.</p>
+
+<br>
+
+
+<p>Evolution is a fundamental force that drives humans and the world around us. <a href="https://www.cs.ucf.edu/~kstanley/">Ken Stanely</a> reminded us that while computers dominate at solving problems, humans still rule at open-ended innovation over the millenia. The underlying properties of evolution still elude our deep understanding. Studying the core nature of this powerful phenomena is a very important area of research.</p>
+
+<br>
+
+
+<p>The last question of the evening to all the panelists was the greatest Christmas gift of all &ndash; “Where do you want AI to go?”. The diversity of the answers reflected the broad hopes shared by many that will light the way to come. I’ll paraphrase some of the ones here:</p>
+
+<ul>
+<li>Want to understand fundamental laws and principles and use them to better the human condition.</li>
+<li>Understand the different varieties of intelligence.</li>
+<li>Want an intelligent and superfriendly apprentice. To understand self by emulating.</li>
+<li>To move beyond GPT-3 remixing to really assisting creativity for humanity.</li>
+<li>Hope that AI will amplify us and our abilities.</li>
+<li>Use AI to help people understand what bias they have.</li>
+<li>That humans will still have something to add after AI have mastered a domain</li>
+<li>To understand the brain in the most simple and beautiful way.</li>
+<li>Gain a better clarity and understanding of our own values by deciding which to endow our AI with.</li>
+<li>Want the costs and benefits of AI to be distributed globally and economically.</li>
+</ul>
+
+
+<br>
+
+
+<p>Thanks again Montreal.AI for putting together such a great program and sharing it with the community. I look forward to next year.</p>
+
+<br>
+
+
+<p>Merry Christmas everyone!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure Interop With Python NLP Libraries]]></title>
@@ -1266,197 +1333,6 @@ generate)
 <p>We have shown some of the potential of integrating deep learning models with Clojure. clojure.spec is a powerful tool and it can be leveraged in new and interesting ways for both deep learning and AI more generally.</p>
 
 <p>I hope that more people are intrigued to experiment and take a further look into what we can do in this area.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Focus on the Generator]]></title>
-    <link href="http://gigasquid.github.io/blog/2019/09/06/focus-on-the-generator/"/>
-    <updated>2019-09-06T18:07:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2019/09/06/focus-on-the-generator</id>
-    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/smigla-bobinski/19705409981/in/album-72157647756733695/" title="SIMULACRA by Karina Smigla-Bobinski"><img src="https://live.staticflickr.com/330/19705409981_4e0ae93572.jpg" width="500" height="267" alt="SIMULACRA by Karina Smigla-Bobinski"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>In this first post of this series, we took a look at a <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">simple autoencoder</a>. It took and image and transformed it back to an image. Then, we <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">focused in on the disciminator</a> portion of the model, where we took an image and transformed it to a label. Now, we focus in on the generator portion of the model do the inverse operation: we transform a label to an image. In recap:</p>
-
-<ul>
-<li>Autoencoder: image &ndash;> image</li>
-<li>Discriminator: image &ndash;> label</li>
-<li>Generator: label &ndash;> image (This is what we are doing now!)</li>
-</ul>
-
-
-<p><img src="https://live.staticflickr.com/65535/48689260086_11fe4b089b_b.jpg" alt="generator" /></p>
-
-<h2>Still Need Data of Course</h2>
-
-<p>Nothing changes here. We are still using the MNIST handwritten digit set and have an input and out to our model.</p>
-
-<p>```clojure
-(def
-  train-data
-  (mx-io/mnist-iter {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>                 :label (str data-dir "train-labels-idx1-ubyte")
-                 :input-shape [784]
-                 :flat true
-                 :batch-size batch-size
-                 :shuffle true}))
-</code></pre>
-
-<p>(def
-  test-data (mx-io/mnist-iter</p>
-
-<pre><code>         {:image (str data-dir "t10k-images-idx3-ubyte")
-          :label (str data-dir "t10k-labels-idx1-ubyte")
-          :input-shape [784]
-          :batch-size batch-size
-          :flat true
-          :shuffle true}))
-</code></pre>
-
-<p>(def input (sym/variable &ldquo;input&rdquo;))
-(def output (sym/variable &ldquo;input_&rdquo;))
-```</p>
-
-<h2>The Generator Model</h2>
-
-<p>The model does change to one hot encode the label for the number. Other than that, it&rsquo;s pretty much the exact same second half of the autoencoder model.</p>
-
-<p>```clojure
-(defn get-symbol []
-  (as-> input data</p>
-
-<pre><code>(sym/one-hot "onehot" {:indices data :depth 10})
-;; decode
-(sym/fully-connected "decode1" {:data data :num-hidden 50})
-(sym/activation "sigmoid3" {:data data :act-type "sigmoid"})
-
-;; decode
-(sym/fully-connected "decode2" {:data data :num-hidden 100})
-(sym/activation "sigmoid4" {:data data :act-type "sigmoid"})
-
-;;output
-(sym/fully-connected "result" {:data data :num-hidden 784})
-(sym/activation "sigmoid5" {:data data :act-type "sigmoid"})
-
-(sym/linear-regression-output {:data data :label output})))
-</code></pre>
-
-<p>(def data-desc
-  (first
-   (mx-io/provide-data-desc train-data)))
-(def label-desc
-  (first
-   (mx-io/provide-label-desc train-data)))
-```</p>
-
-<p>When binding the shapes to the model, we now need to specify that the input data shapes is the label instead of the image and the output of the model is going to be the image.</p>
-
-<p>```clojure
-(def
-  model
-  ;;; change data shapes to label shapes
-  (&ndash;> (m/module (get-symbol) {:data-names [&ldquo;input&rdquo;] :label-names [&ldquo;input_&rdquo;]})</p>
-
-<pre><code>  (m/bind {:data-shapes [(assoc label-desc :name "input")]
-           :label-shapes [(assoc data-desc :name "input_")]})
-  (m/init-params {:initializer  (initializer/uniform 1)})
-  (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
-</code></pre>
-
-<p>(def my-metric (eval-metric/mse))
-```</p>
-
-<h2>Training</h2>
-
-<p>The training of the model is pretty straight forward. Just being mindful that we are using hte batch-label, (number label),  as the input and and validating with the batch-data, (image).</p>
-
-<p>```clojure
-(defn train [num-epochs]
-  (doseq [epoch-num (range 0 num-epochs)]</p>
-
-<pre><code>(println "starting epoch " epoch-num)
-(mx-io/do-batches
- train-data
- (fn [batch]
-   ;;; change input to be the label
-   (-&gt; model
-       (m/forward {:data (mx-io/batch-label batch)
-                   :label (mx-io/batch-data batch)})
-       (m/update-metric my-metric (mx-io/batch-data batch))
-       (m/backward)
-       (m/update))))
-(println "result for epoch " epoch-num " is "
-         (eval-metric/get-and-reset my-metric))))
-</code></pre>
-
-<p>```</p>
-
-<h2>Results Before Training</h2>
-
-<p>```clojure
-(def my-test-batch (mx-io/next test-data))
-  ;;; change to input labels
-  (def test-labels (mx-io/batch-label my-test-batch))
-  (def preds (m/predict-batch model {:data test-labels} ))
-  (viz/im-sav {:title &ldquo;before-training-preds&rdquo;</p>
-
-<pre><code>           :output-path "results/"
-           :x (ndarray/reshape (first preds) [100 1 28 28])})
-</code></pre>
-
-<p>  (&ndash;>> test-labels first ndarray/&ndash;>vec (take 10))
-  ;=> (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)
-```</p>
-
-<p><img src="http://live.staticflickr.com/65535/48689304281_a41bf39353.jpg" alt="before training" /></p>
-
-<p>Not very impressive&hellip; Let&rsquo;s train</p>
-
-<p>```clojure
-(train 3)</p>
-
-<p>starting epoch  0
-result for epoch  0  is<br/>
-[mse 0.0723091]
-starting epoch  1
-result for epoch  1  is  [mse 0.053891845]
-starting epoch  2
-result for epoch  2  is  [mse 0.05337505]
-```</p>
-
-<h2>Results After Training</h2>
-
-<p>```clojure
- (def my-test-batch (mx-io/next test-data))
-  (def test-labels (mx-io/batch-label my-test-batch))
-  (def preds (m/predict-batch model {:data test-labels}))
-  (viz/im-sav {:title &ldquo;after-training-preds&rdquo;</p>
-
-<pre><code>           :output-path "results/"
-           :x (ndarray/reshape (first preds) [100 1 28 28])})
-</code></pre>
-
-<p>  (&ndash;>> test-labels first ndarray/&ndash;>vec (take 10))</p>
-
-<p>  ;=>   (9.0 5.0 7.0 1.0 8.0 6.0 6.0 0.0 8.0 1.0)
-```</p>
-
-<p><img src="https://live.staticflickr.com/65535/48689328481_338416ba7c.jpg" alt="after training" /></p>
-
-<p>Cool! The first row is indeed</p>
-
-<p><code>(9.0 5.0 7.0 1.0 8.0 6.0 6.0 0.0 8.0 1.0)</code></p>
-
-<h2>Save Your Model</h2>
-
-<p>Don&rsquo;t forget to save the generator model off &ndash; we are going to use it next time.</p>
-
-<p><code>clojure
-(m/save-checkpoint model {:prefix "model/generator" :epoch 2})
-</code></p>
-
-<p>Happy Deep Learning until next time &hellip;</p>
 ]]></content>
   </entry>
   
