@@ -79,7 +79,7 @@ This is where LIME enters.
 
 ### Using LIME for Interpretable Models
 
-One of the biggest problems holding back applying state of the art machine learning models to real life problems is that of interpretability and trust. The [lime technique](https://github.com/marcotcr/lime) is a well designed tool to help with this. One of the reasons that I really like it is that it is `model agnostic`. This means that you can use it with whatever code you want to use with it as long as you adhere to it's `api`. You need to provide it with the input and a function that will classify and return the probabilities in a numpy array.
+One of the biggest problems holding back applying state of the art machine learning models to real life problems is that of interpretability and trust. The [lime technique](https://github.com/marcotcr/lime) is a well designed tool to help with this. One of the reasons that I really like it is that it is _model agnostic_. This means that you can use it with whatever code you want to use with it as long as you adhere to it's _api_. You need to provide it with the input and a function that will classify and return the probabilities in a numpy array.
 
 The creation of the explainer is only a `require` away:
 
@@ -112,7 +112,7 @@ d  (println "lime texts are " texts)
 
 
  (predict-texts [text]) ;=>  [[0.99718672 0.00281324]]
-````
+```
 
 Finally we make an explanation for our text here. We are only using 6 features and 100 samples, to keep the cpus down, but in real life you would want to use closer to the default amount of `5000` samples. The samples are how the explainers work, it modifies the text over and over again and sees the difference in classification values. For example, one of the sample texts for our case is `' Toast with   bacon in the center with  syrup on .  with  sugar  desired.'`.
 
@@ -129,6 +129,8 @@ Finally we make an explanation for our text here. We are only using 6 features a
 
 ![](https://live.staticflickr.com/65535/51039510876_e547177bb2_h.jpg)
 
+
+Now it becomes more clear. The model is using mainly the word `toast` to classify it as breakfast with supporting words also being `french`, `egg`, `maple`, and `syrup`. The word `the` is also in there too which could be an artifact of the low numbers of samples we used or not. But now at least we have the tools to dig in and understand.
 
 ## Final Thoughts
 
