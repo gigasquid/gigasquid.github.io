@@ -107,7 +107,7 @@ We need to create a function that will take in some text and then return the pro
 
 (defn predict-texts
   [texts]
-d  (println "lime texts are " texts)
+  (println "lime texts are " texts)
   (numpy/array (mapv predict-probs texts)))
 
 
