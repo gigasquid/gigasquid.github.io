@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deep Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/deep-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2020-12-24T11:16:16-05:00</updated>
+  <updated>2021-03-15T09:50:28-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,138 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Breakfast With Zero-Shot NLP]]></title>
+    <link href="http://gigasquid.github.io/blog/2021/03/15/breakfast-with-zero-shot-nlp/"/>
+    <updated>2021-03-15T09:07:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2021/03/15/breakfast-with-zero-shot-nlp</id>
+    <content type="html"><![CDATA[<p><img src="https://i.imgflip.com/51ror1.jpg" alt="" /></p>
+
+<p>What if I told you that you could pick up a library model and instantly classify text with arbitrary categories without any training or fine tuning?</p>
+
+<p>That is exactly what we are going to do with <a href="https://joeddav.github.io/blog/2020/05/29/ZSL.html">Hugging Face&rsquo;s zero-shot learning model</a>. We will also be using <a href="https://github.com/clj-python/libpython-clj">libpython-clj</a> to do this exploration without leaving the comfort of our trusty Clojure REPL.</p>
+
+<h3>What&rsquo;s for breakfast?</h3>
+
+<p>We&rsquo;ll start off by taking some text from a recipe description and trying to decide if it&rsquo;s for breakfast, lunch or dinner:</p>
+
+<p><code>"French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired."</code></p>
+
+<p>Next we will need to install the required python deps:</p>
+
+<p><code>pip install numpy torch transformers lime</code></p>
+
+<p>Now we just need to set up the libpython clojure namespace to load the Hugging Face transformers library.</p>
+
+<p>```clojure
+(ns gigasquid.zeroshot
+  (:require
+   [libpython-clj2.python :as py :refer [py. py.. py.&ndash;]]
+   [libpython-clj2.require :refer [require-python]]))</p>
+
+<p>(require-python &lsquo;[transformers :bind-ns])
+```</p>
+
+<p>Setup is complete. We are now ready to classify with zeroshot.</p>
+
+<h4>Classify with Zero Shot</h4>
+
+<p>To create the classifier with zero shot, you need only create it with a handy pipeline function.</p>
+
+<p><code>clojure
+(def classifier (py. transformers "pipeline" "zero-shot-classification"))
+</code></p>
+
+<p>After that you need just the text you want to classify and category labels you want to use.</p>
+
+<p>```clojure
+(def text &ldquo;French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired.&rdquo;)</p>
+
+<p>(def labels [&ldquo;breakfast&rdquo; &ldquo;lunch&rdquo; &ldquo;dinner&rdquo;])
+```</p>
+
+<p>Classification is only a function call away with:</p>
+
+<p>```clojure
+(classifier text labels)</p>
+
+<p>{&lsquo;labels&rsquo;: [&lsquo;breakfast&rsquo;, &lsquo;lunch&rsquo;, &lsquo;dinner&rsquo;],
+ &lsquo;scores&rsquo;: [0.989736795425415, 0.007010194938629866, 0.003252972150221467]}
+```</p>
+
+<p>Breakfast is the winner. Notice that all the  probabilities add up to 1. This is because the default mode for <code>classify</code> uses <code>softmax</code>. We can change that so the categories are each considered independently with the <code>:multi-class</code> option.</p>
+
+<p><code>clojure
+(classifier text labels :multi_class true)
+{'labels': ['breakfast', 'lunch', 'dinner'],
+ 'scores': [0.9959920048713684, 0.22608685493469238, 0.031050905585289]}
+</code></p>
+
+<p>This is a really powerful technique for such an easy to use library. However, how can we do anything with it if we don&rsquo;t understand how it is working and get a handle on how to debug it. We need some level of trust in it for utility.</p>
+
+<p>This is where LIME enters.</p>
+
+<h3>Using LIME for Interpretable Models</h3>
+
+<p>One of the biggest problems holding back applying state of the art machine learning models to real life problems is that of interpretability and trust. The <a href="https://github.com/marcotcr/lime">lime technique</a> is a well designed tool to help with this. One of the reasons that I really like it is that it is <em>model agnostic</em>. This means that you can use it with whatever code you want to use with it as long as you adhere to it&rsquo;s <em>api</em>. You need to provide it with the input and a function that will classify and return the probabilities in a numpy array.</p>
+
+<p>The creation of the explainer is only a <code>require</code> away:</p>
+
+<p>```clojure
+(require-python &lsquo;[lime.lime_text :as lime])
+(require-python 'numpy)</p>
+
+<p>(def explainer (lime/LimeTextExplainer :class_names labels))
+```</p>
+
+<p>We need to create a function that will take in some text and then return the probabilities  for the labels. Since the zeroshot classifier will reorder the returning labels/probs by the value, we need to make sure that it will match up by index to the original labels.</p>
+
+<p>```clojure
+(defn predict-probs
+  [text]
+  (let [result (classifier text labels)</p>
+
+<pre><code>    result-scores (get result "scores")
+    result-labels (get result "labels")
+    result-map (zipmap result-labels result-scores)]
+(mapv (fn [cn]
+        (get result-map cn))
+      labels)))
+</code></pre>
+
+<p>(defn predict-texts
+  [texts]
+d  (println &ldquo;lime texts are &rdquo; texts)
+  (numpy/array (mapv predict-probs texts)))</p>
+
+<p> (predict-texts [text]) ;=>  [[0.99718672 0.00281324]]
+```</p>
+
+<p>Finally we make an explanation for our text here. We are only using 6 features and 100 samples, to keep the cpus down, but in real life you would want to use closer to the default amount of <code>5000</code> samples. The samples are how the explainers work, it modifies the text over and over again and sees the difference in classification values. For example, one of the sample texts for our case is <code>' Toast with   bacon in the center with  syrup on .  with  sugar  desired.'</code>.</p>
+
+<p>```clojure
+(def exp-result
+  (py. explainer &ldquo;explain_instance&rdquo; text predict-texts</p>
+
+<pre><code>   :num_features 6
+   :num_samples 100))
+</code></pre>
+
+<p>(py. exp-result &ldquo;save_to_file&rdquo; &ldquo;explanation.html&rdquo;)
+```</p>
+
+<p><img src="https://live.staticflickr.com/65535/51039510876_e547177bb2_h.jpg" alt="" /></p>
+
+<p>Now it becomes more clear. The model is using mainly the word <code>toast</code> to classify it as breakfast with supporting words also being <code>french</code>, <code>egg</code>, <code>maple</code>, and <code>syrup</code>. The word <code>the</code> is also in there too which could be an artifact of the low numbers of samples we used or not. But now at least we have the tools to dig in and understand.</p>
+
+<h2>Final Thoughts</h2>
+
+<p>Exciting advances are happening in Deep Learning and NLP. To make them truly useful,  we will need to continue to consider how to make them interpretable and debuggable.</p>
+
+<p>As always, keep your Clojure REPL handy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Thoughts on AI Debate 2]]></title>
@@ -930,251 +1062,6 @@ result for epoch  2  is  [mse 0.05337505]
 </code></p>
 
 <p>Happy Deep Learning until next time &hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Focus on the Discriminator]]></title>
-    <link href="http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator/"/>
-    <updated>2019-08-30T10:16:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator</id>
-    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/marcomagrini/698692268/in/photolist-24JYSq-hTTAJN-4gjQW9-9GRKCW-4gfNhz-x2yZ-6Nnwy1-6Lm68p-66BVjW-8hawRk-4sE2Jz-5Z6uvQ-6B4iH3-qzDvGU-aNpvLT-9UFZLh-egKvNt-bMh6PR-ceG9AL-gDqtze-96JhRW-7EWMH6-3MTfDt-9rUJ4W-dFPssj-8LLrys-aDAda3-9rUJ45-7xLAFR-prSHik-7yDFHC-7erqEc-6YJx8e-39SyR4-dkQnGi-7hy6zT-4UokrH-hkMoBr-9tBN3K-jq8Bpu-aDMSk2-pwQdmt-9tFrUD-6TzF6G-WDAsCC-8Mm4tD-8M8hyS-4yzkGK-67MPUw-crfg" title="sunflowers"><img src="https://live.staticflickr.com/1007/698692268_b31d429272.jpg" width="500" height="325" alt="sunflowers"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>In the <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">last post</a>, we took a look at a simple autoencoder. The autoencoder is a deep learning model that takes in an image and, (through an encoder and decoder), works to produce the same image. In short:</p>
-
-<ul>
-<li>Autoencoder: image &ndash;> image</li>
-</ul>
-
-
-<p>For a discriminator, we are going to focus on only the first half on the autoencoder.</p>
-
-<p><img src="https://live.staticflickr.com/65535/48647347383_9577b7b672_b.jpg" alt="discriminator" /></p>
-
-<p>Why only half? We want a different transformation. We are going to want to take an image as input and then do some <em>discrimination</em> of the image and classify what type of image it is. In our case, the model is going to input an image of a handwritten digit and attempt to decide which number it is.</p>
-
-<ul>
-<li>Discriminator: image &ndash;> label</li>
-</ul>
-
-
-<p>As always, with deep learning. To do anything, we need data.</p>
-
-<h3>MNIST Data</h3>
-
-<p>Nothing changes here from the autoencoder code. We are still using the MNIST dataset for handwritten digits.</p>
-
-<p>```clojure
-;;; Load the MNIST datasets
-(def train-data
-  (mx-io/mnist-iter
-   {:image (str data-dir &ldquo;train-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>:label (str data-dir "train-labels-idx1-ubyte")
-:input-shape [784]
-:flat true
-:batch-size batch-size
-:shuffle true}))
-</code></pre>
-
-<p>(def test-data
-  (mx-io/mnist-iter
-   {:image (str data-dir &ldquo;t10k-images-idx3-ubyte&rdquo;)</p>
-
-<pre><code>:label (str data-dir "t10k-labels-idx1-ubyte")
-:input-shape [784]
-:batch-size batch-size
-:flat true
-:shuffle true}))
-</code></pre>
-
-<p>```</p>
-
-<p>The model will change since we want a different output.</p>
-
-<h3>The Model</h3>
-
-<p>We are still taking in the image as input, and using the same encoder layers from the autoencoder model. However, at the end, we use a fully connected layer that has 10 hidden nodes &ndash; one for each label of the digits 0-9. Then we use a softmax for the classification output.</p>
-
-<p>```clojure
-(def input (sym/variable &ldquo;input&rdquo;))
-(def output (sym/variable &ldquo;input_&rdquo;))</p>
-
-<p>(defn get-symbol []
-  (as-> input data</p>
-
-<pre><code>;; encode
-(sym/fully-connected "encode1" {:data data :num-hidden 100})
-(sym/activation "sigmoid1" {:data data :act-type "sigmoid"})
-
-;; encode
-(sym/fully-connected "encode2" {:data data :num-hidden 50})
-(sym/activation "sigmoid2" {:data data :act-type "sigmoid"})
-
-;;; this last bit changed from autoencoder
-;;output
-(sym/fully-connected "result" {:data data :num-hidden 10})
-(sym/softmax-output {:data data :label output})))
-</code></pre>
-
-<p>```</p>
-
-<p>In the autoencoder, we were never actually using the label, but we will certainly need to use it this time. It is reflected in the model&rsquo;s bindings with the data and label shapes.</p>
-
-<p>```clojure
-(def model (&ndash;> (m/module (get-symbol) {:data-names [&ldquo;input&rdquo;] :label-names [&ldquo;input_&rdquo;]})</p>
-
-<pre><code>           (m/bind {:data-shapes [(assoc data-desc :name "input")]
-                    :label-shapes [(assoc label-desc :name "input_")]})
-           (m/init-params {:initializer (initializer/uniform 1)})
-           (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
-</code></pre>
-
-<p>```</p>
-
-<p>For the evaluation metric, we are also going to use an accuracy metric vs a mean squared error (mse) metric</p>
-
-<p><code>clojure
-(def my-metric (eval-metric/accuracy))
-</code></p>
-
-<p>With these items in place, we are ready to train the model.</p>
-
-<h3>Training</h3>
-
-<p>The training from the autoencoder needs to changes to use the real label for the the forward pass and updating the metric.</p>
-
-<p>```clojure
-(defn train [num-epochs]
-  (doseq [epoch-num (range 0 num-epochs)]</p>
-
-<pre><code>(println "starting epoch " epoch-num)
-(mx-io/do-batches
- train-data
- (fn [batch]
-   ;;; here we make sure to use the label
-   ;;; now for forward and update-metric
-   (-&gt; model
-       (m/forward {:data (mx-io/batch-data batch)
-                   :label (mx-io/batch-label batch)})
-       (m/update-metric my-metric (mx-io/batch-label batch))
-       (m/backward)
-       (m/update))))
-(println {:epoch epoch-num
-          :metric (eval-metric/get-and-reset my-metric)})))
-</code></pre>
-
-<p>```</p>
-
-<h3>Let&rsquo;s Run Things</h3>
-
-<p>It&rsquo;s always a good idea to take a look at things before you start training.</p>
-
-<p>The first batch of the training data looks like:</p>
-
-<p>```clojure
-  (def my-batch (mx-io/next train-data))
-  (def images (mx-io/batch-data my-batch))
-  (viz/im-sav {:title &ldquo;originals&rdquo;</p>
-
-<pre><code>           :output-path "results/"
-           :x (-&gt; images
-                  first
-                  (ndarray/reshape [100 1 28 28]))})
-</code></pre>
-
-<p>```</p>
-
-<p><img src="https://live.staticflickr.com/65535/48648000857_fb17f0de66.jpg" alt="training-batch" /></p>
-
-<p>Before training, if we take the first batch from the test data and predict what the labels are:</p>
-
-<p>```clojure
-  (def my-test-batch (mx-io/next test-data))
-  (def test-images (mx-io/batch-data my-test-batch))
-  (viz/im-sav {:title &ldquo;test-images&rdquo;</p>
-
-<pre><code>           :output-path "results/"
-           :x (-&gt; test-images
-                  first
-                  (ndarray/reshape [100 1 28 28]))})
-</code></pre>
-
-<p>```</p>
-
-<p><img src="https://live.staticflickr.com/65535/48647524478_ca35bef78f.jpg" alt="test-batch" /></p>
-
-<p>```clojure
-  (def preds (m/predict-batch model {:data test-images} ))
-  (&ndash;>> preds</p>
-
-<pre><code>   first
-   (ndarray/argmax-channel)
-   (ndarray/-&gt;vec)
-   (take 10))
-</code></pre>
-
-<p> ;=> (1.0 8.0 8.0 8.0 8.0 8.0 2.0 8.0 8.0 1.0)
-```</p>
-
-<p>Yeah, not even close. The real first line of the images is <code>6 1 0 0 3 1 4 8 0 9</code></p>
-
-<p>Let&rsquo;s Train!</p>
-
-<p>```clojure
-  (train 3)</p>
-
-<p>;; starting epoch  0
-;; {:epoch 0, :metric [accuracy 0.83295]}
-;; starting epoch  1
-;; {:epoch 1, :metric [accuracy 0.9371333]}
-;; starting epoch  2
-;; {:epoch 2, :metric [accuracy 0.9547667]}</p>
-
-<p>```</p>
-
-<p>After the training, let&rsquo;s have another look at the predicted labels.</p>
-
-<p>```clojure
-  (def preds (m/predict-batch model {:data test-images} ))
-  (&ndash;>> preds</p>
-
-<pre><code>   first
-   (ndarray/argmax-channel)
-   (ndarray/-&gt;vec)
-   (take 10))
-</code></pre>
-
-<p> ;=> (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)
-```</p>
-
-<ul>
-<li>Predicted = <code>(6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</code></li>
-<li>Actual = <code>6 1 0 0 3 1 4 8 0 9</code></li>
-</ul>
-
-
-<p>Rock on!</p>
-
-<h3>Closing</h3>
-
-<p>In this post, we focused on the first half of the autoencoder and made a discriminator model that took in an image and gave us a label.</p>
-
-<p>Don&rsquo;t forget to save the trained model for later, we&rsquo;ll be using it.</p>
-
-<p>```clojure
-  (m/save-checkpoint model {:prefix &ldquo;model/discriminator&rdquo;</p>
-
-<pre><code>                        :epoch 2})
-</code></pre>
-
-<p>```</p>
-
-<p>Until then, here is a picture of Otto the cat in a basket to keep you going.</p>
-
-<p><img src="https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg" alt="Otto in basket" /></p>
-
-<p><em>P.S. If you want to run all the code for yourself. It is <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/discriminator.clj">here</a></em></p>
 ]]></content>
   </entry>
   

@@ -95,6 +95,146 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-04-12T00:02:09-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu 12 Apr 2012, 12:02 AM</time>
+        
+           | <a href="/blog/2012/04/12/the-software-bathtub-curve/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2012/04/12/the-software-bathtub-curve/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2012/04/12/the-software-bathtub-curve/" itemprop="url">The Software Bathtub Curve</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><img class="left" src="http://farm4.staticflickr.com/3767/9925846584_3bf93b2cca.jpg"></p>
+
+<p>I have had my Dualit Toaster for close to 19 years now. It has never broken down. It has reliably toasted my bread every morning with the mere turn of a dial.</p>
+
+<p>I have had my dishwasher for 1 year and 2 weeks. It has all sorts of cool buttons and modes so that I can customize my wash cycles to suit my dishes and my mood. Precisely two weeks after the warranty expired, it began to blink randomly and stopped working. The control board had died. This was not an isolated incident. I have gone through many such failures with other appliances, my refrigerator, stove and washing machine.</p>
+
+<p>Looking at my toaster and dishwasher, I made a couple of observations:</p>
+
+<ol>
+<li> <strong>The more complex the product, the less reliable it is, and the shorter the life span.</strong></li>
+</ol>
+
+
+<p>Sure, it would be cool if I could control my toaster with my mobile phone app, but just having a heating coil and a dial gives the advantage of having a lot less things that could go wrong.</p>
+
+<ol>
+<li> <strong>A product is only as reliable as its least reliable part.</strong></li>
+</ol>
+
+
+<p>You can pay a small fortune for a oven built of stainless steel with all the latest technological advances in color display and computerized air flow. But if it relies on the same computer circuit board that all the other ovens use, (the one gives out after a year), then your investment is not any more reliable.</p>
+
+<p>I also noted that these observations could be translated to software as well. Certainly, in the case of building software, the more complex the system the more things that can go wrong. The same could hold true that overall software system is only as reliable as the least reliable part of it.</p>
+
+<p>This brought me to the larger question.</p>
+
+<blockquote><p>How can they predict the dates so accurately? My dishwasher stopped working 2 weeks after the warranty ran out.</p></blockquote>
+
+<p>— Carin Meier (@carinmeier) <a href="https://twitter.com/carinmeier/status/190222737594269696">April 11, 2012</a></p>
+
+<p>How do the manufacturers know, with such accuracy, when the product is going to fail? Could you apply the same principles to software?</p>
+
+<blockquote><p>@<a href="https://twitter.com/carinmeier">carinmeier</a> believe it or not they spend millions calculating it. I spent way too many hours in 6-sigma training with bathtub curves.</p></blockquote>
+
+<p>— Jonathan Hays (@cheesemaker) <a href="https://twitter.com/cheesemaker/status/190225140863348736">April 11, 2012</a></p>
+
+<p><a href="http://en.wikipedia.org/wiki/Bathtub_curve">The Bathtub Curve</a>, according to wikipedia, is widely used in reliability engineering. It gets its name from the shape of the curve, which looks a bit like a bathtub. It is talked about in three sections:</p>
+
+<ol>
+<li><p> Decreasing failure rate (early failures)</p></li>
+<li><p> Constant failure rate (random failures)</p></li>
+<li><p> Increasing failure rate (wear-out failures)</p></li>
+</ol>
+
+
+<p>With software, we don&rsquo;t talk about failures so much. We do talk about bugs, but even that is a bit misleading because it doesn&rsquo;t take into account the need to accommodate features and evolving changes. So let&rsquo;s talk about “issues” instead that can be broad enough to accommodate traditional bugs, gaps of functional needs, and performance related items.</p>
+
+<p>The Software Bathtub Curve might look like the following:</p>
+
+<p><strong>Decreasing issue rate (launch &amp; growing pains)</strong></p>
+
+<p>This is the early stage of the software. After its initial launch, gaps in functionality, bugs, and performance issues are readily identified and corrected. The main factors of reliability here are communication, responsiveness and agility.</p>
+
+<p>Sample questions for determining data for this part of the curve:</p>
+
+<ol>
+<li><p> Do you use a dynamic language/ framework that allows rapid development? +10</p></li>
+<li><p> If the product owner and developers were in the same restaurant would they recognize each other? + 10</p></li>
+<li><p> Can the product owner and developers recognize each other by voice? +5</p></li>
+<li><p> Do you have a daily standup? + 5</p></li>
+<li><p> Do you really stand up the whole time? +2</p></li>
+<li><p> How many outside integration points are there? -5 for each</p></li>
+<li><p> How many programming languages and frameworks are there? -5 for each</p></li>
+<li><p> Do you release often? +5 for every 2 weeks (-1 for each week longer)</p></li>
+<li><p> Do you work over 40 hours a week regularly? -10</p></li>
+<li><p>. Do you have an automated test suite? + 10</p></li>
+<li><p>. Does it have regularly have untended errors in it? -5</p></li>
+<li><p>. Do you use pair programming or code reviews? +10</p></li>
+</ol>
+
+
+<p><strong>Constant failure rate (random failures)</strong></p>
+
+<p>****This is the time when the software reaches maturity. The business needs do not change drastically, but require minor refinements. Random issues occur from 3rd party integration issues or real world data issues. Major factors for reliability in this phase are avoidance of technical debt, data curation, and code quality.</p>
+
+<ol>
+<li><p> Has the team scaled down to just include a minimal or junior support staff? -10</p></li>
+<li><p> Do new features/ fixes get put in with the appropriate refactoring and tests? + 10</p></li>
+<li><p> Do new features/fixes more often just get stuck in there in the easiest way possible? -5</p></li>
+<li><p> Do your tests still all pass +10</p></li>
+<li><p> Do you get advance warning when a 3rd party api is changing? + 10</p></li>
+<li><p> Do you test that change in advance? + 5</p></li>
+<li><p> Do you still talk to the product owners? +5</p></li>
+<li><p> Do you care about code / data quality? + 10</p></li>
+</ol>
+
+
+<p><strong>Increasing failure rate (Failure to adapt to new business needs)</strong></p>
+
+<p>This is the final phase in the software life cycle. The new business needs cannot be met with the exsiting software and the cost of changing or adapting it is too high or not possible. Major factors for reliability and length of life span include openness and complexity of design and architecture.</p>
+
+<ol>
+<li><p> Do you have have to pay for a closed vendor product? -10</p></li>
+<li><p> Do you use open source languages and libraries? + 10</p></li>
+<li><p> Are you afraid to change anything because it might break? -10</p></li>
+<li><p> Is your main software language more than 1 version behind the latest? -5 for each version behind</p></li>
+<li><p> Does the mention of new features install fear instead of passion? -500</p></li>
+</ol>
+
+
+<p>In the end, although it is interesting to compare software to the appliance Bathtub Curve, it is a leaky abstraction at best (sorry, couldn&rsquo;t resist). Software is living thing. It needs to respond to its ever changing environment and needs. Furthermore, it is made up of a collection of living people who care and tend for it as well. However, there are clear factors that can go a long way to increasing the reliability, usability, and lifespan of software as well. We, as software developers, should keep them in mind as part of the ultimate goal of creating living, quality software.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-01-14T16:10:14-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 14 Jan 2012,  4:10 PM</time>
         
            | <a href="/blog/2012/01/14/code-mash-2012-bacon-for-the-brain/#disqus_thread" itemprop="discussionUrl"
@@ -612,46 +752,6 @@ git push heroku master
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2011-05-01T10:02:39-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun  1 May 2011, 10:02 AM</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2011/05/01/hacking-javascript-for-the-love-of-clojure/" itemprop="url">Hacking JavaScript for the Love of Clojure</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>Lately, I have been working on the awesome open source project <a href="http://www.4clojure.com/">4Clojure.com</a>. The site helps you to learn Clojure by solving “koan” type problems in an interactive format. One of the enhancements that I was looking at putting in was a way to enter code in a text box and have it color highlight as type. I found the <a href="http://ace.ajax.org/">ACE project</a>, which looked like exactly what I wanted. However, sad panda, they didn&rsquo;t have a Clojure mode. Not deterred, I decided that I would try to take a crack at it. I ported most of the rules from the Clojure brush in Syntax Highlighter over and implemented some basic auto-indent.</p>
-
-<p>The Github source has been added to the main project at Ace <a href="https://github.com/ajaxorg/ace">https://github.com/ajaxorg/ace</a>
-You can see it in action on the 4Clojure.com site here: <a href="http://www.4clojure.com/problem/14">http://www.4clojure.com/problem/14</a></p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -671,7 +771,7 @@ You can see it in action on the 4Clojure.com site here: <a href="http://www.4clo
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2020 - Carin Meier<br>
+  Copyright &copy; 2021 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

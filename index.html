@@ -95,6 +95,218 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2021-03-15T09:07:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 15 Mar 2021,  9:07 AM</time>
+        
+           | <a href="/blog/2021/03/15/breakfast-with-zero-shot-nlp/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2021/03/15/breakfast-with-zero-shot-nlp/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2021/03/15/breakfast-with-zero-shot-nlp/" itemprop="url">Breakfast With Zero-Shot NLP</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><img src="https://i.imgflip.com/51ror1.jpg" alt="" /></p>
+
+<p>What if I told you that you could pick up a library model and instantly classify text with arbitrary categories without any training or fine tuning?</p>
+
+<p>That is exactly what we are going to do with <a href="https://joeddav.github.io/blog/2020/05/29/ZSL.html">Hugging Face&rsquo;s zero-shot learning model</a>. We will also be using <a href="https://github.com/clj-python/libpython-clj">libpython-clj</a> to do this exploration without leaving the comfort of our trusty Clojure REPL.</p>
+
+<h3>What&rsquo;s for breakfast?</h3>
+
+<p>We&rsquo;ll start off by taking some text from a recipe description and trying to decide if it&rsquo;s for breakfast, lunch or dinner:</p>
+
+<p><code>"French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired."</code></p>
+
+<p>Next we will need to install the required python deps:</p>
+
+<p><code>pip install numpy torch transformers lime</code></p>
+
+<p>Now we just need to set up the libpython clojure namespace to load the Hugging Face transformers library.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.zeroshot</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span>
+</span><span class='line'>   <span class="p">[</span><span class="nv">libpython-clj2.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]</span>
+</span><span class='line'>   <span class="p">[</span><span class="nv">libpython-clj2.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">transformers</span> <span class="ss">:bind-ns</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Setup is complete. We are now ready to classify with zeroshot.</p>
+
+<h4>Classify with Zero Shot</h4>
+
+<p>To create the classifier with zero shot, you need only create it with a handy pipeline function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">classifier</span> <span class="p">(</span><span class="nf">py.</span> <span class="nv">transformers</span> <span class="s">&quot;pipeline&quot;</span> <span class="s">&quot;zero-shot-classification&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After that you need just the text you want to classify and category labels you want to use.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">text</span> <span class="s">&quot;French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired.&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">labels</span> <span class="p">[</span><span class="s">&quot;breakfast&quot;</span> <span class="s">&quot;lunch&quot;</span> <span class="s">&quot;dinner&quot;</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Classification is only a function call away with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">classifier</span> <span class="nv">text</span> <span class="nv">labels</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">{</span><span class="ss">&#39;labels</span><span class="o">&#39;</span><span class="err">:</span> <span class="p">[</span><span class="ss">&#39;breakfast</span><span class="o">&#39;</span>, <span class="ss">&#39;lunch</span><span class="o">&#39;</span>, <span class="ss">&#39;dinner</span><span class="o">&#39;</span><span class="p">]</span>,
+</span><span class='line'> <span class="ss">&#39;scores</span><span class="o">&#39;</span><span class="err">:</span> <span class="p">[</span><span class="mf">0.989736795425415</span>, <span class="mf">0.007010194938629866</span>, <span class="mf">0.003252972150221467</span><span class="p">]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Breakfast is the winner. Notice that all the  probabilities add up to 1. This is because the default mode for <code>classify</code> uses <code>softmax</code>. We can change that so the categories are each considered independently with the <code>:multi-class</code> option.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">classifier</span> <span class="nv">text</span> <span class="nv">labels</span> <span class="ss">:multi_class</span> <span class="nv">true</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span><span class="ss">&#39;labels</span><span class="o">&#39;</span><span class="err">:</span> <span class="p">[</span><span class="ss">&#39;breakfast</span><span class="o">&#39;</span>, <span class="ss">&#39;lunch</span><span class="o">&#39;</span>, <span class="ss">&#39;dinner</span><span class="o">&#39;</span><span class="p">]</span>,
+</span><span class='line'> <span class="ss">&#39;scores</span><span class="o">&#39;</span><span class="err">:</span> <span class="p">[</span><span class="mf">0.9959920048713684</span>, <span class="mf">0.22608685493469238</span>, <span class="mf">0.031050905585289</span><span class="p">]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a really powerful technique for such an easy to use library. However, how can we do anything with it if we don&rsquo;t understand how it is working and get a handle on how to debug it. We need some level of trust in it for utility.</p>
+
+<p>This is where LIME enters.</p>
+
+<h3>Using LIME for Interpretable Models</h3>
+
+<p>One of the biggest problems holding back applying state of the art machine learning models to real life problems is that of interpretability and trust. The <a href="https://github.com/marcotcr/lime">lime technique</a> is a well designed tool to help with this. One of the reasons that I really like it is that it is <em>model agnostic</em>. This means that you can use it with whatever code you want to use with it as long as you adhere to it&rsquo;s <em>api</em>. You need to provide it with the input and a function that will classify and return the probabilities in a numpy array.</p>
+
+<p>The creation of the explainer is only a <code>require</code> away:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">lime.lime_text</span> <span class="ss">:as</span> <span class="nv">lime</span><span class="p">])</span>
+</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="ss">&#39;numpy</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">explainer</span> <span class="p">(</span><span class="nf">lime/LimeTextExplainer</span> <span class="ss">:class_names</span> <span class="nv">labels</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We need to create a function that will take in some text and then return the probabilities  for the labels. Since the zeroshot classifier will reorder the returning labels/probs by the value, we need to make sure that it will match up by index to the original labels.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">predict-probs</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">text</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">result</span> <span class="p">(</span><span class="nf">classifier</span> <span class="nv">text</span> <span class="nv">labels</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">result-scores</span> <span class="p">(</span><span class="nb">get </span><span class="nv">result</span> <span class="s">&quot;scores&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">result-labels</span> <span class="p">(</span><span class="nb">get </span><span class="nv">result</span> <span class="s">&quot;labels&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">result-map</span> <span class="p">(</span><span class="nb">zipmap </span><span class="nv">result-labels</span> <span class="nv">result-scores</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">mapv</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">cn</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">(</span><span class="nb">get </span><span class="nv">result-map</span> <span class="nv">cn</span><span class="p">))</span>
+</span><span class='line'>          <span class="nv">labels</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">predict-texts</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">texts</span><span class="p">]</span>
+</span><span class='line'><span class="nv">d</span>  <span class="p">(</span><span class="nb">println </span><span class="s">&quot;lime texts are &quot;</span> <span class="nv">texts</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">numpy/array</span> <span class="p">(</span><span class="nf">mapv</span> <span class="nv">predict-probs</span> <span class="nv">texts</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'> <span class="p">(</span><span class="nf">predict-texts</span> <span class="p">[</span><span class="nv">text</span><span class="p">])</span> <span class="c1">;=&gt;  [[0.99718672 0.00281324]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally we make an explanation for our text here. We are only using 6 features and 100 samples, to keep the cpus down, but in real life you would want to use closer to the default amount of <code>5000</code> samples. The samples are how the explainers work, it modifies the text over and over again and sees the difference in classification values. For example, one of the sample texts for our case is <code>' Toast with   bacon in the center with  syrup on .  with  sugar  desired.'</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">exp-result</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">py.</span> <span class="nv">explainer</span> <span class="s">&quot;explain_instance&quot;</span> <span class="nv">text</span> <span class="nv">predict-texts</span>
+</span><span class='line'>       <span class="ss">:num_features</span> <span class="mi">6</span>
+</span><span class='line'>       <span class="ss">:num_samples</span> <span class="mi">100</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">py.</span> <span class="nv">exp-result</span> <span class="s">&quot;save_to_file&quot;</span> <span class="s">&quot;explanation.html&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://live.staticflickr.com/65535/51039510876_e547177bb2_h.jpg" alt="" /></p>
+
+<p>Now it becomes more clear. The model is using mainly the word <code>toast</code> to classify it as breakfast with supporting words also being <code>french</code>, <code>egg</code>, <code>maple</code>, and <code>syrup</code>. The word <code>the</code> is also in there too which could be an artifact of the low numbers of samples we used or not. But now at least we have the tools to dig in and understand.</p>
+
+<h2>Final Thoughts</h2>
+
+<p>Exciting advances are happening in Deep Learning and NLP. To make them truly useful,  we will need to continue to consider how to make them interpretable and debuggable.</p>
+
+<p>As always, keep your Clojure REPL handy.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2020-12-24T10:59:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Thu 24 Dec 2020, 10:59 AM</time>
         
            | <a href="/blog/2020/12/24/thoughts-on-ai-debate-2/#disqus_thread" itemprop="discussionUrl"
@@ -3057,140 +3269,6 @@ In the following the spec is only that the data be a general string, but using t
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-03-22T10:42:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 22 Mar 2019, 10:42 AM</time>
-        
-           | <a href="/blog/2019/03/22/clojure-mxnet-march-update/#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io/blog/2019/03/22/clojure-mxnet-march-update/">Comments</a>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2019/03/22/clojure-mxnet-march-update/" itemprop="url">Clojure MXNet March Update</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>I&rsquo;m starting a monthly update for <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. The goal is to share the progress and exciting things that are happening in the project and our community.</p>
-
-<p>Here&rsquo;s some highlights for the month of March.</p>
-
-<h2>Shipped</h2>
-
-<p>Under the shipped heading, the 1.4.0 release of MXNet has been released, along with the <a href="https://search.maven.org/search?q=clojure%20mxnet">Clojure MXNet Jars</a>. There have been improvements to the JVM memory management and an Image API addition. You can see the full list of changes <a href="https://github.com/apache/incubator-mxnet/releases/tag/1.4.0#clojure">here</a></p>
-
-<h2>Clojure MXNet Made Simple Article Series</h2>
-
-<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> authored a really nice series of blog posts to help get people started with Clojure MXNet.</p>
-
-<ul>
-<li><a href="https://arthurcaillau.com/mxnet-clojure-aws/">Getting started with Clojure and MXNet on AWS</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-ndarrays-api/">MXNet made simple: Clojure NDArray API</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-symbol-api/">MXNet made simple: Clojure Symbol API</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-module-api/">MXNet made simple: Clojure Module API</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-symbol-visualization/">MXNet made simple: Clojure Symbol Visualization API</a></li>
-<li><a href="https://arthurcaillau.com/mxnet-made-simple-image-manipulation/">MXNet made simple: Image Manipulation with OpenCV and MXNet</a></li>
-</ul>
-
-
-<h2>Lein Template &amp; Docker file</h2>
-
-<p><a href="https://github.com/hellonico/">Nicolas Modrzyk</a> created a Leiningen template that allows you to easily get a MXNet project started &ndash; with a notebook too! It&rsquo;s a great way to take Clojure MXNet for a spin</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># create project
-</span><span class='line'>lein new clj-mxnet hello
-</span><span class='line'>
-</span><span class='line'># run included sample
-</span><span class='line'>lein run
-</span><span class='line'>
-</span><span class='line'># start notebook engine
-</span><span class='line'>lein notebook
-</span><span class='line'>
-</span><span class='line'># open notebook
-</span><span class='line'>http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj
-</span><span class='line'># open empty notebook with all namespaces
-</span><span class='line'>http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There also is a docker file as well</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>docker run -it -p 10000:10000 hellonico/mxnet
-</span><span class='line'>
-</span><span class='line'>After starting the container, you can open the same notebooks as above:
-</span><span class='line'>
-</span><span class='line'># open notebook
-</span><span class='line'>http://0.0.0.0:10000/worksheet.html?filename=notes/practice.clj
-</span><span class='line'># open empty notebook with all namespaces
-</span><span class='line'>http://0.0.0.0:10000/worksheet.html?filename=notes/empty.clj</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Cool Stuff in Development</h2>
-
-<p>There are a few really interesting things cooking for the future.</p>
-
-<p>One is a <a href="https://github.com/apache/incubator-mxnet/pull/14372">PR for memory fixes</a> from the Scala team that is getting really close to merging. This will be a solution to some the the memory problems that were encountered by early adopters of the Module API.</p>
-
-<p>Another, is the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> that is being spearheaded by Kedar Bellare</p>
-
-<p>Finally, work is being started to create a <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103089990">Gluon API for the Clojure package</a> which is quite exciting.</p>
-
-<h2>Get Involved</h2>
-
-<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip.</p>
-
-<h2>Cat Picture of the Month</h2>
-
-<p>There is no better way to close out an update than a cat picture, so here is a picture of my family cat, Otto, watching birds at the window.</p>
-
-<p><img src="https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg"></p>
-
-<p>Have a great rest of March!</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -3210,7 +3288,7 @@ In the following the spec is only that the data be a general string, but using t
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2020 - Carin Meier<br>
+  Copyright &copy; 2021 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
