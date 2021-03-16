@@ -109,7 +109,7 @@ As always, we welcome involvement in the true Apache tradition. If you have ques
 
 ## Cat Picture of the Month
 
-To close out, let's take a lesson from my cats Otto and Pi and don't forget the importance of naps.
+To close out, let's take a lesson from my cats and don't forget the importance of naps.
 
 {%img https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg %}
 

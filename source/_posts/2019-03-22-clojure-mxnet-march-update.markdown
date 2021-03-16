@@ -78,7 +78,7 @@ As always, we welcome involvement in the true Apache tradition. If you have ques
 
 ## Cat Picture of the Month
 
-There is no better way to close out an update than a cat picture, so here is a picture of my family cat, Otto, watching birds at the window. 
+There is no better way to close out an update than a cat picture, so here is a picture of my family cat watching birds at the window. 
 
 {% img https://farm8.staticflickr.com/7862/46718997174_13bf6e88ea_z.jpg %}
 

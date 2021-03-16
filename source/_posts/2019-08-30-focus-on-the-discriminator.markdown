@@ -213,7 +213,7 @@ Don't forget to save the trained model for later, we'll be using it.
 ```
 
 
-Until then, here is a picture of Otto the cat in a basket to keep you going.
+Until then, here is a picture of the cat in a basket to keep you going.
 
 ![Otto in basket](https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg)
 
