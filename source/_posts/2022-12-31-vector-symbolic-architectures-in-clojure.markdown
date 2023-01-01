@@ -11,6 +11,8 @@ categories:
 
 ![](https://live.staticflickr.com/65535/52596142860_c4cf8642b0_z.jpg)
 
+_generated with Stable Diffusion_
+
 Before diving into the details of what Vector Symbolic Architectures are and what it means to implement Clojure data structures in them, I'd like to start with some of my motivation in this space.
 
 ## Small AI for More Personal Enjoyment
@@ -19,22 +21,22 @@ Over the last few years, I've spent time learning, exploring, and contributing t
 
 Between work and family, I don't have a lot of free time. When I do get a few precious hours to do some coding _just for me_, I want it it to be small enough for me to fire up and play with it in a REPL on my local laptop and get a result back in under two minutes.
 
-I also believe that the current state of AI is not going to be have any meaningful *revolutionary* innovations in the current mainstream deep learning space. This is not to say that there won't be advances. Just as commercial airlines transformed the original first flight, I'm sure we are going to continue to see the transformation of society with current big models at scale - I just think the next leap forward is going to come from somewhere else. And that somewhere else is going to be *small* AI.
+I also believe that the current state of AI is not likely to produce any more  meaningful *revolutionary* innovations in the current mainstream deep learning space. This is not to say that there won't be advances. Just as commercial airlines transformed the original first flight, I'm sure we are going to continue to see the transformation of society with current big models at scale - I just think the next leap forward is going to come from somewhere else. And that somewhere else is going to be *small* AI.
 
-## Vector Symbolic Architures/ VSA aka Hyperdimensional Computing
+## Vector Symbolic Architures aka Hyperdimensional Computing
 
-I'm talking about small AI here, but VSA or Hyperdimensional computing is based on really big vectors - like 1,000,000 dimensions. The beauty and simplicity in it is that everything is a hypervector - symbols, maps, lists. Through the [blessing of high dimensionality](http://rctn.org/vs265/kanerva09-hyperdimensional.pdf), any random hypervector is mathematically guarenteed to be orthogonal to any other one. This all enables some cool things:
+Although I'm  talking about small AI,  VSA or Hyperdimensional computing is based on really big vectors - like 1,000,000 dimensions. The beauty and simplicity in it is that everything is a hypervector - symbols, maps, lists. Through the [blessing of high dimensionality](http://rctn.org/vs265/kanerva09-hyperdimensional.pdf), any random hypervector is mathematically guaranteed to be orthogonal to any other one. This all enables some cool things:
 
 - Random hypervectors can be used to represent symbols (like numbers, strings, keywords, etc..)
-- We can use an algebra to combine this hypervectors: bundling, binding, and unbinding to create new hypervectors that are compositions of each other and can store and retrieve key value pairs. These operations furthermore are _fuzzy_ due to the nature of working with vectors. In the following code examples, I will be using the concrete model of MAP (Multiply, Add, Permute)[https://redwood.berkeley.edu/wp-content/uploads/2021/08/Module2_VSA_models_slides.pdf] by [R. Gayler](https://www.rossgayler.com/).
+- We can use an algebra to operate on hypervectors: _bundling_ and _binding_ operations create new hypervectors that are compositions of each other and can store and retrieve key value pairs. These operations furthermore are _fuzzy_ due to the nature of working with vectors. In the following code examples, I will be using the concrete model of [MAP (Multiply, Add, Permute)](https://redwood.berkeley.edu/wp-content/uploads/2021/08/Module2_VSA_models_slides.pdf) by [R. Gayler](https://www.rossgayler.com/).
 - We can represent Clojure data structures such as maps and vectors in them and perform operations such as `get` with probabilistic outcomes.
-- Everything is a hypervector! I mean you have a keyword that is a symbol that is a hypervector, then you bundle that with other keywords to be a map. The result is a single hypervector. You then create a vector and add some more in. The result is a single hypervector. The simplicity in the algebra and form of the VSA is beautiful - not unlike LISP itself. Actually, [P. Kanerva thought that a LISP could be made from it](https://redwood.berkeley.edu/wp-content/uploads/2021/08/Neubert2019_Article_AnIntroductionToHyperdimension.pdf). In my exploration, I only got as far as making some Clojure data structures, but I'm sure it's possible.
+- Everything is a hypervector! I mean you have a keyword that is a symbol that is a hypervector, then you bundle that with other keywords to be a map. The result is a single hypervector. You then create a sequence structure and add some more in. The result is a single hypervector. The simplicity in the algebra and form of the VSA is beautiful - not unlike LISP itself. Actually, [P. Kanerva thought that a LISP could be made from it](https://redwood.berkeley.edu/wp-content/uploads/2021/08/Neubert2019_Article_AnIntroductionToHyperdimension.pdf). In my exploration, I only got as far as making some Clojure data structures, but I'm sure it's possible.
 
 ## Start with an Intro and a Paper
 
 A good place to start with Vector Symbolic Architectures is actually the paper referenced above - [An Introduction to Hyperdimensional Computing for Robots](https://redwood.berkeley.edu/wp-content/uploads/2021/08/Neubert2019_Article_AnIntroductionToHyperdimension.pdf). In general, I find the practice of taking a paper and then trying to implement it a great way to learn.
 
-To work with VSAs in clojure, I needed a high performing Clojure library with tensors and data types. I reached for [https://github.com/techascent/tech.datatype](https://github.com/techascent/tech.datatype). It could handle a million dimensions pretty easily on my laptop.
+To work with VSAs in Clojure, I needed a high performing Clojure library with tensors and data types. I reached for [https://github.com/techascent/tech.datatype](https://github.com/techascent/tech.datatype). It could handle a million dimensions pretty easily on my laptop.
 
 To create a new hypervector - simply chose random values between -1 and 1. This gives us a direction in space which is enough.
 
@@ -55,7 +57,7 @@ To create a new hypervector - simply chose random values between -1 and 1. This 
   (dtt/->tensor (repeatedly size #(binary-rand)) :datatype :int8))
 ```
 
-The only main operations to create key value pairs is additon and matrix multiplication.
+The only main operations to create key value pairs is addition and matrix multiplication.
 
 Adding two hyperdimensional vectors, (hdvs), together is calling bundling. Note we clip the values to 1 or -1. At high dimensions, only the direction really matters not the magnitude.
 
@@ -88,10 +90,10 @@ We can assign key values using `bind` which is matrix multiplication.
 
 One cool thing is that the binding of a key value pair is also the inverse of itself. So to unbind is just to bind again.
 
-The final thing we need is a cleanup memory. The purpose of this is to store the hdv somewhere without any noise. As the hdv gets bundled with other operations there is noise associated with it. It helps to usethe cleaned up version by comparing the result to the memory version for future operations. For Clojure, this can be a simple atom.
+The final thing we need is a cleanup memory. The purpose of this is to store the hdv somewhere without any noise. As the hdv gets bundled with other operations there is noise associated with it. It helps to use the cleaned up version by comparing the result to the memory version for future operations. For Clojure, this can be a simple atom.
 
 
-Following along the example in the paper, we reset the cleanup mememory and add some symbols.
+Following along the example in the paper, we reset the cleanup memory and add some symbols.
 
 ```clojure
 (vb/reset-hdv-mem!)
@@ -115,7 +117,7 @@ Next we create the key value map with combinations of `bind` and `bundle`.
         (vb/bind (vb/get-hdv :high-score) (vb/get-hdv 1000)))))
 ```
 
-So H is just one hypervector as a result of this. We can then query it. `unbind-get` is using the `bind` operation as inverse. So if we want to query for the `:name` value, we get the `:name` hdv from memory and do the `bind` operation on the `H` datastructure which is the inverse.
+So `H` is just one hypervector as a result of this. We can then query it. `unbind-get` is using the `bind` operation as inverse. So if we want to query for the `:name` value, we get the `:name` hdv from memory and do the `bind` operation on the `H` data structure which is the inverse.
 
 ```clojure
 (vb/unbind-get H :name)
@@ -145,7 +147,7 @@ Or go the other way and look for `Alice`.
 ;; [-1 1 -1 ... -1 -1 -1]]
 ```
 
-Now that we have the fundementals from the paper, we can try to implement some Clojure data structures.
+Now that we have the fundamentals from the paper, we can try to implement some Clojure data structures.
 
 
 ## Clojure Data Structures in VSAs
@@ -220,6 +222,8 @@ We can represent Clojure vectors as VSA data structures as well by using the per
 
 We can also add onto the Clojure vector with a conj.
 
+
+```clojure
 (def our-second-vsa-vector-of-maps
   (vd/vsa-conj our-first-vsa-vector-of-maps (vd/clj->vsa {:z 5})))
 
@@ -229,6 +233,7 @@ We can also add onto the Clojure vector with a conj.
 
 ;; =>  [5 #tech.v3.tensor<int8>[1000000][-1 1 1 ... -1 -1 -1]]
 
+```
 
 What is really cool about this is that we have built in fuzziness or similarity matching. For example, with this map, we have more than one possibility of matching.
 
@@ -294,7 +299,7 @@ We can also define an `inspect` function for a hdv by comparing the similarity o
 
 ```
 
-Finally, we can implement clojure `map` and `filter` functions on the vector data strucutures that can also include fuzziness.
+Finally, we can implement clojure `map` and `filter` functions on the vector data structures that can also include fuzziness.
 
 
 ```clojure
@@ -322,7 +327,10 @@ Finally, we can implement clojure `map` and `filter` functions on the vector dat
 
 VSAs and hyperdimensional computing seem like a natural fit for LISP and Clojure. I've only scratched the surface here in how the two can fit together. I hope that more people are inspired to look into it and _small AI with big dimensions_.
 
-Special thanks to Ross Gayler in helping me to implement VSAs and understanding their coolness.
+Full code and examples here [https://github.com/gigasquid/vsa-clj](https://github.com/gigasquid/vsa-clj).
+
+
+_Special thanks to Ross Gayler in helping me to implement VSAs and understanding their coolness._
 
 
 
