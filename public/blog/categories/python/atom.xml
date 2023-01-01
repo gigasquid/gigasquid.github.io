@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Python | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2023-01-01T07:36:47-05:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure Interop With Python NLP Libraries]]></title>
+    <link href="http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/"/>
+    <updated>2020-01-24T15:34:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries</id>
+    <content type="html"><![CDATA[<p><img src="http:////live.staticflickr.com/65535/49435394578_400fdf1c7f_c.jpg" alt="clojure-python" /></p>
+
+<p>In this edition of the blog series of Clojure/Python interop with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>, we&rsquo;ll be taking a look at two popular Python NLP libraries: <a href="https://www.nltk.org/">NLTK</a> and <a href="https://spacy.io/">SpaCy</a>.</p>
+
+<h2>NLTK - Natural Language Toolkit</h2>
+
+<p>I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by <em>far</em> NLTK was the most requested library. After looking into it, I can see why. It&rsquo;s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching.</p>
+
+<h3>Installation</h3>
+
+<p>To use the NLTK toolkit you will need to install it. I use <code>sudo pip3 install nltk</code>, but libpython-clj now supports virtual environments with this <a href="https://github.com/cnuernber/libpython-clj/pull/53">PR</a>, so feel free to use whatever is best for you.</p>
+
+<h3>Features</h3>
+
+<p>We&rsquo;ll take a quick tour of the features of NLTK following along initially with the <a href="https://www.nltk.org/book/ch01.html">nltk official book</a> and then moving onto this more data task centered <a href="https://www.datacamp.com/community/tutorials/text-analytics-beginners-nltk">tutorial</a>.</p>
+
+<p>First, we need to require all of our things as usual:</p>
+
+<pre><code class="clojure">(ns gigasquid.nltk
+  (:require [libpython-clj.require :refer [require-python]]
+            [libpython-clj.python :as py :refer [py. py.. py.-]]))
+(require-python '([nltk :as nltk]))
+</code></pre>
+
+<h4>Downloading packages</h4>
+
+<p>There are all sorts of packages available to download from NLTK. To start out and tour the library, I would go with a small one that has basic data for the nltk book tutorial.</p>
+
+<pre><code class="clojure"> (nltk/download "book")
+  (require-python '([nltk.book :as book]))
+</code></pre>
+
+<p>There are all other sorts of downloads as well, such as <code>(nltk/download "popular")</code> for most used ones. You can also download <code>"all"</code>, but beware that it is big.</p>
+
+<p>You can check out some of the texts it downloaded with:</p>
+
+<pre><code class="clojure">  (book/texts)
+
+  ;;; prints out in repl
+  ;; text1: Moby Dick by Herman Melville 1851
+  ;; text2: Sense and Sensibility by Jane Austen 1811
+  ;; text3: The Book of Genesis
+  ;; text4: Inaugural Address Corpus
+  ;; text5: Chat Corpus
+  ;; text6: Monty Python and the Holy Grail
+  ;; text7: Wall Street Journal
+  ;; text8: Personals Corpus
+  ;; text9: The Man Who Was Thursday by G . K . Chesterton 1908
+
+  book/text1 ;=&gt;  &lt;Text: Moby Dick by Herman Melville 1851&gt;
+  book/text2 ;=&gt;  &lt;Text: Sense and Sensibility by Jane Austen 1811&gt;
+</code></pre>
+
+<p>  You can do fun things like see how many tokens are in a text</p>
+
+<pre><code class="clojure">  (count (py.- book/text3 tokens))  ;=&gt; 44764
+</code></pre>
+
+<p>  Or even see the lexical diversity, which is a measure of the richness of the text by looking at the unique set of word tokens against the total tokens.</p>
+
+<pre><code class="clojure">  (defn lexical-diversity [text]
+    (let [tokens (py.- text tokens)]
+      (/ (-&gt; tokens set count)
+         (* 1.0 (count tokens)))))
+
+  (lexical-diversity book/text3) ;=&gt; 0.06230453042623537
+  (lexical-diversity book/text5) ;=&gt; 0.13477005109975562
+</code></pre>
+
+<p> This of course is all very interesting but I prefer to look at some more practical tasks, so we are going to look at some sentence tokenization.</p>
+
+<h4>Sentence Tokenization</h4>
+
+<p> Text can be broken up into individual word tokens or sentence tokens. Let&rsquo;s start off first with the token package</p>
+
+<pre><code class="clojure">(require-python '([nltk.tokenize :as tokenize]))
+(def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+The sky is pinkish-blue. You shouldn't eat cardboard")
+</code></pre>
+
+<p>To tokenize sentences, you take the text and use <code>tokenize/sent_tokenize</code>.</p>
+
+<pre><code class="clojure"> (def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+The sky is pinkish-blue. You shouldn't eat cardboard")
+ (def tokenized-sent (tokenize/sent_tokenize text))
+ tokenized-sent
+ ;;=&gt; ['Hello Mr. Smith, how are you doing today?', 'The weather is great, and city is awesome.', 'The sky is pinkish-blue.', "You shouldn't eat cardboard"]
+</code></pre>
+
+<p>Likewise, to tokenize words, you use <code>tokenize/word_tokenize</code>:</p>
+
+<pre><code class="clojure"> (def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+The sky is pinkish-blue. You shouldn't eat cardboard")
+ (def tokenized-sent (tokenize/sent_tokenize text))
+ tokenized-sent
+ ;;=&gt; ['Hello Mr. Smith, how are you doing today?', 'The weather is great, and city is awesome.', 'The sky is pinkish-blue.', "You shouldn't eat cardboard"]
+
+
+ (def tokenized-word (tokenize/word_tokenize text))
+ tokenized-word
+  ;;=&gt; ['Hello', 'Mr.', 'Smith', ',', 'how', 'are', 'you', 'doing', 'today', '?', 'The', 'weather', 'is', 'great', ',', 'and', 'city', 'is', 'awesome', '.', 'The', 'sky', 'is', 'pinkish-blue', '.', 'You', 'should', "n't", 'eat', 'cardboard']
+</code></pre>
+
+<h4>Frequency Distribution</h4>
+
+<p> You can also look at the frequency distribution of the words with using the probability package.</p>
+
+<pre><code class="clojure"> (require-python '([nltk.probability :as probability]))
+
+ (def fdist (probability/FreqDist tokenized-word))
+ fdist ;=&gt; &lt;FreqDist with 25 samples and 30 outcomes&gt;
+
+ (py. fdist most_common)
+  ;=&gt; [('is', 3), (',', 2), ('The', 2), ('.', 2), ('Hello', 1), ('Mr.', 1), ('Smith', 1), ('how', 1), ('are', 1), ('you', 1), ('doing', 1), ('today', 1), ('?', 1), ('weather', 1), ('great', 1), ('and', 1), ('city', 1), ('awesome', 1), ('sky', 1), ('pinkish-blue', 1), ('You', 1), ('should', 1), ("n't", 1), ('eat', 1), ('cardboard', 1)]
+</code></pre>
+
+<h4>Stop Words</h4>
+
+<p>Stop words are considered noise in text and there are ways to use the library to remove them using the <code>nltk.corpus</code>.</p>
+
+<pre><code class="clojure">(def stop-words (into #{} (py. corpus/stopwords words "english")))
+ stop-words
+  ;=&gt; #{"d" "itself" "more" "didn't" "ain" "won" "hers"....}
+</code></pre>
+
+<p>Now that we have a collection of the stop words, we can filter them out of our text in the normal way in Clojure.</p>
+
+<pre><code class="clojure">(def filtered-sent (-&gt;&gt; tokenized-sent
+                         (map tokenize/word_tokenize)
+                         (map #(remove stop-words %))))
+ filtered-sent
+ ;; (("Hello" "Mr." "Smith" "," "today" "?")
+ ;; ("The" "weather" "great" "," "city" "awesome" ".")
+ ;; ("The" "sky" "pinkish-blue" ".")
+ ;; ("You" "n't" "eat" "cardboard"))
+</code></pre>
+
+<h4>Lexion Normalization and Lemmatization</h4>
+
+<p>Stemming and Lemmatization allow ways for the text to be reduced to base words and normalized.
+For example, the word <code>flying</code> has a stemmed word of <code>fli</code> and a lemma of <code>fly</code>.</p>
+
+<pre><code class="clojure">(require-python '([nltk.stem :as stem]))
+(require-python '([nltk.stem.wordnet :as wordnet]))
+
+(let [lem (wordnet/WordNetLemmatizer)
+       stem (stem/PorterStemmer)
+       word "flying"]
+   {:lemmatized-word (py. lem lemmatize word "v")
+    :stemmed-word (py. stem stem word)})
+ ;=&gt; {:lemmatized-word "fly", :stemmed-word "fli"}
+</code></pre>
+
+<h4>POS Tagging</h4>
+
+<p>It also has support for Part-of-Speech (POS) Tagging. A quick example of that is:</p>
+
+<pre><code class="clojure">(let [sent "Albert Einstein was born in Ulm, Germany in 1879."
+       tokens (nltk/word_tokenize sent)]
+   {:tokens tokens
+    :pos-tag (nltk/pos_tag tokens)})
+ ;; {:tokens
+ ;; ['Albert', 'Einstein', 'was', 'born', 'in', 'Ulm', ',', 'Germany', 'in', '1879', '.'],
+ ;; :pos-tag
+ ;; [('Albert', 'NNP'), ('Einstein', 'NNP'), ('was', 'VBD'), ('born', 'VBN'), ('in', 'IN'), ('Ulm', 'NNP'), (',', ','), ('Germany', 'NNP'), ('in', 'IN'), ('1879', 'CD'), ('.', '.')]}
+</code></pre>
+
+<p>Phew! That&rsquo;s a brief overview of what NLTK can do, now what about the other library SpaCy?</p>
+
+<h2>SpaCy</h2>
+
+<p><a href="https://spacy.io/usage/spacy-101#whats-spacy">SpaCy</a> is the main competitor to NLTK. It has a more opinionated library which is more object oriented than NLTK which mainly processes text. It has better performance for tokenization and POS tagging and has support for word vectors, which NLTK does not.</p>
+
+<p>Let&rsquo;s dive in a take a look at it.</p>
+
+<h3>Installation</h3>
+
+<p>To install spaCy, you will need to do:</p>
+
+<ul>
+<li><code>pip3 install spacy</code></li>
+<li><code>python3 -m spacy download en_core_web_sm</code> to load up the small language model</li>
+</ul>
+
+
+<p>We&rsquo;ll be following along this <a href="https://spacy.io/usage/spacy-101#annotat">tutorial</a></p>
+
+<p>We will, of course, need to load up the library</p>
+
+<pre><code class="clojure">(require-python '([spacy :as spacy]))
+</code></pre>
+
+<p>and its language model:</p>
+
+<pre><code class="clojure">(def nlp (spacy/load "en_core_web_sm"))
+</code></pre>
+
+<h4>Linguistic Annotations</h4>
+
+<p>There are many linguistic annotations that are available, from POS, lemmas, and more:</p>
+
+<pre><code class="clojure">(let [doc (nlp "Apple is looking at buying U.K. startup for $1 billion")]
+  (map (fn [token]
+         [(py.- token text) (py.- token pos_) (py.- token dep_)])
+       doc))
+;; (["Apple" "PROPN" "nsubj"]
+;;  ["is" "AUX" "aux"]
+;;  ["looking" "VERB" "ROOT"]
+;;  ["at" "ADP" "prep"]
+;;  ["buying" "VERB" "pcomp"]
+;;  ["U.K." "PROPN" "compound"]
+;;  ["startup" "NOUN" "dobj"]
+;;  ["for" "ADP" "prep"]
+;;  ["$" "SYM" "quantmod"]
+;;  ["1" "NUM" "compound"]
+;;  ["billion" "NUM" "pobj"])
+</code></pre>
+
+<p>Here are some more:</p>
+
+<pre><code class="clojure">(let [doc (nlp "Apple is looking at buying U.K. startup for $1 billion")]
+  (map (fn [token]
+         {:text (py.- token text)
+          :lemma (py.- token lemma_)
+          :pos (py.- token pos_)
+          :tag (py.- token tag_)
+          :dep (py.- token dep_)
+          :shape (py.- token shape_)
+          :alpha (py.- token is_alpha)
+          :is_stop (py.- token is_stop)} )
+       doc))
+
+;; ({:text "Apple",
+;;   :lemma "Apple",
+;;   :pos "PROPN",
+;;   :tag "NNP",
+;;   :dep "nsubj",
+;;   :shape "Xxxxx",
+;;   :alpha true,
+;;   :is_stop false}
+;;  {:text "is",
+;;   :lemma "be",
+;;   :pos "AUX",
+;;   :tag "VBZ",
+;;   :dep "aux",
+;;   :shape "xx",
+;;   :alpha true,
+;;   :is_stop true}
+;;  ...
+</code></pre>
+
+<h3>Named Entities</h3>
+
+<p>It also handles named entities in the same fashion.</p>
+
+<pre><code class="clojure">(let [doc (nlp "Apple is looking at buying U.K. startup for $1 billion")]
+  (map (fn [ent]
+         {:text (py.- ent text)
+          :start-char (py.- ent start_char)
+          :end-char (py.- ent end_char)
+          :label (py.- ent label_)} )
+       (py.- doc ents)))
+
+;; ({:text "Apple", :start-char 0, :end-char 5, :label "ORG"}
+;;  {:text "U.K.", :start-char 27, :end-char 31, :label "GPE"}
+;;  {:text "$1 billion", :start-char 44, :end-char 54, :label "MONEY"})
+</code></pre>
+
+<p>As you can see, it can handle pretty much the same things as NLTK. But let&rsquo;s take a look at what it can do that NLTK and that is with word vectors.</p>
+
+<h4>Word Vectors</h4>
+
+<p>In order to use word vectors, you will have to load up a medium or large size data model because the small ones don&rsquo;t ship with word vectors. You can do that at the command line with:</p>
+
+<pre><code>python3 -m spacy download en_core_web_md
+</code></pre>
+
+<p>You will need to restart your repl and then load it with:</p>
+
+<pre><code class="clojure">(require-python '([spacy :as spacy]))
+(def nlp (spacy/load "en_core_web_md"))
+</code></pre>
+
+<p>Now you can see cool word vector stuff!</p>
+
+<pre><code class="clojure">(let [tokens (nlp "dog cat banana afskfsd")]
+  (map (fn [token]
+         {:text (py.- token text)
+          :has-vector (py.- token has_vector)
+          :vector_norm (py.- token vector_norm)
+          :is_oov (py.- token is_oov)} )
+       tokens))
+
+;; ({:text "dog",
+;;   :has-vector true,
+;;   :vector_norm 7.033673286437988,
+;;   :is_oov false}
+;;  {:text "cat",
+;;   :has-vector true,
+;;   :vector_norm 6.680818557739258,
+;;   :is_oov false}
+;;  {:text "banana",
+;;   :has-vector true,
+;;   :vector_norm 6.700014114379883,
+;;   :is_oov false}
+;;  {:text "afskfsd", :has-vector false, :vector_norm 0.0, :is_oov true})
+</code></pre>
+
+<p>And find similarity between different words.</p>
+
+<pre><code class="clojure">(let [tokens (nlp "dog cat banana")]
+  (for [token1 tokens
+        token2 tokens]
+    {:token1 (py.- token1 text)
+     :token2 (py.- token2 text)
+     :similarity (py. token1 similarity token2)}))
+
+;; ({:token1 "dog", :token2 "dog", :similarity 1.0}
+;;  {:token1 "dog", :token2 "cat", :similarity 0.8016854524612427}
+;;  {:token1 "dog", :token2 "banana", :similarity 0.2432764321565628}
+;;  {:token1 "cat", :token2 "dog", :similarity 0.8016854524612427}
+;;  {:token1 "cat", :token2 "cat", :similarity 1.0}
+;;  {:token1 "cat", :token2 "banana", :similarity 0.28154364228248596}
+;;  {:token1 "banana", :token2 "dog", :similarity 0.2432764321565628}
+;;  {:token1 "banana", :token2 "cat", :similarity 0.28154364228248596}
+;;  {:token1 "banana", :token2 "banana", :similarity 1.0})
+</code></pre>
+
+<h2>Wrap up</h2>
+
+<p>We&rsquo;ve seen a grand tour of the two most popular natural language python libraries that you can now use through Clojure interop!</p>
+
+<p>I hope you&rsquo;ve enjoyed it and if you are interested in exploring yourself, the code examples are <a href="https://github.com/gigasquid/libpython-clj-examples">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Parens for Pyplot]]></title>
+    <link href="http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/"/>
+    <updated>2020-01-18T15:39:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a> has opened the door for Clojure to directly interop with Python libraries. That means we can take just about any Python library and directly use it in our Clojure REPL. But what about <a href="https://matplotlib.org/">matplotlib</a>?</p>
+
+<p>Matplotlib.pyplot is a standard fixture in most tutorials and python data science code. How do we interop with a python graphics library?</p>
+
+<h2>How do you interop?</h2>
+
+<p>It turns out that matplotlib has a headless mode where we can export the graphics and then display it using any method that we would normally use to display a .png file. In my case, I made a quick macro for it using the shell <code>open</code>. I&rsquo;m sure that someone out that could improve upon it, (and maybe even make it a cool utility lib), but it suits what I&rsquo;m doing so far:</p>
+
+<pre><code class="clojure">ns gigasquid.plot
+(:require [libpython-clj.require :refer [require-python]]
+[libpython-clj.python :as py :refer [py. py.. py.-]]
+[clojure.java.shell :as sh])
+
+
+;;; This uses the headless version of matplotlib to generate a graph then copy it to the JVM
+;; where we can then print it
+
+;;;; have to set the headless mode before requiring pyplot
+(def mplt (py/import-module "matplotlib"))
+(py. mplt "use" "Agg")
+
+(require-python 'matplotlib.pyplot)
+(require-python 'matplotlib.backends.backend_agg)
+(require-python 'numpy)
+
+
+(defmacro with-show
+  "Takes forms with mathplotlib.pyplot to then show locally"
+  [&amp; body]
+  `(let [_# (matplotlib.pyplot/clf)
+         fig# (matplotlib.pyplot/figure)
+         agg-canvas# (matplotlib.backends.backend_agg/FigureCanvasAgg fig#)]
+     ~(cons 'do body)
+     (py. agg-canvas# "draw")
+     (matplotlib.pyplot/savefig "temp.png")
+     (sh/sh "open" "temp.png")))
+</code></pre>
+
+<h2>Parens for Pyplot!</h2>
+
+<p>Now that we have our wrapper let&rsquo;s take it for a spin. We&rsquo;ll be following along more or less this <a href="http://cs231n.github.io/python-numpy-tutorial/#matplotlib-plotting">tutorial for numpy plotting</a></p>
+
+<p>For setup you will need the following installed in your python environment:</p>
+
+<ul>
+<li>numpy</li>
+<li>matplotlib</li>
+<li>pillow</li>
+</ul>
+
+
+<p>We are also going to use the latest and greatest syntax from libpython-clj so you are going to need to install the snapshot version locally until the next version goes out:</p>
+
+<ul>
+<li><code>git clone git@github.com:cnuernber/libpython-clj.git</code></li>
+<li><code>cd cd libpython-clj</code></li>
+<li><code>lein install</code></li>
+</ul>
+
+
+<p>After that is all setup we can require the libs we need in clojure.</p>
+
+<pre><code class="clojure">(ns gigasquid.numpy-plot
+  (:require [libpython-clj.require :refer [require-python]]
+            [libpython-clj.python :as py :refer [py. py.. py.-]]
+            [gigasquid.plot :as plot]))
+</code></pre>
+
+<p>The <code>plot</code> namespace contains the macro for <code>with-show</code> above. The <code>py.</code> and others is the new and improved syntax for interop.</p>
+
+<h3>Simple Sin and Cos</h3>
+
+<p>Let&rsquo;s start off with a simple sine and cosine functions. This code will create a <code>x</code> numpy vector of a range from 0 to <code>3 * pi</code> in 0.1 increments and then create <code>y</code> numpy vector of the <code>sin</code> of that and plot it</p>
+
+<pre><code class="clojure">(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)
+        y (numpy/sin x)]
+    (plot/with-show
+      (matplotlib.pyplot/plot x y)))
+</code></pre>
+
+<p><img src="https://live.staticflickr.com/65535/49405284796_014447588d_z.jpg" alt="sin" /></p>
+
+<p>Beautiful yes!</p>
+
+<p>Let&rsquo;s get a bit more complicated now and and plot both the sin and cosine as well as add labels, title, and legend.</p>
+
+<pre><code class="clojure">(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)
+        y-sin (numpy/sin x)
+        y-cos (numpy/cos x)]
+    (plot/with-show
+      (matplotlib.pyplot/plot x y-sin)
+      (matplotlib.pyplot/plot x y-cos)
+      (matplotlib.pyplot/xlabel "x axis label")
+      (matplotlib.pyplot/ylabel "y axis label")
+      (matplotlib.pyplot/title "Sine and Cosine")
+      (matplotlib.pyplot/legend ["Sine" "Cosine"])))
+</code></pre>
+
+<p><img src="http:////live.staticflickr.com/65535/49405284806_1d04957bce_z.jpg" alt="sin and cos" /></p>
+
+<p>We can also add subplots. Subplots are when you divide the plots into different portions.
+It is a bit stateful and involves making one subplot <em>active</em> and making changes and then making the other subplot <em>active</em>. Again not too hard to do with Clojure.</p>
+
+<pre><code class="clojure">(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)
+        y-sin (numpy/sin x)
+        y-cos (numpy/cos x)]
+    (plot/with-show
+      ;;; set up a subplot gird that has a height of 2 and width of 1
+      ;; and set the first such subplot as active
+      (matplotlib.pyplot/subplot 2 1 1)
+      (matplotlib.pyplot/plot x y-sin)
+      (matplotlib.pyplot/title "Sine")
+
+      ;;; set the second subplot as active and make the second plot
+      (matplotlib.pyplot/subplot 2 1 2)
+      (matplotlib.pyplot/plot x y-cos)
+      (matplotlib.pyplot/title "Cosine")))
+</code></pre>
+
+<p><img src="http:////live.staticflickr.com/65535/49405284836_8e49e4a6b8_z.jpg" alt="sin and cos subplots" /></p>
+
+<h3>Plotting with Images</h3>
+
+<p>Pyplot also has functions for working directly with images as well. Here we take a picture of my cat and create another version of it that is tinted.</p>
+
+<pre><code class="clojure">(let [img (matplotlib.pyplot/imread "resources/cat.jpg")
+        img-tinted (numpy/multiply img [1 0.95 0.9])]
+    (plot/with-show
+      (matplotlib.pyplot/subplot 1 2 1)
+      (matplotlib.pyplot/imshow img)
+      (matplotlib.pyplot/subplot 1 2 2)
+      (matplotlib.pyplot/imshow (numpy/uint8 img-tinted))))
+</code></pre>
+
+<p><img src="http://live.staticflickr.com/65535/49404801993_ed398d5768_n.jpg" alt="cat tinted" /></p>
+
+<h3>Pie charts</h3>
+
+<p>Finally, we can show how to do a pie chart. I asked people in a <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a> what they wanted an example of in python interop and one of them was a pie chart. This is for you!</p>
+
+<p>The original code for this example came from this <a href="https://matplotlib.org/3.1.1/gallery/pie_and_polar_charts/pie_features.html">tutorial</a>.</p>
+
+<pre><code class="clojure">(let [labels ["Frogs" "Hogs" "Dogs" "Logs"]
+        sizes [15 30 45 10]
+        explode [0 0.1 0 0] ; only explode the 2nd slice (Hogs)
+        ]
+    (plot/with-show
+      (let [[fig1 ax1] (matplotlib.pyplot/subplots)]
+        (py. ax1 "pie" sizes :explode explode :labels labels :autopct "%1.1f%%"
+                             :shadow true :startangle 90)
+        (py. ax1 "axis" "equal")) ;equal aspec ration ensures that pie is drawn as circle
+      ))
+</code></pre>
+
+<p><img src="http://live.staticflickr.com/65535/49404802008_7e84ceff76_z.jpg" alt="pie chart" /></p>
+
+<h3>Onwards and Upwards!</h3>
+
+<p>This is just the beginning. In upcoming posts, I will be showcasing examples of interop with different libraries from the python ecosystem. Part of the goal is to get people used to how to use interop but also to raise awareness of the capabilities of the python libraries out there right now since they have been historically out of our ecosystem.</p>
+
+<p>If you have any libraries that you would like examples of, I&rsquo;m taking requests. Feel free to leave them in the comments of the blog or in the <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a>.</p>
+
+<p>Until next time, happy interoping!</p>
+
+<p>PS All the code examples are here <a href="https://github.com/gigasquid/libpython-clj-examples">https://github.com/gigasquid/libpython-clj-examples</a></p>
+]]></content>
+  </entry>
+  
+</feed>

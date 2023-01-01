@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Speech Act Classification for Text With Clojure - Squid's Blog</title>
+  <meta name="author" content="Carin Meier">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/">
+  <meta property="og:title" content="Speech Act Classification for Text With Clojure - Squid's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      
+        <header role="banner">
+          <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Squid's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="/blog/archives">Archives</a></li>
+<li ><a href="/about">About</a></li>
+<li ><a href="/books">Books</a></li>
+<li ><a href="/speaking">Speaking</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+        </header>
+      
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Squid's Blog" />
+    
+    <meta itemprop="url" content="http://gigasquid.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-10-20T13:11:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 20 Oct 2015,  1:11 PM</time>
+        
+           | <a href="#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        Speech Act Classification for Text With Clojure
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p>We humans are quite wonderful.  We do amazing things every day without even realizing it.  One of them, you are doing right now.  You are reading text.  Your brain is taking these jumbles of letters and spaces in this sentence, which in linguist terms is called an <a href="https://en.wikipedia.org/wiki/Utterance">utterance</a>, and making sense out of it.  The individual meanings of sentences might be quite complex.</p>
+
+<p>Take for example the utterance, &ldquo;I like cheese&rdquo;.  To understand it properly, you need to know the meanings of the individual words.  In particular, you would need to know that cheese is a tasty food stuff that is made from milk.  This would be a detailed and full understanding.  But there is a higher level of understanding that we can look at called <a href="https://en.wikipedia.org/wiki/Utterance">Speech Acts</a>.</p>
+
+<p>Speech Acts are way of classifying our communication according to purposes.  We perform speech acts when we ask questions, make statements, requests, promises, or even just say thanks.  These speech acts cross languages.  When I ask a question in English, it is the same speech act as if I ask it in French.  In fact, if we were to travel to another planet with aliens, we can assume if they had a language, it would involve speech acts.  It should be no surprise then, to communicate effectively with machines, it will have to understand speech acts.</p>
+
+<p>To explore this communication we are going to consider only three speech acts:</p>
+
+<ul>
+<li>Statements - &ldquo;I like cheese.&rdquo;</li>
+<li>Questions - &ldquo;How do you make cheese?&rdquo;</li>
+<li>Expressives - &ldquo;Thank you&rdquo;</li>
+</ul>
+
+
+<p><em>Our goal is to have our program be able to tell the difference between these three speech acts - without punctuation.</em></p>
+
+<p>Why not use punctuation?  If you are having a conversation with a human over Slack or some other chat channel, you may or may not put in a question mark or period.  To have a computer be able to converse as naturally with a human as another human, it will have to understand the speech act without the aid of punctuation.</p>
+
+<p>Generally, we want to have the computer:</p>
+
+<ol>
+<li>Read in an utterance/text that may or may not have punctuation.</li>
+<li>Classify whether the result is a statement, question, or expressive.</li>
+</ol>
+
+
+<p>To tackle this problem, we are going to have to break this up into two main parts.  The first is <em>parsing</em> the text and annotating it with data.  The second is to classify the text based on the data from the parsing.</p>
+
+<h2>Parsing and Annotating Text with Stanford CoreNLP</h2>
+
+<p>The <a href="http://nlp.stanford.edu/software/corenlp.shtml">Stanford CoreNLP</a> is considering the state of the art for POS, (Part of Speech), tagging and other linguistic annotations.  It also is a Java library, so very easy to use from Clojure.</p>
+
+<p>Here we are using a simple wrapper library called <a href="https://github.com/gigasquid/stanford-talk">stanford-talk</a> to take in some text and process it.  The result is a list of <em>tokens</em> for each word in the <code>:token-data</code> map.  Each token is annotated with the POS tag.  There is a lot more data in the annotations that we can look at to give us insight into this text.  But, to keep things simple, we are just going to look at the POS speech tag at the moment.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">process-text</span> <span class="s">&quot;I like cheese&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;{:token-data</span>
+</span><span class='line'><span class="c1">; ({:sent-num 0, :token &quot;I&quot;, :pos &quot;PRP&quot;, :net &quot;O&quot;, :lemma &quot;I&quot;, :sentiment &quot;Neutral&quot;}</span>
+</span><span class='line'><span class="c1">;  {:sent-num 0, :token &quot;like&quot;, :pos &quot;VBP&quot;, :net &quot;O&quot;, :lemma &quot;like&quot;, :sentiment &quot;Neutral&quot;}</span>
+</span><span class='line'><span class="c1">;  {:sent-num 0, :token &quot;cheese&quot;, :pos &quot;NN&quot;, :net &quot;O&quot;, :lemma &quot;cheese&quot;, :sentiment &quot;Neutral&quot;}),</span>
+</span><span class='line'><span class="c1">; :refs [[{:sent-num 0, :token &quot;I&quot;, :gender &quot;UNKNOWN&quot;, :mention-type &quot;PRONOMINAL&quot;, :number &quot;SINGULAR&quot;, :animacy &quot;ANIMATE&quot;};]]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So the text &ldquo;I like cheese&rdquo; has the following POS tags <a href="https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html">list of all POS tags</a>:</p>
+
+<ul>
+<li>I = PRP Personal Pronoun</li>
+<li>like = VBP Verb, non-3rd person singular present</li>
+<li>cheese - Noun, singular or mass</li>
+</ul>
+
+
+<p>This is great.  We have some data about the text we can analyze.  The next thing to do is to figure out how to classify the text based on this data.</p>
+
+<h2>Classification with Weka</h2>
+
+<p><a href="http://www.cs.waikato.ac.nz/~ml/weka/">Weka</a> is a collection of machine learning algorithms.  There is a program for interactive exploration of data sets, as well as a java library so you can use it programatically.  Speaking of data sets, we need some.  Just having one sentence about liking cheese is not going to get us very far with any machine learning.</p>
+
+<p>So where can you go to get conversational questions and statements on the internet?  Well, one place that is pretty good for that is <a href="http://www.answers.com/Q/FAQ/2528-9">answers.com</a>.  We can scrape some pages for questions and answers.  Enough so that we can collect and cleanup some input files of</p>
+
+<ul>
+<li>~ 200 statements</li>
+<li>~ 200 questions</li>
+</ul>
+
+
+<p>The expressives were a bit more difficult.  Let&rsquo;s just make a list of about 80 of them.</p>
+
+<p>Now, we have a list of text data.  We need to decide on some features and generate some input files to train the classifiers on.</p>
+
+<h3>Choosing Features for Classification</h3>
+
+<p>First, what is a feature?  A feature is some sort of encoding of the data that the computer is going to consider for classification. For example, the number of nouns in a sentence could be a feature.  There is a whole field of study dedicated to figuring out what the best features for data for machine learning are.  Again, to keep things simple, we can take an educated guess on some features based on a good <a href="https://www.cs.utah.edu/~riloff/pdfs/emnlp11-speechacts.pdf">paper</a>:</p>
+
+<ul>
+<li>Sentence length</li>
+<li>Number of nouns in the sentence (NN, NNS, NNP, NNPS)</li>
+<li>If the sentence ends in a noun or adjective (NN, NNS, NNP, NNPS, JJ, JJR, JJS)</li>
+<li>If the sentence begins in a verb (VB, VBD, VBG, VBP, VPZ)</li>
+<li>The count of the wh, (like who, what) markers (WDT, WRB, WP, WP$)</li>
+</ul>
+
+
+<p>We can now go through our data file, generate our feature data, and output .arff file format to ready it as training file for weka.</p>
+
+<p>Raw question file example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">What</span> <span class="nv">is</span> <span class="nv">floater</span> <span class="nv">exe</span>
+</span><span class='line'><span class="nv">Is</span> <span class="nv">bottled</span> <span class="nv">water</span> <span class="nb">or </span><span class="nv">tap</span> <span class="nv">water</span> <span class="nv">better</span> <span class="nb">for </span><span class="nv">your</span> <span class="nv">dog</span>
+</span><span class='line'><span class="nv">How</span> <span class="k">do </span><span class="nv">you</span> <span class="nv">treat</span> <span class="nv">lie</span> <span class="nv">bumps</span> <span class="nv">on</span> <span class="nv">the</span> <span class="nv">tongue</span>
+</span><span class='line'><span class="nv">Can</span> <span class="nv">caffeine</span> <span class="nv">be</span> <span class="nv">used</span> <span class="nv">in</span> <span class="nv">powder</span> <span class="nv">form</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Arff file with features</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">@</span><span class="nv">relation</span> <span class="nv">speechacts</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">@</span><span class="nv">attribute</span>       <span class="nv">sen_len</span>            <span class="nv">numeric</span>
+</span><span class='line'><span class="o">@</span><span class="nv">attribute</span>       <span class="nv">nn_num</span>             <span class="nv">numeric</span>
+</span><span class='line'><span class="o">@</span><span class="nv">attribute</span>       <span class="nv">end_in_n</span>           <span class="nv">numeric</span>
+</span><span class='line'><span class="o">@</span><span class="nv">attribute</span>       <span class="nv">begin_v</span>            <span class="nv">numeric</span>
+</span><span class='line'><span class="o">@</span><span class="nv">attribute</span>       <span class="nv">wh_num</span>             <span class="nv">numeric</span>
+</span><span class='line'><span class="o">@</span><span class="nv">attribute</span>       <span class="nv">type</span>               <span class="p">{</span><span class="nv">assertion</span>,<span class="nv">question</span>,<span class="nv">expressive</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">@</span><span class="nv">data</span>
+</span><span class='line'><span class="mi">4</span>,<span class="mi">2</span>,<span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>,<span class="nv">question</span>
+</span><span class='line'><span class="mi">10</span>,<span class="mi">4</span>,<span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">0</span>,<span class="nv">question</span>
+</span><span class='line'><span class="mi">9</span>,<span class="mi">3</span>,<span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>,<span class="nv">question</span>
+</span><span class='line'><span class="mi">7</span>,<span class="mi">3</span>,<span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">0</span>,<span class="nv">question</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we have our input file to training our machine learning algorithms, we can start looking at classifiers.</p>
+
+<h3>Choosing the Classifier</h3>
+
+<p><img src="http://c2.staticflickr.com/6/5794/22338401315_1abf0ffb2d_z.jpg"></p>
+
+<p>Using the weka explorer, we can try out different classification models.  For this data, the best one seems to be the <a href="https://en.wikipedia.org/wiki/Random_forest">Random Forest</a>.  In the explorer, it beat out Naive Bayes and J48.  It is also worth mentioning that we are not using a separate source of test data, we are cross validating on the original training set.  If we wanted to be more rigorous, we could collect more data and cut it in half, using one set for the training and one set for the testing.</p>
+
+<p>Now that we have a classifier, we can create some Clojure code with the java library to use it.</p>
+
+<h3>Using the Weka Classifier from our Clojure Code</h3>
+
+<p>After importing the needed Java classes into our Clojure code, we can create the Random Forest classifier.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">classifier</span> <span class="p">(</span><span class="k">new </span><span class="nv">RandomForest</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We then create a function that will load our arff input file as a datasource</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">get-datasource</span> <span class="p">[</span><span class="nv">fname</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">new </span><span class="nv">ConverterUtils$DataSource</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">.getResourceAsStream</span> <span class="p">(</span><span class="nf">clojure.lang.RT/baseLoader</span><span class="p">)</span> <span class="nv">fname</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And another uses it to train the classifier, returning a map of the <em>evaluator</em> and <em>data</em> that we will need for our predictions.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">train-classifier</span> <span class="p">[</span><span class="nv">fname</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">source</span> <span class="p">(</span><span class="nf">get-datasource</span> <span class="nv">fname</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">data</span> <span class="p">(</span><span class="nf">.getDataSet</span> <span class="nv">source</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">_</span> <span class="p">(</span><span class="nf">.setClassIndex</span> <span class="nv">data</span> <span class="p">(</span><span class="nb">dec </span><span class="p">(</span><span class="nf">.numAttributes</span> <span class="nv">data</span><span class="p">)))</span>
+</span><span class='line'>        <span class="nv">_</span>  <span class="p">(</span><span class="nf">.buildClassifier</span> <span class="nv">classifier</span> <span class="nv">data</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">e</span> <span class="p">(</span><span class="k">new </span><span class="nv">Evaluation</span> <span class="nv">data</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">.crossValidateModel</span> <span class="nv">e</span> <span class="nv">classifier</span> <span class="nv">data</span> <span class="p">(</span><span class="nf">.intValue</span> <span class="p">(</span><span class="nb">int </span><span class="mi">10</span><span class="p">))</span> <span class="p">(</span><span class="k">new </span><span class="nv">Random</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="nb">into-array </span><span class="p">[]))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">.toSummaryString</span> <span class="nv">e</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:evaluator</span> <span class="nv">e</span>
+</span><span class='line'>     <span class="ss">:data</span> <span class="nv">data</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we need to be able to ask about a classification for a particular instance of new data.  This is going to be where we are parsing new text and asking for an answer from our trained model.  To do this, we need to generate an <em>instance</em> for the evaluation to look at.  It is constructed from numbers in the same order as our arff file.  The exception is that we are not going to provide a value for the final field of the speech act type.  We will assign that to the a missing value.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">gen-instance</span> <span class="p">[</span><span class="nv">dataset</span> <span class="p">[</span><span class="nv">val0</span> <span class="nv">val1</span> <span class="nv">val2</span> <span class="nv">val3</span> <span class="nv">val4</span><span class="p">]]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="k">new </span><span class="nv">Instance</span> <span class="mi">6</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">doto </span><span class="nv">i</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.setValue</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">double </span><span class="nv">val0</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.setValue</span> <span class="mi">1</span> <span class="p">(</span><span class="nb">double </span><span class="nv">val1</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.setValue</span> <span class="mi">2</span> <span class="p">(</span><span class="nb">double </span><span class="nv">val2</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.setValue</span> <span class="mi">3</span> <span class="p">(</span><span class="nb">double </span><span class="nv">val3</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.setValue</span> <span class="mi">4</span> <span class="p">(</span><span class="nb">double </span><span class="nv">val4</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.setValue</span> <span class="mi">5</span> <span class="p">(</span><span class="nf">Instance/missingValue</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">.setDataset</span> <span class="nv">dataset</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can use this function in a prediction function to get our answer back</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">predict</span> <span class="p">[</span><span class="nv">ev</span> <span class="nv">d</span> <span class="nv">vals</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">v</span>  <span class="p">(</span><span class="nf">.evaluateModelOnce</span> <span class="nv">ev</span> <span class="nv">classifier</span> <span class="p">(</span><span class="nf">gen-instance</span> <span class="nv">d</span> <span class="nv">vals</span><span class="p">))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">case</span> <span class="nv">v</span>
+</span><span class='line'>      <span class="mf">0.0</span> <span class="ss">:statement</span>
+</span><span class='line'>      <span class="mf">1.0</span> <span class="ss">:question</span>
+</span><span class='line'>      <span class="mf">2.0</span> <span class="ss">:expressive</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Calling the predict function would look something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">results</span> <span class="p">(</span><span class="nf">train-classifier</span> <span class="s">&quot;speech-acts-input-all.arff&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">predictor</span> <span class="p">(</span><span class="ss">:evaluator</span> <span class="nv">results</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">data</span> <span class="p">(</span><span class="ss">:data</span> <span class="nv">results</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">predict</span> <span class="nv">predictor</span> <span class="nv">data</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;; -&gt; :expressive</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we have the parsing piece and the classification piece, we can put everything together.</p>
+
+<h3>Putting it all together</h3>
+
+<p>We finally have all the details we need write a <code>classify-text</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">classify-text</span> <span class="p">[</span><span class="nv">text</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">stats</span> <span class="p">(</span><span class="nf">parser/gen-stats</span> <span class="nv">text</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">features</span> <span class="p">[(</span><span class="ss">:sen-len</span> <span class="nv">stats</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="ss">:nn-num</span> <span class="nv">stats</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="ss">:end-in-n</span> <span class="nv">stats</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="ss">:begin-v</span> <span class="nv">stats</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="ss">:wh-num</span> <span class="nv">stats</span><span class="p">)]]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">weka/predict</span> <span class="nv">predictor</span> <span class="nv">data</span> <span class="nv">features</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">classify-text</span> <span class="s">&quot;I like cheese&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; :statement</span>
+</span><span class='line'><span class="p">(</span><span class="nf">classify-text</span> <span class="s">&quot;How do you make cheese&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; :question</span>
+</span><span class='line'><span class="p">(</span><span class="nf">classify-text</span> <span class="s">&quot;Right on&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; -&gt; :expressive</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yea! It worked.  We finally have something that will read in text and tell us its best guess of a speech act, all without punctuation.  Let&rsquo;s quickly review what we have done.</p>
+
+<h3>Summary</h3>
+
+<ul>
+<li>Gather data sets of statements, questions, and expressives</li>
+<li>Parse text and annotate it with POS tags using Stanford CoreNLP</li>
+<li>Choose features of the data to analyze and generate arff files</li>
+<li>Use Weka explorer to try out the best classification algorithims</li>
+<li>Programatically use weka to train classifier and predict a new instance</li>
+<li>Write a program to tie it all together</li>
+</ul>
+
+
+<p>It&rsquo;s funny how a simple thing like asking whether something is a statement or question gets you knee deep in Natural Language Processing and Machine Learning pretty fast.</p>
+
+<p>We&rsquo;ve learned a lot, now let&rsquo;s have a bit of fun.  Now that we can classify speech acts, we can make a sort of proto chat bot with a really limited responses.</p>
+
+<h3>Proto Chat Bot</h3>
+
+<p>Here we are going to be a bit loose and actually check if a question mark is used.  If it is, we will automatically mark it as a question.  Otherwise, we will classify it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">respond</span> <span class="p">[</span><span class="nv">text</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">question-mark?</span> <span class="p">(</span><span class="nb">re-find </span> <span class="o">#</span><span class="s">&quot;\?$&quot;</span> <span class="nv">text</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">type</span> <span class="p">(</span><span class="k">if </span><span class="nv">question-mark?</span>
+</span><span class='line'>               <span class="ss">:question</span>
+</span><span class='line'>               <span class="p">(</span><span class="nf">classify-text</span> <span class="nv">text</span><span class="p">))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">case</span> <span class="nv">type</span>
+</span><span class='line'>      <span class="ss">:question</span> <span class="s">&quot;That is an interesting question.&quot;</span>
+</span><span class='line'>      <span class="ss">:statement</span> <span class="s">&quot;Nice to know.&quot;</span>
+</span><span class='line'>      <span class="ss">:expressive</span> <span class="s">&quot;:)&quot;</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We just need a quick repl and main function now:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">repl</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">do</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">print </span><span class="s">&quot;&gt;&gt; &quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">flush</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">input</span> <span class="p">(</span><span class="nf">read-line</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">if-not </span><span class="p">(</span><span class="nb">= </span><span class="nv">input</span> <span class="s">&quot;quit&quot;</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">do</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">try</span> <span class="p">(</span><span class="nf">c/respond</span> <span class="nv">input</span><span class="p">)</span>
+</span><span class='line'>                     <span class="p">(</span><span class="nf">catch</span> <span class="nv">Exception</span> <span class="nv">e</span> <span class="p">(</span><span class="nb">str </span><span class="s">&quot;Sorry: &quot;</span> <span class="nv">e</span> <span class="s">&quot; - &quot;</span> <span class="p">(</span><span class="nf">.getMessage</span> <span class="nv">e</span><span class="p">)))))</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">recur</span><span class="p">))</span>
+</span><span class='line'>     <span class="p">(</span><span class="k">do </span><span class="p">(</span><span class="nb">println </span><span class="s">&quot;Bye!&quot;</span><span class="p">)</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">System/exit</span> <span class="mi">0</span><span class="p">)))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-main</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">args</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Hello.  Let&#39;s chat.&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">flush</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">repl</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Testing it out with <code>lein run</code>, we can have a little chat:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">Hello.</span>  <span class="nv">Let</span><span class="ss">&#39;s</span> <span class="nv">chat.</span>
+</span><span class='line'><span class="nv">&gt;&gt;</span> <span class="nv">Hi</span>
+</span><span class='line'><span class="err">:</span><span class="p">)</span>
+</span><span class='line'><span class="nv">&gt;&gt;</span> <span class="nv">Do</span> <span class="nv">you</span> <span class="nv">know</span> <span class="nv">where</span> <span class="nv">I</span> <span class="nv">can</span> <span class="nv">go</span> <span class="nv">to</span> <span class="nv">buy</span> <span class="nv">cheese</span>
+</span><span class='line'><span class="nv">That</span> <span class="nv">is</span> <span class="nv">an</span> <span class="nv">interesting</span> <span class="nv">question.</span>
+</span><span class='line'><span class="nv">&gt;&gt;</span> <span class="nv">I</span> <span class="nv">am</span> <span class="nv">a</span> <span class="nv">big</span> <span class="nv">cheese</span> <span class="nv">fan</span>
+</span><span class='line'><span class="nv">Nice</span> <span class="nv">to</span> <span class="nv">know.</span>
+</span><span class='line'><span class="nv">&gt;&gt;</span> <span class="nv">you</span> <span class="nv">are</span> <span class="nv">quite</span> <span class="nv">smart</span>
+</span><span class='line'><span class="nv">Nice</span> <span class="nv">to</span> <span class="nv">know.</span>
+</span><span class='line'><span class="nv">&gt;&gt;</span> <span class="nv">bye</span>
+</span><span class='line'><span class="err">:</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Want more?  Check out the code <a href="https://github.com/gigasquid/speech-acts-classifier">https://github.com/gigasquid/speech-acts-classifier</a>.</p>
+
+<p><em>Special thanks to <a href="https://twitter.com/ohpauleez">Paul deGrandis</a> for allowing me to pick his awesome brain on AI things</em></p>
+</div>
+
+
+      <footer class="post-footer">
+        <p class="meta text-muted">
+          
+
+
+<figure class="author-image">
+    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
+</figure>
+
+<section class="author">
+    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
+
+    <div class="author-meta">
+        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="share">
+    
+    <h4>Share this post</h4>
+    
+    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/;" 
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+    
+</section>
+
+
+
+
+<!--
+<footer class="post-footer">
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+
+-->
+          
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-10-20T13:11:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 20 Oct 2015,  1:11 PM</time>
+          <br>
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="pager">
+            
+            
+              
+                <a href="/blog/2015/08/25/converstations-with-datomic-3/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Conversations with Datomic - Part 3"> 
+                  <div class="text-muted">
+                    <small>Previous Post</small>
+                  </div>
+                  <div class="pager-title">
+                    <h4>Conversations with Datomic - Part 3</h4>
+                  </div>
+                </a>
+              
+            
+            
+            
+              
+              <a href="/blog/2015/12/08/gigasquids-radar-2015/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Gigasquid's Radar 2015">
+                <div class="text-muted">
+                  <small>Next Post</small>
+                </div>
+                <div class="pager-title">
+                  <h4>Gigasquid's Radar 2015</h4>
+                </div>
+              </a>
+              
+            
+            
+          </div>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h2>Comments</h2>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2023 - Carin Meier<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2015/10/20/speech-act-classification-for-text-with-clojure/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,913 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: MXNet | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/mxnet/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2023-01-01T07:36:47-05:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Integrating Deep Learning With clojure.spec]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/10/11/integrating-deep-learning-with-clojure-dot-spec/"/>
+    <updated>2019-10-11T13:51:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/10/11/integrating-deep-learning-with-clojure-dot-spec</id>
+    <content type="html"><![CDATA[<p>clojure.spec allows you to write specifications for data and use them for validation. It also provides a generative aspect that allows for robust testing as well as an additional way to understand your data through manual inspection. The dual nature of validation and generation is a natural fit for deep learning models that consist of paired discriminator/generator models.</p>
+
+<p><br></p>
+
+<p><strong><strong>TLDR: In this post we show that you can leverage the dual nature of clojure.spec&rsquo;s validator/generator to incorporate a deep learning model&rsquo;s classifier/generator.</strong></strong></p>
+
+<p><br></p>
+
+<p>A common use of clojure.spec is at the boundaries to validate that incoming data is indeed in the expected form. Again, this is boundary is a fitting place to integrate models for the deep learning paradigm and our traditional software code.</p>
+
+<p>Before we get into the deep learning side of things, let&rsquo;s take a quick refresher on how to use clojure.spec.</p>
+
+<h2>quick view of clojure.spec</h2>
+
+<p>To create a simple spec for keywords that are cat sounds, we can use <code>s/def</code>.</p>
+
+<pre><code class="clojure">(s/def ::cat-sounds #{:meow :purr :hiss})
+</code></pre>
+
+<p>To do the validation, you can use the <code>s/valid?</code> function.</p>
+
+<pre><code class="clojure">(s/valid? ::cat-sounds :meow) ;=&gt; true
+(s/valid? ::cat-sounds :bark) ;=&gt; false
+</code></pre>
+
+<p>For the generation side of things, we can turn the spec into generator and sample it.</p>
+
+<pre><code class="clojure">(gen/sample (s/gen ::cat-sounds))
+;=&gt;(:hiss :hiss :hiss :meow :meow :purr :hiss :meow :meow :meow)
+</code></pre>
+
+<p>There is the ability to compose specs by adding them together with <code>s/and</code>.</p>
+
+<pre><code class="clojure">(s/def ::even-number (s/and int? even?))
+(gen/sample (s/gen ::even-number))
+;=&gt; (0 0 -2 2 0 10 -4 8 6 8)
+</code></pre>
+
+<p>We can also control the generation by creating a custom generator using <code>s/with-gen</code>.
+In the following the spec is only that the data be a general string, but using the custom generator, we can restrict the output to only be a certain set of example cat names.</p>
+
+<pre><code class="clojure">(s/def ::cat-name
+  (s/with-gen
+    string?
+    #(s/gen #{"Suki" "Bill" "Patches" "Sunshine"})))
+
+(s/valid? ::cat-name "Peaches") ;=&gt; true
+(gen/sample (s/gen ::cat-name))
+;; ("Patches" "Sunshine" "Sunshine" "Suki" "Suki" "Sunshine"
+;;  "Suki" "Patches" "Sunshine" "Suki")
+</code></pre>
+
+<p>For further information on clojure.spec, I whole-heartedly recommend the <a href="https://clojure.org/guides/spec">spec Guide</a>. But, now with a basic overview of spec, we can move on to creating specs for our Deep Learning models.</p>
+
+<h2>Creating specs for Deep Learning Models</h2>
+
+<p>In previous posts, we covered making <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">simple autoencoders for handwritten digits</a>.</p>
+
+<p><img src="http://live.staticflickr.com/65535/48647524478_ca35bef78f_n.jpg" alt="handwritten digits" /></p>
+
+<p>Then, we made models that would:</p>
+
+<ul>
+<li>Take an image of a digit and give you back the string value (ex: &ldquo;2&rdquo;) - <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">post</a></li>
+<li>Take a string number value and give you back a digit image. - <a href="https://gigasquidsoftware.com/blog/2019/09/06/focus-on-the-generator/">post</a></li>
+</ul>
+
+
+<p>We will use both of the models to make a spec with a custom generator.</p>
+
+<p><br></p>
+
+<p><em>Note: For the sake of simplicity, some of the supporting code is left out. But if you want to see the whole code, it is on <a href="(https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/model_specs.clj">github</a>)</em></p>
+
+<p><br></p>
+
+<p>With the help of the trained discriminator model, we can make a function that takes in an image and returns the number string value.</p>
+
+<pre><code class="clojure">(defn discriminate [image]
+  (-&gt; (m/forward discriminator-model {:data [image]})
+      (m/outputs)
+      (ffirst)
+      (ndarray/argmax-channel)
+      (ndarray/-&gt;vec)
+      (first)
+      (int)))
+</code></pre>
+
+<p>Let&rsquo;s test it out with a test-image:</p>
+
+<p><img src="http://live.staticflickr.com/65535/48881532151_251e30840e_s.jpg" alt="test-discriminator-image" /></p>
+
+<pre><code class="clojure">(discriminate my-test-image) ;=&gt; 6
+</code></pre>
+
+<p>Likewise, with the trained generator model, we can make a function that takes a string number and returns the corresponding image.</p>
+
+<pre><code class="clojure">(defn generate [label]
+  (-&gt; (m/forward generator-model {:data [(ndarray/array [label] [batch-size])]})
+      (m/outputs)
+      (ffirst)))
+</code></pre>
+
+<p>Giving it a test drive as well:</p>
+
+<pre><code class="clojure">(def generated-test-image (generate 3))
+(viz/im-sav {:title "generated-image"
+             :output-path "results/"
+             :x (ndarray/reshape generated-test-image [batch-size 1 28 28])})
+</code></pre>
+
+<p><img src="http://live.staticflickr.com/65535/48881532451_023de68ddb_s.jpg" alt="generated-test-image" /></p>
+
+<p>Great! Let&rsquo;s go ahead and start writing specs. First let&rsquo;s make a quick spec to describe a MNIST number - which is a single digit between 0 and 9.</p>
+
+<pre><code class="clojure">(s/def ::mnist-number (s/and int? #(&lt;= 0 % 9)))
+(s/valid? ::mnist-number 3) ;=&gt; true
+(s/valid? ::mnist-number 11) ;=&gt; false
+(gen/sample (s/gen ::mnist-number))
+;=&gt; (0 1 0 3 5 3 7 5 0 1)
+</code></pre>
+
+<p>We now have both parts to validate and generate and can create a spec for it.</p>
+
+<pre><code class="clojure">(s/def ::mnist-image
+    (s/with-gen
+      #(s/valid? ::mnist-number (discriminate %))
+      #(gen/fmap (fn [n]
+                   (do (ndarray/copy (generate n))))
+                 (s/gen ::mnist-number))))
+</code></pre>
+
+<p>The <code>::mnist-number</code> spec is used for the validation after the <code>discriminate</code> model is used. On the generator side, we use the generator for the <code>::mnist-number</code> spec and feed that into the deep learning generator model to get sample images.</p>
+
+<p>We have a test function that will help us test out this new spec, called <code>test-model-spec</code>. It will return a map with the following form:</p>
+
+<pre><code>{:spec name-of-the-spec
+ :valid? whether or not the `s/valid?` called on the test value is true or not
+ :sample-values This calls the discriminator model on the generated values
+ }
+</code></pre>
+
+<p>It will also write an image of all the sample images to a file named <code>sample-spec-name</code></p>
+
+<p>Let&rsquo;s try it on our test image:</p>
+
+<p><img src="http://live.staticflickr.com/65535/48881532151_251e30840e_s.jpg" alt="test-discriminator-image" /></p>
+
+<pre><code class="clojure">(s/valid? ::mnist-image my-test-image) ;=&gt; true
+
+
+(test-model-spec ::mnist-image my-test-image)
+;; {:spec "mnist-image"
+;;  :valid? true
+;;  :sample-values [0 0 0 1 3 1 0 2 7 3]}
+</code></pre>
+
+<p><img src="http://live.staticflickr.com/65535/48882235262_1e0dd7b758_q.jpg" alt="sample-mnist-image" /></p>
+
+<p>Pretty cool!</p>
+
+<p>Let&rsquo;s do some more specs. But first, our spec is going to be a bit repetitive, so we&rsquo;ll make a quick macro to make things easier.</p>
+
+<pre><code class="clojure">(defmacro def-model-spec [spec-key spec discriminate-fn generate-fn]
+    `(s/def ~spec-key
+       (s/with-gen
+         #(s/valid? ~spec (~discriminate-fn %))
+         #(gen/fmap (fn [n#]
+                      (do (ndarray/copy (~generate-fn n#))))
+                    (s/gen ~spec)))))
+</code></pre>
+
+<h3>More Specs - More Fun</h3>
+
+<p>This time let&rsquo;s define an even mnist image spec</p>
+
+<pre><code class="clojure"> (def-model-spec ::even-mnist-image
+    (s/and ::mnist-number even?)
+    discriminate
+    generate)
+
+  (test-model-spec ::even-mnist-image my-test-image)
+
+  ;; {:spec "even-mnist-image"
+  ;;  :valid? true
+  ;;  :sample-values [0 0 2 0 8 2 2 2 0 0]}
+</code></pre>
+
+<p><img src="http://live.staticflickr.com/65535/48882253157_02e45d3132_q.jpg" alt="sample-even-mnist-image" /></p>
+
+<p>And Odds</p>
+
+<pre><code class="clojure">  (def-model-spec ::odd-mnist-image
+    (s/and ::mnist-number odd?)
+    discriminate
+    generate)
+
+  (test-model-spec ::odd-mnist-image my-test-image)
+
+  ;; {:spec "odd-mnist-image"
+  ;;  :valid? false
+  ;;  :sample-values [5 1 5 1 3 3 3 1 1 1]}
+</code></pre>
+
+<p><img src="http://live.staticflickr.com/65535/48881548138_c18850f806_q.jpg" alt="sample-odd-mnist-image" /></p>
+
+<p>Finally, let&rsquo;s do Odds that are over 2!</p>
+
+<pre><code class="clojure">  (def-model-spec ::odd-over-2-mnist-image
+    (s/and ::mnist-number odd? #(&gt; % 2))
+    discriminate
+    generate)
+
+  (test-model-spec ::odd-over-2-mnist-image my-test-image)
+
+  ;; {:spec "odd-over-2-mnist-image"
+  ;;  :valid? false
+  ;;  :sample-values [3 3 3 5 3 5 7 7 7 3]}
+</code></pre>
+
+<p><img src="http://live.staticflickr.com/65535/48882089776_6f55416418_q.jpg" alt="sample-odd-over-2-mnist-image" /></p>
+
+<h2>Conclusion</h2>
+
+<p>We have shown some of the potential of integrating deep learning models with Clojure. clojure.spec is a powerful tool and it can be leveraged in new and interesting ways for both deep learning and AI more generally.</p>
+
+<p>I hope that more people are intrigued to experiment and take a further look into what we can do in this area.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Focus on the Generator]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/09/06/focus-on-the-generator/"/>
+    <updated>2019-09-06T18:07:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/09/06/focus-on-the-generator</id>
+    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/smigla-bobinski/19705409981/in/album-72157647756733695/" title="SIMULACRA by Karina Smigla-Bobinski"><img src="https://live.staticflickr.com/330/19705409981_4e0ae93572.jpg" width="500" height="267" alt="SIMULACRA by Karina Smigla-Bobinski"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>In this first post of this series, we took a look at a <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">simple autoencoder</a>. It took and image and transformed it back to an image. Then, we <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">focused in on the disciminator</a> portion of the model, where we took an image and transformed it to a label. Now, we focus in on the generator portion of the model do the inverse operation: we transform a label to an image. In recap:</p>
+
+<ul>
+<li>Autoencoder: image -> image</li>
+<li>Discriminator: image -> label</li>
+<li>Generator: label -> image (This is what we are doing now!)</li>
+</ul>
+
+
+<p><img src="https://live.staticflickr.com/65535/48689260086_11fe4b089b_b.jpg" alt="generator" /></p>
+
+<h2>Still Need Data of Course</h2>
+
+<p>Nothing changes here. We are still using the MNIST handwritten digit set and have an input and out to our model.</p>
+
+<pre><code class="clojure">(def
+  train-data
+  (mx-io/mnist-iter {:image (str data-dir "train-images-idx3-ubyte")
+                     :label (str data-dir "train-labels-idx1-ubyte")
+                     :input-shape [784]
+                     :flat true
+                     :batch-size batch-size
+                     :shuffle true}))
+
+(def
+  test-data (mx-io/mnist-iter
+             {:image (str data-dir "t10k-images-idx3-ubyte")
+              :label (str data-dir "t10k-labels-idx1-ubyte")
+              :input-shape [784]
+              :batch-size batch-size
+              :flat true
+              :shuffle true}))
+
+(def input (sym/variable "input"))
+(def output (sym/variable "input_"))
+</code></pre>
+
+<h2>The Generator Model</h2>
+
+<p>The model does change to one hot encode the label for the number. Other than that, it&rsquo;s pretty much the exact same second half of the autoencoder model.</p>
+
+<pre><code class="clojure">(defn get-symbol []
+  (as-&gt; input data
+    (sym/one-hot "onehot" {:indices data :depth 10})
+    ;; decode
+    (sym/fully-connected "decode1" {:data data :num-hidden 50})
+    (sym/activation "sigmoid3" {:data data :act-type "sigmoid"})
+
+    ;; decode
+    (sym/fully-connected "decode2" {:data data :num-hidden 100})
+    (sym/activation "sigmoid4" {:data data :act-type "sigmoid"})
+
+    ;;output
+    (sym/fully-connected "result" {:data data :num-hidden 784})
+    (sym/activation "sigmoid5" {:data data :act-type "sigmoid"})
+
+    (sym/linear-regression-output {:data data :label output})))
+
+(def data-desc
+  (first
+   (mx-io/provide-data-desc train-data)))
+(def label-desc
+  (first
+   (mx-io/provide-label-desc train-data)))
+</code></pre>
+
+<p>When binding the shapes to the model, we now need to specify that the input data shapes is the label instead of the image and the output of the model is going to be the image.</p>
+
+<pre><code class="clojure">(def
+  model
+  ;;; change data shapes to label shapes
+  (-&gt; (m/module (get-symbol) {:data-names ["input"] :label-names ["input_"]})
+      (m/bind {:data-shapes [(assoc label-desc :name "input")]
+               :label-shapes [(assoc data-desc :name "input_")]})
+      (m/init-params {:initializer  (initializer/uniform 1)})
+      (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
+
+(def my-metric (eval-metric/mse))
+</code></pre>
+
+<h2>Training</h2>
+
+<p>The training of the model is pretty straight forward. Just being mindful that we are using hte batch-label, (number label),  as the input and and validating with the batch-data, (image).</p>
+
+<pre><code class="clojure">(defn train [num-epochs]
+  (doseq [epoch-num (range 0 num-epochs)]
+    (println "starting epoch " epoch-num)
+    (mx-io/do-batches
+     train-data
+     (fn [batch]
+       ;;; change input to be the label
+       (-&gt; model
+           (m/forward {:data (mx-io/batch-label batch)
+                       :label (mx-io/batch-data batch)})
+           (m/update-metric my-metric (mx-io/batch-data batch))
+           (m/backward)
+           (m/update))))
+    (println "result for epoch " epoch-num " is "
+             (eval-metric/get-and-reset my-metric))))
+</code></pre>
+
+<h2>Results Before Training</h2>
+
+<pre><code class="clojure">(def my-test-batch (mx-io/next test-data))
+  ;;; change to input labels
+  (def test-labels (mx-io/batch-label my-test-batch))
+  (def preds (m/predict-batch model {:data test-labels} ))
+  (viz/im-sav {:title "before-training-preds"
+               :output-path "results/"
+               :x (ndarray/reshape (first preds) [100 1 28 28])})
+
+  (-&gt;&gt; test-labels first ndarray/-&gt;vec (take 10))
+  ;=&gt; (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)
+</code></pre>
+
+<p><img src="http://live.staticflickr.com/65535/48689304281_a41bf39353.jpg" alt="before training" /></p>
+
+<p>Not very impressive&hellip; Let&rsquo;s train</p>
+
+<pre><code class="clojure">(train 3)
+
+starting epoch  0
+result for epoch  0  is  
+[mse 0.0723091]
+starting epoch  1
+result for epoch  1  is  [mse 0.053891845]
+starting epoch  2
+result for epoch  2  is  [mse 0.05337505]
+</code></pre>
+
+<h2>Results After Training</h2>
+
+<pre><code class="clojure"> (def my-test-batch (mx-io/next test-data))
+  (def test-labels (mx-io/batch-label my-test-batch))
+  (def preds (m/predict-batch model {:data test-labels}))
+  (viz/im-sav {:title "after-training-preds"
+               :output-path "results/"
+               :x (ndarray/reshape (first preds) [100 1 28 28])})
+  (-&gt;&gt; test-labels first ndarray/-&gt;vec (take 10))
+
+  ;=&gt;   (9.0 5.0 7.0 1.0 8.0 6.0 6.0 0.0 8.0 1.0)
+</code></pre>
+
+<p><img src="https://live.staticflickr.com/65535/48689328481_338416ba7c.jpg" alt="after training" /></p>
+
+<p>Cool! The first row is indeed</p>
+
+<p><code>(9.0 5.0 7.0 1.0 8.0 6.0 6.0 0.0 8.0 1.0)</code></p>
+
+<h2>Save Your Model</h2>
+
+<p>Don&rsquo;t forget to save the generator model off - we are going to use it next time.</p>
+
+<pre><code class="clojure">(m/save-checkpoint model {:prefix "model/generator" :epoch 2})
+</code></pre>
+
+<p>Happy Deep Learning until next time &hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Focus on the Discriminator]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator/"/>
+    <updated>2019-08-30T10:16:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/08/30/focus-on-the-discriminator</id>
+    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/marcomagrini/698692268/in/photolist-24JYSq-hTTAJN-4gjQW9-9GRKCW-4gfNhz-x2yZ-6Nnwy1-6Lm68p-66BVjW-8hawRk-4sE2Jz-5Z6uvQ-6B4iH3-qzDvGU-aNpvLT-9UFZLh-egKvNt-bMh6PR-ceG9AL-gDqtze-96JhRW-7EWMH6-3MTfDt-9rUJ4W-dFPssj-8LLrys-aDAda3-9rUJ45-7xLAFR-prSHik-7yDFHC-7erqEc-6YJx8e-39SyR4-dkQnGi-7hy6zT-4UokrH-hkMoBr-9tBN3K-jq8Bpu-aDMSk2-pwQdmt-9tFrUD-6TzF6G-WDAsCC-8Mm4tD-8M8hyS-4yzkGK-67MPUw-crfg" title="sunflowers"><img src="https://live.staticflickr.com/1007/698692268_b31d429272.jpg" width="500" height="325" alt="sunflowers"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>In the <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">last post</a>, we took a look at a simple autoencoder. The autoencoder is a deep learning model that takes in an image and, (through an encoder and decoder), works to produce the same image. In short:</p>
+
+<ul>
+<li>Autoencoder: image -> image</li>
+</ul>
+
+
+<p>For a discriminator, we are going to focus on only the first half on the autoencoder.</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647347383_9577b7b672_b.jpg" alt="discriminator" /></p>
+
+<p>Why only half? We want a different transformation. We are going to want to take an image as input and then do some <em>discrimination</em> of the image and classify what type of image it is. In our case, the model is going to input an image of a handwritten digit and attempt to decide which number it is.</p>
+
+<ul>
+<li>Discriminator: image -> label</li>
+</ul>
+
+
+<p>As always, with deep learning. To do anything, we need data.</p>
+
+<h3>MNIST Data</h3>
+
+<p>Nothing changes here from the autoencoder code. We are still using the MNIST dataset for handwritten digits.</p>
+
+<pre><code class="clojure">;;; Load the MNIST datasets
+(def train-data
+  (mx-io/mnist-iter
+   {:image (str data-dir "train-images-idx3-ubyte")
+    :label (str data-dir "train-labels-idx1-ubyte")
+    :input-shape [784]
+    :flat true
+    :batch-size batch-size
+    :shuffle true}))
+
+(def test-data
+  (mx-io/mnist-iter
+   {:image (str data-dir "t10k-images-idx3-ubyte")
+    :label (str data-dir "t10k-labels-idx1-ubyte")
+    :input-shape [784]
+    :batch-size batch-size
+    :flat true
+    :shuffle true}))
+</code></pre>
+
+<p>The model will change since we want a different output.</p>
+
+<h3>The Model</h3>
+
+<p>We are still taking in the image as input, and using the same encoder layers from the autoencoder model. However, at the end, we use a fully connected layer that has 10 hidden nodes - one for each label of the digits 0-9. Then we use a softmax for the classification output.</p>
+
+<pre><code class="clojure">(def input (sym/variable "input"))
+(def output (sym/variable "input_"))
+
+(defn get-symbol []
+  (as-&gt; input data
+    ;; encode
+    (sym/fully-connected "encode1" {:data data :num-hidden 100})
+    (sym/activation "sigmoid1" {:data data :act-type "sigmoid"})
+
+    ;; encode
+    (sym/fully-connected "encode2" {:data data :num-hidden 50})
+    (sym/activation "sigmoid2" {:data data :act-type "sigmoid"})
+
+    ;;; this last bit changed from autoencoder
+    ;;output
+    (sym/fully-connected "result" {:data data :num-hidden 10})
+    (sym/softmax-output {:data data :label output})))
+</code></pre>
+
+<p>In the autoencoder, we were never actually using the label, but we will certainly need to use it this time. It is reflected in the model&rsquo;s bindings with the data and label shapes.</p>
+
+<pre><code class="clojure">(def model (-&gt; (m/module (get-symbol) {:data-names ["input"] :label-names ["input_"]})
+               (m/bind {:data-shapes [(assoc data-desc :name "input")]
+                        :label-shapes [(assoc label-desc :name "input_")]})
+               (m/init-params {:initializer (initializer/uniform 1)})
+               (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
+</code></pre>
+
+<p>For the evaluation metric, we are also going to use an accuracy metric vs a mean squared error (mse) metric</p>
+
+<pre><code class="clojure">(def my-metric (eval-metric/accuracy))
+</code></pre>
+
+<p>With these items in place, we are ready to train the model.</p>
+
+<h3>Training</h3>
+
+<p>The training from the autoencoder needs to changes to use the real label for the the forward pass and updating the metric.</p>
+
+<pre><code class="clojure">(defn train [num-epochs]
+  (doseq [epoch-num (range 0 num-epochs)]
+    (println "starting epoch " epoch-num)
+    (mx-io/do-batches
+     train-data
+     (fn [batch]
+       ;;; here we make sure to use the label
+       ;;; now for forward and update-metric
+       (-&gt; model
+           (m/forward {:data (mx-io/batch-data batch)
+                       :label (mx-io/batch-label batch)})
+           (m/update-metric my-metric (mx-io/batch-label batch))
+           (m/backward)
+           (m/update))))
+    (println {:epoch epoch-num
+              :metric (eval-metric/get-and-reset my-metric)})))
+</code></pre>
+
+<h3>Let&rsquo;s Run Things</h3>
+
+<p>It&rsquo;s always a good idea to take a look at things before you start training.</p>
+
+<p>The first batch of the training data looks like:</p>
+
+<pre><code class="clojure">  (def my-batch (mx-io/next train-data))
+  (def images (mx-io/batch-data my-batch))
+  (viz/im-sav {:title "originals"
+               :output-path "results/"
+               :x (-&gt; images
+                      first
+                      (ndarray/reshape [100 1 28 28]))})
+</code></pre>
+
+<p><img src="https://live.staticflickr.com/65535/48648000857_fb17f0de66.jpg" alt="training-batch" /></p>
+
+<p>Before training, if we take the first batch from the test data and predict what the labels are:</p>
+
+<pre><code class="clojure">  (def my-test-batch (mx-io/next test-data))
+  (def test-images (mx-io/batch-data my-test-batch))
+  (viz/im-sav {:title "test-images"
+               :output-path "results/"
+               :x (-&gt; test-images
+                      first
+                      (ndarray/reshape [100 1 28 28]))})
+</code></pre>
+
+<p><img src="https://live.staticflickr.com/65535/48647524478_ca35bef78f.jpg" alt="test-batch" /></p>
+
+<pre><code class="clojure">  (def preds (m/predict-batch model {:data test-images} ))
+  (-&gt;&gt; preds
+       first
+       (ndarray/argmax-channel)
+       (ndarray/-&gt;vec)
+       (take 10))
+ ;=&gt; (1.0 8.0 8.0 8.0 8.0 8.0 2.0 8.0 8.0 1.0)
+</code></pre>
+
+<p>Yeah, not even close. The real first line of the images is <code>6 1 0 0 3 1 4 8 0 9</code></p>
+
+<p>Let&rsquo;s Train!</p>
+
+<pre><code class="clojure">  (train 3)
+
+;; starting epoch  0
+;; {:epoch 0, :metric [accuracy 0.83295]}
+;; starting epoch  1
+;; {:epoch 1, :metric [accuracy 0.9371333]}
+;; starting epoch  2
+;; {:epoch 2, :metric [accuracy 0.9547667]}
+</code></pre>
+
+<p>After the training, let&rsquo;s have another look at the predicted labels.</p>
+
+<pre><code class="clojure">  (def preds (m/predict-batch model {:data test-images} ))
+  (-&gt;&gt; preds
+       first
+       (ndarray/argmax-channel)
+       (ndarray/-&gt;vec)
+       (take 10))
+ ;=&gt; (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)
+</code></pre>
+
+<ul>
+<li>Predicted = <code>(6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)</code></li>
+<li>Actual = <code>6 1 0 0 3 1 4 8 0 9</code></li>
+</ul>
+
+
+<p>Rock on!</p>
+
+<h3>Closing</h3>
+
+<p>In this post, we focused on the first half of the autoencoder and made a discriminator model that took in an image and gave us a label.</p>
+
+<p>Don&rsquo;t forget to save the trained model for later, we&rsquo;ll be using it.</p>
+
+<pre><code class="clojure">  (m/save-checkpoint model {:prefix "model/discriminator"
+                            :epoch 2})
+</code></pre>
+
+<p>Until then, here is a picture of the cat in a basket to keep you going.</p>
+
+<p><img src="https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg" alt="Otto in basket" /></p>
+
+<p><em>P.S. If you want to run all the code for yourself. It is <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/discriminator.clj">here</a></em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Autoencoder]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/"/>
+    <updated>2019-08-16T16:16:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder</id>
+    <content type="html"><![CDATA[<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/horlik/2901925672/in/photolist-5qr8pf-qkv3m8-32RwmC-dZBC2B-ja8ch-48vDg-f56TGS-oUfNKn-652ZqG-QnCrbX-y3C828-jeGkmu-dxwE9L-jKaGtZ-haQ6j3-61w8UJ-WmitYz-tLymA-dZCHC4-CGvx3R-CC3GPE-BSxzda-eu625R-vHAgnk-cR7WAE-jZiLgu-BsZwLP-fhfvPT-dN1Rf9-o8Mkby-8zDocw-5DvC7S-CEij58-oaw922-akUgeW-ayQiGU-aay1vS-2fVFske-2eoRpCe-rqwa4o-9VJPtv-opgEcq-MDfFe-9yzUaK-4is9Z9-cutXnm-f9U23-L7hpoe-3i3H-enSJKf" title="Perfect mirror"><img src="https://live.staticflickr.com/3274/2901925672_325f5faeb8.jpg" width="500" height="364" alt="Perfect mirror"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p><em>If you look long enough into the autoencoder, it looks back at you.</em></p>
+
+<p>The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.</p>
+
+<p>It&rsquo;s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a <em>latent space representation</em> and the encoder translating that back to a regular images that we can view.</p>
+
+<p><img src="https://camo.githubusercontent.com/1ab40362a922059fa3686914cf5cff803ba7dd43/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f3830302f312a4c53594e57356d33544e377852583631425a686f5a412e706e67" alt="" /></p>
+
+<p>We are going to make a simple autoencoder with Clojure MXNet for handwritten digits using the MNIST dataset.</p>
+
+<h3>The Dataset</h3>
+
+<p>We first load up the training data into an iterator that will allow us to cycle through all the images.</p>
+
+<pre><code class="clojure">(def train-data (mx-io/mnist-iter {:image (str data-dir "train-images-idx3-ubyte")
+                                   :label (str data-dir "train-labels-idx1-ubyte")
+                                   :input-shape [784]
+                                   :flat true
+                                   :batch-size batch-size
+                                   :shuffle true}))
+</code></pre>
+
+<p>Notice there the the input shape is 784. We are purposely flattening out our 28x28 image of a number to just be a one dimensional flat array. The reason is so that we can use a simpler model for the autoencoder.</p>
+
+<p>We also load up the corresponding test data.</p>
+
+<pre><code class="clojure">(def test-data (mx-io/mnist-iter {:image (str data-dir "t10k-images-idx3-ubyte")
+                                  :label (str data-dir "t10k-labels-idx1-ubyte")
+                                  :input-shape [784]
+                                  :batch-size batch-size
+                                  :flat true
+                                  :shuffle true}))
+</code></pre>
+
+<p>When we are working with deep learning models we keep the training and the test data separate. When we train the model, we won&rsquo;t use the test data. That way we can evaluate it later on the unseen test data.</p>
+
+<h3>The Model</h3>
+
+<p>Now we need to define the layers of the model. We know we are going to have an input and an output. The input will be the array that represents the image of the digit and the output will also be an array which is reconstruction of that image.</p>
+
+<pre><code class="clojure">(def input (sym/variable "input"))
+(def output (sym/variable "input_"))
+
+(defn get-symbol []
+  (as-&gt; input data
+    ;; encode
+    (sym/fully-connected "encode1" {:data data :num-hidden 100})
+    (sym/activation "sigmoid1" {:data data :act-type "sigmoid"})
+
+    ;; encode
+    (sym/fully-connected "encode2" {:data data :num-hidden 50})
+    (sym/activation "sigmoid2" {:data data :act-type "sigmoid"})
+
+    ;; decode
+    (sym/fully-connected "decode1" {:data data :num-hidden 50})
+    (sym/activation "sigmoid3" {:data data :act-type "sigmoid"})
+
+    ;; decode
+    (sym/fully-connected "decode2" {:data data :num-hidden 100})
+    (sym/activation "sigmoid4" {:data data :act-type "sigmoid"})
+
+    ;;output
+    (sym/fully-connected "result" {:data data :num-hidden 784})
+    (sym/activation "sigmoid5" {:data data :act-type "sigmoid"})
+
+    (sym/linear-regression-output {:data data :label output})))
+</code></pre>
+
+<p>From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:</p>
+
+<p>784 (image) -> 100 -> 50 -> 50 -> 100 -> 784 (output)</p>
+
+<p>We can now construct the full model with the <em>module</em> api from clojure-mxnet.</p>
+
+<pre><code class="clojure">(def data-desc (first (mx-io/provide-data-desc train-data)))
+
+(def model (-&gt; (m/module (get-symbol) {:data-names ["input"] :label-names ["input_"]})
+               (m/bind {:data-shapes [(assoc data-desc :name "input")]
+                        :label-shapes [(assoc data-desc :name "input_")]})
+               (m/init-params {:initializer  (initializer/uniform 1)})
+               (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})})))
+</code></pre>
+
+<p>Notice that when we are binding the <code>data-shapes</code> and <code>label-shapes</code> we are using only the <code>data</code> from our handwritten digit dataset, (the images), and not the labels. This will ensure that as it trains it will seek to recreate the input image for the output image.</p>
+
+<h3>Before Training</h3>
+
+<p>Before we start our training, let&rsquo;s get a baseline of what the original images look like and what the output of the untrained model is.</p>
+
+<p>To look at the original images we can take the first training batch of 100 images and visualize them. Since we are initially using the flattened <code>[784]</code> image representation. We need to reshape it to the 28x28 image that we can recognize.</p>
+
+<pre><code class="clojure">(def my-batch (mx-io/next train-data))
+(def images (mx-io/batch-data my-batch))
+(ndarray/shape (ndarray/reshape (first images) [100 1 28 28]))
+(viz/im-sav {:title "originals" :output-path "results/" :x (ndarray/reshape (first images) [100 1 28 28])})
+</code></pre>
+
+<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567560737/in/dateposted-public/" title="originals"><img src="https://live.staticflickr.com/65535/48567560737_672d065ac2.jpg" width="420" height="420" alt="originals"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>We can also do the same visualization with the test batch of data images by putting them into the <code>predict-batch</code> and using our model.</p>
+
+<pre><code class="clojure">;;; before training
+ (def my-test-batch (mx-io/next test-data))
+ (def test-images (mx-io/batch-data my-test-batch))
+ (def preds (m/predict-batch model {:data test-images} ))
+ (viz/im-sav {:title "before-training-preds" :output-path "results/" :x (ndarray/reshape (first preds) [100 1 28 28])})
+</code></pre>
+
+<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567589067/in/dateposted-public/" title="before-training-preds"><img src="https://live.staticflickr.com/65535/48567589067_e44eeda1a9.jpg" width="420" height="420" alt="before-training-preds"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>They are not anything close to recognizable as numbers.</p>
+
+<h3>Training</h3>
+
+<p>The next step is to train the model on the data. We set up a training function to step through all the batches of data.</p>
+
+<pre><code class="clojure">(def my-metric (eval-metric/mse))
+
+(defn train [num-epochs]
+  (doseq [epoch-num (range 0 num-epochs)]
+    (println "starting epoch " epoch-num)
+    (mx-io/do-batches
+     train-data
+     (fn [batch]
+       (-&gt; model
+           (m/forward {:data (mx-io/batch-data batch) :label (mx-io/batch-data batch)})
+           (m/update-metric my-metric (mx-io/batch-data batch))
+           (m/backward)
+           (m/update))))
+    (println "result for epoch " epoch-num " is " (eval-metric/get-and-reset my-metric))))
+</code></pre>
+
+<p>For each batch of 100 images it is doing the following:</p>
+
+<ul>
+<li>Run the forward pass of the model with both the data and label being the image</li>
+<li>Update the accuracy of the model with the <code>mse</code> (mean squared error metric)</li>
+<li>Do the backward computation</li>
+<li>Update the model according to the optimizer and the forward/backward computation.</li>
+</ul>
+
+
+<p>Let&rsquo;s train it for 3 epochs.</p>
+
+<pre><code>starting epoch  0
+result for epoch  0  is  [mse 0.06460866]
+starting epoch  1
+result for epoch  1  is  [mse 0.033874355]
+starting epoch  2
+result for epoch  2  is  [mse 0.027255038]
+</code></pre>
+
+<h3>After training</h3>
+
+<p>We can check the test images again and see if they look better.</p>
+
+<pre><code class="clojure">;;; after training
+(def my-test-batch (mx-io/next test-data))
+(def test-images (mx-io/batch-data my-test-batch))
+(def preds (m/predict-batch model {:data test-images} ))
+(viz/im-sav {:title "after-training-preds" :output-path "results/" :x (ndarray/reshape (first preds) [100 1 28 28])})
+</code></pre>
+
+<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567523206/in/dateposted-public/" title="after-training-preds"><img src="https://live.staticflickr.com/65535/48567523206_d78480012f.jpg" width="420" height="420" alt="after-training-preds"></a><script async src="http://gigasquid.github.io//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+
+<p>Much improved! They definitely look like numbers.</p>
+
+<h3>Wrap up</h3>
+
+<p>We&rsquo;ve made a simple autoencoder that can take images of digits and compress them down to a latent space representation the can later be decoded into the same image.</p>
+
+<p>If you want to check out the full code for this example, you can find it <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder">here</a>.</p>
+
+<p>Stay tuned. We&rsquo;ll take this example and build on it in future posts.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure MXNet April Update]]></title>
+    <link href="http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/"/>
+    <updated>2019-04-26T15:51:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update</id>
+    <content type="html"><![CDATA[<p>Spring is bringing some beautiful new things to the  <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. Here are some highlights for the month of April.</p>
+
+<h2>Shipped</h2>
+
+<p>We&rsquo;ve merged <a href="https://github.com/apache/incubator-mxnet/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Aclosed+clojure">10 PRs</a> over the last month. Many of them focus on core improvements to documentation and usability which is very important.</p>
+
+<p>The MXNet project is also preparing a new release <code>1.4.1</code>, so keep on the lookout for that to hit in the near future.</p>
+
+<h2>Clojure MXNet Made Simple Article Series</h2>
+
+<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> added another post to his fantastic series - <a href="https://arthurcaillau.com/mxnet-made-simple-pretrained-models/">MXNet made simple: Pretrained Models for image classification - Inception and VGG</a></p>
+
+<h2>Cool Stuff in Development</h2>
+
+<h3>New APIs</h3>
+
+<p>Great progress was made on the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> by <a href="https://github.com/kedarbellare">Kedar Bellare</a>. We now have an experimental new version of the apis that are generated more directly from the C code so that we can have more control over the output.</p>
+
+<p>For example the new version of the generated api for NDArray looks like:</p>
+
+<pre><code class="clojure">(defn
+ activation
+ "Applies an activation function element-wise to the input.
+
+  The following activation functions are supported:
+
+  - `relu`: Rectified Linear Unit, :math:`y = max(x, 0)`
+  - `sigmoid`: :math:`y = \\frac{1}{1 + exp(-x)}`
+  - `tanh`: Hyperbolic tangent, :math:`y = \\frac{exp(x) - exp(-x)}{exp(x) + exp(-x)}`
+  - `softrelu`: Soft ReLU, or SoftPlus, :math:`y = log(1 + exp(x))`
+  - `softsign`: :math:`y = \\frac{x}{1 + abs(x)}`
+
+
+
+  Defined in src/operator/nn/activation.cc:L167
+
+  `data`: The input array.
+  `act-type`: Activation function to be applied.
+  `out`: Output array. (optional)"
+ ([data act-type] (activation {:data data, :act-type act-type}))
+ ([{:keys [data act-type out], :or {out nil}, :as opts}]
+  (util/coerce-return
+   (NDArrayAPI/Activation data act-type (util/-&gt;option out)))))
+</code></pre>
+
+<p>as opposed to:</p>
+
+<pre><code class="clojure">(defn
+ activation
+ ([&amp; nd-array-and-params]
+  (util/coerce-return
+   (NDArray/Activation
+    (util/coerce-param
+     nd-array-and-params
+     #{"scala.collection.Seq"})))))
+</code></pre>
+
+<p>So much nicer!!!</p>
+
+<h3>BERT (State of the Art for NLP)</h3>
+
+<p>We also have some really exciting examples for BERT in a <a href="https://github.com/apache/incubator-mxnet/pull/14769">PR</a> that will be merged soon. If you are not familiar with BERT, this <a href="http://jalammar.github.io/illustrated-bert/">blog post</a> is a good overview. Basically, it&rsquo;s the state of the art in NLP right now. With the help of exported models from <a href="https://github.com/dmlc/gluon-nlp">GluonNLP</a>, we can do both inference and fine tuning of BERT models in MXNet with Clojure! This is an excellent example of cross fertilization across the GluonNLP, Scala, and Clojure MXNet projects.</p>
+
+<p>There are two examples.</p>
+
+<p>1) BERT question and answer inference based off of a fine tuned model of the <a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD Dataset</a> in GluonNLP which is then exported. It allows one to actually do some natural language question and answering like:</p>
+
+<pre><code>Question Answer Data
+{:input-answer
+ "Rich Hickey is the creator of the Clojure language. Before Clojure, he developed dotLisp, a similar project based on the .NET platform, and three earlier attempts to provide interoperability between Lisp and Java: a Java foreign language interface for Common Lisp, A Foreign Object Interface for Lisp, and a Lisp-friendly interface to Java Servlets.",
+ :input-question "Who created Clojure?",
+ :ground-truth-answers ["rich" "hickey"]}
+
+  Predicted Answer:  [rich hickey]
+</code></pre>
+
+<p>2) The second example is using the exported BERT base model and then fine tuning it in Clojure to do a task with sentence pair classification to see if two sentences are equivalent or not.</p>
+
+<p>The nice thing about this is that we were able to convert the existing <a href="https://gluon-nlp.mxnet.io/examples/sentence_embedding/bert.html">tutorial in GluonNLP</a> over to a Clojure Jupyter notebook with the <code>lein-jupyter</code> plugin. I didn&rsquo;t realize that there is a nifty <code>save-as</code> command in Jupyter that can generate a markdown file, which makes for very handy documentation. Take a peek at the tutorial <a href="https://github.com/apache/incubator-mxnet/blob/d062d46f1c351dc9b70a038511b564dab5c43266/contrib/clojure-package/examples/bert/fine-tune-bert.md">here</a>. It might make its way into a blog post on its own in the next week or two.</p>
+
+<h2>Upcoming Events</h2>
+
+<ul>
+<li><p>I&rsquo;ll be speaking about Clojure MXNet at the next <a href="https://twitter.com/scicloj">Scicloj Event</a> on May 15th at 10PM UTC. Please join us and get involved in making Clojure a great place for Data Science.</p></li>
+<li><p>I&rsquo;m also really excited to attend <a href="https://iclr.cc/">ICLR</a> in a couple weeks. It is a <em>huge conference</em> that I&rsquo;m sure will melt my mind with the latest research in Deep Learning. If anyone else is planning to attend, please say hi :)</p></li>
+</ul>
+
+
+<h2>Get Involved</h2>
+
+<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip</p>
+
+<h2>Cat Picture of the Month</h2>
+
+<p>To close out, let&rsquo;s take a lesson from my cats and don&rsquo;t forget the importance of naps.</p>
+
+<p><img class="<a" src="href="https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg">https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg</a>"></p>
+
+<p>Have a great rest of April!</p>
+]]></content>
+  </entry>
+  
+</feed>

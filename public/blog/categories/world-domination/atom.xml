@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: World Domination | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/world-domination/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2023-01-01T07:36:47-05:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[World Domination With Hexapods and Clojure]]></title>
+    <link href="http://gigasquid.github.io/blog/2014/03/20/world-domination-with-hexapods-and-clojure/"/>
+    <updated>2014-03-20T21:00:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2014/03/20/world-domination-with-hexapods-and-clojure</id>
+    <content type="html"><![CDATA[<p>Once you have your <a href="http://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/">hexapod assembled and running using the hand held
+controller</a>,
+of course, your thoughts naturally turn to world domination.</p>
+
+<h2>The most powerful tool in the world is the Clojure REPL</h2>
+
+<p>World domination requires the most powerful tools available.  That of
+course calls for Clojure and the Clojure REPL.  I recommend Emacs
+as the editor of choice of such an endeavor.  However, it if you are
+content with city, state, or single country domination, other editors
+that support Clojure are also fine.</p>
+
+<h2>Connect the XBee to your computer</h2>
+
+<p>First, we need to get the computer to talk to the hexapod wirelessly.
+We can do this with a <a href="http://www.trossenrobotics.com/uartsbee">USB to Serial adapter</a>
+that uses the paired XBee from the handheld commander.</p>
+
+<p>Take the XBee from the handheld commander</p>
+
+<p><img class="<a" src="href="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg">http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg</a>"></p>
+
+<p>and move it to the USB to serial adapter</p>
+
+<p><img class="<a" src="href="http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg">http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg</a>"></p>
+
+<p>Now plug the usb into your computer.</p>
+
+<h2>Get your Clojure ready</h2>
+
+<p>In your clojure project, the only magic you need is the <a href="https://github.com/samaaron/serial-port">Serial Port library</a>. Import the library and list your serial ports.  Then open the one that shows up for you.</p>
+
+<pre><code class="clojure">(ns clj-hexapod.core
+  (require [serial-port :as serial]))
+
+;; Use this command to see what port your serial port
+;; is assinged to
+(serial/list-ports)
+
+;; replace the USB0 with whater it shows
+(def port (serial/open "/dev/ttyUSB0" 38400))
+</code></pre>
+
+<p>Since we are going to be talking to the hexapod.  We need to send the commands in the same format that it is expecting. Basically, a packet of where the postions of the joystick are, as well as what buttons are pushed.</p>
+
+<pre><code class="clojure">(defn checksum [v]
+  (mod (- 255 (reduce + v)) 256))
+
+(defn vec-&gt;bytes [v]
+  (byte-array (map #(-&gt; % (Integer.) (.byteValue) (byte)) v)))
+
+(defn build-packet [r-vert r-horz l-vert l-horz buttons]
+  [255 ;header
+   r-vert
+   r-horz
+   l-vert
+   l-horz
+   buttons
+   0
+   (checksum [r-vert r-horz l-vert l-horz buttons])])
+
+(defn send [packet]
+  (serial/write port (vec-&gt;bytes packet)))
+</code></pre>
+
+<p>From here, we can simply make functions for the joystick controls to go up and down</p>
+
+<pre><code class="clojure">;;values between 129-254
+(defn up [speed]
+  "joystick up for speed between 1-100"
+  (if (good-range? speed)
+    (int (+ 129 (* 125 (/ speed 100.0))))
+    CENTER))
+
+;;values between 0 and 125
+(defn down [speed]
+  "joystick down speed between 1-100"
+  (if (good-range? speed)
+    (int (- 125 (* 125 (/ speed 100.0))))
+    CENTER))
+</code></pre>
+
+<p>Then we can do things like walk, turn, and change the gait</p>
+
+<pre><code class="clojure">(defn walk-forward [speed]
+  "walk forward speed between 1-100"
+  (send (build-packet CENTER CENTER (up speed) CENTER 0)))
+
+(defn walk-backwards [speed]
+  "walk backwards speed between 1-100"
+  (send (build-packet CENTER CENTER (down speed) CENTER 0)))
+
+(defn walk-right [speed]
+  "walk right speed between 1-100"
+  (send (build-packet CENTER CENTER CENTER (up speed) 0)))
+
+(defn walk-left [speed]
+  "walk right speed between 1-100"
+  (send (build-packet CENTER CENTER CENTER (down speed) 0)))
+
+(defn turn-right [speed]
+  "turn right speed between 1-100"
+  (send (build-packet CENTER (up speed) CENTER CENTER 0)))
+
+(defn turn-left [speed]
+  "turn left speed between 1-100"
+  (send (build-packet CENTER (down speed) CENTER CENTER 0)))
+
+(defn change-gait [gait-key]
+  (let [gait-num (gait-key gaits)]
+    (send (build-packet CENTER CENTER CENTER CENTER gait-num))))
+
+(defn stop []
+  "stop hexapod"
+  (send (build-packet CENTER CENTER CENTER CENTER 0)))
+</code></pre>
+
+<p>You can control it from the REPL with some simple commands</p>
+
+<pre><code class="clojure">(walk-forward 20)
+(walk-backwards 10)
+(walk-right 10)
+(walk-left 10)
+(turn-right 10)
+(turn-left 10)
+(change-gait :ripple-smooth)
+(change-gait :tripod-normal)
+(change-gait :ripple)
+(change-gait :amble)
+(stop)
+</code></pre>
+
+<p>If you want to see the code, it is out on github as <a href="https://github.com/gigasquid/clj-hexapod">clj-hexapod</a>.  Please keep in mind that it is early days still, and I am still just exploring.</p>
+
+<h2>Phoneix Code Firmware</h2>
+
+<p>It is worth noting the the above code was meant to run with the default hexapod firmware.  That is the &ldquo;Nuke&rdquo; firmware.  There is another firmware, the <a href="https://github.com/KurtE/Arduino_Phoenix_Parts">Phoenix code</a>, that gives the hexapod more lifelike moves and allows it to twist and shift is rather creepy ways.</p>
+
+<p>I just loaded it on the hexapod yesterday.  The commander software changed too, so I will of course need to revisit the code, to add in the new moves.  But here is a sneak preview of what it can do:</p>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('PmBGt9T-yvI');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/PmBGt9T-yvI?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/PmBGt9T-yvI/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=PmBGt9T-yvI" id="PmBGt9T-yvI" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<p><em>That is my daughter singing in the background</em></p>
+
+<h2>That&rsquo;s all for now</h2>
+
+<p>I hope I have given you pointers for getting started on your own world domination with Clojure and Hexapods. Remember to practice your laugh &hellip;. Muhahaha :)</p>
+]]></content>
+  </entry>
+  
+</feed>

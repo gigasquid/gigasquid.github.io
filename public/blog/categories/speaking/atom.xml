@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Speaking | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/speaking/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2023-01-01T07:36:47-05:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Looking Forward to London]]></title>
+    <link href="http://gigasquid.github.io/blog/2013/10/03/looking-forward-to-london/"/>
+    <updated>2013-10-03T20:43:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/10/03/looking-forward-to-london</id>
+    <content type="html"><![CDATA[<p>I really love the London.  I have only been once many years ago,
+but I was enchanted.  Here is a partial list of my favorite
+things:</p>
+
+<ul>
+<li>Ducks in Regent&rsquo;s Park</li>
+<li>Tea Rooms</li>
+<li>The Food Hall at Harrod&rsquo;s</li>
+<li>The British Museum</li>
+<li>English Breakfasts</li>
+<li>The way the British put an extra &ldquo;r&rdquo; in phrases like &ldquo;vanilla in it&rdquo;</li>
+</ul>
+
+
+<p>As you know, I also adore Clojure. So I am absolutely thrilled to combine the two.</p>
+
+<h2>Clojure eXchange</h2>
+
+<p>I will be speaking at the
+<a href="http://skillsmatter.com/event/java-jee/clojure-exchange-2013">Clojure eXchange conference</a>
+on December 6th.  The talk is a bit odd, (like me), and will have
+Clojure, parsers, sea monsters, philosophy, and an AR Drone in it.  It
+should be a lot of fun.</p>
+
+<p>I really looking forward to get a chance to meet the London Clojure
+community in person. Hope to see you there.</p>
+
+<p>P.S. If anyone has any tips on flying overseas with an AR Drone.
+Please let me know :)</p>
+]]></content>
+  </entry>
+  
+</feed>

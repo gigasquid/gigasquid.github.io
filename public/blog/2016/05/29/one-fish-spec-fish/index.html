@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>One Fish Spec Fish - Squid's Blog</title>
+  <meta name="author" content="Carin Meier">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/">
+  <meta property="og:title" content="One Fish Spec Fish - Squid's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      
+        <header role="banner">
+          <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Squid's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="/blog/archives">Archives</a></li>
+<li ><a href="/about">About</a></li>
+<li ><a href="/books">Books</a></li>
+<li ><a href="/speaking">Speaking</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+        </header>
+      
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Squid's Blog" />
+    
+    <meta itemprop="url" content="http://gigasquid.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-05-29T16:29:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 29 May 2016,  4:29 PM</time>
+        
+           | <a href="#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        One Fish Spec Fish
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p><img src="https://upload.wikimedia.org/wikipedia/en/9/9a/One_Fish_Two_Fish_Red_Fish_Blue_Fish_%28cover_art%29.jpg"></p>
+
+<p><a href="http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec">Clojure.spec</a> is an exciting, new core library for Clojure.  It enables pragmatic specifications for functions and brings a new level of robustness to building software in Clojure, along with unexpected side benefits.  One of which is the ability to write specifications that generate Dr. Seuss inspired rhymes.</p>
+
+<p>In this blog post, we&rsquo;ll take a tour of writing specifications for a clojure function, as well as the power of data generation.  First, some inspirational words:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>One fish
+</span><span class='line'>Two fish
+</span><span class='line'>Red fish
+</span><span class='line'>Blue fish</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The mere shape of these words brings a function to mind.  One that would take in a vector:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and give us back a string of transformed items with the word <em>fish</em> added, of course.</p>
+
+<p>But, let us turn our attention the parameters of this function and see how we can further specify them.  Before we get started, make sure you use the latest version of clojure, currently <code>[org.clojure/clojure "1.9.0-alpha13"]</code>,  test.check <code>[org.clojure/test.check "0.9.0"]</code>, and add clojure.spec to your namespace.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">one-fish.core</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.spec</span> <span class="ss">:as</span> <span class="nv">s</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Specifying the values of the parameters</h3>
+
+<p>Back to the parameters. The first two are integers, that&rsquo;s pretty easy, but we want to say more about them.  For example, we don&rsquo;t want them to be very big.  Having a child&rsquo;s poem with the <em>One Hundred Thousand and Thirty Three fish</em> really won&rsquo;t do.  In fact, what we really want is to say is there is finite notion of <em>fish-numbers</em> and it&rsquo;s a map of integer to string representation.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">fish-numbers</span> <span class="p">{</span><span class="mi">0</span> <span class="s">&quot;Zero&quot;</span>
+</span><span class='line'>                   <span class="mi">1</span> <span class="s">&quot;One&quot;</span>
+</span><span class='line'>                   <span class="mi">2</span> <span class="s">&quot;Two&quot;</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then, we can use the <code>s/def</code> to register the spec we are going to define for global reuse.  We&rsquo;ll use a namespaced keyword <code>::fish-number</code> to express that our specification for a valid number is the keys of the <code>fish-numbers</code> map.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::fish-number</span> <span class="p">(</span><span class="nb">set </span><span class="p">(</span><span class="nb">keys </span><span class="nv">fish-numbers</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we have the specification, we can ask it if it&rsquo;s valid for a given value.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::fish-number</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
+</span><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::fish-number</span> <span class="mi">5</span><span class="p">)</span> <span class="c1">;=&gt; false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So <code>5</code> is not a valid number for us.  We can ask it to explain why not.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::fish-number</span> <span class="mi">5</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;;val: 5 fails spec: :one-fish.core/fish-number predicate: (set (keys fish-numbers))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which, of course,  totally makes sense because <code>5</code> is not in our <code>fish-numbers</code> map.  Now that we&rsquo;ve covered the numbers, let&rsquo;s look at the colors.  We&rsquo;ll use a finite set of colors for our specification.  In addition to the classic red and blue, we&rsquo;ll also add the color <em>dun</em>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::color</span> <span class="o">#</span><span class="p">{</span><span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span> <span class="s">&quot;Dun&quot;</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>You may be asking yourself, &ldquo;Is dun really a color?&rdquo;.  The author can assure you that it is in fact a real color, like a <a href="http://www.dictionary.com/browse/dun">dun colored horse</a>.  Furthermore, the word has the very important characteristic of rhyming with number one, which the author spent way too much time trying to think of.</em></p>
+
+<h3>Specifying the sequences of the values</h3>
+
+<p>We&rsquo;re at the point where we can start specifying things about the sequence of values in the parameter vector.  We&rsquo;ll have two numbers followed by two colors.  Using the <code>s/cat</code>, which is a concatentation of predicates/patterns, we can specify it as the <code>::first-line</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What the spec is doing here is associating each <em>part</em> with a <em>tag</em>, to identify what was matched or not, and its predicate/pattern.  So, if we try to explain a failing spec, it will tell us where it went wrong.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::first-line</span>  <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Black&quot;</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;; In: [3] val: &quot;Black&quot; fails spec: :one-fish.core/color</span>
+</span><span class='line'><span class="c1">;;   at: [:c2] predicate: #{&quot;Blue&quot; &quot;Dun&quot; &quot;Red&quot;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s great, but there&rsquo;s more we can express about the sequence of values.  For example, the second number should be one bigger than the first number.  The input to the function is going to be the map of the destructured tag keys from the <code>::first-line</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">one-bigger?</span> <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">n1</span> <span class="nv">n2</span><span class="p">]}]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">= </span><span class="nv">n2</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">n1</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also, the colors should not be the same value.  We can add these additional specifications with <code>s/and</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/and</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">)</span>
+</span><span class='line'>                           <span class="nv">one-bigger?</span>
+</span><span class='line'>                           <span class="o">#</span><span class="p">(</span><span class="nb">not= </span><span class="p">(</span><span class="ss">:c1</span> <span class="nv">%</span><span class="p">)</span> <span class="p">(</span><span class="ss">:c2</span> <span class="nv">%</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can test if our data is valid.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If we want to get the destructured, conformed values, we can use <code>s/conform</code>.  It will return the tags along with the values.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/conform</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;=&gt; {:n1 1, :n2 2, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Failing values for the specification can be easily identified.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; false</span>
+</span><span class='line'><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;; val: {:n1 2, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}</span>
+</span><span class='line'><span class="c1">;; fails spec: :one-fish.core/first-line predicate: one-bigger?</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.</p>
+
+<h3>Generating test data - and poetry with specification</h3>
+
+<p>The <code>s/exercise</code> function will generate data for your specifications.  It does 10 items by default, but we can tell it to do only 5.  Let&rsquo;s see what it comes up with.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/exercise</span> <span class="ss">::first-line</span> <span class="mi">5</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; ([(0 1 &quot;Dun&quot; &quot;Red&quot;) {:n1 0, :n2 1, :c1 &quot;Dun&quot;, :c2 &quot;Red&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(0 1 &quot;Blue&quot; &quot;Red&quot;) {:n1 0, :n2 1, :c1 &quot;Blue&quot;, :c2 &quot;Red&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(0 1 &quot;Blue&quot; &quot;Dun&quot;) {:n1 0, :n2 1, :c1 &quot;Blue&quot;, :c2 &quot;Dun&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(1 2 &quot;Blue&quot; &quot;Dun&quot;) {:n1 1, :n2 2, :c1 &quot;Blue&quot;, :c2 &quot;Dun&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(1 2 &quot;Dun&quot; &quot;Red&quot;) {:n1 1, :n2 2, :c1 &quot;Dun&quot;, :c2 &quot;Red&quot;}])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hmmm&hellip; something&rsquo;s not quite right.  Looking at the first result <code>[0 1 "Dun" Red"]</code>, it would result in:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">Zero</span> <span class="nv">fish</span>
+</span><span class='line'><span class="nv">One</span> <span class="nv">fish</span>
+</span><span class='line'><span class="nv">Dun</span> <span class="nv">fish</span>
+</span><span class='line'><span class="nv">Red</span> <span class="nv">fish</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Although, it meets our criteria, it&rsquo;s missing one essential ingredient - rhyming!</p>
+
+<p>Let&rsquo;s fix this by adding an extra predicate <code>number-rhymes-with-color?</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-number-rhymes-with-color?</span> <span class="p">[{</span><span class="nv">n</span> <span class="ss">:n2</span> <span class="nv">c</span> <span class="ss">:c2</span><span class="p">}]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">or</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="nv">n</span> <span class="nv">c</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="nv">n</span> <span class="nv">c</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="s">&quot;Dun&quot;</span><span class="p">])))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&rsquo;ll add this to our definition of <code>::first-line</code>, stating that the second number parameter should rhyme with the second color parameter.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/and</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">)</span>
+</span><span class='line'>                           <span class="nv">one-bigger?</span>
+</span><span class='line'>                           <span class="o">#</span><span class="p">(</span><span class="nb">not= </span><span class="p">(</span><span class="ss">:c1</span> <span class="nv">%</span><span class="p">)</span> <span class="p">(</span><span class="ss">:c2</span> <span class="nv">%</span><span class="p">))</span>
+</span><span class='line'>                           <span class="nv">fish-number-rhymes-with-color?</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; true</span>
+</span><span class='line'><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Dun&quot;</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;;  {:n1 1, :n2 2, :c1 &quot;Red&quot;, :c2 &quot;Dun&quot;} fails spec:</span>
+</span><span class='line'><span class="c1">;;  :one-fish.core/first-line predicate: fish-number-rhymes-with-color?</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, let&rsquo;s try the data generation again.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/exercise</span> <span class="ss">::first-line</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; ([(1 2 &quot;Red&quot; &quot;Blue&quot;) {:n1 1, :n2 2, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(1 2 &quot;Red&quot; &quot;Blue&quot;) {:n1 1, :n2 2, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(0 1 &quot;Blue&quot; &quot;Dun&quot;) {:n1 0, :n2 1, :c1 &quot;Blue&quot;, :c2 &quot;Dun&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(1 2 &quot;Dun&quot; &quot;Blue&quot;) {:n1 1, :n2 2, :c1 &quot;Dun&quot;, :c2 &quot;Blue&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(1 2 &quot;Dun&quot; &quot;Blue&quot;) {:n1 1, :n2 2, :c1 &quot;Dun&quot;, :c2 &quot;Blue&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(0 1 &quot;Blue&quot; &quot;Dun&quot;) {:n1 0, :n2 1, :c1 &quot;Blue&quot;, :c2 &quot;Dun&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(1 2 &quot;Red&quot; &quot;Blue&quot;) {:n1 1, :n2 2, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(0 1 &quot;Red&quot; &quot;Dun&quot;) {:n1 0, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Dun&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(0 1 &quot;Red&quot; &quot;Dun&quot;) {:n1 0, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Dun&quot;}]</span>
+</span><span class='line'><span class="c1">;;  [(0 1 &quot;Blue&quot; &quot;Dun&quot;) {:n1 0, :n2 1, :c1 &quot;Blue&quot;, :c2 &quot;Dun&quot;}])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Much better.  To finish things off, let&rsquo;s finally create a function to create a string for our mini-poem from our data.  While  we&rsquo;re at it, we can use our spec with <code>s/fdef</code>, to validate that the parameters are indeed in the form of <code>::first-line</code>.</p>
+
+<h3>Using spec with functions</h3>
+
+<p>Here&rsquo;s our function <code>fish-line</code> that takes in our values as a parameters.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-line</span> <span class="p">[</span><span class="nv">n1</span> <span class="nv">n2</span> <span class="nv">c1</span> <span class="nv">c2</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">clojure.string/join</span> <span class="s">&quot; &quot;</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%</span> <span class="s">&quot; fish.&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">[(</span><span class="nb">get </span><span class="nv">fish-numbers</span> <span class="nv">n1</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">get </span><span class="nv">fish-numbers</span> <span class="nv">n2</span><span class="p">)</span>
+</span><span class='line'>       <span class="nv">c1</span>
+</span><span class='line'>       <span class="nv">c2</span><span class="p">])))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can specify that the args for this function be validated with <code>::first-line</code> and the return value is a string.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/fdef</span> <span class="nv">fish-line</span>
+</span><span class='line'>        <span class="ss">:args</span> <span class="ss">::first-line</span>
+</span><span class='line'>        <span class="ss">:ret</span>  <span class="nv">string?</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we turn on the instrumentation of the validation for functions and see what happens. To enable this, we need to add the <code>spec.test</code> namespace to our requires:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">one-fish.core</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.spec</span> <span class="ss">:as</span> <span class="nv">s</span><span class="p">]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">clojure.spec.test</span> <span class="ss">:as</span> <span class="nv">stest</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The instrument function takes a fully-qualified symbol so add ` before the function name  to resolve it in the context of the current namespace.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">stest/instrument</span> <span class="o">`</span><span class="nv">fish-line</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">fish-line</span> <span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;-&gt; &quot;One fish. Two fish. Red fish. Blue fish.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But what about with bad data?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">fish-line</span> <span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'> <span class="c1">;; Call to #&#39;one-fish.core/fish-line did not conform to spec: val:</span>
+</span><span class='line'> <span class="c1">;;   {:n1 2, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;} fails at: [:args] predicate:</span>
+</span><span class='line'> <span class="c1">;;   one-bigger? :clojure.spec/args (2 1 &quot;Red&quot; &quot;Blue&quot;)</span>
+</span><span class='line'>
+</span><span class='line'> <span class="c1">;;   {:clojure.spec/problems</span>
+</span><span class='line'> <span class="c1">;;    {[:args]</span>
+</span><span class='line'> <span class="c1">;;     {:pred one-bigger?,</span>
+</span><span class='line'> <span class="c1">;;      :val {:n1 2, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;},</span>
+</span><span class='line'> <span class="c1">;;      :via [],</span>
+</span><span class='line'> <span class="c1">;;      :in []}},</span>
+</span><span class='line'> <span class="c1">;;    :clojure.spec/args (2 1 &quot;Red&quot; &quot;Blue&quot;)}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ah, yes - the first number must be one smaller than the second number.</p>
+
+<h3>Wrap up</h3>
+
+<p>I hope you&rsquo;ve enjoyed this brief tour of clojure.spec.  If you&rsquo;re interested in learning more, you should check out the <a href="http://clojure.org/guides/spec">spec.guide</a>.  It really is an exciting, new feature to Clojure.</p>
+
+<p>In the meantime, I&rsquo;ll leave you with one of our generated lines, sure to be a big hit with future generations.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">Zero</span> <span class="nv">fish</span>
+</span><span class='line'><span class="nv">One</span> <span class="nv">fish</span>
+</span><span class='line'><span class="nv">Red</span> <span class="nv">fish</span>
+</span><span class='line'><span class="nv">Dun</span> <span class="nv">fish</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+      <footer class="post-footer">
+        <p class="meta text-muted">
+          
+
+
+<figure class="author-image">
+    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
+</figure>
+
+<section class="author">
+    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
+
+    <div class="author-meta">
+        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="share">
+    
+    <h4>Share this post</h4>
+    
+    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/;" 
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+    
+</section>
+
+
+
+
+<!--
+<footer class="post-footer">
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+
+-->
+          
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-05-29T16:29:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 29 May 2016,  4:29 PM</time>
+          <br>
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="pager">
+            
+            
+              
+                <a href="/blog/2016/03/16/kolmogorov-uspensky-machine/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post:  Kolmogorov-Uspensky Machine"> 
+                  <div class="text-muted">
+                    <small>Previous Post</small>
+                  </div>
+                  <div class="pager-title">
+                    <h4> Kolmogorov-Uspensky Machine</h4>
+                  </div>
+                </a>
+              
+            
+            
+            
+              
+              <a href="/blog/2016/06/19/book-writing-for-the-busy-programmer/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Book Writing for the Busy Programmer">
+                <div class="text-muted">
+                  <small>Next Post</small>
+                </div>
+                <div class="pager-title">
+                  <h4>Book Writing for the Busy Programmer</h4>
+                </div>
+              </a>
+              
+            
+            
+          </div>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h2>Comments</h2>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2023 - Carin Meier<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2016/05/29/one-fish-spec-fish/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr.js"></script>
+
+
+  </body>
+</html>

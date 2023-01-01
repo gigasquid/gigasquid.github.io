@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Semantic Web | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/semantic-web/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2023-01-01T07:36:47-05:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Semantic Web and JRuby]]></title>
+    <link href="http://gigasquid.github.io/blog/2011/08/08/semantic-web-and-jruby/"/>
+    <updated>2011-08-08T02:30:21+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2011/08/08/semantic-web-and-jruby</id>
+    <content type="html"><![CDATA[<p>I got the chance to share my enthusiasm for two of my favorite technologies at JRubyConf by giving a presentation on Semantic Web and JRuby. It was an excellent experience. I was able to connect with other people that shared my interest in the Semantic Web and some that have even worked with the technologies professionally. Most exciting, I had the opportunity to share my knowledge and hopefully inspire others to look farther into using JRuby with the Jena Semantic Web Framework.</p>
+
+<p>Here are some resources from the presentation that I wanted to share with everyone:</p>
+
+<p>On github, <a href="https://github.com/gigasquid/jruby_semantic_web_examples">https://github.com/gigasquid/jruby_semantic_web_examples</a>, I put together some examples of SPARQL queries against dbpedia as well as translating the examples that they have on the <a href="http://jena.sourceforge.net/tutorial/RDF_API/index.html">Jena RDF API</a> to use JRuby</p>
+
+<p>Here is the presentation itself:
+<a href="https://github.com/gigasquid/Presentations/blob/master/SemanticWebJRuby.pdf">https://github.com/gigasquid/Presentations/blob/master/SemanticWebJRuby.pdf</a></p>
+
+<p>A special note of thanks to <a href="http://foaf-visualizer.org/?uri=http://purl.org/net/bsletten">Brian Sletten</a>, the Semantic Web guru, who inspired and exposed me to the Semantic Web, helped me out by answering my questions and pointing me in the right direction and for just being a swell guy.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hello World in RDF]]></title>
+    <link href="http://gigasquid.github.io/blog/2010/07/08/hello-world-in-rdf/"/>
+    <updated>2010-07-08T03:33:20+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2010/07/08/hello-world-in-rdf</id>
+    <content type="html"><![CDATA[<p>I decided to start playing with RDFs to start me on the road to understanding and programming Semantic Web.  As always, the first step it to start with a “Hello World” type of exercise.  In my case, I had armed myself with a good cappuccino at Starbucks and decided to set myself with a purl link and FOAF page.
+<a href="https://secure.wikimedia.org/wikipedia/en/wiki/FOAF_%28software%29">
+FOAF (Friend of a Friend)</a> is one of the most popular vocabularies out there for RDF (Resource Description Framework).  It expresses relationships in a machine readable format and is considered one of the first social Semantic Web applications.</p>
+
+<p>When you look at a foaf.rdf file, it is basically just an file with xml tags:</p>
+
+<pre><code>&lt;foaf:Person rdf:ID="me"&gt;
+&lt;foaf:name&gt;Carin Meier&lt;/foaf:name&gt;
+&lt;foaf:givenname&gt;Carin&lt;/foaf:givenname&gt;
+&lt;foaf:family_name&gt;Meier&lt;/foaf:family_name&gt;
+&lt;foaf:nick&gt;squid&lt;/foaf:nick&gt;
+</code></pre>
+
+<p>Not too much fun to start coding by hand though.  Luckily, there is a handy dandy generator - <a href="http://www.ldodds.com/foaf/foaf-a-matic">FOAF-a-matic.</a> Just fill in the form and you can easily generate the basic foaf rdf file for yourself.  You can always add to it later.  Save the file as foaf.rdf somewhere on your website for indexing.</p>
+
+<p>Now you can do some fun stuff with it.  You can check and visualize your RDF document with <a href="http://www.w3.org/RDF/Validator/">http://www.w3.org/RDF/Validator/</a>.  Or you can use a<a href="http://foaf-visualizer.org/?uri=http://gigasquidsoftware.com/foaf/foaf.rdf"> FOAF visualizer</a>.</p>
+
+<p>The final part is to set yourself up with a purl address.  <a href="http://www.purl.org/docs/index.html">Purl.org</a> is a website that is dedicated to providing web endpoints or addresses that can be indentifiers for individuals.  It provides a layer of indirection that is very useful in the changing world of the web.  For example, if I use my work web page link as my identifier in my RDF and then I change jobs, all my FOAF links will be broken.  However, I can use my purl address and set up my identifier as my webpage and then change it when then need arises.   So logon to purl.org and set yourself up with an account.
+When other people &ldquo;know&rdquo; you in FOAF, they can use your purl link:</p>
+
+<blockquote><p>&lt;foaf:Person>
+&lt;foaf:name>Carin Meier&lt;/foaf:name>
+&lt;rdfs:seeAlso rdf:resource=&ldquo;<a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier</a>&rdquo;/>
+&lt;/foaf:Person></p></blockquote>
+
+<p>My FOAF is <a href="http://gigasquidsoftware.com/foaf/foaf.rdf">http://gigasquidsoftware.com/foaf/foaf.rdf</a>
+My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier</a></p>
+
+<p>That&rsquo;s it!  Hello World in FOAF!</p>
+]]></content>
+  </entry>
+  
+</feed>

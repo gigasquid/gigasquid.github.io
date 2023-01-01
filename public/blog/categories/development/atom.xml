@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Development | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/development/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2023-01-01T07:36:47-05:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Embrace and Reach]]></title>
+    <link href="http://gigasquid.github.io/blog/2013/11/02/embrace-and-reach/"/>
+    <updated>2013-11-02T14:51:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/11/02/embrace-and-reach</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm1.staticflickr.com/99/290760357_01392a3f51_n.jpg">http://farm1.staticflickr.com/99/290760357_01392a3f51_n.jpg</a>"></p>
+
+<p>One of the wonderful things about being a technologist today, is
+to be part of an industry that is bubbling over with new and
+exciting things. It can be exhilarating and overwhelming. How can we
+try and do all these great new things?  Of course, it is not
+sensible to simply drop whatever you are using and continually chase
+after the newest tech.  Nor is steadfastly staying in one place and
+refusing to accept that there is a better way of doing things.  The
+challenge is to absorb, identify, and synthesize both good of the
+what we are currently doing and the new stuff too.  We want to embrace and continue the good things that
+are working for us and reach for the new technologies that will propel
+us farther in the future.</p>
+
+<p>Since everyone has their own experience synthesizing the world around
+them, there are many differing opinions on what we should continue to
+embrace and what we technologies and practices should reach for.  I
+humbly offer my thoughts on this based from my own perspective.</p>
+
+<h2>Embrace: Agile Feedback</h2>
+
+<h2>Reach for: Lean Startup Discipline and Programmer Anarchy</h2>
+
+<p>Agile has become a victim of its own success.  Becoming so big, its
+message has been confused and abused in too many ways to name.  But
+the core pillar of frequent and continuous feedback is a foundation to
+any successful software project and should be embraced.  However, we
+should not stop there.  We should reach for the rewards that <a href="http://theleanstartup.com/principles">Lean Startup
+Methodology</a> offers in the form
+of displinced validation.  We should also
+reach to unleash the innovation of our smart developers with
+<a href="http://www.youtube.com/watch?v=uk-CF7klLdA">Programmer Anarchy</a>, and
+look for ways to ruthlessly stomp out unnecessary and wasteful
+project management practices.</p>
+
+<h2>Embrace: Ruby&rsquo;s Community</h2>
+
+<h2>Reach for: Clojure, Go, Elixir, and Meteor</h2>
+
+<p>Ruby and Rails have been an incredible game changer for web
+development.  But they too are suffering from their own success.  One
+of the strengths of Ruby, which should be embraced and nutured, is the
+strength of the community and the openness to newcomers.  This strength
+yields a fruitful ground for a vibrant library ecosystem, which has
+helped Ruby flourish.  We need to reach beyond Ruby and Rails to other
+languages and frameworks that focus on simplicity and concurrency.  The bright future
+will belong to the likes of <a href="http://clojure.org/">Clojure</a>,
+<a href="http://golang.org/">Go</a>, <a href="http://elixir-lang.org/">Elixir</a>, and <a href="http://www.meteor.com/">Meteor</a>.  We need
+to reach and start using these in the products we build, while
+encouraging the growth of a welcoming community and ecosystem like the
+one we have in Ruby.</p>
+
+<h2>Embrace: Collaboration</h2>
+
+<h2>Reach for: the Distributed and Decentralized</h2>
+
+<p>Collaboration with tools like Google Docs works.  We should continue
+to embrace the power that this gives us. However we should embrace
+tools for combining this collaboration in a truly distributed and
+decentralized manner. Git itself is wonderful and distributed, but we
+should reach for tools like Github to be more decentralized and resilient.
+As privacy concerns grow in today&rsquo;s world.  We need to reach beyond
+the convenience that a centralized source of information gives us and
+truly understand the trade offs involved.</p>
+
+<p>We live in an incredible, vibrant time.  Look around and what you
+do everyday.  Embrace and nurture all the good parts, and never give up
+reaching for something better.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Controlling Multiple Drones With Clojure and Goals and Beliefs]]></title>
+    <link href="http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs/"/>
+    <updated>2013-09-05T15:35:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs</id>
+    <content type="html"><![CDATA[<h2>How to Control Multiple Drones with Clojure</h2>
+
+<p>The <a href="https://github.com/gigasquid/clj-drone">clj-drone</a> library now
+has multi-drone support!  You can now send multiple drones commands,
+receive their navigation data, and even have them perform their
+actions autonomously with goals and beliefs.</p>
+
+<p>It takes a bit of extra setup to control more than one drone. We need to assign them each an
+ip and get them talking as an adhoc network.
+<a href="https://twitter.com/jimweirich">Jim Weirich</a> creating a neat little
+script to run on the drone to do just this.  Here are the
+instructions:</p>
+
+<h3>Change first drone to adhoc network</h3>
+
+<p>Connect your computer to the first drone&rsquo;s network.</p>
+
+<pre><code class="clojure">telnet 192.68.1.1
+</code></pre>
+
+<p>Create the following file as adhoc.sh.  This shell script will
+temporarily change the network to an adhoc network named
+&ldquo;multidrone_ah&rdquo; and assign it a static ip of 192.168.1.100.
+The next time you reboot your drone, things will be back to normal.</p>
+
+<pre><code class="clojure">; This script should be run on the drone.
+; Change the IP address to be difference
+; for each drone on the same ad-hoc network
+;
+killall udhcpd
+ifconfig ath0 down
+iwconfig ath0 mode ad-hoc essid multidrone_ah channel auto commit
+ifconfig ath0 192.168.1.100 netmask 255.255.255.0 up
+</code></pre>
+
+<p>Run the script.</p>
+
+<h3>Change the second drone to the adhoc network</h3>
+
+<p>Connect your computer to the second drone&rsquo;s network.</p>
+
+<pre><code class="clojure">telnet 192.68.1.1
+</code></pre>
+
+<pre><code class="clojure">; This script should be run on the drone.
+; Change the IP address to be difference
+; for each drone on the same ad-hoc network
+;
+killall udhcpd
+ifconfig ath0 down
+iwconfig ath0 mode ad-hoc essid multidrone_ah channel auto commit
+ifconfig ath0 192.168.1.200 netmask 255.255.255.0 up
+</code></pre>
+
+<p>Run the script.</p>
+
+<h3>On your laptop</h3>
+
+<ul>
+<li>Connect to the adhoc network that the drones are on &ldquo;multidrone_ah&rdquo;</li>
+<li>Change your computer to a static ip on the network (from network
+preferences on mac) something like 192.168.1.101</li>
+</ul>
+
+
+<p>Now you are ready to run the program.  Here is a small example of
+sending simple commands:</p>
+
+<pre><code class="clojure">(drone-initialize :drone1 "192.168.1.100" default-at-port default-navdata-port)
+(mdrone :drone1 :take-off)
+(mdrone :drone1 :land)
+
+(drone-initialize :drone2 "192.168.1.200" default-at-port default-navdata-port)
+(mdrone :drone2 :take-off)
+(mdrone :drone2 :land)
+</code></pre>
+
+<h2>Bring on Multiple Drones interacting with Goals and Beliefs</h2>
+
+<p>The clj-drone library implements goals and beliefs from <a href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">John
+McCarthy&rsquo;s work</a>.
+The way this works is that the navigation data being constantly sent
+to our computer for processing.  Everytime we get a navigation packet
+that ends up looking something like this, (but with lots more data):</p>
+
+<pre><code class="clojure"> {:altitude 0.0, :yaw -0.215, :pitch -1.075, :roll -2.904, :control-state :landed, :communication :ok, :com-watchdog :ok, :seq-num 870}
+</code></pre>
+
+<p>We then define a belief-action using this data.</p>
+
+<pre><code class="clojure">(def-belief-action ba-landed1
+  "I (Drone1) am landed"
+  (fn [{:keys [control-state]}] (= control-state :landed))
+  (fn [navdata] (mdrone :drone1 :take-off)))
+</code></pre>
+
+<p>The def-belief-action macro takes:</p>
+
+<ul>
+<li>Name of the belief action</li>
+<li>A readable sentence that expresses the belief.  (This is later
+logged, so that we know what the drone believes at all times.)</li>
+<li>A predicate that takes in the navigation data as a parameter.  When
+it evaluates to true, then the belief is said to be &ldquo;held&rdquo;.</li>
+<li>A function to execute when the belief is held</li>
+</ul>
+
+
+<p>The beliefs are then combined to form goals.</p>
+
+<pre><code class="clojure">(def-goal g-take-off1
+  "I (Drone1) want to fly."
+  (fn [{:keys [control-state]}] (= control-state :hovering))
+  [ba-landed1 ba-taking-off1])
+</code></pre>
+
+<p>The def-goal macro takes:</p>
+
+<ul>
+<li>The name of the goal</li>
+<li>A readable sentence that expresses the goal. (This is later logged,
+so that we can know when it achieves a goal.)</li>
+<li>A predicate that takes in the navigation data as a parameter.  When
+it evaluates to true, the goal is said to be achieved.  It will no
+longer evaluate or hold any of the belief actions associated with
+that goal.</li>
+</ul>
+
+
+<p>Finally, we can set a list of goals for a drone to achieve:</p>
+
+<pre><code class="clojure"> (set-current-goal-list drones :drone1
+ [g-take-off1 g-find-other-drone-and-wave1 g-land1])
+</code></pre>
+
+<p>This sets the goal list for a drone.  It will take-off, look around
+for the other drone and wave, (do a dance), once it sees it.  Finally,
+after both drones have spotted each other and waved, they will both
+land.</p>
+
+<h2>Video or It Didn&rsquo;t Happen</h2>
+
+<p>Here is a video of both drones.  They will take off, look around for
+each other and wave when they spot each other.  They will land when
+the have both waved.  They are operating solely on goals and beliefs
+with their navigation data.</p>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('J65rvPdJQ0c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/J65rvPdJQ0c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/J65rvPdJQ0c/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=J65rvPdJQ0c" id="J65rvPdJQ0c" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<p>The code running the video above can be found in the examples of the
+<a href="https://github.com/gigasquid/clj-drone/tree/master/examples">clj-drone</a>.</p>
+
+<p>Happy Hacking!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Babar - a Little Language With Speech Acts for Machines]]></title>
+    <link href="http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/"/>
+    <updated>2013-06-04T18:57:52+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg">http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg</a>"></p>
+
+<h2>Preface: A Gentle Obsession</h2>
+
+<p>About a year ago, I picked up John McCarthy&rsquo;s paper on <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/elephant/elephant.html">Elephant 2000</a>. I have to admit that I only understood about 10% of it. But I was so intrigued by the ideas that it sent me on a quest. I re-read it numerous times, slept with it under my pillow, and finally decided that I needed to read his other papers to get an insight into his thoughts. I began a considered effort with <a href="http://gigasquidsoftware.com/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue/">Seven McCarthy Papers in Seven Weeks</a>. It ended up taking about three months, rather than seven 7 weeks. Again I came back to Elephant 2000. I began to understand more as other ideas and concepts sunk in, like <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/ascribing/ascribing.html">ascribing beliefs and goals to machines</a>. But to really explore the ideas, I really wanted to try to implement parts of Elephant in my own programming language. The problem was, having no formal training in computer science, (my background is Physics), I had never created a programming language before. The stars aligned and I found the <a href="https://github.com/Engelberg/instaparse">Instaparse</a> Clojure library. The result is <a href="https://github.com/gigasquid/babar">Babar</a>, a language designed to explore communication with machines via <a href="http://en.wikipedia.org/wiki/Speech_act">Speech Acts</a>.</p>
+
+<h2>What are the Speech Acts?</h2>
+
+<p>When I say say &ldquo;Pass the salt.&rdquo;, the meaning behind the utterance is that I would like someone to reach out and move the salt shaker to me. I am requesting an action be performed. It doesn&rsquo;t really matter if the utterance is in English, French, or Spanish. The intention is the same. Furthermore, if you accept my request to pass the salt. It creates a commitment on your part to actually perform the action. There are two types of speech acts that Babar is concerned with. The first is called an <a href="http://en.wikipedia.org/wiki/Illocutionary_act">Illocutionary Act</a>. Some of the english verbs denoting these acts are &ldquo;assert&rdquo;, &ldquo;command&rdquo;, &ldquo;request&rdquo;, and &ldquo;query&rdquo;. The second is a <a href="http://en.wikipedia.org/wiki/Perlocutionary_act">Perlocutionary Act</a>. These are acts that are concerned with the effects of hearing them on future actions. Some of english verbs denoting these acts are &ldquo;convince&rdquo;, &ldquo;persuade&rdquo;, and &ldquo;warn&rdquo;.</p>
+
+<h2>Hello Babar</h2>
+
+<p>Babar is an experimental language that uses these Speech Acts to communicate. It also combines one of the other ideas of McCarthy, that is of beliefs and goals. The ultimate aim in the language is discover ways of thinking about computers and communicating with them based on the way that we communicate with each other. The state of a computer at any given point in time can be very complex and hard to understand. If we ascribe this state to be a &ldquo;belief&rdquo;, it becomes easier to understand and thus easier to program. The Babar REPL has internal commitments and internal beliefs. The goal of the Babar REPL is to keep all of its commitments. Speech acts are used to &ldquo;convince&rdquo; Babar of beliefs and to make &ldquo;requests&rdquo; that form commitments. The Babar REPL continually checks to see if it needs to fulfill a commitments. It fulfills them based on its beliefs. As an optional configuration, the REPL will speak aloud its beliefs as the become true - or as it &ldquo;holds&rdquo; the belief.</p>
+
+<h2>Syntax and Basics</h2>
+
+<p>The language uses basic Clojure datatypes and makes the parens optional in most cases to make the expressions look more like syntactically sugared speech acts.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>    <span class="mi">1</span>     <span class="c1">;=&gt; 1</span>
+</span><span class='line'>    <span class="mf">2.3</span>   <span class="c1">;=&gt; 2.3</span>
+</span><span class='line'>    <span class="mf">-3.4</span>  <span class="c1">;=&gt; 3.4</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="nv">ldquo</span><span class="c1">;cat&amp;rdquo; ;=&gt; cat</span>
+</span><span class='line'>    <span class="ss">:bird</span> <span class="c1">;=&gt; bird</span>
+</span><span class='line'>    <span class="nv">true</span>  <span class="c1">;=&gt; true</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:cat</span> <span class="ss">:meow</span> <span class="ss">:dog</span> <span class="ss">:bark</span><span class="p">}</span> <span class="c1">;=&gt; {:cat :meow :dog :bark}</span>
+</span><span class='line'>    <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="nv">true</span> <span class="ss">:bird</span><span class="p">]</span> <span class="c1">;=&gt; [1 2 true bird]</span>
+</span><span class='line'>    <span class="nv">atom</span> <span class="mi">1</span> <span class="c1">;=&gt; #&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">&lt;pre&gt;&lt;code&gt;</span><span class="p">(</span><span class="k">def </span><span class="nv">dog</span> <span class="mi">16</span><span class="p">)</span>
+</span><span class='line'><span class="nv">dog</span> <span class="c1">;=&amp;gt; 16</span>
+</span><span class='line'><span class="k">def </span><span class="nv">cat</span> <span class="mi">18</span>
+</span><span class='line'><span class="nv">cat</span> <span class="c1">;=&amp;gt; 18</span>
+</span><span class='line'><span class="nv">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Vectors are a bit interesting in the respect that you don&rsquo;t need to input the square brackets. If you just put in space delimited items, it will automatically construct a vector for you.</p>
+
+<pre><code class="clojure    ">    1 2 3 4 ;=&gt; [1 2 3 4]
+</code></pre>
+
+<p>You can create anonymous functions with the fn [x] syntax from clojure. And call them with surrounding parens. You can call regular functions by the () notation or the shorthand :.</p>
+
+<pre><code class="clojure    ">    fn [x] + x 1 ;=&gt; fn
+    (fn [x] + x 1) ;=&gt; fn
+    ((fn [x] + x 1) 3) ;=&gt; 4
+    ((fn [x y z] + x y z) 1 2 3) ;=&gt; 6
+    ((fn [] [4 5 6])) ;=&gt; [4 5 6]
+
+    defn dog [] "woof"
+    dog: ;=&gt; "woof"
+</code></pre>
+
+<p>To see the complete documentation - please visit the <a href="https://github.com/gigasquid/babar">Github repo</a>.</p>
+
+<h2>Show Me Babar Speech Acts</h2>
+
+<p>Now that we have the basics. Let&rsquo;s look at example of running a program with speech acts.
+This one speaks its beliefs and has assertions, a request, and queries.</p>
+
+<pre><code class="clojure    ">    speak-config true.
+    assert sunny false.
+    convince #nice-day "It is a nice day." fn [] = sunny true.
+    request *open-window when #nice-day fn [] println "Opened the window".
+    query request-is-done *open-window?
+    assert sunny true.
+    query request-is-done *open-window?
+</code></pre>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('bt2iYsVyCOM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/bt2iYsVyCOM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/bt2iYsVyCOM/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=bt2iYsVyCOM" id="bt2iYsVyCOM" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<p>Here is another one that shows using a request until a belief is held.</p>
+
+<pre><code class="clojure    ">    speak-config true.
+
+    assert counter atom 1.
+    convince #done "I am done counting" fn [] &gt; @counter 3.
+    request *count-up until #done fn [] swap! counter inc.
+    sleep 25.
+    query request-value *count-up?
+</code></pre>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('aT8MK0w71LM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/aT8MK0w71LM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/aT8MK0w71LM/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=aT8MK0w71LM" id="aT8MK0w71LM" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<p>Here the REPL asks you a question if you give it an undeclared var</p>
+
+<pre><code class="clojure">    speak-config true.
+    ask-config true.
+
+    request *task1 fn [] + 10 x.
+    query request-is-done *task1?
+    assert x 3.
+    sleep 10.
+    query request-is-done *task1?
+    query request-value *task1?
+</code></pre>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('nmi_fafmjsg');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/nmi_fafmjsg?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/nmi_fafmjsg/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=nmi_fafmjsg" id="nmi_fafmjsg" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<h2>Autonomous AR Drone Flight with Babar REPL</h2>
+
+<p>Since the language is aimed at communincating with machines. It is only natural that I use it to talk to the AR Drone.
+Here is a program that has the drone take off, get to a cruising altitude, and land - all using speech acts (and the <a href="https://github.com/gigasquid/clj-drone">clj-drone library</a>).</p>
+
+<pre><code class="clojure    ">    speak-config true.
+
+    import "clj-drone.core".
+    import "clj-drone.navdata".
+
+    assert get-navdata [key] get @nav-data key.
+    assert navdata-equal [key val] = (get-navdata key) val.
+    assert navdata-gt [key val] &gt; (get-navdata key) val.
+    assert init-drone [] (drone-initialize).
+    assert init-nav [] (drone-init-navdata).
+
+    convince #landed "I am on the ground" fn [] (navdata-equal :control-state :landed).
+    convince #flying "I am flying" fn [] or (navdata-equal :control-state :flying)
+                                            (navdata-equal :control-state :hovering).
+    convince #high-enough "I am high enough" fn [] (navdata-gt :altitude 1.5).
+
+    request *take-off when #landed fn [] (drone :take-off).
+    request *cruising-alt when #flying until #high-enough fn [] (drone :up 0.1).
+    request *land when #high-enough fn [] (drone :land).
+
+    convince #done "Whee! I am done." fn [] and (navdata-equal :control-state :landed)
+                                                query request-is-done *land.
+    request *end-navstream when #done fn [] (end-navstream).
+</code></pre>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('CIzR8jD2d3c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/CIzR8jD2d3c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/CIzR8jD2d3c/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=CIzR8jD2d3c" id="CIzR8jD2d3c" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<h2>Conclusion and Thanks</h2>
+
+<p>I can honestly say, that this has been one of the most enjoyable programming quests. I encourage you all to look at McCarthy&rsquo;s papers, Clojure, Instaparse, and of course, hacking robots. A special thanks to all the Cincy folks at <a href="http://www.neo.com/">Neo</a> who have supported me through my gentle obsessions and have let me have the freedom to follow my curiosity.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7 John McCarthy Papers in 7 Weeks – #1 How My Thermostat Has Beliefs and Goals]]></title>
+    <link href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/"/>
+    <updated>2012-09-20T13:03:36+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg">http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg</a>"></p>
+
+<h2>Ascribing Mental Qualities to Machines or How My Thermostat has Beliefs and Goals</h2>
+
+<p>After reading John McCarthy&rsquo;s paper this week <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/">Ascribing Mental Qualities to Machines</a>, I can honestly say that it has changed the way I think about programs and most certainly thermostats. For you see, I realize now that my thermostat has beliefs and goals. No, it does not have beliefs about what the weather is going to be tomorrow, or when the next George R.R. Martin book is going to come out. But it does have beliefs. It has three of them to be exact:</p>
+
+<ul>
+<li><p>The room is too hot</p></li>
+<li><p>The room is too cold</p></li>
+<li><p>The room is OK</p></li>
+</ul>
+
+
+<p>It also only has one goal:</p>
+
+<ul>
+<li>The room should be OK</li>
+</ul>
+
+
+<h3>Wat?</h3>
+
+<p>Why should we think of a simple thermostat this way? It is not very complex. In fact, we can completely understand its state and reason about its behavior by looking at its small and complete program listing. What benefit can there possibly be to endow the humble thermostat with its own beliefs and goals?</p>
+
+<h3>Start Small</h3>
+
+<p>Let&rsquo;s step back. We are talking about designing and building intelligent systems, not just programs. The example of a thermostat is indeed small, but let us try out our ideas on a easy to understand system first. Later we can consider applying it to more complex systems.</p>
+
+<h3>Beliefs and Goals are Easier to Understand and Reason About</h3>
+
+<p>Using a higher level construct to express state can make it easier to reason and understand intelligent systems. It also is useful in describing states that are not completely known or have portions that are not easily observable. In short, defining a program&rsquo;s state in terms of beliefs and goals may be closer to our natural way of thinking. When I consider my co-worker sitting next to me. I cannot hope to observe the complete mental state of him at that moment. Although I could hope to describe it at a high level with beliefs and goals. I could even hope to predict future behavior with this knowledge of his beliefs and goals, (which most likely has to do with the goal of eating more bacon).</p>
+
+<h3>Easier to Debug and Correct</h3>
+
+<p>Once we have a higher level model of a systems mental state and behavior. It would be easier to debug, communicate, and correct problems. For example, If I come home and the room is way too cold, I could look for the problem in terms of beliefs and goals. Does the thermostat have a faulty belief? Or did it have a good belief that the room was too cold? If so, then the problem was that it could not act on its belief to tell the furnace to turn on. If it could communicate and know the problem, perhaps it could message me and I could arrange a service call, or it could even self-correct. Another example, is my recent experience with my Roomba. I came home the other day to find my Roomba had not returned to its charging station after its scheduled cleaning. Instead, it was stopped under my bed. What went wrong? Did it believe that the battery was low? Or was there some other faulty belief? It would be nice if it could tell me.</p>
+
+<h3>Delving Further - What is a belief?</h3>
+
+<p>McCarthy talks about defining a belief as a function of the system&rsquo;s state. For each state, there are beliefs that can be expressed as a sentences in a language. The machine does not need to understand the meaning and concepts in the English, French or any given language. That is for us to interpret. The important part is that there is a mapping of the state to this sentence. Taking our humble thermostat for an example:</p>
+
+<pre><code>(defn thermo-belief [temp]
+  (cond
+    (&gt; temp 70) "The room is too hot."
+    (&lt; temp 70) "The room is too cold."
+    :else "The room is OK."))
+</code></pre>
+
+<p>We can test our thermostats beliefs with something like:</p>
+
+<pre><code>(deftest thermo-beliefs-tests
+  (is (= "The room is too hot." (thermo-belief 71)))
+  (is (= "The room is too cold." (thermo-belief 69)))
+  (is (= "The room is OK." (thermo-belief 70))))
+</code></pre>
+
+<p>This testing or criticizing the belief structure of the thermostat is what McCarthy called a Second Order Structural definition for mental qualities. This differs from a First Order Structural definition in that, rather than criticizing or testing an individual belief, he sought to describe them by testing/ criticizing the structure of the whole set of beliefs.</p>
+
+<p>In the example of our thermostat, to have a &ldquo;good&rdquo; belief structure, in accordance with Second Order Structural definition, it the must have some consequences or actions of it beliefs. Furthermore, these actions most be consistent with its goals.</p>
+
+<p>It might be expressed in code like this:</p>
+
+<pre><code>(defn thermo-action [belief temp]
+  (case belief
+    "The room is too hot." (dec temp)
+    "The room is too cold." (inc temp)
+    "The room is ok." temp))
+</code></pre>
+
+<p>In this case, the action of a belief is returning a new state, the temperature. Our thermostat could issue a command to the furnace to turn on. But, let us keep it simple for the moment and just think of its action directly changing the temperature. Now, our believing thermostat program can be described as having beliefs as well as taking actions from them.</p>
+
+<pre><code>(defn thermostat [temp]
+  (thermo-action (thermo-belief temp) temp))
+
+(thermostat 33) ;=&gt; 34
+</code></pre>
+
+<p>So now we have a thermostat that has beliefs and consequences from these beliefs. We still need to figure out how to test that its belief system is consistent with its goals. Thankfully, it only has one goal to keep it simple. The goal is that the room should be OK.</p>
+
+<pre><code>(def goal 70)
+</code></pre>
+
+<p>Let&rsquo;s say that the thermostat is doing what it believes will achieve its goals, if the new temperature is closer to its goal.</p>
+
+<pre><code>(defn distance-from-goal [g t]
+  (Math/abs (- g t)))
+
+(distance-from-goal goal 80) ;=&gt; 10
+
+(defn closer-to-goal [g t nt]
+  (&gt; (distance-from-goal g t)
+    (distance-from-goal g nt)))
+
+(closer-to-goal goal 75 73) ;=&gt; true
+(closer-to-goal goal 75 76) ;=&gt; false
+(closer-to-goal goal 56 57) ;=&gt; true
+</code></pre>
+
+<p>We can now construct a test to see if the thermostat actions are consistent with its goals.</p>
+
+<pre><code>(deftest themo-behavior-test
+  (is (closer-to-goal goal 4 (thermostat 4)))
+  (is (closer-to-goal goal 74 (thermostat 74)))
+  (is (closer-to-goal goal 75 (thermostat 75)))
+  (is (closer-to-goal goal 56 (thermostat 56))))
+</code></pre>
+
+<p>Given this particular thermostat example, we could even recursively show that it will reach its goal:</p>
+
+<pre><code>(defn thermo-simulation [g s]
+(if (= g s) "Woo hoo!"
+(thermo-simulation g (thermostat s))))
+
+(thermo-simulation goal 73) ;=&gt;; "Woo hoo!"
+
+(deftest thermo-goal-achievement-test
+(is (= "Woo hoo!" (thermo-simulation goal 73)))
+(is (= "Woo hoo!" (thermo-simulation goal 100)))
+(is (= "Woo hoo!" (thermo-simulation goal 33)))
+(is (= "Woo hoo!" (thermo-simulation goal -33))) )
+</code></pre>
+
+<p>Our thermostat&rsquo;s beliefs are good!</p>
+
+<h3>What if &hellip;.</h3>
+
+<p>The way that McCarthy explains the Second Order Structural definition as criticizing and testing beliefs, made me start thinking about test driven design. What if we were to start thinking and designing our programs with this testing of belief and goal structure? It could be IDD (Intelligence Driven Design) rather than TDD/ BDD. From experience, I know that TDD has changed the way that I think about coding and resulted in cleaner and more robust programs. I wonder what effect IDD could have on our program&rsquo;s creation and perhaps the future of AI. Could changing the way we approach our definition of state and behavior change our software to become more intelligent? Wait a minute. If we write a test system to criticize another programs beliefs and goals, wouldn&rsquo;t we be designing a program that would have beliefs about another program&rsquo;s beliefs?</p>
+
+<p>&hellip;</p>
+
+<p>&hellip;</p>
+
+<p>My brain get exploded.
+It is in fact, turtles all the way down :)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7 John McCarthy Papers in 7 Weeks - Prologue]]></title>
+    <link href="http://gigasquid.github.io/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue/"/>
+    <updated>2012-09-19T01:50:08+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue</id>
+    <content type="html"><![CDATA[<p>In the spirit of <a href="http://pragprog.com/book/btlang/seven-languages-in-seven-weeks">Seven Languages in Seven Weeks</a>, I have decided to embark on a quest. But instead of focusing on expanding my mindset with different programming languages, I am focusing on trying to get into the mindset of <a href="http://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist">John McCarthy</a>), father of LISP and AI, by reading and thinking about seven of his <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/">papers</a>.</p>
+
+<h3>Why?</h3>
+
+<h4>Get out of your box</h4>
+
+<p>If you are comfortable, you are not challenging yourself to grow.  You are doomed to stay in your same mindset and your little box and your world gets smaller.  As an Object Oriented programmer, I was happy in my little box.  Then one day, I discovered Clojure and Functional Programming and my world became bigger and richer because of it.  I hope to glean a similar box expansion, by exploring the thoughts of McCarthy.  Especially, since I have the nagging suspicion that we are somehow doing programming <a href="http://www.catonmat.net/blog/wp-content/uploads/2008/12/john-mccarthy-programming-wrong.jpg">&ldquo;completely wrong.&rdquo;</a></p>
+
+<h4>Slow Down</h4>
+
+<p>Reading papers is an antidote to today&rsquo;s relentless stream of Twitter and Hacker News techno stuff.  It forces you to slow down and read something &hellip;gasp, maybe even the same thing multiple times and digest it.  Thinking slow and eating more veggies is something we could all do more.</p>
+
+<h4>Structure</h4>
+
+<p>Following a somewhat arbitrary schedule of seven papers in seven weeks gives a structure that gives an measurable goal and timeline to this endeavor.  Which gives you a fighting chance of actually getting it accomplished.</p>
+
+<h4>The Answer is Never Too Far Away</h4>
+
+<p>When we are presented with a problem, more often then not, the answer comes to us  from some of our recent thoughts and experiences. Many breakthroughs in new technologies have come from cross pollination across different fields.  Exposing yourself to a new ways of thinking gives your creative problem solving abilities new and powerful ammunition.</p>
+
+<h4>Encourage Others</h4>
+
+<p>Serendipity moves in mysterious ways.  By sharing your travels and thoughts, who knows what might spark in someone else&rsquo;s mind&hellip;</p>
+
+<p>So I encourage you to join along.  Pick a <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/">paper</a> that appeals to you and read it this week. Think about it, talk to your co-workers about it, maybe write about it, or even code from it.  But most importantly, slow down and take a moment to peek outside your box.</p>
+]]></content>
+  </entry>
+  
+</feed>

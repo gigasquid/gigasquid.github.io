@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>7 John McCarthy Papers in 7 Weeks – #1 How My Thermostat Has Beliefs and Goals - Squid's Blog</title>
+  <meta name="author" content="Carin Meier">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">
+  <meta property="og:title" content="7 John McCarthy Papers in 7 Weeks – #1 How My Thermostat Has Beliefs &hellip; - Squid's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      
+        <header role="banner">
+          <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Squid's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="/blog/archives">Archives</a></li>
+<li ><a href="/about">About</a></li>
+<li ><a href="/books">Books</a></li>
+<li ><a href="/speaking">Speaking</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+        </header>
+      
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Squid's Blog" />
+    
+    <meta itemprop="url" content="http://gigasquid.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-09-20T13:03:36+00:00"  data-updated="true" itemprop="datePublished dateCreated">Thu 20 Sep 2012,  1:03 PM</time>
+        
+           | <a href="#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        7 John McCarthy Papers in 7 Weeks – #1 How My Thermostat Has Beliefs and Goals
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p><img src="http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg"></p>
+
+<h2>Ascribing Mental Qualities to Machines or How My Thermostat has Beliefs and Goals</h2>
+
+<p>After reading John McCarthy&rsquo;s paper this week <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/">Ascribing Mental Qualities to Machines</a>, I can honestly say that it has changed the way I think about programs and most certainly thermostats. For you see, I realize now that my thermostat has beliefs and goals. No, it does not have beliefs about what the weather is going to be tomorrow, or when the next George R.R. Martin book is going to come out. But it does have beliefs. It has three of them to be exact:</p>
+
+<ul>
+<li><p>The room is too hot</p></li>
+<li><p>The room is too cold</p></li>
+<li><p>The room is OK</p></li>
+</ul>
+
+
+<p>It also only has one goal:</p>
+
+<ul>
+<li>The room should be OK</li>
+</ul>
+
+
+<h3>Wat?</h3>
+
+<p>Why should we think of a simple thermostat this way? It is not very complex. In fact, we can completely understand its state and reason about its behavior by looking at its small and complete program listing. What benefit can there possibly be to endow the humble thermostat with its own beliefs and goals?</p>
+
+<h3>Start Small</h3>
+
+<p>Let&rsquo;s step back. We are talking about designing and building intelligent systems, not just programs. The example of a thermostat is indeed small, but let us try out our ideas on a easy to understand system first. Later we can consider applying it to more complex systems.</p>
+
+<h3>Beliefs and Goals are Easier to Understand and Reason About</h3>
+
+<p>Using a higher level construct to express state can make it easier to reason and understand intelligent systems. It also is useful in describing states that are not completely known or have portions that are not easily observable. In short, defining a program&rsquo;s state in terms of beliefs and goals may be closer to our natural way of thinking. When I consider my co-worker sitting next to me. I cannot hope to observe the complete mental state of him at that moment. Although I could hope to describe it at a high level with beliefs and goals. I could even hope to predict future behavior with this knowledge of his beliefs and goals, (which most likely has to do with the goal of eating more bacon).</p>
+
+<h3>Easier to Debug and Correct</h3>
+
+<p>Once we have a higher level model of a systems mental state and behavior. It would be easier to debug, communicate, and correct problems. For example, If I come home and the room is way too cold, I could look for the problem in terms of beliefs and goals. Does the thermostat have a faulty belief? Or did it have a good belief that the room was too cold? If so, then the problem was that it could not act on its belief to tell the furnace to turn on. If it could communicate and know the problem, perhaps it could message me and I could arrange a service call, or it could even self-correct. Another example, is my recent experience with my Roomba. I came home the other day to find my Roomba had not returned to its charging station after its scheduled cleaning. Instead, it was stopped under my bed. What went wrong? Did it believe that the battery was low? Or was there some other faulty belief? It would be nice if it could tell me.</p>
+
+<h3>Delving Further - What is a belief?</h3>
+
+<p>McCarthy talks about defining a belief as a function of the system&rsquo;s state. For each state, there are beliefs that can be expressed as a sentences in a language. The machine does not need to understand the meaning and concepts in the English, French or any given language. That is for us to interpret. The important part is that there is a mapping of the state to this sentence. Taking our humble thermostat for an example:</p>
+
+<pre><code>(defn thermo-belief [temp]
+  (cond
+    (&gt; temp 70) "The room is too hot."
+    (&lt; temp 70) "The room is too cold."
+    :else "The room is OK."))
+</code></pre>
+
+<p>We can test our thermostats beliefs with something like:</p>
+
+<pre><code>(deftest thermo-beliefs-tests
+  (is (= "The room is too hot." (thermo-belief 71)))
+  (is (= "The room is too cold." (thermo-belief 69)))
+  (is (= "The room is OK." (thermo-belief 70))))
+</code></pre>
+
+<p>This testing or criticizing the belief structure of the thermostat is what McCarthy called a Second Order Structural definition for mental qualities. This differs from a First Order Structural definition in that, rather than criticizing or testing an individual belief, he sought to describe them by testing/ criticizing the structure of the whole set of beliefs.</p>
+
+<p>In the example of our thermostat, to have a &ldquo;good&rdquo; belief structure, in accordance with Second Order Structural definition, it the must have some consequences or actions of it beliefs. Furthermore, these actions most be consistent with its goals.</p>
+
+<p>It might be expressed in code like this:</p>
+
+<pre><code>(defn thermo-action [belief temp]
+  (case belief
+    "The room is too hot." (dec temp)
+    "The room is too cold." (inc temp)
+    "The room is ok." temp))
+</code></pre>
+
+<p>In this case, the action of a belief is returning a new state, the temperature. Our thermostat could issue a command to the furnace to turn on. But, let us keep it simple for the moment and just think of its action directly changing the temperature. Now, our believing thermostat program can be described as having beliefs as well as taking actions from them.</p>
+
+<pre><code>(defn thermostat [temp]
+  (thermo-action (thermo-belief temp) temp))
+
+(thermostat 33) ;=&gt; 34
+</code></pre>
+
+<p>So now we have a thermostat that has beliefs and consequences from these beliefs. We still need to figure out how to test that its belief system is consistent with its goals. Thankfully, it only has one goal to keep it simple. The goal is that the room should be OK.</p>
+
+<pre><code>(def goal 70)
+</code></pre>
+
+<p>Let&rsquo;s say that the thermostat is doing what it believes will achieve its goals, if the new temperature is closer to its goal.</p>
+
+<pre><code>(defn distance-from-goal [g t]
+  (Math/abs (- g t)))
+
+(distance-from-goal goal 80) ;=&gt; 10
+
+(defn closer-to-goal [g t nt]
+  (&gt; (distance-from-goal g t)
+    (distance-from-goal g nt)))
+
+(closer-to-goal goal 75 73) ;=&gt; true
+(closer-to-goal goal 75 76) ;=&gt; false
+(closer-to-goal goal 56 57) ;=&gt; true
+</code></pre>
+
+<p>We can now construct a test to see if the thermostat actions are consistent with its goals.</p>
+
+<pre><code>(deftest themo-behavior-test
+  (is (closer-to-goal goal 4 (thermostat 4)))
+  (is (closer-to-goal goal 74 (thermostat 74)))
+  (is (closer-to-goal goal 75 (thermostat 75)))
+  (is (closer-to-goal goal 56 (thermostat 56))))
+</code></pre>
+
+<p>Given this particular thermostat example, we could even recursively show that it will reach its goal:</p>
+
+<pre><code>(defn thermo-simulation [g s]
+(if (= g s) "Woo hoo!"
+(thermo-simulation g (thermostat s))))
+
+(thermo-simulation goal 73) ;=&gt;; "Woo hoo!"
+
+(deftest thermo-goal-achievement-test
+(is (= "Woo hoo!" (thermo-simulation goal 73)))
+(is (= "Woo hoo!" (thermo-simulation goal 100)))
+(is (= "Woo hoo!" (thermo-simulation goal 33)))
+(is (= "Woo hoo!" (thermo-simulation goal -33))) )
+</code></pre>
+
+<p>Our thermostat&rsquo;s beliefs are good!</p>
+
+<h3>What if &hellip;.</h3>
+
+<p>The way that McCarthy explains the Second Order Structural definition as criticizing and testing beliefs, made me start thinking about test driven design. What if we were to start thinking and designing our programs with this testing of belief and goal structure? It could be IDD (Intelligence Driven Design) rather than TDD/ BDD. From experience, I know that TDD has changed the way that I think about coding and resulted in cleaner and more robust programs. I wonder what effect IDD could have on our program&rsquo;s creation and perhaps the future of AI. Could changing the way we approach our definition of state and behavior change our software to become more intelligent? Wait a minute. If we write a test system to criticize another programs beliefs and goals, wouldn&rsquo;t we be designing a program that would have beliefs about another program&rsquo;s beliefs?</p>
+
+<p>&hellip;</p>
+
+<p>&hellip;</p>
+
+<p>My brain get exploded.
+It is in fact, turtles all the way down :)</p>
+</div>
+
+
+      <footer class="post-footer">
+        <p class="meta text-muted">
+          
+
+
+<figure class="author-image">
+    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
+</figure>
+
+<section class="author">
+    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">gigasquid</span></span></h4>
+
+    <div class="author-meta">
+        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="share">
+    
+    <h4>Share this post</h4>
+    
+    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/;" 
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+    
+</section>
+
+
+
+
+<!--
+<footer class="post-footer">
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+
+-->
+          
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-09-20T13:03:36+00:00"  data-updated="true" itemprop="datePublished dateCreated">Thu 20 Sep 2012,  1:03 PM</time>
+          <br>
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/development/'>Development</a>, <a class='category' href='/blog/categories/john-mccarthy-papers/'>John McCarthy Papers</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="pager">
+            
+            
+              
+                <a href="/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: 7 John McCarthy Papers in 7 weeks - Prologue"> 
+                  <div class="text-muted">
+                    <small>Previous Post</small>
+                  </div>
+                  <div class="pager-title">
+                    <h4>7 John McCarthy Papers in 7 weeks - Prologue</h4>
+                  </div>
+                </a>
+              
+            
+            
+            
+              
+              <a href="/blog/2012/09/29/7-john-mccarthy-papers-in-7-weeks-2/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: 7 John McCarthy Papers in 7 Weeks - #2">
+                <div class="text-muted">
+                  <small>Next Post</small>
+                </div>
+                <div class="pager-title">
+                  <h4>7 John McCarthy Papers in 7 Weeks - #2</h4>
+                </div>
+              </a>
+              
+            
+            
+          </div>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h2>Comments</h2>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2023 - Carin Meier<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr.js"></script>
+
+
+  </body>
+</html>

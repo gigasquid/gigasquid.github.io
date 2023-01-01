@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: John McCarthy Papers | Squid's Blog]]></title>
+  <link href="http://gigasquid.github.io/blog/categories/john-mccarthy-papers/atom.xml" rel="self"/>
+  <link href="http://gigasquid.github.io/"/>
+  <updated>2023-01-01T07:36:47-05:00</updated>
+  <id>http://gigasquid.github.io/</id>
+  <author>
+    <name><![CDATA[Carin Meier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Babar - a Little Language With Speech Acts for Machines]]></title>
+    <link href="http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/"/>
+    <updated>2013-06-04T18:57:52+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg">http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg</a>"></p>
+
+<h2>Preface: A Gentle Obsession</h2>
+
+<p>About a year ago, I picked up John McCarthy&rsquo;s paper on <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/elephant/elephant.html">Elephant 2000</a>. I have to admit that I only understood about 10% of it. But I was so intrigued by the ideas that it sent me on a quest. I re-read it numerous times, slept with it under my pillow, and finally decided that I needed to read his other papers to get an insight into his thoughts. I began a considered effort with <a href="http://gigasquidsoftware.com/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue/">Seven McCarthy Papers in Seven Weeks</a>. It ended up taking about three months, rather than seven 7 weeks. Again I came back to Elephant 2000. I began to understand more as other ideas and concepts sunk in, like <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/ascribing/ascribing.html">ascribing beliefs and goals to machines</a>. But to really explore the ideas, I really wanted to try to implement parts of Elephant in my own programming language. The problem was, having no formal training in computer science, (my background is Physics), I had never created a programming language before. The stars aligned and I found the <a href="https://github.com/Engelberg/instaparse">Instaparse</a> Clojure library. The result is <a href="https://github.com/gigasquid/babar">Babar</a>, a language designed to explore communication with machines via <a href="http://en.wikipedia.org/wiki/Speech_act">Speech Acts</a>.</p>
+
+<h2>What are the Speech Acts?</h2>
+
+<p>When I say say &ldquo;Pass the salt.&rdquo;, the meaning behind the utterance is that I would like someone to reach out and move the salt shaker to me. I am requesting an action be performed. It doesn&rsquo;t really matter if the utterance is in English, French, or Spanish. The intention is the same. Furthermore, if you accept my request to pass the salt. It creates a commitment on your part to actually perform the action. There are two types of speech acts that Babar is concerned with. The first is called an <a href="http://en.wikipedia.org/wiki/Illocutionary_act">Illocutionary Act</a>. Some of the english verbs denoting these acts are &ldquo;assert&rdquo;, &ldquo;command&rdquo;, &ldquo;request&rdquo;, and &ldquo;query&rdquo;. The second is a <a href="http://en.wikipedia.org/wiki/Perlocutionary_act">Perlocutionary Act</a>. These are acts that are concerned with the effects of hearing them on future actions. Some of english verbs denoting these acts are &ldquo;convince&rdquo;, &ldquo;persuade&rdquo;, and &ldquo;warn&rdquo;.</p>
+
+<h2>Hello Babar</h2>
+
+<p>Babar is an experimental language that uses these Speech Acts to communicate. It also combines one of the other ideas of McCarthy, that is of beliefs and goals. The ultimate aim in the language is discover ways of thinking about computers and communicating with them based on the way that we communicate with each other. The state of a computer at any given point in time can be very complex and hard to understand. If we ascribe this state to be a &ldquo;belief&rdquo;, it becomes easier to understand and thus easier to program. The Babar REPL has internal commitments and internal beliefs. The goal of the Babar REPL is to keep all of its commitments. Speech acts are used to &ldquo;convince&rdquo; Babar of beliefs and to make &ldquo;requests&rdquo; that form commitments. The Babar REPL continually checks to see if it needs to fulfill a commitments. It fulfills them based on its beliefs. As an optional configuration, the REPL will speak aloud its beliefs as the become true - or as it &ldquo;holds&rdquo; the belief.</p>
+
+<h2>Syntax and Basics</h2>
+
+<p>The language uses basic Clojure datatypes and makes the parens optional in most cases to make the expressions look more like syntactically sugared speech acts.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>    <span class="mi">1</span>     <span class="c1">;=&gt; 1</span>
+</span><span class='line'>    <span class="mf">2.3</span>   <span class="c1">;=&gt; 2.3</span>
+</span><span class='line'>    <span class="mf">-3.4</span>  <span class="c1">;=&gt; 3.4</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="nv">ldquo</span><span class="c1">;cat&amp;rdquo; ;=&gt; cat</span>
+</span><span class='line'>    <span class="ss">:bird</span> <span class="c1">;=&gt; bird</span>
+</span><span class='line'>    <span class="nv">true</span>  <span class="c1">;=&gt; true</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:cat</span> <span class="ss">:meow</span> <span class="ss">:dog</span> <span class="ss">:bark</span><span class="p">}</span> <span class="c1">;=&gt; {:cat :meow :dog :bark}</span>
+</span><span class='line'>    <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="nv">true</span> <span class="ss">:bird</span><span class="p">]</span> <span class="c1">;=&gt; [1 2 true bird]</span>
+</span><span class='line'>    <span class="nv">atom</span> <span class="mi">1</span> <span class="c1">;=&gt; #&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">&lt;pre&gt;&lt;code&gt;</span><span class="p">(</span><span class="k">def </span><span class="nv">dog</span> <span class="mi">16</span><span class="p">)</span>
+</span><span class='line'><span class="nv">dog</span> <span class="c1">;=&amp;gt; 16</span>
+</span><span class='line'><span class="k">def </span><span class="nv">cat</span> <span class="mi">18</span>
+</span><span class='line'><span class="nv">cat</span> <span class="c1">;=&amp;gt; 18</span>
+</span><span class='line'><span class="nv">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Vectors are a bit interesting in the respect that you don&rsquo;t need to input the square brackets. If you just put in space delimited items, it will automatically construct a vector for you.</p>
+
+<pre><code class="clojure    ">    1 2 3 4 ;=&gt; [1 2 3 4]
+</code></pre>
+
+<p>You can create anonymous functions with the fn [x] syntax from clojure. And call them with surrounding parens. You can call regular functions by the () notation or the shorthand :.</p>
+
+<pre><code class="clojure    ">    fn [x] + x 1 ;=&gt; fn
+    (fn [x] + x 1) ;=&gt; fn
+    ((fn [x] + x 1) 3) ;=&gt; 4
+    ((fn [x y z] + x y z) 1 2 3) ;=&gt; 6
+    ((fn [] [4 5 6])) ;=&gt; [4 5 6]
+
+    defn dog [] "woof"
+    dog: ;=&gt; "woof"
+</code></pre>
+
+<p>To see the complete documentation - please visit the <a href="https://github.com/gigasquid/babar">Github repo</a>.</p>
+
+<h2>Show Me Babar Speech Acts</h2>
+
+<p>Now that we have the basics. Let&rsquo;s look at example of running a program with speech acts.
+This one speaks its beliefs and has assertions, a request, and queries.</p>
+
+<pre><code class="clojure    ">    speak-config true.
+    assert sunny false.
+    convince #nice-day "It is a nice day." fn [] = sunny true.
+    request *open-window when #nice-day fn [] println "Opened the window".
+    query request-is-done *open-window?
+    assert sunny true.
+    query request-is-done *open-window?
+</code></pre>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('bt2iYsVyCOM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/bt2iYsVyCOM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/bt2iYsVyCOM/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=bt2iYsVyCOM" id="bt2iYsVyCOM" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<p>Here is another one that shows using a request until a belief is held.</p>
+
+<pre><code class="clojure    ">    speak-config true.
+
+    assert counter atom 1.
+    convince #done "I am done counting" fn [] &gt; @counter 3.
+    request *count-up until #done fn [] swap! counter inc.
+    sleep 25.
+    query request-value *count-up?
+</code></pre>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('aT8MK0w71LM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/aT8MK0w71LM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/aT8MK0w71LM/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=aT8MK0w71LM" id="aT8MK0w71LM" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<p>Here the REPL asks you a question if you give it an undeclared var</p>
+
+<pre><code class="clojure">    speak-config true.
+    ask-config true.
+
+    request *task1 fn [] + 10 x.
+    query request-is-done *task1?
+    assert x 3.
+    sleep 10.
+    query request-is-done *task1?
+    query request-value *task1?
+</code></pre>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('nmi_fafmjsg');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/nmi_fafmjsg?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/nmi_fafmjsg/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=nmi_fafmjsg" id="nmi_fafmjsg" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<h2>Autonomous AR Drone Flight with Babar REPL</h2>
+
+<p>Since the language is aimed at communincating with machines. It is only natural that I use it to talk to the AR Drone.
+Here is a program that has the drone take off, get to a cruising altitude, and land - all using speech acts (and the <a href="https://github.com/gigasquid/clj-drone">clj-drone library</a>).</p>
+
+<pre><code class="clojure    ">    speak-config true.
+
+    import "clj-drone.core".
+    import "clj-drone.navdata".
+
+    assert get-navdata [key] get @nav-data key.
+    assert navdata-equal [key val] = (get-navdata key) val.
+    assert navdata-gt [key val] &gt; (get-navdata key) val.
+    assert init-drone [] (drone-initialize).
+    assert init-nav [] (drone-init-navdata).
+
+    convince #landed "I am on the ground" fn [] (navdata-equal :control-state :landed).
+    convince #flying "I am flying" fn [] or (navdata-equal :control-state :flying)
+                                            (navdata-equal :control-state :hovering).
+    convince #high-enough "I am high enough" fn [] (navdata-gt :altitude 1.5).
+
+    request *take-off when #landed fn [] (drone :take-off).
+    request *cruising-alt when #flying until #high-enough fn [] (drone :up 0.1).
+    request *land when #high-enough fn [] (drone :land).
+
+    convince #done "Whee! I am done." fn [] and (navdata-equal :control-state :landed)
+                                                query request-is-done *land.
+    request *end-navstream when #done fn [] (end-navstream).
+</code></pre>
+
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('CIzR8jD2d3c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/CIzR8jD2d3c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/CIzR8jD2d3c/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=CIzR8jD2d3c" id="CIzR8jD2d3c" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
+
+<h2>Conclusion and Thanks</h2>
+
+<p>I can honestly say, that this has been one of the most enjoyable programming quests. I encourage you all to look at McCarthy&rsquo;s papers, Clojure, Instaparse, and of course, hacking robots. A special thanks to all the Cincy folks at <a href="http://www.neo.com/">Neo</a> who have supported me through my gentle obsessions and have let me have the freedom to follow my curiosity.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7 McCarthy Papers in 7ish Weeks #7 - Elephant 2000]]></title>
+    <link href="http://gigasquid.github.io/blog/2013/01/02/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000/"/>
+    <updated>2013-01-02T00:30:32+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/01/02/7-mccarthy-papers-in-7ish-weeks-7-elephant-2000</id>
+    <content type="html"><![CDATA[<p>Saving the best for last.  <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/elephant/elephant.html">Elephant 2000</a></p>
+
+<p>To be continued&hellip;.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7 McCarthy Papers in 7ish Weeks #5 & #6 - SDFW Tic-Tac-Toe]]></title>
+    <link href="http://gigasquid.github.io/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5/"/>
+    <updated>2012-11-25T14:08:53+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png">http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png</a>"></p>
+
+<p>This holiday edition blog post covers two McCarthy papers instead of just one.  We will be talking about <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/freewill.pdf">Free Will - Even for Robots</a> and the companion paper <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/freewill2.pdf">Simple Deterministic Free Will</a>.</p>
+
+<h2>In which we deftly sidestep the philosophers</h2>
+
+<p>We know that computers and programs are completely deterministic.  A philosophical question is whether we, as humans are ruled by determinism, (although complex it may be), or not.  If we take the decision that humans are deterministic, then we can argue that either there is no free will - or that free will is &ldquo;compatible&rdquo; with determinism.  Philosophers, of course, could discuss such questions interminably, trying to get a theory to fit for all people and all occasions.  Thankfully, McCarthy takes a very admirable and practical view on free will.  Let&rsquo;s try out something simple for a computer program and see how it works.  He explores a philosophy "Compatibilist&rsquo;s" view, which regards a person to have free will if his actions are decided by an internal process, even if this process itself is deterministic.  But by exploring this view with computer programs, he makes clear:</p>
+
+<blockquote><p>&hellip; I don&rsquo;t need to take a position on determinism itself.</p></blockquote>
+
+<h2>Simple Deterministic Free Will</h2>
+
+<p>So what would Free Will look like for a machine. How do we go about defining it? McCarthy proposes the idea of Simple Deterministic Free Will. The main idea is that the mechanism of free will is broken up into two parts. The first part looks at the possible actions and the consequences of those actions, and the second part decides which of those actions are preferable and does them. He gives the example of a chess program:</p>
+
+<blockquote><p>People and chess programs carry thinking about choice beyond the ﬁrst level. Thus “If I make this move, my opponent (or nature regarded as an opponent) will have the following choices, each of which will give me further choices.” Examining such trees of possibilities is an aspect of free will in the world, but the simplest form of free will in a deterministic world does not involve branching more than once.</p></blockquote>
+
+<p>So perhaps we could find an example that is simpler than chess to work with &hellip;</p>
+
+<blockquote><p>&hellip;it would be interesting to design the simplest possible system exhibiting deterministic free will. A program for tic-tac-toe is simpler than a chess program, but the usual program does consider choices.</p></blockquote>
+
+<h2>Simple Deterministic Free Will Tic Tac Toe</h2>
+
+<p>So to explore McCarthy&rsquo;s idea of Simple Deterministic Free Will, I decided to try to construct a game of Tic Tac Toe with SDFW principles. Coincidentally, my six year old daughter, just learned how to play Tic Tac Toe as well. I wanted to construct a program that would &ldquo;reason&rdquo; about the game as would a child. Even though the game of Tic Tac Toe is simple enough to have all the possibility trees of moves completely solved, this is not how a my daughter approaches the game. Each time it is her move, she only looks one move ahead to see if she can win three in a row, or if she needs to block her opponent from winning the next move.</p>
+
+<h2>My Tic Tac Toe Program has Beliefs</h2>
+
+<p>It has three beliefs to be precise. It believes that no one is going to win, or it is going to win, or its opponent is going to win.</p>
+
+<pre><code>(def beliefs
+  { :win "I am going to win."
+    :lose "My opponent is going to win."
+    :noone "No one is going to win."})
+</code></pre>
+
+<p>McCarthy thinks that <a href="http://gigasquidsoftware.com/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">ascribing programs beliefs can be useful</a>. One of the reasons is that it helps us as humans, reason and debug our programs. I definitely saw the value of this when I was trying to debug my tic tac toe game. After it failed to block my winning move, I could see what its false belief was - ah - it thought that &ldquo;No one is going to win&rdquo;. I wrote another failing unit test to fix its bad belief.</p>
+
+<h2>My Tic Tac Toe Program Looks to See What Its Possible Actions and Preferences Are</h2>
+
+<p>It looks at the board and computes all its possible next moves. Then it computes all the possible next moves of its opponent. It looks at the consequences of these moves by assigning a belief from one of its three beliefs. Next, it ranks the moves according to the preference of its beliefs.</p>
+
+<pre><code>(def belief-action-preferences
+  { (beliefs :win) 1
+    (beliefs :lose) 2
+    (beliefs :noone) 3})
+</code></pre>
+
+<p>It then chooses the move to take that has the highest rank. If it believes that no-one is going to win, I opted to have it choose a random move from the list of possible choices. But this randomness is completely arbitrary on my part and not necessary to SDFW at all.</p>
+
+<h2>Why ClojureScript is Awesome</h2>
+
+<p>I coded the core tic-tac-toe program in Clojure, but then I thought that having a web page UI would be nice for my daughter to play with. So, I just took the game logic and moved it to ClojureScript. Let me say that again slower&hellip; I used the same code on the server on the browser. Awesome. Using the <a href="https://github.com/emezeske/lein-cljsbuild/blob/0.2.10/doc/CROSSOVERS.md">lein-cljsbuild crossover support</a>, I was able to simply configure my UI ClojureScript code to access my regular clojure game engine. Very cool. I was also very pleased to work with the <a href="https://github.com/levand/domina">https://github.com/levand/domina</a> DOM manipulation library for ClojureScript.</p>
+
+<h2>End Result</h2>
+
+<p>It was a fun project that let me play with ClojureScript, explore McCarthy&rsquo;s free will for robots, have some very interesting conversations about free will with my co-wokers and code and coffee friends, and make a game for my daughter to play and enjoy. If you are interested in checking out the program for yourself - <a href="http://gigasquid.github.com/sdfw-tic-tac-toe/">http://gigasquid.github.com/sdfw-tic-tac-toe/</a>. The last belief is displayed at the bottom. I have only tried it on Chrome, so beware. Finally, if you find any false beliefs, feel free to submit a pull request to <a href="https://github.com/gigasquid/sdfw-tic-tac-toe">https://github.com/gigasquid/sdfw-tic-tac-toe</a>.</p>
+
+<p>P.S. If you are wondering, I drew the awesome graphics all by myself.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7 McCarthy Papers in 7ish Weeks - #4]]></title>
+    <link href="http://gigasquid.github.io/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4/"/>
+    <updated>2012-11-06T13:32:04+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2012/11/06/7-mccarthy-papers-in-7ish-weeks-4</id>
+    <content type="html"><![CDATA[<p>Reading <a href="http://www-formal.stanford.edu/jmc/ailogic/ailogic.html">Artificial Intelligence, Logic, and Formalizing Common Sense</a>, led me surprisingly to reflect on, not only logic and philosophy, but also the history and present state of AI.</p>
+
+<p>Fist let&rsquo;s look at the kind of AI that McCarthy is describing in paper. He talks of a program that can use common sense knowledge about the world around it and have this knowledge structured well enough that it can be reasoned about mathematically. In fact, he describes four levels of logic:</p>
+
+<ol>
+<li><p>The computer program has its &ldquo;beliefs&rdquo; completely defined by its internal state.  If you are confused by the term &ldquo;beliefs&rdquo;, it refers to <a href="http://gigasquidsoftware.com/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/">ascribing mental qualities to machines</a>.  In his famous example, a thermostat has three beliefs: the room is too hot, the room is too cold, and the room is just right.</p></li>
+<li><p>The programs express their beliefs in sentences in machine memory.  However, they do not use ordinary logic.  They use other methods like rules and procedures.</p></li>
+<li><p>In addition to expresses their beliefs in sentences, they also use first order logic and logical deduction to reach their conclusions.</p></li>
+<li><p>The fourth level is still a goal today.  It is to have the program represent general facts about the world as logical sentences.  Furthermore, to have a database of these commonsense facts that programs can share.</p></li>
+</ol>
+
+
+<p>Let&rsquo;s step back now for a moment, to a excerpt from the very beginning of the paper:</p>
+
+<blockquote><p>One path to human-level AI uses mathematical logic to formalize common-sense knowledge in such a way that common-sense problems can be solved by logical reasoning. This methodology requires understanding the common-sense world well enough to formalize facts about it and ways of achieving goals in it. Basing AI on understanding the common-sense world is different from basing it on understanding human psychology or neurophysiology.</p></blockquote>
+
+<p>This approach to AI is just one approach. It is commonly referred to as a &ldquo;top down&rdquo; approach.  In the early years of AI it was the dominant way of thinking about things. Looking back at the history of AI, the <a href="http://en.wikipedia.org/wiki/History_of_artificial_intelligence#The_golden_years_1956.E2.88.921974">golden years</a> were full of optimism, (and funding), that this was the path to achieving fully intelligent machines.  Disenchantment with unfulfilled promises, led to the first <a href="http://en.wikipedia.org/wiki/AI_winter">AI winter</a>.  There was a rise of expert systems later on that limited their scope to small domains and avoided the common sense problem, but eventually ended in a second AI winter and ushered in our current world.  This basic approach is an opposite ground-up view of AI.  It uses neural networks and statistics from a physical inspiration.  Some of this inspiration is from human neurophysiology, some of it is from insect and animal world, but simplicity behavior of a &ldquo;body&rdquo; is emphasized.  With the advances in hardware and computing power today, the innovations and accomplishments have been breath taking.</p>
+
+<p>A good example of the two approaches can be seen in my Roomba.  A top down approach, would require my Roomba to have a complete room model in its program.  It would have to understand what my couch was, where the doors where and have logically reasoning to direct it to which areas to clean and when to stop cleaning and recharge itself.  The creators of the Roomba were from the opposite camp of thinking.  They took the simpler behavior approach of having the Roomba just take a random walk in the room and turn around when it ran into an obstacle.  It took a bit longer to get the room clean in such a random fashion, but not having to deal with the overhead of a mental model was well worth the trade off.</p>
+
+<p>Noam Chomsky recently argued that the<a href="http://www.theatlantic.com/technology/archive/2012/11/noam-chomsky-on-where-artificial-intelligence-went-wrong/261637/"> pendulum has swung too far in favor of this simplified behaviorist approach</a>. Even in the light of <a href="http://norvig.com/chomsky.html">Norvig&rsquo;s response</a>, I think Chomsky has a point.  We would do well to search for gems of true intelligent systems in the historical landscape of the AI Winter.  Some of the breakthroughs of current sheer computing power and new modeling techniques, might yield great fruits.</p>
+
+<p>One of the comments by nagelonce, on the Chomsky article,  puts this very well:</p>
+
+<blockquote><p>AI has a hole in the middle. There&rsquo;s top-down AI, which focuses on abstractions and reductionism. There&rsquo;s bottom-up AI, which focuses on reactive systems and the front end of visual processing. They have yet to meet in the middle. They are, however, much closer to doing so than they were twenty years ago.</p></blockquote>
+
+<p>If you are interested in checking out a top-down open source AI project, take a look at <a href="http://www.opencyc.org/doc">OpenCyc</a>.  After a brief look at it the other night, it suffers from the lack of love and documentation.  But, I can also see the promise of McCarthy&rsquo;s common sense knowledge and logic system, covered in a thin layer of snow.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7 John McCarthy Papers in 7 Weeks #3]]></title>
+    <link href="http://gigasquid.github.io/blog/2012/10/15/7-john-mccarthy-papers-in-7-weeks-3/"/>
+    <updated>2012-10-15T01:37:30+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2012/10/15/7-john-mccarthy-papers-in-7-weeks-3</id>
+    <content type="html"><![CDATA[<p><strong>In which I realize that John McCarthy is the father of the Semantic Web</strong></p>
+
+<p>I have realized that it generally takes me more than a week to read a paper, reflect on it, experiment, and finally blog about it. But, since I made up the rules of the project in the first place,  I am not going to dwell on the time frame and just move forward with the next paper.</p>
+
+<p>When I picked the paper <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/concepts/concepts.html">First Order Theories of Individual Concepts and Propositions</a>, I thought to myself that it would be a rather narrow, more self contained paper than the first two broad papers that I read. However, the connections that it drew to current technologies caught me by surprise.</p>
+
+<p>The main point of the paper is how to formalize language statements, including concepts, so that a computer can apply mathematical rules and logic to them. McCarthy had mentioned concepts and thoughts in his &ldquo;Ascribing Mental Qualities&rdquo; paper, where he says:</p>
+
+<blockquote><p>&ldquo;..the deep structure&rdquo; of a publicly expressible thought is a node is the public network."</p></blockquote>
+
+<p>This immediately brought to my mind the Semantic Web.   In Semantic Web, data is structured in <a href="http://www.w3.org/TR/rdf-primer/#statements">RDF</a> statements as triples - <subject> <predicate> <object>.  The data contained in these triples are structured and described so that machines can derive context and meaning from it.  For example, instead of just putting  "cat" as the subject.  In RDF you would use <a href="http://dbpedia.org/resource/Cat">http://dbpedia.org/resource/Cat</a> as the subject. Which, is pretty much dead on McCarthy&rsquo;s expressible thought as a node in the public network.</p>
+
+<p>McCarthy uses the following example to illustrate how to construct First Order statements.</p>
+
+<blockquote><p>Frege (1892) discussed the need to distinguish direct and indirect use of words. According to one interpretation of Frege&rsquo;s ideas, the meaning of the phrase &ldquo;Mike&rsquo;s telephone number&rdquo; in the sentence &ldquo;Pat knows Mike&rsquo;s telephone number&rdquo; is the concept of Mike&rsquo;s telephone number, whereas its meaning in the sentence &ldquo;Pat dialed Mike&rsquo;s telephone number&rdquo; is the number itself. Thus if we also have Mary&rsquo;s telephone number = Mike&rsquo;s telephone number", then Pat dialed Mary's telephone number" follows, but &ldquo;Pat knows Mary&rsquo;s telephone number does not. phone number&rdquo; is the number itself. Thus if we also have Mary&rsquo;s telephone number = Mike&rsquo;s telephone number", then Pat dialed Mary's telephone number" follows, but Pat knows Mary&rsquo;s telephone number does not.</p></blockquote>
+
+<p>McCarthy express the statement &ldquo;Pat knows Mike&rsquo;s telephone number&rdquo; as:</p>
+
+<blockquote><p>true Know(Pat; Telephone Mike)</p></blockquote>
+
+<p>He then uses more formalized statements to derive logic statements and reasoning from this example.</p>
+
+<p>At this point, I was seeing more connections to the field of Semantic Web. Expressing data in RDF/ OWL gives computers exactly this type of logic and reasoning ability too.</p>
+
+<p>So how would you go about expressing &ldquo;Pat knows Mike&rsquo;s telephone number&rdquo; in Semantic Web data form?   This question is not a simple one,(at least for me),  because there are so many different ways that you can construct RDF.  The choices were a bit overwhelming.</p>
+
+<p>One option might be to use RDF reification, in which you can make statements about statements.  Another option might be using OWL classes and properties.  There are some excellent answers when I posed the question on <a href="http://stackoverflow.com/questions/13114018/how-to-state-pat-knows-mikes-telephone-number-in-rdf-owl">http://stackoverflow.com/questions/13114018/how-to-state-pat-knows-mikes-telephone-number-in-rdf-owl.</a></p>
+
+<p>Indeed, it seems that we can express individual concepts and propositions in Semantic Web form quite well.  I had not realized that John McCarthy is the father of Sematic Web as well.</p>
+
+<p>In closing, he speaks of AI Applications. Reasoning and predication are familiar applications that we use today. However he hits upon one that is quite interesting to me. That is &ldquo;..determining that it <strong>does not know </strong>something or that someone else doesn&rsquo;t.&rdquo; This is not a common area to think about with computer programs. We are usually much more focused on what it does know and how to reason about it. But, if we are really to build intelligent, learning systems, we need to be able to identify what it does not know as well.  Perhaps then the AI can help us humans, who are pretty bad at that too.</p>
+]]></content>
+  </entry>
+  
+</feed>

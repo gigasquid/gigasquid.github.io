@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Clojure Dictionary Challenge - Squid's Blog</title>
+  <meta name="author" content="Carin Meier">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/">
+  <meta property="og:title" content="Clojure Dictionary Challenge - Squid's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      
+        <header role="banner">
+          <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Squid's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="/blog/archives">Archives</a></li>
+<li ><a href="/about">About</a></li>
+<li ><a href="/books">Books</a></li>
+<li ><a href="/speaking">Speaking</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+        </header>
+      
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Squid's Blog" />
+    
+    <meta itemprop="url" content="http://gigasquid.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-10-12T03:11:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 12 Oct 2010,  3:11 AM</time>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        Clojure Dictionary Challenge
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p>There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file.  Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution.  Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.</p>
+
+<p>Armed with Stuart Halloway&rsquo;s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission.</p>
+
+<p>Starting small – I decided to tackle the issue of finding consecutive consonants in a word.  I found that re-seq handles regex very nicely</p>
+
+<pre><code>user=&gt;  (re-seq #"[^aeiou]{2,}" "batty") 
+("tty")
+</code></pre>
+
+<p>Building on … let&rsquo;s find the number of letters in this word.  Since we have a sequence – we need to get the first element off of it, convert it to a string and find the length of it</p>
+
+<pre><code>user=&gt;  (.length (str (first (re-seq #"[^aeiou]{2,}" "batty"))))
+3
+</code></pre>
+
+<p>Not bad – but let&rsquo;s turn this into a function now</p>
+
+<pre><code>user=&gt; (defn count-cons [s]
+   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+ )
+#'user/count-cons
+</code></pre>
+
+<p>Now we can call the function directly</p>
+
+<pre><code>user=&gt; (count-cons "batty")
+3
+</code></pre>
+
+<p>Alright – we are making progress.  Next step, we need to be able to compare two words and see which has the bigger consonant count and return that.  For this, we will need a little “if” magic.</p>
+
+<pre><code>user=&gt; (defn compare-words [s1,s2]
+(if (&gt; (count-cons s1) (count-cons s2))
+  s1 s2))
+#'user/compare-words
+</code></pre>
+
+<p>Let&rsquo;s test it out</p>
+
+<pre><code>#'user/compare-words
+user=&gt; (compare-words "batty" "bat")
+"batty"
+user=&gt; (compare-words "bat" "batty")
+"batty"
+</code></pre>
+
+<p>Oh, yes, we are getting to the good part now.  Since we have a function that we can call on two arguments and give us one back that we can work with – we are ready to pull out the big guns …. reduce!</p>
+
+<pre><code>user=&gt; (reduce compare-words ["vat", "batty", "cars"])
+"batty"
+</code></pre>
+
+<p>Yeah!  Next we just need to feed it a file.  For this, after doing some research, I used the duck-streams library – you need to load it in using</p>
+
+<pre><code>user=&gt; (use '[clojure.contrib.duck-streams :only (spit read-lines)])
+
+nil
+</code></pre>
+
+<p>We open the file and read the lines and feed it to our function</p>
+
+<pre><code>user=&gt; (reduce compare-words (read-lines "/usr/share/dict/words"))
+
+"Ångström"
+</code></pre>
+
+<p>Yes, my regex needs some tweaking - but for this exercise, I am content.</p>
+
+<p>When you just have the working code.  It is actually quite concise:</p>
+
+<pre><code>;Counting consecutive consonants
+
+(use '[clojure.contrib.duck-streams :only (spit read-lines)])
+
+(defn count-cons [s]
+   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+ )
+
+(defn compare-words [s1,s2]
+(if (&gt; (count-cons s1) (count-cons s2))
+  s1 s2))
+
+(reduce compare-words (read-lines "/usr/share/dict/words"))
+</code></pre>
+
+<p>All in all, a fun evening trying to think functionally.</p>
+</div>
+
+
+      <footer class="post-footer">
+        <p class="meta text-muted">
+          
+
+
+<figure class="author-image">
+    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
+</figure>
+
+<section class="author">
+    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">gigasquid</span></span></h4>
+
+    <div class="author-meta">
+        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="share">
+    
+    <h4>Share this post</h4>
+    
+    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/;" 
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+    
+</section>
+
+
+
+
+<!--
+<footer class="post-footer">
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+
+-->
+          
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-10-12T03:11:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 12 Oct 2010,  3:11 AM</time>
+          <br>
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/development/'>Development</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="pager">
+            
+            
+              
+                <a href="/blog/2010/09/13/agile-software-lessons-from-ballet/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Agile Software Lessons from Ballet"> 
+                  <div class="text-muted">
+                    <small>Previous Post</small>
+                  </div>
+                  <div class="pager-title">
+                    <h4>Agile Software Lessons from Ballet</h4>
+                  </div>
+                </a>
+              
+            
+            
+            
+              
+              <a href="/blog/2010/11/20/zen-and-zombies/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Zen and Zombies - Adventures in Ruby">
+                <div class="text-muted">
+                  <small>Next Post</small>
+                </div>
+                <div class="pager-title">
+                  <h4>Zen and Zombies - Adventures in Ruby</h4>
+                </div>
+              </a>
+              
+            
+            
+          </div>
+        
+      </footer>
+    </article>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2023 - Carin Meier<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr.js"></script>
+
+
+  </body>
+</html>

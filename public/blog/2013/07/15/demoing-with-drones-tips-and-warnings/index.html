@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Demoing With Drones: Tips and Warnings - Squid's Blog</title>
+  <meta name="author" content="Carin Meier">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/">
+  <meta property="og:title" content="Demoing With Drones: Tips and Warnings - Squid's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      
+        <header role="banner">
+          <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Squid's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="/blog/archives">Archives</a></li>
+<li ><a href="/about">About</a></li>
+<li ><a href="/books">Books</a></li>
+<li ><a href="/speaking">Speaking</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+        </header>
+      
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Squid's Blog" />
+    
+    <meta itemprop="url" content="http://gigasquid.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-07-15T15:42:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 15 Jul 2013,  3:42 PM</time>
+        
+           | <a href="#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        Demoing With Drones: Tips and Warnings
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p>Lately, I have had the pleasure of speaking and sharing my experience
+of programming <a href="http://ardrone2.parrot.com/">AR Drones</a> with Clojure.  However, doing live hardware
+demos has not always been a smooth ride.  In fact, it can be fraught
+with peril.  I thought that I would share some of the tips and tricks
+that have helped me, as well as help make you
+aware of some potential pitfalls.</p>
+
+<h2>Traveling with the AR Drone</h2>
+
+<p><img class="left" src="http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg"></p>
+
+<p>Do you need to take your drone with you on the plane to the demo?
+The box that the drone comes in is a very nice carrying case, however it
+is too big to take on as a carry-on.  I found that taking the hull
+off, and packing it into a plastic box worked well.  It was small
+enough to pack under the seat of even the smaller planes.  I took the
+battery out and packed it in my checked luggage.</p>
+
+<h2>Before the Demo</h2>
+
+<ul>
+<li><p><strong>Put colored masking tape on the floor</strong> : If the floor is
+  featureless, the drone will have a hard time staying in one place
+  while it is hovering.  Put down some strips of colored masking
+  tape in the area that you want to demo the drone.</p></li>
+<li><p><strong>Charge the spare battery</strong>:  Make sure that you have at least 2
+  batteries charged and ready to go.  If there is an extra plug
+  nearby, just plug in the battery and charger until you are ready
+  to present.</p></li>
+<li><p><strong>Beware the network interference</strong>:  In some larger venues, like
+  hotels, the network traffic will make things break.  In
+  particular, receiving navigation data back from the drone. There
+  are possible strategies for mitigating this - the only one I have
+  tried so far is to bump up the timeout on the UDP connection.
+  Other things that you may want to try would be to auto-reconnect
+  after timeout.  Also limiting the amount navdata you need might
+  also work.</p></li>
+<li><p><strong>Backup videos</strong> - Having backup videos of your demo actually
+  working is essential.  It is safety net that will allow you to
+  sleep the night before.  Like they say, &ldquo;Hope for the best, but
+  plan for the worst&rdquo;.</p></li>
+<li><p><strong>Rehearse</strong> - If possible, go through your drone demos in the space
+  sometime before the talk.  You will get a feeling for issues that
+  might occur - like network troubles.</p></li>
+</ul>
+
+
+<h2>Demo Time!</h2>
+
+<ul>
+<li><p><strong>Front row drone catchers</strong> - Enlist the aid of your audience.
+  Show the people in the front row how to catch a drone safely and
+  hold it at a 90 degree angle so the engine cuts out.  That way, if
+  the drone starts going off in unplanned ways, you will have help.</p></li>
+<li><p><strong>Cross your fingers and have fun</strong> - Good luck.  Hardware demos are
+  a lot of fun.  Hopefully, everything we work as planned, but if
+  not - at least it was interesting.</p></li>
+</ul>
+
+</div>
+
+
+      <footer class="post-footer">
+        <p class="meta text-muted">
+          
+
+
+<figure class="author-image">
+    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
+</figure>
+
+<section class="author">
+    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
+
+    <div class="author-meta">
+        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="share">
+    
+    <h4>Share this post</h4>
+    
+    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/;" 
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+    
+</section>
+
+
+
+
+<!--
+<footer class="post-footer">
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+
+-->
+          
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-07-15T15:42:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 15 Jul 2013,  3:42 PM</time>
+          <br>
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/drone/'>Drone</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="pager">
+            
+            
+              
+                <a href="/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Babar - A Little Language with Speech Acts for Machines"> 
+                  <div class="text-muted">
+                    <small>Previous Post</small>
+                  </div>
+                  <div class="pager-title">
+                    <h4>Babar - A Little Language with Speech Acts for Machines</h4>
+                  </div>
+                </a>
+              
+            
+            
+            
+              
+              <a href="/blog/2013/07/22/5-whys-of-community/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: My 5 Whys of Community">
+                <div class="text-muted">
+                  <small>Next Post</small>
+                </div>
+                <div class="pager-title">
+                  <h4>My 5 Whys of Community</h4>
+                </div>
+              </a>
+              
+            
+            
+          </div>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h2>Comments</h2>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2023 - Carin Meier<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr.js"></script>
+
+
+  </body>
+</html>

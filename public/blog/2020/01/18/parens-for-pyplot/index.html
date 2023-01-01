@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Parens for Pyplot - Squid's Blog</title>
+  <meta name="author" content="Carin Meier">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/">
+  <meta property="og:title" content="Parens for Pyplot - Squid's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      
+        <header role="banner">
+          <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Squid's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="/blog/archives">Archives</a></li>
+<li ><a href="/about">About</a></li>
+<li ><a href="/books">Books</a></li>
+<li ><a href="/speaking">Speaking</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+        </header>
+      
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Squid's Blog" />
+    
+    <meta itemprop="url" content="http://gigasquid.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2020-01-18T15:39:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 18 Jan 2020,  3:39 PM</time>
+        
+           | <a href="#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        Parens for Pyplot
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p><a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a> has opened the door for Clojure to directly interop with Python libraries. That means we can take just about any Python library and directly use it in our Clojure REPL. But what about <a href="https://matplotlib.org/">matplotlib</a>?</p>
+
+<p>Matplotlib.pyplot is a standard fixture in most tutorials and python data science code. How do we interop with a python graphics library?</p>
+
+<h2>How do you interop?</h2>
+
+<p>It turns out that matplotlib has a headless mode where we can export the graphics and then display it using any method that we would normally use to display a .png file. In my case, I made a quick macro for it using the shell <code>open</code>. I&rsquo;m sure that someone out that could improve upon it, (and maybe even make it a cool utility lib), but it suits what I&rsquo;m doing so far:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="kd">ns </span><span class="nv">gigasquid.plot</span>
+</span><span class='line'><span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">libpython-clj.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]</span>
+</span><span class='line'><span class="p">[</span><span class="nv">libpython-clj.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]</span>
+</span><span class='line'><span class="p">[</span><span class="nv">clojure.java.shell</span> <span class="ss">:as</span> <span class="nv">sh</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;; This uses the headless version of matplotlib to generate a graph then copy it to the JVM</span>
+</span><span class='line'><span class="c1">;; where we can then print it</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;;; have to set the headless mode before requiring pyplot</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">mplt</span> <span class="p">(</span><span class="nf">py/import-module</span> <span class="s">&quot;matplotlib&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">py.</span> <span class="nv">mplt</span> <span class="s">&quot;use&quot;</span> <span class="s">&quot;Agg&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="ss">&#39;matplotlib.pyplot</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="ss">&#39;matplotlib.backends.backend_agg</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="ss">&#39;numpy</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defmacro </span><span class="nv">with-show</span>
+</span><span class='line'>  <span class="s">&quot;Takes forms with mathplotlib.pyplot to then show locally&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="o">&amp;</span> <span class="nv">body</span><span class="p">]</span>
+</span><span class='line'>  <span class="o">`</span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">_#</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/clf</span><span class="p">)</span>
+</span><span class='line'>         <span class="nv">fig#</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/figure</span><span class="p">)</span>
+</span><span class='line'>         <span class="nv">agg-canvas#</span> <span class="p">(</span><span class="nf">matplotlib.backends.backend_agg/FigureCanvasAgg</span> <span class="nv">fig#</span><span class="p">)]</span>
+</span><span class='line'>     <span class="o">~</span><span class="p">(</span><span class="nb">cons </span><span class="ss">&#39;do</span> <span class="nv">body</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">py.</span> <span class="nv">agg-canvas#</span> <span class="s">&quot;draw&quot;</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">matplotlib.pyplot/savefig</span> <span class="s">&quot;temp.png&quot;</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">sh/sh</span> <span class="s">&quot;open&quot;</span> <span class="s">&quot;temp.png&quot;</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Parens for Pyplot!</h2>
+
+<p>Now that we have our wrapper let&rsquo;s take it for a spin. We&rsquo;ll be following along more or less this <a href="http://cs231n.github.io/python-numpy-tutorial/#matplotlib-plotting">tutorial for numpy plotting</a></p>
+
+<p>For setup you will need the following installed in your python environment:</p>
+
+<ul>
+<li>numpy</li>
+<li>matplotlib</li>
+<li>pillow</li>
+</ul>
+
+
+<p>We are also going to use the latest and greatest syntax from libpython-clj so you are going to need to install the snapshot version locally until the next version goes out:</p>
+
+<ul>
+<li><code>git clone git@github.com:cnuernber/libpython-clj.git</code></li>
+<li><code>cd cd libpython-clj</code></li>
+<li><code>lein install</code></li>
+</ul>
+
+
+<p>After that is all setup we can require the libs we need in clojure.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.numpy-plot</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">libpython-clj.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">libpython-clj.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]</span>
+</span><span class='line'>            <span class="p">[</span><span class="nv">gigasquid.plot</span> <span class="ss">:as</span> <span class="nv">plot</span><span class="p">]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>plot</code> namespace contains the macro for <code>with-show</code> above. The <code>py.</code> and others is the new and improved syntax for interop.</p>
+
+<h3>Simple Sin and Cos</h3>
+
+<p>Let&rsquo;s start off with a simple sine and cosine functions. This code will create a <code>x</code> numpy vector of a range from 0 to <code>3 * pi</code> in 0.1 increments and then create <code>y</code> numpy vector of the <code>sin</code> of that and plot it</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://live.staticflickr.com/65535/49405284796_014447588d_z.jpg" alt="sin" /></p>
+
+<p>Beautiful yes!</p>
+
+<p>Let&rsquo;s get a bit more complicated now and and plot both the sin and cosine as well as add labels, title, and legend.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y-sin</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y-cos</span> <span class="p">(</span><span class="nf">numpy/cos</span> <span class="nv">x</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y-sin</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y-cos</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/xlabel</span> <span class="s">&quot;x axis label&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/ylabel</span> <span class="s">&quot;y axis label&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/title</span> <span class="s">&quot;Sine and Cosine&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/legend</span> <span class="p">[</span><span class="s">&quot;Sine&quot;</span> <span class="s">&quot;Cosine&quot;</span><span class="p">])))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http:////live.staticflickr.com/65535/49405284806_1d04957bce_z.jpg" alt="sin and cos" /></p>
+
+<p>We can also add subplots. Subplots are when you divide the plots into different portions.
+It is a bit stateful and involves making one subplot <em>active</em> and making changes and then making the other subplot <em>active</em>. Again not too hard to do with Clojure.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y-sin</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">y-cos</span> <span class="p">(</span><span class="nf">numpy/cos</span> <span class="nv">x</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="c1">;;; set up a subplot gird that has a height of 2 and width of 1</span>
+</span><span class='line'>      <span class="c1">;; and set the first such subplot as active</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">2</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y-sin</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/title</span> <span class="s">&quot;Sine&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">;;; set the second subplot as active and make the second plot</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">2</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y-cos</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/title</span> <span class="s">&quot;Cosine&quot;</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http:////live.staticflickr.com/65535/49405284836_8e49e4a6b8_z.jpg" alt="sin and cos subplots" /></p>
+
+<h3>Plotting with Images</h3>
+
+<p>Pyplot also has functions for working directly with images as well. Here we take a picture of my cat and create another version of it that is tinted.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">img</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/imread</span> <span class="s">&quot;resources/cat.jpg&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">img-tinted</span> <span class="p">(</span><span class="nf">numpy/multiply</span> <span class="nv">img</span> <span class="p">[</span><span class="mi">1</span> <span class="mf">0.95</span> <span class="mf">0.9</span><span class="p">])]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/imshow</span> <span class="nv">img</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/imshow</span> <span class="p">(</span><span class="nf">numpy/uint8</span> <span class="nv">img-tinted</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://live.staticflickr.com/65535/49404801993_ed398d5768_n.jpg" alt="cat tinted" /></p>
+
+<h3>Pie charts</h3>
+
+<p>Finally, we can show how to do a pie chart. I asked people in a <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a> what they wanted an example of in python interop and one of them was a pie chart. This is for you!</p>
+
+<p>The original code for this example came from this <a href="https://matplotlib.org/3.1.1/gallery/pie_and_polar_charts/pie_features.html">tutorial</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">labels</span> <span class="p">[</span><span class="s">&quot;Frogs&quot;</span> <span class="s">&quot;Hogs&quot;</span> <span class="s">&quot;Dogs&quot;</span> <span class="s">&quot;Logs&quot;</span><span class="p">]</span>
+</span><span class='line'>        <span class="nv">sizes</span> <span class="p">[</span><span class="mi">15</span> <span class="mi">30</span> <span class="mi">45</span> <span class="mi">10</span><span class="p">]</span>
+</span><span class='line'>        <span class="nv">explode</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.1</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]</span> <span class="c1">; only explode the 2nd slice (Hogs)</span>
+</span><span class='line'>        <span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">fig1</span> <span class="nv">ax1</span><span class="p">]</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/subplots</span><span class="p">)]</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">py.</span> <span class="nv">ax1</span> <span class="s">&quot;pie&quot;</span> <span class="nv">sizes</span> <span class="ss">:explode</span> <span class="nv">explode</span> <span class="ss">:labels</span> <span class="nv">labels</span> <span class="ss">:autopct</span> <span class="s">&quot;%1.1f%%&quot;</span>
+</span><span class='line'>                             <span class="ss">:shadow</span> <span class="nv">true</span> <span class="ss">:startangle</span> <span class="mi">90</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">py.</span> <span class="nv">ax1</span> <span class="s">&quot;axis&quot;</span> <span class="s">&quot;equal&quot;</span><span class="p">))</span> <span class="c1">;equal aspec ration ensures that pie is drawn as circle</span>
+</span><span class='line'>      <span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://live.staticflickr.com/65535/49404802008_7e84ceff76_z.jpg" alt="pie chart" /></p>
+
+<h3>Onwards and Upwards!</h3>
+
+<p>This is just the beginning. In upcoming posts, I will be showcasing examples of interop with different libraries from the python ecosystem. Part of the goal is to get people used to how to use interop but also to raise awareness of the capabilities of the python libraries out there right now since they have been historically out of our ecosystem.</p>
+
+<p>If you have any libraries that you would like examples of, I&rsquo;m taking requests. Feel free to leave them in the comments of the blog or in the <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a>.</p>
+
+<p>Until next time, happy interoping!</p>
+
+<p>PS All the code examples are here <a href="https://github.com/gigasquid/libpython-clj-examples">https://github.com/gigasquid/libpython-clj-examples</a></p>
+</div>
+
+
+      <footer class="post-footer">
+        <p class="meta text-muted">
+          
+
+
+<figure class="author-image">
+    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
+</figure>
+
+<section class="author">
+    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
+
+    <div class="author-meta">
+        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="share">
+    
+    <h4>Share this post</h4>
+    
+    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/;" 
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+    
+</section>
+
+
+
+
+<!--
+<footer class="post-footer">
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+
+-->
+          
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2020-01-18T15:39:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 18 Jan 2020,  3:39 PM</time>
+          <br>
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/python/'>Python</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="pager">
+            
+            
+              
+                <a href="/blog/2020/01/10/hugging-face-gpt-with-clojure/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Hugging Face GPT with Clojure"> 
+                  <div class="text-muted">
+                    <small>Previous Post</small>
+                  </div>
+                  <div class="pager-title">
+                    <h4>Hugging Face GPT with Clojure</h4>
+                  </div>
+                </a>
+              
+            
+            
+            
+              
+              <a href="/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Clojure Interop with Python NLP Libraries">
+                <div class="text-muted">
+                  <small>Next Post</small>
+                </div>
+                <div class="pager-title">
+                  <h4>Clojure Interop with Python NLP Libraries</h4>
+                </div>
+              </a>
+              
+            
+            
+          </div>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h2>Comments</h2>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2023 - Carin Meier<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr.js"></script>
+
+
+  </body>
+</html>

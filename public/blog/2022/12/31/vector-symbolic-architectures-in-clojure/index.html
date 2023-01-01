@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Vector Symbolic Architectures in Clojure - Squid's Blog</title>
+  <meta name="author" content="Carin Meier">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/">
+  <meta property="og:title" content="Vector Symbolic Architectures in Clojure - Squid's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      
+        <header role="banner">
+          <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Squid's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ><a href="/blog/archives">Archives</a></li>
+<li ><a href="/about">About</a></li>
+<li ><a href="/books">Books</a></li>
+<li ><a href="/speaking">Speaking</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+        </header>
+      
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Squid's Blog" />
+    
+    <meta itemprop="url" content="http://gigasquid.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2022-12-31T15:41:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 31 Dec 2022,  3:41 PM</time>
+        
+           | <a href="#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        Vector Symbolic Architectures in Clojure
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p><img src="https://live.staticflickr.com/65535/52596142860_c4cf8642b0_z.jpg" alt="" /></p>
+
+<p><em>generated with Stable Diffusion</em></p>
+
+<p>Before diving into the details of what Vector Symbolic Architectures are and what it means to implement Clojure data structures in them, I&rsquo;d like to start with some of my motivation in this space.</p>
+
+<h2>Small AI for More Personal Enjoyment</h2>
+
+<p>Over the last few years, I&rsquo;ve spent time learning, exploring, and contributing to open source deep learning. It continues to amaze me with its rapid movement and achievements at scale. However, the scale is really too big and too slow for me to enjoy it anymore.</p>
+
+<p>Between work and family, I don&rsquo;t have a lot of free time. When I do get a few precious hours to do some coding <em>just for me</em>, I want it it to be small enough for me to fire up and play with it in a REPL on my local laptop and get a result back in under two minutes.</p>
+
+<p>I also believe that the current state of AI is not likely to produce any more  meaningful <em>revolutionary</em> innovations in the current mainstream deep learning space. This is not to say that there won&rsquo;t be advances. Just as commercial airlines transformed the original first flight, I&rsquo;m sure we are going to continue to see the transformation of society with current big models at scale - I just think the next leap forward is going to come from somewhere else. And that somewhere else is going to be <em>small</em> AI.</p>
+
+<h2>Vector Symbolic Architures aka Hyperdimensional Computing</h2>
+
+<p>Although I&rsquo;m  talking about small AI,  VSA or Hyperdimensional computing is based on really big vectors - like 1,000,000 dimensions. The beauty and simplicity in it is that everything is a hypervector - symbols, maps, lists. Through the <a href="http://rctn.org/vs265/kanerva09-hyperdimensional.pdf">blessing of high dimensionality</a>, any random hypervector is mathematically guaranteed to be orthogonal to any other one. This all enables some cool things:</p>
+
+<ul>
+<li>Random hypervectors can be used to represent symbols (like numbers, strings, keywords, etc..)</li>
+<li>We can use an algebra to operate on hypervectors: <em>bundling</em> and <em>binding</em> operations create new hypervectors that are compositions of each other and can store and retrieve key value pairs. These operations furthermore are <em>fuzzy</em> due to the nature of working with vectors. In the following code examples, I will be using the concrete model of <a href="https://redwood.berkeley.edu/wp-content/uploads/2021/08/Module2_VSA_models_slides.pdf">MAP (Multiply, Add, Permute)</a> by <a href="https://www.rossgayler.com/">R. Gayler</a>.</li>
+<li>We can represent Clojure data structures such as maps and vectors in them and perform operations such as <code>get</code> with probabilistic outcomes.</li>
+<li>Everything is a hypervector! I mean you have a keyword that is a symbol that is a hypervector, then you bundle that with other keywords to be a map. The result is a single hypervector. You then create a sequence structure and add some more in. The result is a single hypervector. The simplicity in the algebra and form of the VSA is beautiful - not unlike LISP itself. Actually, <a href="https://redwood.berkeley.edu/wp-content/uploads/2021/08/Neubert2019_Article_AnIntroductionToHyperdimension.pdf">P. Kanerva thought that a LISP could be made from it</a>. In my exploration, I only got as far as making some Clojure data structures, but I&rsquo;m sure it&rsquo;s possible.</li>
+</ul>
+
+
+<h2>Start with an Intro and a Paper</h2>
+
+<p>A good place to start with Vector Symbolic Architectures is actually the paper referenced above - <a href="https://redwood.berkeley.edu/wp-content/uploads/2021/08/Neubert2019_Article_AnIntroductionToHyperdimension.pdf">An Introduction to Hyperdimensional Computing for Robots</a>. In general, I find the practice of taking a paper and then trying to implement it a great way to learn.</p>
+
+<p>To work with VSAs in Clojure, I needed a high performing Clojure library with tensors and data types. I reached for <a href="https://github.com/techascent/tech.datatype">https://github.com/techascent/tech.datatype</a>. It could handle a million dimensions pretty easily on my laptop.</p>
+
+<p>To create a new hypervector - simply chose random values between -1 and 1. This gives us a direction in space which is enough.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;; Uses Gaylor Method for HDV Operations</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">size</span> <span class="mi">1</span><span class="nv">e6</span><span class="p">)</span>  <span class="c1">; big enough for the &quot;Blessing of Dimensionality&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">binary-rand</span>
+</span><span class='line'>  <span class="s">&quot;Choose a random binary magnitude for the vector +1 or -1&quot;</span>
+</span><span class='line'>  <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="mf">0.5</span><span class="p">)</span> <span class="mi">-1</span> <span class="mi">1</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">hdv</span>
+</span><span class='line'>  <span class="s">&quot;Create a random hyperdimensional vector of default size&quot;</span>
+</span><span class='line'>  <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">dtt/-&gt;tensor</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="nv">size</span> <span class="o">#</span><span class="p">(</span><span class="nf">binary-rand</span><span class="p">))</span> <span class="ss">:datatype</span> <span class="ss">:int8</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The only main operations to create key value pairs is addition and matrix multiplication.</p>
+
+<p>Adding two hyperdimensional vectors, (hdvs), together is calling bundling. Note we clip the values to 1 or -1. At high dimensions, only the direction really matters not the magnitude.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">clip</span>
+</span><span class='line'>  <span class="s">&quot;Clips the hyperdimensional vector magnitude to 1 or -1.</span>
+</span><span class='line'><span class="s">   We can discard these because of the nature of the large vectors</span>
+</span><span class='line'><span class="s">   that the mangitudes do not matter&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">v</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">v</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">dtype-fn/min</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">dtype-fn/max</span> <span class="mi">-1</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">bundle</span>
+</span><span class='line'>  <span class="s">&quot;Adds two hyperdimensional vectors together into a single bundle&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">bundle-op</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">clip</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can assign key values using <code>bind</code> which is matrix multiplication.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">bind</span>
+</span><span class='line'>  <span class="s">&quot;Binds two HDVs using the multiplication operator. This binding is akin to assigning a symbol to a value. &quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">dtype-fn/*</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One cool thing is that the binding of a key value pair is also the inverse of itself. So to unbind is just to bind again.</p>
+
+<p>The final thing we need is a cleanup memory. The purpose of this is to store the hdv somewhere without any noise. As the hdv gets bundled with other operations there is noise associated with it. It helps to use the cleaned up version by comparing the result to the memory version for future operations. For Clojure, this can be a simple atom.</p>
+
+<p>Following along the example in the paper, we reset the cleanup memory and add some symbols.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vb/reset-hdv-mem!</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">vb/add-hdv!</span> <span class="ss">:name</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">vb/add-hdv!</span> <span class="s">&quot;Alice&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">vb/add-hdv!</span> <span class="ss">:yob</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">vb/add-hdv!</span> <span class="mi">1980</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">vb/add-hdv!</span> <span class="ss">:high-score</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">vb/add-hdv!</span> <span class="mi">1000</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next we create the key value map with combinations of <code>bind</code> and <code>bundle</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">H</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">vb/bind</span> <span class="p">(</span><span class="nf">vb/get-hdv</span> <span class="ss">:name</span><span class="p">)</span> <span class="p">(</span><span class="nf">vb/get-hdv</span> <span class="s">&quot;Alice&quot;</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">vb/bundle</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">vb/bind</span> <span class="p">(</span><span class="nf">vb/get-hdv</span> <span class="ss">:yob</span><span class="p">)</span> <span class="p">(</span><span class="nf">vb/get-hdv</span> <span class="mi">1980</span><span class="p">)))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">vb/bundle</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">vb/bind</span> <span class="p">(</span><span class="nf">vb/get-hdv</span> <span class="ss">:high-score</span><span class="p">)</span> <span class="p">(</span><span class="nf">vb/get-hdv</span> <span class="mi">1000</span><span class="p">)))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So <code>H</code> is just one hypervector as a result of this. We can then query it. <code>unbind-get</code> is using the <code>bind</code> operation as inverse. So if we want to query for the <code>:name</code> value, we get the <code>:name</code> hdv from memory and do the <code>bind</code> operation on the <code>H</code> data structure which is the inverse.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vb/unbind-get</span> <span class="nv">H</span> <span class="ss">:name</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; [&quot;Alice&quot; #tech.v3.tensor&lt;int8&gt;[1000000]</span>
+</span><span class='line'><span class="c1">;;  [-1 1 1 ... 1 -1 -1]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can find other values like <code>:high-score</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vb/unbind-get</span> <span class="nv">H</span> <span class="ss">:high-score</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;  [1000 #tech.v3.tensor&lt;int8&gt;[1000000]</span>
+</span><span class='line'><span class="c1">;; [-1 -1 1 ... -1 1 1]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or go the other way and look for <code>Alice</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vb/unbind-get</span> <span class="nv">H</span> <span class="s">&quot;Alice&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; [:name #tech.v3.tensor&lt;int8&gt;[1000000]</span>
+</span><span class='line'><span class="c1">;; [-1 1 -1 ... -1 -1 -1]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we have the fundamentals from the paper, we can try to implement some Clojure data structures.</p>
+
+<h2>Clojure Data Structures in VSAs</h2>
+
+<p>First things first, let&rsquo;s clear our cleanup memory.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vb/reset-hdv-mem!</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s start off with a map, (keeping to non-nested versions to keep things simple).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">our-first-vsa-map</span> <span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span> <span class="p">{</span><span class="ss">:x</span> <span class="mi">1</span> <span class="ss">:y</span> <span class="mi">2</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The result is a 1,000,000 dimension hypervector - but remember all the parts are also hypervectors as well. Let&rsquo;s take a look at what is in the cleanup memory so far.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">@</span><span class="nv">vb/cleanup-mem</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; {:x #tech.v3.tensor&lt;int8&gt;[1000000][1 -1 1 ... 1 -1 -1],</span>
+</span><span class='line'><span class="c1">;;  1 #tech.v3.tensor&lt;int8&gt;[1000000][1 1 -1 ... -1 -1 -1],</span>
+</span><span class='line'><span class="c1">;;  :y #tech.v3.tensor&lt;int8&gt;[1000000][1 1 -1 ... 1 1 1],</span>
+</span><span class='line'><span class="c1">;;  2 #tech.v3.tensor&lt;int8&gt;[1000000][-1 -1 -1 ... -1 -1 1]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can write a <code>vsa-get</code> function that takes the composite hypervector of the map and get the value from it by finding the closest match with cosine similarity to the cleanup memory.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">our-first-vsa-map</span> <span class="ss">:x</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  [1 #tech.v3.tensor&lt;int8&gt;[1000000][1 1 -1 ... -1 -1 -1]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the example above, the symbolic value is the first item in the vector, in this case the number 1, and the actual hypervector is the second value.</p>
+
+<p>We can add onto the map with a new key value pair.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">our-second-vsa-map</span> <span class="p">(</span><span class="nf">vd/vsa-assoc</span> <span class="nv">our-first-vsa-map</span> <span class="ss">:z</span> <span class="mi">3</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">our-second-vsa-map</span> <span class="ss">:z</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  [3 #tech.v3.tensor&lt;int8&gt;[1000000][1 -1 1 ... -1 -1 1]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can represent Clojure vectors as VSA data structures as well by using the permute (or rotate) and adding them like a stack.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">our-first-vsa-vector-of-maps</span> <span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span> <span class="p">[{</span><span class="ss">:x</span> <span class="mi">1</span><span class="p">}</span> <span class="p">{</span><span class="ss">:x</span> <span class="mi">2</span> <span class="ss">:y</span> <span class="mi">3</span><span class="p">}]))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; We can get the value of x in the 2nd map by</span>
+</span><span class='line'><span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">our-first-vsa-vector-of-maps</span> <span class="ss">:x</span> <span class="p">{</span><span class="ss">:idx</span> <span class="mi">1</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; [2 #tech.v3.tensor&lt;int8&gt;[1000000][-1 1 1 ... 1 -1 1]]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; Or the first map</span>
+</span><span class='line'><span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">our-first-vsa-vector-of-maps</span> <span class="ss">:x</span> <span class="p">{</span><span class="ss">:idx</span> <span class="mi">0</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  [1 #tech.v3.tensor&lt;int8&gt;[1000000][-1 -1 1 ... 1 1 1]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can also add onto the Clojure vector with a conj.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">our-second-vsa-vector-of-maps</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">vd/vsa-conj</span> <span class="nv">our-first-vsa-vector-of-maps</span> <span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span> <span class="p">{</span><span class="ss">:z</span> <span class="mi">5</span><span class="p">})))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">our-second-vsa-vector-of-maps</span> <span class="ss">:z</span> <span class="p">{</span><span class="ss">:idx</span> <span class="mi">2</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  [5 #tech.v3.tensor&lt;int8&gt;[1000000][-1 1 1 ... -1 -1 -1]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What is really cool about this is that we have built in fuzziness or similarity matching. For example, with this map, we have more than one possibility of matching.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">vsa-simple-map</span> <span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span> <span class="p">{</span><span class="ss">:x</span> <span class="mi">1</span> <span class="ss">:y</span> <span class="mi">1</span> <span class="ss">:z</span> <span class="mi">3</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>.
+We can see all the possible matches and scores</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">vsa-simple-map</span> <span class="ss">:x</span> <span class="p">{</span><span class="ss">:threshold</span> <span class="mi">-1</span> <span class="ss">:verbose?</span> <span class="nv">true</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  [{1 #tech.v3.tensor&lt;int8&gt;[1000000]</span>
+</span><span class='line'><span class="c1">;;      [1 -1 1 ... -1 -1 -1], :dot 125165.0, :cos-sim 0.1582533568106879}  {:x #tech.v3.tensor&lt;int8&gt;[1000000]</span>
+</span><span class='line'><span class="c1">;;      [1 -1 -1 ... -1 -1 1], :dot 2493.0, :cos-sim 0.0031520442498225933} {:z #tech.v3.tensor&lt;int8&gt;[1000000]</span>
+</span><span class='line'><span class="c1">;;      [-1 -1 1 ... 1 1 -1], :dot 439.0, :cos-sim 5.550531190020531E-4}    {3 #tech.v3.tensor&lt;int8&gt;[1000000]</span>
+</span><span class='line'><span class="c1">;;      [-1 -1 1 ... -1 -1 1], :dot -443.0, :cos-sim -5.601105506102723E-4}  {:y #tech.v3.tensor&lt;int8&gt;[1000000]</span>
+</span><span class='line'><span class="c1">;;      [-1 -1 1 ... 1 1 1], :dot -751.0, :cos-sim -9.495327844431478E-4}]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This opens up the possibility of defining compound symbolic values and doing fuzzy matching. For example with colors.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vb/reset-hdv-mem!</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">primary-color-vsa-map</span> <span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span> <span class="p">{</span><span class="ss">:x</span> <span class="ss">:red</span> <span class="ss">:y</span> <span class="ss">:yellow</span> <span class="ss">:z</span> <span class="ss">:blue</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s add a new compound value to the cleanup memory that is green based on yellow and blue.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vb/add-hdv!</span> <span class="ss">:green</span> <span class="p">(</span><span class="nf">vb/bundle</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">vb/get-hdv</span> <span class="ss">:yellow</span><span class="p">)</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">vb/get-hdv</span> <span class="ss">:blue</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can query the hdv color map for things that are close to green.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">primary-color-vsa-map</span> <span class="ss">:green</span> <span class="p">{</span><span class="ss">:threshold</span> <span class="mf">0.1</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  [{:z #tech.v3.tensor&lt;int8&gt;[1000000][1 -1 1 ... -1 1 1]}</span>
+</span><span class='line'><span class="c1">;;     {:y #tech.v3.tensor&lt;int8&gt;[1000000] [-1 1 1 ... 1 1 1]}]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can also define an <code>inspect</code> function for a hdv by comparing the similarity of all the values of the cleanup memory in it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">vd/vsa-inspect</span> <span class="nv">primary-color-vsa-map</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; Note that it includes green in it since it is a compound value</span>
+</span><span class='line'><span class="c1">;; =&gt;  #{:y :yellow :green :z :red :blue :x}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">vd/vsa-inspect</span> <span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span> <span class="p">{</span><span class="ss">:x</span> <span class="ss">:red</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  #{:red :x}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we can implement clojure <code>map</code> and <code>filter</code> functions on the vector data structures that can also include fuzziness.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">color-vsa-vector-map</span> <span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span> <span class="p">[{</span><span class="ss">:x</span> <span class="ss">:yellow</span><span class="p">}</span> <span class="p">{</span><span class="ss">:x</span> <span class="ss">:green</span><span class="p">}</span> <span class="p">{</span><span class="ss">:z</span> <span class="ss">:red</span><span class="p">}]))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">vd/vsa-map</span> <span class="o">#</span><span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">%</span> <span class="ss">:yellow</span> <span class="p">{</span><span class="ss">:threshold</span> <span class="mf">0.01</span><span class="p">})</span>
+</span><span class='line'>                  <span class="p">(</span><span class="nf">mapv</span> <span class="nv">ffirst</span><span class="p">))</span>
+</span><span class='line'>            <span class="nv">color-vsa-vector-map</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  ([:x] [:x] [])</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">color-vsa-vector-map</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">vd/vsa-filter</span> <span class="o">#</span><span class="p">(</span><span class="nf">vd/vsa-get</span> <span class="nv">%</span> <span class="ss">:yellow</span> <span class="p">{</span><span class="ss">:threshold</span> <span class="mf">0.01</span><span class="p">}))</span>
+</span><span class='line'>     <span class="nv">count</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; =&gt;  2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Wrap Up</h2>
+
+<p>VSAs and hyperdimensional computing seem like a natural fit for LISP and Clojure. I&rsquo;ve only scratched the surface here in how the two can fit together. I hope that more people are inspired to look into it and <em>small AI with big dimensions</em>.</p>
+
+<p>Full code and examples here <a href="https://github.com/gigasquid/vsa-clj">https://github.com/gigasquid/vsa-clj</a>.</p>
+
+<p><em>Special thanks to Ross Gayler in helping me to implement VSAs and understanding their coolness.</em></p>
+</div>
+
+
+      <footer class="post-footer">
+        <p class="meta text-muted">
+          
+
+
+<figure class="author-image">
+    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
+</figure>
+
+<section class="author">
+    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
+
+    <div class="author-meta">
+        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
+    </div>
+</section>
+
+<hr>
+
+<section class="share">
+    
+    <h4>Share this post</h4>
+    
+    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/;" 
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+    
+</section>
+
+
+
+
+<!--
+<footer class="post-footer">
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+
+-->
+          
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2022-12-31T15:41:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 31 Dec 2022,  3:41 PM</time>
+          <br>
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ai/'>AI</a>, <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="pager">
+            
+            
+              
+                <a href="/blog/2021/03/15/breakfast-with-zero-shot-nlp/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Breakfast with Zero-Shot NLP"> 
+                  <div class="text-muted">
+                    <small>Previous Post</small>
+                  </div>
+                  <div class="pager-title">
+                    <h4>Breakfast with Zero-Shot NLP</h4>
+                  </div>
+                </a>
+              
+            
+            
+            
+          </div>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h2>Comments</h2>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2023 - Carin Meier<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'squidsblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/';
+        var disqus_url = 'http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr.js"></script>
+
+
+  </body>
+</html>
