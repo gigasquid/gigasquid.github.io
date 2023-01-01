@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Development | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -111,17 +111,15 @@ instructions:</p>
 
 <p>Connect your computer to the first drone&rsquo;s network.</p>
 
-<p>```clojure
-telnet 192.68.1.1
-````</p>
+<pre><code class="clojure">telnet 192.68.1.1
+</code></pre>
 
 <p>Create the following file as adhoc.sh.  This shell script will
 temporarily change the network to an adhoc network named
 &ldquo;multidrone_ah&rdquo; and assign it a static ip of 192.168.1.100.
 The next time you reboot your drone, things will be back to normal.</p>
 
-<p>```clojure
-; This script should be run on the drone.
+<pre><code class="clojure">; This script should be run on the drone.
 ; Change the IP address to be difference
 ; for each drone on the same ad-hoc network
 ;
@@ -129,7 +127,7 @@ killall udhcpd
 ifconfig ath0 down
 iwconfig ath0 mode ad-hoc essid multidrone_ah channel auto commit
 ifconfig ath0 192.168.1.100 netmask 255.255.255.0 up
-````</p>
+</code></pre>
 
 <p>Run the script.</p>
 
@@ -137,12 +135,10 @@ ifconfig ath0 192.168.1.100 netmask 255.255.255.0 up
 
 <p>Connect your computer to the second drone&rsquo;s network.</p>
 
-<p>```clojure
-telnet 192.68.1.1
-````</p>
+<pre><code class="clojure">telnet 192.68.1.1
+</code></pre>
 
-<p>```clojure
-; This script should be run on the drone.
+<pre><code class="clojure">; This script should be run on the drone.
 ; Change the IP address to be difference
 ; for each drone on the same ad-hoc network
 ;
@@ -150,7 +146,7 @@ killall udhcpd
 ifconfig ath0 down
 iwconfig ath0 mode ad-hoc essid multidrone_ah channel auto commit
 ifconfig ath0 192.168.1.200 netmask 255.255.255.0 up
-````</p>
+</code></pre>
 
 <p>Run the script.</p>
 
@@ -166,15 +162,14 @@ preferences on mac) something like 192.168.1.101</li>
 <p>Now you are ready to run the program.  Here is a small example of
 sending simple commands:</p>
 
-<p>```clojure
-(drone-initialize :drone1 &ldquo;192.168.1.100&rdquo; default-at-port default-navdata-port)
+<pre><code class="clojure">(drone-initialize :drone1 "192.168.1.100" default-at-port default-navdata-port)
 (mdrone :drone1 :take-off)
-(mdrone :drone1 :land)</p>
+(mdrone :drone1 :land)
 
-<p>(drone-initialize :drone2 &ldquo;192.168.1.200&rdquo; default-at-port default-navdata-port)
+(drone-initialize :drone2 "192.168.1.200" default-at-port default-navdata-port)
 (mdrone :drone2 :take-off)
 (mdrone :drone2 :land)
-````</p>
+</code></pre>
 
 <h2>Bring on Multiple Drones interacting with Goals and Beliefs</h2>
 
@@ -184,18 +179,16 @@ The way this works is that the navigation data being constantly sent
 to our computer for processing.  Everytime we get a navigation packet
 that ends up looking something like this, (but with lots more data):</p>
 
-<p>```clojure
- {:altitude 0.0, :yaw -0.215, :pitch -1.075, :roll -2.904, :control-state :landed, :communication :ok, :com-watchdog :ok, :seq-num 870}
-````</p>
+<pre><code class="clojure"> {:altitude 0.0, :yaw -0.215, :pitch -1.075, :roll -2.904, :control-state :landed, :communication :ok, :com-watchdog :ok, :seq-num 870}
+</code></pre>
 
 <p>We then define a belief-action using this data.</p>
 
-<p>```clojure
-(def-belief-action ba-landed1
-  &ldquo;I (Drone1) am landed&rdquo;
+<pre><code class="clojure">(def-belief-action ba-landed1
+  "I (Drone1) am landed"
   (fn [{:keys [control-state]}] (= control-state :landed))
   (fn [navdata] (mdrone :drone1 :take-off)))
-````</p>
+</code></pre>
 
 <p>The def-belief-action macro takes:</p>
 
@@ -211,12 +204,11 @@ it evaluates to true, then the belief is said to be &ldquo;held&rdquo;.</li>
 
 <p>The beliefs are then combined to form goals.</p>
 
-<p>```clojure
-(def-goal g-take-off1
-  &ldquo;I (Drone1) want to fly.&rdquo;
+<pre><code class="clojure">(def-goal g-take-off1
+  "I (Drone1) want to fly."
   (fn [{:keys [control-state]}] (= control-state :hovering))
   [ba-landed1 ba-taking-off1])
-````</p>
+</code></pre>
 
 <p>The def-goal macro takes:</p>
 
@@ -233,10 +225,9 @@ that goal.</li>
 
 <p>Finally, we can set a list of goals for a drone to achieve:</p>
 
-<p><code>clojure
- (set-current-goal-list drones :drone1
+<pre><code class="clojure"> (set-current-goal-list drones :drone1
  [g-take-off1 g-find-other-drone-and-wave1 g-land1])
-</code></p>
+</code></pre>
 
 <p>This sets the goal list for a drone.  It will take-off, look around
 for the other drone and wave, (do a dance), once it sees it.  Finally,
@@ -271,7 +262,7 @@ with their navigation data.</p>
   <entry>
     <title type="html"><![CDATA[Babar - a Little Language With Speech Acts for Machines]]></title>
     <link href="http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/"/>
-    <updated>2013-06-04T14:57:52-04:00</updated>
+    <updated>2013-06-04T18:57:52+00:00</updated>
     <id>http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg">http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg</a>"></p>
 
@@ -285,7 +276,7 @@ with their navigation data.</p>
 
 <h2>Hello Babar</h2>
 
-<p>Babar is an experimental language that uses these Speech Acts to communicate. It also combines one of the other ideas of McCarthy, that is of beliefs and goals. The ultimate aim in the language is discover ways of thinking about computers and communicating with them based on the way that we communicate with each other. The state of a computer at any given point in time can be very complex and hard to understand. If we ascribe this state to be a &ldquo;belief&rdquo;, it becomes easier to understand and thus easier to program. The Babar REPL has internal commitments and internal beliefs. The goal of the Babar REPL is to keep all of its commitments. Speech acts are used to &ldquo;convince&rdquo; Babar of beliefs and to make &ldquo;requests&rdquo; that form commitments. The Babar REPL continually checks to see if it needs to fulfill a commitments. It fulfills them based on its beliefs. As an optional configuration, the REPL will speak aloud its beliefs as the become true &ndash; or as it &ldquo;holds&rdquo; the belief.</p>
+<p>Babar is an experimental language that uses these Speech Acts to communicate. It also combines one of the other ideas of McCarthy, that is of beliefs and goals. The ultimate aim in the language is discover ways of thinking about computers and communicating with them based on the way that we communicate with each other. The state of a computer at any given point in time can be very complex and hard to understand. If we ascribe this state to be a &ldquo;belief&rdquo;, it becomes easier to understand and thus easier to program. The Babar REPL has internal commitments and internal beliefs. The goal of the Babar REPL is to keep all of its commitments. Speech acts are used to &ldquo;convince&rdquo; Babar of beliefs and to make &ldquo;requests&rdquo; that form commitments. The Babar REPL continually checks to see if it needs to fulfill a commitments. It fulfills them based on its beliefs. As an optional configuration, the REPL will speak aloud its beliefs as the become true - or as it &ldquo;holds&rdquo; the belief.</p>
 
 <h2>Syntax and Basics</h2>
 
@@ -308,21 +299,17 @@ with their navigation data.</p>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">&lt;/p&gt;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>    <span class="mi">1</span>     <span class="c1">;=&gt; 1</span>
+</span><span class='line'>    <span class="mf">2.3</span>   <span class="c1">;=&gt; 2.3</span>
+</span><span class='line'>    <span class="mf">-3.4</span>  <span class="c1">;=&gt; 3.4</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="nv">ldquo</span><span class="c1">;cat&amp;rdquo; ;=&gt; cat</span>
+</span><span class='line'>    <span class="ss">:bird</span> <span class="c1">;=&gt; bird</span>
+</span><span class='line'>    <span class="nv">true</span>  <span class="c1">;=&gt; true</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:cat</span> <span class="ss">:meow</span> <span class="ss">:dog</span> <span class="ss">:bark</span><span class="p">}</span> <span class="c1">;=&gt; {:cat :meow :dog :bark}</span>
+</span><span class='line'>    <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="nv">true</span> <span class="ss">:bird</span><span class="p">]</span> <span class="c1">;=&gt; [1 2 true bird]</span>
+</span><span class='line'>    <span class="nv">atom</span> <span class="mi">1</span> <span class="c1">;=&gt; #&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="nv">&lt;pre&gt;&lt;code&gt;1</span>     <span class="c1">;=&amp;gt; 1</span>
-</span><span class='line'><span class="mf">2.3</span>   <span class="c1">;=&amp;gt; 2.3</span>
-</span><span class='line'><span class="mf">-3.4</span>  <span class="c1">;=&amp;gt; 3.4</span>
-</span><span class='line'><span class="s">&quot;cat&quot;</span> <span class="c1">;=&amp;gt; cat</span>
-</span><span class='line'><span class="ss">:bird</span> <span class="c1">;=&amp;gt; bird</span>
-</span><span class='line'><span class="nv">true</span>  <span class="c1">;=&amp;gt; true</span>
-</span><span class='line'><span class="p">{</span><span class="ss">:cat</span> <span class="ss">:meow</span> <span class="ss">:dog</span> <span class="ss">:bark</span><span class="p">}</span> <span class="c1">;=&amp;gt; {:cat :meow :dog :bark}</span>
-</span><span class='line'><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="nv">true</span> <span class="ss">:bird</span><span class="p">]</span> <span class="c1">;=&amp;gt; [1 2 true bird]</span>
-</span><span class='line'><span class="nv">atom</span> <span class="mi">1</span> <span class="c1">;=&amp;gt; #</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dog</span> <span class="mi">16</span><span class="p">)</span>
+</span><span class='line'><span class="nv">&lt;pre&gt;&lt;code&gt;</span><span class="p">(</span><span class="k">def </span><span class="nv">dog</span> <span class="mi">16</span><span class="p">)</span>
 </span><span class='line'><span class="nv">dog</span> <span class="c1">;=&amp;gt; 16</span>
 </span><span class='line'><span class="k">def </span><span class="nv">cat</span> <span class="mi">18</span>
 </span><span class='line'><span class="nv">cat</span> <span class="c1">;=&amp;gt; 18</span>
@@ -333,48 +320,36 @@ with their navigation data.</p>
 
 <p>Vectors are a bit interesting in the respect that you don&rsquo;t need to input the square brackets. If you just put in space delimited items, it will automatically construct a vector for you.</p>
 
-<p>```clojure</p>
-
-<pre><code>1 2 3 4 ;=&gt; [1 2 3 4]
+<pre><code class="clojure    ">    1 2 3 4 ;=&gt; [1 2 3 4]
 </code></pre>
-
-<p>````</p>
 
 <p>You can create anonymous functions with the fn [x] syntax from clojure. And call them with surrounding parens. You can call regular functions by the () notation or the shorthand :.</p>
 
-<p>```clojure</p>
+<pre><code class="clojure    ">    fn [x] + x 1 ;=&gt; fn
+    (fn [x] + x 1) ;=&gt; fn
+    ((fn [x] + x 1) 3) ;=&gt; 4
+    ((fn [x y z] + x y z) 1 2 3) ;=&gt; 6
+    ((fn [] [4 5 6])) ;=&gt; [4 5 6]
 
-<pre><code>fn [x] + x 1 ;=&gt; fn
-(fn [x] + x 1) ;=&gt; fn
-((fn [x] + x 1) 3) ;=&gt; 4
-((fn [x y z] + x y z) 1 2 3) ;=&gt; 6
-((fn [] [4 5 6])) ;=&gt; [4 5 6]
-
-defn dog [] "woof"
-dog: ;=&gt; "woof"
+    defn dog [] "woof"
+    dog: ;=&gt; "woof"
 </code></pre>
 
-<p>````</p>
-
-<p>To see the complete documentation &ndash; please visit the <a href="https://github.com/gigasquid/babar">Github repo</a>.</p>
+<p>To see the complete documentation - please visit the <a href="https://github.com/gigasquid/babar">Github repo</a>.</p>
 
 <h2>Show Me Babar Speech Acts</h2>
 
 <p>Now that we have the basics. Let&rsquo;s look at example of running a program with speech acts.
 This one speaks its beliefs and has assertions, a request, and queries.</p>
 
-<p>```clojure</p>
-
-<pre><code>speak-config true.
-assert sunny false.
-convince #nice-day "It is a nice day." fn [] = sunny true.
-request *open-window when #nice-day fn [] println "Opened the window".
-query request-is-done *open-window?
-assert sunny true.
-query request-is-done *open-window?
+<pre><code class="clojure    ">    speak-config true.
+    assert sunny false.
+    convince #nice-day "It is a nice day." fn [] = sunny true.
+    request *open-window when #nice-day fn [] println "Opened the window".
+    query request-is-done *open-window?
+    assert sunny true.
+    query request-is-done *open-window?
 </code></pre>
-
-<p>````</p>
 
 <p>
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('bt2iYsVyCOM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/bt2iYsVyCOM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
@@ -389,18 +364,14 @@ query request-is-done *open-window?
 
 <p>Here is another one that shows using a request until a belief is held.</p>
 
-<p>```clojure</p>
+<pre><code class="clojure    ">    speak-config true.
 
-<pre><code>speak-config true.
-
-assert counter atom 1.
-convince #done "I am done counting" fn [] &gt; @counter 3.
-request *count-up until #done fn [] swap! counter inc.
-sleep 25.
-query request-value *count-up?
+    assert counter atom 1.
+    convince #done "I am done counting" fn [] &gt; @counter 3.
+    request *count-up until #done fn [] swap! counter inc.
+    sleep 25.
+    query request-value *count-up?
 </code></pre>
-
-<p>````</p>
 
 <p>
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('aT8MK0w71LM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/aT8MK0w71LM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
@@ -415,20 +386,16 @@ query request-value *count-up?
 
 <p>Here the REPL asks you a question if you give it an undeclared var</p>
 
-<p>```clojure</p>
+<pre><code class="clojure">    speak-config true.
+    ask-config true.
 
-<pre><code>speak-config true.
-ask-config true.
-
-request *task1 fn [] + 10 x.
-query request-is-done *task1?
-assert x 3.
-sleep 10.
-query request-is-done *task1?
-query request-value *task1?
+    request *task1 fn [] + 10 x.
+    query request-is-done *task1?
+    assert x 3.
+    sleep 10.
+    query request-is-done *task1?
+    query request-value *task1?
 </code></pre>
-
-<p>````</p>
 
 <p>
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('nmi_fafmjsg');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/nmi_fafmjsg?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
@@ -444,36 +411,32 @@ query request-value *task1?
 <h2>Autonomous AR Drone Flight with Babar REPL</h2>
 
 <p>Since the language is aimed at communincating with machines. It is only natural that I use it to talk to the AR Drone.
-Here is a program that has the drone take off, get to a cruising altitude, and land &ndash; all using speech acts (and the <a href="https://github.com/gigasquid/clj-drone">clj-drone library</a>).</p>
+Here is a program that has the drone take off, get to a cruising altitude, and land - all using speech acts (and the <a href="https://github.com/gigasquid/clj-drone">clj-drone library</a>).</p>
 
-<p>```clojure</p>
+<pre><code class="clojure    ">    speak-config true.
 
-<pre><code>speak-config true.
+    import "clj-drone.core".
+    import "clj-drone.navdata".
 
-import "clj-drone.core".
-import "clj-drone.navdata".
+    assert get-navdata [key] get @nav-data key.
+    assert navdata-equal [key val] = (get-navdata key) val.
+    assert navdata-gt [key val] &gt; (get-navdata key) val.
+    assert init-drone [] (drone-initialize).
+    assert init-nav [] (drone-init-navdata).
 
-assert get-navdata [key] get @nav-data key.
-assert navdata-equal [key val] = (get-navdata key) val.
-assert navdata-gt [key val] &gt; (get-navdata key) val.
-assert init-drone [] (drone-initialize).
-assert init-nav [] (drone-init-navdata).
+    convince #landed "I am on the ground" fn [] (navdata-equal :control-state :landed).
+    convince #flying "I am flying" fn [] or (navdata-equal :control-state :flying)
+                                            (navdata-equal :control-state :hovering).
+    convince #high-enough "I am high enough" fn [] (navdata-gt :altitude 1.5).
 
-convince #landed "I am on the ground" fn [] (navdata-equal :control-state :landed).
-convince #flying "I am flying" fn [] or (navdata-equal :control-state :flying)
-                                        (navdata-equal :control-state :hovering).
-convince #high-enough "I am high enough" fn [] (navdata-gt :altitude 1.5).
+    request *take-off when #landed fn [] (drone :take-off).
+    request *cruising-alt when #flying until #high-enough fn [] (drone :up 0.1).
+    request *land when #high-enough fn [] (drone :land).
 
-request *take-off when #landed fn [] (drone :take-off).
-request *cruising-alt when #flying until #high-enough fn [] (drone :up 0.1).
-request *land when #high-enough fn [] (drone :land).
-
-convince #done "Whee! I am done." fn [] and (navdata-equal :control-state :landed)
-                                            query request-is-done *land.
-request *end-navstream when #done fn [] (end-navstream).
+    convince #done "Whee! I am done." fn [] and (navdata-equal :control-state :landed)
+                                                query request-is-done *land.
+    request *end-navstream when #done fn [] (end-navstream).
 </code></pre>
-
-<p>````</p>
 
 <p>
 <div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('CIzR8jD2d3c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/CIzR8jD2d3c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
@@ -495,7 +458,7 @@ request *end-navstream when #done fn [] (end-navstream).
   <entry>
     <title type="html"><![CDATA[7 John McCarthy Papers in 7 Weeks – #1 How My Thermostat Has Beliefs and Goals]]></title>
     <link href="http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1/"/>
-    <updated>2012-09-20T09:03:36-04:00</updated>
+    <updated>2012-09-20T13:03:36+00:00</updated>
     <id>http://gigasquid.github.io/blog/2012/09/20/7-john-mccarthy-papers-in-7-weeks-1</id>
     <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg">http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg</a>"></p>
 
@@ -533,7 +496,7 @@ request *end-navstream when #done fn [] (end-navstream).
 
 <p>Once we have a higher level model of a systems mental state and behavior. It would be easier to debug, communicate, and correct problems. For example, If I come home and the room is way too cold, I could look for the problem in terms of beliefs and goals. Does the thermostat have a faulty belief? Or did it have a good belief that the room was too cold? If so, then the problem was that it could not act on its belief to tell the furnace to turn on. If it could communicate and know the problem, perhaps it could message me and I could arrange a service call, or it could even self-correct. Another example, is my recent experience with my Roomba. I came home the other day to find my Roomba had not returned to its charging station after its scheduled cleaning. Instead, it was stopped under my bed. What went wrong? Did it believe that the battery was low? Or was there some other faulty belief? It would be nice if it could tell me.</p>
 
-<h3>Delving Further &ndash; What is a belief?</h3>
+<h3>Delving Further - What is a belief?</h3>
 
 <p>McCarthy talks about defining a belief as a function of the system&rsquo;s state. For each state, there are beliefs that can be expressed as a sentences in a language. The machine does not need to understand the meaning and concepts in the English, French or any given language. That is for us to interpret. The important part is that there is a mapping of the state to this sentence. Taking our humble thermostat for an example:</p>
 
@@ -635,9 +598,9 @@ It is in fact, turtles all the way down :)</p>
   
   <entry>
     <title type="html"><![CDATA[7 John McCarthy Papers in 7 Weeks - Prologue]]></title>
-    <link href="http://gigasquid.github.io/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue/"/>
-    <updated>2012-09-18T21:50:08-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue</id>
+    <link href="http://gigasquid.github.io/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue/"/>
+    <updated>2012-09-19T01:50:08+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2012/09/19/7-john-mccarthy-papers-in-7-days-prologue</id>
     <content type="html"><![CDATA[<p>In the spirit of <a href="http://pragprog.com/book/btlang/seven-languages-in-seven-weeks">Seven Languages in Seven Weeks</a>, I have decided to embark on a quest. But instead of focusing on expanding my mindset with different programming languages, I am focusing on trying to get into the mindset of <a href="http://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist">John McCarthy</a>), father of LISP and AI, by reading and thinking about seven of his <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/">papers</a>.</p>
 
 <h3>Why?</h3>

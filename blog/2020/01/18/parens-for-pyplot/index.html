@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2020-01-18T15:39:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 18 Jan 2020,  3:39 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -165,7 +163,7 @@
 <span class='line-number'>26</span>
 <span class='line-number'>27</span>
 <span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="kd">ns </span><span class="nv">gigasquid.plot</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="kd">ns </span><span class="nv">gigasquid.plot</span>
 </span><span class='line'><span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">libpython-clj.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]</span>
 </span><span class='line'><span class="p">[</span><span class="nv">libpython-clj.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]</span>
 </span><span class='line'><span class="p">[</span><span class="nv">clojure.java.shell</span> <span class="ss">:as</span> <span class="nv">sh</span><span class="p">])</span>
@@ -224,7 +222,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.numpy-plot</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.numpy-plot</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">libpython-clj.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">libpython-clj.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">gigasquid.plot</span> <span class="ss">:as</span> <span class="nv">plot</span><span class="p">]))</span>
@@ -241,7 +239,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">y</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/plot</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)))</span>
@@ -264,7 +262,7 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">y-sin</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">y-cos</span> <span class="p">(</span><span class="nf">numpy/cos</span> <span class="nv">x</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
@@ -296,7 +294,7 @@ It is a bit stateful and involves making one subplot <em>active</em> and making 
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nf">numpy/arange</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="nv">numpy/pi</span><span class="p">)</span> <span class="mf">0.1</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">y-sin</span> <span class="p">(</span><span class="nf">numpy/sin</span> <span class="nv">x</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">y-cos</span> <span class="p">(</span><span class="nf">numpy/cos</span> <span class="nv">x</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
@@ -326,7 +324,7 @@ It is a bit stateful and involves making one subplot <em>active</em> and making 
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">img</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/imread</span> <span class="s">&quot;resources/cat.jpg&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">img</span> <span class="p">(</span><span class="nf">matplotlib.pyplot/imread</span> <span class="s">&quot;resources/cat.jpg&quot;</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">img-tinted</span> <span class="p">(</span><span class="nf">numpy/multiply</span> <span class="nv">img</span> <span class="p">[</span><span class="mi">1</span> <span class="mf">0.95</span> <span class="mf">0.9</span><span class="p">])]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">plot/with-show</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">matplotlib.pyplot/subplot</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">1</span><span class="p">)</span>
@@ -354,7 +352,7 @@ It is a bit stateful and involves making one subplot <em>active</em> and making 
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">labels</span> <span class="p">[</span><span class="s">&quot;Frogs&quot;</span> <span class="s">&quot;Hogs&quot;</span> <span class="s">&quot;Dogs&quot;</span> <span class="s">&quot;Logs&quot;</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">labels</span> <span class="p">[</span><span class="s">&quot;Frogs&quot;</span> <span class="s">&quot;Hogs&quot;</span> <span class="s">&quot;Dogs&quot;</span> <span class="s">&quot;Logs&quot;</span><span class="p">]</span>
 </span><span class='line'>        <span class="nv">sizes</span> <span class="p">[</span><span class="mi">15</span> <span class="mi">30</span> <span class="mi">45</span> <span class="mi">10</span><span class="p">]</span>
 </span><span class='line'>        <span class="nv">explode</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.1</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]</span> <span class="c1">; only explode the 2nd slice (Hogs)</span>
 </span><span class='line'>        <span class="p">]</span>
@@ -384,8 +382,6 @@ It is a bit stateful and involves making one subplot <em>active</em> and making 
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -445,8 +441,6 @@ It is a bit stateful and involves making one subplot <em>active</em> and making 
 
 -->
           
-
-
 
 
 
@@ -517,7 +511,7 @@ It is a bit stateful and involves making one subplot <em>active</em> and making 
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-05-29T16:29:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 29 May 2016,  4:29 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -148,7 +146,7 @@
 <p>The mere shape of these words brings a function to mind.  One that would take in a vector:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -158,7 +156,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">one-fish.core</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">one-fish.core</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.spec</span> <span class="ss">:as</span> <span class="nv">s</span><span class="p">]))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -170,7 +168,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">fish-numbers</span> <span class="p">{</span><span class="mi">0</span> <span class="s">&quot;Zero&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">fish-numbers</span> <span class="p">{</span><span class="mi">0</span> <span class="s">&quot;Zero&quot;</span>
 </span><span class='line'>                   <span class="mi">1</span> <span class="s">&quot;One&quot;</span>
 </span><span class='line'>                   <span class="mi">2</span> <span class="s">&quot;Two&quot;</span><span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -179,7 +177,7 @@
 <p>Then, we can use the <code>s/def</code> to register the spec we are going to define for global reuse.  We&rsquo;ll use a namespaced keyword <code>::fish-number</code> to express that our specification for a valid number is the keys of the <code>fish-numbers</code> map.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::fish-number</span> <span class="p">(</span><span class="nb">set </span><span class="p">(</span><span class="nb">keys </span><span class="nv">fish-numbers</span><span class="p">)))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::fish-number</span> <span class="p">(</span><span class="nb">set </span><span class="p">(</span><span class="nb">keys </span><span class="nv">fish-numbers</span><span class="p">)))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -187,7 +185,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::fish-number</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::fish-number</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
 </span><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::fish-number</span> <span class="mi">5</span><span class="p">)</span> <span class="c1">;=&gt; false</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -196,7 +194,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::fish-number</span> <span class="mi">5</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::fish-number</span> <span class="mi">5</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;;val: 5 fails spec: :one-fish.core/fish-number predicate: (set (keys fish-numbers))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -204,7 +202,7 @@
 <p>Which, of course,  totally makes sense because <code>5</code> is not in our <code>fish-numbers</code> map.  Now that we&rsquo;ve covered the numbers, let&rsquo;s look at the colors.  We&rsquo;ll use a finite set of colors for our specification.  In addition to the classic red and blue, we&rsquo;ll also add the color <em>dun</em>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::color</span> <span class="o">#</span><span class="p">{</span><span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span> <span class="s">&quot;Dun&quot;</span><span class="p">})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::color</span> <span class="o">#</span><span class="p">{</span><span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span> <span class="s">&quot;Dun&quot;</span><span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -215,7 +213,7 @@
 <p>We&rsquo;re at the point where we can start specifying things about the sequence of values in the parameter vector.  We&rsquo;ll have two numbers followed by two colors.  Using the <code>s/cat</code>, which is a concatentation of predicates/patterns, we can specify it as the <code>::first-line</code></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -224,7 +222,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::first-line</span>  <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Black&quot;</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::first-line</span>  <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Black&quot;</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;; In: [3] val: &quot;Black&quot; fails spec: :one-fish.core/color</span>
 </span><span class='line'><span class="c1">;;   at: [:c2] predicate: #{&quot;Blue&quot; &quot;Dun&quot; &quot;Red&quot;}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -234,7 +232,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">one-bigger?</span> <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">n1</span> <span class="nv">n2</span><span class="p">]}]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">one-bigger?</span> <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">n1</span> <span class="nv">n2</span><span class="p">]}]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">= </span><span class="nv">n2</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">n1</span><span class="p">)))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -244,7 +242,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/and</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/and</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">)</span>
 </span><span class='line'>                           <span class="nv">one-bigger?</span>
 </span><span class='line'>                           <span class="o">#</span><span class="p">(</span><span class="nb">not= </span><span class="p">(</span><span class="ss">:c1</span> <span class="nv">%</span><span class="p">)</span> <span class="p">(</span><span class="ss">:c2</span> <span class="nv">%</span><span class="p">))))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -253,7 +251,7 @@
 <p>We can test if our data is valid.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; true</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; true</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -261,7 +259,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/conform</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/conform</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;=&gt; {:n1 1, :n2 2, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -272,7 +270,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; false</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span> <span class="c1">;=&gt; false</span>
 </span><span class='line'><span class="p">(</span><span class="nf">s/explain</span> <span class="ss">::first-line</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;; val: {:n1 2, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}</span>
 </span><span class='line'><span class="c1">;; fails spec: :one-fish.core/first-line predicate: one-bigger?</span>
@@ -281,7 +279,7 @@
 
 <p>With our specifications for both the values and the sequences of values in hand, we can now use the power of data generation to actually create data.</p>
 
-<h3>Generating test data &ndash; and poetry with specification</h3>
+<h3>Generating test data - and poetry with specification</h3>
 
 <p>The <code>s/exercise</code> function will generate data for your specifications.  It does 10 items by default, but we can tell it to do only 5.  Let&rsquo;s see what it comes up with.</p>
 
@@ -291,7 +289,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/exercise</span> <span class="ss">::first-line</span> <span class="mi">5</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/exercise</span> <span class="ss">::first-line</span> <span class="mi">5</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;; ([(0 1 &quot;Dun&quot; &quot;Red&quot;) {:n1 0, :n2 1, :c1 &quot;Dun&quot;, :c2 &quot;Red&quot;}]</span>
 </span><span class='line'><span class="c1">;;  [(0 1 &quot;Blue&quot; &quot;Red&quot;) {:n1 0, :n2 1, :c1 &quot;Blue&quot;, :c2 &quot;Red&quot;}]</span>
 </span><span class='line'><span class="c1">;;  [(0 1 &quot;Blue&quot; &quot;Dun&quot;) {:n1 0, :n2 1, :c1 &quot;Blue&quot;, :c2 &quot;Dun&quot;}]</span>
@@ -306,14 +304,14 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Zero</span> <span class="nv">fish</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">Zero</span> <span class="nv">fish</span>
 </span><span class='line'><span class="nv">One</span> <span class="nv">fish</span>
 </span><span class='line'><span class="nv">Dun</span> <span class="nv">fish</span>
 </span><span class='line'><span class="nv">Red</span> <span class="nv">fish</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Although, it meets our criteria, it&rsquo;s missing one essential ingredient &ndash; rhyming!</p>
+<p>Although, it meets our criteria, it&rsquo;s missing one essential ingredient - rhyming!</p>
 
 <p>Let&rsquo;s fix this by adding an extra predicate <code>number-rhymes-with-color?</code>.</p>
 
@@ -321,7 +319,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-number-rhymes-with-color?</span> <span class="p">[{</span><span class="nv">n</span> <span class="ss">:n2</span> <span class="nv">c</span> <span class="ss">:c2</span><span class="p">}]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-number-rhymes-with-color?</span> <span class="p">[{</span><span class="nv">n</span> <span class="ss">:n2</span> <span class="nv">c</span> <span class="ss">:c2</span><span class="p">}]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">or</span>
 </span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="nv">n</span> <span class="nv">c</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="s">&quot;Blue&quot;</span><span class="p">])</span>
 </span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="nv">n</span> <span class="nv">c</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="s">&quot;Dun&quot;</span><span class="p">])))</span>
@@ -339,7 +337,7 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/and</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::first-line</span> <span class="p">(</span><span class="nf">s/and</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:n1</span> <span class="ss">::fish-number</span> <span class="ss">:n2</span> <span class="ss">::fish-number</span> <span class="ss">:c1</span> <span class="ss">::color</span> <span class="ss">:c2</span> <span class="ss">::color</span><span class="p">)</span>
 </span><span class='line'>                           <span class="nv">one-bigger?</span>
 </span><span class='line'>                           <span class="o">#</span><span class="p">(</span><span class="nb">not= </span><span class="p">(</span><span class="ss">:c1</span> <span class="nv">%</span><span class="p">)</span> <span class="p">(</span><span class="ss">:c2</span> <span class="nv">%</span><span class="p">))</span>
 </span><span class='line'>                           <span class="nv">fish-number-rhymes-with-color?</span><span class="p">))</span>
@@ -364,7 +362,7 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/exercise</span> <span class="ss">::first-line</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/exercise</span> <span class="ss">::first-line</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;; ([(1 2 &quot;Red&quot; &quot;Blue&quot;) {:n1 1, :n2 2, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}]</span>
 </span><span class='line'><span class="c1">;;  [(1 2 &quot;Red&quot; &quot;Blue&quot;) {:n1 1, :n2 2, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;}]</span>
 </span><span class='line'><span class="c1">;;  [(0 1 &quot;Blue&quot; &quot;Dun&quot;) {:n1 0, :n2 1, :c1 &quot;Blue&quot;, :c2 &quot;Dun&quot;}]</span>
@@ -391,7 +389,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-line</span> <span class="p">[</span><span class="nv">n1</span> <span class="nv">n2</span> <span class="nv">c1</span> <span class="nv">c2</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">fish-line</span> <span class="p">[</span><span class="nv">n1</span> <span class="nv">n2</span> <span class="nv">c1</span> <span class="nv">c2</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">clojure.string/join</span> <span class="s">&quot; &quot;</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%</span> <span class="s">&quot; fish.&quot;</span><span class="p">)</span>
 </span><span class='line'>      <span class="p">[(</span><span class="nb">get </span><span class="nv">fish-numbers</span> <span class="nv">n1</span><span class="p">)</span>
@@ -406,7 +404,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/fdef</span> <span class="nv">fish-line</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/fdef</span> <span class="nv">fish-line</span>
 </span><span class='line'>        <span class="ss">:args</span> <span class="ss">::first-line</span>
 </span><span class='line'>        <span class="ss">:ret</span>  <span class="nv">string?</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -417,7 +415,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">one-fish.core</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">one-fish.core</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.spec</span> <span class="ss">:as</span> <span class="nv">s</span><span class="p">]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">clojure.spec.test</span> <span class="ss">:as</span> <span class="nv">stest</span><span class="p">]))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -429,7 +427,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">stest/instrument</span> <span class="o">`</span><span class="nv">fish-line</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">stest/instrument</span> <span class="o">`</span><span class="nv">fish-line</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">fish-line</span> <span class="mi">1</span> <span class="mi">2</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;-&gt; &quot;One fish. Two fish. Red fish. Blue fish.&quot;</span>
@@ -451,7 +449,7 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">fish-line</span> <span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">fish-line</span> <span class="mi">2</span> <span class="mi">1</span> <span class="s">&quot;Red&quot;</span> <span class="s">&quot;Blue&quot;</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'> <span class="c1">;; Call to #&#39;one-fish.core/fish-line did not conform to spec: val:</span>
 </span><span class='line'> <span class="c1">;;   {:n1 2, :n2 1, :c1 &quot;Red&quot;, :c2 &quot;Blue&quot;} fails at: [:args] predicate:</span>
@@ -467,7 +465,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Ah, yes &ndash; the first number must be one smaller than the second number.</p>
+<p>Ah, yes - the first number must be one smaller than the second number.</p>
 
 <h3>Wrap up</h3>
 
@@ -479,7 +477,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Zero</span> <span class="nv">fish</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">Zero</span> <span class="nv">fish</span>
 </span><span class='line'><span class="nv">One</span> <span class="nv">fish</span>
 </span><span class='line'><span class="nv">Red</span> <span class="nv">fish</span>
 </span><span class='line'><span class="nv">Dun</span> <span class="nv">fish</span>
@@ -491,8 +489,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -552,8 +548,6 @@
 
 -->
           
-
-
 
 
 
@@ -624,7 +618,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

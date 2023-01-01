@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-06T15:47:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sat  6 Sep 2014,  3:47 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -148,7 +146,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defproject </span><span class="nv">green-eggs</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defproject </span><span class="nv">green-eggs</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
 </span><span class='line'>  <span class="ss">:description</span> <span class="s">&quot;try them&quot;</span>
 </span><span class='line'>  <span class="ss">:url</span> <span class="s">&quot;http://en.wikipedia.org/wiki/Green_Eggs_and_Ham&quot;</span>
 </span><span class='line'>  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Eclipse Public License&quot;</span>
@@ -179,7 +177,7 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">green-eggs.core</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">green-eggs.core</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.async</span> <span class="ss">:as</span> <span class="nv">async</span><span class="p">]))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">green-eggs-n-ham</span>
@@ -201,7 +199,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">i-do-not-like-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">i-do-not-like-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;I would not eat them %s.&quot;</span> <span class="nv">s</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">i-do-not-like-them</span> <span class="s">&quot;in the rain&quot;</span><span class="p">)</span>
@@ -216,7 +214,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">try-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">try-them</span> <span class="p">[</span><span class="nv">s</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">clojure.string/replace</span> <span class="nv">s</span>  <span class="o">#</span><span class="s">&quot; not&quot;</span> <span class="s">&quot;&quot;</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">try-them</span> <span class="s">&quot;I would not eat them in the rain.&quot;</span><span class="p">)</span>
@@ -231,7 +229,7 @@ One of the really nice things about transducers is that you can describe and com
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-xform</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-xform</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">comp</span>
 </span><span class='line'>   <span class="p">(</span><span class="nb">map </span><span class="nv">i-do-not-like-them</span><span class="p">)</span>
 </span><span class='line'>   <span class="p">(</span><span class="nb">map </span><span class="nv">try-them</span><span class="p">)))</span>
@@ -263,7 +261,7 @@ One of the really nice things about transducers is that you can describe and com
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;; -&gt; [&quot;I would eat them in the rain.&quot;</span>
 </span><span class='line'><span class="c1">;;     &quot;I would eat them on a train.&quot;</span>
 </span><span class='line'><span class="c1">;;     &quot;I would eat them in a box.&quot;</span>
@@ -284,7 +282,7 @@ One of the really nice things about transducers is that you can describe and com
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">class </span><span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">class </span><span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
 </span><span class='line'><span class="c1">;; -&gt; clojure.lang.LazyTransformer</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">1</span> <span class="p">(</span><span class="nf">sequence</span> <span class="nv">sam-i-am-xform</span> <span class="nv">green-eggs-n-ham</span><span class="p">))</span>
@@ -309,7 +307,7 @@ One of the really nice things about transducers is that you can describe and com
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">transduce</span> <span class="nv">sam-i-am-xform</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">transduce</span> <span class="nv">sam-i-am-xform</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.</span>
 </span><span class='line'><span class="c1">;;     I would eat them on a train.</span>
 </span><span class='line'><span class="c1">;;     I would eat them in a box.</span>
@@ -330,21 +328,21 @@ One of the really nice things about transducers is that you can describe and com
 <p>Core.async has a really nice way to define channels with a transducer that will transform each element on the channel.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-chan</span> <span class="p">(</span><span class="nf">async/chan</span> <span class="mi">1</span> <span class="nv">sam-i-am-xform</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">sam-i-am-chan</span> <span class="p">(</span><span class="nf">async/chan</span> <span class="mi">1</span> <span class="nv">sam-i-am-xform</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>Let&rsquo;s define another channel to reduce the results of the sam-i-am-chan to a string.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result-chan</span> <span class="p">(</span><span class="nf">async/reduce</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">sam-i-am-chan</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">result-chan</span> <span class="p">(</span><span class="nf">async/reduce</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="nv">%1</span> <span class="nv">%2</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="s">&quot;&quot;</span> <span class="nv">sam-i-am-chan</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>Finally, let&rsquo;s actually put the green-eggs-n-ham data onto the sam-i-am-chan and let the data transformations flow&hellip;.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">async/onto-chan</span> <span class="nv">sam-i-am-chan</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">async/onto-chan</span> <span class="nv">sam-i-am-chan</span> <span class="nv">green-eggs-n-ham</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -362,7 +360,7 @@ we can get our result off the result channel and revel in the beauty of asynchro
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">i-like-them</span> <span class="p">(</span><span class="nf">async/&lt;!!</span> <span class="nv">result-chan</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">i-like-them</span> <span class="p">(</span><span class="nf">async/&lt;!!</span> <span class="nv">result-chan</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="nv">i-like-them</span>
 </span><span class='line'><span class="c1">;; -&gt; &quot;I would eat them in the rain.</span>
@@ -385,8 +383,6 @@ we can get our result off the result channel and revel in the beauty of asynchro
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -446,8 +442,6 @@ we can get our result off the result channel and revel in the beauty of asynchro
 
 -->
           
-
-
 
 
 
@@ -518,7 +512,7 @@ we can get our result off the result channel and revel in the beauty of asynchro
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

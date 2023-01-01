@@ -93,20 +93,139 @@
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-09-12T20:09:15-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 12 Sep 2010,  8:09 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-10-12T03:11:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 12 Oct 2010,  3:11 AM</time>
         
       </p>
     
     
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/09/12/agile-software-lessons-from-ballet/" itemprop="url">Agile Software Lessons From Ballet</a></h2>
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/10/12/clojure-dictionary-challenge/" itemprop="url">Clojure Dictionary Challenge</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file.  Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution.  Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.</p>
+
+<p>Armed with Stuart Halloway&rsquo;s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission.</p>
+
+<p>Starting small – I decided to tackle the issue of finding consecutive consonants in a word.  I found that re-seq handles regex very nicely</p>
+
+<pre><code>user=&gt;  (re-seq #"[^aeiou]{2,}" "batty") 
+("tty")
+</code></pre>
+
+<p>Building on … let&rsquo;s find the number of letters in this word.  Since we have a sequence – we need to get the first element off of it, convert it to a string and find the length of it</p>
+
+<pre><code>user=&gt;  (.length (str (first (re-seq #"[^aeiou]{2,}" "batty"))))
+3
+</code></pre>
+
+<p>Not bad – but let&rsquo;s turn this into a function now</p>
+
+<pre><code>user=&gt; (defn count-cons [s]
+   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+ )
+#'user/count-cons
+</code></pre>
+
+<p>Now we can call the function directly</p>
+
+<pre><code>user=&gt; (count-cons "batty")
+3
+</code></pre>
+
+<p>Alright – we are making progress.  Next step, we need to be able to compare two words and see which has the bigger consonant count and return that.  For this, we will need a little “if” magic.</p>
+
+<pre><code>user=&gt; (defn compare-words [s1,s2]
+(if (&gt; (count-cons s1) (count-cons s2))
+  s1 s2))
+#'user/compare-words
+</code></pre>
+
+<p>Let&rsquo;s test it out</p>
+
+<pre><code>#'user/compare-words
+user=&gt; (compare-words "batty" "bat")
+"batty"
+user=&gt; (compare-words "bat" "batty")
+"batty"
+</code></pre>
+
+<p>Oh, yes, we are getting to the good part now.  Since we have a function that we can call on two arguments and give us one back that we can work with – we are ready to pull out the big guns …. reduce!</p>
+
+<pre><code>user=&gt; (reduce compare-words ["vat", "batty", "cars"])
+"batty"
+</code></pre>
+
+<p>Yeah!  Next we just need to feed it a file.  For this, after doing some research, I used the duck-streams library – you need to load it in using</p>
+
+<pre><code>user=&gt; (use '[clojure.contrib.duck-streams :only (spit read-lines)])
+
+nil
+</code></pre>
+
+<p>We open the file and read the lines and feed it to our function</p>
+
+<pre><code>user=&gt; (reduce compare-words (read-lines "/usr/share/dict/words"))
+
+"Ångström"
+</code></pre>
+
+<p>Yes, my regex needs some tweaking - but for this exercise, I am content.</p>
+
+<p>When you just have the working code.  It is actually quite concise:</p>
+
+<pre><code>;Counting consecutive consonants
+
+(use '[clojure.contrib.duck-streams :only (spit read-lines)])
+
+(defn count-cons [s]
+   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+ )
+
+(defn compare-words [s1,s2]
+(if (&gt; (count-cons s1) (count-cons s2))
+  s1 s2))
+
+(reduce compare-words (read-lines "/usr/share/dict/words"))
+</code></pre>
+
+<p>All in all, a fun evening trying to think functionally.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-09-13T00:09:15+00:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 13 Sep 2010, 12:09 AM</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/09/13/agile-software-lessons-from-ballet/" itemprop="url">Agile Software Lessons From Ballet</a></h2>
     
   </header>
 
 
   <div class="entry-content clearfix" itemprop="articleBody description"><p><img src="http://lh3.ggpht.com/_ebGqcJ7qdjk/SimNpSOosaI/AAAAAAAACcI/lr-4YdYyz3E/kirov-swan-lopatkina.jpg" alt="Swan Lake" />
-_Photo by Valentin Baranovsky &ndash; Uliana Lopatkina and Danila Korsuntsev. _</p>
+_Photo by Valentin Baranovsky - Uliana Lopatkina and Danila Korsuntsev. _</p>
 
 <p>Many moons ago, I spent a couple of years dancing with a ballet company.  You wouldn&rsquo;t think that much of that experience would transfer to development projects, but I give you an example in partnership, the can be applicable straight from the ballet world to the software world.  The partnership in question is the one between the lead ballerina and the lead male dancer called a “pas de deux.”  In many ballets, this dance involves the ballerina being a swan/princess and the male dancer being a prince/sorcerer.  But in my example, it really doesn&rsquo;t matter that much.  The only important point is that they are the best dancers in the whole company.</p>
 
@@ -171,9 +290,7 @@ _Photo by Valentin Baranovsky &ndash; Uliana Lopatkina and Danila Korsuntsev. _<
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-09-12T10:11:14-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 12 Sep 2010, 10:11 AM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-09-12T14:11:14+00:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 12 Sep 2010,  2:11 PM</time>
         
       </p>
     
@@ -220,14 +337,12 @@ _Photo by Valentin Baranovsky &ndash; Uliana Lopatkina and Danila Korsuntsev. _<
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-08-19T22:43:34-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu 19 Aug 2010, 10:43 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-08-20T02:43:34+00:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 20 Aug 2010,  2:43 AM</time>
         
       </p>
     
     
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/08/19/fox-in-socks-blocks/" itemprop="url">Fox in Socks Blocks</a></h2>
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/08/20/fox-in-socks-blocks/" itemprop="url">Fox in Socks Blocks</a></h2>
     
   </header>
 
@@ -247,7 +362,7 @@ fox_in_socks_blocks do |sillywords|
 end
 </code></pre>
 
-<p>That&rsquo;s right &ndash; the output is:
+<p>That&rsquo;s right - the output is:
 <code>
 Chicks with bricks come.
 Chicks with blocks come.
@@ -281,14 +396,12 @@ Chicks with bricks and blocks and clocks come.
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-08-17T21:58:04-04:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 17 Aug 2010,  9:58 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-08-18T01:58:04+00:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 18 Aug 2010,  1:58 AM</time>
         
       </p>
     
     
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/08/17/the-smart-not-so-smart-wave-function/" itemprop="url">The Smart Not-So-Smart Wave Function</a></h2>
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/08/18/the-smart-not-so-smart-wave-function/" itemprop="url">The Smart Not-So-Smart Wave Function</a></h2>
     
   </header>
 
@@ -324,14 +437,12 @@ Chicks with bricks and blocks and clocks come.
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-07-29T22:54:33-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu 29 Jul 2010, 10:54 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-07-30T02:54:33+00:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 30 Jul 2010,  2:54 AM</time>
         
       </p>
     
     
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/07/29/open-source-wednesdays/" itemprop="url">Open Source Wednesdays</a></h2>
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/07/30/open-source-wednesdays/" itemprop="url">Open Source Wednesdays</a></h2>
     
   </header>
 
@@ -369,14 +480,12 @@ Chicks with bricks and blocks and clocks come.
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-07-07T23:33:20-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed  7 Jul 2010, 11:33 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-07-08T03:33:20+00:00"  data-updated="true" itemprop="datePublished dateCreated">Thu  8 Jul 2010,  3:33 AM</time>
         
       </p>
     
     
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/07/07/hello-world-in-rdf/" itemprop="url">Hello World in RDF</a></h2>
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/07/08/hello-world-in-rdf/" itemprop="url">Hello World in RDF</a></h2>
     
   </header>
 
@@ -394,7 +503,7 @@ FOAF (Friend of a Friend)</a> is one of the most popular vocabularies out there 
 &lt;foaf:nick&gt;squid&lt;/foaf:nick&gt;
 </code></pre>
 
-<p>Not too much fun to start coding by hand though.  Luckily, there is a handy dandy generator &ndash; <a href="http://www.ldodds.com/foaf/foaf-a-matic">FOAF-a-matic.</a> Just fill in the form and you can easily generate the basic foaf rdf file for yourself.  You can always add to it later.  Save the file as foaf.rdf somewhere on your website for indexing.</p>
+<p>Not too much fun to start coding by hand though.  Luckily, there is a handy dandy generator - <a href="http://www.ldodds.com/foaf/foaf-a-matic">FOAF-a-matic.</a> Just fill in the form and you can easily generate the basic foaf rdf file for yourself.  You can always add to it later.  Save the file as foaf.rdf somewhere on your website for indexing.</p>
 
 <p>Now you can do some fun stuff with it.  You can check and visualize your RDF document with <a href="http://www.w3.org/RDF/Validator/">http://www.w3.org/RDF/Validator/</a>.  Or you can use a<a href="http://foaf-visualizer.org/?uri=http://gigasquidsoftware.com/foaf/foaf.rdf"> FOAF visualizer</a>.</p>
 
@@ -434,9 +543,7 @@ My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier<
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-07-01T14:04:53-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu  1 Jul 2010,  2:04 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-07-01T18:04:53+00:00"  data-updated="true" itemprop="datePublished dateCreated">Thu  1 Jul 2010,  6:04 PM</time>
         
       </p>
     
@@ -477,14 +584,12 @@ My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier<
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-06-26T22:38:46-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 26 Jun 2010, 10:38 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-06-27T02:38:46+00:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 27 Jun 2010,  2:38 AM</time>
         
       </p>
     
     
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/06/26/not-ready-to-throw-the-object-model-out-with-the-bath-water/" itemprop="url">Not Ready to Throw the Object Model Out With the Bath Water</a></h2>
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/06/27/not-ready-to-throw-the-object-model-out-with-the-bath-water/" itemprop="url">Not Ready to Throw the Object Model Out With the Bath Water</a></h2>
     
   </header>
 
@@ -524,9 +629,7 @@ My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier<
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-06-09T13:08:52-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed  9 Jun 2010,  1:08 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-06-09T17:08:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">Wed  9 Jun 2010,  5:08 PM</time>
         
       </p>
     
@@ -550,50 +653,11 @@ My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier<
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-05-26T22:09:14-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 26 May 2010, 10:09 PM</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2010/05/26/feature-vs-bug-does-it-matter/" itemprop="url">Feature vs Bug - Does It Matter?</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>How many minutes and hours have been wasted trying to decide if a ticket is a feature or a bug?  Yes, I have been there, entering a new item ticket, the dropdown in the tracker glares at me.  Decide!  Is is a bug or a feature.  Some are clear-cut, of course.  The ever popular null-pointer on unvalidated input for example.  But others are not so clear.   What about the field that you thought was supposed to viewable employees in the supervisor&rsquo;s location, but really ended up needing to be viewable to the employee&rsquo;s in the supervisor&rsquo;s location and the direct reports in another location?   The question then turns on whether or not this information was in the &ldquo;spec&rdquo; or whether the business user didn&rsquo;t let the developer know about it.  Now the question has created an ugly situation of &ldquo;blame&rdquo;.  Whose fault is it?</p>
-
-<p>While I am all for development responsibility and testing, I think this line of thinking can only lead to trouble and harm the close relationship sought by the business user and the developer.  How can you truly have agile, collaborative development, if the two parties are at odds, even in the small sense of categorizing work tickets.  In the end, the same work needs to be done to get to the end result of having the application serve the business needs.  So let&rsquo;s lay off the blame game and just say no to bug vs feature.</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
       
-        <li class="previous disabled"><a href="#">&larr;&nbsp;Older</a></li>
+        <li class="previous"><a href="">&larr;&nbsp;Older</a></li>
       
       <li><a href="/blog/archives">Blog Archives</a></li>
       
@@ -608,7 +672,7 @@ My purl link is <a href="http://purl.org/net/cmeier">http://purl.org/net/cmeier<
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

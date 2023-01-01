@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-02-10T21:27:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 10 Feb 2016,  9:27 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -142,35 +140,30 @@
 <table>
 <thead>
 <tr>
-<th></th>
 <th> Noun          </th>
-<th align="center"> Doc1</th>
+<th style="text-align:center;"> Doc1</th>
 <th> Doc2</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td></td>
 <td> flower        </td>
-<td align="center"> 1   </td>
+<td style="text-align:center;"> 1   </td>
 <td>0</td>
 </tr>
 <tr>
-<td></td>
 <td> king          </td>
-<td align="center"> 0   </td>
+<td style="text-align:center;"> 0   </td>
 <td>1</td>
 </tr>
 <tr>
-<td></td>
 <td> fairy         </td>
-<td align="center"> 1   </td>
+<td style="text-align:center;"> 1   </td>
 <td>0</td>
 </tr>
 <tr>
-<td></td>
 <td> gold          </td>
-<td align="center"> 1   </td>
+<td style="text-align:center;"> 1   </td>
 <td>1</td>
 </tr>
 </tbody>
@@ -197,7 +190,7 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">hyperdimensional-playground.context-vectors</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">hyperdimensional-playground.context-vectors</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.matrix</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">clojure.core.matrix.linear</span> <span class="ss">:as</span> <span class="nv">ml</span><span class="p">]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">clojure.string</span> <span class="ss">:as</span> <span class="nv">string</span><span class="p">]</span>
@@ -227,7 +220,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">update-doc!</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">update-doc!</span>
 </span><span class='line'>  <span class="s">&quot;Given a document - upate the frequency matrix using random indexing&quot;</span>
 </span><span class='line'>  <span class="p">[</span><span class="nv">doc</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">known-nouns</span> <span class="p">(</span><span class="nf">clojure.set/intersection</span> <span class="nv">fairy-tales-nouns</span> <span class="p">(</span><span class="nb">set </span><span class="nv">doc</span><span class="p">))]</span>
@@ -252,7 +245,7 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">process-book</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">process-book</span>
 </span><span class='line'>  <span class="s">&quot;Load a book and break it into sentence like documents and update the frequency matrix&quot;</span>
 </span><span class='line'>  <span class="p">[</span><span class="nv">book-str</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">book-text</span> <span class="p">(</span><span class="nb">slurp </span><span class="nv">book-str</span><span class="p">)</span>
@@ -272,7 +265,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">book</span> <span class="nv">book-list</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">book</span> <span class="nv">book-list</span><span class="p">]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">process-book</span> <span class="nv">book</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -290,7 +283,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">wv</span> <span class="p">[</span><span class="nv">word</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">wv</span> <span class="p">[</span><span class="nv">word</span><span class="p">]</span>
 </span><span class='line'>  <span class="s">&quot;Get a hypervector for the word from the frequency matrix&quot;</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">get </span><span class="nv">noun-idx</span> <span class="nv">word</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">assert </span><span class="p">(</span><span class="nb">not </span><span class="p">(</span><span class="nb">nil? </span><span class="nv">i</span><span class="p">))</span> <span class="p">(</span><span class="nb">str </span><span class="nv">word</span> <span class="s">&quot; not found&quot;</span><span class="p">))</span>
@@ -309,7 +302,7 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">compare-wvs</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">compare-wvs</span>
 </span><span class='line'>  <span class="s">&quot;Compare two words and give the cosine distance info map&quot;</span>
 </span><span class='line'>  <span class="p">[</span><span class="nv">word1</span> <span class="nv">word2</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">wv1</span> <span class="p">(</span><span class="nf">wv</span> <span class="nv">word1</span><span class="p">)</span>
@@ -333,7 +326,7 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">sort-by </span><span class="ss">:cosine</span><span class="p">[(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;queen&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">sort-by </span><span class="ss">:cosine</span><span class="p">[(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;queen&quot;</span><span class="p">)</span>
 </span><span class='line'>                 <span class="p">(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;prince&quot;</span><span class="p">)</span>
 </span><span class='line'>                 <span class="p">(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;princess&quot;</span><span class="p">)</span>
 </span><span class='line'>                 <span class="p">(</span><span class="nf">compare-wvs</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;guard&quot;</span><span class="p">)</span>
@@ -355,7 +348,7 @@
 <p>We can take a look at how close <em>boy</em> and <em>king</em> are together by themselves.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;king&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.42996397142253145</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;king&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.42996397142253145</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -363,7 +356,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gold&quot;</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gold&quot;</span><span class="p">))</span>
 </span><span class='line'>              <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;king&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.5876251031366048</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -374,7 +367,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.33102858702785953</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.33102858702785953</span>
 </span><span class='line'><span class="c1">;; boy + giant = jack</span>
 </span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;giant&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;boy&quot;</span><span class="p">))</span>
 </span><span class='line'>              <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">))</span> <span class="c1">;=&gt;0.4491473187787431</span>
@@ -385,7 +378,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;; frog + princess = prince</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; frog + princess = prince</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv-add</span> <span class="s">&quot;frog&quot;</span> <span class="s">&quot;princess&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;prince&quot;</span><span class="p">))</span> <span class="c1">;=&gt; 0.5231641991974249</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -395,7 +388,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;; queen= (king-man) + woman</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; queen= (king-man) + woman</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;queen&quot;</span><span class="p">)</span>
 </span><span class='line'>              <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;woman&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv-subtract</span> <span class="s">&quot;king&quot;</span> <span class="s">&quot;man&quot;</span><span class="p">)))</span> <span class="c1">;=&gt;0.5659832204544486</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -405,7 +398,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;father&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">cosine-sim</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;father&quot;</span><span class="p">)</span>
 </span><span class='line'>              <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;man&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv-subtract</span> <span class="s">&quot;mother&quot;</span> <span class="s">&quot;woman&quot;</span><span class="p">)))</span> <span class="c1">;=&gt;0.5959841177719538</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -414,7 +407,7 @@
 
 <h3>Reasoning with word vector with the database as a hyperdimensional value</h3>
 
-<p>The curious nature of hypervectors allows the storage of multiple entity, attributes in it and allow the retrieval of the likeness of them later by simple linear math &ndash; using only xor multiplication and addition.  This gives us the <em>database as a value</em> in the form of a high dimensional vector.</p>
+<p>The curious nature of hypervectors allows the storage of multiple entity, attributes in it and allow the retrieval of the likeness of them later by simple linear math - using only xor multiplication and addition.  This gives us the <em>database as a value</em> in the form of a high dimensional vector.</p>
 
 <p>For an example, say we want to express the fact that Hansel is a brother of Gretel.  We can do this by adding the xor product of brother with hansel and the product of brother with Gretel.</p>
 
@@ -424,7 +417,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; hansel is the brother of gretel</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;; hansel is the brother of gretel</span>
 </span><span class='line'><span class="c1">;; B*H + B*G</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">hansel-brother-of-gretel</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">mean-add</span>
@@ -439,7 +432,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">jack-brother-of-hansel</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">jack-brother-of-hansel</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">mean-add</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">))</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;hansel&quot;</span><span class="p">))))</span>
@@ -450,7 +443,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">facts</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">hansel-brother-of-gretel</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">facts</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">hansel-brother-of-gretel</span>
 </span><span class='line'>                       <span class="nv">jack-brother-of-hansel</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -462,7 +455,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="c1">;; is jack the brother of hansel?</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="c1">;; is jack the brother of hansel?</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">)</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
@@ -470,14 +463,14 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>What about someone unrelated.  Is Cinderella the brother of Gretel? &ndash; No</p>
+<p>What about someone unrelated.  Is Cinderella the brother of Gretel? - No</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="c1">;; is cinderella the brother of gretel ?</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="c1">;; is cinderella the brother of gretel ?</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;cinderella&quot;</span><span class="p">)</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
@@ -485,14 +478,14 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Is Jack the brother of Gretel &ndash; Yes</p>
+<p>Is Jack the brother of Gretel - Yes</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="c1">;; is jack the brother of gretel ?</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="c1">;; is jack the brother of gretel ?</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">)</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
@@ -504,10 +497,10 @@
 
 <h3>Siblings in Hyperspace</h3>
 
-<p>Let&rsquo;s invent a new word vector that is not in our nouns &ndash; <em>siblings</em>.  We are going to create new random hypervector to represent it.</p>
+<p>Let&rsquo;s invent a new word vector that is not in our nouns - <em>siblings</em>.  We are going to create new random hypervector to represent it.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">siblings</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">siblings</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -515,7 +508,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">siblings-brother-sister</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">siblings-brother-sister</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;brother&quot;</span><span class="p">))</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;sister&quot;</span><span class="p">))))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -528,7 +521,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="c1">;; gretel is the sister of hansel</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="c1">;; gretel is the sister of hansel</span>
 </span><span class='line'>  <span class="c1">;; S*G + S*H</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">gretel-sister-of-hansel</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">mean-add</span>
@@ -545,7 +538,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="c1">;; gretel is the sister of jack</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="c1">;; gretel is the sister of jack</span>
 </span><span class='line'>  <span class="c1">; S*G + S*H</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">gretel-sister-of-jack</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">mean-add</span>
@@ -561,7 +554,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">facts</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">hansel-brother-of-gretel</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="k">def </span><span class="nv">facts</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">hansel-brother-of-gretel</span>
 </span><span class='line'>                       <span class="nv">jack-brother-of-hansel</span>
 </span><span class='line'>                       <span class="nv">gretel-sister-of-jack</span>
 </span><span class='line'>                       <span class="nv">gretel-sister-of-hansel</span>
@@ -571,38 +564,38 @@
 
 <p>Now we can ask some for questions.</p>
 
-<p>Are Hansel and Gretel siblings? &ndash; Yes</p>
+<p>Are Hansel and Gretel siblings? - Yes</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; are hansel and gretel siblings?</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;; are hansel and gretel siblings?</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;hansel&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;gretel&quot;</span><span class="p">))</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt;0.627015379034067</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Are John and Roland siblings &ndash; No</p>
+<p>Are John and Roland siblings - No</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; are john and roland siblings?</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;; are john and roland siblings?</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;roland&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;john&quot;</span><span class="p">))</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt; 0.1984017637065277</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Are Jack and Hansel siblings? &ndash; Yes</p>
+<p>Are Jack and Hansel siblings? - Yes</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">cosine-sim</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="nf">cosine-sim</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">mean-add</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;jack&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">wv</span> <span class="s">&quot;hansel&quot;</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">siblings</span> <span class="nv">facts</span><span class="p">))</span> <span class="c1">;=&gt;0.48003572523507465</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -625,8 +618,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -686,8 +677,6 @@
 
 -->
           
-
-
 
 
 
@@ -758,7 +747,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

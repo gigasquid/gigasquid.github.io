@@ -93,6 +93,196 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-03-19T21:06:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 19 Mar 2014,  9:06 PM</time>
+        
+           | <a href="/blog/2014/03/19/walking-with-hexapods/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/03/19/walking-with-hexapods/" itemprop="url">Walking With Hexapods</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><img src="http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg"></p>
+
+<p>Here we see the <a href="http://www.trossenrobotics.com/phantomx-ax-hexapod.aspx">PhantomX Hexapod</a> thriving in the natural habitat of a
+cozy, climate controlled, modern house. But there was a time before
+the hexapod.  In particular, there was a time of many hexapod parts
+and a high level software developer that somehow, despite her natural
+lack of mechanical skills, managed to bring it to life. This blog post
+endeavors to chronicle the high and low points of this journey. And
+perhaps, will make it easier for any other brave souls that would like
+to bring the <em>Age of Hexapods</em> into their homes.</p>
+
+<h2>Oh My! So Many Parts</h2>
+
+<p>I wasn&rsquo;t really mentally prepared for the vast amounts of parts in the
+kit.  Here is a sampling:</p>
+
+<ul>
+<li>18 AX-12A Servos</li>
+<li>Top/ Bottom Body Plate</li>
+<li>20 Brackets</li>
+<li>Arbotix Board</li>
+<li>2 Xbees</li>
+<li>Lipo Battery &amp; Charger</li>
+<li>Arbotix programmer</li>
+<li>19 Cables</li>
+<li><strong>50,000 nuts and screws </strong> (Really only about 850 - but you get my
+ point)</li>
+</ul>
+
+
+<h2>First Things First</h2>
+
+<p>The very first thing to do is to make sure that you have all the
+parts.  Once I went through the checklist and double counted all my
+screws, I was relieved to go onto the next task of programming the
+Arbotix and assign ids to servos and center them. These steps
+consisted of:</p>
+
+<ul>
+<li>Getting the Arduino IDE going</li>
+<li>Loading the Drivers and Libraries</li>
+<li>Loading the ROS (Robot Operating System) on the Arbotix Board, so
+that it could be used to program the servos.</li>
+</ul>
+
+
+<p>Each of the servos have to be assigned a number. This will let the
+program know which part of the leg is which, so that it will
+eventually - hopefully, be able to walk. Once the id is given, a
+sticker is labeled on the servo for future use. Centering the servos
+is a VERY important step not to overlook.  If you do not center the
+servos, you will get into the unfortunate circumstance of having to
+dissemble the robot, cry, recenter the servos, and then reassemble the
+robot. Please avoid.</p>
+
+<h2>Putting It Together</h2>
+
+<p>The assembly starts with the feet and legs first.
+I was so pleased when I got the feet assembled, that I considered
+knitting little baby hexapod booties.</p>
+
+<p><img src="http://farm8.staticflickr.com/7298/13278059445_562bb9ce4b.jpg"></p>
+
+<p>Next a servo and the tibia is added</p>
+
+<p><img src="http://farm8.staticflickr.com/7311/13278197583_599f030bab.jpg"></p>
+
+<p>Another servo and the tibia and femur is assembled</p>
+
+<p><img src="http://farm8.staticflickr.com/7185/13278392294_8986c14e5b.jpg"></p>
+
+<p>Finally, another servo and the whole leg is assembled</p>
+
+<p><img src="http://farm8.staticflickr.com/7033/13278197683_cfd9a4870f.jpg"></p>
+
+<h2>Newbie Advice</h2>
+
+<p>I would like to pause for a minute to share some advice from my trial
+and errors in assembly thus far:</p>
+
+<ul>
+<li><strong>Don&rsquo;t overtighten screws </strong> - More is not better. It makes things
+like plexiglass frames crack and break.</li>
+<li><strong>Seating nuts in servos is hard</strong> - This isn&rsquo;t really advice. Just
+moral support in your struggle.  There are 18 servos and up to 20
+nuts to seat in each servo.</li>
+</ul>
+
+
+<p><img src="http://farm4.staticflickr.com/3833/13278059175_91699a9704_n.jpg"></p>
+
+<h2>Assembling the body</h2>
+
+<p>The body is where the board, battery and and cables go.</p>
+
+<p><img src="http://farm4.staticflickr.com/3755/13278197953_44717aea96.jpg"></p>
+
+<p>At long last, the legs can be attached to the body - with 120 screws
+of course.</p>
+
+<h2>Round two of Newbie Advice</h2>
+
+<ul>
+<li>For those who have never stripped wires and attached them to power
+supplies, like me, please mind that the wires are twisted so that
+the edges don&rsquo;t fray out and short out everything requiring you to
+re-assign all the servos that lost their ids and much unscrewing,
+crying, and reassembling.</li>
+<li>When programming the Arbotix board.  You must remove the Xbee, or it
+will not work.</li>
+<li>Also, did I mention not over-tightening screws? Also, the order in
+which you tighten the screws is important too.  Try to tighten them
+all loosely in order, so you don&rsquo;t stress the fiberglass parts and
+have something like this happen.</li>
+</ul>
+
+
+<p><img src="http://farm4.staticflickr.com/3749/13278392754_cde8d9e10f_n.jpg"></p>
+
+<h2>It is Alive!</h2>
+
+<p>Finally, the moment of truth. The hexapod is assembled and it is time
+to upload a test check on the board to make sure that everything is
+working alright.</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('i9St8kDuyqU');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/i9St8kDuyqU?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/i9St8kDuyqU/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=i9St8kDuyqU" id="i9St8kDuyqU" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+
+<h2>Walking with Hexapods</h2>
+
+<p>The kit comes with a commander that you assemble of course.  You can
+use it to control the hexapod with hand-held joysticks.</p>
+
+<p><img src="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg"></p>
+
+<p>The moment of truth, when it finally took its very first steps, and the Age of Hexapods began.</p>
+
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('pUrZeJ39xjs');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/pUrZeJ39xjs?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/pUrZeJ39xjs/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=pUrZeJ39xjs" id="pUrZeJ39xjs" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+
+<p><em>Stay tuned for the next post of how to control the hexapod with your
+Clojure code and loading the Phoenix firmware that gives it a
+life-like moves</em></p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
 
 
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-02-22T11:02:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 22 Feb 2014, 11:02 AM</time>
@@ -208,8 +398,6 @@ that when I dream in code, he is still there with me.</p>
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-02-16T14:57:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 16 Feb 2014,  2:57 PM</time>
         
            | <a href="/blog/2014/02/16/hitchhikers-clojure-has-a-new-home/#disqus_thread" itemprop="discussionUrl"
@@ -228,7 +416,7 @@ easier to read them in a chronological fashion.</p>
 
 <p><a href="http://hitchhikersclojure.com/">http://hitchhikersclojure.com/</a></p>
 
-<p>There is also a public <a href="https://github.com/gigasquid/hitchhikers-clojure">repo</a> &ndash; feel free to contribute spelling and
+<p>There is also a public <a href="https://github.com/gigasquid/hitchhikers-clojure">repo</a> - feel free to contribute spelling and
 grammar fixes, or your great ideas.</p>
 </div>
   
@@ -244,8 +432,6 @@ grammar fixes, or your great ideas.</p>
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -303,7 +489,7 @@ for a nil parameter. For example, take this locked door:</em></p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">locked-door</span> <span class="p">[</span><span class="nv">key</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">locked-door</span> <span class="p">[</span><span class="nv">key</span><span class="p">]</span>
 </span><span class='line'>        <span class="p">(</span><span class="k">if </span><span class="nb">key </span><span class="s">&quot;open&quot;</span> <span class="s">&quot;nope - staying shut&quot;</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">locked-door</span> <span class="ss">:key</span><span class="p">)</span> <span class="c1">;=&gt; &quot;open&quot;</span>
@@ -318,7 +504,7 @@ pesky obstacle.</em></p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">this-door</span> <span class="p">(</span><span class="nf">fnil</span> <span class="nv">locked-door</span> <span class="ss">:another-key-that-works</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">this-door</span> <span class="p">(</span><span class="nf">fnil</span> <span class="nv">locked-door</span> <span class="ss">:another-key-that-works</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">this-door</span> <span class="ss">:key</span><span class="p">)</span> <span class="c1">;=&gt; &quot;open&quot;</span>
 </span><span class='line'><span class="p">(</span><span class="nf">this-door</span> <span class="nv">nil</span><span class="p">)</span> <span class="c1">;=&gt; open</span>
@@ -380,7 +566,7 @@ won&rsquo;t melt in your hands.</em></p>
 <p><em>To construct a channel simply use <em>chan</em></em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -397,7 +583,7 @@ talk to the otter with a blocking put <em>>!!</em>.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">future</span> <span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Hello otters.&quot;</span><span class="p">))</span> <span class="c1">;=&gt;#&lt;Future@3c371c41: :pending&gt;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">future</span> <span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Hello otters.&quot;</span><span class="p">))</span> <span class="c1">;=&gt;#&lt;Future@3c371c41: :pending&gt;</span>
 </span><span class='line'><span class="p">(</span><span class="nf">&lt;!!</span> <span class="nv">talk-to-otters-chan</span><span class="p">)</span> <span class="c1">;=&gt; &quot;Hello otters.&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -411,7 +597,7 @@ the marshmallow.</p>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">;;create channel with buffer size 10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">;;create channel with buffer size 10</span>
 </span><span class='line'><span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Hello otters.&quot;</span><span class="p">)</span> <span class="c1">;=&gt; nil</span>
 </span><span class='line'><span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Do you know anything about the world ending?&quot;</span><span class="p">)</span> <span class="c1">;=&gt; nil</span>
 </span><span class='line'>
@@ -436,7 +622,7 @@ these go blocks one can use regular non-blocking puts <strong>>!</strong> and ge
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">go</span> <span class="p">(</span><span class="nf">while</span> <span class="nv">true</span>
 </span><span class='line'>      <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">&lt;!</span> <span class="nv">talk-to-otters-chan</span><span class="p">))))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Hello otters&quot;</span><span class="p">)</span>
@@ -470,7 +656,7 @@ conversing with human, animals, and other Clojure-based life forms.</em></p>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">talk-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">talk-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">listen-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">go</span> <span class="p">(</span><span class="nf">while</span> <span class="nv">true</span>
 </span><span class='line'>      <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">&lt;!</span> <span class="nv">listen-chan</span><span class="p">))))</span>
@@ -518,8 +704,6 @@ around and sucked them down into the ground.</p>
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -589,7 +773,7 @@ a dry spell and was trying to do the following recursive function in his evaluat
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">rain</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">days</span><span class="p">))))</span>
@@ -608,7 +792,7 @@ a dry spell and was trying to do the following recursive function in his evaluat
 the days before passing it to the recursive function.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">dec </span><span class="mi">5</span><span class="p">)</span> <span class="c1">;=&gt; 4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">dec </span><span class="mi">5</span><span class="p">)</span> <span class="c1">;=&gt; 4</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -626,7 +810,7 @@ the days before passing it to the recursive function.</em></p>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">rain</span> <span class="nv">days</span><span class="p">)))</span>
@@ -656,7 +840,7 @@ the days before passing it to the recursive function.</em></p>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">recur</span> <span class="nv">days</span><span class="p">)))</span>
@@ -684,7 +868,7 @@ aspects of Clojure. For instance, take this vector of 2 chickens:</em></p>
 <p><img src="http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg"></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -692,7 +876,7 @@ aspects of Clojure. For instance, take this vector of 2 chickens:</em></p>
 <a href="http://clojuredocs.org/clojure_core/clojure.core/cycle">cycle</a>.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -708,7 +892,7 @@ to get the first n infinite chickens.</em></p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">5</span> <span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">take </span><span class="mi">5</span> <span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]))</span>
 </span><span class='line'><span class="c1">;;=&gt; (:hen :rooster :hen :rooster :hen)</span>
 </span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">10</span> <span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]))</span>
 </span><span class='line'><span class="c1">;;=&gt; (:hen :rooster :hen :rooster :hen :rooster :hen :rooster :hen</span>
@@ -747,8 +931,6 @@ we need to see the otters.&rdquo;</p>
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -828,7 +1010,7 @@ where the following expressions are evaluated in the Clojure
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="s">&quot;hi&quot;</span> <span class="c1">;;=&gt; &quot;hi&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="s">&quot;hi&quot;</span> <span class="c1">;;=&gt; &quot;hi&quot;</span>
 </span><span class='line'><span class="mi">1</span> <span class="c1">;;=&gt; 1</span>
 </span><span class='line'><span class="nv">true</span> <span class="c1">;;=&gt; true</span>
 </span><span class='line'><span class="nv">nil</span> <span class="c1">;;=&gt; nil</span>
@@ -839,7 +1021,7 @@ where the following expressions are evaluated in the Clojure
 
 <p><em>Which leads to the very practical tip of what to do if you find a nil
 in your pistachio.  The answer, of course, is to be thankful that you
-have a value that represents the absence of a value &ndash; and to get
+have a value that represents the absence of a value - and to get
 another pistachio.</em></p>
 
 <p><em>In Clojure, a s-expression is written with parens.  The first element
@@ -849,7 +1031,7 @@ themselves.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">;;=&gt; 3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">;;=&gt; 3</span>
 </span><span class='line'><span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="p">(</span><span class="nb">+ </span><span class="mi">2</span> <span class="mi">2</span><span class="p">))</span> <span class="c1">;;=&gt; 5</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -865,7 +1047,7 @@ string &ldquo;red&rdquo; to the nut-name.</em></p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">red</span> <span class="p">[</span><span class="nv">nut</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">red</span> <span class="p">[</span><span class="nv">nut</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">str </span><span class="s">&quot;red &quot;</span> <span class="nv">nut</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">)</span> <span class="c1">;;=&gt; &quot;red nut1&quot;</span>
@@ -876,7 +1058,7 @@ string &ldquo;red&rdquo; to the nut-name.</em></p>
 longer be evaluated.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">)</span> <span class="c1">;;=&gt; (red &quot;nut1&quot;)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">)</span> <span class="c1">;;=&gt; (red &quot;nut1&quot;)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -886,7 +1068,7 @@ manipulate with other s-expressions (code as data).</em></p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">first </span><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">))</span> <span class="c1">;;=&gt; red</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">first </span><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">))</span> <span class="c1">;;=&gt; red</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">last </span><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">))</span> <span class="c1">;;=&gt; &quot;nut1&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -898,7 +1080,7 @@ the first slot.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="s">&quot;nut1&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="s">&quot;nut1&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;;=&gt; ClassCastException java.lang.String cannot be cast to clojure.lang.IFn</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -968,8 +1150,6 @@ started glowing on either side of them &hellip; and they disappeared.</p>
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-01-09T21:23:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Thu  9 Jan 2014,  9:23 PM</time>
         
            | <a href="/blog/2014/01/09/lean-customer-interview-tips-for-the-introverted-developer/#disqus_thread" itemprop="discussionUrl"
@@ -1015,27 +1195,27 @@ out of my comfort zone and engaged in customer interviews.</p>
 
 <p>Background:  Our team was designing experiments around creating an app
 for Food Trucks.  The fundamental assumption that we wanted to
-validate was &ndash; &ldquo;People will pay money for a phone app that will tell
+validate was - &ldquo;People will pay money for a phone app that will tell
 them where all the Food Trucks are.&rdquo;  So we headed downtown to the
 local food market. This was a place where there were local artisan
 food vendors in a food hall.  It seemed like an ideal place to find
 people interested in good food and Food Trucks.</p>
 
-<h3>Tip #1 &ndash; You will suck at first, but it gets better</h3>
+<h3>Tip #1 - You will suck at first, but it gets better</h3>
 
 <p>The first few people I tried to talk were complete failures. I felt
 like a complete idiot. Do not get discouraged.  It helps if you go
 with someone else for moral support, although you should interview
 people by yourself, so they don&rsquo;t feel intimidated.</p>
 
-<h3>Tip #2 &ndash; Have your questions written down</h3>
+<h3>Tip #2 - Have your questions written down</h3>
 
 <p>Come prepared with the questions that you want to ask people, so you
 don&rsquo;t have a brain freeze with nervousness.  However, I found I got
 people to talk to me more if I didn&rsquo;t carry the pad of paper with me.
 Basically anything you can do to look less like a marketer helps.</p>
 
-<h3>Tip #3 &ndash; Tell them what you are trying to build first</h3>
+<h3>Tip #3 - Tell them what you are trying to build first</h3>
 
 <p>DO NOT START OUT LIKE THIS:  &ldquo;Can I ask you a few questions?&rdquo;
 This never worked. Again, this is what a marketer would say.
@@ -1044,7 +1224,7 @@ developer looking to build a app for Food Trucks. In most cases, they
 were happy to give advice on whether they would use the app and how
 much they would pay for it.</p>
 
-<h3>Tip #4 &ndash; Write down your results right away</h3>
+<h3>Tip #4 - Write down your results right away</h3>
 
 <p>Memory is a fleeting thing.  Try to record the results of your
 conversation right away.  Take the notepad from your pocket and go to
@@ -1053,7 +1233,7 @@ Also try to write down what the person said, not just your
 interpretation. If someone is helping you interview, you can have one
 person be a scribe, while one person talks.</p>
 
-<h3>Tip #5 &ndash; Give Gifts</h3>
+<h3>Tip #5 - Give Gifts</h3>
 
 <p>If you have any funding available for this endeavor, you can get a
 stack of Amazon $10 gift cards for people&rsquo;s time. This was some advice
@@ -1073,7 +1253,7 @@ success.</p>
 
 <p>Build things that matter.  Build well. Build the right things.</p>
 
-<h5>Thanks to Scott Burwinkel for helping review this post for me &ndash; you rock</h5>
+<h5>Thanks to Scott Burwinkel for helping review this post for me - you rock</h5>
 </div>
   
   
@@ -1088,8 +1268,6 @@ success.</p>
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -1130,7 +1308,7 @@ I decided to go with the new
 Some of my reasons:</p>
 
 <ul>
-<li>Powerful &ndash; New Haswell processor</li>
+<li>Powerful - New Haswell processor</li>
 <li>13.3 inch touch display with 1920 x 1080 resolution</li>
 <li>Ships with Ubuntu 12.04 (64 bit)</li>
 <li>Nice design (yes looks are important)</li>
@@ -1158,14 +1336,14 @@ comparable to the Mac Air.</p>
 basis.
 Here is a overview:</p>
 
-<h4>Application Dock/ Organization &ndash; Dash</h4>
+<h4>Application Dock/ Organization - Dash</h4>
 
 <p>Ubuntu has a dock on the left hand side of the screen, that is very
 similar to the mac one.  You can right click and pin applications to
 the dock to keep them in there. Clicking into the dash option, you can
 browse your applications that are installed.</p>
 
-<h4>Getting New Apps &ndash; Ubuntu Software Center or apt-get</h4>
+<h4>Getting New Apps - Ubuntu Software Center or apt-get</h4>
 
 <p>You can install new applications easily by using the Ubuntu Software
 Center.  Browsing the applications and installing them is point and
@@ -1175,12 +1353,12 @@ version, you can always install via the command line with</p>
 <pre><code>sudo apt-get install package-name
 </code></pre>
 
-<h4>Browser &ndash; Firefox or Chromium</h4>
+<h4>Browser - Firefox or Chromium</h4>
 
 <p>Ubuntu comes with Firefox and Chromium installed.
 You can also go with Chrome of course.</p>
 
-<h4>Mail &ndash; Thunderbird</h4>
+<h4>Mail - Thunderbird</h4>
 
 <p>Ubuntu comes with Thunderbird mail ready to go.
 I was pleasantly surprised by how easy it was to setup Thunderbird
@@ -1192,7 +1370,7 @@ there.  I also just found out about
 <a href="http://www.omgubuntu.co.uk/2013/10/geary-0-4-released-with-new-look-new-features">Geary</a>,
 which looks pretty sweet.</p>
 
-<h4>Password Management &ndash; 1 Password Anywhere + Dropbox / LastPass</h4>
+<h4>Password Management - 1 Password Anywhere + Dropbox / LastPass</h4>
 
 <p>There is not a linux client for 1Password. I can still use it by using
 <a href="http://help.agilebits.com/1Password3/1passwordanywhere.html">1PasswordAnywhere</a>.
@@ -1211,7 +1389,7 @@ I did an apt-get to get the 24 version.</p>
 <p>I went with gitg for a graphical Git client. It seems to have all the
 things you need.</p>
 
-<h4>Terminal &ndash; Byobu</h4>
+<h4>Terminal - Byobu</h4>
 
 <p><a href="http://byobu.co/">Byobu Terminal</a> comes already installed in Ubuntu. I have been taking
 it for a test drive and really like some of the features of easily
@@ -1223,14 +1401,14 @@ adding new tabs, splitting screens and re-attaching to sessions.</p>
 <a href="http://www.omgubuntu.co.uk/2012/09/use-evernote-in-ubuntu-with-everpad">Everpad</a>,
 I can still use all my evernote stuff too.</p>
 
-<h4>Presentations &ndash; LibreOffice / Reveal.js</h4>
+<h4>Presentations - LibreOffice / Reveal.js</h4>
 
 <p>I have used Keynote heavily on the Mac.  For existing presentations, I
 can convert them to ppt format and then modify or run in LibreOffice
 Impress. Most likely with all my new presentations, I will just use a
 JavaScript framework like <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a></p>
 
-<h4>Communication &ndash; Hipchat / Skype/ Google Hangouts / Campfire</h4>
+<h4>Communication - Hipchat / Skype/ Google Hangouts / Campfire</h4>
 
 <p>We use Hipchat for messaging at work.  Hipchat has a linux client
 that works just the same.  Skype also has a linux client.  Of course,
@@ -1268,8 +1446,6 @@ OSS.</p>
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -1330,7 +1506,7 @@ enough to the target you are looking for</li>
 
 
 <p>The beauty of this system is that the neural network, (given the right
-configuration and the right training), can approximate any function &ndash;
+configuration and the right training), can approximate any function -
 just by exposing it to data.</p>
 
 <h2>Start Small</h2>
@@ -1351,7 +1527,7 @@ output layer has 2 neurons.</p>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;Neurons</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;Neurons</span>
 </span><span class='line'><span class="c1">;;  Input Hidden  Output</span>
 </span><span class='line'><span class="c1">;;  A     1       C</span>
 </span><span class='line'><span class="c1">;;  B     2       D</span>
@@ -1405,7 +1581,7 @@ our neurons and connection strengths to some real values.</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">input-neurons</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">input-neurons</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">])</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">input-hidden-strengths</span> <span class="p">[</span> <span class="p">[</span><span class="mf">0.12</span> <span class="mf">0.2</span> <span class="mf">0.13</span><span class="p">]</span>
 </span><span class='line'>                              <span class="p">[</span><span class="mf">0.01</span> <span class="mf">0.02</span> <span class="mf">0.03</span><span class="p">]])</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">hidden-neurons</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">])</span>
@@ -1423,7 +1599,7 @@ layer is the sum of all the inputs of its connections multiplied by
 the connection strength.  The neuron can also have its own threshold,
 (meaning you would subtract the threshold from the sum of inputs), but
 to keep things a simple as possible in this example, the threshold is
-0 &ndash; so we will ignore it.  The sum is then feed into an activation
+0 - so we will ignore it.  The sum is then feed into an activation
 function, that has an output in the range of -1 to 1.  The activation
 function is the tanh function.  We will also need the derivative of
 the tanh function a little later when we are calculating errors, so we
@@ -1437,7 +1613,7 @@ will define both here.</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">activation-fn</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="nf">Math/tanh</span> <span class="nv">x</span><span class="p">)))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">activation-fn</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="nf">Math/tanh</span> <span class="nv">x</span><span class="p">)))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dactivation-fn</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">y</span><span class="p">]</span> <span class="p">(</span><span class="nb">- </span><span class="mf">1.0</span> <span class="p">(</span><span class="nb">* </span><span class="nv">y</span> <span class="nv">y</span><span class="p">))))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">layer-activation</span> <span class="p">[</span><span class="nv">inputs</span> <span class="nv">strengths</span><span class="p">]</span>
@@ -1455,7 +1631,7 @@ we get:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">input-neurons</span> <span class="nv">input-hidden-strengths</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">input-neurons</span> <span class="nv">input-hidden-strengths</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt;  [0.11942729853438588 0.197375320224904 0.12927258360605834]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1464,7 +1640,7 @@ we get:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-hidden-neurons</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">new-hidden-neurons</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">input-neurons</span> <span class="nv">input-hidden-strengths</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1476,7 +1652,7 @@ we get:</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">new-hidden-neurons</span> <span class="nv">hidden-output-strengths</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">new-hidden-neurons</span> <span class="nv">hidden-output-strengths</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt;  [0.02315019005321053 0.027608061500083565]</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-output-neurons</span>
@@ -1494,11 +1670,11 @@ haven&rsquo;t trained our network to do anything yet.</p>
 <p>To train our network, we have to let it know what the answer,(or
 target), should be, so we can calculate the errors and finally update
 our connection strengths. For this simple example, let&rsquo;s just inverse
-the data &ndash; so given an input of [1 0] should give us an output of
+the data - so given an input of [1 0] should give us an output of
 [0 1].</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">targets</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">targets</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1518,7 +1694,7 @@ activation function</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">output-deltas</span> <span class="p">[</span><span class="nv">targets</span> <span class="nv">outputs</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">output-deltas</span> <span class="p">[</span><span class="nv">targets</span> <span class="nv">outputs</span><span class="p">]</span>
 </span><span class='line'>  <span class="s">&quot;measures the delta errors for the output layer (Desired value – actual value) and multiplying it by the gradient of the activation function&quot;</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nf">mapv</span> <span class="nv">dactivation-fn</span> <span class="nv">outputs</span><span class="p">)</span>
 </span><span class='line'>     <span class="p">(</span><span class="nb">- </span><span class="nv">targets</span> <span class="nv">outputs</span><span class="p">)))</span>
@@ -1533,7 +1709,7 @@ activation function</p>
 <p>Great let&rsquo;s remember this output deltas for later</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">odeltas</span> <span class="p">(</span><span class="nf">output-deltas</span> <span class="nv">targets</span> <span class="nv">new-output-neurons</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">odeltas</span> <span class="p">(</span><span class="nf">output-deltas</span> <span class="nv">targets</span> <span class="nv">new-output-neurons</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1544,7 +1720,7 @@ found from the output layer.  In fact, for each hidden neuron, the
 error delta is the gradient of the activation function multiplied by
 the weighted sum of the ouput deltas of connected ouput neurons and
 it&rsquo;s connection strength.  This should remind you of the forward
-propagation of the inputs &ndash; but this time we are doing it backwards
+propagation of the inputs - but this time we are doing it backwards
 with the error deltas.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -1557,7 +1733,7 @@ with the error deltas.</p>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">hlayer-deltas</span> <span class="p">[</span><span class="nv">odeltas</span> <span class="nv">neurons</span> <span class="nv">strengths</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">hlayer-deltas</span> <span class="p">[</span><span class="nv">odeltas</span> <span class="nv">neurons</span> <span class="nv">strengths</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nf">mapv</span> <span class="nv">dactivation-fn</span> <span class="nv">neurons</span><span class="p">)</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">mapv</span> <span class="o">#</span><span class="p">(</span><span class="nb">reduce + </span><span class="nv">%</span><span class="p">)</span>
 </span><span class='line'>           <span class="p">(</span><span class="nb">* </span><span class="nv">odeltas</span> <span class="nv">strengths</span><span class="p">))))</span>
@@ -1576,7 +1752,7 @@ with the error deltas.</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">hdeltas</span> <span class="p">(</span><span class="nf">hlayer-deltas</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">hdeltas</span> <span class="p">(</span><span class="nf">hlayer-deltas</span>
 </span><span class='line'>              <span class="nv">odeltas</span>
 </span><span class='line'>              <span class="nv">new-hidden-neurons</span>
 </span><span class='line'>              <span class="nv">hidden-output-strengths</span><span class="p">))</span>
@@ -1606,7 +1782,7 @@ using. For this example, let&rsquo;s use a training rate of 0.2</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">update-strengths</span> <span class="p">[</span><span class="nv">deltas</span> <span class="nv">neurons</span> <span class="nv">strengths</span> <span class="nv">lrate</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">update-strengths</span> <span class="p">[</span><span class="nv">deltas</span> <span class="nv">neurons</span> <span class="nv">strengths</span> <span class="nv">lrate</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">+ </span><span class="nv">strengths</span> <span class="p">(</span><span class="nb">* </span><span class="nv">lrate</span>
 </span><span class='line'>                  <span class="p">(</span><span class="nf">mapv</span> <span class="o">#</span><span class="p">(</span><span class="nb">* </span><span class="nv">deltas</span> <span class="nv">%</span><span class="p">)</span> <span class="nv">neurons</span><span class="p">))))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1630,7 +1806,7 @@ using. For this example, let&rsquo;s use a training rate of 0.2</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">update-strengths</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">update-strengths</span>
 </span><span class='line'>       <span class="nv">odeltas</span>
 </span><span class='line'>       <span class="nv">new-hidden-neurons</span>
 </span><span class='line'>       <span class="nv">hidden-output-strengths</span>
@@ -1649,7 +1825,7 @@ using. For this example, let&rsquo;s use a training rate of 0.2</p>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-hidden-output-strengths</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">new-hidden-output-strengths</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">update-strengths</span>
 </span><span class='line'>       <span class="nv">odeltas</span>
 </span><span class='line'>       <span class="nv">new-hidden-neurons</span>
@@ -1675,7 +1851,7 @@ using. For this example, let&rsquo;s use a training rate of 0.2</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">update-strengths</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="nf">update-strengths</span>
 </span><span class='line'>           <span class="nv">hdeltas</span>
 </span><span class='line'>           <span class="nv">input-neurons</span>
 </span><span class='line'>           <span class="nv">input-hidden-strengths</span>
@@ -1693,7 +1869,7 @@ using. For this example, let&rsquo;s use a training rate of 0.2</p>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-input-hidden-strengths</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">new-input-hidden-strengths</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">update-strengths</span>
 </span><span class='line'>       <span class="nv">hdeltas</span>
 </span><span class='line'>       <span class="nv">input-neurons</span>
@@ -1728,7 +1904,7 @@ So lets define the data structure as
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">nn</span> <span class="p">[</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">input-hidden-strengths</span> <span class="nv">hidden-neurons</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">nn</span> <span class="p">[</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">input-hidden-strengths</span> <span class="nv">hidden-neurons</span>
 </span><span class='line'><span class="nv">hidden-output-strengths</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span><span class="p">]])</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1744,7 +1920,7 @@ layer-activation function that we defined earlier.</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">feed-forward</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">network</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">feed-forward</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">network</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">in</span> <span class="nv">i-h-strengths</span> <span class="nv">h</span> <span class="nv">h-o-strengths</span> <span class="nv">out</span><span class="p">]</span> <span class="nv">network</span>
 </span><span class='line'>        <span class="nv">new-h</span> <span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">input</span> <span class="nv">i-h-strengths</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">new-o</span> <span class="p">(</span><span class="nf">layer-activation</span> <span class="nv">new-h</span> <span class="nv">h-o-strengths</span><span class="p">)]</span>
@@ -1758,7 +1934,7 @@ just working on the individual pieces.</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">testing</span> <span class="s">&quot;feed forward&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">testing</span> <span class="s">&quot;feed forward&quot;</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">is</span> <span class="p">(</span><span class="nb">== </span><span class="p">[</span><span class="nv">input-neurons</span> <span class="nv">input-hidden-strengths</span> <span class="nv">new-hidden-neurons</span> <span class="nv">hidden-output-strengths</span> <span class="nv">new-output-neurons</span><span class="p">]</span>
 </span><span class='line'>          <span class="p">(</span><span class="nf">feed-forward</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">nn</span><span class="p">))))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1786,7 +1962,7 @@ errors and returns back a new network with the updated weights</p>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">update-weights</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">update-weights</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[[</span> <span class="nv">in</span> <span class="nv">i-h-strengths</span> <span class="nv">h</span> <span class="nv">h-o-strengths</span> <span class="nv">out</span><span class="p">]</span> <span class="nv">network</span>
 </span><span class='line'>        <span class="nv">o-deltas</span> <span class="p">(</span><span class="nf">output-deltas</span> <span class="nv">target</span> <span class="nv">out</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">h-deltas</span> <span class="p">(</span><span class="nf">hlayer-deltas</span> <span class="nv">o-deltas</span> <span class="nv">h</span> <span class="nv">h-o-strengths</span><span class="p">)</span>
@@ -1813,7 +1989,7 @@ errors and returns back a new network with the updated weights</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">testing</span> <span class="s">&quot;update-weights&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">testing</span> <span class="s">&quot;update-weights&quot;</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">is</span> <span class="p">(</span> <span class="nb">== </span><span class="p">[</span><span class="nv">input-neurons</span>
 </span><span class='line'>            <span class="nv">new-input-hidden-strengths</span>
 </span><span class='line'>            <span class="nv">new-hidden-neurons</span>
@@ -1838,7 +2014,7 @@ input forward and then updates the weights.</p>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train-network</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">input</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">train-network</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">input</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">update-weights</span> <span class="p">(</span><span class="nf">feed-forward</span> <span class="nv">input</span> <span class="nv">network</span><span class="p">)</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">testing</span> <span class="s">&quot;train-network&quot;</span>
@@ -1860,7 +2036,7 @@ of inversing the data</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n1</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">nn</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">n1</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">nn</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">train-network</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="mf">0.5</span><span class="p">)</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">train-network</span> <span class="p">[</span><span class="mf">0.5</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.5</span><span class="p">]</span> <span class="mf">0.5</span><span class="p">)</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">train-network</span> <span class="p">[</span><span class="mf">0.25</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.25</span><span class="p">]</span> <span class="mf">0.5</span><span class="p">)))</span>
@@ -1872,7 +2048,7 @@ neurons for the feed-forward function.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">ff</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">network</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">ff</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">network</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">last </span><span class="p">(</span><span class="nf">feed-forward</span> <span class="nv">input</span> <span class="nv">network</span><span class="p">)))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1883,7 +2059,7 @@ neurons for the feed-forward function.</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;untrained</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;untrained</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">nn</span><span class="p">)</span> <span class="c1">;=&gt; [0.02315019005321053 0.027608061500083565]</span>
 </span><span class='line'><span class="c1">;;trained</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n1</span><span class="p">)</span> <span class="c1">;=&gt; [0.03765676393050254 0.10552175312900794]</span>
@@ -1900,7 +2076,7 @@ be able to present a set of training data for it to learn on.  For
 example, it would be nice to have a training data structure look like:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">target</span><span class="p">]</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">target</span><span class="p">]</span> <span class="nv">...</span> <span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">target</span><span class="p">]</span> <span class="p">[</span><span class="nv">input</span> <span class="nv">target</span><span class="p">]</span> <span class="nv">...</span> <span class="p">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1913,7 +2089,7 @@ example, it would be nice to have a training data structure look like:</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train-data</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">data</span> <span class="nv">learning-rate</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">train-data</span> <span class="p">[</span><span class="nv">network</span> <span class="nv">data</span> <span class="nv">learning-rate</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">if-let </span><span class="p">[[</span><span class="nv">input</span> <span class="nv">target</span><span class="p">]</span> <span class="p">(</span><span class="nb">first </span><span class="nv">data</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">recur</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">train-network</span> <span class="nv">network</span> <span class="nv">input</span> <span class="nv">target</span> <span class="nv">learning-rate</span><span class="p">)</span>
@@ -1933,7 +2109,7 @@ example, it would be nice to have a training data structure look like:</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n2</span> <span class="p">(</span><span class="nf">train-data</span> <span class="nv">nn</span> <span class="p">[</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">n2</span> <span class="p">(</span><span class="nf">train-data</span> <span class="nv">nn</span> <span class="p">[</span>
 </span><span class='line'>                        <span class="p">[[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">]]</span>
 </span><span class='line'>                        <span class="p">[[</span><span class="mf">0.5</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.5</span><span class="p">]]</span>
 </span><span class='line'>                        <span class="p">[[</span><span class="mf">0.25</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="mf">0.25</span><span class="p">]</span> <span class="p">]</span>
@@ -1951,7 +2127,7 @@ set of inputs and their inverse.</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">inverse-data</span> <span class="p">[]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">inverse-data</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">n</span> <span class="p">(</span><span class="nb">rand </span><span class="mi">1</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">[[</span><span class="nv">n</span> <span class="mi">0</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span> <span class="nv">n</span><span class="p">]]))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1965,7 +2141,7 @@ more data</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n3</span> <span class="p">(</span><span class="nf">train-data</span> <span class="nv">nn</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="mi">400</span> <span class="nv">inverse-data</span><span class="p">)</span> <span class="mf">0.5</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">n3</span> <span class="p">(</span><span class="nf">train-data</span> <span class="nv">nn</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="mi">400</span> <span class="nv">inverse-data</span><span class="p">)</span> <span class="mf">0.5</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n3</span><span class="p">)</span> <span class="c1">;=&gt; [-4.958278484025221E-4 0.8211647699205362]</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mf">0.5</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n3</span><span class="p">)</span> <span class="c1">;=&gt; [2.1645760787874696E-4 0.5579396715416916]</span>
@@ -1993,7 +2169,7 @@ constructed with random weights.</p>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">gen-strengths</span> <span class="p">[</span><span class="nv">to</span> <span class="nv">from</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">gen-strengths</span> <span class="p">[</span><span class="nv">to</span> <span class="nv">from</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">l</span> <span class="p">(</span><span class="nb">* </span><span class="nv">to</span> <span class="nv">from</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">map </span><span class="nv">vec</span> <span class="p">(</span><span class="nf">partition</span> <span class="nv">from</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="nv">l</span> <span class="o">#</span><span class="p">(</span><span class="nb">rand </span><span class="p">(</span><span class="nb">/ </span><span class="mi">1</span> <span class="nv">l</span><span class="p">)))))))</span>
 </span><span class='line'>
@@ -2011,7 +2187,7 @@ constructed with random weights.</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">tnn</span> <span class="p">(</span><span class="nf">construct-network</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">2</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">tnn</span> <span class="p">(</span><span class="nf">construct-network</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">2</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n5</span> <span class="p">(</span><span class="nf">train-data</span> <span class="nv">tnn</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="mi">1000</span> <span class="nv">inverse-data</span><span class="p">)</span> <span class="mf">0.2</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ff</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span> <span class="nv">n4</span><span class="p">)</span> <span class="c1">;=&gt; [-4.954958580800465E-4 0.8160149309699489]</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -2052,8 +2228,6 @@ farther as well.</p>
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -2152,74 +2326,6 @@ reaching for something better.</p>
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-10-03T20:43:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu  3 Oct 2013,  8:43 PM</time>
-        
-           | <a href="/blog/2013/10/03/looking-forward-to-london/#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io/blog/2013/10/03/looking-forward-to-london/">Comments</a>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2013/10/03/looking-forward-to-london/" itemprop="url">Looking Forward to London</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>I really love the London.  I have only been once many years ago,
-but I was enchanted.  Here is a partial list of my favorite
-things:</p>
-
-<ul>
-<li>Ducks in Regent&rsquo;s Park</li>
-<li>Tea Rooms</li>
-<li>The Food Hall at Harrod&rsquo;s</li>
-<li>The British Museum</li>
-<li>English Breakfasts</li>
-<li>The way the British put an extra &ldquo;r&rdquo; in phrases like &ldquo;vanilla in it&rdquo;</li>
-</ul>
-
-
-<p>As you know, I also adore Clojure. So I am absolutely thrilled to combine the two.</p>
-
-<h2>Clojure eXchange</h2>
-
-<p>I will be speaking at the
-<a href="http://skillsmatter.com/event/java-jee/clojure-exchange-2013">Clojure eXchange conference</a>
-on December 6th.  The talk is a bit odd, (like me), and will have
-Clojure, parsers, sea monsters, philosophy, and an AR Drone in it.  It
-should be a lot of fun.</p>
-
-<p>I really looking forward to get a chance to meet the London Clojure
-community in person. Hope to see you there.</p>
-
-<p>P.S. If anyone has any tips on flying overseas with an AR Drone.
-Please let me know :)</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -2239,7 +2345,7 @@ Please let me know :)</p>
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

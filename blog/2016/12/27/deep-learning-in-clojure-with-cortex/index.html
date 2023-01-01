@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-12-27T10:44:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 27 Dec 2016, 10:44 AM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -177,7 +175,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">[</span><span class="nv">mikera.image.core</span> <span class="ss">:as</span> <span class="nv">imagez</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">[</span><span class="nv">mikera.image.core</span> <span class="ss">:as</span> <span class="nv">imagez</span><span class="p">]</span>
 </span><span class='line'> <span class="p">[</span><span class="nv">think.image.image</span> <span class="ss">:as</span> <span class="nv">image</span><span class="p">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -198,7 +196,7 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dataset-image-size</span> <span class="mi">52</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">dataset-image-size</span> <span class="mi">52</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dataset-num-classes</span> <span class="mi">2</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dataset-num-channels</span> <span class="mi">3</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dataset-datatype</span> <span class="ss">:float</span><span class="p">)</span>
@@ -235,7 +233,7 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">create-basic-network-description</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">create-basic-network-description</span>
 </span><span class='line'>  <span class="p">[]</span>
 </span><span class='line'>  <span class="p">[(</span><span class="nf">desc/input</span> <span class="nv">dataset-image-size</span> <span class="nv">dataset-image-size</span> <span class="nv">dataset-num-channels</span><span class="p">)</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">desc/convolutional</span> <span class="mi">5</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">20</span><span class="p">)</span>
@@ -267,7 +265,7 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">max-image-rotation-degrees</span> <span class="mi">25</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">max-image-rotation-degrees</span> <span class="mi">25</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">img-aug-pipeline</span>
 </span><span class='line'>  <span class="p">[</span><span class="nv">img</span><span class="p">]</span>
@@ -295,7 +293,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train-forever</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">train-forever</span>
 </span><span class='line'>  <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">dataset</span> <span class="p">(</span><span class="nf">create-dataset</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">initial-description</span> <span class="p">(</span><span class="nf">create-basic-network-description</span><span class="p">)</span>
@@ -343,7 +341,7 @@
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">label-one</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">label-one</span>
 </span><span class='line'>  <span class="s">&quot;Take an arbitrary image and label it.&quot;</span>
 </span><span class='line'>  <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">file-label-pairs</span> <span class="p">(</span><span class="nf">shuffle</span> <span class="p">(</span><span class="nf">classification/directory-&gt;file-label-seq</span> <span class="nv">testing-dir</span>
@@ -370,7 +368,7 @@
 <p>and classifies it as a cat. Yipee!</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:probability-map</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span> <span class="mf">0.9995587468147278</span>, <span class="s">&quot;dog&quot;</span> <span class="mf">4.4119369704276323</span><span class="nv">E-4</span><span class="p">}</span>, <span class="ss">:classification</span> <span class="s">&quot;cat&quot;</span><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:probability-map</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span> <span class="mf">0.9995587468147278</span>, <span class="s">&quot;dog&quot;</span> <span class="mf">4.4119369704276323</span><span class="nv">E-4</span><span class="p">}</span>, <span class="ss">:classification</span> <span class="s">&quot;cat&quot;</span><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -378,10 +376,10 @@
 
 <p><img src="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg"></p>
 
-<p>Feeding it through the program &ndash; it says it is a cat.</p>
+<p>Feeding it through the program - it says it is a cat.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">{</span><span class="ss">:probability-map</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span> <span class="mf">0.9942012429237366</span>, <span class="s">&quot;dog&quot;</span> <span class="mf">0.005798777565360069</span><span class="p">}</span>, <span class="ss">:classification</span> <span class="s">&quot;cat&quot;</span><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">{</span><span class="ss">:probability-map</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span> <span class="mf">0.9942012429237366</span>, <span class="s">&quot;dog&quot;</span> <span class="mf">0.005798777565360069</span><span class="p">}</span>, <span class="ss">:classification</span> <span class="s">&quot;cat&quot;</span><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -400,7 +398,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">infer/infer-n-observations</span> <span class="p">(</span><span class="ss">:network-description</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="nf">infer/infer-n-observations</span> <span class="p">(</span><span class="ss">:network-description</span>
 </span><span class='line'>                                             <span class="p">(</span><span class="nf">suite-io/read-nippy-file</span> <span class="s">&quot;trained-network.nippy&quot;</span><span class="p">))</span>
 </span><span class='line'>                                            <span class="nv">observations</span>
 </span><span class='line'>                                            <span class="p">(</span><span class="nf">ds/create-image-shape</span> <span class="nv">dataset-num-channels</span>
@@ -418,7 +416,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">write-kaggle-results</span> <span class="p">[</span><span class="nv">results</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">write-kaggle-results</span> <span class="p">[</span><span class="nv">results</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">with-open </span><span class="p">[</span><span class="nv">out-file</span> <span class="p">(</span><span class="nf">io/writer</span> <span class="s">&quot;kaggle-results.csv&quot;</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">csv/write-csv</span> <span class="nv">out-file</span>
 </span><span class='line'>                   <span class="p">(</span><span class="nb">into </span><span class="p">[[</span><span class="s">&quot;id&quot;</span> <span class="s">&quot;label&quot;</span><span class="p">]]</span>
@@ -444,8 +442,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -505,8 +501,6 @@
 
 -->
           
-
-
 
 
 
@@ -577,7 +571,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

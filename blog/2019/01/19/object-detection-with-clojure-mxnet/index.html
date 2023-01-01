@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-01-19T13:34:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 19 Jan 2019,  1:34 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -154,7 +152,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">create-detector</span> <span class="p">[]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">create-detector</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">descriptors</span> <span class="p">[{</span><span class="ss">:name</span> <span class="s">&quot;data&quot;</span>
 </span><span class='line'>                      <span class="ss">:shape</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">3</span> <span class="mi">512</span> <span class="mi">512</span><span class="p">]</span>
 </span><span class='line'>                      <span class="ss">:layout</span> <span class="nv">layout/NCHW</span>
@@ -188,14 +186,14 @@
 <p>To load the image use <code>load-image</code> which will load the image from the path.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">infer/load-image-from-file</span> <span class="nv">input-image</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">infer/load-image-from-file</span> <span class="nv">input-image</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>Then run the detection using <code>infer/detect-objects</code> which will give you the top five predictions by default.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">infer/detect-objects</span> <span class="nv">detector</span> <span class="nv">image</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">infer/detect-objects</span> <span class="nv">detector</span> <span class="nv">image</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -215,7 +213,7 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[[{</span><span class="ss">:class</span> <span class="s">&quot;person&quot;</span>,
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[[{</span><span class="ss">:class</span> <span class="s">&quot;person&quot;</span>,
 </span><span class='line'>   <span class="ss">:prob</span> <span class="mf">0.9657765</span>,
 </span><span class='line'>   <span class="ss">:x-min</span> <span class="mf">0.021868259</span>,
 </span><span class='line'>   <span class="ss">:y-min</span> <span class="mf">0.049295247</span>,
@@ -276,7 +274,7 @@
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
 <span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defproject </span><span class="nv">org.apache.mxnet.contrib.clojure/clojure-mxnet</span> <span class="s">&quot;1.5.0-SNAPSHOT&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defproject </span><span class="nv">org.apache.mxnet.contrib.clojure/clojure-mxnet</span> <span class="s">&quot;1.5.0-SNAPSHOT&quot;</span>
 </span><span class='line'>  <span class="ss">:description</span> <span class="s">&quot;Clojure package for MXNet&quot;</span>
 </span><span class='line'>  <span class="ss">:url</span> <span class="s">&quot;https://github.com/apache/incubator-mxnet&quot;</span>
 </span><span class='line'>  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Apache License&quot;</span>
@@ -328,8 +326,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -389,8 +385,6 @@
 
 -->
           
-
-
 
 
 
@@ -461,7 +455,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

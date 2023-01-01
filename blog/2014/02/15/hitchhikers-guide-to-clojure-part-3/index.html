@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-02-15T13:48:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 15 Feb 2014,  1:48 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -163,7 +161,7 @@ for a nil parameter. For example, take this locked door:</em></p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">locked-door</span> <span class="p">[</span><span class="nv">key</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">locked-door</span> <span class="p">[</span><span class="nv">key</span><span class="p">]</span>
 </span><span class='line'>        <span class="p">(</span><span class="k">if </span><span class="nb">key </span><span class="s">&quot;open&quot;</span> <span class="s">&quot;nope - staying shut&quot;</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">locked-door</span> <span class="ss">:key</span><span class="p">)</span> <span class="c1">;=&gt; &quot;open&quot;</span>
@@ -178,7 +176,7 @@ pesky obstacle.</em></p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">this-door</span> <span class="p">(</span><span class="nf">fnil</span> <span class="nv">locked-door</span> <span class="ss">:another-key-that-works</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">this-door</span> <span class="p">(</span><span class="nf">fnil</span> <span class="nv">locked-door</span> <span class="ss">:another-key-that-works</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">this-door</span> <span class="ss">:key</span><span class="p">)</span> <span class="c1">;=&gt; &quot;open&quot;</span>
 </span><span class='line'><span class="p">(</span><span class="nf">this-door</span> <span class="nv">nil</span><span class="p">)</span> <span class="c1">;=&gt; open</span>
@@ -240,7 +238,7 @@ won&rsquo;t melt in your hands.</em></p>
 <p><em>To construct a channel simply use <em>chan</em></em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -257,7 +255,7 @@ talk to the otter with a blocking put <em>>!!</em>.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">future</span> <span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Hello otters.&quot;</span><span class="p">))</span> <span class="c1">;=&gt;#&lt;Future@3c371c41: :pending&gt;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">future</span> <span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Hello otters.&quot;</span><span class="p">))</span> <span class="c1">;=&gt;#&lt;Future@3c371c41: :pending&gt;</span>
 </span><span class='line'><span class="p">(</span><span class="nf">&lt;!!</span> <span class="nv">talk-to-otters-chan</span><span class="p">)</span> <span class="c1">;=&gt; &quot;Hello otters.&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -271,7 +269,7 @@ the marshmallow.</p>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">;;create channel with buffer size 10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span> <span class="mi">10</span><span class="p">))</span> <span class="c1">;;create channel with buffer size 10</span>
 </span><span class='line'><span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Hello otters.&quot;</span><span class="p">)</span> <span class="c1">;=&gt; nil</span>
 </span><span class='line'><span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Do you know anything about the world ending?&quot;</span><span class="p">)</span> <span class="c1">;=&gt; nil</span>
 </span><span class='line'>
@@ -296,7 +294,7 @@ these go blocks one can use regular non-blocking puts <strong>>!</strong> and ge
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">talk-to-otters-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">go</span> <span class="p">(</span><span class="nf">while</span> <span class="nv">true</span>
 </span><span class='line'>      <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">&lt;!</span> <span class="nv">talk-to-otters-chan</span><span class="p">))))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">&gt;!!</span> <span class="nv">talk-to-otters-chan</span> <span class="s">&quot;Hello otters&quot;</span><span class="p">)</span>
@@ -330,7 +328,7 @@ conversing with human, animals, and other Clojure-based life forms.</em></p>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">talk-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">talk-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">listen-chan</span> <span class="p">(</span><span class="nf">chan</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">go</span> <span class="p">(</span><span class="nf">while</span> <span class="nv">true</span>
 </span><span class='line'>      <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">&lt;!</span> <span class="nv">listen-chan</span><span class="p">))))</span>
@@ -370,8 +368,6 @@ around and sucked them down into the ground.</p>
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -431,8 +427,6 @@ around and sucked them down into the ground.</p>
 
 -->
           
-
-
 
 
 
@@ -503,7 +497,7 @@ around and sucked them down into the ground.</p>
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

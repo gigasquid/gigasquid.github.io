@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2021-03-15T09:07:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 15 Mar 2021,  9:07 AM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -154,7 +152,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.zeroshot</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.zeroshot</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span>
 </span><span class='line'>   <span class="p">[</span><span class="nv">libpython-clj2.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]</span>
 </span><span class='line'>   <span class="p">[</span><span class="nv">libpython-clj2.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]))</span>
@@ -171,7 +169,7 @@
 <p>To create the classifier with zero shot, you need only create it with a handy pipeline function.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">classifier</span> <span class="p">(</span><span class="nf">py.</span> <span class="nv">transformers</span> <span class="s">&quot;pipeline&quot;</span> <span class="s">&quot;zero-shot-classification&quot;</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">classifier</span> <span class="p">(</span><span class="nf">py.</span> <span class="nv">transformers</span> <span class="s">&quot;pipeline&quot;</span> <span class="s">&quot;zero-shot-classification&quot;</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -180,7 +178,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">text</span> <span class="s">&quot;French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired.&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">text</span> <span class="s">&quot;French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired.&quot;</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">labels</span> <span class="p">[</span><span class="s">&quot;breakfast&quot;</span> <span class="s">&quot;lunch&quot;</span> <span class="s">&quot;dinner&quot;</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -192,7 +190,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">classifier</span> <span class="nv">text</span> <span class="nv">labels</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">classifier</span> <span class="nv">text</span> <span class="nv">labels</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">{</span><span class="ss">&#39;labels</span><span class="o">&#39;</span><span class="err">:</span> <span class="p">[</span><span class="ss">&#39;breakfast</span><span class="o">&#39;</span>, <span class="ss">&#39;lunch</span><span class="o">&#39;</span>, <span class="ss">&#39;dinner</span><span class="o">&#39;</span><span class="p">]</span>,
 </span><span class='line'> <span class="ss">&#39;scores</span><span class="o">&#39;</span><span class="err">:</span> <span class="p">[</span><span class="mf">0.989736795425415</span>, <span class="mf">0.007010194938629866</span>, <span class="mf">0.003252972150221467</span><span class="p">]}</span>
@@ -204,7 +202,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">classifier</span> <span class="nv">text</span> <span class="nv">labels</span> <span class="ss">:multi_class</span> <span class="nv">true</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">classifier</span> <span class="nv">text</span> <span class="nv">labels</span> <span class="ss">:multi_class</span> <span class="nv">true</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span><span class="ss">&#39;labels</span><span class="o">&#39;</span><span class="err">:</span> <span class="p">[</span><span class="ss">&#39;breakfast</span><span class="o">&#39;</span>, <span class="ss">&#39;lunch</span><span class="o">&#39;</span>, <span class="ss">&#39;dinner</span><span class="o">&#39;</span><span class="p">]</span>,
 </span><span class='line'> <span class="ss">&#39;scores</span><span class="o">&#39;</span><span class="err">:</span> <span class="p">[</span><span class="mf">0.9959920048713684</span>, <span class="mf">0.22608685493469238</span>, <span class="mf">0.031050905585289</span><span class="p">]}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -225,7 +223,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">lime.lime_text</span> <span class="ss">:as</span> <span class="nv">lime</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">lime.lime_text</span> <span class="ss">:as</span> <span class="nv">lime</span><span class="p">])</span>
 </span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="ss">&#39;numpy</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'>
@@ -253,7 +251,7 @@
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">predict-probs</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">predict-probs</span>
 </span><span class='line'>  <span class="p">[</span><span class="nv">text</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">result</span> <span class="p">(</span><span class="nf">classifier</span> <span class="nv">text</span> <span class="nv">labels</span><span class="p">)</span>
 </span><span class='line'>        <span class="nv">result-scores</span> <span class="p">(</span><span class="nb">get </span><span class="nv">result</span> <span class="s">&quot;scores&quot;</span><span class="p">)</span>
@@ -283,7 +281,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">exp-result</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">exp-result</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">py.</span> <span class="nv">explainer</span> <span class="s">&quot;explain_instance&quot;</span> <span class="nv">text</span> <span class="nv">predict-texts</span>
 </span><span class='line'>       <span class="ss">:num_features</span> <span class="mi">6</span>
 </span><span class='line'>       <span class="ss">:num_samples</span> <span class="mi">100</span><span class="p">))</span>
@@ -308,8 +306,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -379,8 +375,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2021-03-15T09:07:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 15 Mar 2021,  9:07 AM</time>
           <br>
 
@@ -410,6 +404,18 @@
             
             
             
+              
+              <a href="/blog/2022/12/31/vector-symbolic-architectures-in-clojure/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Vector Symbolic Architectures in Clojure">
+                <div class="text-muted">
+                  <small>Next Post</small>
+                </div>
+                <div class="pager-title">
+                  <h4>Vector Symbolic Architectures in Clojure</h4>
+                </div>
+              </a>
+              
+            
+            
           </div>
         
       </footer>
@@ -429,7 +435,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

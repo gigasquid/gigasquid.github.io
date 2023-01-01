@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2017-10-22T16:02:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 22 Oct 2017,  4:02 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -158,7 +156,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">graal-test.core</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">graal-test.core</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:import</span> <span class="p">(</span><span class="nf">org.graalvm.polyglot</span> <span class="nv">Context</span><span class="p">)))</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">;; note that is also supports Ruby, LLVM, and JS</span>
@@ -176,7 +174,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">3^2 + 2^2</span>
 </span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0x7ff40e4d &quot;13.0&quot;]</span>
@@ -194,7 +192,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result1</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">result1</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">sum.of.squares &lt;- function(x,y) {</span>
 </span><span class='line'><span class="s">  x^2 + y^2</span>
 </span><span class='line'><span class="s">}</span>
@@ -207,7 +205,7 @@
 <p>Again, it looks like it worked. Let&rsquo;s try to get the result back into Clojure as a value we can work with. We could ask the result what sort of type it is with</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.isNumber</span> <span class="nv">result1</span><span class="p">)</span> <span class="c1">;=&gt; true </span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.isNumber</span> <span class="nv">result1</span><span class="p">)</span> <span class="c1">;=&gt; true </span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -219,7 +217,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-&gt;clojure</span> <span class="p">[</span><span class="nv">polyglot-value</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">-&gt;clojure</span> <span class="p">[</span><span class="nv">polyglot-value</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">polyglot-value</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">.toString</span><span class="p">)</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">clojure.edn/read-string</span><span class="p">)))</span>
@@ -246,7 +244,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">install.packages(\&quot;numDeriv\&quot;, repos = \&quot;http://cran.case.edu/\&quot;)</span>
 </span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -265,7 +263,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result2</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">result2</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">library(numDeriv)</span>
 </span><span class='line'><span class="s">grad(sin, (0:10)*2*pi/10)</span>
 </span><span class='line'><span class="s">&quot;</span><span class="p">))</span>
@@ -288,7 +286,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.hasArrayElements</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.hasArrayElements</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
 </span><span class='line'><span class="p">(</span><span class="nf">.getArraySize</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; 11</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">range </span><span class="mi">10</span><span class="p">)]</span>
@@ -300,7 +298,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>So, we&rsquo;ve showed basic interop with R &ndash; which is pretty neat. What about Python?</p>
+<p>So, we&rsquo;ve showed basic interop with R - which is pretty neat. What about Python?</p>
 
 <h3>Interoping with Python</h3>
 
@@ -311,7 +309,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;python&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;python&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">import time;</span>
 </span><span class='line'><span class="s">time.clock()</span>
 </span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
@@ -334,8 +332,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -395,8 +391,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
 
 -->
           
-
-
 
 
 
@@ -467,7 +461,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-08-19T08:56:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 19 Aug 2015,  8:56 AM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -148,7 +146,7 @@
 <p><strong>Human:</strong> Alright.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -158,7 +156,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>
 </span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
 </span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
 </span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
@@ -174,7 +172,7 @@
 <p><strong>Human:</strong> Like this?</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[[</span><span class="ss">:db/retract</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">]])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[[</span><span class="ss">:db/retract</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">]])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -193,7 +191,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">db-tiny-no-cheese</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">db-tiny-no-cheese</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="nv">db-tiny-no-cheese</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -202,7 +200,7 @@
 <p><strong>Datomic:</strong></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>, <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>, <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>, <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>, <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -220,7 +218,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span>
 </span><span class='line'>  <span class="ss">:in</span> <span class="nv">$</span>
 </span><span class='line'>  <span class="ss">:where</span> <span class="p">[</span><span class="nv">?e</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
 </span><span class='line'>         <span class="p">[</span><span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span><span class="p">]]</span>
@@ -236,7 +234,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span>
 </span><span class='line'>       <span class="ss">:in</span> <span class="nv">$</span>
 </span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?e</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
 </span><span class='line'>       <span class="p">[</span><span class="nv">?e</span> <span class="nv">?a</span> <span class="nv">?v</span> <span class="nv">?tx</span> <span class="nv">?op</span><span class="p">]]</span>
@@ -250,7 +248,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">#</span><span class="p">{[</span><span class="mi">17592186045423</span> <span class="mi">63</span> <span class="s">&quot;Tiny&quot;</span>       <span class="mi">13194139534314</span> <span class="nv">true</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">#</span><span class="p">{[</span><span class="mi">17592186045423</span> <span class="mi">63</span> <span class="s">&quot;Tiny&quot;</span>       <span class="mi">13194139534314</span> <span class="nv">true</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">[</span><span class="mi">17592186045423</span> <span class="mi">64</span> <span class="s">&quot;Great Dane&quot;</span> <span class="mi">13194139534314</span> <span class="nv">true</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">[</span><span class="mi">17592186045423</span> <span class="mi">65</span> <span class="s">&quot;Cheese&quot;</span>     <span class="mi">13194139534314</span> <span class="nv">true</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">[</span><span class="mi">17592186045423</span> <span class="mi">65</span> <span class="s">&quot;Cheese&quot;</span>     <span class="mi">13194139534320</span> <span class="nv">false</span><span class="p">]}</span>
@@ -275,7 +273,7 @@
 <p><strong>Human:</strong> I can&rsquo;t wait to try this.  Ok, let&rsquo;s go back to the time when I first asserted the fact that Tiny liked cheese.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/as-of</span> <span class="nv">db-tiny-no-cheese</span> <span class="mi">13194139534314</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/as-of</span> <span class="nv">db-tiny-no-cheese</span> <span class="mi">13194139534314</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -285,7 +283,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045423</span>
 </span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
 </span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
 </span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
@@ -301,7 +299,7 @@
 <p><strong>Human:</strong> Hmmm&hellip; Do I have to do a <em>retract</em> every time I want to change a value?  For example, the dog named Fido has a favorite treat of a Bone right now, right?</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="nv">db-tiny-no-cheese</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/pull</span> <span class="nv">db-tiny-no-cheese</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -311,7 +309,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045421</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045421</span>
 </span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span>
 </span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Mix&quot;</span>
 </span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Bone&quot;</span><span class="p">}</span>
@@ -330,7 +328,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span><span class="p">]</span>
 </span><span class='line'>                   <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Eggs&quot;</span><span class="p">}])</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span><span class="p">])</span>
@@ -343,7 +341,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045421</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045421</span>
 </span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span>
 </span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Mix&quot;</span>
 </span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Eggs&quot;</span><span class="p">}</span>
@@ -381,8 +379,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -442,8 +438,6 @@
 
 -->
           
-
-
 
 
 
@@ -514,7 +508,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

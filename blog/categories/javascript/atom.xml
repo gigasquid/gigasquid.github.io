@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Mocking Ajax Calls With Jasmine]]></title>
     <link href="http://gigasquid.github.io/blog/2011/05/05/mocking-ajax-calls-with-jasmine/"/>
-    <updated>2011-05-05T12:42:13-04:00</updated>
+    <updated>2011-05-05T16:42:13+00:00</updated>
     <id>http://gigasquid.github.io/blog/2011/05/05/mocking-ajax-calls-with-jasmine</id>
     <content type="html"><![CDATA[<p>I have been happily using <a href="https://github.com/pivotal/jasmine/">Jasmine</a> and <a href="https://github.com/velesin/jasmine-jquery">Jasmine-JQuery</a> on a project with great success. However, I was still unsure about how to handle mocking the ajax calls back to the server. It turns out the answer is already in Jasmine. Time to call out the spies!</p>
 
@@ -25,7 +25,7 @@
 <p>In my source file I have an ajax call that I would like to mock that looks like this:
 [gist id=957387]</p>
 
-<p>Now in my spec file &ndash; I setup a spy on the ajax call and use andCallFake to mock the call. When the method is tested, the ajax call will be mocked and return through the success handler. You can pass data back through the fakeData var.
+<p>Now in my spec file - I setup a spy on the ajax call and use andCallFake to mock the call. When the method is tested, the ajax call will be mocked and return through the success handler. You can pass data back through the fakeData var.
 [gist id=957389]</p>
 ]]></content>
   </entry>
@@ -33,7 +33,7 @@
   <entry>
     <title type="html"><![CDATA[Hacking JavaScript for the Love of Clojure]]></title>
     <link href="http://gigasquid.github.io/blog/2011/05/01/hacking-javascript-for-the-love-of-clojure/"/>
-    <updated>2011-05-01T10:02:39-04:00</updated>
+    <updated>2011-05-01T14:02:39+00:00</updated>
     <id>http://gigasquid.github.io/blog/2011/05/01/hacking-javascript-for-the-love-of-clojure</id>
     <content type="html"><![CDATA[<p>Lately, I have been working on the awesome open source project <a href="http://www.4clojure.com/">4Clojure.com</a>. The site helps you to learn Clojure by solving “koan” type problems in an interactive format. One of the enhancements that I was looking at putting in was a way to enter code in a text box and have it color highlight as type. I found the <a href="http://ace.ajax.org/">ACE project</a>, which looked like exactly what I wanted. However, sad panda, they didn&rsquo;t have a Clojure mode. Not deterred, I decided that I would try to take a crack at it. I ported most of the rules from the Clojure brush in Syntax Highlighter over and implemented some basic auto-indent.</p>
 

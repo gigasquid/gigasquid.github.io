@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure, | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -32,11 +32,8 @@
 
 <p>Once we have it downloaded we will configure our PATH to use Graal&rsquo;s java instead of our own.</p>
 
-<p>```</p>
-
-<h1>export PATH=/path/to/graalAndTruffle/bin:$PATH</h1>
-
-<p>```</p>
+<pre><code># export PATH=/path/to/graalAndTruffle/bin:$PATH
+</code></pre>
 
 <p>Now, we can create a new lein project and run <code>lein repl</code> and begin the fun.</p>
 
@@ -44,13 +41,12 @@
 
 <p>In our new namespace, we just need to import the <a href="http://graalvm.github.io/graal/truffle/javadoc/org/graalvm/polyglot/Context.html">Polyglot Context</a> to get started:</p>
 
-<p>```clojure
-(ns graal-test.core
-  (:import (org.graalvm.polyglot Context)))</p>
+<pre><code class="clojure">(ns graal-test.core
+  (:import (org.graalvm.polyglot Context)))
 
-<p>;; note that is also supports Ruby, LLVM, and JS
-(def context (Context/create (into-array [&ldquo;python&rdquo; &ldquo;R&rdquo;])))
-```</p>
+;; note that is also supports Ruby, LLVM, and JS
+(def context (Context/create (into-array ["python" "R"])))
+</code></pre>
 
 <p>Now, we are ready to actually try to run some R and Python code right in our REPL. Let&rsquo;s start first with R.</p>
 
@@ -58,45 +54,39 @@
 
 <p>The main function we are going to use is the <code>eval</code> function in the context. Let&rsquo;s start small with some basic math.</p>
 
-<p><code>clojure
-(.eval context "R" "
+<pre><code class="clojure">(.eval context "R" "
 3^2 + 2^2
 ")
 ;=&gt; #object[org.graalvm.polyglot.Value 0x7ff40e4d "13.0"]
-</code></p>
+</code></pre>
 
 <p>Wow! It actually did something. It returned something called a <a href="https://github.com/graalvm/graal/blob/master/sdk/src/org.graalvm.polyglot/src/org/graalvm/polyglot/Value.java">Polyglot Value</a> with what looks like the right answer in it.</p>
 
 <p>Emboldened by our early success, let&rsquo;s try something a little more complicated like calling a function.</p>
 
-<p><code>clojure
-(def result1 (.eval context "R" "
+<pre><code class="clojure">(def result1 (.eval context "R" "
 sum.of.squares &lt;- function(x,y) {
   x^2 + y^2
 }
 sum.of.squares(3,4)
 "))
 ;=&gt; #object[org.graalvm.polyglot.Value 0xc3edd92 "25.0"]
-</code></p>
+</code></pre>
 
 <p>Again, it looks like it worked. Let&rsquo;s try to get the result back into Clojure as a value we can work with. We could ask the result what sort of type it is with</p>
 
-<p><code>clojure
-(.isNumber result1) ;=&gt; true
-</code></p>
+<pre><code class="clojure">(.isNumber result1) ;=&gt; true 
+</code></pre>
 
 <p>but let&rsquo;s just use <code>clojure.edn</code> to read the string and save some time.</p>
 
-<p>```
-(defn &ndash;>clojure [polyglot-value]
-  (&ndash;> polyglot-value</p>
+<pre><code>(defn -&gt;clojure [polyglot-value]
+  (-&gt; polyglot-value
+      (.toString)
+      (clojure.edn/read-string)))
 
-<pre><code>  (.toString)
-  (clojure.edn/read-string)))
+(-&gt;clojure result1) ;=&gt; 25
 </code></pre>
-
-<p>(&ndash;>clojure result1) ;=> 25
-```</p>
 
 <p>It would be nice to have a easier way to export symbols and import symbols to and from the guest and host language. In fact, Graal provides a way to do this but to do this in Clojure, we would need something else called <a href="https://github.com/graalvm/graal/tree/master/truffle">Truffle</a>.</p>
 
@@ -113,58 +103,51 @@ There are quite a few languages implemented with the Truffle framework. R is one
 
 <p>First we import the package using cran.</p>
 
-<p><code>clojure
-(.eval context "R" "
+<pre><code class="clojure">(.eval context "R" "
 install.packages(\"numDeriv\", repos = \"http://cran.case.edu/\")
 ")
-</code></p>
+</code></pre>
 
 <p>If you are doing this at your REPL, you can will see lots of text going on in your <code>lein repl</code> process at this point. It&rsquo;s going out and figuring out what deps you need and installing them in your <code>/graalvm-0.28.2/jre/languages/R</code> directory structure.</p>
 
 <p>After it is done, we can actually use it!</p>
 
-<p>```clojure
-(def result2 (.eval context &ldquo;R&rdquo; &ldquo;
+<pre><code class="clojure">(def result2 (.eval context "R" "
 library(numDeriv)
-grad(sin, (0:10)<em>2</em>pi/10)
-&rdquo;))
-result2 ;=> #object[org.graalvm.polyglot.Value 0x76765898 &ldquo;c(1,</p>
-
-<pre><code>    ;0.809016994367249, 0.309016994372158, -0.309016994373567,
-    ;-0.809016994368844, -0.999999999993381, -0.809016994370298,
-    ;-0.309016994373312, 0.309016994372042, 0.809016994369185,
-    ;0.999999999993381)"]
+grad(sin, (0:10)*2*pi/10)
+"))
+result2 ;=&gt; #object[org.graalvm.polyglot.Value 0x76765898 "c(1,
+        ;0.809016994367249, 0.309016994372158, -0.309016994373567,
+        ;-0.809016994368844, -0.999999999993381, -0.809016994370298,
+        ;-0.309016994373312, 0.309016994372042, 0.809016994369185,
+        ;0.999999999993381)"]
 </code></pre>
-
-<p>```</p>
 
 <p>This has a bit more interesting result as an array. But the Context has ways of dealing with it.</p>
 
-<p>```clojure
-(.hasArrayElements result2) ;=> true
-(.getArraySize result2) ;=> 11</p>
+<pre><code class="clojure">(.hasArrayElements result2) ;=&gt; true
+(.getArraySize result2) ;=&gt; 11
 
-<p>(for [i (range 10)]
-  (&ndash;> (.getArrayElement result2 i) (&ndash;>clojure)))
-;=> (1.0 0.8090169943672489 0.3090169943721585 -0.3090169943735675
+(for [i (range 10)]
+  (-&gt; (.getArrayElement result2 i) (-&gt;clojure)))
+;=&gt; (1.0 0.8090169943672489 0.3090169943721585 -0.3090169943735675
 ;-0.8090169943688436 -0.9999999999933814
 ; -0.8090169943702977 -0.3090169943733122 0.30901699437204233
 ; 0.8090169943691851)
-```</p>
+</code></pre>
 
-<p>So, we&rsquo;ve showed basic interop with R &ndash; which is pretty neat. What about Python?</p>
+<p>So, we&rsquo;ve showed basic interop with R - which is pretty neat. What about Python?</p>
 
 <h3>Interoping with Python</h3>
 
 <p>Truffle is scheduled to fully support Python in 2018, but there is already an early alpha version in the Graal download that we can play with.</p>
 
-<p><code>clojure
-(.eval context "python" "
+<pre><code class="clojure">(.eval context "python" "
 import time;
 time.clock()
 ")
  ;=&gt; #object[org.graalvm.polyglot.Value 0x4a6b3b70 "1.508202803249E9"]
-</code></p>
+</code></pre>
 
 <p>Neat!</p>
 

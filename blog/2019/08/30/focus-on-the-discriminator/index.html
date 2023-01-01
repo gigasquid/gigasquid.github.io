@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-08-30T10:16:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 30 Aug 2019, 10:16 AM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -134,7 +132,7 @@
 <p>In the <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">last post</a>, we took a look at a simple autoencoder. The autoencoder is a deep learning model that takes in an image and, (through an encoder and decoder), works to produce the same image. In short:</p>
 
 <ul>
-<li>Autoencoder: image &ndash;> image</li>
+<li>Autoencoder: image -> image</li>
 </ul>
 
 
@@ -145,7 +143,7 @@
 <p>Why only half? We want a different transformation. We are going to want to take an image as input and then do some <em>discrimination</em> of the image and classify what type of image it is. In our case, the model is going to input an image of a handwritten digit and attempt to decide which number it is.</p>
 
 <ul>
-<li>Discriminator: image &ndash;> label</li>
+<li>Discriminator: image -> label</li>
 </ul>
 
 
@@ -173,7 +171,7 @@
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;; Load the MNIST datasets</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; Load the MNIST datasets</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/mnist-iter</span>
 </span><span class='line'>   <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
@@ -198,7 +196,7 @@
 
 <h3>The Model</h3>
 
-<p>We are still taking in the image as input, and using the same encoder layers from the autoencoder model. However, at the end, we use a fully connected layer that has 10 hidden nodes &ndash; one for each label of the digits 0-9. Then we use a softmax for the classification output.</p>
+<p>We are still taking in the image as input, and using the same encoder layers from the autoencoder model. However, at the end, we use a fully connected layer that has 10 hidden nodes - one for each label of the digits 0-9. Then we use a softmax for the classification output.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -217,7 +215,7 @@
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">input</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input&quot;</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">input</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input&quot;</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">output</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input_&quot;</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">get-symbol</span> <span class="p">[]</span>
@@ -244,7 +242,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">model</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/module</span> <span class="p">(</span><span class="nf">get-symbol</span><span class="p">)</span> <span class="p">{</span><span class="ss">:data-names</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]</span> <span class="ss">:label-names</span> <span class="p">[</span><span class="s">&quot;input_&quot;</span><span class="p">]})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">model</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/module</span> <span class="p">(</span><span class="nf">get-symbol</span><span class="p">)</span> <span class="p">{</span><span class="ss">:data-names</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]</span> <span class="ss">:label-names</span> <span class="p">[</span><span class="s">&quot;input_&quot;</span><span class="p">]})</span>
 </span><span class='line'>               <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">data-desc</span> <span class="ss">:name</span> <span class="s">&quot;input&quot;</span><span class="p">)]</span>
 </span><span class='line'>                        <span class="ss">:label-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">label-desc</span> <span class="ss">:name</span> <span class="s">&quot;input_&quot;</span><span class="p">)]})</span>
 </span><span class='line'>               <span class="p">(</span><span class="nf">m/init-params</span> <span class="p">{</span><span class="ss">:initializer</span> <span class="p">(</span><span class="nf">initializer/uniform</span> <span class="mi">1</span><span class="p">)})</span>
@@ -255,7 +253,7 @@
 <p>For the evaluation metric, we are also going to use an accuracy metric vs a mean squared error (mse) metric</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">my-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">my-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -281,7 +279,7 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">0</span> <span class="nv">num-epochs</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;starting epoch &quot;</span> <span class="nv">epoch-num</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span>
@@ -313,7 +311,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">my-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">train-data</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="k">def </span><span class="nv">my-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">train-data</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-batch</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;originals&quot;</span>
 </span><span class='line'>               <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
@@ -334,7 +332,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">test-images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-test-batch</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;test-images&quot;</span>
 </span><span class='line'>               <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
@@ -353,7 +351,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">preds</span>
 </span><span class='line'>       <span class="nv">first</span>
 </span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/argmax-channel</span><span class="p">)</span>
@@ -375,7 +373,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">train</span> <span class="mi">3</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="nf">train</span> <span class="mi">3</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">;; starting epoch  0</span>
 </span><span class='line'><span class="c1">;; {:epoch 0, :metric [accuracy 0.83295]}</span>
@@ -395,7 +393,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">preds</span>
 </span><span class='line'>       <span class="nv">first</span>
 </span><span class='line'>       <span class="p">(</span><span class="nf">ndarray/argmax-channel</span><span class="p">)</span>
@@ -421,7 +419,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;model/discriminator&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;model/discriminator&quot;</span>
 </span><span class='line'>                            <span class="ss">:epoch</span> <span class="mi">2</span><span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -437,8 +435,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -498,8 +494,6 @@
 
 -->
           
-
-
 
 
 
@@ -570,7 +564,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

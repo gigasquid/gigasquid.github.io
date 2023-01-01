@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-02-06T14:26:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat  6 Feb 2016,  2:26 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -144,7 +142,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">hyperdimensional-playground.core</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">hyperdimensional-playground.core</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core.matrix</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">clojure.core.matrix.linear</span> <span class="ss">:as</span> <span class="nv">ml</span><span class="p">]))</span>
 </span><span class='line'>
@@ -162,7 +160,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">sz</span> <span class="mi">100000</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">sz</span> <span class="mi">100000</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rand-hv</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">hv</span> <span class="p">(</span><span class="nf">m/new-sparse-array</span> <span class="p">[</span><span class="nv">sz</span><span class="p">])</span>
@@ -181,7 +179,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">d</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span>
@@ -201,7 +199,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">cosine-sim</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">cosine-sim</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nf">m/dot</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
 </span><span class='line'>     <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nf">ml/norm</span> <span class="nv">v1</span><span class="p">)</span> <span class="p">(</span><span class="nf">ml/norm</span> <span class="nv">v2</span><span class="p">))))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -215,7 +213,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  1.0</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  1.0</span>
 </span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">d</span> <span class="nv">d</span><span class="p">)</span> <span class="c1">;=&gt; 1.0</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt;  0.0859992468320239</span>
@@ -233,7 +231,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">mean-add</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">hvs</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">mean-add</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">hvs</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">m/emap</span> <span class="o">#</span><span class="p">(</span><span class="nf">Math/round</span> <span class="p">(</span><span class="nb">double </span><span class="nv">%</span><span class="p">))</span>
 </span><span class='line'>   <span class="p">(</span><span class="nf">m/div</span> <span class="p">(</span><span class="nb">apply </span><span class="nv">m/add</span> <span class="nv">hvs</span><span class="p">)</span> <span class="p">(</span><span class="nb">count </span><span class="nv">hvs</span><span class="p">))))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -245,7 +243,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; x = a + b</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;; x = a + b</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="p">(</span><span class="nf">mean-add</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0.7234734658023224</span>
 </span><span class='line'><span class="p">(</span><span class="nf">cosine-sim</span> <span class="nv">x</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt; 0.7252586504505658</span>
@@ -257,7 +255,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">xor-mul</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">xor-mul</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">m/add</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">m/emap</span> <span class="o">#</span><span class="p">(</span><span class="nf">mod</span> <span class="nv">%</span> <span class="mi">2</span><span class="p">))))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -271,7 +269,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">hamming-dist</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">hamming-dist</span> <span class="p">[</span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">m/esum</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">])</span> <span class="c1">;=&gt; 0</span>
@@ -294,7 +292,7 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; xa = x * a</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">; xa = x * a</span>
 </span><span class='line'><span class="c1">; ya = y * a</span>
 </span><span class='line'><span class="c1">; hamming distance of xa is the same as ya</span>
 </span><span class='line'>
@@ -320,7 +318,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Gigasquid&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Gigasquid&quot;</span>
 </span><span class='line'> <span class="ss">:cute-animal</span> <span class="s">&quot;duck&quot;</span>
 </span><span class='line'> <span class="ss">:favorite-sock</span> <span class="s">&quot;red plaid&quot;</span><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -338,7 +336,7 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; data records with bound pairs</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;; data records with bound pairs</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; favorite-sock</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">y</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; cute-animal</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">z</span> <span class="p">(</span><span class="nf">rand-hv</span><span class="p">))</span> <span class="c1">;; name</span>
@@ -354,7 +352,7 @@
 <p>Now, we have a sum of all these things and we want to find the value of the <em>favorite sock</em>.  We can <em>unbind</em> it from the sum by xor multiplying the favorite-sock hypervector <code>x</code>.  Because of the property that xor multiplication both distributes and cancels itself out.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">))</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">hamming-dist</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">a</span><span class="p">))</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; 0</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -367,7 +365,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">a</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1462.0  ;; closest to &quot;red-plaid&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">a</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1462.0  ;; closest to &quot;red-plaid&quot;</span>
 </span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">b</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1721.0</span>
 </span><span class='line'><span class="p">(</span><span class="nf">hamming-dist</span> <span class="nv">c</span> <span class="p">(</span><span class="nf">xor-mul</span> <span class="nv">x</span> <span class="nv">h</span><span class="p">))</span> <span class="c1">;=&gt; 1736.0</span>
 </span><span class='line'>
@@ -388,8 +386,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -449,8 +445,6 @@
 
 -->
           
-
-
 
 
 
@@ -521,7 +515,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

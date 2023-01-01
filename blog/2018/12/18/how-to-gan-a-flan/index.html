@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2018-12-18T16:34:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 18 Dec 2018,  4:34 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -129,7 +127,7 @@
   </header>
 
 
-<div class="entry-content clearfix" itemprop="articleBody description"><p>It&rsquo;s holiday time and that means parties and getting together with friends. Bringing a baked good or dessert to a gathering is a time honored tradition. But what if this year, you could take it to the next level? Everyone brings actual food. But with the help of Deep Learning, you can bring something completely different &ndash;  you can bring the <em>image</em> of baked good! I&rsquo;m not talking about just any old image that someone captured with a camera or created with a pen and paper. I&rsquo;m talking about the computer itself <strong>creating</strong>. This image would be never before seen, totally unique, and crafted by the creative process of the machine.</p>
+<div class="entry-content clearfix" itemprop="articleBody description"><p>It&rsquo;s holiday time and that means parties and getting together with friends. Bringing a baked good or dessert to a gathering is a time honored tradition. But what if this year, you could take it to the next level? Everyone brings actual food. But with the help of Deep Learning, you can bring something completely different -  you can bring the <em>image</em> of baked good! I&rsquo;m not talking about just any old image that someone captured with a camera or created with a pen and paper. I&rsquo;m talking about the computer itself <strong>creating</strong>. This image would be never before seen, totally unique, and crafted by the creative process of the machine.</p>
 
 <p>That is exactly what we are going to do. We are going to create a <em>flan</em></p>
 
@@ -149,9 +147,9 @@
 <p>Onto the recipe. How are we actually going to make this work? We need some ingredients:</p>
 
 <ul>
-<li><a href="https://clojure.org/">Clojure</a> &ndash; the most advanced programming language to create generative desserts.</li>
-<li><a href="https://mxnet.apache.org">Apache MXNet</a> &ndash; a flexible and efficient deep learning library that has a Clojure package.</li>
-<li>1000-5000 pictures of flans &ndash; for Deep Learning you need data!</li>
+<li><a href="https://clojure.org/">Clojure</a> - the most advanced programming language to create generative desserts.</li>
+<li><a href="https://mxnet.apache.org">Apache MXNet</a> - a flexible and efficient deep learning library that has a Clojure package.</li>
+<li>1000-5000 pictures of flans - for Deep Learning you need data!</li>
 </ul>
 
 
@@ -182,7 +180,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">flan-iter</span> <span class="p">(</span><span class="nf">mx-io/image-record-iter</span> <span class="p">{</span><span class="ss">:path-imgrec</span> <span class="s">&quot;flan.rec&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">flan-iter</span> <span class="p">(</span><span class="nf">mx-io/image-record-iter</span> <span class="p">{</span><span class="ss">:path-imgrec</span> <span class="s">&quot;flan.rec&quot;</span>
 </span><span class='line'>                                         <span class="ss">:data-shape</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]</span>
 </span><span class='line'>                                         <span class="ss">:batch-size</span> <span class="nv">batch-size</span><span class="p">}))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -208,7 +206,7 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">discriminator</span> <span class="p">[]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">discriminator</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">sym/convolution</span> <span class="s">&quot;d1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>
 </span><span class='line'>                           <span class="ss">:kernel</span> <span class="p">[</span><span class="mi">4</span> <span class="mi">4</span><span class="p">]</span>
@@ -240,7 +238,7 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">generator</span> <span class="p">[]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">generator</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;rand&quot;</span><span class="p">)</span> <span class="nv">data</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">sym/deconvolution</span> <span class="s">&quot;g1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>
 </span><span class='line'>                             <span class="ss">:kernel</span> <span class="p">[</span><span class="mi">4</span> <span class="mi">4</span><span class="p">]</span>
@@ -268,7 +266,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">mx-io/reduce-batches</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">mx-io/reduce-batches</span>
 </span><span class='line'>       <span class="nv">flan-iter</span>
 </span><span class='line'>       <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">n</span> <span class="nv">batch</span><span class="p">]</span>
 </span><span class='line'>         <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">rbatch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">rand-noise-iter</span><span class="p">)</span>
@@ -329,7 +327,7 @@
 
 <p>Even worse. Are those demonic flans? Should we even continue down this path?</p>
 
-<p>Answer: Yes &ndash; <strong>the training must go on..</strong></p>
+<p>Answer: Yes - <strong>the training must go on..</strong></p>
 
 <h3>Epoch 161</h3>
 
@@ -356,15 +354,13 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <p>Wrapping up, training GANs is a <em>lot</em> of fun. With MXNet, you can bring the fun with you to Clojure.</p>
 
-<p>Want more, check out this Clojure Conj video &ndash;  <a href="https://www.youtube.com/watch?v=yzfnlcHtwiY">Can You GAN?</a>.</p>
+<p>Want more, check out this Clojure Conj video -  <a href="https://www.youtube.com/watch?v=yzfnlcHtwiY">Can You GAN?</a>.</p>
 </div>
 
 
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -424,8 +420,6 @@ It will load up the trained model and generate flans for you to explore and brin
 
 -->
           
-
-
 
 
 
@@ -496,7 +490,7 @@ It will load up the trained model and generate flans for you to explore and brin
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

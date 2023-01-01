@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AR Drones | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/ar-drones/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -35,17 +35,15 @@ instructions:</p>
 
 <p>Connect your computer to the first drone&rsquo;s network.</p>
 
-<p>```clojure
-telnet 192.68.1.1
-````</p>
+<pre><code class="clojure">telnet 192.68.1.1
+</code></pre>
 
 <p>Create the following file as adhoc.sh.  This shell script will
 temporarily change the network to an adhoc network named
 &ldquo;multidrone_ah&rdquo; and assign it a static ip of 192.168.1.100.
 The next time you reboot your drone, things will be back to normal.</p>
 
-<p>```clojure
-; This script should be run on the drone.
+<pre><code class="clojure">; This script should be run on the drone.
 ; Change the IP address to be difference
 ; for each drone on the same ad-hoc network
 ;
@@ -53,7 +51,7 @@ killall udhcpd
 ifconfig ath0 down
 iwconfig ath0 mode ad-hoc essid multidrone_ah channel auto commit
 ifconfig ath0 192.168.1.100 netmask 255.255.255.0 up
-````</p>
+</code></pre>
 
 <p>Run the script.</p>
 
@@ -61,12 +59,10 @@ ifconfig ath0 192.168.1.100 netmask 255.255.255.0 up
 
 <p>Connect your computer to the second drone&rsquo;s network.</p>
 
-<p>```clojure
-telnet 192.68.1.1
-````</p>
+<pre><code class="clojure">telnet 192.68.1.1
+</code></pre>
 
-<p>```clojure
-; This script should be run on the drone.
+<pre><code class="clojure">; This script should be run on the drone.
 ; Change the IP address to be difference
 ; for each drone on the same ad-hoc network
 ;
@@ -74,7 +70,7 @@ killall udhcpd
 ifconfig ath0 down
 iwconfig ath0 mode ad-hoc essid multidrone_ah channel auto commit
 ifconfig ath0 192.168.1.200 netmask 255.255.255.0 up
-````</p>
+</code></pre>
 
 <p>Run the script.</p>
 
@@ -90,15 +86,14 @@ preferences on mac) something like 192.168.1.101</li>
 <p>Now you are ready to run the program.  Here is a small example of
 sending simple commands:</p>
 
-<p>```clojure
-(drone-initialize :drone1 &ldquo;192.168.1.100&rdquo; default-at-port default-navdata-port)
+<pre><code class="clojure">(drone-initialize :drone1 "192.168.1.100" default-at-port default-navdata-port)
 (mdrone :drone1 :take-off)
-(mdrone :drone1 :land)</p>
+(mdrone :drone1 :land)
 
-<p>(drone-initialize :drone2 &ldquo;192.168.1.200&rdquo; default-at-port default-navdata-port)
+(drone-initialize :drone2 "192.168.1.200" default-at-port default-navdata-port)
 (mdrone :drone2 :take-off)
 (mdrone :drone2 :land)
-````</p>
+</code></pre>
 
 <h2>Bring on Multiple Drones interacting with Goals and Beliefs</h2>
 
@@ -108,18 +103,16 @@ The way this works is that the navigation data being constantly sent
 to our computer for processing.  Everytime we get a navigation packet
 that ends up looking something like this, (but with lots more data):</p>
 
-<p>```clojure
- {:altitude 0.0, :yaw -0.215, :pitch -1.075, :roll -2.904, :control-state :landed, :communication :ok, :com-watchdog :ok, :seq-num 870}
-````</p>
+<pre><code class="clojure"> {:altitude 0.0, :yaw -0.215, :pitch -1.075, :roll -2.904, :control-state :landed, :communication :ok, :com-watchdog :ok, :seq-num 870}
+</code></pre>
 
 <p>We then define a belief-action using this data.</p>
 
-<p>```clojure
-(def-belief-action ba-landed1
-  &ldquo;I (Drone1) am landed&rdquo;
+<pre><code class="clojure">(def-belief-action ba-landed1
+  "I (Drone1) am landed"
   (fn [{:keys [control-state]}] (= control-state :landed))
   (fn [navdata] (mdrone :drone1 :take-off)))
-````</p>
+</code></pre>
 
 <p>The def-belief-action macro takes:</p>
 
@@ -135,12 +128,11 @@ it evaluates to true, then the belief is said to be &ldquo;held&rdquo;.</li>
 
 <p>The beliefs are then combined to form goals.</p>
 
-<p>```clojure
-(def-goal g-take-off1
-  &ldquo;I (Drone1) want to fly.&rdquo;
+<pre><code class="clojure">(def-goal g-take-off1
+  "I (Drone1) want to fly."
   (fn [{:keys [control-state]}] (= control-state :hovering))
   [ba-landed1 ba-taking-off1])
-````</p>
+</code></pre>
 
 <p>The def-goal macro takes:</p>
 
@@ -157,10 +149,9 @@ that goal.</li>
 
 <p>Finally, we can set a list of goals for a drone to achieve:</p>
 
-<p><code>clojure
- (set-current-goal-list drones :drone1
+<pre><code class="clojure"> (set-current-goal-list drones :drone1
  [g-take-off1 g-find-other-drone-and-wave1 g-land1])
-</code></p>
+</code></pre>
 
 <p>This sets the goal list for a drone.  It will take-off, look around
 for the other drone and wave, (do a dance), once it sees it.  Finally,

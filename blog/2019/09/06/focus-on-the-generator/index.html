@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-09-06T18:07:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri  6 Sep 2019,  6:07 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -134,9 +132,9 @@
 <p>In this first post of this series, we took a look at a <a href="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/">simple autoencoder</a>. It took and image and transformed it back to an image. Then, we <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">focused in on the disciminator</a> portion of the model, where we took an image and transformed it to a label. Now, we focus in on the generator portion of the model do the inverse operation: we transform a label to an image. In recap:</p>
 
 <ul>
-<li>Autoencoder: image &ndash;> image</li>
-<li>Discriminator: image &ndash;> label</li>
-<li>Generator: label &ndash;> image (This is what we are doing now!)</li>
+<li>Autoencoder: image -> image</li>
+<li>Discriminator: image -> label</li>
+<li>Generator: label -> image (This is what we are doing now!)</li>
 </ul>
 
 
@@ -166,7 +164,7 @@
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">def</span>
 </span><span class='line'>  <span class="nv">train-data</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
 </span><span class='line'>                     <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
@@ -216,7 +214,7 @@
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">get-symbol</span> <span class="p">[]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">get-symbol</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="nv">input</span> <span class="nv">data</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">sym/one-hot</span> <span class="s">&quot;onehot&quot;</span> <span class="p">{</span><span class="ss">:indices</span> <span class="nv">data</span> <span class="ss">:depth</span> <span class="mi">10</span><span class="p">})</span>
 </span><span class='line'>    <span class="c1">;; decode</span>
@@ -254,7 +252,7 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">def</span>
 </span><span class='line'>  <span class="nv">model</span>
 </span><span class='line'>  <span class="c1">;;; change data shapes to label shapes</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/module</span> <span class="p">(</span><span class="nf">get-symbol</span><span class="p">)</span> <span class="p">{</span><span class="ss">:data-names</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]</span> <span class="ss">:label-names</span> <span class="p">[</span><span class="s">&quot;input_&quot;</span><span class="p">]})</span>
@@ -286,7 +284,7 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">0</span> <span class="nv">num-epochs</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;starting epoch &quot;</span> <span class="nv">epoch-num</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span>
@@ -316,7 +314,7 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
 </span><span class='line'>  <span class="c1">;;; change to input labels</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">test-labels</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">my-test-batch</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-labels</span><span class="p">}</span> <span class="p">))</span>
@@ -342,7 +340,7 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">train</span> <span class="mi">3</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">train</span> <span class="mi">3</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">0</span>
 </span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">0</span>  <span class="nv">is</span>
@@ -365,7 +363,7 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">test-labels</span> <span class="p">(</span><span class="nf">mx-io/batch-label</span> <span class="nv">my-test-batch</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-labels</span><span class="p">}))</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;after-training-preds&quot;</span>
@@ -385,10 +383,10 @@
 
 <h2>Save Your Model</h2>
 
-<p>Don&rsquo;t forget to save the generator model off &ndash; we are going to use it next time.</p>
+<p>Don&rsquo;t forget to save the generator model off - we are going to use it next time.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;model/generator&quot;</span> <span class="ss">:epoch</span> <span class="mi">2</span><span class="p">})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">m/save-checkpoint</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;model/generator&quot;</span> <span class="ss">:epoch</span> <span class="mi">2</span><span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -399,8 +397,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -460,8 +456,6 @@
 
 -->
           
-
-
 
 
 
@@ -532,7 +526,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

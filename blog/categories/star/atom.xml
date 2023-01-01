@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Star | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/star/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -71,18 +71,17 @@ but the language is designed in a way that immutable functional
 programming is encouraged. The feel of the language is concise but
 human readable.</p>
 
-<p><blockquote><p></p></p><p><pre><code>Star is a coherent, general-purpose programming language that<br/>combines elements from a wide variety of existing languages as<br/>well as adding innovative elements of its own. Star inherits func-<br/>tional programming in general, a Haskell-style type system, an F#-<br/>style monad for parallel computations, and Concurrent ML for or-<br/>chestrating concurrent and parallel applications.<br/></code></pre></p><p><p></p><footer><strong>Feel different on the Java platform: the star programming language  <a href="http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052">http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052</a></strong></footer></blockquote></p>
+<p><blockquote><p>Star is a coherent, general-purpose programming language that<br/>    combines elements from a wide variety of existing languages as<br/>    well as adding innovative elements of its own. Star inherits func-<br/>    tional programming in general, a Haskell-style type system, an F#-<br/>    style monad for parallel computations, and Concurrent ML for or-<br/>    chestrating concurrent and parallel applications.</p><footer><strong>Feel different on the Java platform: the star programming language  <a href="http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052">http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052</a></strong></footer></blockquote></p>
 
 <h3>Hello World</h3>
 
 <p>The best way to get a feel for it is to look at a few examples.  Of
 course, let&rsquo;s start off with Hello World.</p>
 
-<p><code>haskell
-main() do {
+<pre><code class="haskell">main() do {
   logMsg(info, "Hello World");
 }
-</code></p>
+</code></pre>
 
 <p>Another way of doing our Hello World is in a worksheet.
 This feature is still in the works, but it will likely turn into a
@@ -91,13 +90,12 @@ statement will also soon not be required.  But a nice feature of using
 the worksheeet is that is a combined module and transcript of the
 session.</p>
 
-<p>```haskell
-import worksheet</p>
+<pre><code class="haskell">import worksheet
 
-<p>worksheet{
-  show &ldquo;hello world&rdquo;
+worksheet{
+  show "hello world"
 }
-```</p>
+</code></pre>
 
 <p>Here is what the output looks like:</p>
 
@@ -111,20 +109,19 @@ info: execution took 0.053684428
 <p>Let&rsquo;s take a look at another example.  This time a naive fib function
 with pattern matching.</p>
 
-<p>```haskell
-import worksheet</p>
+<pre><code class="haskell">import worksheet
 
-<p>worksheet{
+worksheet{
   fib(0) is 0
   fib(1) is 1
-  fib(n) is fib(n-1) + fib(n-2)</p>
+  fib(n) is fib(n-1) + fib(n-2)
 
-<p>  assert fib(0)=0;
+  assert fib(0)=0;
   assert fib(1)=1;
   assert fib(3)=2;
   assert fib(10)=55;
 }
-```</p>
+</code></pre>
 
 <p>Notice how the fib function is defined with pattern matching.  Also
 how the keyword &ldquo;is&rdquo; is used instead of an &ldquo;=&rdquo; to make the code flow
@@ -148,14 +145,14 @@ info: execution took 0.039725132
 <p>The declaration of pattern matching for functions can also include
 guards like in this fizzbuzz example</p>
 
-<p><code>haskell
-fizzbuzz has type (integer) =&gt; string
+<pre><code class="haskell">fizzbuzz has type (integer) =&gt; string
 fizzbuzz(N) where N%3=0 and N%5=0 is "fizzbuzz"
 fizzbuzz(N) where N%3=0 is "fizz"
 fizzbuzz(N) where N%5=0 is "buzz"
 fizzbuzz(N) default is "$N"
-</code>
-Also note the type declaration.  The type declaration is optional.
+</code></pre>
+
+<p>Also note the type declaration.  The type declaration is optional.
 The complier is smart enough to figure it out.  Sometimes it is more
 readable to include the type declaration.  But, it can be left out for
 more concise code.</p>
@@ -166,25 +163,22 @@ more concise code.</p>
 that you add to the front of and are destructed as the first element
 and then the rest of the list. To construct a cons list:</p>
 
-<p><code>haskell
- testNumbers is cons of {1;2;3;4;5;6;7;8;9;10;11;12;13;14;15}
-</code></p>
+<pre><code class="haskell"> testNumbers is cons of {1;2;3;4;5;6;7;8;9;10;11;12;13;14;15}
+</code></pre>
 
 <p>To use a cons list in a function with pattern matching:</p>
 
-<p><code>haskell
-listFizzBuzz has type (cons of integer) =&gt; cons of string
+<pre><code class="haskell">listFizzBuzz has type (cons of integer) =&gt; cons of string
 listFizzBuzz(nil) is nil
 listFizzBuzz(cons(x, xs)) is cons(fizzbuzz(x), listFizzBuzz(xs))
-</code></p>
+</code></pre>
 
 <p>The function listFizzBuzz takes in a list of integers and turns it
 into a list of strings using the fizzbuzz function. If we evaluate:</p>
 
-<p><code>haskell
-testNumbers is cons of {1;2;3;4;5;6;7;8;9;10;11;12;13;14;15}
+<pre><code class="haskell">testNumbers is cons of {1;2;3;4;5;6;7;8;9;10;11;12;13;14;15}
 result is listFizzBuzz(testNumbers)
-</code></p>
+</code></pre>
 
 <p>The result will look like
 <code>haskell
@@ -192,7 +186,7 @@ cons of {"1";"2";"fizz";"4";"buzz";"fizz";"7";"8";"fizz";"buzz";"11";"fizz";"13"
 </code></p>
 
 <p>There are other collection types such as arrays and relations, (which
-are really cool &ndash; you can do queries on them like a database), but I haven&rsquo;t explored them well enough to really
+are really cool - you can do queries on them like a database), but I haven&rsquo;t explored them well enough to really
 talk about yet.</p>
 
 <h3>Actors and Speech Acts</h3>
@@ -209,59 +203,51 @@ notifications are either going to be a book(string) method, or a
 cancel(string) method.  To book a reservation for a person or cancel
 it.</p>
 
-<p><code>haskell
-type tx is book(string) or cancel(string);
-</code></p>
+<pre><code class="haskell">type tx is book(string) or cancel(string);
+</code></pre>
 
 <p>The actor is defined using:</p>
 
-<p>```haskell
-flight((FlightName has type string), (MaxPeople has type integer)) is actor{</p>
+<pre><code class="haskell">flight((FlightName has type string), (MaxPeople has type integer)) is actor{
+    var flightStatus := "open";
 
-<pre><code>var flightStatus := "open";
+    setFlightStatus(s) do { flightStatus := s };
 
-setFlightStatus(s) do { flightStatus := s };
+    on book(pname) on Tx do
+        logMsg(info,"booking $pname on #FlightName's flight: max #MaxPeople current $(size(plist))");
+    on book(pname) on Tx where size(plist) &lt; MaxPeople do
+      extend plist with pname;
+    on book(pname) on Tx where size(plist) &gt;= MaxPeople do
+      logMsg(info, "sorry .. the flight is full");
+    on book(pname) on Tx where flightStatus != "open" do
+      logMsg(info, "sorry .. the flight is no longer open");
 
-on book(pname) on Tx do
-    logMsg(info,"booking $pname on #FlightName's flight: max #MaxPeople current $(size(plist))");
-on book(pname) on Tx where size(plist) &lt; MaxPeople do
-  extend plist with pname;
-on book(pname) on Tx where size(plist) &gt;= MaxPeople do
-  logMsg(info, "sorry .. the flight is full");
-on book(pname) on Tx where flightStatus != "open" do
-  logMsg(info, "sorry .. the flight is no longer open");
+    on cancel(pname) on Tx do
+      delete (X where X = pname) in plist;
 
-on cancel(pname) on Tx do
-  delete (X where X = pname) in plist;
-
-getPassengerList has type () =&gt; list of string;
-getPassengerList() is plist;
-}
+    getPassengerList has type () =&gt; list of string;
+    getPassengerList() is plist;
+    }
 </code></pre>
-
-<p>```</p>
 
 <p>There is some extra things in the code, but for right now, look at the
 book and cancel methods.  These are the functions that will be called
 when the actor is notified like this:</p>
 
-<p><code>haskell
-F is flight("flight123", 5)
+<pre><code class="haskell">F is flight("flight123", 5)
 notify F with book("Carin") on Tx
 notify F with book("Bob") on Tx
-</code></p>
+</code></pre>
 
 <p>To query the actor we use :</p>
 
-<p><code>haskell
- x is query F's getPassengerList with getPassengerList()
-</code></p>
+<pre><code class="haskell"> x is query F's getPassengerList with getPassengerList()
+</code></pre>
 
 <p>To use a request with the actor we use</p>
 
-<p><code>haskell
- request F's setFlightStatus to setFlightStatus("closed")
-</code></p>
+<pre><code class="haskell"> request F's setFlightStatus to setFlightStatus("closed")
+</code></pre>
 
 <h2>Go Explore</h2>
 

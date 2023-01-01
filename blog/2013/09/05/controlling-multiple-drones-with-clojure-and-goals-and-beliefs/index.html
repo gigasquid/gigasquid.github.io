@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-05T15:35:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu  5 Sep 2013,  3:35 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -147,7 +145,7 @@ instructions:</p>
 <p>Connect your computer to the first drone&rsquo;s network.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">telnet</span> <span class="mf">192.68</span><span class="nv">.1.1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">telnet</span> <span class="mf">192.68</span><span class="nv">.1.1</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -166,7 +164,7 @@ The next time you reboot your drone, things will be back to normal.</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; This script should be run on the drone.</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">; This script should be run on the drone.</span>
 </span><span class='line'><span class="c1">; Change the IP address to be difference</span>
 </span><span class='line'><span class="c1">; for each drone on the same ad-hoc network</span>
 </span><span class='line'><span class="c1">;</span>
@@ -186,7 +184,7 @@ The next time you reboot your drone, things will be back to normal.</p>
 <p>Connect your computer to the second drone&rsquo;s network.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">telnet</span> <span class="mf">192.68</span><span class="nv">.1.1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">telnet</span> <span class="mf">192.68</span><span class="nv">.1.1</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -200,7 +198,7 @@ The next time you reboot your drone, things will be back to normal.</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">; This script should be run on the drone.</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">; This script should be run on the drone.</span>
 </span><span class='line'><span class="c1">; Change the IP address to be difference</span>
 </span><span class='line'><span class="c1">; for each drone on the same ad-hoc network</span>
 </span><span class='line'><span class="c1">;</span>
@@ -234,7 +232,7 @@ sending simple commands:</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">drone-initialize</span> <span class="ss">:drone1</span> <span class="s">&quot;192.168.1.100&quot;</span> <span class="nv">default-at-port</span> <span class="nv">default-navdata-port</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">drone-initialize</span> <span class="ss">:drone1</span> <span class="s">&quot;192.168.1.100&quot;</span> <span class="nv">default-at-port</span> <span class="nv">default-navdata-port</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:take-off</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:land</span><span class="p">)</span>
 </span><span class='line'>
@@ -255,7 +253,7 @@ to our computer for processing.  Everytime we get a navigation packet
 that ends up looking something like this, (but with lots more data):</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">{</span><span class="ss">:altitude</span> <span class="mf">0.0</span>, <span class="ss">:yaw</span> <span class="mf">-0.215</span>, <span class="ss">:pitch</span> <span class="mf">-1.075</span>, <span class="ss">:roll</span> <span class="mf">-2.904</span>, <span class="ss">:control-state</span> <span class="ss">:landed</span>, <span class="ss">:communication</span> <span class="ss">:ok</span>, <span class="ss">:com-watchdog</span> <span class="ss">:ok</span>, <span class="ss">:seq-num</span> <span class="mi">870</span><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">{</span><span class="ss">:altitude</span> <span class="mf">0.0</span>, <span class="ss">:yaw</span> <span class="mf">-0.215</span>, <span class="ss">:pitch</span> <span class="mf">-1.075</span>, <span class="ss">:roll</span> <span class="mf">-2.904</span>, <span class="ss">:control-state</span> <span class="ss">:landed</span>, <span class="ss">:communication</span> <span class="ss">:ok</span>, <span class="ss">:com-watchdog</span> <span class="ss">:ok</span>, <span class="ss">:seq-num</span> <span class="mi">870</span><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -267,7 +265,7 @@ that ends up looking something like this, (but with lots more data):</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def-belief-action</span> <span class="nv">ba-landed1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">def-belief-action</span> <span class="nv">ba-landed1</span>
 </span><span class='line'>  <span class="s">&quot;I (Drone1) am landed&quot;</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">control-state</span><span class="p">]}]</span> <span class="p">(</span><span class="nb">= </span><span class="nv">control-state</span> <span class="ss">:landed</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">navdata</span><span class="p">]</span> <span class="p">(</span><span class="nf">mdrone</span> <span class="ss">:drone1</span> <span class="ss">:take-off</span><span class="p">)))</span>
@@ -294,7 +292,7 @@ it evaluates to true, then the belief is said to be &ldquo;held&rdquo;.</li>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">def-goal</span> <span class="nv">g-take-off1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">def-goal</span> <span class="nv">g-take-off1</span>
 </span><span class='line'>  <span class="s">&quot;I (Drone1) want to fly.&quot;</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">control-state</span><span class="p">]}]</span> <span class="p">(</span><span class="nb">= </span><span class="nv">control-state</span> <span class="ss">:hovering</span><span class="p">))</span>
 </span><span class='line'>  <span class="p">[</span><span class="nv">ba-landed1</span> <span class="nv">ba-taking-off1</span><span class="p">])</span>
@@ -320,7 +318,7 @@ that goal.</li>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">set-current-goal-list</span> <span class="nv">drones</span> <span class="ss">:drone1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="nf">set-current-goal-list</span> <span class="nv">drones</span> <span class="ss">:drone1</span>
 </span><span class='line'> <span class="p">[</span><span class="nv">g-take-off1</span> <span class="nv">g-find-other-drone-and-wave1</span> <span class="nv">g-land1</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -356,8 +354,6 @@ with their navigation data.</p>
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -417,8 +413,6 @@ with their navigation data.</p>
 
 -->
           
-
-
 
 
 
@@ -489,7 +483,7 @@ with their navigation data.</p>
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

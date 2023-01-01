@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-07-18T09:40:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 18 Jul 2016,  9:40 AM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -138,7 +136,7 @@
 <p>Here is where we embark for fun.  We are going to use genetic programming to generate clojure.spec <em>creatures</em> that contain a program.  Through successive generations, those creatures will breed, mutate, and evolve to fit the data that we are going to give it.  Going with our creature theme, we can say that it <em>eats</em> a sequence of data like this</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[</span><span class="s">&quot;hi&quot;</span> <span class="nv">true</span> <span class="mi">5</span> <span class="mi">10</span> <span class="s">&quot;boo&quot;</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[</span><span class="s">&quot;hi&quot;</span> <span class="nv">true</span> <span class="mi">5</span> <span class="mi">10</span> <span class="s">&quot;boo&quot;</span><span class="p">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -146,7 +144,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>
 </span><span class='line'> <span class="ss">:score</span> <span class="mi">0</span><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -159,7 +157,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/explain-data</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>  <span class="p">[</span><span class="mi">1</span> <span class="s">&quot;hi&quot;</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/explain-data</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>  <span class="p">[</span><span class="mi">1</span> <span class="s">&quot;hi&quot;</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;=&gt; nil</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -168,7 +166,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/explain-data</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>  <span class="p">[</span><span class="mi">1</span> <span class="nv">true</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/explain-data</span> <span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)</span>  <span class="p">[</span><span class="mi">1</span> <span class="nv">true</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;=&gt; #:clojure.spec{:problems [{:path [:1], :pred string?, :val true, :via [], :in [1]}]}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -182,7 +180,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">score</span> <span class="p">[</span><span class="nv">creature</span> <span class="nv">test-data</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">score</span> <span class="p">[</span><span class="nv">creature</span> <span class="nv">test-data</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">try</span>
 </span><span class='line'>   <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">problems</span> <span class="p">(</span><span class="ss">:clojure.spec/problems</span> <span class="p">(</span><span class="nf">s/explain-data</span> <span class="p">(</span><span class="nb">eval </span><span class="p">(</span><span class="ss">:program</span> <span class="nv">creature</span><span class="p">))</span> <span class="nv">test-data</span><span class="p">))]</span>
 </span><span class='line'>     <span class="p">(</span><span class="k">if </span><span class="nv">problems</span>
@@ -196,7 +194,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">score</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)}</span> <span class="p">[</span><span class="mi">1</span> <span class="nv">true</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">score</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/cat</span> <span class="ss">:0</span> <span class="nv">int?</span> <span class="ss">:1</span> <span class="nv">string?</span><span class="p">)}</span> <span class="p">[</span><span class="mi">1</span> <span class="nv">true</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;=&gt; {:program (s/cat :0 int? :1 string?), :score 1}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -210,7 +208,7 @@
 <p>This is where I really love Clojure.  Code is data, so we can create the programs as lists and they are just themselves.  To run the programs, we just need to call <code>eval</code> on them.  We are going to constrain the creatures somewhat.  They are all going to start out with <code>s/cat</code> and have a certain length of items in the sequence.  Also, we are going to allow the parts of the spec to be created with certain predicates.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">[</span><span class="ss">&#39;integer?</span> <span class="ss">&#39;string?</span> <span class="ss">&#39;boolean?</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">even?</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">[</span><span class="ss">&#39;integer?</span> <span class="ss">&#39;string?</span> <span class="ss">&#39;boolean?</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">even?</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -218,7 +216,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">seqs</span> <span class="p">[</span><span class="ss">&#39;s/+</span> <span class="ss">&#39;s/*</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">seqs</span> <span class="p">[</span><span class="ss">&#39;s/+</span> <span class="ss">&#39;s/*</span><span class="p">])</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">and-ors</span> <span class="p">[</span><span class="ss">&#39;s/and</span> <span class="ss">&#39;s/or</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -229,7 +227,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">seq-prob</span> <span class="mf">0.3</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">seq-prob</span> <span class="mf">0.3</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">nest-prob</span> <span class="mf">0.00</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">max-depth</span> <span class="mi">4</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">and-or-prob</span> <span class="mf">0.85</span><span class="p">)</span>
@@ -242,7 +240,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-arg</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-arg</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">seq-prob</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">make-random-seq</span> <span class="nv">n</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">preds</span><span class="p">)))</span>
@@ -262,7 +260,7 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-seq</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-seq</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">cond</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">nest-prob</span><span class="p">)</span>
@@ -285,7 +283,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-cat</span> <span class="p">[</span><span class="nv">len</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">make-random-cat</span> <span class="p">[</span><span class="nv">len</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">args</span> <span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">r</span> <span class="nv">i</span><span class="p">]</span>
 </span><span class='line'>                       <span class="p">(</span><span class="nb">conj </span><span class="nv">r</span> <span class="p">(</span><span class="nb">keyword </span><span class="p">(</span><span class="nb">str </span><span class="nv">i</span><span class="p">))</span>
 </span><span class='line'>                             <span class="p">(</span><span class="nf">make-random-arg</span> <span class="nv">max-depth</span><span class="p">)))</span>
@@ -299,7 +297,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">make-random-cat</span> <span class="mi">3</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">make-random-cat</span> <span class="mi">3</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; (clojure.spec/cat :0 (s/and integer? odd?) :1 integer? :2 boolean?)</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -309,7 +307,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">initial-population</span> <span class="p">[</span><span class="nv">popsize</span> <span class="nv">max-cat-length</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">initial-population</span> <span class="p">[</span><span class="nv">popsize</span> <span class="nv">max-cat-length</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">range </span><span class="nv">popsize</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">{</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">make-random-cat</span> <span class="p">(</span><span class="nb">inc </span><span class="p">(</span><span class="nb">rand-int </span><span class="nv">max-cat-length</span><span class="p">)))}))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -327,7 +325,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">mutable?</span> <span class="p">[</span><span class="nv">node</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">mutable?</span> <span class="p">[</span><span class="nv">node</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">seq? </span><span class="nv">node</span><span class="p">)</span>
 </span><span class='line'>        <span class="p">(</span><span class="nb">contains? </span><span class="p">(</span><span class="nf">set/union</span> <span class="p">(</span><span class="nb">set </span><span class="nv">seqs</span><span class="p">)</span> <span class="o">#</span><span class="p">{</span><span class="ss">&#39;clojure.spec/spec</span><span class="p">})</span> <span class="p">(</span><span class="nb">first </span><span class="nv">node</span><span class="p">)))</span>
 </span><span class='line'>      <span class="p">(</span><span class="nb">contains? </span><span class="p">(</span><span class="nb">set </span><span class="nv">preds</span><span class="p">)</span> <span class="nv">node</span><span class="p">)))</span>
@@ -345,7 +343,7 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">mutate-prob</span> <span class="mf">0.1</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">mutate-prob</span> <span class="mf">0.1</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">mutate</span> <span class="p">[</span><span class="nv">creature</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">program</span> <span class="p">(</span><span class="ss">:program</span> <span class="nv">creature</span><span class="p">)</span>
@@ -361,7 +359,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">mutate</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">clojure.spec/cat</span> <span class="ss">:0</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)</span> <span class="ss">:1</span> <span class="nv">integer?</span><span class="p">)})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">mutate</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">clojure.spec/cat</span> <span class="ss">:0</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)</span> <span class="ss">:1</span> <span class="nv">integer?</span><span class="p">)})</span>
 </span><span class='line'><span class="c1">;=&gt; {:program (clojure.spec/cat :0 (s/or (s/and integer? even?)) :1 integer?)}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -397,7 +395,7 @@
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">crossover-prob</span> <span class="mf">0.7</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">crossover-prob</span> <span class="mf">0.7</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">crossover</span> <span class="p">[</span><span class="nv">creature1</span> <span class="nv">creature2</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">program1</span> <span class="p">(</span><span class="ss">:program</span> <span class="nv">creature1</span><span class="p">)</span>
@@ -414,7 +412,7 @@
 </span><span class='line'>                              <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span>
 </span><span class='line'>                                <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nf">mutable?</span> <span class="nv">x</span><span class="p">)</span>
 </span><span class='line'>                                         <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nf">rand</span><span class="p">)</span> <span class="nv">crossover-prob</span><span class="p">)</span>
-</span><span class='line'>                                         <span class="p">(</span><span class="nb">not </span><span class="err">@</span><span class="nv">crossed-over?</span><span class="p">))</span>
+</span><span class='line'>                                         <span class="p">(</span><span class="nb">not </span><span class="o">@</span><span class="nv">crossed-over?</span><span class="p">))</span>
 </span><span class='line'>                                  <span class="p">(</span><span class="k">do </span><span class="p">(</span><span class="nf">reset!</span> <span class="nv">crossed-over?</span> <span class="nv">true</span><span class="p">)</span> <span class="nv">chosen-node</span><span class="p">)</span>
 </span><span class='line'>                                  <span class="nv">x</span><span class="p">))</span>
 </span><span class='line'>                              <span class="nv">program2</span><span class="p">)</span>
@@ -428,7 +426,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">crossover</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">clojure.spec/cat</span> <span class="ss">:0</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)</span> <span class="ss">:1</span> <span class="nv">integer?</span><span class="p">)}</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">crossover</span> <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">clojure.spec/cat</span> <span class="ss">:0</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">integer?</span> <span class="nv">odd?</span><span class="p">)</span> <span class="ss">:1</span> <span class="nv">integer?</span><span class="p">)}</span>
 </span><span class='line'>           <span class="p">{</span><span class="ss">:program</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">clojure.spec/cat</span> <span class="ss">:0</span> <span class="nb">string? </span><span class="ss">:1</span> <span class="nv">boolean?</span><span class="p">)})</span>
 </span><span class='line'><span class="c1">;=&gt; {:program (clojure.spec/cat :0 (s/and integer? odd?) :1 boolean?)}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -456,7 +454,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">select-best</span> <span class="p">[</span><span class="nv">creatures</span> <span class="nv">tournament-size</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">select-best</span> <span class="p">[</span><span class="nv">creatures</span> <span class="nv">tournament-size</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">selected</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="nv">tournament-size</span> <span class="o">#</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">creatures</span><span class="p">))]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nb">sort-by </span><span class="ss">:score</span> <span class="nv">selected</span><span class="p">)</span> <span class="nb">reverse </span><span class="nv">first</span><span class="p">)))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -486,7 +484,7 @@
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">perfect-fit</span> <span class="p">[</span><span class="nv">creatures</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">perfect-fit</span> <span class="p">[</span><span class="nv">creatures</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nb">filter </span><span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="mi">100</span> <span class="p">(</span><span class="ss">:score</span> <span class="nv">%</span><span class="p">))</span> <span class="nv">creatures</span><span class="p">)))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">evolve</span> <span class="p">[</span><span class="nv">pop-size</span> <span class="nv">max-gen</span> <span class="nv">tournament-size</span> <span class="nv">test-data</span><span class="p">]</span>
@@ -515,7 +513,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">creature-specs</span> <span class="p">(</span><span class="nf">evolve</span> <span class="mi">100</span> <span class="mi">100</span> <span class="mi">7</span> <span class="p">[</span><span class="s">&quot;hi&quot;</span> <span class="nv">true</span> <span class="mi">5</span> <span class="mi">10</span> <span class="s">&quot;boo&quot;</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">creature-specs</span> <span class="p">(</span><span class="nf">evolve</span> <span class="mi">100</span> <span class="mi">100</span> <span class="mi">7</span> <span class="p">[</span><span class="s">&quot;hi&quot;</span> <span class="nv">true</span> <span class="mi">5</span> <span class="mi">10</span> <span class="s">&quot;boo&quot;</span><span class="p">]))</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">perfect-fit</span> <span class="nv">creature-specs</span><span class="p">)</span>
 </span><span class='line'>  <span class="c1">;=&gt;{:program (clojure.spec/cat :0 string? :1 boolean? :2 (s/and integer? odd?) :3 integer? :4 string?)</span>
 </span><span class='line'>      <span class="ss">:score</span> <span class="mi">100</span><span class="p">}</span>
@@ -530,7 +528,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">s/exercise</span> <span class="p">(</span><span class="nb">eval </span><span class="p">(</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">perfect-fit</span> <span class="nv">creature-specs</span><span class="p">)))</span> <span class="mi">5</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="nf">s/exercise</span> <span class="p">(</span><span class="nb">eval </span><span class="p">(</span><span class="ss">:program</span> <span class="p">(</span><span class="nf">perfect-fit</span> <span class="nv">creature-specs</span><span class="p">)))</span> <span class="mi">5</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;; ([(&quot;&quot; true -1 -1 &quot;&quot;) {:0 &quot;&quot;, :1 true, :2 -1, :3 -1, :4 &quot;&quot;}]</span>
 </span><span class='line'><span class="c1">;;  [(&quot;D&quot; false -1 -1 &quot;G&quot;) {:0 &quot;D&quot;, :1 false, :2 -1, :3 -1, :4 &quot;G&quot;}]</span>
 </span><span class='line'><span class="c1">;;  [(&quot;12&quot; false -1 0 &quot;l0&quot;) {:0 &quot;12&quot;, :1 false, :2 -1, :3 0, :4 &quot;l0&quot;}]</span>
@@ -580,8 +578,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -641,8 +637,6 @@
 
 -->
           
-
-
 
 
 
@@ -713,7 +707,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

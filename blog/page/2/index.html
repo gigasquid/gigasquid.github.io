@@ -93,6 +93,181 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-04-26T15:51:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 26 Apr 2019,  3:51 PM</time>
+        
+           | <a href="/blog/2019/04/26/clojure-mxnet-april-update/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2019/04/26/clojure-mxnet-april-update/" itemprop="url">Clojure MXNet April Update</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>Spring is bringing some beautiful new things to the  <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. Here are some highlights for the month of April.</p>
+
+<h2>Shipped</h2>
+
+<p>We&rsquo;ve merged <a href="https://github.com/apache/incubator-mxnet/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Aclosed+clojure">10 PRs</a> over the last month. Many of them focus on core improvements to documentation and usability which is very important.</p>
+
+<p>The MXNet project is also preparing a new release <code>1.4.1</code>, so keep on the lookout for that to hit in the near future.</p>
+
+<h2>Clojure MXNet Made Simple Article Series</h2>
+
+<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> added another post to his fantastic series - <a href="https://arthurcaillau.com/mxnet-made-simple-pretrained-models/">MXNet made simple: Pretrained Models for image classification - Inception and VGG</a></p>
+
+<h2>Cool Stuff in Development</h2>
+
+<h3>New APIs</h3>
+
+<p>Great progress was made on the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> by <a href="https://github.com/kedarbellare">Kedar Bellare</a>. We now have an experimental new version of the apis that are generated more directly from the C code so that we can have more control over the output.</p>
+
+<p>For example the new version of the generated api for NDArray looks like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">defn</span>
+</span><span class='line'> <span class="nv">activation</span>
+</span><span class='line'> <span class="s">&quot;Applies an activation function element-wise to the input.</span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  The following activation functions are supported:</span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  - `relu`: Rectified Linear Unit, :math:`y = max(x, 0)`</span>
+</span><span class='line'><span class="s">  - `sigmoid`: :math:`y = \\frac{1}{1 + exp(-x)}`</span>
+</span><span class='line'><span class="s">  - `tanh`: Hyperbolic tangent, :math:`y = \\frac{exp(x) - exp(-x)}{exp(x) + exp(-x)}`</span>
+</span><span class='line'><span class="s">  - `softrelu`: Soft ReLU, or SoftPlus, :math:`y = log(1 + exp(x))`</span>
+</span><span class='line'><span class="s">  - `softsign`: :math:`y = \\frac{x}{1 + abs(x)}`</span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  Defined in src/operator/nn/activation.cc:L167</span>
+</span><span class='line'><span class="s">  </span>
+</span><span class='line'><span class="s">  `data`: The input array.</span>
+</span><span class='line'><span class="s">  `act-type`: Activation function to be applied.</span>
+</span><span class='line'><span class="s">  `out`: Output array. (optional)&quot;</span>
+</span><span class='line'> <span class="p">([</span><span class="nv">data</span> <span class="nv">act-type</span><span class="p">]</span> <span class="p">(</span><span class="nf">activation</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>, <span class="ss">:act-type</span> <span class="nv">act-type</span><span class="p">}))</span>
+</span><span class='line'> <span class="p">([{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">data</span> <span class="nv">act-type</span> <span class="nv">out</span><span class="p">]</span>, <span class="ss">:or</span> <span class="p">{</span><span class="nv">out</span> <span class="nv">nil</span><span class="p">}</span>, <span class="ss">:as</span> <span class="nv">opts</span><span class="p">}]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">util/coerce-return</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">NDArrayAPI/Activation</span> <span class="nv">data</span> <span class="nv">act-type</span> <span class="p">(</span><span class="nf">util/-&gt;option</span> <span class="nv">out</span><span class="p">)))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>as opposed to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">defn</span>
+</span><span class='line'> <span class="nv">activation</span>
+</span><span class='line'> <span class="p">([</span><span class="o">&amp;</span> <span class="nv">nd-array-and-params</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">util/coerce-return</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">NDArray/Activation</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">util/coerce-param</span>
+</span><span class='line'>     <span class="nv">nd-array-and-params</span>
+</span><span class='line'>     <span class="o">#</span><span class="p">{</span><span class="s">&quot;scala.collection.Seq&quot;</span><span class="p">})))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So much nicer!!!</p>
+
+<h3>BERT (State of the Art for NLP)</h3>
+
+<p>We also have some really exciting examples for BERT in a <a href="https://github.com/apache/incubator-mxnet/pull/14769">PR</a> that will be merged soon. If you are not familiar with BERT, this <a href="http://jalammar.github.io/illustrated-bert/">blog post</a> is a good overview. Basically, it&rsquo;s the state of the art in NLP right now. With the help of exported models from <a href="https://github.com/dmlc/gluon-nlp">GluonNLP</a>, we can do both inference and fine tuning of BERT models in MXNet with Clojure! This is an excellent example of cross fertilization across the GluonNLP, Scala, and Clojure MXNet projects.</p>
+
+<p>There are two examples.</p>
+
+<p>1) BERT question and answer inference based off of a fine tuned model of the <a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD Dataset</a> in GluonNLP which is then exported. It allows one to actually do some natural language question and answering like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">Question</span> <span class="nv">Answer</span> <span class="nv">Data</span>
+</span><span class='line'><span class="p">{</span><span class="ss">:input-answer</span>
+</span><span class='line'> <span class="s">&quot;Rich Hickey is the creator of the Clojure language. Before Clojure, he developed dotLisp, a similar project based on the .NET platform, and three earlier attempts to provide interoperability between Lisp and Java: a Java foreign language interface for Common Lisp, A Foreign Object Interface for Lisp, and a Lisp-friendly interface to Java Servlets.&quot;</span>,
+</span><span class='line'> <span class="ss">:input-question</span> <span class="s">&quot;Who created Clojure?&quot;</span>,
+</span><span class='line'> <span class="ss">:ground-truth-answers</span> <span class="p">[</span><span class="s">&quot;rich&quot;</span> <span class="s">&quot;hickey&quot;</span><span class="p">]}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">Predicted</span> <span class="nv">Answer</span><span class="err">:</span>  <span class="p">[</span><span class="nv">rich</span> <span class="nv">hickey</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2) The second example is using the exported BERT base model and then fine tuning it in Clojure to do a task with sentence pair classification to see if two sentences are equivalent or not.</p>
+
+<p>The nice thing about this is that we were able to convert the existing <a href="https://gluon-nlp.mxnet.io/examples/sentence_embedding/bert.html">tutorial in GluonNLP</a> over to a Clojure Jupyter notebook with the <code>lein-jupyter</code> plugin. I didn&rsquo;t realize that there is a nifty <code>save-as</code> command in Jupyter that can generate a markdown file, which makes for very handy documentation. Take a peek at the tutorial <a href="https://github.com/apache/incubator-mxnet/blob/d062d46f1c351dc9b70a038511b564dab5c43266/contrib/clojure-package/examples/bert/fine-tune-bert.md">here</a>. It might make its way into a blog post on its own in the next week or two.</p>
+
+<h2>Upcoming Events</h2>
+
+<ul>
+<li><p>I&rsquo;ll be speaking about Clojure MXNet at the next <a href="https://twitter.com/scicloj">Scicloj Event</a> on May 15th at 10PM UTC. Please join us and get involved in making Clojure a great place for Data Science.</p></li>
+<li><p>I&rsquo;m also really excited to attend <a href="https://iclr.cc/">ICLR</a> in a couple weeks. It is a <em>huge conference</em> that I&rsquo;m sure will melt my mind with the latest research in Deep Learning. If anyone else is planning to attend, please say hi :)</p></li>
+</ul>
+
+
+<h2>Get Involved</h2>
+
+<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip</p>
+
+<h2>Cat Picture of the Month</h2>
+
+<p>To close out, let&rsquo;s take a lesson from my cats and don&rsquo;t forget the importance of naps.</p>
+
+<p><img src="https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg"></p>
+
+<p>Have a great rest of April!</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
 
 
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-03-22T10:42:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 22 Mar 2019, 10:42 AM</time>
@@ -132,7 +307,7 @@
 
 <h2>Lein Template &amp; Docker file</h2>
 
-<p><a href="https://github.com/hellonico/">Nicolas Modrzyk</a> created a Leiningen template that allows you to easily get a MXNet project started &ndash; with a notebook too! It&rsquo;s a great way to take Clojure MXNet for a spin</p>
+<p><a href="https://github.com/hellonico/">Nicolas Modrzyk</a> created a Leiningen template that allows you to easily get a MXNet project started - with a notebook too! It&rsquo;s a great way to take Clojure MXNet for a spin</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -227,8 +402,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-01-19T13:34:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 19 Jan 2019,  1:34 PM</time>
         
            | <a href="/blog/2019/01/19/object-detection-with-clojure-mxnet/#disqus_thread" itemprop="discussionUrl"
@@ -267,7 +440,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">create-detector</span> <span class="p">[]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">create-detector</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">descriptors</span> <span class="p">[{</span><span class="ss">:name</span> <span class="s">&quot;data&quot;</span>
 </span><span class='line'>                      <span class="ss">:shape</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">3</span> <span class="mi">512</span> <span class="mi">512</span><span class="p">]</span>
 </span><span class='line'>                      <span class="ss">:layout</span> <span class="nv">layout/NCHW</span>
@@ -301,14 +474,14 @@
 <p>To load the image use <code>load-image</code> which will load the image from the path.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">infer/load-image-from-file</span> <span class="nv">input-image</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">infer/load-image-from-file</span> <span class="nv">input-image</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>Then run the detection using <code>infer/detect-objects</code> which will give you the top five predictions by default.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">infer/detect-objects</span> <span class="nv">detector</span> <span class="nv">image</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">infer/detect-objects</span> <span class="nv">detector</span> <span class="nv">image</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -328,7 +501,7 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[[{</span><span class="ss">:class</span> <span class="s">&quot;person&quot;</span>,
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[[{</span><span class="ss">:class</span> <span class="s">&quot;person&quot;</span>,
 </span><span class='line'>   <span class="ss">:prob</span> <span class="mf">0.9657765</span>,
 </span><span class='line'>   <span class="ss">:x-min</span> <span class="mf">0.021868259</span>,
 </span><span class='line'>   <span class="ss">:y-min</span> <span class="mf">0.049295247</span>,
@@ -389,7 +562,7 @@
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
 <span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defproject </span><span class="nv">org.apache.mxnet.contrib.clojure/clojure-mxnet</span> <span class="s">&quot;1.5.0-SNAPSHOT&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defproject </span><span class="nv">org.apache.mxnet.contrib.clojure/clojure-mxnet</span> <span class="s">&quot;1.5.0-SNAPSHOT&quot;</span>
 </span><span class='line'>  <span class="ss">:description</span> <span class="s">&quot;Clojure package for MXNet&quot;</span>
 </span><span class='line'>  <span class="ss">:url</span> <span class="s">&quot;https://github.com/apache/incubator-mxnet&quot;</span>
 </span><span class='line'>  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Apache License&quot;</span>
@@ -459,8 +632,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2018-12-18T16:34:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 18 Dec 2018,  4:34 PM</time>
         
            | <a href="/blog/2018/12/18/how-to-gan-a-flan/#disqus_thread" itemprop="discussionUrl"
@@ -474,7 +645,7 @@
   </header>
 
 
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>It&rsquo;s holiday time and that means parties and getting together with friends. Bringing a baked good or dessert to a gathering is a time honored tradition. But what if this year, you could take it to the next level? Everyone brings actual food. But with the help of Deep Learning, you can bring something completely different &ndash;  you can bring the <em>image</em> of baked good! I&rsquo;m not talking about just any old image that someone captured with a camera or created with a pen and paper. I&rsquo;m talking about the computer itself <strong>creating</strong>. This image would be never before seen, totally unique, and crafted by the creative process of the machine.</p>
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>It&rsquo;s holiday time and that means parties and getting together with friends. Bringing a baked good or dessert to a gathering is a time honored tradition. But what if this year, you could take it to the next level? Everyone brings actual food. But with the help of Deep Learning, you can bring something completely different -  you can bring the <em>image</em> of baked good! I&rsquo;m not talking about just any old image that someone captured with a camera or created with a pen and paper. I&rsquo;m talking about the computer itself <strong>creating</strong>. This image would be never before seen, totally unique, and crafted by the creative process of the machine.</p>
 
 <p>That is exactly what we are going to do. We are going to create a <em>flan</em></p>
 
@@ -494,9 +665,9 @@
 <p>Onto the recipe. How are we actually going to make this work? We need some ingredients:</p>
 
 <ul>
-<li><a href="https://clojure.org/">Clojure</a> &ndash; the most advanced programming language to create generative desserts.</li>
-<li><a href="https://mxnet.apache.org">Apache MXNet</a> &ndash; a flexible and efficient deep learning library that has a Clojure package.</li>
-<li>1000-5000 pictures of flans &ndash; for Deep Learning you need data!</li>
+<li><a href="https://clojure.org/">Clojure</a> - the most advanced programming language to create generative desserts.</li>
+<li><a href="https://mxnet.apache.org">Apache MXNet</a> - a flexible and efficient deep learning library that has a Clojure package.</li>
+<li>1000-5000 pictures of flans - for Deep Learning you need data!</li>
 </ul>
 
 
@@ -527,7 +698,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">flan-iter</span> <span class="p">(</span><span class="nf">mx-io/image-record-iter</span> <span class="p">{</span><span class="ss">:path-imgrec</span> <span class="s">&quot;flan.rec&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">flan-iter</span> <span class="p">(</span><span class="nf">mx-io/image-record-iter</span> <span class="p">{</span><span class="ss">:path-imgrec</span> <span class="s">&quot;flan.rec&quot;</span>
 </span><span class='line'>                                         <span class="ss">:data-shape</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]</span>
 </span><span class='line'>                                         <span class="ss">:batch-size</span> <span class="nv">batch-size</span><span class="p">}))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -553,7 +724,7 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">discriminator</span> <span class="p">[]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">discriminator</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">sym/convolution</span> <span class="s">&quot;d1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>
 </span><span class='line'>                           <span class="ss">:kernel</span> <span class="p">[</span><span class="mi">4</span> <span class="mi">4</span><span class="p">]</span>
@@ -585,7 +756,7 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">generator</span> <span class="p">[]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">generator</span> <span class="p">[]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;rand&quot;</span><span class="p">)</span> <span class="nv">data</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">sym/deconvolution</span> <span class="s">&quot;g1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>
 </span><span class='line'>                             <span class="ss">:kernel</span> <span class="p">[</span><span class="mi">4</span> <span class="mi">4</span><span class="p">]</span>
@@ -613,7 +784,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">mx-io/reduce-batches</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">mx-io/reduce-batches</span>
 </span><span class='line'>       <span class="nv">flan-iter</span>
 </span><span class='line'>       <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">n</span> <span class="nv">batch</span><span class="p">]</span>
 </span><span class='line'>         <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">rbatch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">rand-noise-iter</span><span class="p">)</span>
@@ -674,7 +845,7 @@
 
 <p>Even worse. Are those demonic flans? Should we even continue down this path?</p>
 
-<p>Answer: Yes &ndash; <strong>the training must go on..</strong></p>
+<p>Answer: Yes - <strong>the training must go on..</strong></p>
 
 <h3>Epoch 161</h3>
 
@@ -701,7 +872,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <p>Wrapping up, training GANs is a <em>lot</em> of fun. With MXNet, you can bring the fun with you to Clojure.</p>
 
-<p>Want more, check out this Clojure Conj video &ndash;  <a href="https://www.youtube.com/watch?v=yzfnlcHtwiY">Can You GAN?</a>.</p>
+<p>Want more, check out this Clojure Conj video -  <a href="https://www.youtube.com/watch?v=yzfnlcHtwiY">Can You GAN?</a>.</p>
 </div>
   
   
@@ -716,8 +887,6 @@ It will load up the trained model and generate flans for you to explore and brin
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -757,7 +926,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">docs.module</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">docs.module</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.java.io</span> <span class="ss">:as</span> <span class="nv">io</span><span class="p">]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">clojure.java.shell</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">sh</span><span class="p">]]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.eval-metric</span> <span class="ss">:as</span> <span class="nv">eval-metric</span><span class="p">]</span>
@@ -776,7 +945,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">data-dir</span> <span class="s">&quot;data/&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">data-dir</span> <span class="s">&quot;data/&quot;</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">when-not </span><span class="p">(</span><span class="nf">.exists</span> <span class="p">(</span><span class="nf">io/file</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)))</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">sh</span> <span class="s">&quot;../../scripts/get_mnist_data.sh&quot;</span><span class="p">))</span>
@@ -801,7 +970,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
 </span><span class='line'>                                   <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
 </span><span class='line'>                                   <span class="ss">:label-name</span> <span class="s">&quot;softmax_label&quot;</span>
 </span><span class='line'>                                   <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
@@ -833,7 +1002,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">data</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">data</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span>
 </span><span class='line'>      <span class="nv">fc1</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">128</span><span class="p">})</span>
 </span><span class='line'>      <span class="nv">act1</span> <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">fc1</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
 </span><span class='line'>      <span class="nv">fc2</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">act1</span> <span class="ss">:num-hidden</span> <span class="mi">64</span><span class="p">})</span>
@@ -855,7 +1024,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">out</span> <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">out</span> <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
 </span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">128</span><span class="p">})</span>
 </span><span class='line'>           <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
 </span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">64</span><span class="p">})</span>
@@ -875,7 +1044,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">mod</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-data</span> <span class="nv">train-data</span><span class="p">)</span>
 </span><span class='line'>               <span class="ss">:label-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-label</span> <span class="nv">train-data</span><span class="p">)})</span>
@@ -893,7 +1062,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/fit</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)</span> <span class="p">{</span><span class="ss">:train-data</span> <span class="nv">train-data</span> <span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:num-epoch</span> <span class="mi">1</span><span class="p">}))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/fit</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)</span> <span class="p">{</span><span class="ss">:train-data</span> <span class="nv">train-data</span> <span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:num-epoch</span> <span class="mi">1</span><span class="p">}))</span>
 </span><span class='line'><span class="c1">;; Epoch  0  Train- [accuracy 0.12521666]</span>
 </span><span class='line'><span class="c1">;; Epoch  0  Time cost- 8392</span>
 </span><span class='line'><span class="c1">;; Epoch  0  Validation-  [accuracy 0.2227]</span>
@@ -906,7 +1075,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">results</span> <span class="p">(</span><span class="nf">m/predict</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">}))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">results</span> <span class="p">(</span><span class="nf">m/predict</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">}))</span>
 </span><span class='line'><span class="p">(</span><span class="nb">first </span><span class="nv">results</span><span class="p">)</span> <span class="c1">;=&gt;#object[org.apache.mxnet.NDArray 0x3540b6d3 &quot;org.apache.mxnet.NDArray@a48686ec&quot;]</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="p">(</span><span class="nb">first </span><span class="nv">results</span><span class="p">)))</span> <span class="c1">;=&gt;0.08261358</span>
@@ -924,7 +1093,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-every-batch</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">})]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-every-batch</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">})]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/reduce-batches</span> <span class="nv">test-data</span>
 </span><span class='line'>                        <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">i</span> <span class="nv">batch</span><span class="p">]</span>
 </span><span class='line'>                          <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;pred is &quot;</span> <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nb">get </span><span class="nv">preds</span> <span class="nv">i</span><span class="p">))))</span>
@@ -937,7 +1106,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>If you need to evaluate on a test set and don’t need the prediction output, call the <code>score</code> function with a data iterator and an eval metric:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/score</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:eval-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">)})</span> <span class="c1">;=&gt;[&quot;accuracy&quot; 0.2227]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">m/score</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:eval-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">)})</span> <span class="c1">;=&gt;[&quot;accuracy&quot; 0.2227]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -960,7 +1129,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">save-prefix</span> <span class="s">&quot;my-model&quot;</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">save-prefix</span> <span class="s">&quot;my-model&quot;</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">3</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span> <span class="nv">train-data</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span>
 </span><span class='line'>                                          <span class="c1">;; do something</span>
@@ -981,7 +1150,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-mod</span> <span class="p">(</span><span class="nf">m/load-checkpoint</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;my-model&quot;</span> <span class="ss">:epoch</span> <span class="mi">1</span> <span class="ss">:load-optimizer-states</span> <span class="nv">true</span><span class="p">}))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">new-mod</span> <span class="p">(</span><span class="nf">m/load-checkpoint</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;my-model&quot;</span> <span class="ss">:epoch</span> <span class="mi">1</span> <span class="ss">:load-optimizer-states</span> <span class="nv">true</span><span class="p">}))</span>
 </span><span class='line'>
 </span><span class='line'><span class="nv">new-mod</span> <span class="c1">;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 &quot;org.apache.mxnet.module.Module@5304d0f4&quot;]</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -992,7 +1161,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">new-mod</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">new-mod</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-data</span> <span class="nv">train-data</span><span class="p">)</span> <span class="ss">:label-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-label</span> <span class="nv">train-data</span><span class="p">)})</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">m/init-params</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1018,7 +1187,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">arg-params</span> <span class="nv">aux-params</span><span class="p">]</span> <span class="p">(</span><span class="nf">m/params</span> <span class="nv">new-mod</span><span class="p">)]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">arg-params</span> <span class="nv">aux-params</span><span class="p">]</span> <span class="p">(</span><span class="nf">m/params</span> <span class="nv">new-mod</span><span class="p">)]</span>
 </span><span class='line'>  <span class="p">{</span><span class="ss">:arg-params</span> <span class="nv">arg-params</span>
 </span><span class='line'>   <span class="ss">:aux-params</span> <span class="nv">aux-params</span><span class="p">})</span>
 </span><span class='line'>
@@ -1043,7 +1212,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/set-params</span> <span class="nv">new-mod</span> <span class="p">{</span><span class="ss">:arg-params</span> <span class="p">(</span><span class="nf">m/arg-params</span> <span class="nv">new-mod</span><span class="p">)</span> <span class="ss">:aux-params</span> <span class="p">(</span><span class="nf">m/aux-params</span> <span class="nv">new-mod</span><span class="p">)})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">m/set-params</span> <span class="nv">new-mod</span> <span class="p">{</span><span class="ss">:arg-params</span> <span class="p">(</span><span class="nf">m/arg-params</span> <span class="nv">new-mod</span><span class="p">)</span> <span class="ss">:aux-params</span> <span class="p">(</span><span class="nf">m/aux-params</span> <span class="nv">new-mod</span><span class="p">)})</span>
 </span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 &quot;org.apache.mxnet.module.Module@5304d0f4&quot;]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1058,7 +1227,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; reset the training data before calling fit or you will get an error</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;; reset the training data before calling fit or you will get an error</span>
 </span><span class='line'><span class="p">(</span><span class="nf">mx-io/reset</span> <span class="nv">train-data</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">mx-io/reset</span> <span class="nv">test-data</span><span class="p">)</span>
 </span><span class='line'>
@@ -1072,7 +1241,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <h3>See other blog posts about MXNet</h3>
 
 <ul>
-<li><a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Clojure MXNet &ndash; NDArray</a></li>
+<li><a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Clojure MXNet - NDArray</a></li>
 <li><a href="http://gigasquidsoftware.com/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/">Clojure MXNet Joins Apache MXNet</a></li>
 </ul>
 
@@ -1090,8 +1259,6 @@ It will load up the trained model and generate flans for you to explore and brin
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -1125,7 +1292,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <p>We welcome contributors and people getting involved to make it better.</p>
 
-<p>Are you interested in Deep Learning and Clojure? Great &ndash; Join us!</p>
+<p>Are you interested in Deep Learning and Clojure? Great - Join us!</p>
 
 <p>There are a few ways to get involved.</p>
 
@@ -1133,7 +1300,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <li>Check out the current state of the Clojure package some contribution needs here <a href="https://cwiki.apache.org/confluence/display/MXNET/Clojure+Package+Contribution+Needs">https://cwiki.apache.org/confluence/display/MXNET/Clojure+Package+Contribution+Needs</a></li>
 <li>Join the Clojurian Slack #mxnet channel</li>
 <li>Join the <a href="https://lists.apache.org/list.html?dev@mxnet.apache.org">MXNet dev mailing list</a> by sending an email to <code>dev-subscribe@mxnet.apache.org.</code>.</li>
-<li>Join the MXNET Slack channel &ndash; You have to join the MXnet dev mailing list first, but after that says you would like to join the slack and someone will add you.</li>
+<li>Join the MXNET Slack channel - You have to join the MXnet dev mailing list first, but after that says you would like to join the slack and someone will add you.</li>
 <li>Join the <a href="https://discuss.mxnet.io/">MXNet Discussion Forum</a></li>
 </ul>
 
@@ -1142,7 +1309,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <p>There are lots of examples in the package to check out, but a good place to start are the tutorials here <a href="https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial">https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package/examples/tutorial</a></p>
 
-<p>There is a blog walkthough here as well &ndash; <a href="http://gigasquidsoftware.com/blog/2018/07/05/clojure-mxnet-the-module-api/">Clojure MXNet Module API</a></p>
+<p>There is a blog walkthough here as well - <a href="http://gigasquidsoftware.com/blog/2018/07/05/clojure-mxnet-the-module-api/">Clojure MXNet Module API</a></p>
 </div>
   
   
@@ -1157,8 +1324,6 @@ It will load up the trained model and generate flans for you to explore and brin
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -1198,7 +1363,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">tutorial.ndarray</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">tutorial.ndarray</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.ndarray</span> <span class="ss">:as</span> <span class="nv">ndarray</span><span class="p">]))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1207,7 +1372,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.NDArray 0x3e396d0 &quot;org.apache.mxnet.NDArray@aeea40b6&quot;]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1216,7 +1381,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">]))</span>
 </span><span class='line'><span class="c1">;=&gt; [100 50]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1224,7 +1389,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>There is also a quick way to create an ndarray of ones with the <code>ones</code> function:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">256</span> <span class="mi">32</span> <span class="mi">128</span> <span class="mi">1</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">256</span> <span class="mi">32</span> <span class="mi">128</span> <span class="mi">1</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1232,7 +1397,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">3</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">3</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">c</span><span class="p">)</span>  <span class="c1">;=&gt; [2 3]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1241,7 +1406,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">c</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">c</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; [1.0 2.0 3.0 4.0 5.0 6.0]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1256,7 +1421,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">ndarray/+</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">))</span>
 </span><span class='line'><span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
@@ -1267,7 +1432,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1276,7 +1441,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/+=</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/+=</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1288,7 +1453,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr1</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">arr1</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr2</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">res</span> <span class="p">(</span><span class="nf">ndarray/dot</span> <span class="nv">arr1</span> <span class="nv">arr2</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">res</span><span class="p">)</span> <span class="c1">;=&gt; [1 1]</span>
@@ -1305,7 +1470,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>You can save ndarrays with a name as a map like:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/save</span> <span class="s">&quot;filename&quot;</span> <span class="p">{</span><span class="s">&quot;arr1&quot;</span> <span class="nv">arr1</span> <span class="s">&quot;arr2&quot;</span> <span class="nv">arr2</span><span class="p">})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/save</span> <span class="s">&quot;filename&quot;</span> <span class="p">{</span><span class="s">&quot;arr1&quot;</span> <span class="nv">arr1</span> <span class="s">&quot;arr2&quot;</span> <span class="nv">arr2</span><span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1314,7 +1479,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/load</span> <span class="s">&quot;filename&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/load</span> <span class="s">&quot;filename&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; {&quot;arr1&quot; #object[org.apache.mxnet.NDArray 0x1b629ff4 &quot;org.apache.mxnet.NDArray@63da08cb&quot;]</span>
 </span><span class='line'><span class="c1">;=&gt;  &quot;arr2&quot; #object[org.apache.mxnet.NDArray 0x25d994e3 &quot;org.apache.mxnet.NDArray@5bbaf2c3&quot;]}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1327,7 +1492,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>When creating an <code>ndarray</code> you can use a context argument to specify the device. To do this, we will need the help of the <code>context</code> namespace.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">org.apache.clojure-mxnet.context</span> <span class="ss">:as</span> <span class="nv">context</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">org.apache.clojure-mxnet.context</span> <span class="ss">:as</span> <span class="nv">context</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1336,7 +1501,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">cpu-a</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">cpu-a</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/context</span> <span class="nv">cpu-a</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; #object[ml.dmlc.mxnet.Context 0x3f376123 &quot;cpu(0)&quot;]</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1345,7 +1510,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>But we can specify the gpu instead, (if we have a gpu enabled build).</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">gpu-b</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]</span> <span class="p">{</span><span class="ss">:ctx</span> <span class="p">(</span><span class="nf">context/gpu</span> <span class="mi">0</span><span class="p">)}))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">gpu-b</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]</span> <span class="p">{</span><span class="ss">:ctx</span> <span class="p">(</span><span class="nf">context/gpu</span> <span class="mi">0</span><span class="p">)}))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1370,8 +1535,6 @@ It will load up the trained model and generate flans for you to explore and brin
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -1419,8 +1582,6 @@ It will load up the trained model and generate flans for you to explore and brin
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2017-11-07T18:51:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Tue  7 Nov 2017,  6:51 PM</time>
         
            | <a href="/blog/2017/11/07/cats-and-dogs-with-cortex-redux/#disqus_thread" itemprop="discussionUrl"
@@ -1438,7 +1599,7 @@ It will load up the trained model and generate flans for you to explore and brin
 
 <p>I wanted to revisit it for a few reasons. The first one is that the Cortex library has progressed and improved considerably over the last year. It&rsquo;s still not at version 1.0, but it my eyes, it&rsquo;s really starting to shine. The second reason is that they recently published an <a href="https://github.com/thinktopic/cortex/tree/master/examples/resnet-retrain">example</a> of using the RESNET50 model, (I&rsquo;ll explain later on), to do fine-tuning or transfer learning. The third reason, is that there is a great new plugin for leiningen the supports using <a href="https://github.com/didiercrunch/lein-jupyter">Jupyter notebooks with Clojure projects</a>. These notebooks are a great way of doing walkthroughs and tutorials.</p>
 
-<p>Putting all these things together, I felt like I was finally at a stage where I could somewhat replicate the first lesson in the <a href="https://github.com/fastai/courses/blob/master/deeplearning1/nbs/dogs_cats_redux.ipynb">Practical Deep Learning Course for Coders</a> with Cats and Dogs &ndash; although this time all in Clojure!</p>
+<p>Putting all these things together, I felt like I was finally at a stage where I could somewhat replicate the first lesson in the <a href="https://github.com/fastai/courses/blob/master/deeplearning1/nbs/dogs_cats_redux.ipynb">Practical Deep Learning Course for Coders</a> with Cats and Dogs - although this time all in Clojure!</p>
 
 <h2>Where to Start?</h2>
 
@@ -1564,8 +1725,6 @@ It will load up the trained model and generate flans for you to explore and brin
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2017-10-22T16:02:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 22 Oct 2017,  4:02 PM</time>
         
            | <a href="/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/#disqus_thread" itemprop="discussionUrl"
@@ -1608,7 +1767,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">graal-test.core</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">graal-test.core</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:import</span> <span class="p">(</span><span class="nf">org.graalvm.polyglot</span> <span class="nv">Context</span><span class="p">)))</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">;; note that is also supports Ruby, LLVM, and JS</span>
@@ -1626,7 +1785,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">3^2 + 2^2</span>
 </span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; #object[org.graalvm.polyglot.Value 0x7ff40e4d &quot;13.0&quot;]</span>
@@ -1644,7 +1803,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result1</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">result1</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">sum.of.squares &lt;- function(x,y) {</span>
 </span><span class='line'><span class="s">  x^2 + y^2</span>
 </span><span class='line'><span class="s">}</span>
@@ -1657,7 +1816,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <p>Again, it looks like it worked. Let&rsquo;s try to get the result back into Clojure as a value we can work with. We could ask the result what sort of type it is with</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.isNumber</span> <span class="nv">result1</span><span class="p">)</span> <span class="c1">;=&gt; true </span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.isNumber</span> <span class="nv">result1</span><span class="p">)</span> <span class="c1">;=&gt; true </span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1669,7 +1828,7 @@ It will load up the trained model and generate flans for you to explore and brin
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-&gt;clojure</span> <span class="p">[</span><span class="nv">polyglot-value</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">-&gt;clojure</span> <span class="p">[</span><span class="nv">polyglot-value</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">polyglot-value</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">.toString</span><span class="p">)</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">clojure.edn/read-string</span><span class="p">)))</span>
@@ -1696,7 +1855,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">install.packages(\&quot;numDeriv\&quot;, repos = \&quot;http://cran.case.edu/\&quot;)</span>
 </span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1715,7 +1874,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">result2</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">result2</span> <span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;R&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">library(numDeriv)</span>
 </span><span class='line'><span class="s">grad(sin, (0:10)*2*pi/10)</span>
 </span><span class='line'><span class="s">&quot;</span><span class="p">))</span>
@@ -1738,7 +1897,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.hasArrayElements</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.hasArrayElements</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
 </span><span class='line'><span class="p">(</span><span class="nf">.getArraySize</span> <span class="nv">result2</span><span class="p">)</span> <span class="c1">;=&gt; 11</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">range </span><span class="mi">10</span><span class="p">)]</span>
@@ -1750,7 +1909,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>So, we&rsquo;ve showed basic interop with R &ndash; which is pretty neat. What about Python?</p>
+<p>So, we&rsquo;ve showed basic interop with R - which is pretty neat. What about Python?</p>
 
 <h3>Interoping with Python</h3>
 
@@ -1761,7 +1920,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;python&quot;</span> <span class="s">&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">.eval</span> <span class="nv">context</span> <span class="s">&quot;python&quot;</span> <span class="s">&quot;</span>
 </span><span class='line'><span class="s">import time;</span>
 </span><span class='line'><span class="s">time.clock()</span>
 </span><span class='line'><span class="s">&quot;</span><span class="p">)</span>
@@ -1778,161 +1937,6 @@ There are quite a few languages implemented with the Truffle framework. R is one
 <h3>Footnotes</h3>
 
 <p>If you are interested in playing with the code. I have a github repo here <a href="https://github.com/gigasquid/graal-test">graal-test</a>. If you are interested in watching a video, I really liked <a href="https://www.youtube.com/watch?v=TQMKPRc6cbE">this one</a>. There are also some really nice examples of running in polyglot mode with R and Java and JS here <a href="https://github.com/graalvm/examples">https://github.com/graalvm/examples</a>.</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2017-05-27T14:11:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 27 May 2017,  2:11 PM</time>
-        
-           | <a href="/blog/2017/05/27/self-publishing-for-the-creative-coder/#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io/blog/2017/05/27/self-publishing-for-the-creative-coder/">Comments</a>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2017/05/27/self-publishing-for-the-creative-coder/" itemprop="url">Self Publishing for the Creative Coder</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>So, you have an idea for a fiction book. First, let me tell you that it&rsquo;s a good idea and it&rsquo;s a great thing that you are a coder. Quite a few successful authors have a background in software development. <a href="http://www.imdb.com/title/tt2543164/">Arrival</a>, (which is a fabulous movie), comes from the book, <a href="https://www.amazon.com/Stories-Your-Life-Others-Chiang/dp/1101972122">Stories of your Life</a>,  written by a fellow programmer <a href="https://en.wikipedia.org/wiki/Ted_Chiang">Ted Chiang</a>. <a href="https://en.wikipedia.org/wiki/Charles_Stross">Charlie Stross</a> is another fine example. One of my favorites is <a href="https://en.wikipedia.org/wiki/Daniel_Suarez_(author">Daniel Suarez</a>, the author of the<a href="https://www.amazon.com/DAEMON-Daniel-Suarez/dp/0451228731"> Daemon</a> and more recently <a href="https://www.amazon.com/Change-Agent-Novel-Daniel-Suarez/dp/110198466X/">Change Agent</a>. So yes, you can write a fiction book and you&rsquo;re in good company. This post is dedicated to help make it happen.</p>
-
-<h2>So how do you know about self publishing?</h2>
-
-<p>Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like <em>Hunger Games</em> and <em>Divergent</em>. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she had <em>coding super powers</em>. The idea for <a href="http://www.codeshifterbook.com/">Code Shifter</a> was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a <em>learning how to code</em> book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn&rsquo;t, it would lay the positive groundwork to have them be more open to it later.</p>
-
-<p>Books, like software, always take longer than you plan. My daughter and I enjoyed working on it together and over time it grew into a book that we could share with others. Along the way, I learned quite a bit about writing books, publishing, and other things that I wish I had known beforehand.</p>
-
-<h2>What did you use to write the book?</h2>
-
-<p>In the book world, your story is referred to as your <em>manuscript</em>. As a tool to produce it, I cannot speak highly enough of <a href="https://leanpub.com/">Leanpub</a>. I found it easy and productive to work in as a programmer. For example,  my setup was pretty painless.</p>
-
-<p>In the repo, I had a <code>manuscript</code> directory, in which there was a <code>Book.txt</code> file that listed the chapter files.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>chapter2.txt
-</span><span class='line'>chapter3.txt
-</span><span class='line'>chapter4.txt
-</span><span class='line'>chapter5.txt</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Each chapter file in turn was written in markdown. For example, <code>chapter2.txt</code> looked like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># 1
-</span><span class='line'>
-</span><span class='line'>## Flicker
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>Twelve-year-old Eliza knew that the next words were the result of computer program far more intelligent than any one of them. Standing next to her parents, she held her breath and watched as her brother touched his finger to the message on the wall screen.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>From there, my process looked like:</p>
-
-<ul>
-<li>Write a bit in my favorite editor, (Emacs of course), and make a commit.</li>
-<li>Push the commit to github, which is registered with the Leanpub project</li>
-<li>Log onto the Leanpub project and hit the <em>preview</em> button. This would generate a pdf and ebook that I could share with my daughter for feedback.</li>
-</ul>
-
-
-<p><img src="http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg"></p>
-
-<h3>Advantages of Leanpub for development.</h3>
-
-<p>As I said earlier, I&rsquo;m a fan. Using git for revisions is incredibly useful. I shudder to think of people writing in Word without version control. The ability to easily create PDF and ebook formats was also very convenient. The markdown format has excellent code support. There is also the option as publishing your work as you go. However, I think that this is more useful with a technical book than with fiction.</p>
-
-<h3>Disadvantages of Leanpub for development</h3>
-
-<p>If you are going to work with an freelance editor or share your work with someone in the mainstream book world, they are not going to want pdf. They usually want a doc version. It took me a bit of research to find a good converter, <a href="http://pandoc.org/">pandoc</a>. With it, you can convert from markdown to Word with things looking pretty good. Don&rsquo;t try to do pdf to Word. I found it a big recipe for fail.</p>
-
-<p>Finally, the book was considered done enough to think about publishing.</p>
-
-<p>There was much rejoicing.</p>
-
-<h2>Didn&rsquo;t you want to get the book into bookstores?</h2>
-
-<p>Of course. That would be incredibly cool. However, that requires getting into what they call <em>traditional publishing</em> and it is a lot more work, time, and luck. If you go this route, you will need to budget at least six months to send out form letters to agencies to have them represent your work. Also, beware of predatory services that take advantage of unsuspecting and wide eyed authors. If you are interested in this, you&rsquo;ll want to start looking for agents that are interested in your type of book. <a href="https://querytracker.net/">Query Tracker</a> is a great place to start.</p>
-
-<h2>Traditional publishing sounds hard. What about self publishing?</h2>
-
-<p>Self publishing is certainly an easier more direct way to bring your book to life. For me, it was the best way forward. Luckily, Leanpub made it pretty painless.</p>
-
-<h3>Publishing the book with Leanpub</h3>
-
-<p>Actually publishing the finished copy was really easy with Leanpub. All I had to do was fill in some fields on the project page and push <em>Publish!</em> The book was immediately ready to share with the world. Putting out an updated edition was as easy as pushing the button again. Leanpub provides online reading as well as all the ebook versions.</p>
-
-<p>That was nice, but I really wanted a print copy too.</p>
-
-<h3>Publishing with CreateSpace</h3>
-
-<p>Amazon&rsquo;s <a href="https://www.createspace.com/">CreateSpace</a> provides and excellent platform for on-demand print copies of books. This is where Leanpub comes in handy again. There is an <code>Export Option</code> that provides and unbranded pdf copy of your manuscript with all the correct formatting and margins required for CreateSpace. I simply exported the file and then uploaded it up to the project.</p>
-
-<p><img src="http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg"></p>
-
-<p>The other thing that you will want is a nice cover. There are services through CreateSpace for cover creation that you can buy or you can upload your own file. I was lucky enough to have a talented graphic designer as sister, Kristin Allmyer,  who made me an awesome cover.</p>
-
-<p>One of the confusing things was picking an ISBN for the print copy. You don&rsquo;t need to worry about this for ebook versions but you do for a physical copy. Your choices through CreateSpace are using a provided one for free or buying your own for $99. I chose my own so I could have flexibility of working with another publisher other than Amazon if I want. If you choose that option, you can also make up your own publisher name. Mine is <em>Gigasquid Books</em>.</p>
-
-<p><img src="http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg"></p>
-
-<p>Once you have completed all the setup, they will send you a physical copy in the mail to approve. The moment you get to hold it in your hands is really magical.</p>
-
-<p><img src="https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large"></p>
-
-<p>If it looks alright, you hit the approve button and voilà &ndash; it&rsquo;s for sale on Amazon!</p>
-
-<h3>Publishing with Direct Kindle Publishing</h3>
-
-<p>With CreateSpace, you have the option of porting your book to a Kindle format as well. It will do most of the heavy lifting of converting the files for you and a few button clicks later you have both an Kindle and print version available for your readers.</p>
-
-<p>If you need to update the text of the Kindle version, Leanpub also has an export option available to produce unbranded ebook files. Just take this and upload it to your KDP account and you are good to go.</p>
-
-<h2>Did you run into any problems?</h2>
-
-<p>Of course I did. I was totally new to self publishing and I underestimated how hard copy editing is. Some errors unfortunately made it into the first version. Luckily, I had some really nice people that helped my fix it for later versions. Many thanks to Martin Plumb, Michael Daines, Paul Henrich, and S. Le Callonnec for editing help.</p>
-
-<p>This brings me to my next point. If I had to do it all over again, I would publish the book in a different order. Books are really no different than software. There are going to be bugs when you first release it in the wild. It is best to embrace this. In the future, I would publish the ebook versions first, which are much easier to update and then the print versions after that.</p>
-
-<h2>Did you make lots of money from the book sales?</h2>
-
-<p>Hahaha &hellip;  that&rsquo;s funny. If you are interested in making money, books are not the best way to go. The margins on Leanpub are definitely better than Amazon, but if I really was interested in making money, I would have been much better off using deep learning to make a stock market predictor or code up a startup that I could sell off.</p>
-
-<p>Authors in general, are much harder pressed to make livings than software developers. We should count our blessings.</p>
-
-<h2>Any last words of advice?</h2>
-
-<p>There is a great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.</p>
 </div>
   
   
@@ -1959,7 +1963,7 @@ There are quite a few languages implemented with the Truffle framework. R is one
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

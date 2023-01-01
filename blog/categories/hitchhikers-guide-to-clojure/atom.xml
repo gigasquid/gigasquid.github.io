@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Hitchhiker's Guide to Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/hitchhikers-guide-to-clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -23,7 +23,7 @@ easier to read them in a chronological fashion.</p>
 
 <p><a href="http://hitchhikersclojure.com/">http://hitchhikersclojure.com/</a></p>
 
-<p>There is also a public <a href="https://github.com/gigasquid/hitchhikers-clojure">repo</a> &ndash; feel free to contribute spelling and
+<p>There is also a public <a href="https://github.com/gigasquid/hitchhikers-clojure">repo</a> - feel free to contribute spelling and
 grammar fixes, or your great ideas.</p>
 ]]></content>
   </entry>
@@ -62,25 +62,21 @@ This commonly overlooked function, takes an existing function and
 returns a new function that allows you to specify a default
 for a nil parameter. For example, take this locked door:</em></p>
 
-<p>```clojure
-(defn locked-door [key]</p>
+<pre><code class="clojure">(defn locked-door [key]
+        (if key "open" "nope - staying shut"))
 
-<pre><code>    (if key "open" "nope - staying shut"))
+(locked-door :key) ;=&gt; "open"
+(locked-door nil) ;=&gt; "nope - staying shut"
 </code></pre>
-
-<p>(locked-door :key) ;=> &ldquo;open&rdquo;
-(locked-door nil) ;=> &ldquo;nope &ndash; staying shut&rdquo;
-```</p>
 
 <p><em>In this case, the simple application of fnil will help remove this
 pesky obstacle.</em></p>
 
-<p>```clojure
-(def this-door (fnil locked-door :another-key-that-works))</p>
+<pre><code class="clojure">(def this-door (fnil locked-door :another-key-that-works))
 
-<p>(this-door :key) ;=> &ldquo;open&rdquo;
-(this-door nil) ;=> open
-```</p>
+(this-door :key) ;=&gt; "open"
+(this-door nil) ;=&gt; open
+</code></pre>
 
 <p><em>Please be advised, that some doors are locked for a good reason. It
 is left to the user&rsquo;s discretion. But it is highly recommended in Norway&rsquo;s
@@ -136,9 +132,8 @@ won&rsquo;t melt in your hands.</em></p>
 
 <p><em>To construct a channel simply use <em>chan</em></em></p>
 
-<p><code>clojure
-(def talk-to-otters-chan (chan))
-</code></p>
+<pre><code class="clojure">(def talk-to-otters-chan (chan))
+</code></pre>
 
 <p><em>Channels by default are unbuffered, which keeps them at the
 mini-marshmallow size.  It requires a rendezvous of a channel producer
@@ -151,73 +146,60 @@ otter was busy, so one approach would be to use a
 <a href="http://clojuredocs.org/clojure_core/clojure.core/future">future</a> to
 talk to the otter with a blocking put <em>>!!</em>.</em></p>
 
-<p><code>clojure
-(future (&gt;!! talk-to-otters-chan "Hello otters.")) ;=&gt;#&lt;Future@3c371c41: :pending&gt;
+<pre><code class="clojure">(future (&gt;!! talk-to-otters-chan "Hello otters.")) ;=&gt;#&lt;Future@3c371c41: :pending&gt;
 (&lt;!! talk-to-otters-chan) ;=&gt; "Hello otters."
-</code></p>
+</code></pre>
 
 <p>One could also use a buffered channel, but that increases the size of
 the marshmallow.</p>
 
-<p>```clojure
-(def talk-to-otters-chan (chan 10)) ;;create channel with buffer size 10
-(>!! talk-to-otters-chan &ldquo;Hello otters.&rdquo;) ;=> nil
-(>!! talk-to-otters-chan &ldquo;Do you know anything about the world ending?&rdquo;) ;=> nil</p>
+<pre><code class="clojure">(def talk-to-otters-chan (chan 10)) ;;create channel with buffer size 10
+(&gt;!! talk-to-otters-chan "Hello otters.") ;=&gt; nil
+(&gt;!! talk-to-otters-chan "Do you know anything about the world ending?") ;=&gt; nil
 
-<p>(&lt;!! talk-to-otters-chan) ;=> &ldquo;Hello otters.&rdquo;
-(&lt;!! talk-to-otters-chan) ;=> &ldquo;Do you know anything about the world ending?&rdquo;
-```</p>
+(&lt;!! talk-to-otters-chan) ;=&gt; "Hello otters."
+(&lt;!! talk-to-otters-chan) ;=&gt; "Do you know anything about the world ending?"
+</code></pre>
 
 <p><em>The best way to conserve space and time is to use asynchronous
 communication with <em>go</em> blocks that wont' block the threads. Inside
 these go blocks one can use regular non-blocking puts <strong>>!</strong> and gets
 <strong>&lt;!</strong>.</em></p>
 
-<p>```clojure
-(def talk-to-otters-chan (chan))
-(go (while true</p>
+<pre><code class="clojure">(def talk-to-otters-chan (chan))
+(go (while true
+      (println (&lt;! talk-to-otters-chan))))
+(&gt;!! talk-to-otters-chan "Hello otters")
+(&gt;!! talk-to-otters-chan "Do you know anything about the world ending?")
+(&gt;!! talk-to-otters-chan "Also, you are really fuzzy and cute.")
 
-<pre><code>  (println (&lt;! talk-to-otters-chan))))
-</code></pre>
-
-<p>(>!! talk-to-otters-chan &ldquo;Hello otters&rdquo;)
-(>!! talk-to-otters-chan &ldquo;Do you know anything about the world ending?&rdquo;)
-(>!! talk-to-otters-chan &ldquo;Also, you are really fuzzy and cute.&rdquo;)</p>
-
-<p>;; (This prints out in the REPL as you talk to the otters)
+;; (This prints out in the REPL as you talk to the otters)
 Hello otters
 Do you know anything about the world ending?
 Also, you are really fuzzy and cute.
-```</p>
+</code></pre>
 
 <p><em>This compact, lightweight, and asynchronous method of communication is
 well suited to conversations and messaging of all sorts, including
 conversing with human, animals, and other Clojure-based life forms.</em></p>
 
-<p>```clojure
-(def talk-chan (chan))
+<pre><code class="clojure">(def talk-chan (chan))
 (def listen-chan (chan))
-(go (while true</p>
+(go (while true
+      (println (&lt;! listen-chan))))
+(go (while true
+      (&gt;! listen-chan
+          (str "You said: "(&lt;! talk-chan)
+                " " "Do you have any Abalone?" ))))
+(&gt;!! talk-chan "Hello otters")
+(&gt;!! talk-chan "Do you know anything about the world ending?")
+(&gt;!! talk-chan "Also, you are really fuzzy and cute.")
 
-<pre><code>  (println (&lt;! listen-chan))))
-</code></pre>
-
-<p>(go (while true</p>
-
-<pre><code>  (&gt;! listen-chan
-      (str "You said: "(&lt;! talk-chan)
-            " " "Do you have any Abalone?" ))))
-</code></pre>
-
-<p>(>!! talk-chan &ldquo;Hello otters&rdquo;)
-(>!! talk-chan &ldquo;Do you know anything about the world ending?&rdquo;)
-(>!! talk-chan &ldquo;Also, you are really fuzzy and cute.&rdquo;)</p>
-
-<p>;; (This prints out in the REPL as you talk to the otters)
+;; (This prints out in the REPL as you talk to the otters)
 You said: Hello otters Do you have any Abalone?
 You said: Do you know anything about the world ending? Do you have any Abalone?
 You said: Also, you are really fuzzy and cute. Do you have any Abalone?
-```</p>
+</code></pre>
 
 <p>Amy put one of the mini-marshmallows in her ear.  She immediately
 began to hear the conversation that Frank was having with the otters.</p>
@@ -276,38 +258,32 @@ incident in human history known as &ldquo;The Great Flood&rdquo;. A junior
 Chrono-agent was trying to increase the yield of a tomato crop during
 a dry spell and was trying to do the following recursive function in his evaluator:</em></p>
 
-<p>```clojure
-(defn rain [days]
-  (when (pos? days)</p>
+<pre><code class="clojure">(defn rain [days]
+  (when (pos? days)
+    (println (str "Rain: " days))
+    (rain (dec days))))
 
-<pre><code>(println (str "Rain: " days))
-(rain (dec days))))
-</code></pre>
-
-<p>(rain 5)
+(rain 5)
 ;;Output
 ;;  Rain: 5
 ;;  Rain: 4
 ;;  Rain: 3
 ;;  Rain: 2
 ;;  Rain: 1
-```</p>
+</code></pre>
 
 <p><em>Unfortunately, he made the rookie mistake of forgetting to decrement
 the days before passing it to the recursive function.</em></p>
 
-<p><code>clojure
-(dec 5) ;=&gt; 4
-</code></p>
+<pre><code class="clojure">(dec 5) ;=&gt; 4
+</code></pre>
 
 <p><em>The result of which was severely overwatered tomatoes.</em>
 ```clojure
 (defn rain [days]
-  (when (pos? days)</p>
-
-<pre><code>(println (str "Rain: " days))
-(rain days)))
-</code></pre>
+  (when (pos? days)
+    (println (str &ldquo;Rain: &rdquo; days))
+    (rain days)))</p>
 
 <p>(rain 5)
 ;;  Rain: 5
@@ -321,22 +297,19 @@ the days before passing it to the recursive function.</em></p>
 <p><em>It is interesting to note that he could he written the same function with a
 <a href="http://clojuredocs.org/clojure_core/clojure.core/recur">recur</a> instead.</em></p>
 
-<p>```clojure
-(defn rain [days]
-  (when (pos? days)</p>
+<pre><code class="clojure">(defn rain [days]
+  (when (pos? days)
+    (println (str "Rain: " days))
+    (recur days)))
 
-<pre><code>(println (str "Rain: " days))
-(recur days)))
-</code></pre>
-
-<p>(rain 5)
+(rain 5)
 ;;Output
 ;;  Rain: 5
 ;;  Rain: 5
 ;;  Rain: 5
 ;;  Rain: 5
 ;;  Rain: 5
-```</p>
+</code></pre>
 
 <p><em>That would have had the nice effect of not consuming the stack, (which
 is fabulous for constructing those lovely fibonacci sea shells for beach
@@ -350,16 +323,14 @@ aspects of Clojure. For instance, take this vector of 2 chickens:</em></p>
 
 <p><img class="<a" src="href="http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg">http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg</a>"></p>
 
-<p><code>clojure
-[:hen :rooster]
-</code></p>
+<pre><code class="clojure">[:hen :rooster]
+</code></pre>
 
 <p><em>It can be transformed into an infinite lazy list of chickens by using
 <a href="http://clojuredocs.org/clojure_core/clojure.core/cycle">cycle</a>.</em></p>
 
-<p><code>clojure
-(cycle [:hen :rooster])
-</code></p>
+<pre><code class="clojure">(cycle [:hen :rooster])
+</code></pre>
 
 <p><em>What really set the senior Chrono-agent apart from his junior
 colleague, was that he did not put the infinite sequence in the
@@ -368,13 +339,12 @@ incident in human history, this time involving an over-abundance of poultry. Ins
 <a href="http://clojuredocs.org/clojure_contrib/clojure.contrib.str-utils2/take">take</a>
 to get the first n infinite chickens.</em></p>
 
-<p><code>clojure
-(take 5 (cycle [:hen :rooster]))
+<pre><code class="clojure">(take 5 (cycle [:hen :rooster]))
 ;;=&gt; (:hen :rooster :hen :rooster :hen)
 (take 10 (cycle [:hen :rooster]))
 ;;=&gt; (:hen :rooster :hen :rooster :hen :rooster :hen :rooster :hen
 :rooster)
-</code></p>
+</code></pre>
 
 <p><em>After that, the council of Chrono-agents, decided to license evaluator
 use. Low-level recursion requires the 2nd highest indigo level rank.
@@ -453,16 +423,15 @@ atom simply evaluates to itself.  This is best seen is an example
 where the following expressions are evaluated in the Clojure
 <a href="http://tryclj.com/">REPL</a></em></p>
 
-<p>```clojure
-&ldquo;hi&rdquo; ;;=> &ldquo;hi&rdquo;
-1 ;;=> 1
-true ;;=> true
-nil ;;=> nil
-````</p>
+<pre><code class="clojure">"hi" ;;=&gt; "hi"
+1 ;;=&gt; 1
+true ;;=&gt; true
+nil ;;=&gt; nil
+</code></pre>
 
 <p><em>Which leads to the very practical tip of what to do if you find a nil
 in your pistachio.  The answer, of course, is to be thankful that you
-have a value that represents the absence of a value &ndash; and to get
+have a value that represents the absence of a value - and to get
 another pistachio.</em></p>
 
 <p><em>In Clojure, a s-expression is written with parens.  The first element
@@ -470,47 +439,44 @@ within the parens is an operator or function and the rest of the
 elements are treated as data, some of which can be s-expression
 themselves.</em></p>
 
-<p><code>clojure
-(+ 1 2) ;;=&gt; 3
+<pre><code class="clojure">(+ 1 2) ;;=&gt; 3
 (+ 1 (+ 2 2)) ;;=&gt; 5
-</code>
-<em>Considering the pistachio again, we can think of the nut in the shell
+</code></pre>
+
+<p><em>Considering the pistachio again, we can think of the nut in the shell
 as an s-expression, (providing we also imagine an operator or function
 right in front of the nut).</em></p>
 
 <p><em>Here we define a function that will turn the nut red, by appending the
 string &ldquo;red&rdquo; to the nut-name.</em></p>
 
-<p>```clojure
-(defn red [nut]
-  (str &ldquo;red &rdquo; nut))</p>
+<pre><code class="clojure">(defn red [nut]
+  (str "red " nut))
 
-<p>(red &ldquo;nut1&rdquo;) ;;=> &ldquo;red nut1&rdquo;
-```</p>
+(red "nut1") ;;=&gt; "red nut1"
+</code></pre>
 
 <p><em>Notice that if we put a quote in front of the expression, it will no
 longer be evaluated.</em></p>
 
-<p><code>clojure
-'(red "nut1") ;;=&gt; (red "nut1")
-</code>
-<em>quoting the expression turns it into a list, which we can then
+<pre><code class="clojure">'(red "nut1") ;;=&gt; (red "nut1")
+</code></pre>
+
+<p><em>quoting the expression turns it into a list, which we can then
 manipulate with other s-expressions (code as data).</em></p>
 
-<p>```clojure
-(first &lsquo;(red &ldquo;nut1&rdquo;)) ;;=> red</p>
+<pre><code class="clojure">(first '(red "nut1")) ;;=&gt; red
 
-<p>(last &lsquo;(red &ldquo;nut1&rdquo;)) ;;=> &ldquo;nut1&rdquo;
-```</p>
+(last '(red "nut1")) ;;=&gt; "nut1"
+</code></pre>
 
 <p><em>If we try to evaluate the s-expression with just the nut name in the
 parens, we get an error because there is no function in
 the first slot.</em></p>
 
-<p><code>clojure
-("nut1")
+<pre><code class="clojure">("nut1")
 ;;=&gt; ClassCastException java.lang.String cannot be cast to clojure.lang.IFn
-</code></p>
+</code></pre>
 
 <p><em>The whole thing of having to have a function in front of the nut in
 the pistachio has invited much heated debate on the suitability of

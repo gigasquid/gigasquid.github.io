@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-03-20T21:00:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu 20 Mar 2014,  9:00 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -170,7 +168,7 @@ that uses the paired XBee from the handheld commander.</p>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">clj-hexapod.core</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">clj-hexapod.core</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">require</span> <span class="p">[</span><span class="nv">serial-port</span> <span class="ss">:as</span> <span class="nv">serial</span><span class="p">]))</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">;; Use this command to see what port your serial port</span>
@@ -202,7 +200,7 @@ that uses the paired XBee from the handheld commander.</p>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">checksum</span> <span class="p">[</span><span class="nv">v</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">checksum</span> <span class="p">[</span><span class="nv">v</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">mod</span> <span class="p">(</span><span class="nb">- </span><span class="mi">255</span> <span class="p">(</span><span class="nb">reduce + </span><span class="nv">v</span><span class="p">))</span> <span class="mi">256</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">vec-&gt;bytes</span> <span class="p">[</span><span class="nv">v</span><span class="p">]</span>
@@ -238,7 +236,7 @@ that uses the paired XBee from the handheld commander.</p>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;values between 129-254</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;values between 129-254</span>
 </span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nb">up </span><span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
 </span><span class='line'>  <span class="s">&quot;joystick up for speed between 1-100&quot;</span>
 </span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">good-range?</span> <span class="nv">speed</span><span class="p">)</span>
@@ -287,7 +285,7 @@ that uses the paired XBee from the handheld commander.</p>
 <span class='line-number'>29</span>
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-forward</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">walk-forward</span> <span class="p">[</span><span class="nv">speed</span><span class="p">]</span>
 </span><span class='line'>  <span class="s">&quot;walk forward speed between 1-100&quot;</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">send </span><span class="p">(</span><span class="nf">build-packet</span> <span class="nv">CENTER</span> <span class="nv">CENTER</span> <span class="p">(</span><span class="nb">up </span><span class="nv">speed</span><span class="p">)</span> <span class="nv">CENTER</span> <span class="mi">0</span><span class="p">)))</span>
 </span><span class='line'>
@@ -334,7 +332,7 @@ that uses the paired XBee from the handheld commander.</p>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">walk-forward</span> <span class="mi">20</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">walk-forward</span> <span class="mi">20</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">walk-backwards</span> <span class="mi">10</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">walk-right</span> <span class="mi">10</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">walk-left</span> <span class="mi">10</span><span class="p">)</span>
@@ -376,8 +374,6 @@ that uses the paired XBee from the handheld commander.</p>
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -437,8 +433,6 @@ that uses the paired XBee from the handheld commander.</p>
 
 -->
           
-
-
 
 
 
@@ -509,7 +503,7 @@ that uses the paired XBee from the handheld commander.</p>
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

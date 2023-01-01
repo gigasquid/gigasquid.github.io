@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AI | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/ai/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,306 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Vector Symbolic Architectures in Clojure]]></title>
+    <link href="http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/"/>
+    <updated>2022-12-31T15:41:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure</id>
+    <content type="html"><![CDATA[<p><img src="https://live.staticflickr.com/65535/52596142860_c4cf8642b0_z.jpg" alt="" /></p>
+
+<p><em>generated with Stable Diffusion</em></p>
+
+<p>Before diving into the details of what Vector Symbolic Architectures are and what it means to implement Clojure data structures in them, I&rsquo;d like to start with some of my motivation in this space.</p>
+
+<h2>Small AI for More Personal Enjoyment</h2>
+
+<p>Over the last few years, I&rsquo;ve spent time learning, exploring, and contributing to open source deep learning. It continues to amaze me with its rapid movement and achievements at scale. However, the scale is really too big and too slow for me to enjoy it anymore.</p>
+
+<p>Between work and family, I don&rsquo;t have a lot of free time. When I do get a few precious hours to do some coding <em>just for me</em>, I want it it to be small enough for me to fire up and play with it in a REPL on my local laptop and get a result back in under two minutes.</p>
+
+<p>I also believe that the current state of AI is not likely to produce any more  meaningful <em>revolutionary</em> innovations in the current mainstream deep learning space. This is not to say that there won&rsquo;t be advances. Just as commercial airlines transformed the original first flight, I&rsquo;m sure we are going to continue to see the transformation of society with current big models at scale - I just think the next leap forward is going to come from somewhere else. And that somewhere else is going to be <em>small</em> AI.</p>
+
+<h2>Vector Symbolic Architures aka Hyperdimensional Computing</h2>
+
+<p>Although I&rsquo;m  talking about small AI,  VSA or Hyperdimensional computing is based on really big vectors - like 1,000,000 dimensions. The beauty and simplicity in it is that everything is a hypervector - symbols, maps, lists. Through the <a href="http://rctn.org/vs265/kanerva09-hyperdimensional.pdf">blessing of high dimensionality</a>, any random hypervector is mathematically guaranteed to be orthogonal to any other one. This all enables some cool things:</p>
+
+<ul>
+<li>Random hypervectors can be used to represent symbols (like numbers, strings, keywords, etc..)</li>
+<li>We can use an algebra to operate on hypervectors: <em>bundling</em> and <em>binding</em> operations create new hypervectors that are compositions of each other and can store and retrieve key value pairs. These operations furthermore are <em>fuzzy</em> due to the nature of working with vectors. In the following code examples, I will be using the concrete model of <a href="https://redwood.berkeley.edu/wp-content/uploads/2021/08/Module2_VSA_models_slides.pdf">MAP (Multiply, Add, Permute)</a> by <a href="https://www.rossgayler.com/">R. Gayler</a>.</li>
+<li>We can represent Clojure data structures such as maps and vectors in them and perform operations such as <code>get</code> with probabilistic outcomes.</li>
+<li>Everything is a hypervector! I mean you have a keyword that is a symbol that is a hypervector, then you bundle that with other keywords to be a map. The result is a single hypervector. You then create a sequence structure and add some more in. The result is a single hypervector. The simplicity in the algebra and form of the VSA is beautiful - not unlike LISP itself. Actually, <a href="https://redwood.berkeley.edu/wp-content/uploads/2021/08/Neubert2019_Article_AnIntroductionToHyperdimension.pdf">P. Kanerva thought that a LISP could be made from it</a>. In my exploration, I only got as far as making some Clojure data structures, but I&rsquo;m sure it&rsquo;s possible.</li>
+</ul>
+
+
+<h2>Start with an Intro and a Paper</h2>
+
+<p>A good place to start with Vector Symbolic Architectures is actually the paper referenced above - <a href="https://redwood.berkeley.edu/wp-content/uploads/2021/08/Neubert2019_Article_AnIntroductionToHyperdimension.pdf">An Introduction to Hyperdimensional Computing for Robots</a>. In general, I find the practice of taking a paper and then trying to implement it a great way to learn.</p>
+
+<p>To work with VSAs in Clojure, I needed a high performing Clojure library with tensors and data types. I reached for <a href="https://github.com/techascent/tech.datatype">https://github.com/techascent/tech.datatype</a>. It could handle a million dimensions pretty easily on my laptop.</p>
+
+<p>To create a new hypervector - simply chose random values between -1 and 1. This gives us a direction in space which is enough.</p>
+
+<pre><code class="clojure">;; Uses Gaylor Method for HDV Operations
+
+(def size 1e6)  ; big enough for the "Blessing of Dimensionality"
+
+(defn binary-rand
+  "Choose a random binary magnitude for the vector +1 or -1"
+  []
+  (if (&gt; (rand) 0.5) -1 1))
+
+
+(defn hdv
+  "Create a random hyperdimensional vector of default size"
+  []
+  (dtt/-&gt;tensor (repeatedly size #(binary-rand)) :datatype :int8))
+</code></pre>
+
+<p>The only main operations to create key value pairs is addition and matrix multiplication.</p>
+
+<p>Adding two hyperdimensional vectors, (hdvs), together is calling bundling. Note we clip the values to 1 or -1. At high dimensions, only the direction really matters not the magnitude.</p>
+
+<pre><code>(defn clip
+  "Clips the hyperdimensional vector magnitude to 1 or -1.
+   We can discard these because of the nature of the large vectors
+   that the mangitudes do not matter"
+  [v]
+  (-&gt; v
+      (dtype-fn/min 1)
+      (dtype-fn/max -1)))
+
+
+(defn bundle
+  "Adds two hyperdimensional vectors together into a single bundle"
+  [v1 v2]
+  (-&gt; (bundle-op v1 v2)
+      (clip)))
+</code></pre>
+
+<p>We can assign key values using <code>bind</code> which is matrix multiplication.</p>
+
+<pre><code class="clojure">(defn bind
+  "Binds two HDVs using the multiplication operator. This binding is akin to assigning a symbol to a value. "
+  [v1 v2]
+  (dtype-fn/* v1 v2))
+</code></pre>
+
+<p>One cool thing is that the binding of a key value pair is also the inverse of itself. So to unbind is just to bind again.</p>
+
+<p>The final thing we need is a cleanup memory. The purpose of this is to store the hdv somewhere without any noise. As the hdv gets bundled with other operations there is noise associated with it. It helps to use the cleaned up version by comparing the result to the memory version for future operations. For Clojure, this can be a simple atom.</p>
+
+<p>Following along the example in the paper, we reset the cleanup memory and add some symbols.</p>
+
+<pre><code class="clojure">(vb/reset-hdv-mem!)
+
+(vb/add-hdv! :name)
+(vb/add-hdv! "Alice")
+(vb/add-hdv! :yob)
+(vb/add-hdv! 1980)
+(vb/add-hdv! :high-score)
+(vb/add-hdv! 1000)
+</code></pre>
+
+<p>Next we create the key value map with combinations of <code>bind</code> and <code>bundle</code>.</p>
+
+<pre><code class="clojure">(def H
+  (-&gt; (vb/bind (vb/get-hdv :name) (vb/get-hdv "Alice"))
+      (vb/bundle
+        (vb/bind (vb/get-hdv :yob) (vb/get-hdv 1980)))
+      (vb/bundle
+        (vb/bind (vb/get-hdv :high-score) (vb/get-hdv 1000)))))
+</code></pre>
+
+<p>So <code>H</code> is just one hypervector as a result of this. We can then query it. <code>unbind-get</code> is using the <code>bind</code> operation as inverse. So if we want to query for the <code>:name</code> value, we get the <code>:name</code> hdv from memory and do the <code>bind</code> operation on the <code>H</code> data structure which is the inverse.</p>
+
+<pre><code class="clojure">(vb/unbind-get H :name)
+
+
+;; ["Alice" #tech.v3.tensor&lt;int8&gt;[1000000]
+;;  [-1 1 1 ... 1 -1 -1]]
+</code></pre>
+
+<p>We can find other values like <code>:high-score</code>.</p>
+
+<pre><code class="clojure">(vb/unbind-get H :high-score)
+
+
+;;  [1000 #tech.v3.tensor&lt;int8&gt;[1000000]
+;; [-1 -1 1 ... -1 1 1]]
+</code></pre>
+
+<p>Or go the other way and look for <code>Alice</code>.</p>
+
+<pre><code class="clojure">(vb/unbind-get H "Alice")
+
+
+;; [:name #tech.v3.tensor&lt;int8&gt;[1000000]
+;; [-1 1 -1 ... -1 -1 -1]]
+</code></pre>
+
+<p>Now that we have the fundamentals from the paper, we can try to implement some Clojure data structures.</p>
+
+<h2>Clojure Data Structures in VSAs</h2>
+
+<p>First things first, let&rsquo;s clear our cleanup memory.</p>
+
+<pre><code class="clojure">(vb/reset-hdv-mem!)
+</code></pre>
+
+<p>Let&rsquo;s start off with a map, (keeping to non-nested versions to keep things simple).</p>
+
+<pre><code class="clojure">(def our-first-vsa-map (vd/clj-&gt;vsa {:x 1 :y 2}))
+</code></pre>
+
+<p>The result is a 1,000,000 dimension hypervector - but remember all the parts are also hypervectors as well. Let&rsquo;s take a look at what is in the cleanup memory so far.</p>
+
+<pre><code class="clojure">
+@vb/cleanup-mem
+
+
+;; {:x #tech.v3.tensor&lt;int8&gt;[1000000][1 -1 1 ... 1 -1 -1],
+;;  1 #tech.v3.tensor&lt;int8&gt;[1000000][1 1 -1 ... -1 -1 -1],
+;;  :y #tech.v3.tensor&lt;int8&gt;[1000000][1 1 -1 ... 1 1 1],
+;;  2 #tech.v3.tensor&lt;int8&gt;[1000000][-1 -1 -1 ... -1 -1 1]}
+</code></pre>
+
+<p>We can write a <code>vsa-get</code> function that takes the composite hypervector of the map and get the value from it by finding the closest match with cosine similarity to the cleanup memory.</p>
+
+<pre><code class="clojure">(vd/vsa-get our-first-vsa-map :x)
+
+
+;; =&gt;  [1 #tech.v3.tensor&lt;int8&gt;[1000000][1 1 -1 ... -1 -1 -1]
+</code></pre>
+
+<p>In the example above, the symbolic value is the first item in the vector, in this case the number 1, and the actual hypervector is the second value.</p>
+
+<p>We can add onto the map with a new key value pair.</p>
+
+<pre><code class="clojure">(def our-second-vsa-map (vd/vsa-assoc our-first-vsa-map :z 3))
+
+(vd/vsa-get our-second-vsa-map :z)
+
+
+;; =&gt;  [3 #tech.v3.tensor&lt;int8&gt;[1000000][1 -1 1 ... -1 -1 1]]
+</code></pre>
+
+<p>We can represent Clojure vectors as VSA data structures as well by using the permute (or rotate) and adding them like a stack.</p>
+
+<pre><code class="clojure">(def our-first-vsa-vector-of-maps (vd/clj-&gt;vsa [{:x 1} {:x 2 :y 3}]))
+
+
+;; We can get the value of x in the 2nd map by
+(vd/vsa-get our-first-vsa-vector-of-maps :x {:idx 1})
+
+
+;; [2 #tech.v3.tensor&lt;int8&gt;[1000000][-1 1 1 ... 1 -1 1]]
+
+;; Or the first map
+(vd/vsa-get our-first-vsa-vector-of-maps :x {:idx 0})
+
+
+;; =&gt;  [1 #tech.v3.tensor&lt;int8&gt;[1000000][-1 -1 1 ... 1 1 1]]
+</code></pre>
+
+<p>We can also add onto the Clojure vector with a conj.</p>
+
+<pre><code class="clojure">(def our-second-vsa-vector-of-maps
+  (vd/vsa-conj our-first-vsa-vector-of-maps (vd/clj-&gt;vsa {:z 5})))
+
+
+(vd/vsa-get our-second-vsa-vector-of-maps :z {:idx 2})
+
+
+;; =&gt;  [5 #tech.v3.tensor&lt;int8&gt;[1000000][-1 1 1 ... -1 -1 -1]]
+</code></pre>
+
+<p>What is really cool about this is that we have built in fuzziness or similarity matching. For example, with this map, we have more than one possibility of matching.</p>
+
+<pre><code class="clojure">(def vsa-simple-map (vd/clj-&gt;vsa {:x 1 :y 1 :z 3}))
+</code></pre>
+
+<p>.
+We can see all the possible matches and scores</p>
+
+<pre><code class="clojure">(vd/vsa-get vsa-simple-map :x {:threshold -1 :verbose? true})
+
+
+;; =&gt;  [{1 #tech.v3.tensor&lt;int8&gt;[1000000]
+;;      [1 -1 1 ... -1 -1 -1], :dot 125165.0, :cos-sim 0.1582533568106879}  {:x #tech.v3.tensor&lt;int8&gt;[1000000]
+;;      [1 -1 -1 ... -1 -1 1], :dot 2493.0, :cos-sim 0.0031520442498225933} {:z #tech.v3.tensor&lt;int8&gt;[1000000]
+;;      [-1 -1 1 ... 1 1 -1], :dot 439.0, :cos-sim 5.550531190020531E-4}    {3 #tech.v3.tensor&lt;int8&gt;[1000000]
+;;      [-1 -1 1 ... -1 -1 1], :dot -443.0, :cos-sim -5.601105506102723E-4}  {:y #tech.v3.tensor&lt;int8&gt;[1000000]
+;;      [-1 -1 1 ... 1 1 1], :dot -751.0, :cos-sim -9.495327844431478E-4}]
+</code></pre>
+
+<p>This opens up the possibility of defining compound symbolic values and doing fuzzy matching. For example with colors.</p>
+
+<pre><code class="clojure">(vb/reset-hdv-mem!)
+
+(def primary-color-vsa-map (vd/clj-&gt;vsa {:x :red :y :yellow :z :blue}))
+</code></pre>
+
+<p>Let&rsquo;s add a new compound value to the cleanup memory that is green based on yellow and blue.</p>
+
+<pre><code class="clojure">(vb/add-hdv! :green (vb/bundle
+                      (vb/get-hdv :yellow)
+                      (vb/get-hdv :blue)))
+</code></pre>
+
+<p>Now we can query the hdv color map for things that are close to green.</p>
+
+<pre><code class="clojure">(vd/vsa-get primary-color-vsa-map :green {:threshold 0.1})
+
+
+;; =&gt;  [{:z #tech.v3.tensor&lt;int8&gt;[1000000][1 -1 1 ... -1 1 1]}
+;;     {:y #tech.v3.tensor&lt;int8&gt;[1000000] [-1 1 1 ... 1 1 1]}]
+</code></pre>
+
+<p>We can also define an <code>inspect</code> function for a hdv by comparing the similarity of all the values of the cleanup memory in it.</p>
+
+<pre><code class="clojure">(vd/vsa-inspect primary-color-vsa-map)
+
+
+;; Note that it includes green in it since it is a compound value
+;; =&gt;  #{:y :yellow :green :z :red :blue :x}
+
+(vd/vsa-inspect (vd/clj-&gt;vsa {:x :red}))
+
+
+;; =&gt;  #{:red :x}
+</code></pre>
+
+<p>Finally, we can implement clojure <code>map</code> and <code>filter</code> functions on the vector data structures that can also include fuzziness.</p>
+
+<pre><code class="clojure">(def color-vsa-vector-map (vd/clj-&gt;vsa [{:x :yellow} {:x :green} {:z :red}]))
+
+
+(vd/vsa-map #(-&gt;&gt; (vd/vsa-get % :yellow {:threshold 0.01})
+                  (mapv ffirst))
+            color-vsa-vector-map)
+
+
+;; =&gt;  ([:x] [:x] [])
+
+
+(-&gt;&gt; color-vsa-vector-map
+     (vd/vsa-filter #(vd/vsa-get % :yellow {:threshold 0.01}))
+     count)
+
+
+;; =&gt;  2
+</code></pre>
+
+<h2>Wrap Up</h2>
+
+<p>VSAs and hyperdimensional computing seem like a natural fit for LISP and Clojure. I&rsquo;ve only scratched the surface here in how the two can fit together. I hope that more people are inspired to look into it and <em>small AI with big dimensions</em>.</p>
+
+<p>Full code and examples here <a href="https://github.com/gigasquid/vsa-clj">https://github.com/gigasquid/vsa-clj</a>.</p>
+
+<p><em>Special thanks to Ross Gayler in helping me to implement VSAs and understanding their coolness.</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Breakfast With Zero-Shot NLP]]></title>
@@ -36,14 +336,14 @@
 
 <p>Now we just need to set up the libpython clojure namespace to load the Hugging Face transformers library.</p>
 
-<p>```clojure
-(ns gigasquid.zeroshot
+<pre><code class="clojure">(ns gigasquid.zeroshot
   (:require
-   [libpython-clj2.python :as py :refer [py. py.. py.&ndash;]]
-   [libpython-clj2.require :refer [require-python]]))</p>
+   [libpython-clj2.python :as py :refer [py. py.. py.-]]
+   [libpython-clj2.require :refer [require-python]]))
 
-<p>(require-python &lsquo;[transformers :bind-ns])
-```</p>
+
+(require-python '[transformers :bind-ns])
+</code></pre>
 
 <p>Setup is complete. We are now ready to classify with zeroshot.</p>
 
@@ -51,34 +351,30 @@
 
 <p>To create the classifier with zero shot, you need only create it with a handy pipeline function.</p>
 
-<p><code>clojure
-(def classifier (py. transformers "pipeline" "zero-shot-classification"))
-</code></p>
+<pre><code class="clojure">(def classifier (py. transformers "pipeline" "zero-shot-classification"))
+</code></pre>
 
 <p>After that you need just the text you want to classify and category labels you want to use.</p>
 
-<p>```clojure
-(def text &ldquo;French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired.&rdquo;)</p>
+<pre><code class="clojure">(def text "French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired.")
 
-<p>(def labels [&ldquo;breakfast&rdquo; &ldquo;lunch&rdquo; &ldquo;dinner&rdquo;])
-```</p>
+(def labels ["breakfast" "lunch" "dinner"])
+</code></pre>
 
 <p>Classification is only a function call away with:</p>
 
-<p>```clojure
-(classifier text labels)</p>
+<pre><code class="clojure">(classifier text labels)
 
-<p>{&lsquo;labels&rsquo;: [&lsquo;breakfast&rsquo;, &lsquo;lunch&rsquo;, &lsquo;dinner&rsquo;],
- &lsquo;scores&rsquo;: [0.989736795425415, 0.007010194938629866, 0.003252972150221467]}
-```</p>
+{'labels': ['breakfast', 'lunch', 'dinner'],
+ 'scores': [0.989736795425415, 0.007010194938629866, 0.003252972150221467]}
+</code></pre>
 
 <p>Breakfast is the winner. Notice that all the  probabilities add up to 1. This is because the default mode for <code>classify</code> uses <code>softmax</code>. We can change that so the categories are each considered independently with the <code>:multi-class</code> option.</p>
 
-<p><code>clojure
-(classifier text labels :multi_class true)
+<pre><code class="clojure">(classifier text labels :multi_class true)
 {'labels': ['breakfast', 'lunch', 'dinner'],
  'scores': [0.9959920048713684, 0.22608685493469238, 0.031050905585289]}
-</code></p>
+</code></pre>
 
 <p>This is a really powerful technique for such an easy to use library. However, how can we do anything with it if we don&rsquo;t understand how it is working and get a handle on how to debug it. We need some level of trust in it for utility.</p>
 
@@ -90,48 +386,45 @@
 
 <p>The creation of the explainer is only a <code>require</code> away:</p>
 
-<p>```clojure
-(require-python &lsquo;[lime.lime_text :as lime])
-(require-python 'numpy)</p>
+<pre><code class="clojure">(require-python '[lime.lime_text :as lime])
+(require-python 'numpy)
 
-<p>(def explainer (lime/LimeTextExplainer :class_names labels))
-```</p>
+
+(def explainer (lime/LimeTextExplainer :class_names labels))
+</code></pre>
 
 <p>We need to create a function that will take in some text and then return the probabilities  for the labels. Since the zeroshot classifier will reorder the returning labels/probs by the value, we need to make sure that it will match up by index to the original labels.</p>
 
-<p>```clojure
-(defn predict-probs
+<pre><code class="clojure">(defn predict-probs
   [text]
-  (let [result (classifier text labels)</p>
+  (let [result (classifier text labels)
+        result-scores (get result "scores")
+        result-labels (get result "labels")
+        result-map (zipmap result-labels result-scores)]
+    (mapv (fn [cn]
+            (get result-map cn))
+          labels)))
 
-<pre><code>    result-scores (get result "scores")
-    result-labels (get result "labels")
-    result-map (zipmap result-labels result-scores)]
-(mapv (fn [cn]
-        (get result-map cn))
-      labels)))
-</code></pre>
 
-<p>(defn predict-texts
+(defn predict-texts
   [texts]
-  (println &ldquo;lime texts are &rdquo; texts)
-  (numpy/array (mapv predict-probs texts)))</p>
+  (println "lime texts are " texts)
+  (numpy/array (mapv predict-probs texts)))
 
-<p> (predict-texts [text]) ;=>  [[0.99718672 0.00281324]]
-```</p>
+
+ (predict-texts [text]) ;=&gt;  [[0.99718672 0.00281324]]
+</code></pre>
 
 <p>Finally we make an explanation for our text here. We are only using 6 features and 100 samples, to keep the cpus down, but in real life you would want to use closer to the default amount of <code>5000</code> samples. The samples are how the explainers work, it modifies the text over and over again and sees the difference in classification values. For example, one of the sample texts for our case is <code>' Toast with   bacon in the center with  syrup on .  with  sugar  desired.'</code>.</p>
 
-<p>```clojure
-(def exp-result
-  (py. explainer &ldquo;explain_instance&rdquo; text predict-texts</p>
+<pre><code class="clojure">(def exp-result
+  (py. explainer "explain_instance" text predict-texts
+       :num_features 6
+       :num_samples 100))
 
-<pre><code>   :num_features 6
-   :num_samples 100))
+
+(py. exp-result "save_to_file" "explanation.html")
 </code></pre>
-
-<p>(py. exp-result &ldquo;save_to_file&rdquo; &ldquo;explanation.html&rdquo;)
-```</p>
 
 <p><img src="https://live.staticflickr.com/65535/51039510876_e547177bb2_h.jpg" alt="" /></p>
 
@@ -156,35 +449,29 @@
 
 <p>I had the pleasure of watching the second AI debate from Montreal.AI last night. The first AI debate occurred last year between <a href="https://yoshuabengio.org/">Yoshua Bengio</a> and <a href="https://en.wikipedia.org/wiki/Gary_Marcus">Gary Marcus</a> entitled <a href="https://montrealartificialintelligence.com/aidebate.html">“The Best Way Forward for AI”</a> in which Yoshua argued that Deep Learning could achieve General AI through its own paradigm, while Marcus argued that Deep Learning alone was not sufficient and needed a hybrid approach involving symbolics and inspiration from other disciplines.</p>
 
-<br>
-
+<p><br></p>
 
 <p>This interdisciplinary thread of Gary’s linked the two programs. The second AI debate was entitled <a href="https://montrealartificialintelligence.com/aidebate2.html">“Moving AI Forward: An Interdisciplinary Approach”</a> and reflected a broad panel that explored themes on architecture, neuroscience and psychology, and trust/ethics. The second program was not really a debate, but more of a showcase of ideas in the form of 3 minute presentations from the panelists and discussion around topics with Marcus serving as a capable moderator.</p>
 
-<br>
-
+<p><br></p>
 
 <p>The program aired Wednesday night and was 3 hours long. I watched it live with an unavoidable break in the middle to fetch dinner for my family, but the whole recording is up now on the <a href="https://montrealartificialintelligence.com/aidebate2.html">website</a>. Some of the highlights for me were thoughts around System 1 and System 2,  reinforcement learning, and the properties of evolution.</p>
 
-<br>
-
+<p><br></p>
 
 <p>There was much discussion around System 1 and System 2 in relation to AI. One of the author’s of the recently published paper <a href="https://arxiv.org/pdf/2010.06002.pdf">“Thinking Fast and Slow in AI”</a>, <a href="https://researcher.watson.ibm.com/researcher/view.php?person=ibm-Francesca.Rossi2">Francesca Rossi</a> was a panelist as well as <a href="https://en.wikipedia.org/wiki/Daniel_Kahneman">Danny Kahneman</a> the author of “Thinking Fast and Slow”. Applying the abstraction of these sysems to AI with Deep Learning being System 1 is very appealing, however as Kahneman pointed out in his talk, this abstraction is leaky at its heart as the human System 1 encompasses much more than current AI system 1, (like a model of the world). It is interesting to think of one of the differences in human System 1 and System 2 in relation to one being fast and concurrent while the other is slower and sequential and laden with attention. Why is this so? Is this a constraint and design feature that we should bring to our AI design?</p>
 
-<br>
-
+<p><br></p>
 
 <p><a href="http://www.incompleteideas.net/">Richard Sutton</a> gave a thought provoking talk on how reinforcement learning is the first fully implemented computational theory of intelligence. He pointed to <a href="https://apsc450computationalneuroscience.wordpress.com/marrs-three-levels-of-inquiry/">Marr’s three levels</a>  at which any information processing machine must be understood: hardware implementation, representation/algorithm, and finally the high level theory. That is: what is the goal of the computation? What logic can the strategy be carried out? AI has made great strides due to this computational theory. However, it is only one theory. We need more. I personally think that innovation and exploration in this area could lead to an exciting future in AI.</p>
 
-<br>
-
+<p><br></p>
 
 <p>Evolution is a fundamental force that drives humans and the world around us. <a href="https://www.cs.ucf.edu/~kstanley/">Ken Stanely</a> reminded us that while computers dominate at solving problems, humans still rule at open-ended innovation over the millenia. The underlying properties of evolution still elude our deep understanding. Studying the core nature of this powerful phenomena is a very important area of research.</p>
 
-<br>
+<p><br></p>
 
-
-<p>The last question of the evening to all the panelists was the greatest Christmas gift of all &ndash; “Where do you want AI to go?”. The diversity of the answers reflected the broad hopes shared by many that will light the way to come. I’ll paraphrase some of the ones here:</p>
+<p>The last question of the evening to all the panelists was the greatest Christmas gift of all - “Where do you want AI to go?”. The diversity of the answers reflected the broad hopes shared by many that will light the way to come. I’ll paraphrase some of the ones here:</p>
 
 <ul>
 <li>Want to understand fundamental laws and principles and use them to better the human condition.</li>
@@ -200,13 +487,11 @@
 </ul>
 
 
-<br>
-
+<p><br></p>
 
 <p>Thanks again Montreal.AI for putting together such a great program and sharing it with the community. I look forward to next year.</p>
 
-<br>
-
+<p><br></p>
 
 <p>Merry Christmas everyone!</p>
 ]]></content>
@@ -221,7 +506,7 @@
 
 <p>I wanted to revisit it for a few reasons. The first one is that the Cortex library has progressed and improved considerably over the last year. It&rsquo;s still not at version 1.0, but it my eyes, it&rsquo;s really starting to shine. The second reason is that they recently published an <a href="https://github.com/thinktopic/cortex/tree/master/examples/resnet-retrain">example</a> of using the RESNET50 model, (I&rsquo;ll explain later on), to do fine-tuning or transfer learning. The third reason, is that there is a great new plugin for leiningen the supports using <a href="https://github.com/didiercrunch/lein-jupyter">Jupyter notebooks with Clojure projects</a>. These notebooks are a great way of doing walkthroughs and tutorials.</p>
 
-<p>Putting all these things together, I felt like I was finally at a stage where I could somewhat replicate the first lesson in the <a href="https://github.com/fastai/courses/blob/master/deeplearning1/nbs/dogs_cats_redux.ipynb">Practical Deep Learning Course for Coders</a> with Cats and Dogs &ndash; although this time all in Clojure!</p>
+<p>Putting all these things together, I felt like I was finally at a stage where I could somewhat replicate the first lesson in the <a href="https://github.com/fastai/courses/blob/master/deeplearning1/nbs/dogs_cats_redux.ipynb">Practical Deep Learning Course for Coders</a> with Cats and Dogs - although this time all in Clojure!</p>
 
 <h2>Where to Start?</h2>
 
@@ -246,29 +531,22 @@
 
 <p>This is the generally the most time consuming step of most deep learning. I&rsquo;ll spare you the gritty details but we want to get all the pictures from the <code>train.zip</code> into the format</p>
 
-<p>```
--data
-  -cats-dogs-training</p>
-
-<pre><code>  -cat
-      1110.png
-      ...
-  -dog
-      12416.png
-      ...
+<pre><code>-data
+  -cats-dogs-training
+      -cat
+          1110.png
+          ...
+      -dog
+          12416.png
+          ...
+  -cats-dogs-testing
+      -cat
+          11.png
+          ...
+      -dog
+          12.png
+          ...
 </code></pre>
-
-<p>  -cats-dogs-testing</p>
-
-<pre><code>  -cat
-      11.png
-      ...
-  -dog
-      12.png
-      ...
-</code></pre>
-
-<p>```</p>
 
 <p>The image sizes must also all be resized to match the input of the RESNET50. That means they all have to be 224x224.</p>
 
@@ -284,10 +562,9 @@
 
 <p>Training one epoch took me approximately 6 minutes. Not bad, especially considering that&rsquo;s all the training I really needed to do.</p>
 
-<p><code>
-Loss for epoch 1: (current) 0.05875186542016347 (best) null
+<pre><code>Loss for epoch 1: (current) 0.05875186542016347 (best) null
 Saving network to trained-network.nippy
-</code></p>
+</code></pre>
 
 <p>The key point is that it saved the fine tuned network to trained-network.nippy</p>
 
@@ -350,54 +627,38 @@ Saving network to trained-network.nippy
 
 <p>To use the example&rsquo;s <em>forever</em> training, we need to get the data in the right form. We need all the images to be the same size as well as in a directory structure that is split up into the training and test images. Furthermore, we want all the dog images to be under a &ldquo;dog&rdquo; directory and the cat images under the &ldquo;cat&rdquo; directory so that the all the indexed images under them have the correct &ldquo;label&rdquo;.  It will look like this:</p>
 
-<p>```
-&ndash; training
-  &ndash; cat</p>
-
-<pre><code>- 1.png
-- 2.png
+<pre><code>- training
+  - cat
+    - 1.png
+    - 2.png
+  - dog
+    - 1.png
+    - 2.png
 </code></pre>
-
-<ul>
-<li>dog
-
-<ul>
-<li>1.png</li>
-<li>2.png
-```</li>
-</ul>
-</li>
-</ul>
-
 
 <p>For this task, we are going to use a couple image libraries to help us out:</p>
 
-<p><code>clojure
- [mikera.image.core :as imagez]
+<pre><code class="clojure"> [mikera.image.core :as imagez]
  [think.image.image :as image]
-</code></p>
+</code></pre>
 
 <p>We can resize and rewrite the original images into the form we want. For a image size, we&rsquo;re going to go with 52x52. The choice is arbitrary in that I wanted it bigger than the MNIST dataset which is 28x28 so it will be easier to see, but not so big that it kills my CPU. This is even more important since we want to use RGB colors which is 3 channels as opposed to the MNIST grey scale of 1.</p>
 
-<p>```clojure
-(def dataset-image-size 52)
+<pre><code class="clojure">(def dataset-image-size 52)
 (def dataset-num-classes 2)
 (def dataset-num-channels 3)
-(def dataset-datatype :float)</p>
+(def dataset-datatype :float)
 
-<p>(defn resize-and-write-data
+(defn resize-and-write-data
   [output-dir [idx [file label]]]
-  (let [img-path (str output-dir &ldquo;/&rdquo; label &ldquo;/&rdquo; idx &ldquo;.png&rdquo; )]</p>
-
-<pre><code>(when-not (.exists (io/file img-path))
-  (io/make-parents img-path)
-  (-&gt; (imagez/load-image file)
-      (image/resize dataset-image-size dataset-image-size)
-      (imagez/save img-path)))
-nil))
+  (let [img-path (str output-dir "/" label "/" idx ".png" )]
+    (when-not (.exists (io/file img-path))
+      (io/make-parents img-path)
+      (-&gt; (imagez/load-image file)
+          (image/resize dataset-image-size dataset-image-size)
+          (imagez/save img-path)))
+    nil))
 </code></pre>
-
-<p>```</p>
 
 <p>As far as the split between training images and testing images, we are going the go for an simple even split between testing and training data.</p>
 
@@ -405,8 +666,7 @@ nil))
 
 <p>The Network layer configuration is the meat of the whole thing. We are going to go with the exact same network description as the MNIST example:</p>
 
-<p><code>clojure
-(defn create-basic-network-description
+<pre><code class="clojure">(defn create-basic-network-description
   []
   [(desc/input dataset-image-size dataset-image-size dataset-num-channels)
    (desc/convolutional 5 0 1 20)
@@ -420,27 +680,24 @@ nil))
    (desc/linear-&gt;relu 1000)
    (desc/dropout 0.5)
    (desc/linear-&gt;softmax dataset-num-classes)])
-</code></p>
+</code></pre>
 
 <p>It uses a series of convolutional layers with max pooling for feature recognition. We&rsquo;ll see if it works for color versions of cats and dogs as well as street numbers.</p>
 
 <p>We&rsquo;ll also keep the image augmentation the same as in the example.</p>
 
-<p>```clojure
-(def max-image-rotation-degrees 25)</p>
+<pre><code class="clojure">(def max-image-rotation-degrees 25)
 
-<p>(defn img-aug-pipeline
+(defn img-aug-pipeline
   [img]
-  (&ndash;> img</p>
+  (-&gt; img
+      (image-aug/rotate (- (rand-int (* 2 max-image-rotation-degrees))
+                           max-image-rotation-degrees)
+                        false)
+      (image-aug/inject-noise (* 0.25 (rand)))))
 
-<pre><code>  (image-aug/rotate (- (rand-int (* 2 max-image-rotation-degrees))
-                       max-image-rotation-degrees)
-                    false)
-  (image-aug/inject-noise (* 0.25 (rand)))))
+(def ^:dynamic *num-augmented-images-per-file* 1)
 </code></pre>
-
-<p>(def ^:dynamic <em>num-augmented-images-per-file</em> 1)
-```</p>
 
 <p>It injects one augmented image into our training data by slightly rotating it and adding noise.</p>
 
@@ -448,19 +705,15 @@ nil))
 
 <p>It&rsquo;s time to test it out. Using <code>lein run</code>, we&rsquo;ll launch the <code>train-forever</code> function:</p>
 
-<p>```clojure
-(defn train-forever
+<pre><code class="clojure">(defn train-forever
   []
-  (let [dataset (create-dataset)</p>
-
-<pre><code>    initial-description (create-basic-network-description)
-    confusion-matrix-atom (display-dataset-and-model dataset initial-description)]
-(classification/train-forever dataset observation-&gt;image
-                              initial-description
-                              :confusion-matrix-atom confusion-matrix-atom)))
+  (let [dataset (create-dataset)
+        initial-description (create-basic-network-description)
+        confusion-matrix-atom (display-dataset-and-model dataset initial-description)]
+    (classification/train-forever dataset observation-&gt;image
+                                  initial-description
+                                  :confusion-matrix-atom confusion-matrix-atom)))
 </code></pre>
-
-<p>```</p>
 
 <p>This opens a port to a localhost webpage where we can view the progress <code>http://localhost:8091/</code></p>
 
@@ -482,28 +735,24 @@ nil))
 
 <p>Firing up a REPL we can connect to our namespace and use the <code>label-one</code> function from the cortex example to spot check our classification. It reads in the external nippy file that contains the trained network description, takes a random image from the testing directory, and classifies it.</p>
 
-<p>```clojure
-(defn label-one
-  &ldquo;Take an arbitrary image and label it.&rdquo;
+<pre><code class="clojure">(defn label-one
+  "Take an arbitrary image and label it."
   []
-  (let [file-label-pairs (shuffle (classification/directory->file-label-seq testing-dir</p>
-
-<pre><code>                                                                        false))
-    [test-file test-label] (first file-label-pairs)
-    test-img (imagez/load-image test-file)
-    observation (png-&gt;observation dataset-datatype false test-img)]
-(imagez/show test-img)
-(infer/classify-one-observation (:network-description
-                                 (suite-io/read-nippy-file "trained-network.nippy"))
-                                observation
-                                (ds/create-image-shape dataset-num-channels
-                                                       dataset-image-size
-                                                       dataset-image-size)
-                                dataset-datatype
-                                (classification/get-class-names-from-directory testing-dir))))
+  (let [file-label-pairs (shuffle (classification/directory-&gt;file-label-seq testing-dir
+                                                                            false))
+        [test-file test-label] (first file-label-pairs)
+        test-img (imagez/load-image test-file)
+        observation (png-&gt;observation dataset-datatype false test-img)]
+    (imagez/show test-img)
+    (infer/classify-one-observation (:network-description
+                                     (suite-io/read-nippy-file "trained-network.nippy"))
+                                    observation
+                                    (ds/create-image-shape dataset-num-channels
+                                                           dataset-image-size
+                                                           dataset-image-size)
+                                    dataset-datatype
+                                    (classification/get-class-names-from-directory testing-dir))))
 </code></pre>
-
-<p>```</p>
 
 <p>Running <code>(label-one)</code> gives us the picture:</p>
 
@@ -511,19 +760,17 @@ nil))
 
 <p>and classifies it as a cat. Yipee!</p>
 
-<p><code>clojure
-{:probability-map {"cat" 0.9995587468147278, "dog" 4.4119369704276323E-4}, :classification "cat"}
-</code></p>
+<pre><code class="clojure">{:probability-map {"cat" 0.9995587468147278, "dog" 4.4119369704276323E-4}, :classification "cat"}
+</code></pre>
 
 <p>Not bad, but let&rsquo;s try it with something harder. Personally, I&rsquo;m not even sure whether this is a cat or a dog.</p>
 
 <p><img class="<a" src="href="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg">http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg</a>"></p>
 
-<p>Feeding it through the program &ndash; it says it is a cat.</p>
+<p>Feeding it through the program - it says it is a cat.</p>
 
-<p><code>clojure
- {:probability-map {"cat" 0.9942012429237366, "dog" 0.005798777565360069}, :classification "cat"}
-</code></p>
+<pre><code class="clojure"> {:probability-map {"cat" 0.9942012429237366, "dog" 0.005798777565360069}, :classification "cat"}
+</code></pre>
 
 <p>After much <a href="http://www.today.com/pets/cat-or-dog-wild-eyed-cutie-has-us-all-confused-t104835">debate on the internet</a>, I think that is the best answer the humans got too :)</p>
 
@@ -533,32 +780,24 @@ nil))
 
 <p>We will take each image and resize it, then feed it into cortex&rsquo;s <code>infer-n-observations</code> function, to do all our classification as a batch.</p>
 
-<p>```clojure
- (infer/infer-n-observations (:network-description</p>
-
-<pre><code>                                         (suite-io/read-nippy-file "trained-network.nippy"))
-                                        observations
-                                        (ds/create-image-shape dataset-num-channels
-                                                               dataset-image-size
-                                                               dataset-image-size)
-                                        dataset-datatype)
+<pre><code class="clojure"> (infer/infer-n-observations (:network-description
+                                             (suite-io/read-nippy-file "trained-network.nippy"))
+                                            observations
+                                            (ds/create-image-shape dataset-num-channels
+                                                                   dataset-image-size
+                                                                   dataset-image-size)
+                                            dataset-datatype)
 </code></pre>
-
-<p>```</p>
 
 <p>Finally, we just need to format our results to a csv file and export it:</p>
 
-<p>```clojure
-(defn write-kaggle-results [results]
-  (with-open [out-file (io/writer &ldquo;kaggle-results.csv&rdquo;)]</p>
-
-<pre><code>(csv/write-csv out-file
-               (into [["id" "label"]]
-                     (-&gt; (mapv (fn [[id class]] [(Integer/parseInt id) (if (= "dog" class) 1 0)]) results)
-                         (sort))))))
+<pre><code class="clojure">(defn write-kaggle-results [results]
+  (with-open [out-file (io/writer "kaggle-results.csv")]
+    (csv/write-csv out-file
+                   (into [["id" "label"]]
+                         (-&gt; (mapv (fn [[id class]] [(Integer/parseInt id) (if (= "dog" class) 1 0)]) results)
+                             (sort))))))
 </code></pre>
-
-<p>```</p>
 
 <p>After uploading the file to the Kaggle, I was pleased that the answer got in the top 91%! It made it on the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/leaderboard">Leaderboard</a>.</p>
 

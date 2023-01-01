@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-02-08T21:20:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat  8 Feb 2014,  9:20 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -175,7 +173,7 @@ a dry spell and was trying to do the following recursive function in his evaluat
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">rain</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">days</span><span class="p">))))</span>
@@ -194,7 +192,7 @@ a dry spell and was trying to do the following recursive function in his evaluat
 the days before passing it to the recursive function.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">dec </span><span class="mi">5</span><span class="p">)</span> <span class="c1">;=&gt; 4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">dec </span><span class="mi">5</span><span class="p">)</span> <span class="c1">;=&gt; 4</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -212,7 +210,7 @@ the days before passing it to the recursive function.</em></p>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">rain</span> <span class="nv">days</span><span class="p">)))</span>
@@ -242,7 +240,7 @@ the days before passing it to the recursive function.</em></p>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">rain</span> <span class="p">[</span><span class="nv">days</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">days</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Rain: &quot;</span> <span class="nv">days</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">recur</span> <span class="nv">days</span><span class="p">)))</span>
@@ -270,7 +268,7 @@ aspects of Clojure. For instance, take this vector of 2 chickens:</em></p>
 <p><img src="http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg"></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -278,7 +276,7 @@ aspects of Clojure. For instance, take this vector of 2 chickens:</em></p>
 <a href="http://clojuredocs.org/clojure_core/clojure.core/cycle">cycle</a>.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -294,7 +292,7 @@ to get the first n infinite chickens.</em></p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">5</span> <span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">take </span><span class="mi">5</span> <span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]))</span>
 </span><span class='line'><span class="c1">;;=&gt; (:hen :rooster :hen :rooster :hen)</span>
 </span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">10</span> <span class="p">(</span><span class="nb">cycle </span><span class="p">[</span><span class="ss">:hen</span> <span class="ss">:rooster</span><span class="p">]))</span>
 </span><span class='line'><span class="c1">;;=&gt; (:hen :rooster :hen :rooster :hen :rooster :hen :rooster :hen</span>
@@ -325,8 +323,6 @@ we need to see the otters.&rdquo;</p>
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -386,8 +382,6 @@ we need to see the otters.&rdquo;</p>
 
 -->
           
-
-
 
 
 
@@ -458,7 +452,7 @@ we need to see the otters.&rdquo;</p>
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

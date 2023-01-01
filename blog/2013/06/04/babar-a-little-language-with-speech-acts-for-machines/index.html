@@ -111,9 +111,7 @@
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-06-04T14:57:52-04:00"  data-updated="true" itemprop="datePublished dateCreated">Tue  4 Jun 2013,  2:57 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-06-04T18:57:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">Tue  4 Jun 2013,  6:57 PM</time>
         
       </p>
     
@@ -138,7 +136,7 @@
 
 <h2>Hello Babar</h2>
 
-<p>Babar is an experimental language that uses these Speech Acts to communicate. It also combines one of the other ideas of McCarthy, that is of beliefs and goals. The ultimate aim in the language is discover ways of thinking about computers and communicating with them based on the way that we communicate with each other. The state of a computer at any given point in time can be very complex and hard to understand. If we ascribe this state to be a &ldquo;belief&rdquo;, it becomes easier to understand and thus easier to program. The Babar REPL has internal commitments and internal beliefs. The goal of the Babar REPL is to keep all of its commitments. Speech acts are used to &ldquo;convince&rdquo; Babar of beliefs and to make &ldquo;requests&rdquo; that form commitments. The Babar REPL continually checks to see if it needs to fulfill a commitments. It fulfills them based on its beliefs. As an optional configuration, the REPL will speak aloud its beliefs as the become true &ndash; or as it &ldquo;holds&rdquo; the belief.</p>
+<p>Babar is an experimental language that uses these Speech Acts to communicate. It also combines one of the other ideas of McCarthy, that is of beliefs and goals. The ultimate aim in the language is discover ways of thinking about computers and communicating with them based on the way that we communicate with each other. The state of a computer at any given point in time can be very complex and hard to understand. If we ascribe this state to be a &ldquo;belief&rdquo;, it becomes easier to understand and thus easier to program. The Babar REPL has internal commitments and internal beliefs. The goal of the Babar REPL is to keep all of its commitments. Speech acts are used to &ldquo;convince&rdquo; Babar of beliefs and to make &ldquo;requests&rdquo; that form commitments. The Babar REPL continually checks to see if it needs to fulfill a commitments. It fulfills them based on its beliefs. As an optional configuration, the REPL will speak aloud its beliefs as the become true - or as it &ldquo;holds&rdquo; the belief.</p>
 
 <h2>Syntax and Basics</h2>
 
@@ -159,7 +157,7 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>
 </span><span class='line'>    <span class="mi">1</span>     <span class="c1">;=&gt; 1</span>
 </span><span class='line'>    <span class="mf">2.3</span>   <span class="c1">;=&gt; 2.3</span>
 </span><span class='line'>    <span class="mf">-3.4</span>  <span class="c1">;=&gt; 3.4</span>
@@ -180,7 +178,7 @@
 <p>Vectors are a bit interesting in the respect that you don&rsquo;t need to input the square brackets. If you just put in space delimited items, it will automatically construct a vector for you.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="c1">;=&gt; [1 2 3 4]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="c1">;=&gt; [1 2 3 4]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -196,7 +194,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="mi">1</span> <span class="c1">;=&gt; fn</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="mi">1</span> <span class="c1">;=&gt; fn</span>
 </span><span class='line'><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">;=&gt; fn</span>
 </span><span class='line'><span class="p">((</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">;=&gt; 4</span>
 </span><span class='line'><span class="p">((</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">]</span> <span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">)</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">;=&gt; 6</span>
@@ -209,7 +207,7 @@
 
 <p>`</p>
 
-<p>To see the complete documentation &ndash; please visit the <a href="https://github.com/gigasquid/babar">Github repo</a>.</p>
+<p>To see the complete documentation - please visit the <a href="https://github.com/gigasquid/babar">Github repo</a>.</p>
 
 <h2>Show Me Babar Speech Acts</h2>
 
@@ -223,7 +221,7 @@ This one speaks its beliefs and has assertions, a request, and queries.</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">speak-config</span> <span class="nv">true.</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">speak-config</span> <span class="nv">true.</span>
 </span><span class='line'><span class="nb">assert </span><span class="nv">sunny</span> <span class="nv">false.</span>
 </span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">nice-day</span> <span class="s">&quot;It is a nice day.&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">= </span><span class="nv">sunny</span> <span class="nv">true.</span>
 </span><span class='line'><span class="nv">request</span> <span class="nv">*open-window</span> <span class="nb">when </span><span class="o">#</span><span class="nv">nice-day</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">println </span><span class="s">&quot;Opened the window&quot;</span><span class="nv">.</span>
@@ -253,10 +251,10 @@ This one speaks its beliefs and has assertions, a request, and queries.</p>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">speak-config</span> <span class="nv">true.</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">speak-config</span> <span class="nv">true.</span>
 </span><span class='line'>
 </span><span class='line'><span class="nb">assert </span><span class="nv">counter</span> <span class="nv">atom</span> <span class="mi">1</span><span class="nv">.</span>
-</span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">done</span> <span class="s">&quot;I am done counting&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">&gt; </span><span class="err">@</span><span class="nv">counter</span> <span class="mi">3</span><span class="nv">.</span>
+</span><span class='line'><span class="nv">convince</span> <span class="o">#</span><span class="nv">done</span> <span class="s">&quot;I am done counting&quot;</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">&gt; </span><span class="o">@</span><span class="nv">counter</span> <span class="mi">3</span><span class="nv">.</span>
 </span><span class='line'><span class="nv">request</span> <span class="nv">*count-up</span> <span class="nv">until</span> <span class="o">#</span><span class="nv">done</span> <span class="k">fn </span><span class="p">[]</span> <span class="nv">swap!</span> <span class="nv">counter</span> <span class="nv">inc.</span>
 </span><span class='line'><span class="nv">sleep</span> <span class="mi">25</span><span class="nv">.</span>
 </span><span class='line'><span class="nv">query</span> <span class="nv">request-value</span> <span class="nv">*count-up?</span>
@@ -285,7 +283,7 @@ This one speaks its beliefs and has assertions, a request, and queries.</p>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">speak-config</span> <span class="nv">true.</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">speak-config</span> <span class="nv">true.</span>
 </span><span class='line'><span class="nv">ask-config</span> <span class="nv">true.</span>
 </span><span class='line'>
 </span><span class='line'><span class="nv">request</span> <span class="nv">*task1</span> <span class="k">fn </span><span class="p">[]</span> <span class="nb">+ </span><span class="mi">10</span> <span class="nv">x.</span>
@@ -311,7 +309,7 @@ This one speaks its beliefs and has assertions, a request, and queries.</p>
 <h2>Autonomous AR Drone Flight with Babar REPL</h2>
 
 <p>Since the language is aimed at communincating with machines. It is only natural that I use it to talk to the AR Drone.
-Here is a program that has the drone take off, get to a cruising altitude, and land &ndash; all using speech acts (and the <a href="https://github.com/gigasquid/clj-drone">clj-drone library</a>).</p>
+Here is a program that has the drone take off, get to a cruising altitude, and land - all using speech acts (and the <a href="https://github.com/gigasquid/clj-drone">clj-drone library</a>).</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -336,12 +334,12 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">speak-config</span> <span class="nv">true.</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">speak-config</span> <span class="nv">true.</span>
 </span><span class='line'>
 </span><span class='line'><span class="nb">import </span><span class="s">&quot;clj-drone.core&quot;</span><span class="nv">.</span>
 </span><span class='line'><span class="nb">import </span><span class="s">&quot;clj-drone.navdata&quot;</span><span class="nv">.</span>
 </span><span class='line'>
-</span><span class='line'><span class="nb">assert </span><span class="nv">get-navdata</span> <span class="p">[</span><span class="nv">key</span><span class="p">]</span> <span class="nb">get </span><span class="err">@</span><span class="nv">nav-data</span> <span class="nv">key.</span>
+</span><span class='line'><span class="nb">assert </span><span class="nv">get-navdata</span> <span class="p">[</span><span class="nv">key</span><span class="p">]</span> <span class="nb">get </span><span class="o">@</span><span class="nv">nav-data</span> <span class="nv">key.</span>
 </span><span class='line'><span class="nb">assert </span><span class="nv">navdata-equal</span> <span class="p">[</span><span class="nb">key </span><span class="nv">val</span><span class="p">]</span> <span class="nb">= </span><span class="p">(</span><span class="nf">get-navdata</span> <span class="nv">key</span><span class="p">)</span> <span class="nv">val.</span>
 </span><span class='line'><span class="nb">assert </span><span class="nv">navdata-gt</span> <span class="p">[</span><span class="nb">key </span><span class="nv">val</span><span class="p">]</span> <span class="nb">&gt; </span><span class="p">(</span><span class="nf">get-navdata</span> <span class="nv">key</span><span class="p">)</span> <span class="nv">val.</span>
 </span><span class='line'><span class="nb">assert </span><span class="nv">init-drone</span> <span class="p">[]</span> <span class="p">(</span><span class="nf">drone-initialize</span><span class="p">)</span><span class="nv">.</span>
@@ -382,8 +380,6 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -453,9 +449,7 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
 
 
 
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-06-04T14:57:52-04:00"  data-updated="true" itemprop="datePublished dateCreated">Tue  4 Jun 2013,  2:57 PM</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-06-04T18:57:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">Tue  4 Jun 2013,  6:57 PM</time>
           <br>
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
@@ -472,7 +466,7 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
             
             
               
-                <a href="/blog/2013/05/01/growing-a-language-with-clojure-and-instaparse/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Growing a Language with Clojure and Instaparse"> 
+                <a href="/blog/2013/05/02/growing-a-language-with-clojure-and-instaparse/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Growing a Language with Clojure and Instaparse"> 
                   <div class="text-muted">
                     <small>Previous Post</small>
                   </div>
@@ -509,7 +503,7 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

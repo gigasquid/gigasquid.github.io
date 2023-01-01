@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-02-01T19:33:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat  1 Feb 2014,  7:33 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -185,7 +183,7 @@ where the following expressions are evaluated in the Clojure
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="s">&quot;hi&quot;</span> <span class="c1">;;=&gt; &quot;hi&quot;</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="s">&quot;hi&quot;</span> <span class="c1">;;=&gt; &quot;hi&quot;</span>
 </span><span class='line'><span class="mi">1</span> <span class="c1">;;=&gt; 1</span>
 </span><span class='line'><span class="nv">true</span> <span class="c1">;;=&gt; true</span>
 </span><span class='line'><span class="nv">nil</span> <span class="c1">;;=&gt; nil</span>
@@ -196,7 +194,7 @@ where the following expressions are evaluated in the Clojure
 
 <p><em>Which leads to the very practical tip of what to do if you find a nil
 in your pistachio.  The answer, of course, is to be thankful that you
-have a value that represents the absence of a value &ndash; and to get
+have a value that represents the absence of a value - and to get
 another pistachio.</em></p>
 
 <p><em>In Clojure, a s-expression is written with parens.  The first element
@@ -206,7 +204,7 @@ themselves.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">;;=&gt; 3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">;;=&gt; 3</span>
 </span><span class='line'><span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="p">(</span><span class="nb">+ </span><span class="mi">2</span> <span class="mi">2</span><span class="p">))</span> <span class="c1">;;=&gt; 5</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -222,7 +220,7 @@ string &ldquo;red&rdquo; to the nut-name.</em></p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">red</span> <span class="p">[</span><span class="nv">nut</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">red</span> <span class="p">[</span><span class="nv">nut</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">str </span><span class="s">&quot;red &quot;</span> <span class="nv">nut</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">)</span> <span class="c1">;;=&gt; &quot;red nut1&quot;</span>
@@ -233,7 +231,7 @@ string &ldquo;red&rdquo; to the nut-name.</em></p>
 longer be evaluated.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">)</span> <span class="c1">;;=&gt; (red &quot;nut1&quot;)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">)</span> <span class="c1">;;=&gt; (red &quot;nut1&quot;)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -243,7 +241,7 @@ manipulate with other s-expressions (code as data).</em></p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">first </span><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">))</span> <span class="c1">;;=&gt; red</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">first </span><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">))</span> <span class="c1">;;=&gt; red</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">last </span><span class="o">&#39;</span><span class="p">(</span><span class="nf">red</span> <span class="s">&quot;nut1&quot;</span><span class="p">))</span> <span class="c1">;;=&gt; &quot;nut1&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -255,7 +253,7 @@ the first slot.</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="s">&quot;nut1&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="s">&quot;nut1&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;;=&gt; ClassCastException java.lang.String cannot be cast to clojure.lang.IFn</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -307,8 +305,6 @@ started glowing on either side of them &hellip; and they disappeared.</p>
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -368,8 +364,6 @@ started glowing on either side of them &hellip; and they disappeared.</p>
 
 -->
           
-
-
 
 
 
@@ -440,7 +434,7 @@ started glowing on either side of them &hellip; and they disappeared.</p>
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

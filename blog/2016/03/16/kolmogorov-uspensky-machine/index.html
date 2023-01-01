@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-03-16T18:19:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 16 Mar 2016,  6:19 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -215,31 +213,31 @@
 
 <p>Given a system input of &ldquo;101&rdquo;, it will print out &ldquo;11&rdquo;.  Let&rsquo;s walk through what happens in the program.</p>
 
-<p><strong>Step 1</strong> &ndash; The program starts with our graph in the initial state of our beloved <em>thequickbrownfoxjumpsoverthelazydog</em> configuration.</p>
+<p><strong>Step 1</strong> - The program starts with our graph in the initial state of our beloved <em>thequickbrownfoxjumpsoverthelazydog</em> configuration.</p>
 
 <p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-1.png?raw=true" title="" ></p>
 
-<p><strong>Step 2</strong> &ndash; The first instruction matches <code>,takes input of ones separated by zeros and adds the ones, thequickbrownfoxjumpsoverthelazydog a</code> with he active subgraph being the whole graph. It is replaced by the single graph node <em>a</em>.</p>
+<p><strong>Step 2</strong> - The first instruction matches <code>,takes input of ones separated by zeros and adds the ones, thequickbrownfoxjumpsoverthelazydog a</code> with he active subgraph being the whole graph. It is replaced by the single graph node <em>a</em>.</p>
 
 <p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-2.png?raw=true"></p>
 
-<p><strong>Step 3</strong> &ndash; The next instruction set <code>(1) a ab</code> <em>a</em> subgraph matches and takes a 1 off the input and transforms the graph to <em>ab</em>.</p>
+<p><strong>Step 3</strong> - The next instruction set <code>(1) a ab</code> <em>a</em> subgraph matches and takes a 1 off the input and transforms the graph to <em>ab</em>.</p>
 
 <p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true"></p>
 
-<p><strong>Step 4</strong> &ndash; The instruction set <code>(0) a a</code> also matches (since a is a subgraph of ab) and it takes a zero off the input and transforms back the <em>a</em> to <em>a</em> so the graph is still <em>ab</em>.</p>
+<p><strong>Step 4</strong> - The instruction set <code>(0) a a</code> also matches (since a is a subgraph of ab) and it takes a zero off the input and transforms back the <em>a</em> to <em>a</em> so the graph is still <em>ab</em>.</p>
 
 <p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-4.png?raw=true"></p>
 
-<p><strong>Step 5</strong> &ndash;  The instruction set <code>ab (1) a</code> now matches and a one prints out and the <em>ab</em> graph changes to <em>a</em>.</p>
+<p><strong>Step 5</strong> -  The instruction set <code>ab (1) a</code> now matches and a one prints out and the <em>ab</em> graph changes to <em>a</em>.</p>
 
 <p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true"></p>
 
-<p><strong>Step 6</strong> &ndash; Now, the <code>(1) a ab</code> instruction matches, it takes another 1 off the input (our last one) and transforms to <em>ab</em></p>
+<p><strong>Step 6</strong> - Now, the <code>(1) a ab</code> instruction matches, it takes another 1 off the input (our last one) and transforms to <em>ab</em></p>
 
 <p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true"></p>
 
-<p><strong>Step 7</strong> &ndash; Finally, <code>ab (1) a</code> matches and it prints out a 1 and rewrites the graph to back to <em>a</em></p>
+<p><strong>Step 7</strong> - Finally, <code>ab (1) a</code> matches and it prints out a 1 and rewrites the graph to back to <em>a</em></p>
 
 <p><img src="https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true"></p>
 
@@ -267,8 +265,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -328,8 +324,6 @@
 
 -->
           
-
-
 
 
 
@@ -400,7 +394,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

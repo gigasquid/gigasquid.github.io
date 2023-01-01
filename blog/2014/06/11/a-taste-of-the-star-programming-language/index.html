@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-06-11T10:38:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 11 Jun 2014, 10:38 AM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -193,7 +191,7 @@ course, let&rsquo;s start off with Hello World.</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">main</span><span class="nb">()</span> <span class="kr">do</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">main</span><span class="nb">()</span> <span class="kr">do</span> <span class="p">{</span>
 </span><span class='line'>  <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s">&quot;Hello World&quot;</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -211,7 +209,7 @@ session.</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">import</span> <span class="nn">worksheet</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="kr">import</span> <span class="nn">worksheet</span>
 </span><span class='line'>
 </span><span class='line'><span class="nf">worksheet</span><span class="p">{</span>
 </span><span class='line'>  <span class="n">show</span> <span class="s">&quot;hello world&quot;</span>
@@ -243,7 +241,7 @@ with pattern matching.</p>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">import</span> <span class="nn">worksheet</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="kr">import</span> <span class="nn">worksheet</span>
 </span><span class='line'>
 </span><span class='line'><span class="nf">worksheet</span><span class="p">{</span>
 </span><span class='line'>  <span class="n">fib</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">is</span> <span class="mi">0</span>
@@ -285,7 +283,7 @@ guards like in this fizzbuzz example</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fizzbuzz</span> <span class="n">has</span> <span class="kr">type</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">string</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">fizzbuzz</span> <span class="n">has</span> <span class="kr">type</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">string</span>
 </span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">3</span><span class="ow">=</span><span class="mi">0</span> <span class="n">and</span> <span class="kt">N</span><span class="o">%</span><span class="mi">5</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;fizzbuzz&quot;</span>
 </span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">3</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;fizz&quot;</span>
 </span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">5</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;buzz&quot;</span>
@@ -305,7 +303,7 @@ that you add to the front of and are destructed as the first element
 and then the rest of the list. To construct a cons list:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'> <span class="n">testNumbers</span> <span class="n">is</span> <span class="n">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">;</span><span class="mi">3</span><span class="p">;</span><span class="mi">4</span><span class="p">;</span><span class="mi">5</span><span class="p">;</span><span class="mi">6</span><span class="p">;</span><span class="mi">7</span><span class="p">;</span><span class="mi">8</span><span class="p">;</span><span class="mi">9</span><span class="p">;</span><span class="mi">10</span><span class="p">;</span><span class="mi">11</span><span class="p">;</span><span class="mi">12</span><span class="p">;</span><span class="mi">13</span><span class="p">;</span><span class="mi">14</span><span class="p">;</span><span class="mi">15</span><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span> <span class="n">testNumbers</span> <span class="n">is</span> <span class="n">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">;</span><span class="mi">3</span><span class="p">;</span><span class="mi">4</span><span class="p">;</span><span class="mi">5</span><span class="p">;</span><span class="mi">6</span><span class="p">;</span><span class="mi">7</span><span class="p">;</span><span class="mi">8</span><span class="p">;</span><span class="mi">9</span><span class="p">;</span><span class="mi">10</span><span class="p">;</span><span class="mi">11</span><span class="p">;</span><span class="mi">12</span><span class="p">;</span><span class="mi">13</span><span class="p">;</span><span class="mi">14</span><span class="p">;</span><span class="mi">15</span><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -314,7 +312,7 @@ and then the rest of the list. To construct a cons list:</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">listFizzBuzz</span> <span class="n">has</span> <span class="kr">type</span> <span class="p">(</span><span class="n">cons</span> <span class="kr">of</span> <span class="n">integer</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">cons</span> <span class="kr">of</span> <span class="n">string</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">listFizzBuzz</span> <span class="n">has</span> <span class="kr">type</span> <span class="p">(</span><span class="n">cons</span> <span class="kr">of</span> <span class="n">integer</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">cons</span> <span class="kr">of</span> <span class="n">string</span>
 </span><span class='line'><span class="nf">listFizzBuzz</span><span class="p">(</span><span class="n">nil</span><span class="p">)</span> <span class="n">is</span> <span class="n">nil</span>
 </span><span class='line'><span class="nf">listFizzBuzz</span><span class="p">(</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xs</span><span class="p">))</span> <span class="n">is</span> <span class="n">cons</span><span class="p">(</span><span class="n">fizzbuzz</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">listFizzBuzz</span><span class="p">(</span><span class="n">xs</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -325,7 +323,7 @@ into a list of strings using the fizzbuzz function. If we evaluate:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">testNumbers</span> <span class="n">is</span> <span class="n">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">;</span><span class="mi">3</span><span class="p">;</span><span class="mi">4</span><span class="p">;</span><span class="mi">5</span><span class="p">;</span><span class="mi">6</span><span class="p">;</span><span class="mi">7</span><span class="p">;</span><span class="mi">8</span><span class="p">;</span><span class="mi">9</span><span class="p">;</span><span class="mi">10</span><span class="p">;</span><span class="mi">11</span><span class="p">;</span><span class="mi">12</span><span class="p">;</span><span class="mi">13</span><span class="p">;</span><span class="mi">14</span><span class="p">;</span><span class="mi">15</span><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">testNumbers</span> <span class="n">is</span> <span class="n">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">;</span><span class="mi">3</span><span class="p">;</span><span class="mi">4</span><span class="p">;</span><span class="mi">5</span><span class="p">;</span><span class="mi">6</span><span class="p">;</span><span class="mi">7</span><span class="p">;</span><span class="mi">8</span><span class="p">;</span><span class="mi">9</span><span class="p">;</span><span class="mi">10</span><span class="p">;</span><span class="mi">11</span><span class="p">;</span><span class="mi">12</span><span class="p">;</span><span class="mi">13</span><span class="p">;</span><span class="mi">14</span><span class="p">;</span><span class="mi">15</span><span class="p">}</span>
 </span><span class='line'><span class="nf">result</span> <span class="n">is</span> <span class="n">listFizzBuzz</span><span class="p">(</span><span class="n">testNumbers</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -333,12 +331,12 @@ into a list of strings using the fizzbuzz function. If we evaluate:</p>
 <p>The result will look like</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="s">&quot;1&quot;</span><span class="p">;</span><span class="s">&quot;2&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;4&quot;</span><span class="p">;</span><span class="s">&quot;buzz&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;7&quot;</span><span class="p">;</span><span class="s">&quot;8&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;buzz&quot;</span><span class="p">;</span><span class="s">&quot;11&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;13&quot;</span><span class="p">;</span><span class="s">&quot;14&quot;</span><span class="p">;</span><span class="s">&quot;fizzbuzz&quot;</span><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="s">&quot;1&quot;</span><span class="p">;</span><span class="s">&quot;2&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;4&quot;</span><span class="p">;</span><span class="s">&quot;buzz&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;7&quot;</span><span class="p">;</span><span class="s">&quot;8&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;buzz&quot;</span><span class="p">;</span><span class="s">&quot;11&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;13&quot;</span><span class="p">;</span><span class="s">&quot;14&quot;</span><span class="p">;</span><span class="s">&quot;fizzbuzz&quot;</span><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>There are other collection types such as arrays and relations, (which
-are really cool &ndash; you can do queries on them like a database), but I haven&rsquo;t explored them well enough to really
+are really cool - you can do queries on them like a database), but I haven&rsquo;t explored them well enough to really
 talk about yet.</p>
 
 <h3>Actors and Speech Acts</h3>
@@ -356,7 +354,7 @@ cancel(string) method.  To book a reservation for a person or cancel
 it.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">type</span> <span class="n">tx</span> <span class="n">is</span> <span class="n">book</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="n">or</span> <span class="n">cancel</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="kr">type</span> <span class="n">tx</span> <span class="n">is</span> <span class="n">book</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="n">or</span> <span class="n">cancel</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -382,7 +380,7 @@ it.</p>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">flight</span><span class="p">((</span><span class="kt">FlightName</span> <span class="n">has</span> <span class="kr">type</span> <span class="n">string</span><span class="p">),</span> <span class="p">(</span><span class="kt">MaxPeople</span> <span class="n">has</span> <span class="kr">type</span> <span class="n">integer</span><span class="p">))</span> <span class="n">is</span> <span class="n">actor</span><span class="p">{</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">flight</span><span class="p">((</span><span class="kt">FlightName</span> <span class="n">has</span> <span class="kr">type</span> <span class="n">string</span><span class="p">),</span> <span class="p">(</span><span class="kt">MaxPeople</span> <span class="n">has</span> <span class="kr">type</span> <span class="n">integer</span><span class="p">))</span> <span class="n">is</span> <span class="n">actor</span><span class="p">{</span>
 </span><span class='line'>    <span class="n">var</span> <span class="n">flightStatus</span> <span class="kt">:=</span> <span class="s">&quot;open&quot;</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="n">setFlightStatus</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="kr">do</span> <span class="p">{</span> <span class="n">flightStatus</span> <span class="kt">:=</span> <span class="n">s</span> <span class="p">};</span>
@@ -412,7 +410,7 @@ when the actor is notified like this:</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kt">F</span> <span class="n">is</span> <span class="n">flight</span><span class="p">(</span><span class="s">&quot;flight123&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="kt">F</span> <span class="n">is</span> <span class="n">flight</span><span class="p">(</span><span class="s">&quot;flight123&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </span><span class='line'><span class="nf">notify</span> <span class="kt">F</span> <span class="n">with</span> <span class="n">book</span><span class="p">(</span><span class="s">&quot;Carin&quot;</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span>
 </span><span class='line'><span class="nf">notify</span> <span class="kt">F</span> <span class="n">with</span> <span class="n">book</span><span class="p">(</span><span class="s">&quot;Bob&quot;</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -421,14 +419,14 @@ when the actor is notified like this:</p>
 <p>To query the actor we use :</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'> <span class="n">x</span> <span class="n">is</span> <span class="n">query</span> <span class="kt">F&#39;s</span> <span class="n">getPassengerList</span> <span class="n">with</span> <span class="n">getPassengerList</span><span class="nb">()</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span> <span class="n">x</span> <span class="n">is</span> <span class="n">query</span> <span class="kt">F&#39;s</span> <span class="n">getPassengerList</span> <span class="n">with</span> <span class="n">getPassengerList</span><span class="nb">()</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>To use a request with the actor we use</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'> <span class="n">request</span> <span class="kt">F&#39;s</span> <span class="n">setFlightStatus</span> <span class="n">to</span> <span class="n">setFlightStatus</span><span class="p">(</span><span class="s">&quot;closed&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span> <span class="n">request</span> <span class="kt">F&#39;s</span> <span class="n">setFlightStatus</span> <span class="n">to</span> <span class="n">setFlightStatus</span><span class="p">(</span><span class="s">&quot;closed&quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -466,8 +464,6 @@ that cover the language&rsquo;s features.</p></li>
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -527,8 +523,6 @@ that cover the language&rsquo;s features.</p></li>
 
 -->
           
-
-
 
 
 
@@ -599,7 +593,7 @@ that cover the language&rsquo;s features.</p></li>
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

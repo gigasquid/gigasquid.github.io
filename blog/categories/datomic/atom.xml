@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -70,7 +70,7 @@ I am interested in having you work with me every day, but first I want to unders
 <p><strong>Datomic:</strong> Instead of storing datoms, I send <em>segments</em>, which are closely related datoms,  to storage.  I have quite a few options for storage:</p>
 
 <ul>
-<li>Dev mode &ndash; which just runs within my transactor and writes to the local file system.</li>
+<li>Dev mode - which just runs within my transactor and writes to the local file system.</li>
 <li>SQL database</li>
 <li>DynamoDB</li>
 <li>Cassandra</li>
@@ -154,19 +154,18 @@ I am interested in having you work with me every day, but first I want to unders
 
 <p><strong>Human:</strong> Alright.</p>
 
-<p><code>clojure
-(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
-</code></p>
+<pre><code class="clojure">(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
+</code></pre>
 
 <p><strong>Datomic:</strong></p>
 
-<p><code>clojure
-{:db/id 17592186045423
+<pre><code class="clojure">{:db/id 17592186045423
  :dog/name "Tiny"
  :dog/breed "Great Dane"
  :dog/favorite-treat "Cheese"}
-</code>
-There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane and his favorite-treat is Cheese.  I am not really sure why the Cheese is capitalized, but I am sure it makes sense to a human.</p>
+</code></pre>
+
+<p>There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane and his favorite-treat is Cheese.  I am not really sure why the Cheese is capitalized, but I am sure it makes sense to a human.</p>
 
 <p><strong>Human:</strong> Oh right.  Well, now that you mention it, I am not really sure about the cheese thing either. Can I just remove that fact?</p>
 
@@ -174,9 +173,8 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 
 <p><strong>Human:</strong> Like this?</p>
 
-<p><code>clojure
-(d/transact conn [[:db/retract [:dog/name "Tiny"] :dog/favorite-treat "Cheese"]])
-</code></p>
+<pre><code class="clojure">(d/transact conn [[:db/retract [:dog/name "Tiny"] :dog/favorite-treat "Cheese"]])
+</code></pre>
 
 <p><strong>Datomic:</strong> Exactly.  I have retracted that fact about &ldquo;Tiny&rdquo;.  Go ahead and ask me about all of Tiny&rsquo;s attributes again.</p>
 
@@ -190,17 +188,15 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 
 <p><strong>Human:</strong> That makes sense.</p>
 
-<p>```clojure
-(def db-tiny-no-cheese (d/db conn))</p>
+<pre><code class="clojure">(def db-tiny-no-cheese (d/db conn))
 
-<p>(d/pull db-tiny-no-cheese &lsquo;[*] [:dog/name &ldquo;Tiny&rdquo;])
-```</p>
+(d/pull db-tiny-no-cheese '[*] [:dog/name "Tiny"])
+</code></pre>
 
 <p><strong>Datomic:</strong></p>
 
-<p><code>clojure
-{:db/id 17592186045423, :dog/name "Tiny", :dog/breed "Great Dane"}
-</code></p>
+<pre><code class="clojure">{:db/id 17592186045423, :dog/name "Tiny", :dog/breed "Great Dane"}
+</code></pre>
 
 <p>Tiny is a Great Dane.</p>
 
@@ -212,41 +208,30 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 
 <p><strong>Datomic:</strong> A <em>datom</em> consists of the following parts: the entity, the attribute, the value, transaction, and an operation which tells you if the fact was added or retracted (e a v tx op).  Why don&rsquo;t you try using the <code>d/history</code> function to ask me about all the facts having to do with Tiny?  I suggest using the datalog query</p>
 
-<p>```clojure
-&lsquo;[:find ?e ?a ?v ?tx ?op
+<pre><code class="clojure">'[:find ?e ?a ?v ?tx ?op
   :in $
-  :where [?e :dog/name &ldquo;Tiny&rdquo;]</p>
-
-<pre><code>     [?e ?a ?v ?tx ?op]]
+  :where [?e :dog/name "Tiny"]
+         [?e ?a ?v ?tx ?op]]
 </code></pre>
-
-<p>```</p>
 
 <p>which will return all the entity, attribute, value, transaction, and operation facts I ever knew about Tiny.</p>
 
 <p><strong>Human:</strong> Ok.  Here goes.</p>
 
-<p>```clojure
-(d/q &lsquo;[:find ?e ?a ?v ?tx ?op</p>
-
-<pre><code>   :in $
-   :where [?e :dog/name "Tiny"]
-   [?e ?a ?v ?tx ?op]]
+<pre><code class="clojure">(d/q '[:find ?e ?a ?v ?tx ?op
+       :in $
+       :where [?e :dog/name "Tiny"]
+       [?e ?a ?v ?tx ?op]]
+  (d/history db-tiny-no-cheese))
 </code></pre>
-
-<p>  (d/history db-tiny-no-cheese))
-```</p>
 
 <p><strong>Datomic:</strong></p>
 
-<p>```clojure</p>
-
-<h1>{[17592186045423 63 &ldquo;Tiny&rdquo;       13194139534314 true]</h1>
-
-<p>  [17592186045423 64 &ldquo;Great Dane&rdquo; 13194139534314 true]
-  [17592186045423 65 &ldquo;Cheese&rdquo;     13194139534314 true]
-  [17592186045423 65 &ldquo;Cheese&rdquo;     13194139534320 false]}
-```</p>
+<pre><code class="clojure">#{[17592186045423 63 "Tiny"       13194139534314 true]
+  [17592186045423 64 "Great Dane" 13194139534314 true]
+  [17592186045423 65 "Cheese"     13194139534314 true]
+  [17592186045423 65 "Cheese"     13194139534320 false]}
+</code></pre>
 
 <p>During one transaction, you told me to add three facts about an entity:</p>
 
@@ -265,18 +250,16 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 
 <p><strong>Human:</strong> I can&rsquo;t wait to try this.  Ok, let&rsquo;s go back to the time when I first asserted the fact that Tiny liked cheese.</p>
 
-<p><code>clojure
-(d/pull (d/as-of db-tiny-no-cheese 13194139534314) '[*] [:dog/name "Tiny"])
-</code></p>
+<pre><code class="clojure">(d/pull (d/as-of db-tiny-no-cheese 13194139534314) '[*] [:dog/name "Tiny"])
+</code></pre>
 
 <p><strong>Datomic:</strong>  Hold on.  We are time traveling!</p>
 
-<p><code>clojure
-{:db/id 17592186045423
+<pre><code class="clojure">{:db/id 17592186045423
  :dog/name "Tiny"
  :dog/breed "Great Dane"
  :dog/favorite-treat "Cheese"}
-</code></p>
+</code></pre>
 
 <p>Tiny is a Great Dane whose favorite treat is Cheese.</p>
 
@@ -286,18 +269,16 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 
 <p><strong>Human:</strong> Hmmm&hellip; Do I have to do a <em>retract</em> every time I want to change a value?  For example, the dog named Fido has a favorite treat of a Bone right now, right?</p>
 
-<p><code>clojure
-(d/pull db-tiny-no-cheese '[*] [:dog/name "Fido"])
-</code></p>
+<pre><code class="clojure">(d/pull db-tiny-no-cheese '[*] [:dog/name "Fido"])
+</code></pre>
 
 <p><strong>Datomic:</strong></p>
 
-<p><code>clojure
-{:db/id 17592186045421
+<pre><code class="clojure">{:db/id 17592186045421
  :dog/name "Fido"
  :dog/breed "Mix"
  :dog/favorite-treat "Bone"}
-</code></p>
+</code></pre>
 
 <p>Yes, it is a &ldquo;Bone&rdquo;.</p>
 
@@ -307,23 +288,19 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 
 <p><strong>Human:</strong> Cool.</p>
 
-<p>```clojure
-(d/transact conn [{:db/id [:dog/name &ldquo;Fido&rdquo;]</p>
+<pre><code class="clojure">(d/transact conn [{:db/id [:dog/name "Fido"]
+                   :dog/favorite-treat "Eggs"}])
 
-<pre><code>               :dog/favorite-treat "Eggs"}])
+(d/pull (d/db conn) '[*] [:dog/name "Fido"])
 </code></pre>
-
-<p>(d/pull (d/db conn) &lsquo;[*] [:dog/name &ldquo;Fido&rdquo;])
-```</p>
 
 <p><strong>Datomic</strong></p>
 
-<p><code>clojure
-{:db/id 17592186045421
+<pre><code class="clojure">{:db/id 17592186045421
  :dog/name "Fido"
  :dog/breed "Mix"
  :dog/favorite-treat "Eggs"}
-</code></p>
+</code></pre>
 
 <p>Fido now has a favorite-treat of &ldquo;Eggs&rdquo;.</p>
 
@@ -376,10 +353,9 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 
 <p><strong>Datomic:</strong>  Not a problem.  Make sure to require <code>datomic.api</code> when you set it up.</p>
 
-<p><code>clojure
-(ns conversations.datomic
+<pre><code class="clojure">(ns conversations.datomic
   (require [datomic.api :as d]))
-</code></p>
+</code></pre>
 
 <p><strong>Human:</strong>  All right.  I am all setup up.  I don&rsquo;t really know where to start, so maybe you can tell me a little about yourself.</p>
 
@@ -389,15 +365,14 @@ There is an entity (dog) with the name &ldquo;Tiny&rdquo; who is a Great Dane an
 
 <p><strong>Datomic:</strong> For a casual conversation like this, we can use a in memory database with a uri like this:</p>
 
-<p><code>clojure
-(def uri "datomic:mem://first-conversation")
-</code>
-Then we can create the database and simply connect to it.</p>
+<pre><code class="clojure">(def uri "datomic:mem://first-conversation")
+</code></pre>
 
-<p><code>clojure
-(d/create-database uri)
+<p>Then we can create the database and simply connect to it.</p>
+
+<pre><code class="clojure">(d/create-database uri)
 (def conn (d/connect uri))
-</code></p>
+</code></pre>
 
 <p><strong>Human:</strong> So, being a database, obviously you store things.  What sort of things to you store?</p>
 
@@ -407,16 +382,16 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Datomic:</strong>  Ah.  Well the name of a dog is an attribute.  First, you need to tell me about the name attribute, so that I can use it to store the fact for you .  You can describe the attribute in the form of a map like this:</p>
 
-<p><code>clojure
-{:db/id (d/tempid :db.part/db)
+<pre><code class="clojure">{:db/id (d/tempid :db.part/db)
  :db/ident :dog/name
  :db/valueType :db.type/string
  :db/cardinality :db.cardinality/one
  :db/unique :db.unique/identity
  :db/doc "Name of the Dog"
  :db.install/_attribute :db.part/db}
-</code>
- This map is a set of facts, (called <em>datoms</em>),  about an entity.  In this
+</code></pre>
+
+<p> This map is a set of facts, (called <em>datoms</em>),  about an entity.  In this
  case, the entity is an attribute. Attributes, in turn, can be used to describe other entities, like a dog. I will explain the different parts to you.</p>
 
 <ul>
@@ -432,27 +407,25 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Human:</strong> I think I understand. Let me try one out for myself.  So dog breed would be this?</p>
 
-<p><code>clojure
-{:db/id (d/tempid :db.part/db)
+<pre><code class="clojure">{:db/id (d/tempid :db.part/db)
  :db/ident :dog/breed
  :db/valueType :db.type/string
  :db/cardinality :db.cardinality/one
  :db/doc "Breed of the Dog"
  :db.install/_attribute :db.part/db}
-</code></p>
+</code></pre>
 
 <p><strong>Datomic:</strong>  Yes!  I think you got it.  Let&rsquo;s try one more.</p>
 
 <p><strong>Human:</strong> Ok.  How about the dog&rsquo;s favorite treat?</p>
 
-<p><code>clojure
-{:db/id (d/tempid :db.part/db)
+<pre><code class="clojure">{:db/id (d/tempid :db.part/db)
  :db/ident :dog/favorite-treat
  :db/valueType :db.type/string
  :db/cardinality :db.cardinality/one
  :db/doc "Dog's Favorite Treat to Eat"
  :db.install/_attribute :db.part/db}
-</code></p>
+</code></pre>
 
 <p><strong>Datomic:</strong> You got it.  Now, that you have these attributes, you can give them to me using a transaction with the connection.</p>
 
@@ -460,37 +433,33 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Datomic:</strong>  Yes.  Please send it to me using the form:</p>
 
-<p><code>clojure
-(d/transact conn [....facts....])
-</code></p>
+<pre><code class="clojure">(d/transact conn [....facts....])
+</code></pre>
 
 <p><strong>Human:</strong> Sounds good.  I will put the dog schema datoms we discussed in a vector and call it <code>dog-schema</code> and then send it to you.</p>
 
-<p>```clojure
-(def dog-schema  [{:db/id (d/tempid :db.part/db)</p>
+<pre><code class="clojure">(def dog-schema  [{:db/id (d/tempid :db.part/db)
+                   :db/ident :dog/name
+                   :db/valueType :db.type/string
+                   :db/cardinality :db.cardinality/one
+                   :db/unique :db.unique/identity
+                   :db/doc "Name of the Dog"
+                   :db.install/_attribute :db.part/db}
+                  {:db/id (d/tempid :db.part/db)
+                   :db/ident :dog/breed
+                   :db/valueType :db.type/string
+                   :db/cardinality :db.cardinality/one
+                   :db/doc "Breed of the Dog"
+                   :db.install/_attribute :db.part/db}
+                  {:db/id (d/tempid :db.part/db)
+                   :db/ident :dog/favorite-treat
+                   :db/valueType :db.type/string
+                   :db/cardinality :db.cardinality/one
+                   :db/doc "Dog's Favorite Treat to Eat"
+                   :db.install/_attribute :db.part/db}])
 
-<pre><code>               :db/ident :dog/name
-               :db/valueType :db.type/string
-               :db/cardinality :db.cardinality/one
-               :db/unique :db.unique/identity
-               :db/doc "Name of the Dog"
-               :db.install/_attribute :db.part/db}
-              {:db/id (d/tempid :db.part/db)
-               :db/ident :dog/breed
-               :db/valueType :db.type/string
-               :db/cardinality :db.cardinality/one
-               :db/doc "Breed of the Dog"
-               :db.install/_attribute :db.part/db}
-              {:db/id (d/tempid :db.part/db)
-               :db/ident :dog/favorite-treat
-               :db/valueType :db.type/string
-               :db/cardinality :db.cardinality/one
-               :db/doc "Dog's Favorite Treat to Eat"
-               :db.install/_attribute :db.part/db}])
+(d/transact conn dog-schema)
 </code></pre>
-
-<p>(d/transact conn dog-schema)
-```</p>
 
 <p><strong>Datomic:</strong> The transaction was fine.  I know all about those dog attributes now.</p>
 
@@ -505,25 +474,22 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Human:</strong>  Cool.  Well, in that case, here is the owner schema.  The owner has a name and some dogs.</p>
 
-<p>```clojure
-(def owner-schema [{:db/id (d/tempid :db.part/db)</p>
+<pre><code class="clojure">(def owner-schema [{:db/id (d/tempid :db.part/db)
+                    :db/ident :owner/name
+                    :db/valueType :db.type/string
+                    :db/cardinality :db.cardinality/one
+                    :db/unique :db.unique/identity
+                    :db/doc "Name of the Owner"
+                    :db.install/_attribute :db.part/db}
+                   {:db/id (d/tempid :db.part/db)
+                    :db/ident :owner/dogs
+                    :db/valueType :db.type/ref
+                    :db/cardinality :db.cardinality/many
+                    :db/doc "Dogs of the Owner"
+                    :db.install/_attribute :db.part/db}])
 
-<pre><code>                :db/ident :owner/name
-                :db/valueType :db.type/string
-                :db/cardinality :db.cardinality/one
-                :db/unique :db.unique/identity
-                :db/doc "Name of the Owner"
-                :db.install/_attribute :db.part/db}
-               {:db/id (d/tempid :db.part/db)
-                :db/ident :owner/dogs
-                :db/valueType :db.type/ref
-                :db/cardinality :db.cardinality/many
-                :db/doc "Dogs of the Owner"
-                :db.install/_attribute :db.part/db}])
+(d/transact conn owner-schema)
 </code></pre>
-
-<p>(d/transact conn owner-schema)
-```</p>
 
 <p><strong>Datomic:</strong>  The transaction is fine.  I now know about the attributes that dogs and owners have.  Would you like to tell me some facts about specific dogs and owners?</p>
 
@@ -535,27 +501,23 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Human:</strong>  Like this?</p>
 
-<p>```clojure
-(d/transact conn [{:db/id (d/tempid :db.part/user)</p>
-
-<pre><code>               :owner/name "Bob"
-               :owner/dogs [{:db/id (d/tempid :db.part/user)
-                             :dog/name "Fluffy"
-                             :dog/breed "Poodle"
-                             :dog/favorite-treat "Cheese"}
-                            {:db/id (d/tempid :db.part/user)
-                             :dog/name "Fido"
-                             :dog/breed "Mix"
-                             :dog/favorite-treat "Bone"}]}
-              {:db/id (d/tempid :db.part/user)
-               :owner/name "Lucy"
-               :owner/dogs [{:db/id (d/tempid :db.part/user)
-                             :dog/name "Tiny"
-                             :dog/breed "Great Dane"
-                             :dog/favorite-treat "Cheese"}]}])
+<pre><code class="clojure">(d/transact conn [{:db/id (d/tempid :db.part/user)
+                   :owner/name "Bob"
+                   :owner/dogs [{:db/id (d/tempid :db.part/user)
+                                 :dog/name "Fluffy"
+                                 :dog/breed "Poodle"
+                                 :dog/favorite-treat "Cheese"}
+                                {:db/id (d/tempid :db.part/user)
+                                 :dog/name "Fido"
+                                 :dog/breed "Mix"
+                                 :dog/favorite-treat "Bone"}]}
+                  {:db/id (d/tempid :db.part/user)
+                   :owner/name "Lucy"
+                   :owner/dogs [{:db/id (d/tempid :db.part/user)
+                                 :dog/name "Tiny"
+                                 :dog/breed "Great Dane"
+                                 :dog/favorite-treat "Cheese"}]}])
 </code></pre>
-
-<p>```</p>
 
 <p><strong>Datomic:</strong>  Exactly right.  I now know the facts about Bob and Lucy and their dogs.</p>
 
@@ -563,9 +525,8 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Datomic:</strong>  There are a couple a ways to inquire about facts I know.  To find out about the attributes of a specific dog, or entity, I would recommend using <code>d/pull</code>.  You can ask me in the form of this to get all the attributes for a given dog name.  Note that this works since the dog name is a way to uniquely identify the dog:</p>
 
-<p><code>clojure
-(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
-</code></p>
+<pre><code class="clojure">(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
+</code></pre>
 
 <p><strong>Human:</strong>  What is the <code>(d/db conn)</code> all about?</p>
 
@@ -577,9 +538,8 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Human:</strong> Ok.  Tell me about Tiny.</p>
 
-<p><code>clojure
-(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
-</code></p>
+<pre><code class="clojure">(d/pull (d/db conn) '[*] [:dog/name "Tiny"])
+</code></pre>
 
 <p><strong>Datomic:</strong>
 <code>clojure
@@ -595,15 +555,11 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Datomic:</strong>  For that I would ask using the <em>datalog</em> query <code>d/q</code>.  It uses logic to unify your query with all of my facts and give you the result.  The query itself would be a vector with logic statements inside like:</p>
 
-<p>```clojure
-&lsquo;[:find ?owner-name
-  :where [?dog :dog/name &ldquo;Tiny&rdquo;]</p>
-
-<pre><code>     [?owner :owner/dogs ?dog]
-     [?owner :owner/name ?owner-name]]
+<pre><code class="clojure">'[:find ?owner-name
+  :where [?dog :dog/name "Tiny"]
+         [?owner :owner/dogs ?dog]
+         [?owner :owner/name ?owner-name]]
 </code></pre>
-
-<p>```</p>
 
 <p><strong>Human:</strong>  Whoa.  What is the deal with those question marks?</p>
 
@@ -620,103 +576,80 @@ Then we can create the database and simply connect to it.</p>
 
 <p><strong>Datomic:</strong>  Yes.  They should have the form of:</p>
 
-<p><code>clojure
-(d/q '[datalog-query] db-value)
-</code></p>
+<pre><code class="clojure">(d/q '[datalog-query] db-value)
+</code></pre>
 
 <p>Remember, to get the current db value use <code>(d/db conn)</code>.</p>
 
 <p><strong>Human:</strong>  Ok.  Here we go.</p>
 
-<p>```clojure
-(d/q &lsquo;[:find ?owner-name</p>
-
-<pre><code>   :where [?dog :dog/name "Tiny"]
-          [?owner :owner/dogs ?dog]
-          [?owner :owner/name ?owner-name]]
- (d/db conn))
+<pre><code class="clojure">(d/q '[:find ?owner-name
+       :where [?dog :dog/name "Tiny"]
+              [?owner :owner/dogs ?dog]
+              [?owner :owner/name ?owner-name]]
+     (d/db conn))
 </code></pre>
-
-<p>```</p>
 
 <p><strong>Datomic:</strong></p>
 
 <p>The answer is:</p>
 
-<p>```clojure</p>
-
-<h1>{[&ldquo;Lucy&rdquo;]}</h1>
-
-<p>```</p>
+<pre><code class="clojure">#{["Lucy"]}
+</code></pre>
 
 <p><strong>Human:</strong>  What if I want to pass the dog name as a parameter?  How do I communicate that to you?</p>
 
 <p><strong>Datomic:</strong>  You will need to use an <code>in</code> clause in the query like this:</p>
 
-<p><code>clojure
-'[:find [blah]
+<pre><code class="clojure">'[:find [blah]
    :in $ ?dog-name
    :where [blah]]
-</code></p>
+</code></pre>
 
 <p>The $ is shorthand for the database value and the <code>?dog-name</code> is what you will pass in as a parameter in the query after the db-value.</p>
 
 <p><strong>Human:</strong>  Like this?</p>
 
-<p>```clojure
-(d/q &lsquo;[:find ?owner-name</p>
-
-<pre><code>   :in $ ?dog-name
-   :where [?dog :dog/name ?dog-name]
-          [?owner :owner/dogs ?dog]
-          [?owner :owner/name ?owner-name]]
- (d/db conn) "Tiny")
+<pre><code class="clojure">(d/q '[:find ?owner-name
+       :in $ ?dog-name
+       :where [?dog :dog/name ?dog-name]
+              [?owner :owner/dogs ?dog]
+              [?owner :owner/name ?owner-name]]
+     (d/db conn) "Tiny")
 </code></pre>
-
-<p>```</p>
 
 <p><strong>Datomic:</strong>  Exactly right.  The answer is Lucy again.</p>
 
-<p>```clojure</p>
-
-<h1>{[&ldquo;Lucy&rdquo;]}</h1>
-
-<p>```</p>
+<pre><code class="clojure">#{["Lucy"]}
+</code></pre>
 
 <p><strong>Human:</strong>  I think I am getting the hang of this!  Another quick question.  How would I go about asking you which dogs have cheese as their favorite treat?  I would want the dog&rsquo;s name and breed back.</p>
 
 <p><strong>Datomic:</strong>  You would simply construct another datalog query.  This time I would recommend that you combine the <code>pull</code> syntax within the <code>find</code> part of the query.  The <code>pull</code> syntax is great at selecting attributes from an entity.  So the <code>find</code> part would look something like this:</p>
 
-<p><code>clojure
-[(pull ?dog [:dog/name :dog/breed]) ...]
-</code></p>
+<pre><code class="clojure">[(pull ?dog [:dog/name :dog/breed]) ...]
+</code></pre>
 
 <p>This will return the attributes of the <code>:dog/name</code> and the <code>:dog/breed</code>.  The three dots on the end will let me know that you want a collection returned, so I will give you back a simple vector with the entity attributes requested, instead of the set of vectors I normally give back.</p>
 
 <p>The <code>where</code> section of the query is going to look for the <code>?dog</code> entity that matches the <code>:dog/favorite-treat</code> attribute with &ldquo;Cheese&rdquo;.</p>
 
-<p><code>clojure
-'[:find [(pull ?dog [:dog/name :dog/breed]) ...]
+<pre><code class="clojure">'[:find [(pull ?dog [:dog/name :dog/breed]) ...]
   :where [?dog :dog/favorite-treat "Cheese"]]
-</code></p>
+</code></pre>
 
 <p><strong>Human:</strong>  Then I put it together with the current database value in a <code>d/q</code> function?</p>
 
-<p>```clojure
-(d/q &lsquo;[:find [(pull ?dog [:dog/name :dog/breed]) &hellip;]</p>
-
-<pre><code>   :where [?dog :dog/favorite-treat "Cheese"]]
- (d/db conn))
+<pre><code class="clojure">(d/q '[:find [(pull ?dog [:dog/name :dog/breed]) ...]
+       :where [?dog :dog/favorite-treat "Cheese"]]
+     (d/db conn))
 </code></pre>
-
-<p>```</p>
 
 <p><strong>Datomic:</strong> Yup.  The answer is:</p>
 
-<p><code>clojure
-[{:dog/name "Fluffy", :dog/breed "Poodle"}
+<pre><code class="clojure">[{:dog/name "Fluffy", :dog/breed "Poodle"}
  {:dog/name "Tiny", :dog/breed "Great Dane"}]
-</code></p>
+</code></pre>
 
 <p><strong>Human:</strong>  Thanks so much.  I think I beginning to get the hang of schemas and queries.  What other things do I need to know about you?</p>
 

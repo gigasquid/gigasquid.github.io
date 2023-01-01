@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Semantic Web | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/semantic-web/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Semantic Web and JRuby]]></title>
-    <link href="http://gigasquid.github.io/blog/2011/08/07/semantic-web-and-jruby/"/>
-    <updated>2011-08-07T22:30:21-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2011/08/07/semantic-web-and-jruby</id>
+    <link href="http://gigasquid.github.io/blog/2011/08/08/semantic-web-and-jruby/"/>
+    <updated>2011-08-08T02:30:21+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2011/08/08/semantic-web-and-jruby</id>
     <content type="html"><![CDATA[<p>I got the chance to share my enthusiasm for two of my favorite technologies at JRubyConf by giving a presentation on Semantic Web and JRuby. It was an excellent experience. I was able to connect with other people that shared my interest in the Semantic Web and some that have even worked with the technologies professionally. Most exciting, I had the opportunity to share my knowledge and hopefully inspire others to look farther into using JRuby with the Jena Semantic Web Framework.</p>
 
 <p>Here are some resources from the presentation that I wanted to share with everyone:</p>
@@ -33,9 +33,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hello World in RDF]]></title>
-    <link href="http://gigasquid.github.io/blog/2010/07/07/hello-world-in-rdf/"/>
-    <updated>2010-07-07T23:33:20-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2010/07/07/hello-world-in-rdf</id>
+    <link href="http://gigasquid.github.io/blog/2010/07/08/hello-world-in-rdf/"/>
+    <updated>2010-07-08T03:33:20+00:00</updated>
+    <id>http://gigasquid.github.io/blog/2010/07/08/hello-world-in-rdf</id>
     <content type="html"><![CDATA[<p>I decided to start playing with RDFs to start me on the road to understanding and programming Semantic Web.  As always, the first step it to start with a “Hello World” type of exercise.  In my case, I had armed myself with a good cappuccino at Starbucks and decided to set myself with a purl link and FOAF page.
 <a href="https://secure.wikimedia.org/wikipedia/en/wiki/FOAF_%28software%29">
 FOAF (Friend of a Friend)</a> is one of the most popular vocabularies out there for RDF (Resource Description Framework).  It expresses relationships in a machine readable format and is considered one of the first social Semantic Web applications.</p>
@@ -49,7 +49,7 @@ FOAF (Friend of a Friend)</a> is one of the most popular vocabularies out there 
 &lt;foaf:nick&gt;squid&lt;/foaf:nick&gt;
 </code></pre>
 
-<p>Not too much fun to start coding by hand though.  Luckily, there is a handy dandy generator &ndash; <a href="http://www.ldodds.com/foaf/foaf-a-matic">FOAF-a-matic.</a> Just fill in the form and you can easily generate the basic foaf rdf file for yourself.  You can always add to it later.  Save the file as foaf.rdf somewhere on your website for indexing.</p>
+<p>Not too much fun to start coding by hand though.  Luckily, there is a handy dandy generator - <a href="http://www.ldodds.com/foaf/foaf-a-matic">FOAF-a-matic.</a> Just fill in the form and you can easily generate the basic foaf rdf file for yourself.  You can always add to it later.  Save the file as foaf.rdf somewhere on your website for indexing.</p>
 
 <p>Now you can do some fun stuff with it.  You can check and visualize your RDF document with <a href="http://www.w3.org/RDF/Validator/">http://www.w3.org/RDF/Validator/</a>.  Or you can use a<a href="http://foaf-visualizer.org/?uri=http://gigasquidsoftware.com/foaf/foaf.rdf"> FOAF visualizer</a>.</p>
 

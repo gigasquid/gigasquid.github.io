@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2018-06-03T16:13:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun  3 Jun 2018,  4:13 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -145,7 +143,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">tutorial.ndarray</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">tutorial.ndarray</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.ndarray</span> <span class="ss">:as</span> <span class="nv">ndarray</span><span class="p">]))</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -154,7 +152,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">])</span>
 </span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.NDArray 0x3e396d0 &quot;org.apache.mxnet.NDArray@aeea40b6&quot;]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -163,7 +161,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">50</span><span class="p">]))</span>
 </span><span class='line'><span class="c1">;=&gt; [100 50]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -171,7 +169,7 @@
 <p>There is also a quick way to create an ndarray of ones with the <code>ones</code> function:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">256</span> <span class="mi">32</span> <span class="mi">128</span> <span class="mi">1</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">256</span> <span class="mi">32</span> <span class="mi">128</span> <span class="mi">1</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -179,7 +177,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">3</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">c</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">3</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">c</span><span class="p">)</span>  <span class="c1">;=&gt; [2 3]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -188,7 +186,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">c</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">c</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; [1.0 2.0 3.0 4.0 5.0 6.0]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -203,7 +201,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">a</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nf">ndarray/ones</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">5</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">ndarray/+</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">ndarray/-&gt;vec</span><span class="p">))</span>
 </span><span class='line'><span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
@@ -214,7 +212,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">b</span><span class="p">)</span> <span class="c1">;=&gt; [1.0 1.0 1.0 1.0 1.0]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -223,7 +221,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/+=</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/+=</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="nv">a</span><span class="p">)</span> <span class="c1">;=&gt;  [2.0 2.0 2.0 2.0 2.0]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -235,7 +233,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr1</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">arr1</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">arr2</span> <span class="p">(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">res</span> <span class="p">(</span><span class="nf">ndarray/dot</span> <span class="nv">arr1</span> <span class="nv">arr2</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape-vec</span> <span class="nv">res</span><span class="p">)</span> <span class="c1">;=&gt; [1 1]</span>
@@ -252,7 +250,7 @@
 <p>You can save ndarrays with a name as a map like:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/save</span> <span class="s">&quot;filename&quot;</span> <span class="p">{</span><span class="s">&quot;arr1&quot;</span> <span class="nv">arr1</span> <span class="s">&quot;arr2&quot;</span> <span class="nv">arr2</span><span class="p">})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/save</span> <span class="s">&quot;filename&quot;</span> <span class="p">{</span><span class="s">&quot;arr1&quot;</span> <span class="nv">arr1</span> <span class="s">&quot;arr2&quot;</span> <span class="nv">arr2</span><span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -261,7 +259,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ndarray/load</span> <span class="s">&quot;filename&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">ndarray/load</span> <span class="s">&quot;filename&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; {&quot;arr1&quot; #object[org.apache.mxnet.NDArray 0x1b629ff4 &quot;org.apache.mxnet.NDArray@63da08cb&quot;]</span>
 </span><span class='line'><span class="c1">;=&gt;  &quot;arr2&quot; #object[org.apache.mxnet.NDArray 0x25d994e3 &quot;org.apache.mxnet.NDArray@5bbaf2c3&quot;]}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -274,7 +272,7 @@
 <p>When creating an <code>ndarray</code> you can use a context argument to specify the device. To do this, we will need the help of the <code>context</code> namespace.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">org.apache.clojure-mxnet.context</span> <span class="ss">:as</span> <span class="nv">context</span><span class="p">])</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">org.apache.clojure-mxnet.context</span> <span class="ss">:as</span> <span class="nv">context</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -283,7 +281,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">cpu-a</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">cpu-a</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">ndarray/context</span> <span class="nv">cpu-a</span><span class="p">)</span>
 </span><span class='line'><span class="c1">;=&gt; #object[ml.dmlc.mxnet.Context 0x3f376123 &quot;cpu(0)&quot;]</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -292,7 +290,7 @@
 <p>But we can specify the gpu instead, (if we have a gpu enabled build).</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">gpu-b</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]</span> <span class="p">{</span><span class="ss">:ctx</span> <span class="p">(</span><span class="nf">context/gpu</span> <span class="mi">0</span><span class="p">)}))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">gpu-b</span> <span class="p">(</span><span class="nf">ndarray/zeros</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">200</span><span class="p">]</span> <span class="p">{</span><span class="ss">:ctx</span> <span class="p">(</span><span class="nf">context/gpu</span> <span class="mi">0</span><span class="p">)}))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -309,8 +307,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -370,8 +366,6 @@
 
 -->
           
-
-
 
 
 
@@ -442,7 +436,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

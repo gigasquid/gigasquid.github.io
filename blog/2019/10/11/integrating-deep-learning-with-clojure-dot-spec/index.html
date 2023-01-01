@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-10-11T13:51:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 11 Oct 2019,  1:51 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -131,13 +129,11 @@
 
 <div class="entry-content clearfix" itemprop="articleBody description"><p>clojure.spec allows you to write specifications for data and use them for validation. It also provides a generative aspect that allows for robust testing as well as an additional way to understand your data through manual inspection. The dual nature of validation and generation is a natural fit for deep learning models that consist of paired discriminator/generator models.</p>
 
-<br>
-
+<p><br></p>
 
 <p><strong><strong>TLDR: In this post we show that you can leverage the dual nature of clojure.spec&rsquo;s validator/generator to incorporate a deep learning model&rsquo;s classifier/generator.</strong></strong></p>
 
-<br>
-
+<p><br></p>
 
 <p>A common use of clojure.spec is at the boundaries to validate that incoming data is indeed in the expected form. Again, this is boundary is a fitting place to integrate models for the deep learning paradigm and our traditional software code.</p>
 
@@ -148,7 +144,7 @@
 <p>To create a simple spec for keywords that are cat sounds, we can use <code>s/def</code>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::cat-sounds</span> <span class="o">#</span><span class="p">{</span><span class="ss">:meow</span> <span class="ss">:purr</span> <span class="ss">:hiss</span><span class="p">})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::cat-sounds</span> <span class="o">#</span><span class="p">{</span><span class="ss">:meow</span> <span class="ss">:purr</span> <span class="ss">:hiss</span><span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -156,7 +152,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::cat-sounds</span> <span class="ss">:meow</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::cat-sounds</span> <span class="ss">:meow</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
 </span><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::cat-sounds</span> <span class="ss">:bark</span><span class="p">)</span> <span class="c1">;=&gt; false</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -165,7 +161,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">gen/sample</span> <span class="p">(</span><span class="nf">s/gen</span> <span class="ss">::cat-sounds</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">gen/sample</span> <span class="p">(</span><span class="nf">s/gen</span> <span class="ss">::cat-sounds</span><span class="p">))</span>
 </span><span class='line'><span class="c1">;=&gt;(:hiss :hiss :hiss :meow :meow :purr :hiss :meow :meow :meow)</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -175,7 +171,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::even-number</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">int?</span> <span class="nv">even?</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::even-number</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">int?</span> <span class="nv">even?</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">gen/sample</span> <span class="p">(</span><span class="nf">s/gen</span> <span class="ss">::even-number</span><span class="p">))</span>
 </span><span class='line'><span class="c1">;=&gt; (0 0 -2 2 0 10 -4 8 6 8)</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -193,7 +189,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::cat-name</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::cat-name</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">s/with-gen</span>
 </span><span class='line'>    <span class="nv">string?</span>
 </span><span class='line'>    <span class="o">#</span><span class="p">(</span><span class="nf">s/gen</span> <span class="o">#</span><span class="p">{</span><span class="s">&quot;Suki&quot;</span> <span class="s">&quot;Bill&quot;</span> <span class="s">&quot;Patches&quot;</span> <span class="s">&quot;Sunshine&quot;</span><span class="p">})))</span>
@@ -216,20 +212,18 @@ In the following the spec is only that the data be a general string, but using t
 <p>Then, we made models that would:</p>
 
 <ul>
-<li>Take an image of a digit and give you back the string value (ex: &ldquo;2&rdquo;) &ndash; <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">post</a></li>
-<li>Take a string number value and give you back a digit image. &ndash; <a href="https://gigasquidsoftware.com/blog/2019/09/06/focus-on-the-generator/">post</a></li>
+<li>Take an image of a digit and give you back the string value (ex: &ldquo;2&rdquo;) - <a href="https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/">post</a></li>
+<li>Take a string number value and give you back a digit image. - <a href="https://gigasquidsoftware.com/blog/2019/09/06/focus-on-the-generator/">post</a></li>
 </ul>
 
 
 <p>We will use both of the models to make a spec with a custom generator.</p>
 
-<br>
-
+<p><br></p>
 
 <p><em>Note: For the sake of simplicity, some of the supporting code is left out. But if you want to see the whole code, it is on <a href="(https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/model_specs.clj">github</a>)</em></p>
 
-<br>
-
+<p><br></p>
 
 <p>With the help of the trained discriminator model, we can make a function that takes in an image and returns the number string value.</p>
 
@@ -241,7 +235,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">discriminate</span> <span class="p">[</span><span class="nv">image</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">discriminate</span> <span class="p">[</span><span class="nv">image</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/forward</span> <span class="nv">discriminator-model</span> <span class="p">{</span><span class="ss">:data</span> <span class="p">[</span><span class="nv">image</span><span class="p">]})</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">m/outputs</span><span class="p">)</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">ffirst</span><span class="p">)</span>
@@ -257,7 +251,7 @@ In the following the spec is only that the data be a general string, but using t
 <p><img src="http://live.staticflickr.com/65535/48881532151_251e30840e_s.jpg" alt="test-discriminator-image" /></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">discriminate</span> <span class="nv">my-test-image</span><span class="p">)</span> <span class="c1">;=&gt; 6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">discriminate</span> <span class="nv">my-test-image</span><span class="p">)</span> <span class="c1">;=&gt; 6</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -267,7 +261,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">generate</span> <span class="p">[</span><span class="nv">label</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">generate</span> <span class="p">[</span><span class="nv">label</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/forward</span> <span class="nv">generator-model</span> <span class="p">{</span><span class="ss">:data</span> <span class="p">[(</span><span class="nf">ndarray/array</span> <span class="p">[</span><span class="nv">label</span><span class="p">]</span> <span class="p">[</span><span class="nv">batch-size</span><span class="p">])]})</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">m/outputs</span><span class="p">)</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">ffirst</span><span class="p">)))</span>
@@ -280,7 +274,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">generated-test-image</span> <span class="p">(</span><span class="nf">generate</span> <span class="mi">3</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">generated-test-image</span> <span class="p">(</span><span class="nf">generate</span> <span class="mi">3</span><span class="p">))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;generated-image&quot;</span>
 </span><span class='line'>             <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span>
 </span><span class='line'>           <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="nv">generated-test-image</span> <span class="p">[</span><span class="nv">batch-size</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
@@ -289,14 +283,14 @@ In the following the spec is only that the data be a general string, but using t
 
 <p><img src="http://live.staticflickr.com/65535/48881532451_023de68ddb_s.jpg" alt="generated-test-image" /></p>
 
-<p>Great! Let&rsquo;s go ahead and start writing specs. First let&rsquo;s make a quick spec to describe a MNIST number &ndash; which is a single digit between 0 and 9.</p>
+<p>Great! Let&rsquo;s go ahead and start writing specs. First let&rsquo;s make a quick spec to describe a MNIST number - which is a single digit between 0 and 9.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::mnist-number</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">int?</span> <span class="o">#</span><span class="p">(</span><span class="nb">&lt;= </span><span class="mi">0</span> <span class="nv">%</span> <span class="mi">9</span><span class="p">)))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::mnist-number</span> <span class="p">(</span><span class="nf">s/and</span> <span class="nv">int?</span> <span class="o">#</span><span class="p">(</span><span class="nb">&lt;= </span><span class="mi">0</span> <span class="nv">%</span> <span class="mi">9</span><span class="p">)))</span>
 </span><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::mnist-number</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
 </span><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::mnist-number</span> <span class="mi">11</span><span class="p">)</span> <span class="c1">;=&gt; false</span>
 </span><span class='line'><span class="p">(</span><span class="nf">gen/sample</span> <span class="p">(</span><span class="nf">s/gen</span> <span class="ss">::mnist-number</span><span class="p">))</span>
@@ -312,7 +306,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::mnist-image</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/def</span> <span class="ss">::mnist-image</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">s/with-gen</span>
 </span><span class='line'>      <span class="o">#</span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::mnist-number</span> <span class="p">(</span><span class="nf">discriminate</span> <span class="nv">%</span><span class="p">))</span>
 </span><span class='line'>      <span class="o">#</span><span class="p">(</span><span class="nf">gen/fmap</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">n</span><span class="p">]</span>
@@ -329,7 +323,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">{</span><span class="ss">:spec</span> <span class="nv">name-of-the-spec</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:spec</span> <span class="nv">name-of-the-spec</span>
 </span><span class='line'> <span class="ss">:valid?</span> <span class="nv">whether</span> <span class="nb">or not </span><span class="nv">the</span> <span class="o">`</span><span class="nv">s/valid?</span><span class="o">`</span> <span class="nv">called</span> <span class="nv">on</span> <span class="nv">the</span> <span class="nb">test </span><span class="nv">value</span> <span class="nv">is</span> <span class="nv">true</span> <span class="nb">or </span><span class="nv">not</span>
 </span><span class='line'> <span class="ss">:sample-values</span> <span class="nv">This</span> <span class="nv">calls</span> <span class="nv">the</span> <span class="nv">discriminator</span> <span class="nv">model</span> <span class="nv">on</span> <span class="nv">the</span> <span class="nv">generated</span> <span class="nv">values</span>
 </span><span class='line'> <span class="p">}</span>
@@ -349,7 +343,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::mnist-image</span> <span class="nv">my-test-image</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">s/valid?</span> <span class="ss">::mnist-image</span> <span class="nv">my-test-image</span><span class="p">)</span> <span class="c1">;=&gt; true</span>
 </span><span class='line'>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nf">test-model-spec</span> <span class="ss">::mnist-image</span> <span class="nv">my-test-image</span><span class="p">)</span>
@@ -372,7 +366,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defmacro </span><span class="nv">def-model-spec</span> <span class="p">[</span><span class="nv">spec-key</span> <span class="nv">spec</span> <span class="nv">discriminate-fn</span> <span class="nv">generate-fn</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defmacro </span><span class="nv">def-model-spec</span> <span class="p">[</span><span class="nv">spec-key</span> <span class="nv">spec</span> <span class="nv">discriminate-fn</span> <span class="nv">generate-fn</span><span class="p">]</span>
 </span><span class='line'>    <span class="o">`</span><span class="p">(</span><span class="nf">s/def</span> <span class="o">~</span><span class="nv">spec-key</span>
 </span><span class='line'>       <span class="p">(</span><span class="nf">s/with-gen</span>
 </span><span class='line'>         <span class="o">#</span><span class="p">(</span><span class="nf">s/valid?</span> <span class="o">~</span><span class="nv">spec</span> <span class="p">(</span><span class="o">~</span><span class="nv">discriminate-fn</span> <span class="nv">%</span><span class="p">))</span>
@@ -382,7 +376,7 @@ In the following the spec is only that the data be a general string, but using t
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>More Specs &ndash; More Fun</h3>
+<h3>More Specs - More Fun</h3>
 
 <p>This time let&rsquo;s define an even mnist image spec</p>
 
@@ -396,7 +390,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">def-model-spec</span> <span class="ss">::even-mnist-image</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="nf">def-model-spec</span> <span class="ss">::even-mnist-image</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">s/and</span> <span class="ss">::mnist-number</span> <span class="nv">even?</span><span class="p">)</span>
 </span><span class='line'>    <span class="nv">discriminate</span>
 </span><span class='line'>    <span class="nv">generate</span><span class="p">)</span>
@@ -423,7 +417,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">def-model-spec</span> <span class="ss">::odd-mnist-image</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="nf">def-model-spec</span> <span class="ss">::odd-mnist-image</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">s/and</span> <span class="ss">::mnist-number</span> <span class="nv">odd?</span><span class="p">)</span>
 </span><span class='line'>    <span class="nv">discriminate</span>
 </span><span class='line'>    <span class="nv">generate</span><span class="p">)</span>
@@ -450,7 +444,7 @@ In the following the spec is only that the data be a general string, but using t
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'>  <span class="p">(</span><span class="nf">def-model-spec</span> <span class="ss">::odd-over-2-mnist-image</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="nf">def-model-spec</span> <span class="ss">::odd-over-2-mnist-image</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">s/and</span> <span class="ss">::mnist-number</span> <span class="nv">odd?</span> <span class="o">#</span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">%</span> <span class="mi">2</span><span class="p">))</span>
 </span><span class='line'>    <span class="nv">discriminate</span>
 </span><span class='line'>    <span class="nv">generate</span><span class="p">)</span>
@@ -476,8 +470,6 @@ In the following the spec is only that the data be a general string, but using t
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -537,8 +529,6 @@ In the following the spec is only that the data be a general string, but using t
 
 -->
           
-
-
 
 
 
@@ -609,7 +599,7 @@ In the following the spec is only that the data be a general string, but using t
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

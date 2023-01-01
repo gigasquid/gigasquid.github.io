@@ -111,8 +111,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2018-07-05T19:39:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Thu  5 Jul 2018,  7:39 PM</time>
         
            | <a href="#disqus_thread" itemprop="discussionUrl"
@@ -145,7 +143,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">docs.module</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">docs.module</span>
 </span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.java.io</span> <span class="ss">:as</span> <span class="nv">io</span><span class="p">]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">clojure.java.shell</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">sh</span><span class="p">]]</span>
 </span><span class='line'>            <span class="p">[</span><span class="nv">org.apache.clojure-mxnet.eval-metric</span> <span class="ss">:as</span> <span class="nv">eval-metric</span><span class="p">]</span>
@@ -164,7 +162,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">data-dir</span> <span class="s">&quot;data/&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">data-dir</span> <span class="s">&quot;data/&quot;</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">when-not </span><span class="p">(</span><span class="nf">.exists</span> <span class="p">(</span><span class="nf">io/file</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)))</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">sh</span> <span class="s">&quot;../../scripts/get_mnist_data.sh&quot;</span><span class="p">))</span>
@@ -189,7 +187,7 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
 </span><span class='line'>                                   <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
 </span><span class='line'>                                   <span class="ss">:label-name</span> <span class="s">&quot;softmax_label&quot;</span>
 </span><span class='line'>                                   <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
@@ -221,7 +219,7 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">data</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">data</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span>
 </span><span class='line'>      <span class="nv">fc1</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">128</span><span class="p">})</span>
 </span><span class='line'>      <span class="nv">act1</span> <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">fc1</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
 </span><span class='line'>      <span class="nv">fc2</span> <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">act1</span> <span class="ss">:num-hidden</span> <span class="mi">64</span><span class="p">})</span>
@@ -243,7 +241,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">out</span> <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">out</span> <span class="p">(</span><span class="nf">as-&gt;</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;data&quot;</span><span class="p">)</span> <span class="nv">data</span>
 </span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">128</span><span class="p">})</span>
 </span><span class='line'>           <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;relu1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;relu&quot;</span><span class="p">})</span>
 </span><span class='line'>           <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;fc2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">64</span><span class="p">})</span>
@@ -263,7 +261,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">mod</span>
 </span><span class='line'>      <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-data</span> <span class="nv">train-data</span><span class="p">)</span>
 </span><span class='line'>               <span class="ss">:label-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-label</span> <span class="nv">train-data</span><span class="p">)})</span>
@@ -281,7 +279,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/fit</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)</span> <span class="p">{</span><span class="ss">:train-data</span> <span class="nv">train-data</span> <span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:num-epoch</span> <span class="mi">1</span><span class="p">}))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">mod</span> <span class="p">(</span><span class="nf">m/fit</span> <span class="p">(</span><span class="nf">m/module</span> <span class="nv">out</span><span class="p">)</span> <span class="p">{</span><span class="ss">:train-data</span> <span class="nv">train-data</span> <span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:num-epoch</span> <span class="mi">1</span><span class="p">}))</span>
 </span><span class='line'><span class="c1">;; Epoch  0  Train- [accuracy 0.12521666]</span>
 </span><span class='line'><span class="c1">;; Epoch  0  Time cost- 8392</span>
 </span><span class='line'><span class="c1">;; Epoch  0  Validation-  [accuracy 0.2227]</span>
@@ -294,7 +292,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">results</span> <span class="p">(</span><span class="nf">m/predict</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">}))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">results</span> <span class="p">(</span><span class="nf">m/predict</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">}))</span>
 </span><span class='line'><span class="p">(</span><span class="nb">first </span><span class="nv">results</span><span class="p">)</span> <span class="c1">;=&gt;#object[org.apache.mxnet.NDArray 0x3540b6d3 &quot;org.apache.mxnet.NDArray@a48686ec&quot;]</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">ndarray/-&gt;vec</span> <span class="p">(</span><span class="nb">first </span><span class="nv">results</span><span class="p">)))</span> <span class="c1">;=&gt;0.08261358</span>
@@ -312,7 +310,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-every-batch</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">})]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-every-batch</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span><span class="p">})]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nf">mx-io/reduce-batches</span> <span class="nv">test-data</span>
 </span><span class='line'>                        <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">i</span> <span class="nv">batch</span><span class="p">]</span>
 </span><span class='line'>                          <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;pred is &quot;</span> <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nb">get </span><span class="nv">preds</span> <span class="nv">i</span><span class="p">))))</span>
@@ -325,7 +323,7 @@
 <p>If you need to evaluate on a test set and don’t need the prediction output, call the <code>score</code> function with a data iterator and an eval metric:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/score</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:eval-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">)})</span> <span class="c1">;=&gt;[&quot;accuracy&quot; 0.2227]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">m/score</span> <span class="nv">mod</span> <span class="p">{</span><span class="ss">:eval-data</span> <span class="nv">test-data</span> <span class="ss">:eval-metric</span> <span class="p">(</span><span class="nf">eval-metric/accuracy</span><span class="p">)})</span> <span class="c1">;=&gt;[&quot;accuracy&quot; 0.2227]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -348,7 +346,7 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">save-prefix</span> <span class="s">&quot;my-model&quot;</span><span class="p">]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">save-prefix</span> <span class="s">&quot;my-model&quot;</span><span class="p">]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">3</span><span class="p">)]</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span> <span class="nv">train-data</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span>
 </span><span class='line'>                                          <span class="c1">;; do something</span>
@@ -369,7 +367,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">new-mod</span> <span class="p">(</span><span class="nf">m/load-checkpoint</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;my-model&quot;</span> <span class="ss">:epoch</span> <span class="mi">1</span> <span class="ss">:load-optimizer-states</span> <span class="nv">true</span><span class="p">}))</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">new-mod</span> <span class="p">(</span><span class="nf">m/load-checkpoint</span> <span class="p">{</span><span class="ss">:prefix</span> <span class="s">&quot;my-model&quot;</span> <span class="ss">:epoch</span> <span class="mi">1</span> <span class="ss">:load-optimizer-states</span> <span class="nv">true</span><span class="p">}))</span>
 </span><span class='line'>
 </span><span class='line'><span class="nv">new-mod</span> <span class="c1">;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 &quot;org.apache.mxnet.module.Module@5304d0f4&quot;]</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -380,7 +378,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">new-mod</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">new-mod</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-data</span> <span class="nv">train-data</span><span class="p">)</span> <span class="ss">:label-shapes</span> <span class="p">(</span><span class="nf">mx-io/provide-label</span> <span class="nv">train-data</span><span class="p">)})</span>
 </span><span class='line'>    <span class="p">(</span><span class="nf">m/init-params</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -406,7 +404,7 @@
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">arg-params</span> <span class="nv">aux-params</span><span class="p">]</span> <span class="p">(</span><span class="nf">m/params</span> <span class="nv">new-mod</span><span class="p">)]</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">arg-params</span> <span class="nv">aux-params</span><span class="p">]</span> <span class="p">(</span><span class="nf">m/params</span> <span class="nv">new-mod</span><span class="p">)]</span>
 </span><span class='line'>  <span class="p">{</span><span class="ss">:arg-params</span> <span class="nv">arg-params</span>
 </span><span class='line'>   <span class="ss">:aux-params</span> <span class="nv">aux-params</span><span class="p">})</span>
 </span><span class='line'>
@@ -431,7 +429,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/set-params</span> <span class="nv">new-mod</span> <span class="p">{</span><span class="ss">:arg-params</span> <span class="p">(</span><span class="nf">m/arg-params</span> <span class="nv">new-mod</span><span class="p">)</span> <span class="ss">:aux-params</span> <span class="p">(</span><span class="nf">m/aux-params</span> <span class="nv">new-mod</span><span class="p">)})</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">m/set-params</span> <span class="nv">new-mod</span> <span class="p">{</span><span class="ss">:arg-params</span> <span class="p">(</span><span class="nf">m/arg-params</span> <span class="nv">new-mod</span><span class="p">)</span> <span class="ss">:aux-params</span> <span class="p">(</span><span class="nf">m/aux-params</span> <span class="nv">new-mod</span><span class="p">)})</span>
 </span><span class='line'><span class="c1">;=&gt; #object[org.apache.mxnet.module.Module 0x5304d0f4 &quot;org.apache.mxnet.module.Module@5304d0f4&quot;]</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -446,7 +444,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; reset the training data before calling fit or you will get an error</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;; reset the training data before calling fit or you will get an error</span>
 </span><span class='line'><span class="p">(</span><span class="nf">mx-io/reset</span> <span class="nv">train-data</span><span class="p">)</span>
 </span><span class='line'><span class="p">(</span><span class="nf">mx-io/reset</span> <span class="nv">test-data</span><span class="p">)</span>
 </span><span class='line'>
@@ -460,7 +458,7 @@
 <h3>See other blog posts about MXNet</h3>
 
 <ul>
-<li><a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Clojure MXNet &ndash; NDArray</a></li>
+<li><a href="http://gigasquidsoftware.com/blog/2018/06/03/meet-clojure-mxnet-ndarray/">Clojure MXNet - NDArray</a></li>
 <li><a href="http://gigasquidsoftware.com/blog/2018/07/01/clojure-mxnet-joins-the-apache-mxnet-project/">Clojure MXNet Joins Apache MXNet</a></li>
 </ul>
 
@@ -470,8 +468,6 @@
       <footer class="post-footer">
         <p class="meta text-muted">
           
-  
-
 
 
 <figure class="author-image">
@@ -531,8 +527,6 @@
 
 -->
           
-
-
 
 
 
@@ -603,7 +597,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2021 - Carin Meier<br>
+  Copyright &copy; 2023 - Carin Meier<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.

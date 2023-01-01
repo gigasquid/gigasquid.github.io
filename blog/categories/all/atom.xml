@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -14,1181 +14,276 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Breakfast With Zero-Shot NLP]]></title>
-    <link href="http://gigasquid.github.io/blog/2021/03/15/breakfast-with-zero-shot-nlp/"/>
-    <updated>2021-03-15T09:07:00-04:00</updated>
-    <id>http://gigasquid.github.io/blog/2021/03/15/breakfast-with-zero-shot-nlp</id>
-    <content type="html"><![CDATA[<p><img src="https://i.imgflip.com/51ror1.jpg" alt="" /></p>
+    <title type="html"><![CDATA[On Staying Technical]]></title>
+    <link href="http://gigasquid.github.io/blog/2018/03/04/on-staying-technical/"/>
+    <updated>2018-03-04T11:03:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2018/03/04/on-staying-technical</id>
+    <content type="html"><![CDATA[<p>I was 10 years into my career when I met her. I could count the number of other women programmers I had worked with on one hand and none of them had young children at home like me. She was not only incredibly experienced and competent, but also had a son in college. I was curious about her career path so I asked her one day at lunch why she was still programming and hadn’t become a manager instead.</p>
 
-<p>What if I told you that you could pick up a library model and instantly classify text with arbitrary categories without any training or fine tuning?</p>
-
-<p>That is exactly what we are going to do with <a href="https://joeddav.github.io/blog/2020/05/29/ZSL.html">Hugging Face&rsquo;s zero-shot learning model</a>. We will also be using <a href="https://github.com/clj-python/libpython-clj">libpython-clj</a> to do this exploration without leaving the comfort of our trusty Clojure REPL.</p>
-
-<h3>What&rsquo;s for breakfast?</h3>
-
-<p>We&rsquo;ll start off by taking some text from a recipe description and trying to decide if it&rsquo;s for breakfast, lunch or dinner:</p>
-
-<p><code>"French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired."</code></p>
-
-<p>Next we will need to install the required python deps:</p>
-
-<p><code>pip install numpy torch transformers lime</code></p>
-
-<p>Now we just need to set up the libpython clojure namespace to load the Hugging Face transformers library.</p>
-
-<p>```clojure
-(ns gigasquid.zeroshot
-  (:require
-   [libpython-clj2.python :as py :refer [py. py.. py.&ndash;]]
-   [libpython-clj2.require :refer [require-python]]))</p>
-
-<p>(require-python &lsquo;[transformers :bind-ns])
-```</p>
-
-<p>Setup is complete. We are now ready to classify with zeroshot.</p>
-
-<h4>Classify with Zero Shot</h4>
-
-<p>To create the classifier with zero shot, you need only create it with a handy pipeline function.</p>
-
-<p><code>clojure
-(def classifier (py. transformers "pipeline" "zero-shot-classification"))
-</code></p>
-
-<p>After that you need just the text you want to classify and category labels you want to use.</p>
-
-<p>```clojure
-(def text &ldquo;French Toast with egg and bacon in the center with maple syrup on top. Sprinkle with powdered sugar if desired.&rdquo;)</p>
-
-<p>(def labels [&ldquo;breakfast&rdquo; &ldquo;lunch&rdquo; &ldquo;dinner&rdquo;])
-```</p>
-
-<p>Classification is only a function call away with:</p>
-
-<p>```clojure
-(classifier text labels)</p>
-
-<p>{&lsquo;labels&rsquo;: [&lsquo;breakfast&rsquo;, &lsquo;lunch&rsquo;, &lsquo;dinner&rsquo;],
- &lsquo;scores&rsquo;: [0.989736795425415, 0.007010194938629866, 0.003252972150221467]}
-```</p>
-
-<p>Breakfast is the winner. Notice that all the  probabilities add up to 1. This is because the default mode for <code>classify</code> uses <code>softmax</code>. We can change that so the categories are each considered independently with the <code>:multi-class</code> option.</p>
-
-<p><code>clojure
-(classifier text labels :multi_class true)
-{'labels': ['breakfast', 'lunch', 'dinner'],
- 'scores': [0.9959920048713684, 0.22608685493469238, 0.031050905585289]}
-</code></p>
-
-<p>This is a really powerful technique for such an easy to use library. However, how can we do anything with it if we don&rsquo;t understand how it is working and get a handle on how to debug it. We need some level of trust in it for utility.</p>
-
-<p>This is where LIME enters.</p>
-
-<h3>Using LIME for Interpretable Models</h3>
-
-<p>One of the biggest problems holding back applying state of the art machine learning models to real life problems is that of interpretability and trust. The <a href="https://github.com/marcotcr/lime">lime technique</a> is a well designed tool to help with this. One of the reasons that I really like it is that it is <em>model agnostic</em>. This means that you can use it with whatever code you want to use with it as long as you adhere to it&rsquo;s <em>api</em>. You need to provide it with the input and a function that will classify and return the probabilities in a numpy array.</p>
-
-<p>The creation of the explainer is only a <code>require</code> away:</p>
-
-<p>```clojure
-(require-python &lsquo;[lime.lime_text :as lime])
-(require-python 'numpy)</p>
-
-<p>(def explainer (lime/LimeTextExplainer :class_names labels))
-```</p>
-
-<p>We need to create a function that will take in some text and then return the probabilities  for the labels. Since the zeroshot classifier will reorder the returning labels/probs by the value, we need to make sure that it will match up by index to the original labels.</p>
-
-<p>```clojure
-(defn predict-probs
-  [text]
-  (let [result (classifier text labels)</p>
-
-<pre><code>    result-scores (get result "scores")
-    result-labels (get result "labels")
-    result-map (zipmap result-labels result-scores)]
-(mapv (fn [cn]
-        (get result-map cn))
-      labels)))
-</code></pre>
-
-<p>(defn predict-texts
-  [texts]
-  (println &ldquo;lime texts are &rdquo; texts)
-  (numpy/array (mapv predict-probs texts)))</p>
-
-<p> (predict-texts [text]) ;=>  [[0.99718672 0.00281324]]
-```</p>
-
-<p>Finally we make an explanation for our text here. We are only using 6 features and 100 samples, to keep the cpus down, but in real life you would want to use closer to the default amount of <code>5000</code> samples. The samples are how the explainers work, it modifies the text over and over again and sees the difference in classification values. For example, one of the sample texts for our case is <code>' Toast with   bacon in the center with  syrup on .  with  sugar  desired.'</code>.</p>
-
-<p>```clojure
-(def exp-result
-  (py. explainer &ldquo;explain_instance&rdquo; text predict-texts</p>
-
-<pre><code>   :num_features 6
-   :num_samples 100))
-</code></pre>
-
-<p>(py. exp-result &ldquo;save_to_file&rdquo; &ldquo;explanation.html&rdquo;)
-```</p>
-
-<p><img src="https://live.staticflickr.com/65535/51039510876_e547177bb2_h.jpg" alt="" /></p>
-
-<p>Now it becomes more clear. The model is using mainly the word <code>toast</code> to classify it as breakfast with supporting words also being <code>french</code>, <code>egg</code>, <code>maple</code>, and <code>syrup</code>. The word <code>the</code> is also in there too which could be an artifact of the low numbers of samples we used or not. But now at least we have the tools to dig in and understand.</p>
-
-<h2>Final Thoughts</h2>
-
-<p>Exciting advances are happening in Deep Learning and NLP. To make them truly useful,  we will need to continue to consider how to make them interpretable and debuggable.</p>
-
-<p>As always, keep your Clojure REPL handy.</p>
+<p>She smiled at me kindly and replied, &ldquo;I’ve worked very hard to stay exactly where I am&rdquo;,  and I was enlightened.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Thoughts on AI Debate 2]]></title>
-    <link href="http://gigasquid.github.io/blog/2020/12/24/thoughts-on-ai-debate-2/"/>
-    <updated>2020-12-24T10:59:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2020/12/24/thoughts-on-ai-debate-2</id>
-    <content type="html"><![CDATA[<p><img src="https://montrealartificialintelligence.com/aidebate2mosaic1440x720v8.jpg" alt="" /></p>
+    <title type="html"><![CDATA[Self Publishing for the Creative Coder]]></title>
+    <link href="http://gigasquid.github.io/blog/2017/05/27/self-publishing-for-the-creative-coder/"/>
+    <updated>2017-05-27T14:11:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2017/05/27/self-publishing-for-the-creative-coder</id>
+    <content type="html"><![CDATA[<p>So, you have an idea for a fiction book. First, let me tell you that it&rsquo;s a good idea and it&rsquo;s a great thing that you are a coder. Quite a few successful authors have a background in software development. <a href="http://www.imdb.com/title/tt2543164/">Arrival</a>, (which is a fabulous movie), comes from the book, <a href="https://www.amazon.com/Stories-Your-Life-Others-Chiang/dp/1101972122">Stories of your Life</a>,  written by a fellow programmer <a href="https://en.wikipedia.org/wiki/Ted_Chiang">Ted Chiang</a>. <a href="https://en.wikipedia.org/wiki/Charles_Stross">Charlie Stross</a> is another fine example. One of my favorites is <a href="https://en.wikipedia.org/wiki/Daniel_Suarez_(author">Daniel Suarez</a>, the author of the<a href="https://www.amazon.com/DAEMON-Daniel-Suarez/dp/0451228731"> Daemon</a> and more recently <a href="https://www.amazon.com/Change-Agent-Novel-Daniel-Suarez/dp/110198466X/">Change Agent</a>. So yes, you can write a fiction book and you&rsquo;re in good company. This post is dedicated to help make it happen.</p>
 
-<h2>AI Debate 2 from Montreal.AI</h2>
+<h2>So how do you know about self publishing?</h2>
 
-<p>I had the pleasure of watching the second AI debate from Montreal.AI last night. The first AI debate occurred last year between <a href="https://yoshuabengio.org/">Yoshua Bengio</a> and <a href="https://en.wikipedia.org/wiki/Gary_Marcus">Gary Marcus</a> entitled <a href="https://montrealartificialintelligence.com/aidebate.html">“The Best Way Forward for AI”</a> in which Yoshua argued that Deep Learning could achieve General AI through its own paradigm, while Marcus argued that Deep Learning alone was not sufficient and needed a hybrid approach involving symbolics and inspiration from other disciplines.</p>
+<p>Two years ago, I had a semi-crazy idea for a tween/teen scifi book. At the time, my daughter was into all the popular books of time like <em>Hunger Games</em> and <em>Divergent</em>. The thing that I really liked about them was the strong female protagonist. The only thing that I thought was missing was a story that focused on a girl who could code. It would make it even better if she had <em>coding super powers</em>. The idea for <a href="http://www.codeshifterbook.com/">Code Shifter</a> was born. One of the things that I wanted to explore in writing the book was to have real programming code in the book but not have it be a <em>learning how to code</em> book. The code would exist as part of the story and if the reader picked up concepts along the way, great. Even if they didn&rsquo;t, it would lay the positive groundwork to have them be more open to it later.</p>
 
-<br>
+<p>Books, like software, always take longer than you plan. My daughter and I enjoyed working on it together and over time it grew into a book that we could share with others. Along the way, I learned quite a bit about writing books, publishing, and other things that I wish I had known beforehand.</p>
 
+<h2>What did you use to write the book?</h2>
 
-<p>This interdisciplinary thread of Gary’s linked the two programs. The second AI debate was entitled <a href="https://montrealartificialintelligence.com/aidebate2.html">“Moving AI Forward: An Interdisciplinary Approach”</a> and reflected a broad panel that explored themes on architecture, neuroscience and psychology, and trust/ethics. The second program was not really a debate, but more of a showcase of ideas in the form of 3 minute presentations from the panelists and discussion around topics with Marcus serving as a capable moderator.</p>
+<p>In the book world, your story is referred to as your <em>manuscript</em>. As a tool to produce it, I cannot speak highly enough of <a href="https://leanpub.com/">Leanpub</a>. I found it easy and productive to work in as a programmer. For example,  my setup was pretty painless.</p>
 
-<br>
+<p>In the repo, I had a <code>manuscript</code> directory, in which there was a <code>Book.txt</code> file that listed the chapter files.</p>
 
+<pre><code>chapter2.txt
+chapter3.txt
+chapter4.txt
+chapter5.txt
+</code></pre>
 
-<p>The program aired Wednesday night and was 3 hours long. I watched it live with an unavoidable break in the middle to fetch dinner for my family, but the whole recording is up now on the <a href="https://montrealartificialintelligence.com/aidebate2.html">website</a>. Some of the highlights for me were thoughts around System 1 and System 2,  reinforcement learning, and the properties of evolution.</p>
+<p>Each chapter file in turn was written in markdown. For example, <code>chapter2.txt</code> looked like this:</p>
 
-<br>
+<pre><code># 1
 
-
-<p>There was much discussion around System 1 and System 2 in relation to AI. One of the author’s of the recently published paper <a href="https://arxiv.org/pdf/2010.06002.pdf">“Thinking Fast and Slow in AI”</a>, <a href="https://researcher.watson.ibm.com/researcher/view.php?person=ibm-Francesca.Rossi2">Francesca Rossi</a> was a panelist as well as <a href="https://en.wikipedia.org/wiki/Daniel_Kahneman">Danny Kahneman</a> the author of “Thinking Fast and Slow”. Applying the abstraction of these sysems to AI with Deep Learning being System 1 is very appealing, however as Kahneman pointed out in his talk, this abstraction is leaky at its heart as the human System 1 encompasses much more than current AI system 1, (like a model of the world). It is interesting to think of one of the differences in human System 1 and System 2 in relation to one being fast and concurrent while the other is slower and sequential and laden with attention. Why is this so? Is this a constraint and design feature that we should bring to our AI design?</p>
-
-<br>
-
-
-<p><a href="http://www.incompleteideas.net/">Richard Sutton</a> gave a thought provoking talk on how reinforcement learning is the first fully implemented computational theory of intelligence. He pointed to <a href="https://apsc450computationalneuroscience.wordpress.com/marrs-three-levels-of-inquiry/">Marr’s three levels</a>  at which any information processing machine must be understood: hardware implementation, representation/algorithm, and finally the high level theory. That is: what is the goal of the computation? What logic can the strategy be carried out? AI has made great strides due to this computational theory. However, it is only one theory. We need more. I personally think that innovation and exploration in this area could lead to an exciting future in AI.</p>
-
-<br>
+## Flicker
 
 
-<p>Evolution is a fundamental force that drives humans and the world around us. <a href="https://www.cs.ucf.edu/~kstanley/">Ken Stanely</a> reminded us that while computers dominate at solving problems, humans still rule at open-ended innovation over the millenia. The underlying properties of evolution still elude our deep understanding. Studying the core nature of this powerful phenomena is a very important area of research.</p>
+Twelve-year-old Eliza knew that the next words were the result of computer program far more intelligent than any one of them. Standing next to her parents, she held her breath and watched as her brother touched his finger to the message on the wall screen.
+</code></pre>
 
-<br>
-
-
-<p>The last question of the evening to all the panelists was the greatest Christmas gift of all &ndash; “Where do you want AI to go?”. The diversity of the answers reflected the broad hopes shared by many that will light the way to come. I’ll paraphrase some of the ones here:</p>
+<p>From there, my process looked like:</p>
 
 <ul>
-<li>Want to understand fundamental laws and principles and use them to better the human condition.</li>
-<li>Understand the different varieties of intelligence.</li>
-<li>Want an intelligent and superfriendly apprentice. To understand self by emulating.</li>
-<li>To move beyond GPT-3 remixing to really assisting creativity for humanity.</li>
-<li>Hope that AI will amplify us and our abilities.</li>
-<li>Use AI to help people understand what bias they have.</li>
-<li>That humans will still have something to add after AI have mastered a domain</li>
-<li>To understand the brain in the most simple and beautiful way.</li>
-<li>Gain a better clarity and understanding of our own values by deciding which to endow our AI with.</li>
-<li>Want the costs and benefits of AI to be distributed globally and economically.</li>
+<li>Write a bit in my favorite editor, (Emacs of course), and make a commit.</li>
+<li>Push the commit to github, which is registered with the Leanpub project</li>
+<li>Log onto the Leanpub project and hit the <em>preview</em> button. This would generate a pdf and ebook that I could share with my daughter for feedback.</li>
 </ul>
 
 
-<br>
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg">http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg</a>"></p>
 
+<h3>Advantages of Leanpub for development.</h3>
 
-<p>Thanks again Montreal.AI for putting together such a great program and sharing it with the community. I look forward to next year.</p>
+<p>As I said earlier, I&rsquo;m a fan. Using git for revisions is incredibly useful. I shudder to think of people writing in Word without version control. The ability to easily create PDF and ebook formats was also very convenient. The markdown format has excellent code support. There is also the option as publishing your work as you go. However, I think that this is more useful with a technical book than with fiction.</p>
 
-<br>
+<h3>Disadvantages of Leanpub for development</h3>
 
+<p>If you are going to work with an freelance editor or share your work with someone in the mainstream book world, they are not going to want pdf. They usually want a doc version. It took me a bit of research to find a good converter, <a href="http://pandoc.org/">pandoc</a>. With it, you can convert from markdown to Word with things looking pretty good. Don&rsquo;t try to do pdf to Word. I found it a big recipe for fail.</p>
 
-<p>Merry Christmas everyone!</p>
+<p>Finally, the book was considered done enough to think about publishing.</p>
+
+<p>There was much rejoicing.</p>
+
+<h2>Didn&rsquo;t you want to get the book into bookstores?</h2>
+
+<p>Of course. That would be incredibly cool. However, that requires getting into what they call <em>traditional publishing</em> and it is a lot more work, time, and luck. If you go this route, you will need to budget at least six months to send out form letters to agencies to have them represent your work. Also, beware of predatory services that take advantage of unsuspecting and wide eyed authors. If you are interested in this, you&rsquo;ll want to start looking for agents that are interested in your type of book. <a href="https://querytracker.net/">Query Tracker</a> is a great place to start.</p>
+
+<h2>Traditional publishing sounds hard. What about self publishing?</h2>
+
+<p>Self publishing is certainly an easier more direct way to bring your book to life. For me, it was the best way forward. Luckily, Leanpub made it pretty painless.</p>
+
+<h3>Publishing the book with Leanpub</h3>
+
+<p>Actually publishing the finished copy was really easy with Leanpub. All I had to do was fill in some fields on the project page and push <em>Publish!</em> The book was immediately ready to share with the world. Putting out an updated edition was as easy as pushing the button again. Leanpub provides online reading as well as all the ebook versions.</p>
+
+<p>That was nice, but I really wanted a print copy too.</p>
+
+<h3>Publishing with CreateSpace</h3>
+
+<p>Amazon&rsquo;s <a href="https://www.createspace.com/">CreateSpace</a> provides and excellent platform for on-demand print copies of books. This is where Leanpub comes in handy again. There is an <code>Export Option</code> that provides and unbranded pdf copy of your manuscript with all the correct formatting and margins required for CreateSpace. I simply exported the file and then uploaded it up to the project.</p>
+
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg">http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg</a>"></p>
+
+<p>The other thing that you will want is a nice cover. There are services through CreateSpace for cover creation that you can buy or you can upload your own file. I was lucky enough to have a talented graphic designer as sister, Kristin Allmyer,  who made me an awesome cover.</p>
+
+<p>One of the confusing things was picking an ISBN for the print copy. You don&rsquo;t need to worry about this for ebook versions but you do for a physical copy. Your choices through CreateSpace are using a provided one for free or buying your own for $99. I chose my own so I could have flexibility of working with another publisher other than Amazon if I want. If you choose that option, you can also make up your own publisher name. Mine is <em>Gigasquid Books</em>.</p>
+
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg">http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg</a>"></p>
+
+<p>Once you have completed all the setup, they will send you a physical copy in the mail to approve. The moment you get to hold it in your hands is really magical.</p>
+
+<p><img class="<a" src="href="https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large">https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large</a>"></p>
+
+<p>If it looks alright, you hit the approve button and voilà - it&rsquo;s for sale on Amazon!</p>
+
+<h3>Publishing with Direct Kindle Publishing</h3>
+
+<p>With CreateSpace, you have the option of porting your book to a Kindle format as well. It will do most of the heavy lifting of converting the files for you and a few button clicks later you have both an Kindle and print version available for your readers.</p>
+
+<p>If you need to update the text of the Kindle version, Leanpub also has an export option available to produce unbranded ebook files. Just take this and upload it to your KDP account and you are good to go.</p>
+
+<h2>Did you run into any problems?</h2>
+
+<p>Of course I did. I was totally new to self publishing and I underestimated how hard copy editing is. Some errors unfortunately made it into the first version. Luckily, I had some really nice people that helped my fix it for later versions. Many thanks to Martin Plumb, Michael Daines, Paul Henrich, and S. Le Callonnec for editing help.</p>
+
+<p>This brings me to my next point. If I had to do it all over again, I would publish the book in a different order. Books are really no different than software. There are going to be bugs when you first release it in the wild. It is best to embrace this. In the future, I would publish the ebook versions first, which are much easier to update and then the print versions after that.</p>
+
+<h2>Did you make lots of money from the book sales?</h2>
+
+<p>Hahaha &hellip;  that&rsquo;s funny. If you are interested in making money, books are not the best way to go. The margins on Leanpub are definitely better than Amazon, but if I really was interested in making money, I would have been much better off using deep learning to make a stock market predictor or code up a startup that I could sell off.</p>
+
+<p>Authors in general, are much harder pressed to make livings than software developers. We should count our blessings.</p>
+
+<h2>Any last words of advice?</h2>
+
+<p>There is a great joy from creating a story and sharing it with others. Take your book idea, nurture it, and bring it to life. Then publish it and we can celebrate together.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Clojure Interop With Python NLP Libraries]]></title>
-    <link href="http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/"/>
-    <updated>2020-01-24T15:34:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries</id>
-    <content type="html"><![CDATA[<p><img src="http:////live.staticflickr.com/65535/49435394578_400fdf1c7f_c.jpg" alt="clojure-python" /></p>
-
-<p>In this edition of the blog series of Clojure/Python interop with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>, we&rsquo;ll be taking a look at two popular Python NLP libraries: <a href="https://www.nltk.org/">NLTK</a> and <a href="https://spacy.io/">SpaCy</a>.</p>
-
-<h2>NLTK &ndash; Natural Language Toolkit</h2>
-
-<p>I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by <em>far</em> NLTK was the most requested library. After looking into it, I can see why. It&rsquo;s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching.</p>
-
-<h3>Installation</h3>
-
-<p>To use the NLTK toolkit you will need to install it. I use <code>sudo pip3 install nltk</code>, but libpython-clj now supports virtual environments with this <a href="https://github.com/cnuernber/libpython-clj/pull/53">PR</a>, so feel free to use whatever is best for you.</p>
-
-<h3>Features</h3>
-
-<p>We&rsquo;ll take a quick tour of the features of NLTK following along initially with the <a href="https://www.nltk.org/book/ch01.html">nltk official book</a> and then moving onto this more data task centered <a href="https://www.datacamp.com/community/tutorials/text-analytics-beginners-nltk">tutorial</a>.</p>
-
-<p>First, we need to require all of our things as usual:</p>
-
-<p>```clojure
-(ns gigasquid.nltk
-  (:require [libpython-clj.require :refer [require-python]]</p>
-
-<pre><code>        [libpython-clj.python :as py :refer [py. py.. py.-]]))
-</code></pre>
-
-<p>(require-python &lsquo;([nltk :as nltk]))
-```</p>
-
-<h4>Downloading packages</h4>
-
-<p>There are all sorts of packages available to download from NLTK. To start out and tour the library, I would go with a small one that has basic data for the nltk book tutorial.</p>
-
-<p><code>clojure
- (nltk/download "book")
-  (require-python '([nltk.book :as book]))
-</code></p>
-
-<p>There are all other sorts of downloads as well, such as <code>(nltk/download "popular")</code> for most used ones. You can also download <code>"all"</code>, but beware that it is big.</p>
-
-<p>You can check out some of the texts it downloaded with:</p>
-
-<p>```clojure
-  (book/texts)</p>
-
-<p>  ;;; prints out in repl
-  ;; text1: Moby Dick by Herman Melville 1851
-  ;; text2: Sense and Sensibility by Jane Austen 1811
-  ;; text3: The Book of Genesis
-  ;; text4: Inaugural Address Corpus
-  ;; text5: Chat Corpus
-  ;; text6: Monty Python and the Holy Grail
-  ;; text7: Wall Street Journal
-  ;; text8: Personals Corpus
-  ;; text9: The Man Who Was Thursday by G . K . Chesterton 1908</p>
-
-<p>  book/text1 ;=>  &lt;Text: Moby Dick by Herman Melville 1851>
-  book/text2 ;=>  &lt;Text: Sense and Sensibility by Jane Austen 1811></p>
-
-<p>```</p>
-
-<p>  You can do fun things like see how many tokens are in a text</p>
-
-<p><code>clojure
-  (count (py.- book/text3 tokens))  ;=&gt; 44764
-</code></p>
-
-<p>  Or even see the lexical diversity, which is a measure of the richness of the text by looking at the unique set of word tokens against the total tokens.</p>
-
-<p>```clojure
-  (defn lexical-diversity [text]</p>
-
-<pre><code>(let [tokens (py.- text tokens)]
-  (/ (-&gt; tokens set count)
-     (* 1.0 (count tokens)))))
-</code></pre>
-
-<p>  (lexical-diversity book/text3) ;=> 0.06230453042623537
-  (lexical-diversity book/text5) ;=> 0.13477005109975562
-```</p>
-
-<p> This of course is all very interesting but I prefer to look at some more practical tasks, so we are going to look at some sentence tokenization.</p>
-
-<h4>Sentence Tokenization</h4>
-
-<p> Text can be broken up into individual word tokens or sentence tokens. Let&rsquo;s start off first with the token package</p>
-
-<p><code>clojure
-(require-python '([nltk.tokenize :as tokenize]))
-(def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
-The sky is pinkish-blue. You shouldn't eat cardboard")
-</code></p>
-
-<p>To tokenize sentences, you take the text and use <code>tokenize/sent_tokenize</code>.</p>
-
-<p><code>clojure
- (def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
-The sky is pinkish-blue. You shouldn't eat cardboard")
- (def tokenized-sent (tokenize/sent_tokenize text))
- tokenized-sent
- ;;=&gt; ['Hello Mr. Smith, how are you doing today?', 'The weather is great, and city is awesome.', 'The sky is pinkish-blue.', "You shouldn't eat cardboard"]
-</code></p>
-
-<p>Likewise, to tokenize words, you use <code>tokenize/word_tokenize</code>:</p>
-
-<p>```clojure
- (def text &ldquo;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
-The sky is pinkish-blue. You shouldn&rsquo;t eat cardboard&rdquo;)
- (def tokenized-sent (tokenize/sent_tokenize text))
- tokenized-sent
- ;;=> [&lsquo;Hello Mr. Smith, how are you doing today?&rsquo;, &lsquo;The weather is great, and city is awesome.&rsquo;, &lsquo;The sky is pinkish-blue.&rsquo;, &ldquo;You shouldn&rsquo;t eat cardboard&rdquo;]</p>
-
-<p> (def tokenized-word (tokenize/word_tokenize text))
- tokenized-word
-  ;;=> [&lsquo;Hello&rsquo;, &lsquo;Mr.&rsquo;, &lsquo;Smith&rsquo;, &lsquo;,&rsquo;, &lsquo;how&rsquo;, &lsquo;are&rsquo;, &lsquo;you&rsquo;, &lsquo;doing&rsquo;, &lsquo;today&rsquo;, &lsquo;?&rsquo;, &lsquo;The&rsquo;, &lsquo;weather&rsquo;, &lsquo;is&rsquo;, &lsquo;great&rsquo;, &lsquo;,&rsquo;, &lsquo;and&rsquo;, &lsquo;city&rsquo;, &lsquo;is&rsquo;, &lsquo;awesome&rsquo;, &lsquo;.&rsquo;, &lsquo;The&rsquo;, &lsquo;sky&rsquo;, &lsquo;is&rsquo;, &lsquo;pinkish-blue&rsquo;, &lsquo;.&rsquo;, &lsquo;You&rsquo;, &lsquo;should&rsquo;, &ldquo;n&rsquo;t&rdquo;, &lsquo;eat&rsquo;, &lsquo;cardboard&rsquo;]
-```</p>
-
-<h4>Frequency Distribution</h4>
-
-<p> You can also look at the frequency distribution of the words with using the probability package.</p>
-
-<p>```clojure
- (require-python &lsquo;([nltk.probability :as probability]))</p>
-
-<p> (def fdist (probability/FreqDist tokenized-word))
- fdist ;=> <FreqDist with 25 samples and 30 outcomes></p>
-
-<p> (py. fdist most_common)
-  ;=> [(&lsquo;is&rsquo;, 3), (&lsquo;,&rsquo;, 2), (&lsquo;The&rsquo;, 2), (&lsquo;.&rsquo;, 2), (&lsquo;Hello&rsquo;, 1), (&lsquo;Mr.&rsquo;, 1), (&lsquo;Smith&rsquo;, 1), (&lsquo;how&rsquo;, 1), (&lsquo;are&rsquo;, 1), (&lsquo;you&rsquo;, 1), (&lsquo;doing&rsquo;, 1), (&lsquo;today&rsquo;, 1), (&lsquo;?&rsquo;, 1), (&lsquo;weather&rsquo;, 1), (&lsquo;great&rsquo;, 1), (&lsquo;and&rsquo;, 1), (&lsquo;city&rsquo;, 1), (&lsquo;awesome&rsquo;, 1), (&lsquo;sky&rsquo;, 1), (&lsquo;pinkish-blue&rsquo;, 1), (&lsquo;You&rsquo;, 1), (&lsquo;should&rsquo;, 1), (&ldquo;n&rsquo;t&rdquo;, 1), (&lsquo;eat&rsquo;, 1), (&lsquo;cardboard&rsquo;, 1)]</p>
-
-<p>```</p>
-
-<h4>Stop Words</h4>
-
-<p>Stop words are considered noise in text and there are ways to use the library to remove them using the <code>nltk.corpus</code>.</p>
-
-<p><code>clojure
-(def stop-words (into #{} (py. corpus/stopwords words "english")))
- stop-words
-  ;=&gt; #{"d" "itself" "more" "didn't" "ain" "won" "hers"....}
-</code></p>
-
-<p>Now that we have a collection of the stop words, we can filter them out of our text in the normal way in Clojure.</p>
-
-<p>```clojure
-(def filtered-sent (&ndash;>> tokenized-sent</p>
-
-<pre><code>                     (map tokenize/word_tokenize)
-                     (map #(remove stop-words %))))
-</code></pre>
-
-<p> filtered-sent
- ;; ((&ldquo;Hello&rdquo; &ldquo;Mr.&rdquo; &ldquo;Smith&rdquo; &ldquo;,&rdquo; &ldquo;today&rdquo; &ldquo;?&rdquo;)
- ;; (&ldquo;The&rdquo; &ldquo;weather&rdquo; &ldquo;great&rdquo; &ldquo;,&rdquo; &ldquo;city&rdquo; &ldquo;awesome&rdquo; &ldquo;.&rdquo;)
- ;; (&ldquo;The&rdquo; &ldquo;sky&rdquo; &ldquo;pinkish-blue&rdquo; &ldquo;.&rdquo;)
- ;; (&ldquo;You&rdquo; &ldquo;n&rsquo;t&rdquo; &ldquo;eat&rdquo; &ldquo;cardboard&rdquo;))
-```</p>
-
-<h4>Lexion Normalization and Lemmatization</h4>
-
-<p>Stemming and Lemmatization allow ways for the text to be reduced to base words and normalized.
-For example, the word <code>flying</code> has a stemmed word of <code>fli</code> and a lemma of <code>fly</code>.</p>
-
-<p>```clojure
-(require-python &lsquo;([nltk.stem :as stem]))
-(require-python &rsquo;([nltk.stem.wordnet :as wordnet]))</p>
-
-<p>(let [lem (wordnet/WordNetLemmatizer)</p>
-
-<pre><code>   stem (stem/PorterStemmer)
-   word "flying"]
-</code></pre>
-
-<p>   {:lemmatized-word (py. lem lemmatize word &ldquo;v&rdquo;)</p>
-
-<pre><code>:stemmed-word (py. stem stem word)})
-</code></pre>
-
-<p> ;=> {:lemmatized-word &ldquo;fly&rdquo;, :stemmed-word &ldquo;fli&rdquo;}
-```</p>
-
-<h4>POS Tagging</h4>
-
-<p>It also has support for Part-of-Speech (POS) Tagging. A quick example of that is:</p>
-
-<p>```clojure
-(let [sent &ldquo;Albert Einstein was born in Ulm, Germany in 1879.&rdquo;</p>
-
-<pre><code>   tokens (nltk/word_tokenize sent)]
-</code></pre>
-
-<p>   {:tokens tokens</p>
-
-<pre><code>:pos-tag (nltk/pos_tag tokens)})
-</code></pre>
-
-<p> ;; {:tokens
- ;; [&lsquo;Albert&rsquo;, &lsquo;Einstein&rsquo;, &lsquo;was&rsquo;, &lsquo;born&rsquo;, &lsquo;in&rsquo;, &lsquo;Ulm&rsquo;, &lsquo;,&rsquo;, &lsquo;Germany&rsquo;, &lsquo;in&rsquo;, &lsquo;1879&rsquo;, &lsquo;.&rsquo;],
- ;; :pos-tag
- ;; [(&lsquo;Albert&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;Einstein&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;was&rsquo;, &lsquo;VBD&rsquo;), (&lsquo;born&rsquo;, &lsquo;VBN&rsquo;), (&lsquo;in&rsquo;, &lsquo;IN&rsquo;), (&lsquo;Ulm&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;,&rsquo;, &lsquo;,&rsquo;), (&lsquo;Germany&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;in&rsquo;, &lsquo;IN&rsquo;), (&lsquo;1879&rsquo;, &lsquo;CD&rsquo;), (&lsquo;.&rsquo;, &lsquo;.&rsquo;)]}
-```</p>
-
-<p>Phew! That&rsquo;s a brief overview of what NLTK can do, now what about the other library SpaCy?</p>
-
-<h2>SpaCy</h2>
-
-<p><a href="https://spacy.io/usage/spacy-101#whats-spacy">SpaCy</a> is the main competitor to NLTK. It has a more opinionated library which is more object oriented than NLTK which mainly processes text. It has better performance for tokenization and POS tagging and has support for word vectors, which NLTK does not.</p>
-
-<p>Let&rsquo;s dive in a take a look at it.</p>
-
-<h3>Installation</h3>
-
-<p>To install spaCy, you will need to do:</p>
+    <title type="html"><![CDATA[Guide to Leaving Your Mac Laptop]]></title>
+    <link href="http://gigasquid.github.io/blog/2013/12/26/guide-to-leaving-your-mac-laptop/"/>
+    <updated>2013-12-26T00:00:00-05:00</updated>
+    <id>http://gigasquid.github.io/blog/2013/12/26/guide-to-leaving-your-mac-laptop</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg">http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg</a>"></p>
+
+<p>I felt like I was in a controlling relationship headed downhill.
+After two custom laptops returned for defective hardware, I wanted to
+leave.  But leaving didn&rsquo;t seem so easy after living in the walled
+garden of Apple all those years.</p>
+
+<p>This blog post is about how to leave your Mac and return to OSS.</p>
+
+<h2>Make a New Plan, Stan</h2>
+
+<p>There are quite a few nice alternatives to the Mac Air out there.
+I decided to go with the new
+<a href="http://www.dell.com/us/business/p/xps-13-linux/pd">Sputnik 3</a>.
+Some of my reasons:</p>
 
 <ul>
-<li><code>pip3 install spacy</code></li>
-<li><code>python3 -m spacy download en_core_web_sm</code> to load up the small language model</li>
+<li>Powerful - New Haswell processor</li>
+<li>13.3 inch touch display with 1920 x 1080 resolution</li>
+<li>Ships with Ubuntu 12.04 (64 bit)</li>
+<li>Nice design (yes looks are important)</li>
 </ul>
 
 
-<p>We&rsquo;ll be following along this <a href="https://spacy.io/usage/spacy-101#annotat">tutorial</a></p>
+<p>It arrived a couple of days before Christmas. The packaging itself
+was quite nice.  Here is a picture next
+to my 13 inch Mac Air.</p>
 
-<p>We will, of course, need to load up the library</p>
+<p><img class="<a" src="href="http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg">http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg</a>"></p>
 
-<p><code>clojure
-(require-python '([spacy :as spacy]))
-</code></p>
+<p>The best was that everything just &ldquo;worked&rdquo; out of the box.
+I had no problems configuring Ubuntu and getting the wireless network
+hooked up.  I could close the lid and reopen it and have &ldquo;instant on&rdquo;
+just like the Mac Air.  The keyboard is enjoyable to use and nicely
+backlit.  The sleek design and light weight of the laptop is very
+comparable to the Mac Air.</p>
 
-<p>and its language model:</p>
+<p><img class="<a" src="href="http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg">http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg</a>"></p>
 
-<p><code>clojure
-(def nlp (spacy/load "en_core_web_sm"))
-</code></p>
+<h2>Hop on the Bus, Gus</h2>
 
-<h4>Linguistic Annotations</h4>
+<p>It took my about a day to set up all my programs that I use on a daily
+basis.
+Here is a overview:</p>
 
-<p>There are many linguistic annotations that are available, from POS, lemmas, and more:</p>
+<h4>Application Dock/ Organization - Dash</h4>
 
-<p>```clojure
-(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
-  (map (fn [token]</p>
+<p>Ubuntu has a dock on the left hand side of the screen, that is very
+similar to the mac one.  You can right click and pin applications to
+the dock to keep them in there. Clicking into the dash option, you can
+browse your applications that are installed.</p>
 
-<pre><code>     [(py.- token text) (py.- token pos_) (py.- token dep_)])
-   doc))
+<h4>Getting New Apps - Ubuntu Software Center or apt-get</h4>
+
+<p>You can install new applications easily by using the Ubuntu Software
+Center.  Browsing the applications and installing them is point and
+click easy. If you don&rsquo;t see the one you need or need a more recent
+version, you can always install via the command line with</p>
+
+<pre><code>sudo apt-get install package-name
 </code></pre>
 
-<p>;; ([&ldquo;Apple&rdquo; &ldquo;PROPN&rdquo; &ldquo;nsubj&rdquo;]
-;;  [&ldquo;is&rdquo; &ldquo;AUX&rdquo; &ldquo;aux&rdquo;]
-;;  [&ldquo;looking&rdquo; &ldquo;VERB&rdquo; &ldquo;ROOT&rdquo;]
-;;  [&ldquo;at&rdquo; &ldquo;ADP&rdquo; &ldquo;prep&rdquo;]
-;;  [&ldquo;buying&rdquo; &ldquo;VERB&rdquo; &ldquo;pcomp&rdquo;]
-;;  [&ldquo;U.K.&rdquo; &ldquo;PROPN&rdquo; &ldquo;compound&rdquo;]
-;;  [&ldquo;startup&rdquo; &ldquo;NOUN&rdquo; &ldquo;dobj&rdquo;]
-;;  [&ldquo;for&rdquo; &ldquo;ADP&rdquo; &ldquo;prep&rdquo;]
-;;  [&ldquo;$&rdquo; &ldquo;SYM&rdquo; &ldquo;quantmod&rdquo;]
-;;  [&ldquo;1&rdquo; &ldquo;NUM&rdquo; &ldquo;compound&rdquo;]
-;;  [&ldquo;billion&rdquo; &ldquo;NUM&rdquo; &ldquo;pobj&rdquo;])
-```</p>
+<h4>Browser - Firefox or Chromium</h4>
 
-<p>Here are some more:</p>
+<p>Ubuntu comes with Firefox and Chromium installed.
+You can also go with Chrome of course.</p>
 
-<p>```clojure
-(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
-  (map (fn [token]</p>
+<h4>Mail - Thunderbird</h4>
 
-<pre><code>     {:text (py.- token text)
-      :lemma (py.- token lemma_)
-      :pos (py.- token pos_)
-      :tag (py.- token tag_)
-      :dep (py.- token dep_)
-      :shape (py.- token shape_)
-      :alpha (py.- token is_alpha)
-      :is_stop (py.- token is_stop)} )
-   doc))
-</code></pre>
+<p>Ubuntu comes with Thunderbird mail ready to go.
+I was pleasantly surprised by how easy it was to setup Thunderbird
+Mail.  You simply put in your email and password.  Ubuntu keeps a
+configuration list of commonly used email providers.  It automagically
+figured out the correct domains and ports to use. On the downside, it
+doesn&rsquo;t do anything magic with your contacts. So you are on your own
+there.  I also just found out about
+<a href="http://www.omgubuntu.co.uk/2013/10/geary-0-4-released-with-new-look-new-features">Geary</a>,
+which looks pretty sweet.</p>
 
-<p>;; ({:text &ldquo;Apple&rdquo;,
-;;   :lemma &ldquo;Apple&rdquo;,
-;;   :pos &ldquo;PROPN&rdquo;,
-;;   :tag &ldquo;NNP&rdquo;,
-;;   :dep &ldquo;nsubj&rdquo;,
-;;   :shape &ldquo;Xxxxx&rdquo;,
-;;   :alpha true,
-;;   :is_stop false}
-;;  {:text &ldquo;is&rdquo;,
-;;   :lemma &ldquo;be&rdquo;,
-;;   :pos &ldquo;AUX&rdquo;,
-;;   :tag &ldquo;VBZ&rdquo;,
-;;   :dep &ldquo;aux&rdquo;,
-;;   :shape &ldquo;xx&rdquo;,
-;;   :alpha true,
-;;   :is_stop true}
-;;  &hellip;
-```</p>
+<h4>Password Management - 1 Password Anywhere + Dropbox / LastPass</h4>
 
-<h3>Named Entities</h3>
+<p>There is not a linux client for 1Password. I can still use it by using
+<a href="http://help.agilebits.com/1Password3/1passwordanywhere.html">1PasswordAnywhere</a>.
+I just have a bookmark to the 1PasswordAnyway link and I haz my
+logins. I am switching over to LastPass though, so you can edit / add
+new passwords. There is also an import utility to move stuff over from 1Password.</p>
 
-<p>It also handles named entities in the same fashion.</p>
+<h4>Emacs</h4>
 
-<p>```clojure
-(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
-  (map (fn [ent]</p>
+<p>Emacs just works :)
+It might be just me, but I think it is happier back on Ubuntu.
+I did an apt-get to get the 24 version.</p>
 
-<pre><code>     {:text (py.- ent text)
-      :start-char (py.- ent start_char)
-      :end-char (py.- ent end_char)
-      :label (py.- ent label_)} )
-   (py.- doc ents)))
-</code></pre>
+<h4>Git Client</h4>
 
-<p>;; ({:text &ldquo;Apple&rdquo;, :start-char 0, :end-char 5, :label &ldquo;ORG&rdquo;}
-;;  {:text &ldquo;U.K.&rdquo;, :start-char 27, :end-char 31, :label &ldquo;GPE&rdquo;}
-;;  {:text &ldquo;$1 billion&rdquo;, :start-char 44, :end-char 54, :label &ldquo;MONEY&rdquo;})
-```</p>
+<p>I went with gitg for a graphical Git client. It seems to have all the
+things you need.</p>
 
-<p>As you can see, it can handle pretty much the same things as NLTK. But let&rsquo;s take a look at what it can do that NLTK and that is with word vectors.</p>
+<h4>Terminal - Byobu</h4>
 
-<h4>Word Vectors</h4>
+<p><a href="http://byobu.co/">Byobu Terminal</a> comes already installed in Ubuntu. I have been taking
+it for a test drive and really like some of the features of easily
+adding new tabs, splitting screens and re-attaching to sessions.</p>
 
-<p>In order to use word vectors, you will have to load up a medium or large size data model because the small ones don&rsquo;t ship with word vectors. You can do that at the command line with:</p>
+<h4>Evernote/ Everpad</h4>
 
-<p><code>
-python3 -m spacy download en_core_web_md
-</code></p>
+<p>With
+<a href="http://www.omgubuntu.co.uk/2012/09/use-evernote-in-ubuntu-with-everpad">Everpad</a>,
+I can still use all my evernote stuff too.</p>
 
-<p>You will need to restart your repl and then load it with:</p>
+<h4>Presentations - LibreOffice / Reveal.js</h4>
 
-<p><code>clojure
-(require-python '([spacy :as spacy]))
-(def nlp (spacy/load "en_core_web_md"))
-</code></p>
+<p>I have used Keynote heavily on the Mac.  For existing presentations, I
+can convert them to ppt format and then modify or run in LibreOffice
+Impress. Most likely with all my new presentations, I will just use a
+JavaScript framework like <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a></p>
 
-<p>Now you can see cool word vector stuff!</p>
+<h4>Communication - Hipchat / Skype/ Google Hangouts / Campfire</h4>
 
-<p>```clojure
-(let [tokens (nlp &ldquo;dog cat banana afskfsd&rdquo;)]
-  (map (fn [token]</p>
+<p>We use Hipchat for messaging at work.  Hipchat has a linux client
+that works just the same.  Skype also has a linux client.  Of course,
+Google Hangouts is just fine on the web.  I also use Campfire
+sometimes. There are a couple of linux clients out there, but I
+haven&rsquo;t tried them yet.  The web version works fine for me right now.</p>
 
-<pre><code>     {:text (py.- token text)
-      :has-vector (py.- token has_vector)
-      :vector_norm (py.- token vector_norm)
-      :is_oov (py.- token is_oov)} )
-   tokens))
-</code></pre>
+<h4>iPhone</h4>
 
-<p>;; ({:text &ldquo;dog&rdquo;,
-;;   :has-vector true,
-;;   :vector_norm 7.033673286437988,
-;;   :is_oov false}
-;;  {:text &ldquo;cat&rdquo;,
-;;   :has-vector true,
-;;   :vector_norm 6.680818557739258,
-;;   :is_oov false}
-;;  {:text &ldquo;banana&rdquo;,
-;;   :has-vector true,
-;;   :vector_norm 6.700014114379883,
-;;   :is_oov false}
-;;  {:text &ldquo;afskfsd&rdquo;, :has-vector false, :vector_norm 0.0, :is_oov true})
-```</p>
+<p>On my mac, I used to plug in my phone and sync to my dropbox.  I tried
+plugging in my phone, but unfortunately, iOS7 put in a security
+feature to that prevents having the phone connect properly.  The
+solution for me is to just use the phone dropbox app to sync the
+pictures automatically to my Dropbox.</p>
 
-<p>And find similarity between different words.</p>
+<h2>Get Yourself Free</h2>
 
-<p>```clojure
-(let [tokens (nlp &ldquo;dog cat banana&rdquo;)]
-  (for [token1 tokens</p>
+<p>I don&rsquo;t expect the road to free of bumps.  I have only been using my
+new laptop for a week.  But so far, it has been an enjoyable switch.
+The hardware is really impressive, and it feels good getting back to
+OSS.</p>
 
-<pre><code>    token2 tokens]
-{:token1 (py.- token1 text)
- :token2 (py.- token2 text)
- :similarity (py. token1 similarity token2)}))
-</code></pre>
-
-<p>;; ({:token1 &ldquo;dog&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 1.0}
-;;  {:token1 &ldquo;dog&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 0.8016854524612427}
-;;  {:token1 &ldquo;dog&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 0.2432764321565628}
-;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 0.8016854524612427}
-;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 1.0}
-;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 0.28154364228248596}
-;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 0.2432764321565628}
-;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 0.28154364228248596}
-;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 1.0})
-```</p>
-
-<h2>Wrap up</h2>
-
-<p>We&rsquo;ve seen a grand tour of the two most popular natural language python libraries that you can now use through Clojure interop!</p>
-
-<p>I hope you&rsquo;ve enjoyed it and if you are interested in exploring yourself, the code examples are <a href="https://github.com/gigasquid/libpython-clj-examples">here</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Parens for Pyplot]]></title>
-    <link href="http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot/"/>
-    <updated>2020-01-18T15:39:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2020/01/18/parens-for-pyplot</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a> has opened the door for Clojure to directly interop with Python libraries. That means we can take just about any Python library and directly use it in our Clojure REPL. But what about <a href="https://matplotlib.org/">matplotlib</a>?</p>
-
-<p>Matplotlib.pyplot is a standard fixture in most tutorials and python data science code. How do we interop with a python graphics library?</p>
-
-<h2>How do you interop?</h2>
-
-<p>It turns out that matplotlib has a headless mode where we can export the graphics and then display it using any method that we would normally use to display a .png file. In my case, I made a quick macro for it using the shell <code>open</code>. I&rsquo;m sure that someone out that could improve upon it, (and maybe even make it a cool utility lib), but it suits what I&rsquo;m doing so far:</p>
-
-<p>```clojure
-ns gigasquid.plot
-(:require [libpython-clj.require :refer [require-python]]
-[libpython-clj.python :as py :refer [py. py.. py.&ndash;]]
-[clojure.java.shell :as sh])</p>
-
-<p>;;; This uses the headless version of matplotlib to generate a graph then copy it to the JVM
-;; where we can then print it</p>
-
-<p>;;;; have to set the headless mode before requiring pyplot
-(def mplt (py/import-module &ldquo;matplotlib&rdquo;))
-(py. mplt &ldquo;use&rdquo; &ldquo;Agg&rdquo;)</p>
-
-<p>(require-python &lsquo;matplotlib.pyplot)
-(require-python 'matplotlib.backends.backend_agg)
-(require-python 'numpy)</p>
-
-<p>(defmacro with-show
-  &ldquo;Takes forms with mathplotlib.pyplot to then show locally&rdquo;
-  [&amp; body]
-  `(let [_# (matplotlib.pyplot/clf)</p>
-
-<pre><code>     fig# (matplotlib.pyplot/figure)
-     agg-canvas# (matplotlib.backends.backend_agg/FigureCanvasAgg fig#)]
- ~(cons 'do body)
- (py. agg-canvas# "draw")
- (matplotlib.pyplot/savefig "temp.png")
- (sh/sh "open" "temp.png")))
-</code></pre>
-
-<p>```</p>
-
-<h2>Parens for Pyplot!</h2>
-
-<p>Now that we have our wrapper let&rsquo;s take it for a spin. We&rsquo;ll be following along more or less this <a href="http://cs231n.github.io/python-numpy-tutorial/#matplotlib-plotting">tutorial for numpy plotting</a></p>
-
-<p>For setup you will need the following installed in your python environment:</p>
-
-<ul>
-<li>numpy</li>
-<li>matplotlib</li>
-<li>pillow</li>
-</ul>
-
-
-<p>We are also going to use the latest and greatest syntax from libpython-clj so you are going to need to install the snapshot version locally until the next version goes out:</p>
-
-<ul>
-<li><code>git clone git@github.com:cnuernber/libpython-clj.git</code></li>
-<li><code>cd cd libpython-clj</code></li>
-<li><code>lein install</code></li>
-</ul>
-
-
-<p>After that is all setup we can require the libs we need in clojure.</p>
-
-<p>```clojure
-(ns gigasquid.numpy-plot
-  (:require [libpython-clj.require :refer [require-python]]</p>
-
-<pre><code>        [libpython-clj.python :as py :refer [py. py.. py.-]]
-        [gigasquid.plot :as plot]))
-</code></pre>
-
-<p>```</p>
-
-<p>The <code>plot</code> namespace contains the macro for <code>with-show</code> above. The <code>py.</code> and others is the new and improved syntax for interop.</p>
-
-<h3>Simple Sin and Cos</h3>
-
-<p>Let&rsquo;s start off with a simple sine and cosine functions. This code will create a <code>x</code> numpy vector of a range from 0 to <code>3 * pi</code> in 0.1 increments and then create <code>y</code> numpy vector of the <code>sin</code> of that and plot it</p>
-
-<p>```clojure
-(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
-
-<pre><code>    y (numpy/sin x)]
-(plot/with-show
-  (matplotlib.pyplot/plot x y)))
-</code></pre>
-
-<p>```</p>
-
-<p><img src="https://live.staticflickr.com/65535/49405284796_014447588d_z.jpg" alt="sin" /></p>
-
-<p>Beautiful yes!</p>
-
-<p>Let&rsquo;s get a bit more complicated now and and plot both the sin and cosine as well as add labels, title, and legend.</p>
-
-<p>```clojure
-(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
-
-<pre><code>    y-sin (numpy/sin x)
-    y-cos (numpy/cos x)]
-(plot/with-show
-  (matplotlib.pyplot/plot x y-sin)
-  (matplotlib.pyplot/plot x y-cos)
-  (matplotlib.pyplot/xlabel "x axis label")
-  (matplotlib.pyplot/ylabel "y axis label")
-  (matplotlib.pyplot/title "Sine and Cosine")
-  (matplotlib.pyplot/legend ["Sine" "Cosine"])))
-</code></pre>
-
-<p>```</p>
-
-<p><img src="http:////live.staticflickr.com/65535/49405284806_1d04957bce_z.jpg" alt="sin and cos" /></p>
-
-<p>We can also add subplots. Subplots are when you divide the plots into different portions.
-It is a bit stateful and involves making one subplot <em>active</em> and making changes and then making the other subplot <em>active</em>. Again not too hard to do with Clojure.</p>
-
-<p>```clojure
-(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
-
-<pre><code>    y-sin (numpy/sin x)
-    y-cos (numpy/cos x)]
-(plot/with-show
-  ;;; set up a subplot gird that has a height of 2 and width of 1
-  ;; and set the first such subplot as active
-  (matplotlib.pyplot/subplot 2 1 1)
-  (matplotlib.pyplot/plot x y-sin)
-  (matplotlib.pyplot/title "Sine")
-
-  ;;; set the second subplot as active and make the second plot
-  (matplotlib.pyplot/subplot 2 1 2)
-  (matplotlib.pyplot/plot x y-cos)
-  (matplotlib.pyplot/title "Cosine")))
-</code></pre>
-
-<p>```</p>
-
-<p><img src="http:////live.staticflickr.com/65535/49405284836_8e49e4a6b8_z.jpg" alt="sin and cos subplots" /></p>
-
-<h3>Plotting with Images</h3>
-
-<p>Pyplot also has functions for working directly with images as well. Here we take a picture of my cat and create another version of it that is tinted.</p>
-
-<p>```clojure
-(let [img (matplotlib.pyplot/imread &ldquo;resources/cat.jpg&rdquo;)</p>
-
-<pre><code>    img-tinted (numpy/multiply img [1 0.95 0.9])]
-(plot/with-show
-  (matplotlib.pyplot/subplot 1 2 1)
-  (matplotlib.pyplot/imshow img)
-  (matplotlib.pyplot/subplot 1 2 2)
-  (matplotlib.pyplot/imshow (numpy/uint8 img-tinted))))
-</code></pre>
-
-<p>```</p>
-
-<p><img src="http://live.staticflickr.com/65535/49404801993_ed398d5768_n.jpg" alt="cat tinted" /></p>
-
-<h3>Pie charts</h3>
-
-<p>Finally, we can show how to do a pie chart. I asked people in a <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a> what they wanted an example of in python interop and one of them was a pie chart. This is for you!</p>
-
-<p>The original code for this example came from this <a href="https://matplotlib.org/3.1.1/gallery/pie_and_polar_charts/pie_features.html">tutorial</a>.</p>
-
-<p>```clojure
-(let [labels [&ldquo;Frogs&rdquo; &ldquo;Hogs&rdquo; &ldquo;Dogs&rdquo; &ldquo;Logs&rdquo;]</p>
-
-<pre><code>    sizes [15 30 45 10]
-    explode [0 0.1 0 0] ; only explode the 2nd slice (Hogs)
-    ]
-(plot/with-show
-  (let [[fig1 ax1] (matplotlib.pyplot/subplots)]
-    (py. ax1 "pie" sizes :explode explode :labels labels :autopct "%1.1f%%"
-                         :shadow true :startangle 90)
-    (py. ax1 "axis" "equal")) ;equal aspec ration ensures that pie is drawn as circle
-  ))
-</code></pre>
-
-<p>```</p>
-
-<p><img src="http://live.staticflickr.com/65535/49404802008_7e84ceff76_z.jpg" alt="pie chart" /></p>
-
-<h3>Onwards and Upwards!</h3>
-
-<p>This is just the beginning. In upcoming posts, I will be showcasing examples of interop with different libraries from the python ecosystem. Part of the goal is to get people used to how to use interop but also to raise awareness of the capabilities of the python libraries out there right now since they have been historically out of our ecosystem.</p>
-
-<p>If you have any libraries that you would like examples of, I&rsquo;m taking requests. Feel free to leave them in the comments of the blog or in the <a href="https://twitter.com/gigasquid/status/1218358472049397761">twitter thread</a>.</p>
-
-<p>Until next time, happy interoping!</p>
-
-<p>PS All the code examples are here <a href="https://github.com/gigasquid/libpython-clj-examples">https://github.com/gigasquid/libpython-clj-examples</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hugging Face GPT With Clojure]]></title>
-    <link href="http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/"/>
-    <updated>2020-01-10T19:33:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure</id>
-    <content type="html"><![CDATA[<p><img src="https://live.staticflickr.com/65535/49364554561_6e4f4d0a51_w.jpg" alt="" /></p>
-
-<p>A new age in Clojure has dawned. We now have interop access to any python library with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>.</p>
-
-<br>
-
-
-<p>Let me pause a minute to repeat.</p>
-
-<br>
-
-
-<p><strong> You can now interop with ANY python library. </strong></p>
-
-<br>
-
-
-<p>I know. It&rsquo;s overwhelming. It took a bit for me to come to grips with it too.</p>
-
-<br>
-
-
-<p>Let&rsquo;s take an example of something that I&rsquo;ve <em>always</em> wanted to do and have struggled with mightly finding a way to do it in Clojure:<br/>
-I want to use the latest cutting edge GPT2 code out there to generate text.</p>
-
-<p>Right now, that library is <a href="https://github.com/huggingface/transformers">Hugging Face Transformers</a>.</p>
-
-<br>
-
-
-<p>Get ready. We will wrap that sweet hugging face code in Clojure parens!</p>
-
-<h3>The setup</h3>
-
-<p>The first thing you will need to do is to have python3 installed and the two libraries that we need:</p>
-
-<br>
-
-
-<ul>
-<li>pytorch &ndash; <code>sudo pip3 install torch</code></li>
-<li>hugging face transformers &ndash; <code>sudo pip3 install transformers</code></li>
-</ul>
-
-
-<br>
-
-
-<p>Right now, some of you may not want to proceed. You might have had a bad relationship with Python in the past. It&rsquo;s ok, remember that some of us had bad relationships with Java, but still lead a happy and fulfilled life with Clojure and still can enjoy it from interop. The same is true with Python. Keep an open mind.</p>
-
-<br>
-
-
-<p>There might be some others that don&rsquo;t want to have anything to do with Python and want to keep your Clojure pure. Well, that is a valid choice. But you are missing out on what the big, vibrant, and chaotic Python Deep Learning ecosystem has to offer.</p>
-
-<br>
-
-
-<p>For those of you that are still along for the ride, let&rsquo;s dive in.</p>
-
-<br>
-
-
-<p>Your deps file should have just a single extra dependency in it:</p>
-
-<p>```clojure
-:deps {org.clojure/clojure {:mvn/version &ldquo;1.10.1&rdquo;}</p>
-
-<pre><code>    cnuernber/libpython-clj {:mvn/version "1.30"}}
-</code></pre>
-
-<p>```</p>
-
-<h3>Diving Into Interop</h3>
-
-<p>The first thing that we need to do is require the libpython library.</p>
-
-<p>```clojure
-(ns gigasquid.gpt2
-  (:require [libpython-clj.require :refer [require-python]]</p>
-
-<pre><code>        [libpython-clj.python :as py]))
-</code></pre>
-
-<p>```</p>
-
-<p>It has a very nice <code>require-python</code> syntax that we will use to load the python libraries so that we can use them in our Clojure code.</p>
-
-<p><code>clojure
-(require-python '(transformers))
-(require-python '(torch))
-</code></p>
-
-<p>Here we are going to follow along with the OpenAI GPT-2 tutorial and translate it into interop code.
-The original tutorial is <a href="https://huggingface.co/transformers/quickstart.html">here</a></p>
-
-<br>
-
-
-<p>Let&rsquo;s take the python side first:</p>
-
-<p>```python
-import torch
-from transformers import GPT2Tokenizer, GPT2LMHeadModel</p>
-
-<h1>Load pre-trained model tokenizer (vocabulary)</h1>
-
-<p>tokenizer = GPT2Tokenizer.from_pretrained(&lsquo;gpt2&rsquo;)
-```</p>
-
-<p>This is going to translate in our interop code to:</p>
-
-<p><code>clojure
-(def tokenizer (py/$a transformers/GPT2Tokenizer from_pretrained "gpt2"))
-</code></p>
-
-<p>The <code>py/$a</code> function is used to call attributes on a Python object. We get the <code>transformers/GPTTokenizer</code> object that we have available to use and call <code>from_pretrained</code> on it with the string argument <code>"gpt2"</code></p>
-
-<br>
-
-
-<p>Next in the Python tutorial is:</p>
-
-<p>```python</p>
-
-<h1>Encode a text inputs</h1>
-
-<p>text = &ldquo;Who was Jim Henson ? Jim Henson was a&rdquo;
-indexed_tokens = tokenizer.encode(text)</p>
-
-<h1>Convert indexed tokens in a PyTorch tensor</h1>
-
-<p>tokens_tensor = torch.tensor([indexed_tokens])
-```</p>
-
-<p>This is going to translate to Clojure:</p>
-
-<p>```clojure
-(def text &ldquo;Who was Jim Henson ? Jim Henson was a&rdquo;)
-;; encode text input
-(def indexed-tokens  (py/$a tokenizer encode text))
-indexed-tokens ;=>[8241, 373, 5395, 367, 19069, 5633, 5395, 367, 19069, 373, 257]</p>
-
-<p>;; convert indexed tokens to pytorch tensor
-(def tokens-tensor (torch/tensor [indexed-tokens]))
-tokens-tensor
-;; ([[ 8241,   373,  5395,   367, 19069,  5633,  5395,   367, 19069,   373,
-;;    257]])
-```</p>
-
-<p>Here we are again using <code>py/$a</code> to call the <code>encode</code> method on the text. However, when we are just calling a function, we can do so directly with <code>(torch/tensor [indexed-tokens])</code>. We can even directly use vectors.</p>
-
-<br>
-
-
-<p>Again, you are doing this in the REPL, so you have full power for inspection and display of the python objects. It is a great interop experience &ndash; (cider even has doc information on the python functions in the minibuffer)!</p>
-
-<br>
-
-
-<p>The next part is to load the model itself. This will take a few minutes, since it has to download a big file from s3 and load it up.</p>
-
-<br>
-
-
-<p>In Python:</p>
-
-<p>```python</p>
-
-<h1>Load pre-trained model (weights)</h1>
-
-<p>model = GPT2LMHeadModel.from_pretrained(&lsquo;gpt2&rsquo;)
-```</p>
-
-<p>In Clojure:</p>
-
-<p><code>clojure
-;;; Load pre-trained model (weights)
-;;; Note: this will take a few minutes to download everything
-(def model (py/$a transformers/GPT2LMHeadModel from_pretrained "gpt2"))
-</code></p>
-
-<p>The next part is to run the model with the tokens and make the predictions.</p>
-
-<br>
-
-
-<p>Here the code starts to diverge a tiny bit.</p>
-
-<br>
-
-
-<p>Python:</p>
-
-<p>```python</p>
-
-<h1>Set the model in evaluation mode to deactivate the DropOut modules</h1>
-
-<h1>This is IMPORTANT to have reproducible results during evaluation!</h1>
-
-<p>model.eval()</p>
-
-<h1>If you have a GPU, put everything on cuda</h1>
-
-<p>tokens_tensor = tokens_tensor.to(&lsquo;cuda&rsquo;)
-model.to(&lsquo;cuda&rsquo;)</p>
-
-<h1>Predict all tokens</h1>
-
-<p>with torch.no_grad():</p>
-
-<pre><code>outputs = model(tokens_tensor)
-predictions = outputs[0]
-</code></pre>
-
-<h1>get the predicted next sub-word (in our case, the word &lsquo;man&rsquo;)</h1>
-
-<p>predicted_index = torch.argmax(predictions[0, -1, :]).item()
-predicted_text = tokenizer.decode(indexed_tokens + [predicted_index])
-assert predicted_text == &lsquo;Who was Jim Henson? Jim Henson was a man&rsquo;
-```</p>
-
-<p>And Clojure</p>
-
-<p>```clojure
-;;; Set the model in evaluation mode to deactivate the DropOut modules
-;;; This is IMPORTANT to have reproducible results during evaluation!
-(py/$a model eval)</p>
-
-<p>;;; Predict all tokens
-(def predictions (py/with [r (torch/no_grad)]</p>
-
-<pre><code>                      (first (model tokens-tensor))))
-</code></pre>
-
-<p>;;; get the predicted next sub-word"
-(def predicted-index (let [last-word-predictions (&ndash;> predictions first last)</p>
-
-<pre><code>                       arg-max (torch/argmax last-word-predictions)]
-                   (py/$a arg-max item)))
-</code></pre>
-
-<p>predicted-index ;=>582</p>
-
-<p>(py/$a tokenizer decode (&ndash;> (into [] indexed-tokens)</p>
-
-<pre><code>                        (conj predicted-index)))
-</code></pre>
-
-<p>;=> &ldquo;Who was Jim Henson? Jim Henson was a man&rdquo;
-```</p>
-
-<p>The main differences is that we are obviously not using the python array syntax in our code to manipulate the lists. For example, instead of using <code>outputs[0]</code>, we are going to use <code>(first outputs)</code>. But, other than that, it is a pretty good match, even with the <code>py/with</code>.</p>
-
-<p>Also note that we are not making the call to configure it with GPU. This is intentionally left out to keep things simple for people to try it out. Sometimes, GPU configuration can be a bit tricky to set up depending on your system. For this example, you definitely won&rsquo;t need it since it runs fast enough on cpu. If you do want to do something more complicated later, like fine tuning, you will need to invest some time to get it set up.</p>
-
-<h3>Doing Longer Sequences</h3>
-
-<p>The next example in the tutorial goes on to cover generating longer text.</p>
-
-<br>
-
-
-<p>Python</p>
-
-<p>```python
-tokenizer = GPT2Tokenizer.from_pretrained(&ldquo;gpt2&rdquo;)
-model = GPT2LMHeadModel.from_pretrained(&lsquo;gpt2&rsquo;)</p>
-
-<p>generated = tokenizer.encode(&ldquo;The Manhattan bridge&rdquo;)
-context = torch.tensor([generated])
-past = None</p>
-
-<p>for i in range(100):</p>
-
-<pre><code>print(i)
-output, past = model(context, past=past)
-token = torch.argmax(output[0, :])
-
-generated += [token.tolist()]
-context = token.unsqueeze(0)
-</code></pre>
-
-<p>sequence = tokenizer.decode(generated)</p>
-
-<p>print(sequence)</p>
-
-<p>```</p>
-
-<p>And Clojure</p>
-
-<p>```clojure
-(def tokenizer (py/$a transformers/GPT2Tokenizer from_pretrained &ldquo;gpt2&rdquo;))
-(def model (py/$a transformers/GPT2LMHeadModel from_pretrained &ldquo;gpt2&rdquo;))</p>
-
-<p>(def generated (into [] (py/$a tokenizer encode &ldquo;The Manhattan bridge&rdquo;)))
-(def context (torch/tensor [generated]))</p>
-
-<p>(defn generate-sequence-step [{:keys [generated-tokens context past]}]
-  (let [[output past] (model context :past past)</p>
-
-<pre><code>    token (-&gt; (torch/argmax (first output)))
-    new-generated  (conj generated-tokens (py/$a token tolist))]
-{:generated-tokens new-generated
- :context (py/$a token unsqueeze 0)
- :past past
- :token token}))
-</code></pre>
-
-<p>(defn decode-sequence [{:keys [generated-tokens]}]
-  (py/$a tokenizer decode generated-tokens))</p>
-
-<p>(loop [step {:generated-tokens generated</p>
-
-<pre><code>         :context context
-         :past nil}
-   i 10]
-</code></pre>
-
-<p>  (if (pos? i)</p>
-
-<pre><code>(recur (generate-sequence-step step) (dec i))
-(decode-sequence step)))
-</code></pre>
-
-<p>;=> &ldquo;The Manhattan bridge\n\nThe Manhattan bridge is a major artery for&rdquo;
-```</p>
-
-<p>The great thing is once we have it embedded in our code, there is no stopping. We can create a nice function:</p>
-
-<p>```clojure
-(defn generate-text [starting-text num-of-words-to-predict]
-  (let [tokens (into [] (py/$a tokenizer encode starting-text))</p>
-
-<pre><code>    context (torch/tensor [tokens])
-    result (reduce
-            (fn [r i]
-              (println i)
-              (generate-sequence-step r))
-
-            {:generated-tokens tokens
-             :context context
-             :past nil}
-
-            (range num-of-words-to-predict))]
-(decode-sequence result)))
-</code></pre>
-
-<p>```</p>
-
-<p>And finally we can generate some fun text!</p>
-
-<p>```clojure
-(generate-text &ldquo;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive&rdquo; 20)</p>
-
-<p>;=> &ldquo;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone&rdquo;
-```</p>
-
-<p><strong>Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone</strong></p>
-
-<br>
-
-
-<p>So true GPT2! So true!</p>
-
-<h3>Wrap-up</h3>
-
-<p>libpython-clj is a really powerful tool that will allow Clojurists to better explore, leverage, and integrate Python libraries into their code.</p>
-
-<br>
-
-
-<p>I&rsquo;ve been really impressed with it so far and I encourage you to check it out.</p>
-
-<br>
-
-
-<p>There is a <a href="https://github.com/gigasquid/libpython-clj-examples">repo with the examples</a> out there if you want to check them out. There is also an example of doing MXNet MNIST classification there as well.</p>
+<p>Best of all, I set myself free.</p>
 ]]></content>
   </entry>
   

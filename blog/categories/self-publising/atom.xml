@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Self-publising | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/self-publising/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -32,23 +32,21 @@
 
 <p>In the repo, I had a <code>manuscript</code> directory, in which there was a <code>Book.txt</code> file that listed the chapter files.</p>
 
-<p><code>
-chapter2.txt
+<pre><code>chapter2.txt
 chapter3.txt
 chapter4.txt
 chapter5.txt
-</code></p>
+</code></pre>
 
 <p>Each chapter file in turn was written in markdown. For example, <code>chapter2.txt</code> looked like this:</p>
 
-<p>```</p>
+<pre><code># 1
 
-<h1>1</h1>
+## Flicker
 
-<h2>Flicker</h2>
 
-<p>Twelve-year-old Eliza knew that the next words were the result of computer program far more intelligent than any one of them. Standing next to her parents, she held her breath and watched as her brother touched his finger to the message on the wall screen.
-```</p>
+Twelve-year-old Eliza knew that the next words were the result of computer program far more intelligent than any one of them. Standing next to her parents, she held her breath and watched as her brother touched his finger to the message on the wall screen.
+</code></pre>
 
 <p>From there, my process looked like:</p>
 
@@ -103,7 +101,7 @@ chapter5.txt
 
 <p><img class="<a" src="href="https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large">https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large</a>"></p>
 
-<p>If it looks alright, you hit the approve button and voilà &ndash; it&rsquo;s for sale on Amazon!</p>
+<p>If it looks alright, you hit the approve button and voilà - it&rsquo;s for sale on Amazon!</p>
 
 <h3>Publishing with Direct Kindle Publishing</h3>
 

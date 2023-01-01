@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2021-03-16T11:59:20-04:00</updated>
+  <updated>2023-01-01T07:36:47-05:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -22,7 +22,7 @@
 
 <p>In this edition of the blog series of Clojure/Python interop with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>, we&rsquo;ll be taking a look at two popular Python NLP libraries: <a href="https://www.nltk.org/">NLTK</a> and <a href="https://spacy.io/">SpaCy</a>.</p>
 
-<h2>NLTK &ndash; Natural Language Toolkit</h2>
+<h2>NLTK - Natural Language Toolkit</h2>
 
 <p>I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by <em>far</em> NLTK was the most requested library. After looking into it, I can see why. It&rsquo;s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching.</p>
 
@@ -36,33 +36,27 @@
 
 <p>First, we need to require all of our things as usual:</p>
 
-<p>```clojure
-(ns gigasquid.nltk
-  (:require [libpython-clj.require :refer [require-python]]</p>
-
-<pre><code>        [libpython-clj.python :as py :refer [py. py.. py.-]]))
+<pre><code class="clojure">(ns gigasquid.nltk
+  (:require [libpython-clj.require :refer [require-python]]
+            [libpython-clj.python :as py :refer [py. py.. py.-]]))
+(require-python '([nltk :as nltk]))
 </code></pre>
-
-<p>(require-python &lsquo;([nltk :as nltk]))
-```</p>
 
 <h4>Downloading packages</h4>
 
 <p>There are all sorts of packages available to download from NLTK. To start out and tour the library, I would go with a small one that has basic data for the nltk book tutorial.</p>
 
-<p><code>clojure
- (nltk/download "book")
+<pre><code class="clojure"> (nltk/download "book")
   (require-python '([nltk.book :as book]))
-</code></p>
+</code></pre>
 
 <p>There are all other sorts of downloads as well, such as <code>(nltk/download "popular")</code> for most used ones. You can also download <code>"all"</code>, but beware that it is big.</p>
 
 <p>You can check out some of the texts it downloaded with:</p>
 
-<p>```clojure
-  (book/texts)</p>
+<pre><code class="clojure">  (book/texts)
 
-<p>  ;;; prints out in repl
+  ;;; prints out in repl
   ;; text1: Moby Dick by Herman Melville 1851
   ;; text2: Sense and Sensibility by Jane Austen 1811
   ;; text3: The Book of Genesis
@@ -71,32 +65,27 @@
   ;; text6: Monty Python and the Holy Grail
   ;; text7: Wall Street Journal
   ;; text8: Personals Corpus
-  ;; text9: The Man Who Was Thursday by G . K . Chesterton 1908</p>
+  ;; text9: The Man Who Was Thursday by G . K . Chesterton 1908
 
-<p>  book/text1 ;=>  &lt;Text: Moby Dick by Herman Melville 1851>
-  book/text2 ;=>  &lt;Text: Sense and Sensibility by Jane Austen 1811></p>
-
-<p>```</p>
+  book/text1 ;=&gt;  &lt;Text: Moby Dick by Herman Melville 1851&gt;
+  book/text2 ;=&gt;  &lt;Text: Sense and Sensibility by Jane Austen 1811&gt;
+</code></pre>
 
 <p>  You can do fun things like see how many tokens are in a text</p>
 
-<p><code>clojure
-  (count (py.- book/text3 tokens))  ;=&gt; 44764
-</code></p>
+<pre><code class="clojure">  (count (py.- book/text3 tokens))  ;=&gt; 44764
+</code></pre>
 
 <p>  Or even see the lexical diversity, which is a measure of the richness of the text by looking at the unique set of word tokens against the total tokens.</p>
 
-<p>```clojure
-  (defn lexical-diversity [text]</p>
+<pre><code class="clojure">  (defn lexical-diversity [text]
+    (let [tokens (py.- text tokens)]
+      (/ (-&gt; tokens set count)
+         (* 1.0 (count tokens)))))
 
-<pre><code>(let [tokens (py.- text tokens)]
-  (/ (-&gt; tokens set count)
-     (* 1.0 (count tokens)))))
+  (lexical-diversity book/text3) ;=&gt; 0.06230453042623537
+  (lexical-diversity book/text5) ;=&gt; 0.13477005109975562
 </code></pre>
-
-<p>  (lexical-diversity book/text3) ;=> 0.06230453042623537
-  (lexical-diversity book/text5) ;=> 0.13477005109975562
-```</p>
 
 <p> This of course is all very interesting but I prefer to look at some more practical tasks, so we are going to look at some sentence tokenization.</p>
 
@@ -104,120 +93,97 @@
 
 <p> Text can be broken up into individual word tokens or sentence tokens. Let&rsquo;s start off first with the token package</p>
 
-<p><code>clojure
-(require-python '([nltk.tokenize :as tokenize]))
+<pre><code class="clojure">(require-python '([nltk.tokenize :as tokenize]))
 (def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
 The sky is pinkish-blue. You shouldn't eat cardboard")
-</code></p>
+</code></pre>
 
 <p>To tokenize sentences, you take the text and use <code>tokenize/sent_tokenize</code>.</p>
 
-<p><code>clojure
- (def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+<pre><code class="clojure"> (def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
 The sky is pinkish-blue. You shouldn't eat cardboard")
  (def tokenized-sent (tokenize/sent_tokenize text))
  tokenized-sent
  ;;=&gt; ['Hello Mr. Smith, how are you doing today?', 'The weather is great, and city is awesome.', 'The sky is pinkish-blue.', "You shouldn't eat cardboard"]
-</code></p>
+</code></pre>
 
 <p>Likewise, to tokenize words, you use <code>tokenize/word_tokenize</code>:</p>
 
-<p>```clojure
- (def text &ldquo;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
-The sky is pinkish-blue. You shouldn&rsquo;t eat cardboard&rdquo;)
+<pre><code class="clojure"> (def text "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+The sky is pinkish-blue. You shouldn't eat cardboard")
  (def tokenized-sent (tokenize/sent_tokenize text))
  tokenized-sent
- ;;=> [&lsquo;Hello Mr. Smith, how are you doing today?&rsquo;, &lsquo;The weather is great, and city is awesome.&rsquo;, &lsquo;The sky is pinkish-blue.&rsquo;, &ldquo;You shouldn&rsquo;t eat cardboard&rdquo;]</p>
+ ;;=&gt; ['Hello Mr. Smith, how are you doing today?', 'The weather is great, and city is awesome.', 'The sky is pinkish-blue.', "You shouldn't eat cardboard"]
 
-<p> (def tokenized-word (tokenize/word_tokenize text))
+
+ (def tokenized-word (tokenize/word_tokenize text))
  tokenized-word
-  ;;=> [&lsquo;Hello&rsquo;, &lsquo;Mr.&rsquo;, &lsquo;Smith&rsquo;, &lsquo;,&rsquo;, &lsquo;how&rsquo;, &lsquo;are&rsquo;, &lsquo;you&rsquo;, &lsquo;doing&rsquo;, &lsquo;today&rsquo;, &lsquo;?&rsquo;, &lsquo;The&rsquo;, &lsquo;weather&rsquo;, &lsquo;is&rsquo;, &lsquo;great&rsquo;, &lsquo;,&rsquo;, &lsquo;and&rsquo;, &lsquo;city&rsquo;, &lsquo;is&rsquo;, &lsquo;awesome&rsquo;, &lsquo;.&rsquo;, &lsquo;The&rsquo;, &lsquo;sky&rsquo;, &lsquo;is&rsquo;, &lsquo;pinkish-blue&rsquo;, &lsquo;.&rsquo;, &lsquo;You&rsquo;, &lsquo;should&rsquo;, &ldquo;n&rsquo;t&rdquo;, &lsquo;eat&rsquo;, &lsquo;cardboard&rsquo;]
-```</p>
+  ;;=&gt; ['Hello', 'Mr.', 'Smith', ',', 'how', 'are', 'you', 'doing', 'today', '?', 'The', 'weather', 'is', 'great', ',', 'and', 'city', 'is', 'awesome', '.', 'The', 'sky', 'is', 'pinkish-blue', '.', 'You', 'should', "n't", 'eat', 'cardboard']
+</code></pre>
 
 <h4>Frequency Distribution</h4>
 
 <p> You can also look at the frequency distribution of the words with using the probability package.</p>
 
-<p>```clojure
- (require-python &lsquo;([nltk.probability :as probability]))</p>
+<pre><code class="clojure"> (require-python '([nltk.probability :as probability]))
 
-<p> (def fdist (probability/FreqDist tokenized-word))
- fdist ;=> <FreqDist with 25 samples and 30 outcomes></p>
+ (def fdist (probability/FreqDist tokenized-word))
+ fdist ;=&gt; &lt;FreqDist with 25 samples and 30 outcomes&gt;
 
-<p> (py. fdist most_common)
-  ;=> [(&lsquo;is&rsquo;, 3), (&lsquo;,&rsquo;, 2), (&lsquo;The&rsquo;, 2), (&lsquo;.&rsquo;, 2), (&lsquo;Hello&rsquo;, 1), (&lsquo;Mr.&rsquo;, 1), (&lsquo;Smith&rsquo;, 1), (&lsquo;how&rsquo;, 1), (&lsquo;are&rsquo;, 1), (&lsquo;you&rsquo;, 1), (&lsquo;doing&rsquo;, 1), (&lsquo;today&rsquo;, 1), (&lsquo;?&rsquo;, 1), (&lsquo;weather&rsquo;, 1), (&lsquo;great&rsquo;, 1), (&lsquo;and&rsquo;, 1), (&lsquo;city&rsquo;, 1), (&lsquo;awesome&rsquo;, 1), (&lsquo;sky&rsquo;, 1), (&lsquo;pinkish-blue&rsquo;, 1), (&lsquo;You&rsquo;, 1), (&lsquo;should&rsquo;, 1), (&ldquo;n&rsquo;t&rdquo;, 1), (&lsquo;eat&rsquo;, 1), (&lsquo;cardboard&rsquo;, 1)]</p>
-
-<p>```</p>
+ (py. fdist most_common)
+  ;=&gt; [('is', 3), (',', 2), ('The', 2), ('.', 2), ('Hello', 1), ('Mr.', 1), ('Smith', 1), ('how', 1), ('are', 1), ('you', 1), ('doing', 1), ('today', 1), ('?', 1), ('weather', 1), ('great', 1), ('and', 1), ('city', 1), ('awesome', 1), ('sky', 1), ('pinkish-blue', 1), ('You', 1), ('should', 1), ("n't", 1), ('eat', 1), ('cardboard', 1)]
+</code></pre>
 
 <h4>Stop Words</h4>
 
 <p>Stop words are considered noise in text and there are ways to use the library to remove them using the <code>nltk.corpus</code>.</p>
 
-<p><code>clojure
-(def stop-words (into #{} (py. corpus/stopwords words "english")))
+<pre><code class="clojure">(def stop-words (into #{} (py. corpus/stopwords words "english")))
  stop-words
   ;=&gt; #{"d" "itself" "more" "didn't" "ain" "won" "hers"....}
-</code></p>
+</code></pre>
 
 <p>Now that we have a collection of the stop words, we can filter them out of our text in the normal way in Clojure.</p>
 
-<p>```clojure
-(def filtered-sent (&ndash;>> tokenized-sent</p>
-
-<pre><code>                     (map tokenize/word_tokenize)
-                     (map #(remove stop-words %))))
+<pre><code class="clojure">(def filtered-sent (-&gt;&gt; tokenized-sent
+                         (map tokenize/word_tokenize)
+                         (map #(remove stop-words %))))
+ filtered-sent
+ ;; (("Hello" "Mr." "Smith" "," "today" "?")
+ ;; ("The" "weather" "great" "," "city" "awesome" ".")
+ ;; ("The" "sky" "pinkish-blue" ".")
+ ;; ("You" "n't" "eat" "cardboard"))
 </code></pre>
-
-<p> filtered-sent
- ;; ((&ldquo;Hello&rdquo; &ldquo;Mr.&rdquo; &ldquo;Smith&rdquo; &ldquo;,&rdquo; &ldquo;today&rdquo; &ldquo;?&rdquo;)
- ;; (&ldquo;The&rdquo; &ldquo;weather&rdquo; &ldquo;great&rdquo; &ldquo;,&rdquo; &ldquo;city&rdquo; &ldquo;awesome&rdquo; &ldquo;.&rdquo;)
- ;; (&ldquo;The&rdquo; &ldquo;sky&rdquo; &ldquo;pinkish-blue&rdquo; &ldquo;.&rdquo;)
- ;; (&ldquo;You&rdquo; &ldquo;n&rsquo;t&rdquo; &ldquo;eat&rdquo; &ldquo;cardboard&rdquo;))
-```</p>
 
 <h4>Lexion Normalization and Lemmatization</h4>
 
 <p>Stemming and Lemmatization allow ways for the text to be reduced to base words and normalized.
 For example, the word <code>flying</code> has a stemmed word of <code>fli</code> and a lemma of <code>fly</code>.</p>
 
-<p>```clojure
-(require-python &lsquo;([nltk.stem :as stem]))
-(require-python &rsquo;([nltk.stem.wordnet :as wordnet]))</p>
+<pre><code class="clojure">(require-python '([nltk.stem :as stem]))
+(require-python '([nltk.stem.wordnet :as wordnet]))
 
-<p>(let [lem (wordnet/WordNetLemmatizer)</p>
-
-<pre><code>   stem (stem/PorterStemmer)
-   word "flying"]
+(let [lem (wordnet/WordNetLemmatizer)
+       stem (stem/PorterStemmer)
+       word "flying"]
+   {:lemmatized-word (py. lem lemmatize word "v")
+    :stemmed-word (py. stem stem word)})
+ ;=&gt; {:lemmatized-word "fly", :stemmed-word "fli"}
 </code></pre>
-
-<p>   {:lemmatized-word (py. lem lemmatize word &ldquo;v&rdquo;)</p>
-
-<pre><code>:stemmed-word (py. stem stem word)})
-</code></pre>
-
-<p> ;=> {:lemmatized-word &ldquo;fly&rdquo;, :stemmed-word &ldquo;fli&rdquo;}
-```</p>
 
 <h4>POS Tagging</h4>
 
 <p>It also has support for Part-of-Speech (POS) Tagging. A quick example of that is:</p>
 
-<p>```clojure
-(let [sent &ldquo;Albert Einstein was born in Ulm, Germany in 1879.&rdquo;</p>
-
-<pre><code>   tokens (nltk/word_tokenize sent)]
-</code></pre>
-
-<p>   {:tokens tokens</p>
-
-<pre><code>:pos-tag (nltk/pos_tag tokens)})
-</code></pre>
-
-<p> ;; {:tokens
- ;; [&lsquo;Albert&rsquo;, &lsquo;Einstein&rsquo;, &lsquo;was&rsquo;, &lsquo;born&rsquo;, &lsquo;in&rsquo;, &lsquo;Ulm&rsquo;, &lsquo;,&rsquo;, &lsquo;Germany&rsquo;, &lsquo;in&rsquo;, &lsquo;1879&rsquo;, &lsquo;.&rsquo;],
+<pre><code class="clojure">(let [sent "Albert Einstein was born in Ulm, Germany in 1879."
+       tokens (nltk/word_tokenize sent)]
+   {:tokens tokens
+    :pos-tag (nltk/pos_tag tokens)})
+ ;; {:tokens
+ ;; ['Albert', 'Einstein', 'was', 'born', 'in', 'Ulm', ',', 'Germany', 'in', '1879', '.'],
  ;; :pos-tag
- ;; [(&lsquo;Albert&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;Einstein&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;was&rsquo;, &lsquo;VBD&rsquo;), (&lsquo;born&rsquo;, &lsquo;VBN&rsquo;), (&lsquo;in&rsquo;, &lsquo;IN&rsquo;), (&lsquo;Ulm&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;,&rsquo;, &lsquo;,&rsquo;), (&lsquo;Germany&rsquo;, &lsquo;NNP&rsquo;), (&lsquo;in&rsquo;, &lsquo;IN&rsquo;), (&lsquo;1879&rsquo;, &lsquo;CD&rsquo;), (&lsquo;.&rsquo;, &lsquo;.&rsquo;)]}
-```</p>
+ ;; [('Albert', 'NNP'), ('Einstein', 'NNP'), ('was', 'VBD'), ('born', 'VBN'), ('in', 'IN'), ('Ulm', 'NNP'), (',', ','), ('Germany', 'NNP'), ('in', 'IN'), ('1879', 'CD'), ('.', '.')]}
+</code></pre>
 
 <p>Phew! That&rsquo;s a brief overview of what NLTK can do, now what about the other library SpaCy?</p>
 
@@ -241,96 +207,84 @@ For example, the word <code>flying</code> has a stemmed word of <code>fli</code>
 
 <p>We will, of course, need to load up the library</p>
 
-<p><code>clojure
-(require-python '([spacy :as spacy]))
-</code></p>
+<pre><code class="clojure">(require-python '([spacy :as spacy]))
+</code></pre>
 
 <p>and its language model:</p>
 
-<p><code>clojure
-(def nlp (spacy/load "en_core_web_sm"))
-</code></p>
+<pre><code class="clojure">(def nlp (spacy/load "en_core_web_sm"))
+</code></pre>
 
 <h4>Linguistic Annotations</h4>
 
 <p>There are many linguistic annotations that are available, from POS, lemmas, and more:</p>
 
-<p>```clojure
-(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
-  (map (fn [token]</p>
-
-<pre><code>     [(py.- token text) (py.- token pos_) (py.- token dep_)])
-   doc))
+<pre><code class="clojure">(let [doc (nlp "Apple is looking at buying U.K. startup for $1 billion")]
+  (map (fn [token]
+         [(py.- token text) (py.- token pos_) (py.- token dep_)])
+       doc))
+;; (["Apple" "PROPN" "nsubj"]
+;;  ["is" "AUX" "aux"]
+;;  ["looking" "VERB" "ROOT"]
+;;  ["at" "ADP" "prep"]
+;;  ["buying" "VERB" "pcomp"]
+;;  ["U.K." "PROPN" "compound"]
+;;  ["startup" "NOUN" "dobj"]
+;;  ["for" "ADP" "prep"]
+;;  ["$" "SYM" "quantmod"]
+;;  ["1" "NUM" "compound"]
+;;  ["billion" "NUM" "pobj"])
 </code></pre>
-
-<p>;; ([&ldquo;Apple&rdquo; &ldquo;PROPN&rdquo; &ldquo;nsubj&rdquo;]
-;;  [&ldquo;is&rdquo; &ldquo;AUX&rdquo; &ldquo;aux&rdquo;]
-;;  [&ldquo;looking&rdquo; &ldquo;VERB&rdquo; &ldquo;ROOT&rdquo;]
-;;  [&ldquo;at&rdquo; &ldquo;ADP&rdquo; &ldquo;prep&rdquo;]
-;;  [&ldquo;buying&rdquo; &ldquo;VERB&rdquo; &ldquo;pcomp&rdquo;]
-;;  [&ldquo;U.K.&rdquo; &ldquo;PROPN&rdquo; &ldquo;compound&rdquo;]
-;;  [&ldquo;startup&rdquo; &ldquo;NOUN&rdquo; &ldquo;dobj&rdquo;]
-;;  [&ldquo;for&rdquo; &ldquo;ADP&rdquo; &ldquo;prep&rdquo;]
-;;  [&ldquo;$&rdquo; &ldquo;SYM&rdquo; &ldquo;quantmod&rdquo;]
-;;  [&ldquo;1&rdquo; &ldquo;NUM&rdquo; &ldquo;compound&rdquo;]
-;;  [&ldquo;billion&rdquo; &ldquo;NUM&rdquo; &ldquo;pobj&rdquo;])
-```</p>
 
 <p>Here are some more:</p>
 
-<p>```clojure
-(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
-  (map (fn [token]</p>
+<pre><code class="clojure">(let [doc (nlp "Apple is looking at buying U.K. startup for $1 billion")]
+  (map (fn [token]
+         {:text (py.- token text)
+          :lemma (py.- token lemma_)
+          :pos (py.- token pos_)
+          :tag (py.- token tag_)
+          :dep (py.- token dep_)
+          :shape (py.- token shape_)
+          :alpha (py.- token is_alpha)
+          :is_stop (py.- token is_stop)} )
+       doc))
 
-<pre><code>     {:text (py.- token text)
-      :lemma (py.- token lemma_)
-      :pos (py.- token pos_)
-      :tag (py.- token tag_)
-      :dep (py.- token dep_)
-      :shape (py.- token shape_)
-      :alpha (py.- token is_alpha)
-      :is_stop (py.- token is_stop)} )
-   doc))
-</code></pre>
-
-<p>;; ({:text &ldquo;Apple&rdquo;,
-;;   :lemma &ldquo;Apple&rdquo;,
-;;   :pos &ldquo;PROPN&rdquo;,
-;;   :tag &ldquo;NNP&rdquo;,
-;;   :dep &ldquo;nsubj&rdquo;,
-;;   :shape &ldquo;Xxxxx&rdquo;,
+;; ({:text "Apple",
+;;   :lemma "Apple",
+;;   :pos "PROPN",
+;;   :tag "NNP",
+;;   :dep "nsubj",
+;;   :shape "Xxxxx",
 ;;   :alpha true,
 ;;   :is_stop false}
-;;  {:text &ldquo;is&rdquo;,
-;;   :lemma &ldquo;be&rdquo;,
-;;   :pos &ldquo;AUX&rdquo;,
-;;   :tag &ldquo;VBZ&rdquo;,
-;;   :dep &ldquo;aux&rdquo;,
-;;   :shape &ldquo;xx&rdquo;,
+;;  {:text "is",
+;;   :lemma "be",
+;;   :pos "AUX",
+;;   :tag "VBZ",
+;;   :dep "aux",
+;;   :shape "xx",
 ;;   :alpha true,
 ;;   :is_stop true}
-;;  &hellip;
-```</p>
+;;  ...
+</code></pre>
 
 <h3>Named Entities</h3>
 
 <p>It also handles named entities in the same fashion.</p>
 
-<p>```clojure
-(let [doc (nlp &ldquo;Apple is looking at buying U.K. startup for $1 billion&rdquo;)]
-  (map (fn [ent]</p>
+<pre><code class="clojure">(let [doc (nlp "Apple is looking at buying U.K. startup for $1 billion")]
+  (map (fn [ent]
+         {:text (py.- ent text)
+          :start-char (py.- ent start_char)
+          :end-char (py.- ent end_char)
+          :label (py.- ent label_)} )
+       (py.- doc ents)))
 
-<pre><code>     {:text (py.- ent text)
-      :start-char (py.- ent start_char)
-      :end-char (py.- ent end_char)
-      :label (py.- ent label_)} )
-   (py.- doc ents)))
+;; ({:text "Apple", :start-char 0, :end-char 5, :label "ORG"}
+;;  {:text "U.K.", :start-char 27, :end-char 31, :label "GPE"}
+;;  {:text "$1 billion", :start-char 44, :end-char 54, :label "MONEY"})
 </code></pre>
-
-<p>;; ({:text &ldquo;Apple&rdquo;, :start-char 0, :end-char 5, :label &ldquo;ORG&rdquo;}
-;;  {:text &ldquo;U.K.&rdquo;, :start-char 27, :end-char 31, :label &ldquo;GPE&rdquo;}
-;;  {:text &ldquo;$1 billion&rdquo;, :start-char 44, :end-char 54, :label &ldquo;MONEY&rdquo;})
-```</p>
 
 <p>As you can see, it can handle pretty much the same things as NLTK. But let&rsquo;s take a look at what it can do that NLTK and that is with word vectors.</p>
 
@@ -338,67 +292,59 @@ For example, the word <code>flying</code> has a stemmed word of <code>fli</code>
 
 <p>In order to use word vectors, you will have to load up a medium or large size data model because the small ones don&rsquo;t ship with word vectors. You can do that at the command line with:</p>
 
-<p><code>
-python3 -m spacy download en_core_web_md
-</code></p>
+<pre><code>python3 -m spacy download en_core_web_md
+</code></pre>
 
 <p>You will need to restart your repl and then load it with:</p>
 
-<p><code>clojure
-(require-python '([spacy :as spacy]))
+<pre><code class="clojure">(require-python '([spacy :as spacy]))
 (def nlp (spacy/load "en_core_web_md"))
-</code></p>
+</code></pre>
 
 <p>Now you can see cool word vector stuff!</p>
 
-<p>```clojure
-(let [tokens (nlp &ldquo;dog cat banana afskfsd&rdquo;)]
-  (map (fn [token]</p>
+<pre><code class="clojure">(let [tokens (nlp "dog cat banana afskfsd")]
+  (map (fn [token]
+         {:text (py.- token text)
+          :has-vector (py.- token has_vector)
+          :vector_norm (py.- token vector_norm)
+          :is_oov (py.- token is_oov)} )
+       tokens))
 
-<pre><code>     {:text (py.- token text)
-      :has-vector (py.- token has_vector)
-      :vector_norm (py.- token vector_norm)
-      :is_oov (py.- token is_oov)} )
-   tokens))
-</code></pre>
-
-<p>;; ({:text &ldquo;dog&rdquo;,
+;; ({:text "dog",
 ;;   :has-vector true,
 ;;   :vector_norm 7.033673286437988,
 ;;   :is_oov false}
-;;  {:text &ldquo;cat&rdquo;,
+;;  {:text "cat",
 ;;   :has-vector true,
 ;;   :vector_norm 6.680818557739258,
 ;;   :is_oov false}
-;;  {:text &ldquo;banana&rdquo;,
+;;  {:text "banana",
 ;;   :has-vector true,
 ;;   :vector_norm 6.700014114379883,
 ;;   :is_oov false}
-;;  {:text &ldquo;afskfsd&rdquo;, :has-vector false, :vector_norm 0.0, :is_oov true})
-```</p>
+;;  {:text "afskfsd", :has-vector false, :vector_norm 0.0, :is_oov true})
+</code></pre>
 
 <p>And find similarity between different words.</p>
 
-<p>```clojure
-(let [tokens (nlp &ldquo;dog cat banana&rdquo;)]
-  (for [token1 tokens</p>
+<pre><code class="clojure">(let [tokens (nlp "dog cat banana")]
+  (for [token1 tokens
+        token2 tokens]
+    {:token1 (py.- token1 text)
+     :token2 (py.- token2 text)
+     :similarity (py. token1 similarity token2)}))
 
-<pre><code>    token2 tokens]
-{:token1 (py.- token1 text)
- :token2 (py.- token2 text)
- :similarity (py. token1 similarity token2)}))
+;; ({:token1 "dog", :token2 "dog", :similarity 1.0}
+;;  {:token1 "dog", :token2 "cat", :similarity 0.8016854524612427}
+;;  {:token1 "dog", :token2 "banana", :similarity 0.2432764321565628}
+;;  {:token1 "cat", :token2 "dog", :similarity 0.8016854524612427}
+;;  {:token1 "cat", :token2 "cat", :similarity 1.0}
+;;  {:token1 "cat", :token2 "banana", :similarity 0.28154364228248596}
+;;  {:token1 "banana", :token2 "dog", :similarity 0.2432764321565628}
+;;  {:token1 "banana", :token2 "cat", :similarity 0.28154364228248596}
+;;  {:token1 "banana", :token2 "banana", :similarity 1.0})
 </code></pre>
-
-<p>;; ({:token1 &ldquo;dog&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 1.0}
-;;  {:token1 &ldquo;dog&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 0.8016854524612427}
-;;  {:token1 &ldquo;dog&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 0.2432764321565628}
-;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 0.8016854524612427}
-;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 1.0}
-;;  {:token1 &ldquo;cat&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 0.28154364228248596}
-;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;dog&rdquo;, :similarity 0.2432764321565628}
-;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;cat&rdquo;, :similarity 0.28154364228248596}
-;;  {:token1 &ldquo;banana&rdquo;, :token2 &ldquo;banana&rdquo;, :similarity 1.0})
-```</p>
 
 <h2>Wrap up</h2>
 
@@ -421,37 +367,35 @@ python3 -m spacy download en_core_web_md
 
 <p>It turns out that matplotlib has a headless mode where we can export the graphics and then display it using any method that we would normally use to display a .png file. In my case, I made a quick macro for it using the shell <code>open</code>. I&rsquo;m sure that someone out that could improve upon it, (and maybe even make it a cool utility lib), but it suits what I&rsquo;m doing so far:</p>
 
-<p>```clojure
-ns gigasquid.plot
+<pre><code class="clojure">ns gigasquid.plot
 (:require [libpython-clj.require :refer [require-python]]
-[libpython-clj.python :as py :refer [py. py.. py.&ndash;]]
-[clojure.java.shell :as sh])</p>
+[libpython-clj.python :as py :refer [py. py.. py.-]]
+[clojure.java.shell :as sh])
 
-<p>;;; This uses the headless version of matplotlib to generate a graph then copy it to the JVM
-;; where we can then print it</p>
 
-<p>;;;; have to set the headless mode before requiring pyplot
-(def mplt (py/import-module &ldquo;matplotlib&rdquo;))
-(py. mplt &ldquo;use&rdquo; &ldquo;Agg&rdquo;)</p>
+;;; This uses the headless version of matplotlib to generate a graph then copy it to the JVM
+;; where we can then print it
 
-<p>(require-python &lsquo;matplotlib.pyplot)
+;;;; have to set the headless mode before requiring pyplot
+(def mplt (py/import-module "matplotlib"))
+(py. mplt "use" "Agg")
+
+(require-python 'matplotlib.pyplot)
 (require-python 'matplotlib.backends.backend_agg)
-(require-python 'numpy)</p>
+(require-python 'numpy)
 
-<p>(defmacro with-show
-  &ldquo;Takes forms with mathplotlib.pyplot to then show locally&rdquo;
+
+(defmacro with-show
+  "Takes forms with mathplotlib.pyplot to then show locally"
   [&amp; body]
-  `(let [_# (matplotlib.pyplot/clf)</p>
-
-<pre><code>     fig# (matplotlib.pyplot/figure)
-     agg-canvas# (matplotlib.backends.backend_agg/FigureCanvasAgg fig#)]
- ~(cons 'do body)
- (py. agg-canvas# "draw")
- (matplotlib.pyplot/savefig "temp.png")
- (sh/sh "open" "temp.png")))
+  `(let [_# (matplotlib.pyplot/clf)
+         fig# (matplotlib.pyplot/figure)
+         agg-canvas# (matplotlib.backends.backend_agg/FigureCanvasAgg fig#)]
+     ~(cons 'do body)
+     (py. agg-canvas# "draw")
+     (matplotlib.pyplot/savefig "temp.png")
+     (sh/sh "open" "temp.png")))
 </code></pre>
-
-<p>```</p>
 
 <h2>Parens for Pyplot!</h2>
 
@@ -477,15 +421,11 @@ ns gigasquid.plot
 
 <p>After that is all setup we can require the libs we need in clojure.</p>
 
-<p>```clojure
-(ns gigasquid.numpy-plot
-  (:require [libpython-clj.require :refer [require-python]]</p>
-
-<pre><code>        [libpython-clj.python :as py :refer [py. py.. py.-]]
-        [gigasquid.plot :as plot]))
+<pre><code class="clojure">(ns gigasquid.numpy-plot
+  (:require [libpython-clj.require :refer [require-python]]
+            [libpython-clj.python :as py :refer [py. py.. py.-]]
+            [gigasquid.plot :as plot]))
 </code></pre>
-
-<p>```</p>
 
 <p>The <code>plot</code> namespace contains the macro for <code>with-show</code> above. The <code>py.</code> and others is the new and improved syntax for interop.</p>
 
@@ -493,15 +433,11 @@ ns gigasquid.plot
 
 <p>Let&rsquo;s start off with a simple sine and cosine functions. This code will create a <code>x</code> numpy vector of a range from 0 to <code>3 * pi</code> in 0.1 increments and then create <code>y</code> numpy vector of the <code>sin</code> of that and plot it</p>
 
-<p>```clojure
-(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
-
-<pre><code>    y (numpy/sin x)]
-(plot/with-show
-  (matplotlib.pyplot/plot x y)))
+<pre><code class="clojure">(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)
+        y (numpy/sin x)]
+    (plot/with-show
+      (matplotlib.pyplot/plot x y)))
 </code></pre>
-
-<p>```</p>
 
 <p><img src="https://live.staticflickr.com/65535/49405284796_014447588d_z.jpg" alt="sin" /></p>
 
@@ -509,46 +445,38 @@ ns gigasquid.plot
 
 <p>Let&rsquo;s get a bit more complicated now and and plot both the sin and cosine as well as add labels, title, and legend.</p>
 
-<p>```clojure
-(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
-
-<pre><code>    y-sin (numpy/sin x)
-    y-cos (numpy/cos x)]
-(plot/with-show
-  (matplotlib.pyplot/plot x y-sin)
-  (matplotlib.pyplot/plot x y-cos)
-  (matplotlib.pyplot/xlabel "x axis label")
-  (matplotlib.pyplot/ylabel "y axis label")
-  (matplotlib.pyplot/title "Sine and Cosine")
-  (matplotlib.pyplot/legend ["Sine" "Cosine"])))
+<pre><code class="clojure">(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)
+        y-sin (numpy/sin x)
+        y-cos (numpy/cos x)]
+    (plot/with-show
+      (matplotlib.pyplot/plot x y-sin)
+      (matplotlib.pyplot/plot x y-cos)
+      (matplotlib.pyplot/xlabel "x axis label")
+      (matplotlib.pyplot/ylabel "y axis label")
+      (matplotlib.pyplot/title "Sine and Cosine")
+      (matplotlib.pyplot/legend ["Sine" "Cosine"])))
 </code></pre>
-
-<p>```</p>
 
 <p><img src="http:////live.staticflickr.com/65535/49405284806_1d04957bce_z.jpg" alt="sin and cos" /></p>
 
 <p>We can also add subplots. Subplots are when you divide the plots into different portions.
 It is a bit stateful and involves making one subplot <em>active</em> and making changes and then making the other subplot <em>active</em>. Again not too hard to do with Clojure.</p>
 
-<p>```clojure
-(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)</p>
+<pre><code class="clojure">(let [x (numpy/arange 0 (* 3 numpy/pi) 0.1)
+        y-sin (numpy/sin x)
+        y-cos (numpy/cos x)]
+    (plot/with-show
+      ;;; set up a subplot gird that has a height of 2 and width of 1
+      ;; and set the first such subplot as active
+      (matplotlib.pyplot/subplot 2 1 1)
+      (matplotlib.pyplot/plot x y-sin)
+      (matplotlib.pyplot/title "Sine")
 
-<pre><code>    y-sin (numpy/sin x)
-    y-cos (numpy/cos x)]
-(plot/with-show
-  ;;; set up a subplot gird that has a height of 2 and width of 1
-  ;; and set the first such subplot as active
-  (matplotlib.pyplot/subplot 2 1 1)
-  (matplotlib.pyplot/plot x y-sin)
-  (matplotlib.pyplot/title "Sine")
-
-  ;;; set the second subplot as active and make the second plot
-  (matplotlib.pyplot/subplot 2 1 2)
-  (matplotlib.pyplot/plot x y-cos)
-  (matplotlib.pyplot/title "Cosine")))
+      ;;; set the second subplot as active and make the second plot
+      (matplotlib.pyplot/subplot 2 1 2)
+      (matplotlib.pyplot/plot x y-cos)
+      (matplotlib.pyplot/title "Cosine")))
 </code></pre>
-
-<p>```</p>
 
 <p><img src="http:////live.staticflickr.com/65535/49405284836_8e49e4a6b8_z.jpg" alt="sin and cos subplots" /></p>
 
@@ -556,18 +484,14 @@ It is a bit stateful and involves making one subplot <em>active</em> and making 
 
 <p>Pyplot also has functions for working directly with images as well. Here we take a picture of my cat and create another version of it that is tinted.</p>
 
-<p>```clojure
-(let [img (matplotlib.pyplot/imread &ldquo;resources/cat.jpg&rdquo;)</p>
-
-<pre><code>    img-tinted (numpy/multiply img [1 0.95 0.9])]
-(plot/with-show
-  (matplotlib.pyplot/subplot 1 2 1)
-  (matplotlib.pyplot/imshow img)
-  (matplotlib.pyplot/subplot 1 2 2)
-  (matplotlib.pyplot/imshow (numpy/uint8 img-tinted))))
+<pre><code class="clojure">(let [img (matplotlib.pyplot/imread "resources/cat.jpg")
+        img-tinted (numpy/multiply img [1 0.95 0.9])]
+    (plot/with-show
+      (matplotlib.pyplot/subplot 1 2 1)
+      (matplotlib.pyplot/imshow img)
+      (matplotlib.pyplot/subplot 1 2 2)
+      (matplotlib.pyplot/imshow (numpy/uint8 img-tinted))))
 </code></pre>
-
-<p>```</p>
 
 <p><img src="http://live.staticflickr.com/65535/49404801993_ed398d5768_n.jpg" alt="cat tinted" /></p>
 
@@ -577,21 +501,17 @@ It is a bit stateful and involves making one subplot <em>active</em> and making 
 
 <p>The original code for this example came from this <a href="https://matplotlib.org/3.1.1/gallery/pie_and_polar_charts/pie_features.html">tutorial</a>.</p>
 
-<p>```clojure
-(let [labels [&ldquo;Frogs&rdquo; &ldquo;Hogs&rdquo; &ldquo;Dogs&rdquo; &ldquo;Logs&rdquo;]</p>
-
-<pre><code>    sizes [15 30 45 10]
-    explode [0 0.1 0 0] ; only explode the 2nd slice (Hogs)
-    ]
-(plot/with-show
-  (let [[fig1 ax1] (matplotlib.pyplot/subplots)]
-    (py. ax1 "pie" sizes :explode explode :labels labels :autopct "%1.1f%%"
-                         :shadow true :startangle 90)
-    (py. ax1 "axis" "equal")) ;equal aspec ration ensures that pie is drawn as circle
-  ))
+<pre><code class="clojure">(let [labels ["Frogs" "Hogs" "Dogs" "Logs"]
+        sizes [15 30 45 10]
+        explode [0 0.1 0 0] ; only explode the 2nd slice (Hogs)
+        ]
+    (plot/with-show
+      (let [[fig1 ax1] (matplotlib.pyplot/subplots)]
+        (py. ax1 "pie" sizes :explode explode :labels labels :autopct "%1.1f%%"
+                             :shadow true :startangle 90)
+        (py. ax1 "axis" "equal")) ;equal aspec ration ensures that pie is drawn as circle
+      ))
 </code></pre>
-
-<p>```</p>
 
 <p><img src="http://live.staticflickr.com/65535/49404802008_7e84ceff76_z.jpg" alt="pie chart" /></p>
 
