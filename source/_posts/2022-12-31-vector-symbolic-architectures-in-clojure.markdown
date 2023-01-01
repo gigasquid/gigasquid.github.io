@@ -240,7 +240,6 @@ What is really cool about this is that we have built in fuzziness or similarity 
 ```clojure
 (def vsa-simple-map (vd/clj->vsa {:x 1 :y 1 :z 3}))
 ```
-.
 We can see all the possible matches and scores 
 
 
