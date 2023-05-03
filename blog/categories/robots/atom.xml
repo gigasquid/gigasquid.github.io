@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Robots | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/robots/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-01-01T08:11:20-05:00</updated>
+  <updated>2023-05-03T09:22:53-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -38,11 +38,11 @@ that uses the paired XBee from the handheld commander.</p>
 
 <p>Take the XBee from the handheld commander</p>
 
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg">http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg</a>"></p>
+<p>{% img <a href="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg">http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg</a> %}</p>
 
 <p>and move it to the USB to serial adapter</p>
 
-<p><img class="<a" src="href="http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg">http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg</a>"></p>
+<p>{% img <a href="http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg">http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg</a> %}</p>
 
 <p>Now plug the usb into your computer.</p>
 
@@ -158,16 +158,7 @@ that uses the paired XBee from the handheld commander.</p>
 
 <p>I just loaded it on the hexapod yesterday.  The commander software changed too, so I will of course need to revisit the code, to add in the new moves.  But here is a sneak preview of what it can do:</p>
 
-<p>
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('PmBGt9T-yvI');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/PmBGt9T-yvI?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/PmBGt9T-yvI/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=PmBGt9T-yvI" id="PmBGt9T-yvI" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info"></div>
-</a>
-<div class="video-info" ></div>
-</div>
-
-</p>
+<p>{% youtube PmBGt9T-yvI %}</p>
 
 <p><em>That is my daughter singing in the background</em></p>
 
@@ -182,7 +173,7 @@ that uses the paired XBee from the handheld commander.</p>
     <link href="http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/"/>
     <updated>2014-03-19T21:06:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg">http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg</a>"></p>
+    <content type="html"><![CDATA[<p>{% img <a href="http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg">http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg</a> %}</p>
 
 <p>Here we see the <a href="http://www.trossenrobotics.com/phantomx-ax-hexapod.aspx">PhantomX Hexapod</a> thriving in the natural habitat of a
 cozy, climate controlled, modern house. But there was a time before
@@ -243,19 +234,19 @@ robot. Please avoid.</p>
 I was so pleased when I got the feet assembled, that I considered
 knitting little baby hexapod booties.</p>
 
-<p><img class="<a" src="href="http://farm8.staticflickr.com/7298/13278059445_562bb9ce4b.jpg">http://farm8.staticflickr.com/7298/13278059445_562bb9ce4b.jpg</a>"></p>
+<p>{% img <a href="http://farm8.staticflickr.com/7298/13278059445_562bb9ce4b.jpg">http://farm8.staticflickr.com/7298/13278059445_562bb9ce4b.jpg</a> %}</p>
 
 <p>Next a servo and the tibia is added</p>
 
-<p><img class="<a" src="href="http://farm8.staticflickr.com/7311/13278197583_599f030bab.jpg">http://farm8.staticflickr.com/7311/13278197583_599f030bab.jpg</a>"></p>
+<p>{% img <a href="http://farm8.staticflickr.com/7311/13278197583_599f030bab.jpg">http://farm8.staticflickr.com/7311/13278197583_599f030bab.jpg</a> %}</p>
 
 <p>Another servo and the tibia and femur is assembled</p>
 
-<p><img class="<a" src="href="http://farm8.staticflickr.com/7185/13278392294_8986c14e5b.jpg">http://farm8.staticflickr.com/7185/13278392294_8986c14e5b.jpg</a>"></p>
+<p>{% img <a href="http://farm8.staticflickr.com/7185/13278392294_8986c14e5b.jpg">http://farm8.staticflickr.com/7185/13278392294_8986c14e5b.jpg</a> %}</p>
 
 <p>Finally, another servo and the whole leg is assembled</p>
 
-<p><img class="<a" src="href="http://farm8.staticflickr.com/7033/13278197683_cfd9a4870f.jpg">http://farm8.staticflickr.com/7033/13278197683_cfd9a4870f.jpg</a>"></p>
+<p>{% img <a href="http://farm8.staticflickr.com/7033/13278197683_cfd9a4870f.jpg">http://farm8.staticflickr.com/7033/13278197683_cfd9a4870f.jpg</a> %}</p>
 
 <h2>Newbie Advice</h2>
 
@@ -271,13 +262,13 @@ nuts to seat in each servo.</li>
 </ul>
 
 
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3833/13278059175_91699a9704_n.jpg">http://farm4.staticflickr.com/3833/13278059175_91699a9704_n.jpg</a>"></p>
+<p>{% img <a href="http://farm4.staticflickr.com/3833/13278059175_91699a9704_n.jpg">http://farm4.staticflickr.com/3833/13278059175_91699a9704_n.jpg</a> %}</p>
 
 <h2>Assembling the body</h2>
 
 <p>The body is where the board, battery and and cables go.</p>
 
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3755/13278197953_44717aea96.jpg">http://farm4.staticflickr.com/3755/13278197953_44717aea96.jpg</a>"></p>
+<p>{% img <a href="http://farm4.staticflickr.com/3755/13278197953_44717aea96.jpg">http://farm4.staticflickr.com/3755/13278197953_44717aea96.jpg</a> %}</p>
 
 <p>At long last, the legs can be attached to the body - with 120 screws
 of course.</p>
@@ -299,7 +290,7 @@ have something like this happen.</li>
 </ul>
 
 
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3749/13278392754_cde8d9e10f_n.jpg">http://farm4.staticflickr.com/3749/13278392754_cde8d9e10f_n.jpg</a>"></p>
+<p>{% img <a href="http://farm4.staticflickr.com/3749/13278392754_cde8d9e10f_n.jpg">http://farm4.staticflickr.com/3749/13278392754_cde8d9e10f_n.jpg</a> %}</p>
 
 <h2>It is Alive!</h2>
 
@@ -307,36 +298,18 @@ have something like this happen.</li>
 to upload a test check on the board to make sure that everything is
 working alright.</p>
 
-<p>
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('i9St8kDuyqU');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/i9St8kDuyqU?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/i9St8kDuyqU/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=i9St8kDuyqU" id="i9St8kDuyqU" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info"></div>
-</a>
-<div class="video-info" ></div>
-</div>
-
-</p>
+<p>{% youtube i9St8kDuyqU %}</p>
 
 <h2>Walking with Hexapods</h2>
 
 <p>The kit comes with a commander that you assemble of course.  You can
 use it to control the hexapod with hand-held joysticks.</p>
 
-<p><img class="<a" src="href="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg">http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg</a>"></p>
+<p>{% img <a href="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg">http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg</a> %}</p>
 
 <p>The moment of truth, when it finally took its very first steps, and the Age of Hexapods began.</p>
 
-<p>
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('pUrZeJ39xjs');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/pUrZeJ39xjs?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/pUrZeJ39xjs/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=pUrZeJ39xjs" id="pUrZeJ39xjs" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info"></div>
-</a>
-<div class="video-info" ></div>
-</div>
-
-</p>
+<p>{% youtube pUrZeJ39xjs %}</p>
 
 <p><em>Stay tuned for the next post of how to control the hexapod with your
 Clojure code and loading the Phoenix firmware that gives it a
