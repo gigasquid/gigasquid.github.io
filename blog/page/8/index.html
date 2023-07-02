@@ -93,6 +93,72 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-12-26T21:58:43+00:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 26 Dec 2012,  9:58 PM</time>
+        
+           | <a href="/blog/2012/12/26/hobby-languages-for-clojurists/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2012/12/26/hobby-languages-for-clojurists/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2012/12/26/hobby-languages-for-clojurists/" itemprop="url">Hobby Languages for Clojurists</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>I spend most of my work day in Ruby and CoffeeScript. However, my true love belongs to Clojure, which I consider my &ldquo;hobby&rdquo; language right now. I started to wonder, what are the &ldquo;hobby&rdquo; languages for people who spend most of their work day with Clojure. My informal twitter poll revealed selection as diverse and interesting as the Clojurists themselves.</p>
+
+<p><strong>Developers Who Enjoy Clojure Also Enjoy: </strong>
+<em>(In no particular order)</em></p>
+
+<ul>
+<li><p><a href="http://golang.org/">Go</a> (adorable mascot)</p></li>
+<li><p><a href="http://ocaml.org/">OCaml</a></p></li>
+<li><p><a href="http://factorcode.org/">Factor</a></p></li>
+<li><p><a href="http://www.haskell.org/haskellwiki/Haskell">Haskell</a></p></li>
+<li><p><a href="http://www.scala-lang.org/">Scala</a></p></li>
+<li><p><a href="http://julialang.org/">Julia</a></p></li>
+<li><p><a href="http://www.bayfronttechnologies.com/metaii.html">MetaII</a></p></li>
+<li><p><a href="https://github.com/Fogus/caerbannog">caerbannog</a></p></li>
+<li><p><a href="http://www.jsoftware.com/">J</a></p></li>
+<li><p><a href="http://boo.codehaus.org/">Boo</a> (.Net)</p></li>
+<li><p>JavaScript / Bash</p></li>
+</ul>
+
+
+<p>and of course <strong>MORE Clojure</strong></p>
+
+<ul>
+<li><p><a href="https://github.com/clojure/clojurescript">ClojureScript</a></p></li>
+<li><p><a href="https://github.com/clojure/core.logic">core.logic</a></p></li>
+<li><p><a href="http://overtone.github.com">Overtone</a></p></li>
+<li><p><a href="https://github.com/quil/quil">Quil</a></p></li>
+</ul>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-11-25T14:08:53+00:00"  data-updated="true" itemprop="datePublished dateCreated">Sun 25 Nov 2012,  2:08 PM</time>
         
            | <a href="/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5/#disqus_thread" itemprop="discussionUrl"
@@ -926,76 +992,6 @@ One of the things that I love about Clojure is that it can go anywhere that Java
 <p>For more information about <a href="http://clojure.com/blog/2012/05/08/reducers-a-library-and-model-for-collection-processing.html">Clojure Reducers</a>
 For the code on <a href="https://github.com/gigasquid/baba-yaga-reducers">github</a> if you want to explore yourself.
 More about <a href="http://en.wikipedia.org/wiki/Baba_Yaga">Baba Yaga Russian Fairy Tales</a>.</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2012-07-07T19:02:33+00:00"  data-updated="true" itemprop="datePublished dateCreated">Sat  7 Jul 2012,  7:02 PM</time>
-        
-           | <a href="/blog/2012/07/07/how-to-include-non-clojars-clojure-version-in-your-lein-project/#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io/blog/2012/07/07/how-to-include-non-clojars-clojure-version-in-your-lein-project/">Comments</a>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2012/07/07/how-to-include-non-clojars-clojure-version-in-your-lein-project/" itemprop="url">How to Include Non Clojars/maven Clojure Version in Your Lein Project</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>Do you need to have a specific version of Clojure in your leiningen project that you can&rsquo;t get from Clojars?</p>
-
-<p>I ran into this problem when I wanted to run a sample project on Clojure&rsquo;s reducers - which is not in the current Clojars version of 1.4.0.  I needed to use the most recent version, (unreleased), of 1.5.0.  These are the steps to get you running.</p>
-
-<ul>
-<li><p>Clone the <a href="https://github.com/clojure/clojure/">clojure git repository </a></p></li>
-<li><p>In the project directory - run ant to build the jar</p></li>
-<li><p>Install the jar into your local maven repo</p></li>
-</ul>
-
-
-<p><code>mvn install:install-file -DgroupId=org.clojure -DartifactId=clojure -Dfile=clojure-1.5.0-master-SNAPSHOT.jar -DpomFile=pom.xml</code></p>
-
-<ul>
-<li>Now you can update your lein project.clj with</li>
-</ul>
-
-
-<p><code>(defproject reducers "1.0.0-SNAPSHOT"
-:description "FIXME: write description"
-:dependencies [[org.clojure/clojure "1.5.0-master-SNAPSHOT"]])</code>
-Run lein deps and you should be all set.</p>
-
-<p>This trick also works with running leiningen projects with<a href="http://datomic.com/"> Datomic</a>.  In this case - download the Datomic library and from the root directory run
-<code> mvn install:install-file -DgroupId=com.datomic -DartifactId=datomic -Dfile=datomic-0.1.3164.jar -DpomFile=pom.xml</code></p>
-
-<p><strong><strong><strong><em> Update </em></strong></strong></strong>
-I found out that there is already an alpha version of Clojure on Maven.  So you don&rsquo;t need to do the build.  <a href="http://mvnrepository.com/artifact/org.clojure/clojure/1.5.0-alpha2">http://mvnrepository.com/artifact/org.clojure/clojure/1.5.0-alpha2</a></p>
-
-<p>It would simply be
-<code>(defproject reducers "1.0.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :dependencies [[org.clojure/clojure "1.5.0-alpha2"]])</code></p>
 </div>
   
   

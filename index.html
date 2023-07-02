@@ -93,6 +93,218 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2023-07-02T12:31:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun  2 Jul 2023, 12:31 PM</time>
+        
+           | <a href="/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/#disqus_thread" itemprop="discussionUrl"
+             data-disqus-identifier="http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/">Comments</a>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/" itemprop="url">Ciphers With Vector Symbolic Architectures</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/secret-message.png" alt="" /></p>
+
+<p><em>A secret message inside a 10,000 hyperdimensional vector</em></p>
+
+<p>We&rsquo;ve seen in previous posts how we can encode data structures using <a href="http://gigasquidsoftware.com/blog/2022/12/31/vector-symbolic-architectures-in-clojure/">Vector Symbolic Architectures in Clojure</a>. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.</p>
+
+<h3>A Hyperdimensional Cipher</h3>
+
+<p>Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as <code>n+1</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">alphabet</span>
+</span><span class='line'><span class="w">  </span><span class="p">[</span><span class="ss">:a</span><span class="w"> </span><span class="ss">:b</span><span class="w"> </span><span class="ss">:c</span><span class="w"> </span><span class="ss">:d</span><span class="w"> </span><span class="ss">:e</span><span class="w"> </span><span class="ss">:f</span><span class="w"> </span><span class="ss">:g</span><span class="w"> </span><span class="ss">:h</span><span class="w"> </span><span class="ss">:i</span><span class="w"> </span><span class="ss">:j</span><span class="w"> </span><span class="ss">:k</span><span class="w"> </span><span class="ss">:l</span><span class="w"> </span><span class="ss">:m</span><span class="w"> </span><span class="ss">:n</span><span class="w"> </span><span class="ss">:o</span><span class="w"> </span><span class="ss">:p</span><span class="w"> </span><span class="ss">:q</span><span class="w"> </span><span class="ss">:r</span><span class="w"> </span><span class="ss">:s</span><span class="w"> </span><span class="ss">:t</span><span class="w"> </span><span class="ss">:u</span><span class="w"> </span><span class="ss">:v</span><span class="w"> </span><span class="ss">:w</span><span class="w"> </span><span class="ss">:x</span><span class="w"> </span><span class="ss">:y</span><span class="w"> </span><span class="ss">:z</span><span class="w"> </span><span class="ss">:end-of-message</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">max-num</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">numbers</span><span class="w"> </span><span class="p">(</span><span class="nb">range </span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="nb">inc </span><span class="nv">max-num</span><span class="p">)))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">key-codes</span><span class="w"> </span><span class="p">(</span><span class="nb">into </span><span class="nv">alphabet</span><span class="w"> </span><span class="nv">numbers</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">add-keys-to-cleanup-mem!</span>
+</span><span class='line'><span class="w">  </span><span class="s">&quot;Take a single hdv as a seed and create an alphabet + numbers of them by using rotation/ protect&quot;</span>
+</span><span class='line'><span class="w">  </span><span class="p">[</span><span class="nv">seed-hdv</span><span class="p">]</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">vb/reset-hdv-mem!</span><span class="p">)</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">doall</span>
+</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">v</span><span class="w"> </span><span class="nv">k</span><span class="p">]</span>
+</span><span class='line'><span class="w">              </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">nv</span><span class="w"> </span><span class="p">(</span><span class="nf">vb/protect</span><span class="w"> </span><span class="nv">v</span><span class="p">)]</span>
+</span><span class='line'><span class="w">                </span><span class="p">(</span><span class="nf">vb/add-hdv!</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="nv">nv</span><span class="p">)</span>
+</span><span class='line'><span class="w">                </span><span class="nv">nv</span><span class="p">))</span>
+</span><span class='line'><span class="w">            </span><span class="nv">seed-hdv</span>
+</span><span class='line'><span class="w">            </span><span class="nv">key-codes</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can then encode a message by using a VSA data structure map with the form:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="ss">:c</span>,<span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="ss">:a</span>,<span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="ss">:t</span>,<span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="ss">:s</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>where the numbers are the key to the order of the sequence of the message.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">encode-message</span>
+</span><span class='line'><span class="w">  </span><span class="s">&quot;Encode a message using key value pairs with numbers for ordering&quot;</span>
+</span><span class='line'><span class="w">  </span><span class="p">[</span><span class="nv">message</span><span class="p">]</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">count </span><span class="nv">message</span><span class="p">)</span><span class="w"> </span><span class="nv">max-num</span><span class="p">)</span>
+</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nf">throw</span><span class="w"> </span><span class="p">(</span><span class="nf">ex-info</span><span class="w"> </span><span class="s">&quot;message too long&quot;</span><span class="w"> </span><span class="p">{</span><span class="ss">:allowed-n</span><span class="w"> </span><span class="nv">max-num</span><span class="p">})))</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">ds</span><span class="w"> </span><span class="p">(</span><span class="nb">zipmap </span><span class="nv">numbers</span>
+</span><span class='line'><span class="w">                   </span><span class="p">(</span><span class="nb">conj </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">mapv</span><span class="w"> </span><span class="nb">str </span><span class="nv">message</span><span class="p">)</span>
+</span><span class='line'><span class="w">                              </span><span class="p">(</span><span class="nf">mapv</span><span class="w"> </span><span class="nv">keyword</span><span class="p">))</span>
+</span><span class='line'><span class="w">                         </span><span class="ss">:end-of-message</span><span class="p">))]</span>
+</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nb">println </span><span class="s">&quot;Encoding &quot;</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="s">&quot; into &quot;</span><span class="w"> </span><span class="nv">ds</span><span class="p">)</span>
+</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span><span class="w"> </span><span class="nv">ds</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The message is now in a single hyperdimensional vector. We can decode the message by inspecting each of the numbers in the key value pairs encoded in the data structure.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">decode-message</span>
+</span><span class='line'><span class="w">  </span><span class="s">&quot;Decode a message by getting the value of the numbered pairs&quot;</span>
+</span><span class='line'><span class="w">  </span><span class="p">[</span><span class="nv">msg</span><span class="p">]</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">message-v</span>
+</span><span class='line'><span class="w">        </span><span class="nv">_</span><span class="w"> </span><span class="p">(</span><span class="nb">println </span><span class="s">&quot;decoded message-v &quot;</span><span class="w"> </span><span class="nv">message-v</span><span class="p">)</span>
+</span><span class='line'><span class="w">        </span><span class="nv">decoded</span><span class="w"> </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">message-v</span>
+</span><span class='line'><span class="w">                     </span><span class="p">(</span><span class="nf">partition-by</span><span class="w"> </span><span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="nv">%</span><span class="w"> </span><span class="ss">:end-of-message</span><span class="p">))</span>
+</span><span class='line'><span class="w">                     </span><span class="nv">first</span>
+</span><span class='line'><span class="w">                     </span><span class="p">(</span><span class="nf">mapv</span><span class="w"> </span><span class="o">#</span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">keyword? </span><span class="nv">%</span><span class="p">)</span>
+</span><span class='line'><span class="w">                              </span><span class="p">(</span><span class="nb">name </span><span class="nv">%</span><span class="p">)</span>
+</span><span class='line'><span class="w">                              </span><span class="p">(</span><span class="nb">str </span><span class="nv">%</span><span class="p">)))</span>
+</span><span class='line'><span class="w">                     </span><span class="p">(</span><span class="nb">apply </span><span class="nv">str</span><span class="p">))]</span>
+</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nb">println </span><span class="s">&quot;Decoded message is &quot;</span><span class="w"> </span><span class="nv">decoded</span><span class="p">)</span>
+</span><span class='line'><span class="w">    </span><span class="nv">decoded</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Some example code of generating and decoding the message:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="w">  </span><span class="p">(</span><span class="nf">vb/set-size!</span><span class="w"> </span><span class="mi">1</span><span class="nv">e4</span><span class="p">)</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">def </span><span class="nv">seed-key-hdv</span><span class="w"> </span><span class="p">(</span><span class="nf">vb/hdv</span><span class="p">))</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">add-keys-to-cleanup-mem!</span><span class="w"> </span><span class="nv">seed-key-hdv</span><span class="p">)</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">image/write-image-hdv</span><span class="w"> </span><span class="s">&quot;seed-key-hdv&quot;</span><span class="w"> </span><span class="nv">seed-key-hdv</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">def </span><span class="nv">message</span><span class="w"> </span><span class="p">(</span><span class="nf">encode-message</span><span class="w"> </span><span class="s">&quot;cats&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">image/write-image-hdv</span><span class="w"> </span><span class="s">&quot;secret-message&quot;</span><span class="w"> </span><span class="nv">message</span><span class="p">)</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">decode-message</span><span class="w"> </span><span class="nv">message</span><span class="p">)</span>
+</span><span class='line'><span class="w">  </span><span class="c1">;=&gt; &quot;cats&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The cool thing is that both hyperdimensional dictionary and the hyperdimensional encoded message can both be shared as a simple image like these:</p>
+
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/seed-key-hdv.png" alt="" /> The seed key to generate the dictionary/ cleanup-mem</p></li>
+<li><p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/secret-message.png" alt="" />The encoded secret message</p></li>
+</ul>
+
+
+<p>Then you can load up the seed key/ message from the image. Once you have the dictionary shared, you can create multiple encoded messages with it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">loaded-key</span><span class="w"> </span><span class="p">(</span><span class="nf">image/read-image-to-hdv</span><span class="w"> </span><span class="s">&quot;examples/seed-key-hdv.png&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">add-keys-to-cleanup-mem!</span><span class="w"> </span><span class="nv">loaded-key</span><span class="p">)</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">def </span><span class="nv">loaded-message</span><span class="w"> </span><span class="p">(</span><span class="nf">image/read-image-to-hdv</span><span class="w"> </span><span class="s">&quot;examples/secret-message.png&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">decode-message</span><span class="w"> </span><span class="nv">loaded-message</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Caveats</h3>
+
+<p>Please keep in mind that this is just an experiment - <em>do not use</em> for anything important. Another interesting factor to keep in mind is that the VSA operations to get the key value are probabilistic  so that the correct decoding is not guaranteed. In fact, I set a limit on the 10,000 dimensional vector message to be 4 letters, which I found to be pretty reliable. For example, with 10,000 dimensions, encoding <code>catsz</code> decoded as <code>katsz</code>.</p>
+
+<p>Increasing the number of dimensions lets you encode longer messages. This article is a good companion to look at <a href="https://link.springer.com/article/10.1007/s10462-021-10110-3">capacity across different implementations of VSAs</a>.</p>
+
+<h3>Conclusion</h3>
+
+<p>VSAs could be an interesting way to do ciphers. Some advantages could be that the distribution of the information across the vector and the nature of the mapped data structure, it is hard to do things like vowel counting to try to decipher messages. Of course you don&rsquo;t need to have letters and numbers be the only symbols used in the dictionary, they could represent other things as well. The simplicity of being able to encode data structures in a form that can easily be expressed as a black and white image, also lends in its flexibility. Another application might be the ability to combine this technique with deep learning to keep information safe during the training process.</p>
+
+<p><a href="https://github.com/gigasquid/vsa-clj/blob/main/examples/vsa_cipher.clj">Link to the full github code</a></p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2022-12-31T15:41:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 31 Dec 2022,  3:41 PM</time>
         
            | <a href="/blog/2022/12/31/vector-symbolic-architectures-in-clojure/#disqus_thread" itemprop="discussionUrl"
@@ -3230,307 +3442,6 @@ In the following the spec is only that the data be a general string, but using t
 <p><img src="https://live.staticflickr.com/65535/48647579433_ce703809fa_z.jpg" alt="Otto in basket" /></p>
 
 <p><em>P.S. If you want to run all the code for yourself. It is <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder/blob/master/src/clojure_mxnet_autoencoder/discriminator.clj">here</a></em></p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-08-16T16:16:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 16 Aug 2019,  4:16 PM</time>
-        
-           | <a href="/blog/2019/08/16/simple-autoencoder/#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/">Comments</a>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2019/08/16/simple-autoencoder/" itemprop="url">Simple Autoencoder</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/horlik/2901925672/in/photolist-5qr8pf-qkv3m8-32RwmC-dZBC2B-ja8ch-48vDg-f56TGS-oUfNKn-652ZqG-QnCrbX-y3C828-jeGkmu-dxwE9L-jKaGtZ-haQ6j3-61w8UJ-WmitYz-tLymA-dZCHC4-CGvx3R-CC3GPE-BSxzda-eu625R-vHAgnk-cR7WAE-jZiLgu-BsZwLP-fhfvPT-dN1Rf9-o8Mkby-8zDocw-5DvC7S-CEij58-oaw922-akUgeW-ayQiGU-aay1vS-2fVFske-2eoRpCe-rqwa4o-9VJPtv-opgEcq-MDfFe-9yzUaK-4is9Z9-cutXnm-f9U23-L7hpoe-3i3H-enSJKf" title="Perfect mirror"><img src="https://live.staticflickr.com/3274/2901925672_325f5faeb8.jpg" width="500" height="364" alt="Perfect mirror"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p><em>If you look long enough into the autoencoder, it looks back at you.</em></p>
-
-<p>The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.</p>
-
-<p>It&rsquo;s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a <em>latent space representation</em> and the encoder translating that back to a regular images that we can view.</p>
-
-<p><img src="https://camo.githubusercontent.com/1ab40362a922059fa3686914cf5cff803ba7dd43/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f3830302f312a4c53594e57356d33544e377852583631425a686f5a412e706e67" alt="" /></p>
-
-<p>We are going to make a simple autoencoder with Clojure MXNet for handwritten digits using the MNIST dataset.</p>
-
-<h3>The Dataset</h3>
-
-<p>We first load up the training data into an iterator that will allow us to cycle through all the images.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
-</span><span class='line'>                                   <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
-</span><span class='line'>                                   <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
-</span><span class='line'>                                   <span class="ss">:flat</span> <span class="nv">true</span>
-</span><span class='line'>                                   <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
-</span><span class='line'>                                   <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice there the the input shape is 784. We are purposely flattening out our 28x28 image of a number to just be a one dimensional flat array. The reason is so that we can use a simpler model for the autoencoder.</p>
-
-<p>We also load up the corresponding test data.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">test-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-images-idx3-ubyte&quot;</span><span class="p">)</span>
-</span><span class='line'>                                  <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-labels-idx1-ubyte&quot;</span><span class="p">)</span>
-</span><span class='line'>                                  <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
-</span><span class='line'>                                  <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
-</span><span class='line'>                                  <span class="ss">:flat</span> <span class="nv">true</span>
-</span><span class='line'>                                  <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When we are working with deep learning models we keep the training and the test data separate. When we train the model, we won&rsquo;t use the test data. That way we can evaluate it later on the unseen test data.</p>
-
-<h3>The Model</h3>
-
-<p>Now we need to define the layers of the model. We know we are going to have an input and an output. The input will be the array that represents the image of the digit and the output will also be an array which is reconstruction of that image.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">input</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input&quot;</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">output</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input_&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">get-symbol</span> <span class="p">[]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="nv">input</span> <span class="nv">data</span>
-</span><span class='line'>    <span class="c1">;; encode</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;encode1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">100</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">;; encode</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;encode2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">50</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">;; decode</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;decode1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">50</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid3&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">;; decode</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;decode2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">100</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid4&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">;;output</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;result&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">784</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid5&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/linear-regression-output</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:label</span> <span class="nv">output</span><span class="p">})))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:</p>
-
-<p>784 (image) -> 100 -> 50 -> 50 -> 100 -> 784 (output)</p>
-
-<p>We can now construct the full model with the <em>module</em> api from clojure-mxnet.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">data-desc</span> <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">mx-io/provide-data-desc</span> <span class="nv">train-data</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">model</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/module</span> <span class="p">(</span><span class="nf">get-symbol</span><span class="p">)</span> <span class="p">{</span><span class="ss">:data-names</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]</span> <span class="ss">:label-names</span> <span class="p">[</span><span class="s">&quot;input_&quot;</span><span class="p">]})</span>
-</span><span class='line'>               <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">data-desc</span> <span class="ss">:name</span> <span class="s">&quot;input&quot;</span><span class="p">)]</span>
-</span><span class='line'>                        <span class="ss">:label-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">data-desc</span> <span class="ss">:name</span> <span class="s">&quot;input_&quot;</span><span class="p">)]})</span>
-</span><span class='line'>               <span class="p">(</span><span class="nf">m/init-params</span> <span class="p">{</span><span class="ss">:initializer</span>  <span class="p">(</span><span class="nf">initializer/uniform</span> <span class="mi">1</span><span class="p">)})</span>
-</span><span class='line'>               <span class="p">(</span><span class="nf">m/init-optimizer</span> <span class="p">{</span><span class="ss">:optimizer</span> <span class="p">(</span><span class="nf">optimizer/adam</span> <span class="p">{</span><span class="ss">:learning-rage</span> <span class="mf">0.001</span><span class="p">})})))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice that when we are binding the <code>data-shapes</code> and <code>label-shapes</code> we are using only the <code>data</code> from our handwritten digit dataset, (the images), and not the labels. This will ensure that as it trains it will seek to recreate the input image for the output image.</p>
-
-<h3>Before Training</h3>
-
-<p>Before we start our training, let&rsquo;s get a baseline of what the original images look like and what the output of the untrained model is.</p>
-
-<p>To look at the original images we can take the first training batch of 100 images and visualize them. Since we are initially using the flattened <code>[784]</code> image representation. We need to reshape it to the 28x28 image that we can recognize.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">my-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">train-data</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-batch</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">images</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;originals&quot;</span> <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span> <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">images</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567560737/in/dateposted-public/" title="originals"><img src="https://live.staticflickr.com/65535/48567560737_672d065ac2.jpg" width="420" height="420" alt="originals"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>We can also do the same visualization with the test batch of data images by putting them into the <code>predict-batch</code> and using our model.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; before training</span>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">test-images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-test-batch</span><span class="p">))</span>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
-</span><span class='line'> <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;before-training-preds&quot;</span> <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span> <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">preds</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567589067/in/dateposted-public/" title="before-training-preds"><img src="https://live.staticflickr.com/65535/48567589067_e44eeda1a9.jpg" width="420" height="420" alt="before-training-preds"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>They are not anything close to recognizable as numbers.</p>
-
-<h3>Training</h3>
-
-<p>The next step is to train the model on the data. We set up a training function to step through all the batches of data.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">my-metric</span> <span class="p">(</span><span class="nf">eval-metric/mse</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">0</span> <span class="nv">num-epochs</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;starting epoch &quot;</span> <span class="nv">epoch-num</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span>
-</span><span class='line'>     <span class="nv">train-data</span>
-</span><span class='line'>     <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span><span class="p">]</span>
-</span><span class='line'>       <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">model</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">m/forward</span> <span class="p">{</span><span class="ss">:data</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">)</span> <span class="ss">:label</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">)})</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">m/update-metric</span> <span class="nv">my-metric</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">))</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">m/backward</span><span class="p">)</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">m/update</span><span class="p">))))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;result for epoch &quot;</span> <span class="nv">epoch-num</span> <span class="s">&quot; is &quot;</span> <span class="p">(</span><span class="nf">eval-metric/get-and-reset</span> <span class="nv">my-metric</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For each batch of 100 images it is doing the following:</p>
-
-<ul>
-<li>Run the forward pass of the model with both the data and label being the image</li>
-<li>Update the accuracy of the model with the <code>mse</code> (mean squared error metric)</li>
-<li>Do the backward computation</li>
-<li>Update the model according to the optimizer and the forward/backward computation.</li>
-</ul>
-
-
-<p>Let&rsquo;s train it for 3 epochs.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">0</span>
-</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">0</span>  <span class="nv">is</span>  <span class="p">[</span><span class="nv">mse</span> <span class="mf">0.06460866</span><span class="p">]</span>
-</span><span class='line'><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">1</span>
-</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">1</span>  <span class="nv">is</span>  <span class="p">[</span><span class="nv">mse</span> <span class="mf">0.033874355</span><span class="p">]</span>
-</span><span class='line'><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">2</span>
-</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">2</span>  <span class="nv">is</span>  <span class="p">[</span><span class="nv">mse</span> <span class="mf">0.027255038</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>After training</h3>
-
-<p>We can check the test images again and see if they look better.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; after training</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">test-images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-test-batch</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;after-training-preds&quot;</span> <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span> <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">preds</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567523206/in/dateposted-public/" title="after-training-preds"><img src="https://live.staticflickr.com/65535/48567523206_d78480012f.jpg" width="420" height="420" alt="after-training-preds"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>Much improved! They definitely look like numbers.</p>
-
-<h3>Wrap up</h3>
-
-<p>We&rsquo;ve made a simple autoencoder that can take images of digits and compress them down to a latent space representation the can later be decoded into the same image.</p>
-
-<p>If you want to check out the full code for this example, you can find it <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder">here</a>.</p>
-
-<p>Stay tuned. We&rsquo;ll take this example and build on it in future posts.</p>
 </div>
   
   

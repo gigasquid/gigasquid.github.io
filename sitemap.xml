@@ -522,7 +522,13 @@
         <loc>
             http://gigasquid.github.io/blog/2022/12/31/vector-symbolic-architectures-in-clojure/
         </loc>
-        <lastmod>2023-05-03T07:43:10-04:00</lastmod>
+        <lastmod>2023-07-02T12:40:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/
+        </loc>
+        <lastmod>2023-07-02T14:13:17-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/about/</loc>
@@ -530,7 +536,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/blog/archives/</loc>
-        <lastmod>2023-05-03T07:43:10-04:00</lastmod>
+        <lastmod>2023-07-02T14:13:17-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/books/</loc>
@@ -538,7 +544,7 @@
     </url>
     <url>
         <loc>http://gigasquid.github.io/</loc>
-        <lastmod>2023-05-03T07:43:10-04:00</lastmod>
+        <lastmod>2023-07-02T14:13:17-04:00</lastmod>
     </url>
     <url>
         <loc>http://gigasquid.github.io/robots.txt</loc>

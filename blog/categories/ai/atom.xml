@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AI | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/ai/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-05-03T09:22:49-04:00</updated>
+  <updated>2023-07-02T14:14:14-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -12,6 +12,124 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ciphers With Vector Symbolic Architectures]]></title>
+    <link href="http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/"/>
+    <updated>2023-07-02T12:31:00-04:00</updated>
+    <id>http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures</id>
+    <content type="html"><![CDATA[<p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/secret-message.png" alt="" /></p>
+
+<p><em>A secret message inside a 10,000 hyperdimensional vector</em></p>
+
+<p>We&rsquo;ve seen in previous posts how we can encode data structures using <a href="http://gigasquidsoftware.com/blog/2022/12/31/vector-symbolic-architectures-in-clojure/">Vector Symbolic Architectures in Clojure</a>. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.</p>
+
+<h3>A Hyperdimensional Cipher</h3>
+
+<p>Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as <code>n+1</code>.</p>
+
+<pre><code class="clojure">(def alphabet
+  [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p :q :r :s :t :u :v :w :x :y :z :end-of-message])
+
+
+(def max-num 4)
+(def numbers (range 1 (inc max-num)))
+(def key-codes (into alphabet numbers))
+
+
+(defn add-keys-to-cleanup-mem!
+  "Take a single hdv as a seed and create an alphabet + numbers of them by using rotation/ protect"
+  [seed-hdv]
+  (vb/reset-hdv-mem!)
+  (doall
+    (reduce (fn [v k]
+              (let [nv (vb/protect v)]
+                (vb/add-hdv! k nv)
+                nv))
+            seed-hdv
+            key-codes)))
+</code></pre>
+
+<p>We can then encode a message by using a VSA data structure map with the form:</p>
+
+<pre><code>{1 :c, 2 :a, 3 :t, 4 :s}
+</code></pre>
+
+<p>where the numbers are the key to the order of the sequence of the message.</p>
+
+<pre><code class="clojure">(defn encode-message
+  "Encode a message using key value pairs with numbers for ordering"
+  [message]
+  (when (&gt; (count message) max-num)
+    (throw (ex-info "message too long" {:allowed-n max-num})))
+  (let [ds (zipmap numbers
+                   (conj (-&gt;&gt; (mapv str message)
+                              (mapv keyword))
+                         :end-of-message))]
+    (println "Encoding " message " into " ds)
+    (vd/clj-&gt;vsa ds)))
+</code></pre>
+
+<p>The message is now in a single hyperdimensional vector. We can decode the message by inspecting each of the numbers in the key value pairs encoded in the data structure.</p>
+
+<pre><code class="clojure">(defn decode-message
+  "Decode a message by getting the value of the numbered pairs"
+  [msg]
+  (let [message-v
+        _ (println "decoded message-v " message-v)
+        decoded (-&gt;&gt; message-v
+                     (partition-by #(= % :end-of-message))
+                     first
+                     (mapv #(if (keyword? %)
+                              (name %)
+                              (str %)))
+                     (apply str))]
+    (println "Decoded message is " decoded)
+    decoded))
+</code></pre>
+
+<p>Some example code of generating and decoding the message:</p>
+
+<pre><code class="clojure">  (vb/set-size! 1e4)
+  (def seed-key-hdv (vb/hdv))
+  (add-keys-to-cleanup-mem! seed-key-hdv)
+  (image/write-image-hdv "seed-key-hdv" seed-key-hdv)
+
+  (def message (encode-message "cats"))
+  (image/write-image-hdv "secret-message" message)
+  (decode-message message)
+  ;=&gt; "cats"
+</code></pre>
+
+<p>The cool thing is that both hyperdimensional dictionary and the hyperdimensional encoded message can both be shared as a simple image like these:</p>
+
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/seed-key-hdv.png" alt="" /> The seed key to generate the dictionary/ cleanup-mem</p></li>
+<li><p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/secret-message.png" alt="" />The encoded secret message</p></li>
+</ul>
+
+
+<p>Then you can load up the seed key/ message from the image. Once you have the dictionary shared, you can create multiple encoded messages with it.</p>
+
+<pre><code class="clojure">(def loaded-key (image/read-image-to-hdv "examples/seed-key-hdv.png"))
+  (add-keys-to-cleanup-mem! loaded-key)
+  (def loaded-message (image/read-image-to-hdv "examples/secret-message.png"))
+  (decode-message loaded-message)
+</code></pre>
+
+<h3>Caveats</h3>
+
+<p>Please keep in mind that this is just an experiment - <em>do not use</em> for anything important. Another interesting factor to keep in mind is that the VSA operations to get the key value are probabilistic  so that the correct decoding is not guaranteed. In fact, I set a limit on the 10,000 dimensional vector message to be 4 letters, which I found to be pretty reliable. For example, with 10,000 dimensions, encoding <code>catsz</code> decoded as <code>katsz</code>.</p>
+
+<p>Increasing the number of dimensions lets you encode longer messages. This article is a good companion to look at <a href="https://link.springer.com/article/10.1007/s10462-021-10110-3">capacity across different implementations of VSAs</a>.</p>
+
+<h3>Conclusion</h3>
+
+<p>VSAs could be an interesting way to do ciphers. Some advantages could be that the distribution of the information across the vector and the nature of the mapped data structure, it is hard to do things like vowel counting to try to decipher messages. Of course you don&rsquo;t need to have letters and numbers be the only symbols used in the dictionary, they could represent other things as well. The simplicity of being able to encode data structures in a form that can easily be expressed as a black and white image, also lends in its flexibility. Another application might be the ability to combine this technique with deep learning to keep information safe during the training process.</p>
+
+<p><a href="https://github.com/gigasquid/vsa-clj/blob/main/examples/vsa_cipher.clj">Link to the full github code</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Vector Symbolic Architectures in Clojure]]></title>
@@ -509,7 +627,7 @@
 
 <h2>Where to Start?</h2>
 
-<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
+<p>{% img <a href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a> %}</p>
 
 <p>In the last blog post, we created our deep learning network and trained the data on scaled down images (like 50x50) from scratch. This time we are much smarter.</p>
 
@@ -579,7 +697,7 @@ Saving network to trained-network.nippy
 
 <h3>Compare the results</h3>
 
-<p><img class="<a" src="href="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg">http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg</a>"></p>
+<p>{% img <a href="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg">http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg</a> %}</p>
 
 <p>My one epoch of fine tuning beat my best results of going through the Practical Deep Learning exercise with the fine tuning the VGG16 model. Not bad at all.</p>
 
@@ -590,225 +708,6 @@ Saving network to trained-network.nippy
 <p>Even more exciting, there is a <a href="https://github.com/gigasquid/cats-dogs-cortex-redux/blob/master/Cats%20and%20Dogs%20in%20Cortex%20(Redux).ipynb">walkthrough in a jupyter notebook</a> with a lein-jupyter plugin.</p>
 
 <p>The Deep Learning world in Clojure is an exciting place to be and gaining tools and traction more and more.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Deep Learning in Clojure With Cortex]]></title>
-    <link href="http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex/"/>
-    <updated>2016-12-27T10:44:00-05:00</updated>
-    <id>http://gigasquid.github.io/blog/2016/12/27/deep-learning-in-clojure-with-cortex</id>
-    <content type="html"><![CDATA[<p><strong>Update: Cortex has moved along since I first wrote this blog post, so if you are looking to run the examples, please go and clone the <a href="https://github.com/thinktopic/cortex">Cortex</a> repo and look for the cats and dogs code in the examples directory.</strong></p>
-
-<p>There is an awesome new <em>Clojure-first</em> machine learning library called <a href="https://github.com/thinktopic/cortex">Cortex</a> that was open sourced recently. I&rsquo;ve been exploring it lately and wanted to share my discoveries so far in this post. In our exploration, we are going to tackle one of the classic classification problems of the internet. How do you tell the difference between a cat and dog pic?</p>
-
-<h2>Where to Start?</h2>
-
-<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
-
-<p>For any machine learning problem, we&rsquo;re going to need data. For this, we can use Kaggle&rsquo;s data for the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Cats vs Dogs Challenge</a>.  The training data consists of 25,000 images of cats and dogs. That should be more than enough to train our computer to recognize cats from doggies.</p>
-
-<p>We also need some idea of how to train against the data. Luckily, the Cortex project has a very nice set of examples to help you get started. In particular there is a <a href="https://github.com/thinktopic/cortex/tree/master/examples/suite-classification">suite classification example</a> using MNIST, (hand written digit), corpus. This example contains a number cutting edge features that we&rsquo;ll want to use:</p>
-
-<ul>
-<li>Uses GPU for <em>fast</em> computation.</li>
-<li>Uses a deep, multi-layered, convolutional layered network for feature recognition.</li>
-<li>Has &ldquo;forever&rdquo; training by image augmentation.</li>
-<li>Saves the network configuration as it trains to an external nippy file so that it can be imported later.</li>
-<li>Has a really nice ClojureScript front end to visualize the training progress with a confusion matrix.</li>
-<li>Has a way to import the saved nippy network configuration and perform inference on it to classify a new image.</li>
-</ul>
-
-
-<p>Basically, it has everything we need to hit the ground running.</p>
-
-<h2>Data Wrangling</h2>
-
-<p>To use the example&rsquo;s <em>forever</em> training, we need to get the data in the right form. We need all the images to be the same size as well as in a directory structure that is split up into the training and test images. Furthermore, we want all the dog images to be under a &ldquo;dog&rdquo; directory and the cat images under the &ldquo;cat&rdquo; directory so that the all the indexed images under them have the correct &ldquo;label&rdquo;.  It will look like this:</p>
-
-<pre><code>- training
-  - cat
-    - 1.png
-    - 2.png
-  - dog
-    - 1.png
-    - 2.png
-</code></pre>
-
-<p>For this task, we are going to use a couple image libraries to help us out:</p>
-
-<pre><code class="clojure"> [mikera.image.core :as imagez]
- [think.image.image :as image]
-</code></pre>
-
-<p>We can resize and rewrite the original images into the form we want. For a image size, we&rsquo;re going to go with 52x52. The choice is arbitrary in that I wanted it bigger than the MNIST dataset which is 28x28 so it will be easier to see, but not so big that it kills my CPU. This is even more important since we want to use RGB colors which is 3 channels as opposed to the MNIST grey scale of 1.</p>
-
-<pre><code class="clojure">(def dataset-image-size 52)
-(def dataset-num-classes 2)
-(def dataset-num-channels 3)
-(def dataset-datatype :float)
-
-(defn resize-and-write-data
-  [output-dir [idx [file label]]]
-  (let [img-path (str output-dir "/" label "/" idx ".png" )]
-    (when-not (.exists (io/file img-path))
-      (io/make-parents img-path)
-      (-&gt; (imagez/load-image file)
-          (image/resize dataset-image-size dataset-image-size)
-          (imagez/save img-path)))
-    nil))
-</code></pre>
-
-<p>As far as the split between training images and testing images, we are going the go for an simple even split between testing and training data.</p>
-
-<h2>Network Configuration</h2>
-
-<p>The Network layer configuration is the meat of the whole thing. We are going to go with the exact same network description as the MNIST example:</p>
-
-<pre><code class="clojure">(defn create-basic-network-description
-  []
-  [(desc/input dataset-image-size dataset-image-size dataset-num-channels)
-   (desc/convolutional 5 0 1 20)
-   (desc/max-pooling 2 0 2)
-   (desc/relu)
-   (desc/convolutional 5 0 1 50)
-   (desc/max-pooling 2 0 2)
-   (desc/relu)
-   (desc/convolutional 1 0 1 50)
-   (desc/relu)
-   (desc/linear-&gt;relu 1000)
-   (desc/dropout 0.5)
-   (desc/linear-&gt;softmax dataset-num-classes)])
-</code></pre>
-
-<p>It uses a series of convolutional layers with max pooling for feature recognition. We&rsquo;ll see if it works for color versions of cats and dogs as well as street numbers.</p>
-
-<p>We&rsquo;ll also keep the image augmentation the same as in the example.</p>
-
-<pre><code class="clojure">(def max-image-rotation-degrees 25)
-
-(defn img-aug-pipeline
-  [img]
-  (-&gt; img
-      (image-aug/rotate (- (rand-int (* 2 max-image-rotation-degrees))
-                           max-image-rotation-degrees)
-                        false)
-      (image-aug/inject-noise (* 0.25 (rand)))))
-
-(def ^:dynamic *num-augmented-images-per-file* 1)
-</code></pre>
-
-<p>It injects one augmented image into our training data by slightly rotating it and adding noise.</p>
-
-<h3>Running it!</h3>
-
-<p>It&rsquo;s time to test it out. Using <code>lein run</code>, we&rsquo;ll launch the <code>train-forever</code> function:</p>
-
-<pre><code class="clojure">(defn train-forever
-  []
-  (let [dataset (create-dataset)
-        initial-description (create-basic-network-description)
-        confusion-matrix-atom (display-dataset-and-model dataset initial-description)]
-    (classification/train-forever dataset observation-&gt;image
-                                  initial-description
-                                  :confusion-matrix-atom confusion-matrix-atom)))
-</code></pre>
-
-<p>This opens a port to a localhost webpage where we can view the progress <code>http://localhost:8091/</code></p>
-
-<p><img class="<a" src="href="http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg">http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg</a>"></p>
-
-<p>Below the confusion matrix is shown. This tracks the progress of the training in the classification. In particular, how many times it thought a cat was really a cat and how many times it got it wrong.</p>
-
-<p><img class="<a" src="href="http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg">http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg</a>"></p>
-
-<p>As we are training the data, the loss for each epoch is shown on the console as well as when it saves the network to the external file.</p>
-
-<p>After only thirty minutes of training on my Mac Book Pro, we get to some pretty good results, with the correct percentage in the 99s :</p>
-
-<p><img class="<a" src="href="http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg">http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg</a>"></p>
-
-<p>It&rsquo;s time to do some inference on our trained network.</p>
-
-<h2>Inference</h2>
-
-<p>Firing up a REPL we can connect to our namespace and use the <code>label-one</code> function from the cortex example to spot check our classification. It reads in the external nippy file that contains the trained network description, takes a random image from the testing directory, and classifies it.</p>
-
-<pre><code class="clojure">(defn label-one
-  "Take an arbitrary image and label it."
-  []
-  (let [file-label-pairs (shuffle (classification/directory-&gt;file-label-seq testing-dir
-                                                                            false))
-        [test-file test-label] (first file-label-pairs)
-        test-img (imagez/load-image test-file)
-        observation (png-&gt;observation dataset-datatype false test-img)]
-    (imagez/show test-img)
-    (infer/classify-one-observation (:network-description
-                                     (suite-io/read-nippy-file "trained-network.nippy"))
-                                    observation
-                                    (ds/create-image-shape dataset-num-channels
-                                                           dataset-image-size
-                                                           dataset-image-size)
-                                    dataset-datatype
-                                    (classification/get-class-names-from-directory testing-dir))))
-</code></pre>
-
-<p>Running <code>(label-one)</code> gives us the picture:</p>
-
-<p><img class="<a" src="href="http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg">http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg</a>"></p>
-
-<p>and classifies it as a cat. Yipee!</p>
-
-<pre><code class="clojure">{:probability-map {"cat" 0.9995587468147278, "dog" 4.4119369704276323E-4}, :classification "cat"}
-</code></pre>
-
-<p>Not bad, but let&rsquo;s try it with something harder. Personally, I&rsquo;m not even sure whether this is a cat or a dog.</p>
-
-<p><img class="<a" src="href="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg">http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg</a>"></p>
-
-<p>Feeding it through the program - it says it is a cat.</p>
-
-<pre><code class="clojure"> {:probability-map {"cat" 0.9942012429237366, "dog" 0.005798777565360069}, :classification "cat"}
-</code></pre>
-
-<p>After much <a href="http://www.today.com/pets/cat-or-dog-wild-eyed-cutie-has-us-all-confused-t104835">debate on the internet</a>, I think that is the best answer the humans got too :)</p>
-
-<h2>Kaggle it</h2>
-
-<p>So it seems like we have a pretty good model, why don&rsquo;t we submit our results to the Kaggle competition and see how it rates. All they need is to have us run the classification against their test data of 12,500 images and classify them as 1 = dog or 0 = cat in a csv format.</p>
-
-<p>We will take each image and resize it, then feed it into cortex&rsquo;s <code>infer-n-observations</code> function, to do all our classification as a batch.</p>
-
-<pre><code class="clojure"> (infer/infer-n-observations (:network-description
-                                             (suite-io/read-nippy-file "trained-network.nippy"))
-                                            observations
-                                            (ds/create-image-shape dataset-num-channels
-                                                                   dataset-image-size
-                                                                   dataset-image-size)
-                                            dataset-datatype)
-</code></pre>
-
-<p>Finally, we just need to format our results to a csv file and export it:</p>
-
-<pre><code class="clojure">(defn write-kaggle-results [results]
-  (with-open [out-file (io/writer "kaggle-results.csv")]
-    (csv/write-csv out-file
-                   (into [["id" "label"]]
-                         (-&gt; (mapv (fn [[id class]] [(Integer/parseInt id) (if (= "dog" class) 1 0)]) results)
-                             (sort))))))
-</code></pre>
-
-<p>After uploading the file to the Kaggle, I was pleased that the answer got in the top 91%! It made it on the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/leaderboard">Leaderboard</a>.</p>
-
-<h2>Conclusion</h2>
-
-<p>Using an example setup from the Cortex project and 30 minutes of processing time on my laptop, we were able to crunch through some significant data and come up with a trained classification model that was good enough to make the charts in the Kaggle competition. On top of it all, it is in pure Clojure.</p>
-
-<p>In my mind, this is truely impressive and even though the Cortex library is in it&rsquo;s early phases, it puts it on track to be as useful a tool as Tensor Flow for Machine Learning.</p>
-
-<p>Earlier this month, I watched an ACM Learning webcast with Peter Norvig speaking on AI. In it, he spoke of one of the next challenges of AI which is to combine <a href="https://twitter.com/gigasquid/status/806916856040689664?lang=en">symbolic with neural</a>. I can think of no better language than Clojure with it&rsquo;s simplicity, power, and rich LISP heritage to take on the challenge for the future. With the Cortex library, it&rsquo;s off to a great start.</p>
-
-<p><em>If want to see all the cats vs dog  Kaggle Code, it&rsquo;s out on github here <a href="https://github.com/gigasquid/kaggle-cats-dogs">https://github.com/gigasquid/kaggle-cats-dogs</a></em></p>
 ]]></content>
   </entry>
   
