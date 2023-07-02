@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AI | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/ai/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -627,7 +627,7 @@
 
 <h2>Where to Start?</h2>
 
-<p>{% img <a href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a> %}</p>
+<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
 
 <p>In the last blog post, we created our deep learning network and trained the data on scaled down images (like 50x50) from scratch. This time we are much smarter.</p>
 
@@ -697,7 +697,7 @@ Saving network to trained-network.nippy
 
 <h3>Compare the results</h3>
 
-<p>{% img <a href="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg">http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg">http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg</a>"></p>
 
 <p>My one epoch of fine tuning beat my best results of going through the Practical Deep Learning exercise with the fine tuning the VGG16 model. Not bad at all.</p>
 

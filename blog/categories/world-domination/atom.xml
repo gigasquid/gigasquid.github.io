@@ -4,7 +4,7 @@
   <title><![CDATA[Category: World Domination | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/world-domination/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -38,11 +38,11 @@ that uses the paired XBee from the handheld commander.</p>
 
 <p>Take the XBee from the handheld commander</p>
 
-<p>{% img <a href="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg">http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg</a> %}</p>
+<p><img class="<a" src="href="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg">http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg</a>"></p>
 
 <p>and move it to the USB to serial adapter</p>
 
-<p>{% img <a href="http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg">http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg</a> %}</p>
+<p><img class="<a" src="href="http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg">http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg</a>"></p>
 
 <p>Now plug the usb into your computer.</p>
 
@@ -158,7 +158,16 @@ that uses the paired XBee from the handheld commander.</p>
 
 <p>I just loaded it on the hexapod yesterday.  The commander software changed too, so I will of course need to revisit the code, to add in the new moves.  But here is a sneak preview of what it can do:</p>
 
-<p>{% youtube PmBGt9T-yvI %}</p>
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('PmBGt9T-yvI');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/PmBGt9T-yvI?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/PmBGt9T-yvI/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=PmBGt9T-yvI" id="PmBGt9T-yvI" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
 
 <p><em>That is my daughter singing in the background</em></p>
 

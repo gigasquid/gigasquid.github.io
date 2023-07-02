@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure, | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -18,7 +18,7 @@
     <link href="http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm/"/>
     <updated>2017-10-22T16:02:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2017/10/22/embedded-interop-between-clojure-r-and-python-with-graalvm</id>
-    <content type="html"><![CDATA[<p>{% img <a href="https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg">https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg</a>  %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg">https://images-na.ssl-images-amazon.com/images/M/MV5BOTViY2Y0ZGItMTg2OC00YzEzLWJhYjYtZjg4OTMyOWE4YzM1XkEyXkFqcGdeQXVyNTQ1NzU4Njk@._V1_.jpg</a>" title="" ></p>
 
 <p>In my talk at <a href="https://www.youtube.com/watch?v=eLl6_k_fZn4">Clojure Conj</a> I mentioned how a project from Oracle Labs named GraalVM might have to potential for Clojure to interop with Python on the same VM. At the time of the talk, I had just learned about it so I didn&rsquo;t have time to take a look at it. Over the last week, I&rsquo;ve managed to take it for a test drive and I wanted to share what I found.</p>
 
@@ -93,11 +93,11 @@ sum.of.squares(3,4)
 <p>Truffle is part of the Graal project and is a framework for implementing languages with the Graal compliler.
 There are quite a few languages implemented with the Truffle framework. R is one of them.</p>
 
-<p>{% img <a href="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615">https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615</a> %}</p>
+<p><img class="<a" src="href="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615">https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-14-638.jpg?cb=1495364615</a>"></p>
 
 <p>My understanding is that if Clojure was implemented as a truffle lang, then interop could be much more seamless like this example in Ruby</p>
 
-<p>{% img <a href="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615">https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615</a> %}</p>
+<p><img class="<a" src="href="https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615">https://image.slidesharecdn.com/polyglotonthejvmwithgraalenglish-170521104613/95/polyglot-on-the-jvm-with-graal-english-37-638.jpg?cb=1495364615</a>"></p>
 
 <p>But let&rsquo;s continue in our exploration. What about doing something more interesting, like importing a useful R library and using it. How about the <a href="https://www.rdocumentation.org/packages/numDeriv/versions/2016.8-1">numDeriv</a> package that supports Accurate Numerical Derivatives?</p>
 

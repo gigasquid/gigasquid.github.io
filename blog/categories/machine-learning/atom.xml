@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Machine Learning | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/machine-learning/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -26,7 +26,7 @@
 
 <h2>Where to Start?</h2>
 
-<p>{% img <a href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a> %}</p>
+<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
 
 <p>In the last blog post, we created our deep learning network and trained the data on scaled down images (like 50x50) from scratch. This time we are much smarter.</p>
 
@@ -96,7 +96,7 @@ Saving network to trained-network.nippy
 
 <h3>Compare the results</h3>
 
-<p>{% img <a href="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg">http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg">http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg</a>"></p>
 
 <p>My one epoch of fine tuning beat my best results of going through the Practical Deep Learning exercise with the fine tuning the VGG16 model. Not bad at all.</p>
 
@@ -121,7 +121,7 @@ Saving network to trained-network.nippy
 
 <h2>Where to Start?</h2>
 
-<p>{% img <a href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a> %}</p>
+<p><img class="<a" src="href="http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg">http://kaggle2.blob.core.windows.net/competitions/kaggle/3362/media/woof_meow.jpg</a>"></p>
 
 <p>For any machine learning problem, we&rsquo;re going to need data. For this, we can use Kaggle&rsquo;s data for the <a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data">Cats vs Dogs Challenge</a>.  The training data consists of 25,000 images of cats and dogs. That should be more than enough to train our computer to recognize cats from doggies.</p>
 
@@ -233,17 +233,17 @@ Saving network to trained-network.nippy
 
 <p>This opens a port to a localhost webpage where we can view the progress <code>http://localhost:8091/</code></p>
 
-<p>{% img <a href="http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg">http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg">http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg</a>"></p>
 
 <p>Below the confusion matrix is shown. This tracks the progress of the training in the classification. In particular, how many times it thought a cat was really a cat and how many times it got it wrong.</p>
 
-<p>{% img <a href="http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg">http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg">http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg</a>"></p>
 
 <p>As we are training the data, the loss for each epoch is shown on the console as well as when it saves the network to the external file.</p>
 
 <p>After only thirty minutes of training on my Mac Book Pro, we get to some pretty good results, with the correct percentage in the 99s :</p>
 
-<p>{% img <a href="http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg">http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg">http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg</a>"></p>
 
 <p>It&rsquo;s time to do some inference on our trained network.</p>
 
@@ -272,7 +272,7 @@ Saving network to trained-network.nippy
 
 <p>Running <code>(label-one)</code> gives us the picture:</p>
 
-<p>{% img <a href="http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg">http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg">http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg</a>"></p>
 
 <p>and classifies it as a cat. Yipee!</p>
 
@@ -281,7 +281,7 @@ Saving network to trained-network.nippy
 
 <p>Not bad, but let&rsquo;s try it with something harder. Personally, I&rsquo;m not even sure whether this is a cat or a dog.</p>
 
-<p>{% img <a href="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg">http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg">http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg</a>"></p>
 
 <p>Feeding it through the program - it says it is a cat.</p>
 

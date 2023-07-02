@@ -4,7 +4,7 @@
   <title><![CDATA[Category: All | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/all/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -68,7 +68,7 @@ Twelve-year-old Eliza knew that the next words were the result of computer progr
 </ul>
 
 
-<p>{% img <a href="http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg">http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg">http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg</a>"></p>
 
 <h3>Advantages of Leanpub for development.</h3>
 
@@ -100,17 +100,17 @@ Twelve-year-old Eliza knew that the next words were the result of computer progr
 
 <p>Amazon&rsquo;s <a href="https://www.createspace.com/">CreateSpace</a> provides and excellent platform for on-demand print copies of books. This is where Leanpub comes in handy again. There is an <code>Export Option</code> that provides and unbranded pdf copy of your manuscript with all the correct formatting and margins required for CreateSpace. I simply exported the file and then uploaded it up to the project.</p>
 
-<p>{% img <a href="http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg">http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg">http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg</a>"></p>
 
 <p>The other thing that you will want is a nice cover. There are services through CreateSpace for cover creation that you can buy or you can upload your own file. I was lucky enough to have a talented graphic designer as sister, Kristin Allmyer,  who made me an awesome cover.</p>
 
 <p>One of the confusing things was picking an ISBN for the print copy. You don&rsquo;t need to worry about this for ebook versions but you do for a physical copy. Your choices through CreateSpace are using a provided one for free or buying your own for $99. I chose my own so I could have flexibility of working with another publisher other than Amazon if I want. If you choose that option, you can also make up your own publisher name. Mine is <em>Gigasquid Books</em>.</p>
 
-<p>{% img <a href="http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg">http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg">http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg</a>"></p>
 
 <p>Once you have completed all the setup, they will send you a physical copy in the mail to approve. The moment you get to hold it in your hands is really magical.</p>
 
-<p>{% img <a href="https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large">https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large</a> %}</p>
+<p><img class="<a" src="href="https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large">https://pbs.twimg.com/media/C8xBM-nXYAAOmK0.jpg:large</a>"></p>
 
 <p>If it looks alright, you hit the approve button and voilà - it&rsquo;s for sale on Amazon!</p>
 
@@ -143,7 +143,7 @@ Twelve-year-old Eliza knew that the next words were the result of computer progr
     <link href="http://gigasquid.github.io/blog/2013/12/26/guide-to-leaving-your-mac-laptop/"/>
     <updated>2013-12-26T00:00:00-05:00</updated>
     <id>http://gigasquid.github.io/blog/2013/12/26/guide-to-leaving-your-mac-laptop</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg">http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg</a> %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg">http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg</a>"></p>
 
 <p>I felt like I was in a controlling relationship headed downhill.
 After two custom laptops returned for defective hardware, I wanted to
@@ -171,7 +171,7 @@ Some of my reasons:</p>
 was quite nice.  Here is a picture next
 to my 13 inch Mac Air.</p>
 
-<p>{% img <a href="http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg">http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg</a> %}</p>
+<p><img class="<a" src="href="http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg">http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg</a>"></p>
 
 <p>The best was that everything just &ldquo;worked&rdquo; out of the box.
 I had no problems configuring Ubuntu and getting the wireless network
@@ -180,7 +180,7 @@ just like the Mac Air.  The keyboard is enjoyable to use and nicely
 backlit.  The sleek design and light weight of the laptop is very
 comparable to the Mac Air.</p>
 
-<p>{% img  <a href="http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg">http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg</a> %}</p>
+<p><img class="<a" src="href="http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg">http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg</a>"></p>
 
 <h2>Hop on the Bus, Gus</h2>
 

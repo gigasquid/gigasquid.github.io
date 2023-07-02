@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Drone | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/drone/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -27,7 +27,7 @@ aware of some potential pitfalls.</p>
 
 <h2>Traveling with the AR Drone</h2>
 
-<p>{% img left <a href="http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg">http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg</a> %}</p>
+<p><img class="left <a" src="href="http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg">http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg</a>"></p>
 
 <p>Do you need to take your drone with you on the plane to the demo?
 The box that the drone comes in is a very nice carrying case, however it

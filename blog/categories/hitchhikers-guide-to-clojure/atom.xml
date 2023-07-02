@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Hitchhiker's Guide to Clojure | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/hitchhikers-guide-to-clojure/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -50,7 +50,7 @@ can&rsquo;t go back up to the office&hellip; I would meet myself.&rdquo;</p>
 pulled up a page with the heading <em>Locked Doors and Other Small
 Bothers</em>.</p>
 
-<p>{% img <a href="http://farm4.staticflickr.com/3346/3191331375_a773bff1b7_n.jpg">http://farm4.staticflickr.com/3346/3191331375_a773bff1b7_n.jpg</a> %}</p>
+<p><img class="<a" src="href="http://farm4.staticflickr.com/3346/3191331375_a773bff1b7_n.jpg">http://farm4.staticflickr.com/3346/3191331375_a773bff1b7_n.jpg</a>"></p>
 
 <p><em>One of the reasons for the surprising success of <strong>The Hitchhiker&rsquo;s Guide
 to Clojure</strong> is helpful advice of on an assortment of practical
@@ -98,7 +98,7 @@ relieved to be distracted by the sight of two really adorable otters.  They were
 contentedly around the pool, occasionally stopping to crack an Abalone
 shell on their fuzzy tummies.</p>
 
-<p>{% img <a href="http://cdn.zmescience.com/wp-content/uploads/2012/09/sea-otters.jpg">http://cdn.zmescience.com/wp-content/uploads/2012/09/sea-otters.jpg</a> %}</p>
+<p><img class="<a" src="href="http://cdn.zmescience.com/wp-content/uploads/2012/09/sea-otters.jpg">http://cdn.zmescience.com/wp-content/uploads/2012/09/sea-otters.jpg</a>"></p>
 
 <p>Her rational brain, after having a nice breather, finally re-asserted
 itself and made Amy ask Frank:</p>
@@ -246,7 +246,7 @@ his waist, looked up briefly.</p>
 
 <p>&ldquo;Well, we better get out of here then, I only have a blue fanny pack.&rdquo;</p>
 
-<p>{% img <a href="http://img.rakuten.com/PIC/37504308/0/1/500/37504308.jpg">http://img.rakuten.com/PIC/37504308/0/1/500/37504308.jpg</a> %}</p>
+<p><img class="<a" src="href="http://img.rakuten.com/PIC/37504308/0/1/500/37504308.jpg">http://img.rakuten.com/PIC/37504308/0/1/500/37504308.jpg</a>"></p>
 
 <p><em>The Hitchhiker&rsquo;s Guide to Clojure explains that the &ldquo;fanny pack&rdquo;, or
 &ldquo;bum bag&rdquo;, is the symbol of a licensed Chrono-agent.  The rank of the
@@ -321,7 +321,7 @@ time he got there and stopped the rain, there was not much left to
 work with. Thankfully, he was quite versed in lazy and infinite
 aspects of Clojure. For instance, take this vector of 2 chickens:</em></p>
 
-<p>{% img <a href="http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg">http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg</a> %}</p>
+<p><img class="<a" src="href="http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg">http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg</a>"></p>
 
 <pre><code class="clojure">[:hen :rooster]
 </code></pre>
@@ -371,7 +371,7 @@ we need to see the otters.&rdquo;</p>
     <link href="http://gigasquid.github.io/blog/2014/02/01/hitchhikers-guide-to-clojure/"/>
     <updated>2014-02-01T19:33:00-05:00</updated>
     <id>http://gigasquid.github.io/blog/2014/02/01/hitchhikers-guide-to-clojure</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg">http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg</a> %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg">http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg</a>"></p>
 
 <p><em>The following is a cautionary example of the unpredictable
 combination of Clojure, a marathon viewing of the BBC&rsquo;s series &ldquo;The
@@ -412,7 +412,7 @@ things. The fact that no course of action available to her in the next
 5 minutes would help her employment situation, agitated Amy so much
 that she was violently shelling and eating pistachio nuts.</p>
 
-<p>{% img <a href="http://farm4.staticflickr.com/3331/3659226924_fbf336379e_n.jpg">http://farm4.staticflickr.com/3331/3659226924_fbf336379e_n.jpg</a> %}</p>
+<p><img class="<a" src="href="http://farm4.staticflickr.com/3331/3659226924_fbf336379e_n.jpg">http://farm4.staticflickr.com/3331/3659226924_fbf336379e_n.jpg</a>"></p>
 
 <p>The &ldquo;Hitchhiker&rsquo;s Guide to Clojure&rdquo; says that
 <em>pistachios are Nature&rsquo;s

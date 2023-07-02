@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Star | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/star/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -71,14 +71,7 @@ but the language is designed in a way that immutable functional
 programming is encouraged. The feel of the language is concise but
 human readable.</p>
 
-<p>{% blockquote Feel different on the Java platform: the star programming language  <a href="http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052">http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052</a> %}
-    Star is a coherent, general-purpose programming language that
-    combines elements from a wide variety of existing languages as
-    well as adding innovative elements of its own. Star inherits func-
-    tional programming in general, a Haskell-style type system, an F#-
-    style monad for parallel computations, and Concurrent ML for or-
-    chestrating concurrent and parallel applications.
-{% endblockquote %}</p>
+<p><blockquote><p>Star is a coherent, general-purpose programming language that<br/>    combines elements from a wide variety of existing languages as<br/>    well as adding innovative elements of its own. Star inherits func-<br/>    tional programming in general, a Haskell-style type system, an F#-<br/>    style monad for parallel computations, and Concurrent ML for or-<br/>    chestrating concurrent and parallel applications.</p><footer><strong>Feel different on the Java platform: the star programming language  <a href="http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052">http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052</a></strong></footer></blockquote></p>
 
 <h3>Hello World</h3>
 

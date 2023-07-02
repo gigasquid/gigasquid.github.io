@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Datomic | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/datomic/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -18,7 +18,7 @@
     <link href="http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3/"/>
     <updated>2015-08-25T10:28:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/25/converstations-with-datomic-3</id>
-    <content type="html"><![CDATA[<p>{% img <a href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a> %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
 
 <p><em>This is a continuation of the <a href="http://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/">first</a> and
 <a href="http://gigasquidsoftware.com/blog/2015/08/19/conversations-with-datomic-part-2/">second</a> conversations in which topics such as creating databases,
@@ -33,7 +33,7 @@ I am interested in having you work with me every day, but first I want to unders
 
 <p><strong>Datomic:</strong> I would be happy to explain my architecture to you.  Perhaps showing you this picture is the best way to start.</p>
 
-<p>{% img <a href="http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg">http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg">http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg</a>"></p>
 
 <p>I am made of three main parts: my <em>transactors</em>, my <em>peers</em>, and my <em>storage</em>.</p>
 
@@ -88,7 +88,7 @@ I am interested in having you work with me every day, but first I want to unders
 
 <p><strong>Datomic:</strong> Certainly.  It is even worth another picture.</p>
 
-<p>{% img <a href="http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg">http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg</a> %}</p>
+<p><img class="<a" src="href="http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg">http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg</a>"></p>
 
 <p>Each peer has a its own <em>working set</em> of recent datoms along with a index to all the rest of the datoms in storage in memory.  When the peer has a query for a datom, it first checks to see if it has it locally in its memory cache.  If it can&rsquo;t find it there, then it will ask for a segment of that datom from storage.  Storage will return that datom along with other related datoms in that segment so that the peer can cache that in memory to make it faster for the next query.</p>
 
@@ -136,7 +136,7 @@ I am interested in having you work with me every day, but first I want to unders
     <link href="http://gigasquid.github.io/blog/2015/08/19/conversations-with-datomic-part-2/"/>
     <updated>2015-08-19T08:56:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/19/conversations-with-datomic-part-2</id>
-    <content type="html"><![CDATA[<p>{% img <a href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a> %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
 
 <p><em>The following is a continuation of the first <a href="http://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/">conversation</a> which touched on schema creation and querying.  This conversation includes learning new facts, time, and the sometimes unfortunate reality of lawyers.</em></p>
 
@@ -335,7 +335,7 @@ I am interested in having you work with me every day, but first I want to unders
     <link href="http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/"/>
     <updated>2015-08-15T10:29:00-04:00</updated>
     <id>http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic</id>
-    <content type="html"><![CDATA[<p>{% img <a href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a> %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200">https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200</a>"></p>
 
 <p><strong>Human:</strong> Hi <a href="http://www.datomic.com/">Datomic</a>.   I have been hearing good things about you.  I would like to talk to you and get to know you.  Is that alright?</p>
 

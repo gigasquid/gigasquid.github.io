@@ -4,7 +4,7 @@
   <title><![CDATA[Category: John McCarthy Papers | Squid's Blog]]></title>
   <link href="http://gigasquid.github.io/blog/categories/john-mccarthy-papers/atom.xml" rel="self"/>
   <link href="http://gigasquid.github.io/"/>
-  <updated>2023-07-02T14:14:14-04:00</updated>
+  <updated>2023-07-02T14:15:23-04:00</updated>
   <id>http://gigasquid.github.io/</id>
   <author>
     <name><![CDATA[Carin Meier]]></name>
@@ -18,7 +18,7 @@
     <link href="http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/"/>
     <updated>2013-06-04T18:57:52+00:00</updated>
     <id>http://gigasquid.github.io/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg">http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg</a> %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg">http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg</a>"></p>
 
 <h2>Preface: A Gentle Obsession</h2>
 
@@ -36,24 +36,41 @@
 
 <p>The language uses basic Clojure datatypes and makes the parens optional in most cases to make the expressions look more like syntactically sugared speech acts.</p>
 
-<p>{% codeblock lang:clojure %}
-    1     ;=> 1
-    2.3   ;=> 2.3
-    -3.4  ;=> 3.4
-    &ldquo;cat&rdquo; ;=> cat
-    :bird ;=> bird
-    true  ;=> true
-    {:cat :meow :dog :bark} ;=> {:cat :meow :dog :bark}
-    [1 2 true :bird] ;=> [1 2 true bird]
-    atom 1 ;=> #</p>
-
-<pre><code>(def dog 16)
-dog ;=&gt; 16
-def cat 18
-cat ;=&gt; 18
-</code></pre>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>    <span class="mi">1</span>     <span class="c1">;=&gt; 1</span>
+</span><span class='line'>    <span class="mf">2.3</span>   <span class="c1">;=&gt; 2.3</span>
+</span><span class='line'>    <span class="mf">-3.4</span>  <span class="c1">;=&gt; 3.4</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="nv">ldquo</span><span class="c1">;cat&amp;rdquo; ;=&gt; cat</span>
+</span><span class='line'>    <span class="ss">:bird</span> <span class="c1">;=&gt; bird</span>
+</span><span class='line'>    <span class="nv">true</span>  <span class="c1">;=&gt; true</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:cat</span> <span class="ss">:meow</span> <span class="ss">:dog</span> <span class="ss">:bark</span><span class="p">}</span> <span class="c1">;=&gt; {:cat :meow :dog :bark}</span>
+</span><span class='line'>    <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="nv">true</span> <span class="ss">:bird</span><span class="p">]</span> <span class="c1">;=&gt; [1 2 true bird]</span>
+</span><span class='line'>    <span class="nv">atom</span> <span class="mi">1</span> <span class="c1">;=&gt; #&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">&lt;pre&gt;&lt;code&gt;</span><span class="p">(</span><span class="k">def </span><span class="nv">dog</span> <span class="mi">16</span><span class="p">)</span>
+</span><span class='line'><span class="nv">dog</span> <span class="c1">;=&amp;gt; 16</span>
+</span><span class='line'><span class="k">def </span><span class="nv">cat</span> <span class="mi">18</span>
+</span><span class='line'><span class="nv">cat</span> <span class="c1">;=&amp;gt; 18</span>
+</span><span class='line'><span class="nv">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Vectors are a bit interesting in the respect that you don&rsquo;t need to input the square brackets. If you just put in space delimited items, it will automatically construct a vector for you.</p>
 
@@ -88,7 +105,16 @@ This one speaks its beliefs and has assertions, a request, and queries.</p>
     query request-is-done *open-window?
 </code></pre>
 
-<p>{% youtube bt2iYsVyCOM %}</p>
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('bt2iYsVyCOM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/bt2iYsVyCOM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/bt2iYsVyCOM/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=bt2iYsVyCOM" id="bt2iYsVyCOM" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
 
 <p>Here is another one that shows using a request until a belief is held.</p>
 
@@ -101,7 +127,16 @@ This one speaks its beliefs and has assertions, a request, and queries.</p>
     query request-value *count-up?
 </code></pre>
 
-<p>{% youtube aT8MK0w71LM %}</p>
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('aT8MK0w71LM');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/aT8MK0w71LM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/aT8MK0w71LM/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=aT8MK0w71LM" id="aT8MK0w71LM" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
 
 <p>Here the REPL asks you a question if you give it an undeclared var</p>
 
@@ -116,7 +151,16 @@ This one speaks its beliefs and has assertions, a request, and queries.</p>
     query request-value *task1?
 </code></pre>
 
-<p>{% youtube nmi_fafmjsg %}</p>
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('nmi_fafmjsg');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/nmi_fafmjsg?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/nmi_fafmjsg/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=nmi_fafmjsg" id="nmi_fafmjsg" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
 
 <h2>Autonomous AR Drone Flight with Babar REPL</h2>
 
@@ -148,7 +192,16 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
     request *end-navstream when #done fn [] (end-navstream).
 </code></pre>
 
-<p>{% youtube CIzR8jD2d3c %}</p>
+<p>
+<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('CIzR8jD2d3c');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/CIzR8jD2d3c?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
+<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/CIzR8jD2d3c/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=CIzR8jD2d3c" id="CIzR8jD2d3c" onclick="return false;">
+<div class="youtube-lazy-link-div"></div>
+<div class="youtube-lazy-link-info"></div>
+</a>
+<div class="video-info" ></div>
+</div>
+
+</p>
 
 <h2>Conclusion and Thanks</h2>
 
@@ -172,7 +225,7 @@ Here is a program that has the drone take off, get to a cruising altitude, and l
     <link href="http://gigasquid.github.io/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5/"/>
     <updated>2012-11-25T14:08:53+00:00</updated>
     <id>http://gigasquid.github.io/blog/2012/11/25/7-mccarthy-papers-in-7ish-weeks-5</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png">http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png</a> %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png">http://farm8.staticflickr.com/7388/9925780935_9744792c36_o.png</a>"></p>
 
 <p>This holiday edition blog post covers two McCarthy papers instead of just one.  We will be talking about <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/freewill.pdf">Free Will - Even for Robots</a> and the companion paper <a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/freewill2.pdf">Simple Deterministic Free Will</a>.</p>
 
