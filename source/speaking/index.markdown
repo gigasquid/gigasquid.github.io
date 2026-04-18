@@ -19,6 +19,7 @@ be Clojure, Robots, and AI lately.
 
 
 ## Past Talks
+* [Clojure Conj 2024 - Real World AI Integration](https://www.youtube.com/watch?v=oXlb1mITJHA)
 * [Clojure Conj 2023 - Vector Symbolic Architectures in Clojure](https://www.youtube.com/watch?v=ByzaFEVlaq0&t=8s)
 * [Clojure Conj 2018 - Can you GAN?](https://www.youtube.com/watch?v=yzfnlcHtwiY)
 * [Craft Conf 2018 - Unconvential Programming with Chemical Computing](https://craft-conf.com/)
