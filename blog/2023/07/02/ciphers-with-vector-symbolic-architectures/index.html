@@ -1,477 +1,75 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Ciphers With Vector Symbolic Architectures - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/">
-  <meta property="og:title" content="Ciphers With Vector Symbolic Architectures - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2023-07-02T12:31:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun  2 Jul 2023, 12:31 PM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Ciphers With Vector Symbolic Architectures
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/secret-message.png" alt="" /></p>
-
-<p><em>A secret message inside a 10,000 hyperdimensional vector</em></p>
-
-<p>We&rsquo;ve seen in previous posts how we can encode data structures using <a href="http://gigasquidsoftware.com/blog/2022/12/31/vector-symbolic-architectures-in-clojure/">Vector Symbolic Architectures in Clojure</a>. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.</p>
-
-<h3>A Hyperdimensional Cipher</h3>
-
-<p>Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as <code>n+1</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">alphabet</span>
-</span><span class='line'><span class="w">  </span><span class="p">[</span><span class="ss">:a</span><span class="w"> </span><span class="ss">:b</span><span class="w"> </span><span class="ss">:c</span><span class="w"> </span><span class="ss">:d</span><span class="w"> </span><span class="ss">:e</span><span class="w"> </span><span class="ss">:f</span><span class="w"> </span><span class="ss">:g</span><span class="w"> </span><span class="ss">:h</span><span class="w"> </span><span class="ss">:i</span><span class="w"> </span><span class="ss">:j</span><span class="w"> </span><span class="ss">:k</span><span class="w"> </span><span class="ss">:l</span><span class="w"> </span><span class="ss">:m</span><span class="w"> </span><span class="ss">:n</span><span class="w"> </span><span class="ss">:o</span><span class="w"> </span><span class="ss">:p</span><span class="w"> </span><span class="ss">:q</span><span class="w"> </span><span class="ss">:r</span><span class="w"> </span><span class="ss">:s</span><span class="w"> </span><span class="ss">:t</span><span class="w"> </span><span class="ss">:u</span><span class="w"> </span><span class="ss">:v</span><span class="w"> </span><span class="ss">:w</span><span class="w"> </span><span class="ss">:x</span><span class="w"> </span><span class="ss">:y</span><span class="w"> </span><span class="ss">:z</span><span class="w"> </span><span class="ss">:end-of-message</span><span class="p">])</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">max-num</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">numbers</span><span class="w"> </span><span class="p">(</span><span class="nb">range </span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="nb">inc </span><span class="nv">max-num</span><span class="p">)))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">key-codes</span><span class="w"> </span><span class="p">(</span><span class="nb">into </span><span class="nv">alphabet</span><span class="w"> </span><span class="nv">numbers</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">add-keys-to-cleanup-mem!</span>
-</span><span class='line'><span class="w">  </span><span class="s">&quot;Take a single hdv as a seed and create an alphabet + numbers of them by using rotation/ protect&quot;</span>
-</span><span class='line'><span class="w">  </span><span class="p">[</span><span class="nv">seed-hdv</span><span class="p">]</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">vb/reset-hdv-mem!</span><span class="p">)</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">doall</span>
-</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">v</span><span class="w"> </span><span class="nv">k</span><span class="p">]</span>
-</span><span class='line'><span class="w">              </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">nv</span><span class="w"> </span><span class="p">(</span><span class="nf">vb/protect</span><span class="w"> </span><span class="nv">v</span><span class="p">)]</span>
-</span><span class='line'><span class="w">                </span><span class="p">(</span><span class="nf">vb/add-hdv!</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="nv">nv</span><span class="p">)</span>
-</span><span class='line'><span class="w">                </span><span class="nv">nv</span><span class="p">))</span>
-</span><span class='line'><span class="w">            </span><span class="nv">seed-hdv</span>
-</span><span class='line'><span class="w">            </span><span class="nv">key-codes</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can then encode a message by using a VSA data structure map with the form:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="ss">:c</span>,<span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="ss">:a</span>,<span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="ss">:t</span>,<span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="ss">:s</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>where the numbers are the key to the order of the sequence of the message.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">encode-message</span>
-</span><span class='line'><span class="w">  </span><span class="s">&quot;Encode a message using key value pairs with numbers for ordering&quot;</span>
-</span><span class='line'><span class="w">  </span><span class="p">[</span><span class="nv">message</span><span class="p">]</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">count </span><span class="nv">message</span><span class="p">)</span><span class="w"> </span><span class="nv">max-num</span><span class="p">)</span>
-</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nf">throw</span><span class="w"> </span><span class="p">(</span><span class="nf">ex-info</span><span class="w"> </span><span class="s">&quot;message too long&quot;</span><span class="w"> </span><span class="p">{</span><span class="ss">:allowed-n</span><span class="w"> </span><span class="nv">max-num</span><span class="p">})))</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">ds</span><span class="w"> </span><span class="p">(</span><span class="nb">zipmap </span><span class="nv">numbers</span>
-</span><span class='line'><span class="w">                   </span><span class="p">(</span><span class="nb">conj </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">mapv</span><span class="w"> </span><span class="nb">str </span><span class="nv">message</span><span class="p">)</span>
-</span><span class='line'><span class="w">                              </span><span class="p">(</span><span class="nf">mapv</span><span class="w"> </span><span class="nv">keyword</span><span class="p">))</span>
-</span><span class='line'><span class="w">                         </span><span class="ss">:end-of-message</span><span class="p">))]</span>
-</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nb">println </span><span class="s">&quot;Encoding &quot;</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="s">&quot; into &quot;</span><span class="w"> </span><span class="nv">ds</span><span class="p">)</span>
-</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nf">vd/clj-&gt;vsa</span><span class="w"> </span><span class="nv">ds</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The message is now in a single hyperdimensional vector. We can decode the message by inspecting each of the numbers in the key value pairs encoded in the data structure.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">decode-message</span>
-</span><span class='line'><span class="w">  </span><span class="s">&quot;Decode a message by getting the value of the numbered pairs&quot;</span>
-</span><span class='line'><span class="w">  </span><span class="p">[</span><span class="nv">msg</span><span class="p">]</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">message-v</span>
-</span><span class='line'><span class="w">        </span><span class="nv">_</span><span class="w"> </span><span class="p">(</span><span class="nb">println </span><span class="s">&quot;decoded message-v &quot;</span><span class="w"> </span><span class="nv">message-v</span><span class="p">)</span>
-</span><span class='line'><span class="w">        </span><span class="nv">decoded</span><span class="w"> </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">message-v</span>
-</span><span class='line'><span class="w">                     </span><span class="p">(</span><span class="nf">partition-by</span><span class="w"> </span><span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="nv">%</span><span class="w"> </span><span class="ss">:end-of-message</span><span class="p">))</span>
-</span><span class='line'><span class="w">                     </span><span class="nv">first</span>
-</span><span class='line'><span class="w">                     </span><span class="p">(</span><span class="nf">mapv</span><span class="w"> </span><span class="o">#</span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">keyword? </span><span class="nv">%</span><span class="p">)</span>
-</span><span class='line'><span class="w">                              </span><span class="p">(</span><span class="nb">name </span><span class="nv">%</span><span class="p">)</span>
-</span><span class='line'><span class="w">                              </span><span class="p">(</span><span class="nb">str </span><span class="nv">%</span><span class="p">)))</span>
-</span><span class='line'><span class="w">                     </span><span class="p">(</span><span class="nb">apply </span><span class="nv">str</span><span class="p">))]</span>
-</span><span class='line'><span class="w">    </span><span class="p">(</span><span class="nb">println </span><span class="s">&quot;Decoded message is &quot;</span><span class="w"> </span><span class="nv">decoded</span><span class="p">)</span>
-</span><span class='line'><span class="w">    </span><span class="nv">decoded</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Some example code of generating and decoding the message:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="w">  </span><span class="p">(</span><span class="nf">vb/set-size!</span><span class="w"> </span><span class="mi">1</span><span class="nv">e4</span><span class="p">)</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">def </span><span class="nv">seed-key-hdv</span><span class="w"> </span><span class="p">(</span><span class="nf">vb/hdv</span><span class="p">))</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">add-keys-to-cleanup-mem!</span><span class="w"> </span><span class="nv">seed-key-hdv</span><span class="p">)</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">image/write-image-hdv</span><span class="w"> </span><span class="s">&quot;seed-key-hdv&quot;</span><span class="w"> </span><span class="nv">seed-key-hdv</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">def </span><span class="nv">message</span><span class="w"> </span><span class="p">(</span><span class="nf">encode-message</span><span class="w"> </span><span class="s">&quot;cats&quot;</span><span class="p">))</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">image/write-image-hdv</span><span class="w"> </span><span class="s">&quot;secret-message&quot;</span><span class="w"> </span><span class="nv">message</span><span class="p">)</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">decode-message</span><span class="w"> </span><span class="nv">message</span><span class="p">)</span>
-</span><span class='line'><span class="w">  </span><span class="c1">;=&gt; &quot;cats&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The cool thing is that both hyperdimensional dictionary and the hyperdimensional encoded message can both be shared as a simple image like these:</p>
-
-<ul>
-<li><p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/seed-key-hdv.png" alt="" /> The seed key to generate the dictionary/ cleanup-mem</p></li>
-<li><p><img src="https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/secret-message.png" alt="" />The encoded secret message</p></li>
-</ul>
-
-
-<p>Then you can load up the seed key/ message from the image. Once you have the dictionary shared, you can create multiple encoded messages with it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">loaded-key</span><span class="w"> </span><span class="p">(</span><span class="nf">image/read-image-to-hdv</span><span class="w"> </span><span class="s">&quot;examples/seed-key-hdv.png&quot;</span><span class="p">))</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">add-keys-to-cleanup-mem!</span><span class="w"> </span><span class="nv">loaded-key</span><span class="p">)</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="k">def </span><span class="nv">loaded-message</span><span class="w"> </span><span class="p">(</span><span class="nf">image/read-image-to-hdv</span><span class="w"> </span><span class="s">&quot;examples/secret-message.png&quot;</span><span class="p">))</span>
-</span><span class='line'><span class="w">  </span><span class="p">(</span><span class="nf">decode-message</span><span class="w"> </span><span class="nv">loaded-message</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Caveats</h3>
-
-<p>Please keep in mind that this is just an experiment - <em>do not use</em> for anything important. Another interesting factor to keep in mind is that the VSA operations to get the key value are probabilistic  so that the correct decoding is not guaranteed. In fact, I set a limit on the 10,000 dimensional vector message to be 4 letters, which I found to be pretty reliable. For example, with 10,000 dimensions, encoding <code>catsz</code> decoded as <code>katsz</code>.</p>
-
-<p>Increasing the number of dimensions lets you encode longer messages. This article is a good companion to look at <a href="https://link.springer.com/article/10.1007/s10462-021-10110-3">capacity across different implementations of VSAs</a>.</p>
-
-<h3>Conclusion</h3>
-
-<p>VSAs could be an interesting way to do ciphers. Some advantages could be that the distribution of the information across the vector and the nature of the mapped data structure, it is hard to do things like vowel counting to try to decipher messages. Of course you don&rsquo;t need to have letters and numbers be the only symbols used in the dictionary, they could represent other things as well. The simplicity of being able to encode data structures in a form that can easily be expressed as a black and white image, also lends in its flexibility. Another application might be the ability to combine this technique with deep learning to keep information safe during the training process.</p>
-
-<p><a href="https://github.com/gigasquid/vsa-clj/blob/main/examples/vsa_cipher.clj">Link to the full github code</a></p>
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2023-07-02T12:31:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sun  2 Jul 2023, 12:31 PM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/ai/'>AI</a>, <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2022/12/31/vector-symbolic-architectures-in-clojure/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Vector Symbolic Architectures in Clojure"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Vector Symbolic Architectures in Clojure</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Ciphers with Vector Symbolic Architectures | Squid's Blog</title><meta name=keywords content><meta name=description content="
+A secret message inside a 10,000 hyperdimensional vector
+We&rsquo;ve seen in previous posts how we can encode data structures using Vector Symbolic Architectures in Clojure. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.
+A Hyperdimensional Cipher
+Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as n+1."><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Ciphers with Vector Symbolic Architectures"><meta property="og:description" content="A secret message inside a 10,000 hyperdimensional vector
+We’ve seen in previous posts how we can encode data structures using Vector Symbolic Architectures in Clojure. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.
+A Hyperdimensional Cipher Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as n+1."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-07-02T12:31:00+00:00"><meta property="article:modified_time" content="2023-07-02T12:31:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Ciphers with Vector Symbolic Architectures"><meta name=twitter:description content="A secret message inside a 10,000 hyperdimensional vector
+We’ve seen in previous posts how we can encode data structures using Vector Symbolic Architectures in Clojure. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.
+A Hyperdimensional Cipher Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as n+1."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Ciphers with Vector Symbolic Architectures","item":"https://gigasquidsoftware.com/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Ciphers with Vector Symbolic Architectures","name":"Ciphers with Vector Symbolic Architectures","description":"\nA secret message inside a 10,000 hyperdimensional vector\nWe\u0026rsquo;ve seen in previous posts how we can encode data structures using Vector Symbolic Architectures in Clojure. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.\nA Hyperdimensional Cipher Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as n+1.\n","keywords":[],"articleBody":"\nA secret message inside a 10,000 hyperdimensional vector\nWe’ve seen in previous posts how we can encode data structures using Vector Symbolic Architectures in Clojure. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.\nA Hyperdimensional Cipher Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as n+1.\n(def alphabet [:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o :p :q :r :s :t :u :v :w :x :y :z :end-of-message]) (def max-num 4) (def numbers (range 1 (inc max-num))) (def key-codes (into alphabet numbers)) (defn add-keys-to-cleanup-mem! \"Take a single hdv as a seed and create an alphabet + numbers of them by using rotation/ protect\" [seed-hdv] (vb/reset-hdv-mem!) (doall (reduce (fn [v k] (let [nv (vb/protect v)] (vb/add-hdv! k nv) nv)) seed-hdv key-codes))) We can then encode a message by using a VSA data structure map with the form:\n{1 :c, 2 :a, 3 :t, 4 :s} where the numbers are the key to the order of the sequence of the message.\n(defn encode-message \"Encode a message using key value pairs with numbers for ordering\" [message] (when (\u003e (count message) max-num) (throw (ex-info \"message too long\" {:allowed-n max-num}))) (let [ds (zipmap numbers (conj (-\u003e\u003e (mapv str message) (mapv keyword)) :end-of-message))] (println \"Encoding \" message \" into \" ds) (vd/clj-\u003evsa ds))) The message is now in a single hyperdimensional vector. We can decode the message by inspecting each of the numbers in the key value pairs encoded in the data structure.\n(defn decode-message \"Decode a message by getting the value of the numbered pairs\" [msg] (let [message-v _ (println \"decoded message-v \" message-v) decoded (-\u003e\u003e message-v (partition-by #(= % :end-of-message)) first (mapv #(if (keyword? %) (name %) (str %))) (apply str))] (println \"Decoded message is \" decoded) decoded)) Some example code of generating and decoding the message:\n(vb/set-size! 1e4) (def seed-key-hdv (vb/hdv)) (add-keys-to-cleanup-mem! seed-key-hdv) (image/write-image-hdv \"seed-key-hdv\" seed-key-hdv) (def message (encode-message \"cats\")) (image/write-image-hdv \"secret-message\" message) (decode-message message) ;=\u003e \"cats\" The cool thing is that both hyperdimensional dictionary and the hyperdimensional encoded message can both be shared as a simple image like these:\nThe seed key to generate the dictionary/ cleanup-mem\nThe encoded secret message\nThen you can load up the seed key/ message from the image. Once you have the dictionary shared, you can create multiple encoded messages with it.\n(def loaded-key (image/read-image-to-hdv \"examples/seed-key-hdv.png\")) (add-keys-to-cleanup-mem! loaded-key) (def loaded-message (image/read-image-to-hdv \"examples/secret-message.png\")) (decode-message loaded-message) Caveats Please keep in mind that this is just an experiment - do not use for anything important. Another interesting factor to keep in mind is that the VSA operations to get the key value are probabilistic so that the correct decoding is not guaranteed. In fact, I set a limit on the 10,000 dimensional vector message to be 4 letters, which I found to be pretty reliable. For example, with 10,000 dimensions, encoding catsz decoded as katsz.\nIncreasing the number of dimensions lets you encode longer messages. This article is a good companion to look at capacity across different implementations of VSAs.\nConclusion VSAs could be an interesting way to do ciphers. Some advantages could be that the distribution of the information across the vector and the nature of the mapped data structure, it is hard to do things like vowel counting to try to decipher messages. Of course you don’t need to have letters and numbers be the only symbols used in the dictionary, they could represent other things as well. The simplicity of being able to encode data structures in a form that can easily be expressed as a black and white image, also lends in its flexibility. Another application might be the ability to combine this technique with deep learning to keep information safe during the training process.\nLink to the full github code\n","wordCount":"708","inLanguage":"en","datePublished":"2023-07-02T12:31:00Z","dateModified":"2023-07-02T12:31:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2023/07/02/ciphers-with-vector-symbolic-architectures/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Ciphers with Vector Symbolic Architectures</h1><div class=post-meta><span title='2023-07-02 12:31:00 +0000 UTC'>July 2, 2023</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p><img loading=lazy src=https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/secret-message.png></p><p><em>A secret message inside a 10,000 hyperdimensional vector</em></p><p>We&rsquo;ve seen in previous posts how we can encode data structures using <a href=http://gigasquidsoftware.com/blog/2022/12/31/vector-symbolic-architectures-in-clojure/>Vector Symbolic Architectures in Clojure</a>. This is an exploration of how we can use this to develop a cipher to transmit a secret message between two parties.</p><h3 id=a-hyperdimensional-cipher>A Hyperdimensional Cipher<a hidden class=anchor aria-hidden=true href=#a-hyperdimensional-cipher>#</a></h3><p>Usually, we would develop a dictionary/ cleanup memory of randomly chosen hyperdimensional vectors to represent each symbol. We could do this, but then sharing the dictionary as our key to be able to decode messages would be big. Instead, we could share a single hyperdimensional vector and then use the protect/ rotation operator to create a dictionary of the alphabet and some numbers to order the letters. Think of this as the initial seed symbol and the rest being defined as <code>n+1</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>alphabet
+</span></span><span style=display:flex><span>  [<span style=color:#e6db74>:a</span> <span style=color:#e6db74>:b</span> <span style=color:#e6db74>:c</span> <span style=color:#e6db74>:d</span> <span style=color:#e6db74>:e</span> <span style=color:#e6db74>:f</span> <span style=color:#e6db74>:g</span> <span style=color:#e6db74>:h</span> <span style=color:#e6db74>:i</span> <span style=color:#e6db74>:j</span> <span style=color:#e6db74>:k</span> <span style=color:#e6db74>:l</span> <span style=color:#e6db74>:m</span> <span style=color:#e6db74>:n</span> <span style=color:#e6db74>:o</span> <span style=color:#e6db74>:p</span> <span style=color:#e6db74>:q</span> <span style=color:#e6db74>:r</span> <span style=color:#e6db74>:s</span> <span style=color:#e6db74>:t</span> <span style=color:#e6db74>:u</span> <span style=color:#e6db74>:v</span> <span style=color:#e6db74>:w</span> <span style=color:#e6db74>:x</span> <span style=color:#e6db74>:y</span> <span style=color:#e6db74>:z</span> <span style=color:#e6db74>:end-of-message</span>])
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>max-num <span style=color:#ae81ff>4</span>)
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>numbers (range <span style=color:#ae81ff>1</span> (inc max-num)))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>key-codes (into alphabet numbers))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>defn </span>add-keys-to-cleanup-mem!
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;Take a single hdv as a seed and create an alphabet + numbers of them by using rotation/ protect&#34;</span>
+</span></span><span style=display:flex><span>  [seed-hdv]
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>vb/reset-hdv-mem!</span>)
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>doall</span>
+</span></span><span style=display:flex><span>    (reduce (<span style=color:#66d9ef>fn </span>[v k]
+</span></span><span style=display:flex><span>              (<span style=color:#66d9ef>let </span>[nv (<span style=color:#a6e22e>vb/protect</span> v)]
+</span></span><span style=display:flex><span>                (<span style=color:#a6e22e>vb/add-hdv!</span> k nv)
+</span></span><span style=display:flex><span>                nv))
+</span></span><span style=display:flex><span>            seed-hdv
+</span></span><span style=display:flex><span>            key-codes)))
+</span></span></code></pre></div><p>We can then encode a message by using a VSA data structure map with the form:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>{1 :c, 2 :a, 3 :t, 4 :s}
+</span></span></code></pre></div><p>where the numbers are the key to the order of the sequence of the message.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>defn </span>encode-message
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;Encode a message using key value pairs with numbers for ordering&#34;</span>
+</span></span><span style=display:flex><span>  [message]
+</span></span><span style=display:flex><span>  (when (&gt; (count message) max-num)
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>throw</span> (<span style=color:#a6e22e>ex-info</span> <span style=color:#e6db74>&#34;message too long&#34;</span> {<span style=color:#e6db74>:allowed-n</span> max-num})))
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>let </span>[ds (zipmap numbers
+</span></span><span style=display:flex><span>                   (conj (<span style=color:#a6e22e>-&gt;&gt;</span> (<span style=color:#a6e22e>mapv</span> str message)
+</span></span><span style=display:flex><span>                              (<span style=color:#a6e22e>mapv</span> keyword))
+</span></span><span style=display:flex><span>                         <span style=color:#e6db74>:end-of-message</span>))]
+</span></span><span style=display:flex><span>    (println <span style=color:#e6db74>&#34;Encoding &#34;</span> message <span style=color:#e6db74>&#34; into &#34;</span> ds)
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>vd/clj-&gt;vsa</span> ds)))
+</span></span></code></pre></div><p>The message is now in a single hyperdimensional vector. We can decode the message by inspecting each of the numbers in the key value pairs encoded in the data structure.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>defn </span>decode-message
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;Decode a message by getting the value of the numbered pairs&#34;</span>
+</span></span><span style=display:flex><span>  [msg]
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>let </span>[message-v
+</span></span><span style=display:flex><span>        _ (println <span style=color:#e6db74>&#34;decoded message-v &#34;</span> message-v)
+</span></span><span style=display:flex><span>        decoded (<span style=color:#a6e22e>-&gt;&gt;</span> message-v
+</span></span><span style=display:flex><span>                     (<span style=color:#a6e22e>partition-by</span> <span style=color:#f92672>#</span>(= % <span style=color:#e6db74>:end-of-message</span>))
+</span></span><span style=display:flex><span>                     first
+</span></span><span style=display:flex><span>                     (<span style=color:#a6e22e>mapv</span> <span style=color:#f92672>#</span>(<span style=color:#66d9ef>if </span>(keyword? %)
+</span></span><span style=display:flex><span>                              (name %)
+</span></span><span style=display:flex><span>                              (str %)))
+</span></span><span style=display:flex><span>                     (apply str))]
+</span></span><span style=display:flex><span>    (println <span style=color:#e6db74>&#34;Decoded message is &#34;</span> decoded)
+</span></span><span style=display:flex><span>    decoded))
+</span></span></code></pre></div><p>Some example code of generating and decoding the message:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>  (<span style=color:#a6e22e>vb/set-size!</span> <span style=color:#ae81ff>1</span>e4)
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>def </span>seed-key-hdv (<span style=color:#a6e22e>vb/hdv</span>))
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>add-keys-to-cleanup-mem!</span> seed-key-hdv)
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>image/write-image-hdv</span> <span style=color:#e6db74>&#34;seed-key-hdv&#34;</span> seed-key-hdv)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>def </span>message (<span style=color:#a6e22e>encode-message</span> <span style=color:#e6db74>&#34;cats&#34;</span>))
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>image/write-image-hdv</span> <span style=color:#e6db74>&#34;secret-message&#34;</span> message)
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>decode-message</span> message)
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;=&gt; &#34;cats&#34;</span>
+</span></span></code></pre></div><p>The cool thing is that both hyperdimensional dictionary and the hyperdimensional encoded message can both be shared as a simple image like these:</p><ul><li><p><img loading=lazy src=https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/seed-key-hdv.png> The seed key to generate the dictionary/ cleanup-mem</p></li><li><p><img loading=lazy src=https://raw.githubusercontent.com/gigasquid/vsa-clj/main/examples/secret-message.png>The encoded secret message</p></li></ul><p>Then you can load up the seed key/ message from the image. Once you have the dictionary shared, you can create multiple encoded messages with it.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>loaded-key (<span style=color:#a6e22e>image/read-image-to-hdv</span> <span style=color:#e6db74>&#34;examples/seed-key-hdv.png&#34;</span>))
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>add-keys-to-cleanup-mem!</span> loaded-key)
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>def </span>loaded-message (<span style=color:#a6e22e>image/read-image-to-hdv</span> <span style=color:#e6db74>&#34;examples/secret-message.png&#34;</span>))
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>decode-message</span> loaded-message)
+</span></span></code></pre></div><h3 id=caveats>Caveats<a hidden class=anchor aria-hidden=true href=#caveats>#</a></h3><p>Please keep in mind that this is just an experiment - <em>do not use</em> for anything important. Another interesting factor to keep in mind is that the VSA operations to get the key value are probabilistic so that the correct decoding is not guaranteed. In fact, I set a limit on the 10,000 dimensional vector message to be 4 letters, which I found to be pretty reliable. For example, with 10,000 dimensions, encoding <code>catsz</code> decoded as <code>katsz</code>.</p><p>Increasing the number of dimensions lets you encode longer messages. This article is a good companion to look at <a href=https://link.springer.com/article/10.1007/s10462-021-10110-3>capacity across different implementations of VSAs</a>.</p><h3 id=conclusion>Conclusion<a hidden class=anchor aria-hidden=true href=#conclusion>#</a></h3><p>VSAs could be an interesting way to do ciphers. Some advantages could be that the distribution of the information across the vector and the nature of the mapped data structure, it is hard to do things like vowel counting to try to decipher messages. Of course you don&rsquo;t need to have letters and numbers be the only symbols used in the dictionary, they could represent other things as well. The simplicity of being able to encode data structures in a form that can easily be expressed as a black and white image, also lends in its flexibility. Another application might be the ability to combine this technique with deep learning to keep information safe during the training process.</p><p><a href=https://github.com/gigasquid/vsa-clj/blob/main/examples/vsa_cipher.clj>Link to the full github code</a></p></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=next href=https://gigasquidsoftware.com/blog/2022/12/31/vector-symbolic-architectures-in-clojure/><span class=title>Next »</span>
+<span>Vector Symbolic Architectures in Clojure</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

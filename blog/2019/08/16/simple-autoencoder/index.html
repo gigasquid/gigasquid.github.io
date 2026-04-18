@@ -1,578 +1,96 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Simple Autoencoder - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/">
-  <meta property="og:title" content="Simple Autoencoder - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-08-16T16:16:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 16 Aug 2019,  4:16 PM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Simple Autoencoder
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/horlik/2901925672/in/photolist-5qr8pf-qkv3m8-32RwmC-dZBC2B-ja8ch-48vDg-f56TGS-oUfNKn-652ZqG-QnCrbX-y3C828-jeGkmu-dxwE9L-jKaGtZ-haQ6j3-61w8UJ-WmitYz-tLymA-dZCHC4-CGvx3R-CC3GPE-BSxzda-eu625R-vHAgnk-cR7WAE-jZiLgu-BsZwLP-fhfvPT-dN1Rf9-o8Mkby-8zDocw-5DvC7S-CEij58-oaw922-akUgeW-ayQiGU-aay1vS-2fVFske-2eoRpCe-rqwa4o-9VJPtv-opgEcq-MDfFe-9yzUaK-4is9Z9-cutXnm-f9U23-L7hpoe-3i3H-enSJKf" title="Perfect mirror"><img src="https://live.staticflickr.com/3274/2901925672_325f5faeb8.jpg" width="500" height="364" alt="Perfect mirror"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p><em>If you look long enough into the autoencoder, it looks back at you.</em></p>
-
-<p>The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.</p>
-
-<p>It&rsquo;s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a <em>latent space representation</em> and the encoder translating that back to a regular images that we can view.</p>
-
-<p><img src="https://camo.githubusercontent.com/1ab40362a922059fa3686914cf5cff803ba7dd43/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f3830302f312a4c53594e57356d33544e377852583631425a686f5a412e706e67" alt="" /></p>
-
-<p>We are going to make a simple autoencoder with Clojure MXNet for handwritten digits using the MNIST dataset.</p>
-
-<h3>The Dataset</h3>
-
-<p>We first load up the training data into an iterator that will allow us to cycle through all the images.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">train-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-images-idx3-ubyte&quot;</span><span class="p">)</span>
-</span><span class='line'>                                   <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;train-labels-idx1-ubyte&quot;</span><span class="p">)</span>
-</span><span class='line'>                                   <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
-</span><span class='line'>                                   <span class="ss">:flat</span> <span class="nv">true</span>
-</span><span class='line'>                                   <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
-</span><span class='line'>                                   <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice there the the input shape is 784. We are purposely flattening out our 28x28 image of a number to just be a one dimensional flat array. The reason is so that we can use a simpler model for the autoencoder.</p>
-
-<p>We also load up the corresponding test data.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">test-data</span> <span class="p">(</span><span class="nf">mx-io/mnist-iter</span> <span class="p">{</span><span class="ss">:image</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-images-idx3-ubyte&quot;</span><span class="p">)</span>
-</span><span class='line'>                                  <span class="ss">:label</span> <span class="p">(</span><span class="nb">str </span><span class="nv">data-dir</span> <span class="s">&quot;t10k-labels-idx1-ubyte&quot;</span><span class="p">)</span>
-</span><span class='line'>                                  <span class="ss">:input-shape</span> <span class="p">[</span><span class="mi">784</span><span class="p">]</span>
-</span><span class='line'>                                  <span class="ss">:batch-size</span> <span class="nv">batch-size</span>
-</span><span class='line'>                                  <span class="ss">:flat</span> <span class="nv">true</span>
-</span><span class='line'>                                  <span class="ss">:shuffle</span> <span class="nv">true</span><span class="p">}))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When we are working with deep learning models we keep the training and the test data separate. When we train the model, we won&rsquo;t use the test data. That way we can evaluate it later on the unseen test data.</p>
-
-<h3>The Model</h3>
-
-<p>Now we need to define the layers of the model. We know we are going to have an input and an output. The input will be the array that represents the image of the digit and the output will also be an array which is reconstruction of that image.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">input</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input&quot;</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">output</span> <span class="p">(</span><span class="nf">sym/variable</span> <span class="s">&quot;input_&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">get-symbol</span> <span class="p">[]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="nv">input</span> <span class="nv">data</span>
-</span><span class='line'>    <span class="c1">;; encode</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;encode1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">100</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">;; encode</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;encode2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">50</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">;; decode</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;decode1&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">50</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid3&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">;; decode</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;decode2&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">100</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid4&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">;;output</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/fully-connected</span> <span class="s">&quot;result&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:num-hidden</span> <span class="mi">784</span><span class="p">})</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/activation</span> <span class="s">&quot;sigmoid5&quot;</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:act-type</span> <span class="s">&quot;sigmoid&quot;</span><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">(</span><span class="nf">sym/linear-regression-output</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span> <span class="ss">:label</span> <span class="nv">output</span><span class="p">})))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:</p>
-
-<p>784 (image) -> 100 -> 50 -> 50 -> 100 -> 784 (output)</p>
-
-<p>We can now construct the full model with the <em>module</em> api from clojure-mxnet.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">data-desc</span> <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">mx-io/provide-data-desc</span> <span class="nv">train-data</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">model</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m/module</span> <span class="p">(</span><span class="nf">get-symbol</span><span class="p">)</span> <span class="p">{</span><span class="ss">:data-names</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]</span> <span class="ss">:label-names</span> <span class="p">[</span><span class="s">&quot;input_&quot;</span><span class="p">]})</span>
-</span><span class='line'>               <span class="p">(</span><span class="nf">m/bind</span> <span class="p">{</span><span class="ss">:data-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">data-desc</span> <span class="ss">:name</span> <span class="s">&quot;input&quot;</span><span class="p">)]</span>
-</span><span class='line'>                        <span class="ss">:label-shapes</span> <span class="p">[(</span><span class="nb">assoc </span><span class="nv">data-desc</span> <span class="ss">:name</span> <span class="s">&quot;input_&quot;</span><span class="p">)]})</span>
-</span><span class='line'>               <span class="p">(</span><span class="nf">m/init-params</span> <span class="p">{</span><span class="ss">:initializer</span>  <span class="p">(</span><span class="nf">initializer/uniform</span> <span class="mi">1</span><span class="p">)})</span>
-</span><span class='line'>               <span class="p">(</span><span class="nf">m/init-optimizer</span> <span class="p">{</span><span class="ss">:optimizer</span> <span class="p">(</span><span class="nf">optimizer/adam</span> <span class="p">{</span><span class="ss">:learning-rage</span> <span class="mf">0.001</span><span class="p">})})))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice that when we are binding the <code>data-shapes</code> and <code>label-shapes</code> we are using only the <code>data</code> from our handwritten digit dataset, (the images), and not the labels. This will ensure that as it trains it will seek to recreate the input image for the output image.</p>
-
-<h3>Before Training</h3>
-
-<p>Before we start our training, let&rsquo;s get a baseline of what the original images look like and what the output of the untrained model is.</p>
-
-<p>To look at the original images we can take the first training batch of 100 images and visualize them. Since we are initially using the flattened <code>[784]</code> image representation. We need to reshape it to the 28x28 image that we can recognize.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">my-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">train-data</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-batch</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">ndarray/shape</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">images</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">]))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;originals&quot;</span> <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span> <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">images</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567560737/in/dateposted-public/" title="originals"><img src="https://live.staticflickr.com/65535/48567560737_672d065ac2.jpg" width="420" height="420" alt="originals"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>We can also do the same visualization with the test batch of data images by putting them into the <code>predict-batch</code> and using our model.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; before training</span>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">test-images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-test-batch</span><span class="p">))</span>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
-</span><span class='line'> <span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;before-training-preds&quot;</span> <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span> <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">preds</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567589067/in/dateposted-public/" title="before-training-preds"><img src="https://live.staticflickr.com/65535/48567589067_e44eeda1a9.jpg" width="420" height="420" alt="before-training-preds"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>They are not anything close to recognizable as numbers.</p>
-
-<h3>Training</h3>
-
-<p>The next step is to train the model on the data. We set up a training function to step through all the batches of data.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">my-metric</span> <span class="p">(</span><span class="nf">eval-metric/mse</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">train</span> <span class="p">[</span><span class="nv">num-epochs</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">epoch-num</span> <span class="p">(</span><span class="nb">range </span><span class="mi">0</span> <span class="nv">num-epochs</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;starting epoch &quot;</span> <span class="nv">epoch-num</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">mx-io/do-batches</span>
-</span><span class='line'>     <span class="nv">train-data</span>
-</span><span class='line'>     <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">batch</span><span class="p">]</span>
-</span><span class='line'>       <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">model</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">m/forward</span> <span class="p">{</span><span class="ss">:data</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">)</span> <span class="ss">:label</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">)})</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">m/update-metric</span> <span class="nv">my-metric</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">batch</span><span class="p">))</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">m/backward</span><span class="p">)</span>
-</span><span class='line'>           <span class="p">(</span><span class="nf">m/update</span><span class="p">))))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;result for epoch &quot;</span> <span class="nv">epoch-num</span> <span class="s">&quot; is &quot;</span> <span class="p">(</span><span class="nf">eval-metric/get-and-reset</span> <span class="nv">my-metric</span><span class="p">))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For each batch of 100 images it is doing the following:</p>
-
-<ul>
-<li>Run the forward pass of the model with both the data and label being the image</li>
-<li>Update the accuracy of the model with the <code>mse</code> (mean squared error metric)</li>
-<li>Do the backward computation</li>
-<li>Update the model according to the optimizer and the forward/backward computation.</li>
-</ul>
-
-
-<p>Let&rsquo;s train it for 3 epochs.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">0</span>
-</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">0</span>  <span class="nv">is</span>  <span class="p">[</span><span class="nv">mse</span> <span class="mf">0.06460866</span><span class="p">]</span>
-</span><span class='line'><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">1</span>
-</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">1</span>  <span class="nv">is</span>  <span class="p">[</span><span class="nv">mse</span> <span class="mf">0.033874355</span><span class="p">]</span>
-</span><span class='line'><span class="nv">starting</span> <span class="nv">epoch</span>  <span class="mi">2</span>
-</span><span class='line'><span class="nv">result</span> <span class="nb">for </span><span class="nv">epoch</span>  <span class="mi">2</span>  <span class="nv">is</span>  <span class="p">[</span><span class="nv">mse</span> <span class="mf">0.027255038</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>After training</h3>
-
-<p>We can check the test images again and see if they look better.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; after training</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">my-test-batch</span> <span class="p">(</span><span class="nf">mx-io/next</span> <span class="nv">test-data</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">test-images</span> <span class="p">(</span><span class="nf">mx-io/batch-data</span> <span class="nv">my-test-batch</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">preds</span> <span class="p">(</span><span class="nf">m/predict-batch</span> <span class="nv">model</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">test-images</span><span class="p">}</span> <span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">viz/im-sav</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;after-training-preds&quot;</span> <span class="ss">:output-path</span> <span class="s">&quot;results/&quot;</span> <span class="ss">:x</span> <span class="p">(</span><span class="nf">ndarray/reshape</span> <span class="p">(</span><span class="nb">first </span><span class="nv">preds</span><span class="p">)</span> <span class="p">[</span><span class="mi">100</span> <span class="mi">1</span> <span class="mi">28</span> <span class="mi">28</span><span class="p">])})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a data-flickr-embed="true"  href="https://www.flickr.com/photos/50581552@N06/48567523206/in/dateposted-public/" title="after-training-preds"><img src="https://live.staticflickr.com/65535/48567523206_d78480012f.jpg" width="420" height="420" alt="after-training-preds"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
-
-<p>Much improved! They definitely look like numbers.</p>
-
-<h3>Wrap up</h3>
-
-<p>We&rsquo;ve made a simple autoencoder that can take images of digits and compress them down to a latent space representation the can later be decoded into the same image.</p>
-
-<p>If you want to check out the full code for this example, you can find it <a href="https://github.com/gigasquid/clojure-mxnet-autoencoder">here</a>.</p>
-
-<p>Stay tuned. We&rsquo;ll take this example and build on it in future posts.</p>
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-08-16T16:16:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 16 Aug 2019,  4:16 PM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/deep-learning/'>Deep Learning</a>, <a class='category' href='/blog/categories/mxnet/'>MXNet</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2019/04/26/clojure-mxnet-april-update/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Clojure MXNet April Update"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Clojure MXNet April Update</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2019/08/30/focus-on-the-discriminator/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Focus on the Discriminator">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>Focus on the Discriminator</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2019/08/16/simple-autoencoder/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Simple Autoencoder | Squid's Blog</title><meta name=keywords content><meta name=description content="
+If you look long enough into the autoencoder, it looks back at you.
+The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.
+It&rsquo;s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a latent space representation and the encoder translating that back to a regular images that we can view."><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Simple Autoencoder"><meta property="og:description" content="If you look long enough into the autoencoder, it looks back at you.
+The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.
+It’s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a latent space representation and the encoder translating that back to a regular images that we can view."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-08-16T16:16:00+00:00"><meta property="article:modified_time" content="2019-08-16T16:16:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Simple Autoencoder"><meta name=twitter:description content="If you look long enough into the autoencoder, it looks back at you.
+The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.
+It’s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a latent space representation and the encoder translating that back to a regular images that we can view."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Simple Autoencoder","item":"https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Simple Autoencoder","name":"Simple Autoencoder","description":"\nIf you look long enough into the autoencoder, it looks back at you.\nThe Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.\nIt\u0026rsquo;s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a latent space representation and the encoder translating that back to a regular images that we can view.\n","keywords":[],"articleBody":"\nIf you look long enough into the autoencoder, it looks back at you.\nThe Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.\nIt’s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a latent space representation and the encoder translating that back to a regular images that we can view.\nWe are going to make a simple autoencoder with Clojure MXNet for handwritten digits using the MNIST dataset.\nThe Dataset We first load up the training data into an iterator that will allow us to cycle through all the images.\n(def train-data (mx-io/mnist-iter {:image (str data-dir \"train-images-idx3-ubyte\") :label (str data-dir \"train-labels-idx1-ubyte\") :input-shape [784] :flat true :batch-size batch-size :shuffle true})) Notice there the the input shape is 784. We are purposely flattening out our 28x28 image of a number to just be a one dimensional flat array. The reason is so that we can use a simpler model for the autoencoder.\nWe also load up the corresponding test data.\n(def test-data (mx-io/mnist-iter {:image (str data-dir \"t10k-images-idx3-ubyte\") :label (str data-dir \"t10k-labels-idx1-ubyte\") :input-shape [784] :batch-size batch-size :flat true :shuffle true})) When we are working with deep learning models we keep the training and the test data separate. When we train the model, we won’t use the test data. That way we can evaluate it later on the unseen test data.\nThe Model Now we need to define the layers of the model. We know we are going to have an input and an output. The input will be the array that represents the image of the digit and the output will also be an array which is reconstruction of that image.\n(def input (sym/variable \"input\")) (def output (sym/variable \"input_\")) (defn get-symbol [] (as-\u003e input data ;; encode (sym/fully-connected \"encode1\" {:data data :num-hidden 100}) (sym/activation \"sigmoid1\" {:data data :act-type \"sigmoid\"}) ;; encode (sym/fully-connected \"encode2\" {:data data :num-hidden 50}) (sym/activation \"sigmoid2\" {:data data :act-type \"sigmoid\"}) ;; decode (sym/fully-connected \"decode1\" {:data data :num-hidden 50}) (sym/activation \"sigmoid3\" {:data data :act-type \"sigmoid\"}) ;; decode (sym/fully-connected \"decode2\" {:data data :num-hidden 100}) (sym/activation \"sigmoid4\" {:data data :act-type \"sigmoid\"}) ;;output (sym/fully-connected \"result\" {:data data :num-hidden 784}) (sym/activation \"sigmoid5\" {:data data :act-type \"sigmoid\"}) (sym/linear-regression-output {:data data :label output}))) From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:\n784 (image) -\u003e 100 -\u003e 50 -\u003e 50 -\u003e 100 -\u003e 784 (output)\nWe can now construct the full model with the module api from clojure-mxnet.\n(def data-desc (first (mx-io/provide-data-desc train-data))) (def model (-\u003e (m/module (get-symbol) {:data-names [\"input\"] :label-names [\"input_\"]}) (m/bind {:data-shapes [(assoc data-desc :name \"input\")] :label-shapes [(assoc data-desc :name \"input_\")]}) (m/init-params {:initializer (initializer/uniform 1)}) (m/init-optimizer {:optimizer (optimizer/adam {:learning-rage 0.001})}))) Notice that when we are binding the data-shapes and label-shapes we are using only the data from our handwritten digit dataset, (the images), and not the labels. This will ensure that as it trains it will seek to recreate the input image for the output image.\nBefore Training Before we start our training, let’s get a baseline of what the original images look like and what the output of the untrained model is.\nTo look at the original images we can take the first training batch of 100 images and visualize them. Since we are initially using the flattened [784] image representation. We need to reshape it to the 28x28 image that we can recognize.\n(def my-batch (mx-io/next train-data)) (def images (mx-io/batch-data my-batch)) (ndarray/shape (ndarray/reshape (first images) [100 1 28 28])) (viz/im-sav {:title \"originals\" :output-path \"results/\" :x (ndarray/reshape (first images) [100 1 28 28])}) We can also do the same visualization with the test batch of data images by putting them into the predict-batch and using our model.\n;;; before training (def my-test-batch (mx-io/next test-data)) (def test-images (mx-io/batch-data my-test-batch)) (def preds (m/predict-batch model {:data test-images} )) (viz/im-sav {:title \"before-training-preds\" :output-path \"results/\" :x (ndarray/reshape (first preds) [100 1 28 28])}) They are not anything close to recognizable as numbers.\nTraining The next step is to train the model on the data. We set up a training function to step through all the batches of data.\n(def my-metric (eval-metric/mse)) (defn train [num-epochs] (doseq [epoch-num (range 0 num-epochs)] (println \"starting epoch \" epoch-num) (mx-io/do-batches train-data (fn [batch] (-\u003e model (m/forward {:data (mx-io/batch-data batch) :label (mx-io/batch-data batch)}) (m/update-metric my-metric (mx-io/batch-data batch)) (m/backward) (m/update)))) (println \"result for epoch \" epoch-num \" is \" (eval-metric/get-and-reset my-metric)))) For each batch of 100 images it is doing the following:\nRun the forward pass of the model with both the data and label being the image Update the accuracy of the model with the mse (mean squared error metric) Do the backward computation Update the model according to the optimizer and the forward/backward computation. Let’s train it for 3 epochs.\nstarting epoch 0 result for epoch 0 is [mse 0.06460866] starting epoch 1 result for epoch 1 is [mse 0.033874355] starting epoch 2 result for epoch 2 is [mse 0.027255038] After training We can check the test images again and see if they look better.\n;;; after training (def my-test-batch (mx-io/next test-data)) (def test-images (mx-io/batch-data my-test-batch)) (def preds (m/predict-batch model {:data test-images} )) (viz/im-sav {:title \"after-training-preds\" :output-path \"results/\" :x (ndarray/reshape (first preds) [100 1 28 28])}) Much improved! They definitely look like numbers.\nWrap up We’ve made a simple autoencoder that can take images of digits and compress them down to a latent space representation the can later be decoded into the same image.\nIf you want to check out the full code for this example, you can find it here.\nStay tuned. We’ll take this example and build on it in future posts.\n","wordCount":"980","inLanguage":"en","datePublished":"2019-08-16T16:16:00Z","dateModified":"2019-08-16T16:16:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Simple Autoencoder</h1><div class=post-meta><span title='2019-08-16 16:16:00 +0000 UTC'>August 16, 2019</span>&nbsp;·&nbsp;<span>5 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p><a data-flickr-embed=true href=https://www.flickr.com/photos/horlik/2901925672/in/photolist-5qr8pf-qkv3m8-32RwmC-dZBC2B-ja8ch-48vDg-f56TGS-oUfNKn-652ZqG-QnCrbX-y3C828-jeGkmu-dxwE9L-jKaGtZ-haQ6j3-61w8UJ-WmitYz-tLymA-dZCHC4-CGvx3R-CC3GPE-BSxzda-eu625R-vHAgnk-cR7WAE-jZiLgu-BsZwLP-fhfvPT-dN1Rf9-o8Mkby-8zDocw-5DvC7S-CEij58-oaw922-akUgeW-ayQiGU-aay1vS-2fVFske-2eoRpCe-rqwa4o-9VJPtv-opgEcq-MDfFe-9yzUaK-4is9Z9-cutXnm-f9U23-L7hpoe-3i3H-enSJKf title="Perfect mirror"><img src=https://live.staticflickr.com/3274/2901925672_325f5faeb8.jpg width=500 height=364 alt="Perfect mirror"></a><script async src=//embedr.flickr.com/assets/client-code.js></script></p><p><em>If you look long enough into the autoencoder, it looks back at you.</em></p><p>The Autoencoder is a fun deep learning model to look into. Its goal is simple: given an input image, we would like to have the same output image.</p><p>It&rsquo;s sort of an identity function for deep learning models, but it is composed of two parts: an encoder and decoder, with the encoder translating the images to a <em>latent space representation</em> and the encoder translating that back to a regular images that we can view.</p><p><img loading=lazy src=https://camo.githubusercontent.com/1ab40362a922059fa3686914cf5cff803ba7dd43/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f3830302f312a4c53594e57356d33544e377852583631425a686f5a412e706e67></p><p>We are going to make a simple autoencoder with Clojure MXNet for handwritten digits using the MNIST dataset.</p><h3 id=the-dataset>The Dataset<a hidden class=anchor aria-hidden=true href=#the-dataset>#</a></h3><p>We first load up the training data into an iterator that will allow us to cycle through all the images.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>train-data (<span style=color:#a6e22e>mx-io/mnist-iter</span> {<span style=color:#e6db74>:image</span> (str data-dir <span style=color:#e6db74>&#34;train-images-idx3-ubyte&#34;</span>)
+</span></span><span style=display:flex><span>                                   <span style=color:#e6db74>:label</span> (str data-dir <span style=color:#e6db74>&#34;train-labels-idx1-ubyte&#34;</span>)
+</span></span><span style=display:flex><span>                                   <span style=color:#e6db74>:input-shape</span> [<span style=color:#ae81ff>784</span>]
+</span></span><span style=display:flex><span>                                   <span style=color:#e6db74>:flat</span> true
+</span></span><span style=display:flex><span>                                   <span style=color:#e6db74>:batch-size</span> batch-size
+</span></span><span style=display:flex><span>                                   <span style=color:#e6db74>:shuffle</span> true}))
+</span></span></code></pre></div><p>Notice there the the input shape is 784. We are purposely flattening out our 28x28 image of a number to just be a one dimensional flat array. The reason is so that we can use a simpler model for the autoencoder.</p><p>We also load up the corresponding test data.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>test-data (<span style=color:#a6e22e>mx-io/mnist-iter</span> {<span style=color:#e6db74>:image</span> (str data-dir <span style=color:#e6db74>&#34;t10k-images-idx3-ubyte&#34;</span>)
+</span></span><span style=display:flex><span>                                  <span style=color:#e6db74>:label</span> (str data-dir <span style=color:#e6db74>&#34;t10k-labels-idx1-ubyte&#34;</span>)
+</span></span><span style=display:flex><span>                                  <span style=color:#e6db74>:input-shape</span> [<span style=color:#ae81ff>784</span>]
+</span></span><span style=display:flex><span>                                  <span style=color:#e6db74>:batch-size</span> batch-size
+</span></span><span style=display:flex><span>                                  <span style=color:#e6db74>:flat</span> true
+</span></span><span style=display:flex><span>                                  <span style=color:#e6db74>:shuffle</span> true}))
+</span></span></code></pre></div><p>When we are working with deep learning models we keep the training and the test data separate. When we train the model, we won&rsquo;t use the test data. That way we can evaluate it later on the unseen test data.</p><h3 id=the-model>The Model<a hidden class=anchor aria-hidden=true href=#the-model>#</a></h3><p>Now we need to define the layers of the model. We know we are going to have an input and an output. The input will be the array that represents the image of the digit and the output will also be an array which is reconstruction of that image.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>input (<span style=color:#a6e22e>sym/variable</span> <span style=color:#e6db74>&#34;input&#34;</span>))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>output (<span style=color:#a6e22e>sym/variable</span> <span style=color:#e6db74>&#34;input_&#34;</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>defn </span>get-symbol []
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>as-&gt;</span> input data
+</span></span><span style=display:flex><span>    <span style=color:#75715e>;; encode</span>
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/fully-connected</span> <span style=color:#e6db74>&#34;encode1&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:num-hidden</span> <span style=color:#ae81ff>100</span>})
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/activation</span> <span style=color:#e6db74>&#34;sigmoid1&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:act-type</span> <span style=color:#e6db74>&#34;sigmoid&#34;</span>})
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>;; encode</span>
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/fully-connected</span> <span style=color:#e6db74>&#34;encode2&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:num-hidden</span> <span style=color:#ae81ff>50</span>})
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/activation</span> <span style=color:#e6db74>&#34;sigmoid2&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:act-type</span> <span style=color:#e6db74>&#34;sigmoid&#34;</span>})
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>;; decode</span>
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/fully-connected</span> <span style=color:#e6db74>&#34;decode1&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:num-hidden</span> <span style=color:#ae81ff>50</span>})
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/activation</span> <span style=color:#e6db74>&#34;sigmoid3&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:act-type</span> <span style=color:#e6db74>&#34;sigmoid&#34;</span>})
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>;; decode</span>
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/fully-connected</span> <span style=color:#e6db74>&#34;decode2&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:num-hidden</span> <span style=color:#ae81ff>100</span>})
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/activation</span> <span style=color:#e6db74>&#34;sigmoid4&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:act-type</span> <span style=color:#e6db74>&#34;sigmoid&#34;</span>})
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>;;output</span>
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/fully-connected</span> <span style=color:#e6db74>&#34;result&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:num-hidden</span> <span style=color:#ae81ff>784</span>})
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/activation</span> <span style=color:#e6db74>&#34;sigmoid5&#34;</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:act-type</span> <span style=color:#e6db74>&#34;sigmoid&#34;</span>})
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>sym/linear-regression-output</span> {<span style=color:#e6db74>:data</span> data <span style=color:#e6db74>:label</span> output})))
+</span></span></code></pre></div><p>From the model above we can see the input (image) being passed through simple layers of encoder to its latent representation, and then boosted back up from the decoder back into an output (image). It goes through the pleasingly symmetric transformation of:</p><p>784 (image) -> 100 -> 50 -> 50 -> 100 -> 784 (output)</p><p>We can now construct the full model with the <em>module</em> api from clojure-mxnet.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>data-desc (first (<span style=color:#a6e22e>mx-io/provide-data-desc</span> train-data)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>model (-&gt; (<span style=color:#a6e22e>m/module</span> (<span style=color:#a6e22e>get-symbol</span>) {<span style=color:#e6db74>:data-names</span> [<span style=color:#e6db74>&#34;input&#34;</span>] <span style=color:#e6db74>:label-names</span> [<span style=color:#e6db74>&#34;input_&#34;</span>]})
+</span></span><span style=display:flex><span>               (<span style=color:#a6e22e>m/bind</span> {<span style=color:#e6db74>:data-shapes</span> [(assoc data-desc <span style=color:#e6db74>:name</span> <span style=color:#e6db74>&#34;input&#34;</span>)]
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>:label-shapes</span> [(assoc data-desc <span style=color:#e6db74>:name</span> <span style=color:#e6db74>&#34;input_&#34;</span>)]})
+</span></span><span style=display:flex><span>               (<span style=color:#a6e22e>m/init-params</span> {<span style=color:#e6db74>:initializer</span>  (<span style=color:#a6e22e>initializer/uniform</span> <span style=color:#ae81ff>1</span>)})
+</span></span><span style=display:flex><span>               (<span style=color:#a6e22e>m/init-optimizer</span> {<span style=color:#e6db74>:optimizer</span> (<span style=color:#a6e22e>optimizer/adam</span> {<span style=color:#e6db74>:learning-rage</span> <span style=color:#ae81ff>0.001</span>})})))
+</span></span></code></pre></div><p>Notice that when we are binding the <code>data-shapes</code> and <code>label-shapes</code> we are using only the <code>data</code> from our handwritten digit dataset, (the images), and not the labels. This will ensure that as it trains it will seek to recreate the input image for the output image.</p><h3 id=before-training>Before Training<a hidden class=anchor aria-hidden=true href=#before-training>#</a></h3><p>Before we start our training, let&rsquo;s get a baseline of what the original images look like and what the output of the untrained model is.</p><p>To look at the original images we can take the first training batch of 100 images and visualize them. Since we are initially using the flattened <code>[784]</code> image representation. We need to reshape it to the 28x28 image that we can recognize.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>my-batch (<span style=color:#a6e22e>mx-io/next</span> train-data))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>images (<span style=color:#a6e22e>mx-io/batch-data</span> my-batch))
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>ndarray/shape</span> (<span style=color:#a6e22e>ndarray/reshape</span> (first images) [<span style=color:#ae81ff>100</span> <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>28</span> <span style=color:#ae81ff>28</span>]))
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>viz/im-sav</span> {<span style=color:#e6db74>:title</span> <span style=color:#e6db74>&#34;originals&#34;</span> <span style=color:#e6db74>:output-path</span> <span style=color:#e6db74>&#34;results/&#34;</span> <span style=color:#e6db74>:x</span> (<span style=color:#a6e22e>ndarray/reshape</span> (first images) [<span style=color:#ae81ff>100</span> <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>28</span> <span style=color:#ae81ff>28</span>])})
+</span></span></code></pre></div><p><a data-flickr-embed=true href=https://www.flickr.com/photos/50581552@N06/48567560737/in/dateposted-public/ title=originals><img src=https://live.staticflickr.com/65535/48567560737_672d065ac2.jpg width=420 height=420 alt=originals></a><script async src=//embedr.flickr.com/assets/client-code.js></script></p><p>We can also do the same visualization with the test batch of data images by putting them into the <code>predict-batch</code> and using our model.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#75715e>;;; before training</span>
+</span></span><span style=display:flex><span> (<span style=color:#66d9ef>def </span>my-test-batch (<span style=color:#a6e22e>mx-io/next</span> test-data))
+</span></span><span style=display:flex><span> (<span style=color:#66d9ef>def </span>test-images (<span style=color:#a6e22e>mx-io/batch-data</span> my-test-batch))
+</span></span><span style=display:flex><span> (<span style=color:#66d9ef>def </span>preds (<span style=color:#a6e22e>m/predict-batch</span> model {<span style=color:#e6db74>:data</span> test-images} ))
+</span></span><span style=display:flex><span> (<span style=color:#a6e22e>viz/im-sav</span> {<span style=color:#e6db74>:title</span> <span style=color:#e6db74>&#34;before-training-preds&#34;</span> <span style=color:#e6db74>:output-path</span> <span style=color:#e6db74>&#34;results/&#34;</span> <span style=color:#e6db74>:x</span> (<span style=color:#a6e22e>ndarray/reshape</span> (first preds) [<span style=color:#ae81ff>100</span> <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>28</span> <span style=color:#ae81ff>28</span>])})
+</span></span></code></pre></div><p><a data-flickr-embed=true href=https://www.flickr.com/photos/50581552@N06/48567589067/in/dateposted-public/ title=before-training-preds><img src=https://live.staticflickr.com/65535/48567589067_e44eeda1a9.jpg width=420 height=420 alt=before-training-preds></a><script async src=//embedr.flickr.com/assets/client-code.js></script></p><p>They are not anything close to recognizable as numbers.</p><h3 id=training>Training<a hidden class=anchor aria-hidden=true href=#training>#</a></h3><p>The next step is to train the model on the data. We set up a training function to step through all the batches of data.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>my-metric (<span style=color:#a6e22e>eval-metric/mse</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>defn </span>train [num-epochs]
+</span></span><span style=display:flex><span>  (doseq [epoch-num (range <span style=color:#ae81ff>0</span> num-epochs)]
+</span></span><span style=display:flex><span>    (println <span style=color:#e6db74>&#34;starting epoch &#34;</span> epoch-num)
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>mx-io/do-batches</span>
+</span></span><span style=display:flex><span>     train-data
+</span></span><span style=display:flex><span>     (<span style=color:#66d9ef>fn </span>[batch]
+</span></span><span style=display:flex><span>       (-&gt; model
+</span></span><span style=display:flex><span>           (<span style=color:#a6e22e>m/forward</span> {<span style=color:#e6db74>:data</span> (<span style=color:#a6e22e>mx-io/batch-data</span> batch) <span style=color:#e6db74>:label</span> (<span style=color:#a6e22e>mx-io/batch-data</span> batch)})
+</span></span><span style=display:flex><span>           (<span style=color:#a6e22e>m/update-metric</span> my-metric (<span style=color:#a6e22e>mx-io/batch-data</span> batch))
+</span></span><span style=display:flex><span>           (<span style=color:#a6e22e>m/backward</span>)
+</span></span><span style=display:flex><span>           (<span style=color:#a6e22e>m/update</span>))))
+</span></span><span style=display:flex><span>    (println <span style=color:#e6db74>&#34;result for epoch &#34;</span> epoch-num <span style=color:#e6db74>&#34; is &#34;</span> (<span style=color:#a6e22e>eval-metric/get-and-reset</span> my-metric))))
+</span></span></code></pre></div><p>For each batch of 100 images it is doing the following:</p><ul><li>Run the forward pass of the model with both the data and label being the image</li><li>Update the accuracy of the model with the <code>mse</code> (mean squared error metric)</li><li>Do the backward computation</li><li>Update the model according to the optimizer and the forward/backward computation.</li></ul><p>Let&rsquo;s train it for 3 epochs.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>starting epoch  0
+</span></span><span style=display:flex><span>result for epoch  0  is  [mse 0.06460866]
+</span></span><span style=display:flex><span>starting epoch  1
+</span></span><span style=display:flex><span>result for epoch  1  is  [mse 0.033874355]
+</span></span><span style=display:flex><span>starting epoch  2
+</span></span><span style=display:flex><span>result for epoch  2  is  [mse 0.027255038]
+</span></span></code></pre></div><h3 id=after-training>After training<a hidden class=anchor aria-hidden=true href=#after-training>#</a></h3><p>We can check the test images again and see if they look better.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#75715e>;;; after training</span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>my-test-batch (<span style=color:#a6e22e>mx-io/next</span> test-data))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>test-images (<span style=color:#a6e22e>mx-io/batch-data</span> my-test-batch))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>preds (<span style=color:#a6e22e>m/predict-batch</span> model {<span style=color:#e6db74>:data</span> test-images} ))
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>viz/im-sav</span> {<span style=color:#e6db74>:title</span> <span style=color:#e6db74>&#34;after-training-preds&#34;</span> <span style=color:#e6db74>:output-path</span> <span style=color:#e6db74>&#34;results/&#34;</span> <span style=color:#e6db74>:x</span> (<span style=color:#a6e22e>ndarray/reshape</span> (first preds) [<span style=color:#ae81ff>100</span> <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>28</span> <span style=color:#ae81ff>28</span>])})
+</span></span></code></pre></div><p><a data-flickr-embed=true href=https://www.flickr.com/photos/50581552@N06/48567523206/in/dateposted-public/ title=after-training-preds><img src=https://live.staticflickr.com/65535/48567523206_d78480012f.jpg width=420 height=420 alt=after-training-preds></a><script async src=//embedr.flickr.com/assets/client-code.js></script></p><p>Much improved! They definitely look like numbers.</p><h3 id=wrap-up>Wrap up<a hidden class=anchor aria-hidden=true href=#wrap-up>#</a></h3><p>We&rsquo;ve made a simple autoencoder that can take images of digits and compress them down to a latent space representation the can later be decoded into the same image.</p><p>If you want to check out the full code for this example, you can find it <a href=https://github.com/gigasquid/clojure-mxnet-autoencoder>here</a>.</p><p>Stay tuned. We&rsquo;ll take this example and build on it in future posts.</p></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2019/08/30/focus-on-the-discriminator/><span class=title>« Prev</span>
+<span>Focus on the Discriminator</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2019/04/26/clojure-mxnet-april-update/><span class=title>Next »</span>
+<span>Clojure MXNet April Update</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

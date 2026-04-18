@@ -1,767 +1,165 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Hugging Face GPT With Clojure - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/">
-  <meta property="og:title" content="Hugging Face GPT With Clojure - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2020-01-10T19:33:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 10 Jan 2020,  7:33 PM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Hugging Face GPT With Clojure
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p><img src="https://live.staticflickr.com/65535/49364554561_6e4f4d0a51_w.jpg" alt="" /></p>
-
-<p>A new age in Clojure has dawned. We now have interop access to any python library with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>.</p>
-
-<p><br></p>
-
-<p>Let me pause a minute to repeat.</p>
-
-<p><br></p>
-
-<p><strong> You can now interop with ANY python library. </strong></p>
-
-<p><br></p>
-
-<p>I know. It&rsquo;s overwhelming. It took a bit for me to come to grips with it too.</p>
-
-<p><br></p>
-
-<p>Let&rsquo;s take an example of something that I&rsquo;ve <em>always</em> wanted to do and have struggled with mightly finding a way to do it in Clojure:<br/>
-I want to use the latest cutting edge GPT2 code out there to generate text.</p>
-
-<p>Right now, that library is <a href="https://github.com/huggingface/transformers">Hugging Face Transformers</a>.<br/>
-<br></p>
-
-<p>Get ready. We will wrap that sweet hugging face code in Clojure parens!</p>
-
-<h3>The setup</h3>
-
-<p>The first thing you will need to do is to have python3 installed and the two libraries that we need:</p>
-
-<p><br></p>
-
-<ul>
-<li>pytorch - <code>sudo pip3 install torch</code></li>
-<li>hugging face transformers - <code>sudo pip3 install transformers</code></li>
-</ul>
-
-
-<p><br></p>
-
-<p>Right now, some of you may not want to proceed. You might have had a bad relationship with Python in the past. It&rsquo;s ok, remember that some of us had bad relationships with Java, but still lead a happy and fulfilled life with Clojure and still can enjoy it from interop. The same is true with Python. Keep an open mind.</p>
-
-<p><br></p>
-
-<p>There might be some others that don&rsquo;t want to have anything to do with Python and want to keep your Clojure pure. Well, that is a valid choice. But you are missing out on what the big, vibrant, and chaotic Python Deep Learning ecosystem has to offer.</p>
-
-<p><br></p>
-
-<p>For those of you that are still along for the ride, let&rsquo;s dive in.</p>
-
-<p><br></p>
-
-<p>Your deps file should have just a single extra dependency in it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="ss">:deps</span> <span class="p">{</span><span class="nv">org.clojure/clojure</span> <span class="p">{</span><span class="ss">:mvn/version</span> <span class="s">&quot;1.10.1&quot;</span><span class="p">}</span>
-</span><span class='line'>        <span class="nv">cnuernber/libpython-clj</span> <span class="p">{</span><span class="ss">:mvn/version</span> <span class="s">&quot;1.30&quot;</span><span class="p">}}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Diving Into Interop</h3>
-
-<p>The first thing that we need to do is require the libpython library.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.gpt2</span>
-</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">libpython-clj.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]</span>
-</span><span class='line'>            <span class="p">[</span><span class="nv">libpython-clj.python</span> <span class="ss">:as</span> <span class="nv">py</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It has a very nice <code>require-python</code> syntax that we will use to load the python libraries so that we can use them in our Clojure code.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">transformers</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">torch</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here we are going to follow along with the OpenAI GPT-2 tutorial and translate it into interop code.
-The original tutorial is <a href="https://huggingface.co/transformers/quickstart.html">here</a></p>
-
-<p><br></p>
-
-<p>Let&rsquo;s take the python side first:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span></span><span class="kn">import</span> <span class="nn">torch</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">GPT2Tokenizer</span><span class="p">,</span> <span class="n">GPT2LMHeadModel</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Load pre-trained model tokenizer (vocabulary)</span>
-</span><span class='line'><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">GPT2Tokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;gpt2&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is going to translate in our interop code to:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">tokenizer</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">transformers/GPT2Tokenizer</span> <span class="nv">from_pretrained</span> <span class="s">&quot;gpt2&quot;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>py/$a</code> function is used to call attributes on a Python object. We get the <code>transformers/GPTTokenizer</code> object that we have available to use and call <code>from_pretrained</code> on it with the string argument <code>"gpt2"</code></p>
-
-<p><br></p>
-
-<p>Next in the Python tutorial is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span></span><span class="c1"># Encode a text inputs</span>
-</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Who was Jim Henson ? Jim Henson was a&quot;</span>
-</span><span class='line'><span class="n">indexed_tokens</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Convert indexed tokens in a PyTorch tensor</span>
-</span><span class='line'><span class="n">tokens_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">indexed_tokens</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is going to translate to Clojure:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">text</span> <span class="s">&quot;Who was Jim Henson ? Jim Henson was a&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; encode text input</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">indexed-tokens</span>  <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">tokenizer</span> <span class="nv">encode</span> <span class="nv">text</span><span class="p">))</span>
-</span><span class='line'><span class="nv">indexed-tokens</span> <span class="c1">;=&gt;[8241, 373, 5395, 367, 19069, 5633, 5395, 367, 19069, 373, 257]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;; convert indexed tokens to pytorch tensor</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">tokens-tensor</span> <span class="p">(</span><span class="nf">torch/tensor</span> <span class="p">[</span><span class="nv">indexed-tokens</span><span class="p">]))</span>
-</span><span class='line'><span class="nv">tokens-tensor</span>
-</span><span class='line'><span class="c1">;; ([[ 8241,   373,  5395,   367, 19069,  5633,  5395,   367, 19069,   373,</span>
-</span><span class='line'><span class="c1">;;    257]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here we are again using <code>py/$a</code> to call the <code>encode</code> method on the text. However, when we are just calling a function, we can do so directly with <code>(torch/tensor [indexed-tokens])</code>. We can even directly use vectors.</p>
-
-<p><br></p>
-
-<p>Again, you are doing this in the REPL, so you have full power for inspection and display of the python objects. It is a great interop experience - (cider even has doc information on the python functions in the minibuffer)!</p>
-
-<p><br></p>
-
-<p>The next part is to load the model itself. This will take a few minutes, since it has to download a big file from s3 and load it up.</p>
-
-<p><br></p>
-
-<p>In Python:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span></span><span class="c1"># Load pre-trained model (weights)</span>
-</span><span class='line'><span class="n">model</span> <span class="o">=</span> <span class="n">GPT2LMHeadModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;gpt2&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In Clojure:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; Load pre-trained model (weights)</span>
-</span><span class='line'><span class="c1">;;; Note: this will take a few minutes to download everything</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">model</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">transformers/GPT2LMHeadModel</span> <span class="nv">from_pretrained</span> <span class="s">&quot;gpt2&quot;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The next part is to run the model with the tokens and make the predictions.</p>
-
-<p><br></p>
-
-<p>Here the code starts to diverge a tiny bit.</p>
-
-<p><br></p>
-
-<p>Python:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span></span><span class="c1"># Set the model in evaluation mode to deactivate the DropOut modules</span>
-</span><span class='line'><span class="c1"># This is IMPORTANT to have reproducible results during evaluation!</span>
-</span><span class='line'><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># If you have a GPU, put everything on cuda</span>
-</span><span class='line'><span class="n">tokens_tensor</span> <span class="o">=</span> <span class="n">tokens_tensor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Predict all tokens</span>
-</span><span class='line'><span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-</span><span class='line'>    <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">tokens_tensor</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">predictions</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># get the predicted next sub-word (in our case, the word &#39;man&#39;)</span>
-</span><span class='line'><span class="n">predicted_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">predictions</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
-</span><span class='line'><span class="n">predicted_text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">indexed_tokens</span> <span class="o">+</span> <span class="p">[</span><span class="n">predicted_index</span><span class="p">])</span>
-</span><span class='line'><span class="k">assert</span> <span class="n">predicted_text</span> <span class="o">==</span> <span class="s1">&#39;Who was Jim Henson? Jim Henson was a man&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And Clojure</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="c1">;;; Set the model in evaluation mode to deactivate the DropOut modules</span>
-</span><span class='line'><span class="c1">;;; This is IMPORTANT to have reproducible results during evaluation!</span>
-</span><span class='line'><span class="p">(</span><span class="nf">py/$a</span> <span class="nv">model</span> <span class="nv">eval</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;;; Predict all tokens</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">predictions</span> <span class="p">(</span><span class="nf">py/with</span> <span class="p">[</span><span class="nv">r</span> <span class="p">(</span><span class="nf">torch/no_grad</span><span class="p">)]</span>
-</span><span class='line'>                          <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">model</span> <span class="nv">tokens-tensor</span><span class="p">))))</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;;; get the predicted next sub-word&quot;</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">predicted-index</span> <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">last-word-predictions</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">predictions</span> <span class="nb">first </span><span class="nv">last</span><span class="p">)</span>
-</span><span class='line'>                           <span class="nv">arg-max</span> <span class="p">(</span><span class="nf">torch/argmax</span> <span class="nv">last-word-predictions</span><span class="p">)]</span>
-</span><span class='line'>                       <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">arg-max</span> <span class="nv">item</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">predicted-index</span> <span class="c1">;=&gt;582</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">py/$a</span> <span class="nv">tokenizer</span> <span class="nv">decode</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="nv">indexed-tokens</span><span class="p">)</span>
-</span><span class='line'>                            <span class="p">(</span><span class="nb">conj </span><span class="nv">predicted-index</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;=&gt; &quot;Who was Jim Henson? Jim Henson was a man&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The main differences is that we are obviously not using the python array syntax in our code to manipulate the lists. For example, instead of using <code>outputs[0]</code>, we are going to use <code>(first outputs)</code>. But, other than that, it is a pretty good match, even with the <code>py/with</code>.</p>
-
-<p>Also note that we are not making the call to configure it with GPU. This is intentionally left out to keep things simple for people to try it out. Sometimes, GPU configuration can be a bit tricky to set up depending on your system. For this example, you definitely won&rsquo;t need it since it runs fast enough on cpu. If you do want to do something more complicated later, like fine tuning, you will need to invest some time to get it set up.</p>
-
-<h3>Doing Longer Sequences</h3>
-
-<p>The next example in the tutorial goes on to cover generating longer text.</p>
-
-<p><br></p>
-
-<p>Python</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span></span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">GPT2Tokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;gpt2&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">model</span> <span class="o">=</span> <span class="n">GPT2LMHeadModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;gpt2&#39;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">generated</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;The Manhattan bridge&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">context</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">generated</span><span class="p">])</span>
-</span><span class='line'><span class="n">past</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-</span><span class='line'>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">output</span><span class="p">,</span> <span class="n">past</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">past</span><span class="o">=</span><span class="n">past</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">token</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">generated</span> <span class="o">+=</span> <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">tolist</span><span class="p">()]</span>
-</span><span class='line'>    <span class="n">context</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">sequence</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">generated</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">print</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And Clojure</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">tokenizer</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">transformers/GPT2Tokenizer</span> <span class="nv">from_pretrained</span> <span class="s">&quot;gpt2&quot;</span><span class="p">))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">model</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">transformers/GPT2LMHeadModel</span> <span class="nv">from_pretrained</span> <span class="s">&quot;gpt2&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">generated</span> <span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">tokenizer</span> <span class="nv">encode</span> <span class="s">&quot;The Manhattan bridge&quot;</span><span class="p">)))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">context</span> <span class="p">(</span><span class="nf">torch/tensor</span> <span class="p">[</span><span class="nv">generated</span><span class="p">]))</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">generate-sequence-step</span> <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">generated-tokens</span> <span class="nv">context</span> <span class="nv">past</span><span class="p">]}]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">output</span> <span class="nv">past</span><span class="p">]</span> <span class="p">(</span><span class="nf">model</span> <span class="nv">context</span> <span class="ss">:past</span> <span class="nv">past</span><span class="p">)</span>
-</span><span class='line'>        <span class="nv">token</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">torch/argmax</span> <span class="p">(</span><span class="nb">first </span><span class="nv">output</span><span class="p">)))</span>
-</span><span class='line'>        <span class="nv">new-generated</span>  <span class="p">(</span><span class="nb">conj </span><span class="nv">generated-tokens</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">token</span> <span class="nv">tolist</span><span class="p">))]</span>
-</span><span class='line'>    <span class="p">{</span><span class="ss">:generated-tokens</span> <span class="nv">new-generated</span>
-</span><span class='line'>     <span class="ss">:context</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">token</span> <span class="nv">unsqueeze</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>     <span class="ss">:past</span> <span class="nv">past</span>
-</span><span class='line'>     <span class="ss">:token</span> <span class="nv">token</span><span class="p">}))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">decode-sequence</span> <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">generated-tokens</span><span class="p">]}]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">tokenizer</span> <span class="nv">decode</span> <span class="nv">generated-tokens</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">step</span> <span class="p">{</span><span class="ss">:generated-tokens</span> <span class="nv">generated</span>
-</span><span class='line'>             <span class="ss">:context</span> <span class="nv">context</span>
-</span><span class='line'>             <span class="ss">:past</span> <span class="nv">nil</span><span class="p">}</span>
-</span><span class='line'>       <span class="nv">i</span> <span class="mi">10</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">pos? </span><span class="nv">i</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nf">generate-sequence-step</span> <span class="nv">step</span><span class="p">)</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">i</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">decode-sequence</span> <span class="nv">step</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;=&gt; &quot;The Manhattan bridge\n\nThe Manhattan bridge is a major artery for&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The great thing is once we have it embedded in our code, there is no stopping. We can create a nice function:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">generate-text</span> <span class="p">[</span><span class="nv">starting-text</span> <span class="nv">num-of-words-to-predict</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">tokens</span> <span class="p">(</span><span class="nb">into </span><span class="p">[]</span> <span class="p">(</span><span class="nf">py/$a</span> <span class="nv">tokenizer</span> <span class="nv">encode</span> <span class="nv">starting-text</span><span class="p">))</span>
-</span><span class='line'>        <span class="nv">context</span> <span class="p">(</span><span class="nf">torch/tensor</span> <span class="p">[</span><span class="nv">tokens</span><span class="p">])</span>
-</span><span class='line'>        <span class="nv">result</span> <span class="p">(</span><span class="nf">reduce</span>
-</span><span class='line'>                <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">r</span> <span class="nv">i</span><span class="p">]</span>
-</span><span class='line'>                  <span class="p">(</span><span class="nb">println </span><span class="nv">i</span><span class="p">)</span>
-</span><span class='line'>                  <span class="p">(</span><span class="nf">generate-sequence-step</span> <span class="nv">r</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="p">{</span><span class="ss">:generated-tokens</span> <span class="nv">tokens</span>
-</span><span class='line'>                 <span class="ss">:context</span> <span class="nv">context</span>
-</span><span class='line'>                 <span class="ss">:past</span> <span class="nv">nil</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="p">(</span><span class="nb">range </span><span class="nv">num-of-words-to-predict</span><span class="p">))]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">decode-sequence</span> <span class="nv">result</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And finally we can generate some fun text!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">generate-text</span> <span class="s">&quot;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive&quot;</span> <span class="mi">20</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;=&gt; &quot;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone</strong></p>
-
-<p><br></p>
-
-<p>So true GPT2! So true!</p>
-
-<h3>Wrap-up</h3>
-
-<p>libpython-clj is a really powerful tool that will allow Clojurists to better explore, leverage, and integrate Python libraries into their code.</p>
-
-<p><br></p>
-
-<p>I&rsquo;ve been really impressed with it so far and I encourage you to check it out.</p>
-
-<p><br></p>
-
-<p>There is a <a href="https://github.com/gigasquid/libpython-clj-examples">repo with the examples</a> out there if you want to check them out. There is also an example of doing MXNet MNIST classification there as well.</p>
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2020-01-10T19:33:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 10 Jan 2020,  7:33 PM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/deep-learning/'>Deep Learning</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2019/10/11/integrating-deep-learning-with-clojure-dot-spec/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Integrating Deep Learning with clojure.spec"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Integrating Deep Learning with clojure.spec</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2020/01/18/parens-for-pyplot/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Parens for Pyplot">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>Parens for Pyplot</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2020/01/10/hugging-face-gpt-with-clojure/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Hugging Face GPT with Clojure | Squid's Blog</title><meta name=keywords content><meta name=description content="
+A new age in Clojure has dawned. We now have interop access to any python library with libpython-clj.
+
+Let me pause a minute to repeat.
+
+** You can now interop with ANY python library. **
+
+I know. It&rsquo;s overwhelming. It took a bit for me to come to grips with it too.
+
+Let&rsquo;s take an example of something that I&rsquo;ve always wanted to do and have struggled with mightly finding a way to do it in Clojure:
+I want to use the latest cutting edge GPT2 code out there to generate text."><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2020/01/10/hugging-face-gpt-with-clojure/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2020/01/10/hugging-face-gpt-with-clojure/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2020/01/10/hugging-face-gpt-with-clojure/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Hugging Face GPT with Clojure"><meta property="og:description" content="A new age in Clojure has dawned. We now have interop access to any python library with libpython-clj.
+Let me pause a minute to repeat.
+** You can now interop with ANY python library. **
+I know. It’s overwhelming. It took a bit for me to come to grips with it too.
+Let’s take an example of something that I’ve always wanted to do and have struggled with mightly finding a way to do it in Clojure:
+I want to use the latest cutting edge GPT2 code out there to generate text."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-01-10T19:33:00+00:00"><meta property="article:modified_time" content="2020-01-10T19:33:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Hugging Face GPT with Clojure"><meta name=twitter:description content="A new age in Clojure has dawned. We now have interop access to any python library with libpython-clj.
+Let me pause a minute to repeat.
+** You can now interop with ANY python library. **
+I know. It’s overwhelming. It took a bit for me to come to grips with it too.
+Let’s take an example of something that I’ve always wanted to do and have struggled with mightly finding a way to do it in Clojure:
+I want to use the latest cutting edge GPT2 code out there to generate text."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Hugging Face GPT with Clojure","item":"https://gigasquidsoftware.com/blog/2020/01/10/hugging-face-gpt-with-clojure/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Hugging Face GPT with Clojure","name":"Hugging Face GPT with Clojure","description":"\nA new age in Clojure has dawned. We now have interop access to any python library with libpython-clj.\nLet me pause a minute to repeat.\n** You can now interop with ANY python library. **\nI know. It\u0026rsquo;s overwhelming. It took a bit for me to come to grips with it too.\nLet\u0026rsquo;s take an example of something that I\u0026rsquo;ve always wanted to do and have struggled with mightly finding a way to do it in Clojure:\nI want to use the latest cutting edge GPT2 code out there to generate text.\n","keywords":[],"articleBody":"\nA new age in Clojure has dawned. We now have interop access to any python library with libpython-clj.\nLet me pause a minute to repeat.\n** You can now interop with ANY python library. **\nI know. It’s overwhelming. It took a bit for me to come to grips with it too.\nLet’s take an example of something that I’ve always wanted to do and have struggled with mightly finding a way to do it in Clojure:\nI want to use the latest cutting edge GPT2 code out there to generate text.\nRight now, that library is Hugging Face Transformers.\nGet ready. We will wrap that sweet hugging face code in Clojure parens!\nThe setup The first thing you will need to do is to have python3 installed and the two libraries that we need:\npytorch - sudo pip3 install torch hugging face transformers - sudo pip3 install transformers Right now, some of you may not want to proceed. You might have had a bad relationship with Python in the past. It’s ok, remember that some of us had bad relationships with Java, but still lead a happy and fulfilled life with Clojure and still can enjoy it from interop. The same is true with Python. Keep an open mind.\nThere might be some others that don’t want to have anything to do with Python and want to keep your Clojure pure. Well, that is a valid choice. But you are missing out on what the big, vibrant, and chaotic Python Deep Learning ecosystem has to offer.\nFor those of you that are still along for the ride, let’s dive in.\nYour deps file should have just a single extra dependency in it:\n:deps {org.clojure/clojure {:mvn/version \"1.10.1\"} cnuernber/libpython-clj {:mvn/version \"1.30\"}} Diving Into Interop The first thing that we need to do is require the libpython library.\n(ns gigasquid.gpt2 (:require [libpython-clj.require :refer [require-python]] [libpython-clj.python :as py])) It has a very nice require-python syntax that we will use to load the python libraries so that we can use them in our Clojure code.\n(require-python '(transformers)) (require-python '(torch)) Here we are going to follow along with the OpenAI GPT-2 tutorial and translate it into interop code. The original tutorial is here\nLet’s take the python side first:\nimport torch from transformers import GPT2Tokenizer, GPT2LMHeadModel # Load pre-trained model tokenizer (vocabulary) tokenizer = GPT2Tokenizer.from_pretrained('gpt2') This is going to translate in our interop code to:\n(def tokenizer (py/$a transformers/GPT2Tokenizer from_pretrained \"gpt2\")) The py/$a function is used to call attributes on a Python object. We get the transformers/GPTTokenizer object that we have available to use and call from_pretrained on it with the string argument \"gpt2\"\nNext in the Python tutorial is:\n# Encode a text inputs text = \"Who was Jim Henson ? Jim Henson was a\" indexed_tokens = tokenizer.encode(text) # Convert indexed tokens in a PyTorch tensor tokens_tensor = torch.tensor([indexed_tokens]) This is going to translate to Clojure:\n(def text \"Who was Jim Henson ? Jim Henson was a\") ;; encode text input (def indexed-tokens (py/$a tokenizer encode text)) indexed-tokens ;=\u003e[8241, 373, 5395, 367, 19069, 5633, 5395, 367, 19069, 373, 257] ;; convert indexed tokens to pytorch tensor (def tokens-tensor (torch/tensor [indexed-tokens])) tokens-tensor ;; ([[ 8241, 373, 5395, 367, 19069, 5633, 5395, 367, 19069, 373, ;; 257]]) Here we are again using py/$a to call the encode method on the text. However, when we are just calling a function, we can do so directly with (torch/tensor [indexed-tokens]). We can even directly use vectors.\nAgain, you are doing this in the REPL, so you have full power for inspection and display of the python objects. It is a great interop experience - (cider even has doc information on the python functions in the minibuffer)!\nThe next part is to load the model itself. This will take a few minutes, since it has to download a big file from s3 and load it up.\nIn Python:\n# Load pre-trained model (weights) model = GPT2LMHeadModel.from_pretrained('gpt2') In Clojure:\n;;; Load pre-trained model (weights) ;;; Note: this will take a few minutes to download everything (def model (py/$a transformers/GPT2LMHeadModel from_pretrained \"gpt2\")) The next part is to run the model with the tokens and make the predictions.\nHere the code starts to diverge a tiny bit.\nPython:\n# Set the model in evaluation mode to deactivate the DropOut modules # This is IMPORTANT to have reproducible results during evaluation! model.eval() # If you have a GPU, put everything on cuda tokens_tensor = tokens_tensor.to('cuda') model.to('cuda') # Predict all tokens with torch.no_grad(): outputs = model(tokens_tensor) predictions = outputs[0] # get the predicted next sub-word (in our case, the word 'man') predicted_index = torch.argmax(predictions[0, -1, :]).item() predicted_text = tokenizer.decode(indexed_tokens + [predicted_index]) assert predicted_text == 'Who was Jim Henson? Jim Henson was a man' And Clojure\n;;; Set the model in evaluation mode to deactivate the DropOut modules ;;; This is IMPORTANT to have reproducible results during evaluation! (py/$a model eval) ;;; Predict all tokens (def predictions (py/with [r (torch/no_grad)] (first (model tokens-tensor)))) ;;; get the predicted next sub-word\" (def predicted-index (let [last-word-predictions (-\u003e predictions first last) arg-max (torch/argmax last-word-predictions)] (py/$a arg-max item))) predicted-index ;=\u003e582 (py/$a tokenizer decode (-\u003e (into [] indexed-tokens) (conj predicted-index))) ;=\u003e \"Who was Jim Henson? Jim Henson was a man\" The main differences is that we are obviously not using the python array syntax in our code to manipulate the lists. For example, instead of using outputs[0], we are going to use (first outputs). But, other than that, it is a pretty good match, even with the py/with.\nAlso note that we are not making the call to configure it with GPU. This is intentionally left out to keep things simple for people to try it out. Sometimes, GPU configuration can be a bit tricky to set up depending on your system. For this example, you definitely won’t need it since it runs fast enough on cpu. If you do want to do something more complicated later, like fine tuning, you will need to invest some time to get it set up.\nDoing Longer Sequences The next example in the tutorial goes on to cover generating longer text.\nPython\ntokenizer = GPT2Tokenizer.from_pretrained(\"gpt2\") model = GPT2LMHeadModel.from_pretrained('gpt2') generated = tokenizer.encode(\"The Manhattan bridge\") context = torch.tensor([generated]) past = None for i in range(100): print(i) output, past = model(context, past=past) token = torch.argmax(output[0, :]) generated += [token.tolist()] context = token.unsqueeze(0) sequence = tokenizer.decode(generated) print(sequence) And Clojure\n(def tokenizer (py/$a transformers/GPT2Tokenizer from_pretrained \"gpt2\")) (def model (py/$a transformers/GPT2LMHeadModel from_pretrained \"gpt2\")) (def generated (into [] (py/$a tokenizer encode \"The Manhattan bridge\"))) (def context (torch/tensor [generated])) (defn generate-sequence-step [{:keys [generated-tokens context past]}] (let [[output past] (model context :past past) token (-\u003e (torch/argmax (first output))) new-generated (conj generated-tokens (py/$a token tolist))] {:generated-tokens new-generated :context (py/$a token unsqueeze 0) :past past :token token})) (defn decode-sequence [{:keys [generated-tokens]}] (py/$a tokenizer decode generated-tokens)) (loop [step {:generated-tokens generated :context context :past nil} i 10] (if (pos? i) (recur (generate-sequence-step step) (dec i)) (decode-sequence step))) ;=\u003e \"The Manhattan bridge\\n\\nThe Manhattan bridge is a major artery for\" The great thing is once we have it embedded in our code, there is no stopping. We can create a nice function:\n(defn generate-text [starting-text num-of-words-to-predict] (let [tokens (into [] (py/$a tokenizer encode starting-text)) context (torch/tensor [tokens]) result (reduce (fn [r i] (println i) (generate-sequence-step r)) {:generated-tokens tokens :context context :past nil} (range num-of-words-to-predict))] (decode-sequence result))) And finally we can generate some fun text!\n(generate-text \"Clojure is a dynamic, general purpose programming language, combining the approachability and interactive\" 20) ;=\u003e \"Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone\" Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone\nSo true GPT2! So true!\nWrap-up libpython-clj is a really powerful tool that will allow Clojurists to better explore, leverage, and integrate Python libraries into their code.\nI’ve been really impressed with it so far and I encourage you to check it out.\nThere is a repo with the examples out there if you want to check them out. There is also an example of doing MXNet MNIST classification there as well.\n","wordCount":"1374","inLanguage":"en","datePublished":"2020-01-10T19:33:00Z","dateModified":"2020-01-10T19:33:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2020/01/10/hugging-face-gpt-with-clojure/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Hugging Face GPT with Clojure</h1><div class=post-meta><span title='2020-01-10 19:33:00 +0000 UTC'>January 10, 2020</span>&nbsp;·&nbsp;<span>7 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p><img loading=lazy src=https://live.staticflickr.com/65535/49364554561_6e4f4d0a51_w.jpg></p><p>A new age in Clojure has dawned. We now have interop access to any python library with <a href=https://github.com/cnuernber/libpython-clj>libpython-clj</a>.</p><br><p>Let me pause a minute to repeat.</p><br><p>** You can now interop with ANY python library. **</p><br><p>I know. It&rsquo;s overwhelming. It took a bit for me to come to grips with it too.</p><br><p>Let&rsquo;s take an example of something that I&rsquo;ve <em>always</em> wanted to do and have struggled with mightly finding a way to do it in Clojure:<br>I want to use the latest cutting edge GPT2 code out there to generate text.</p><p>Right now, that library is <a href=https://github.com/huggingface/transformers>Hugging Face Transformers</a>.<br><br></p><p>Get ready. We will wrap that sweet hugging face code in Clojure parens!</p><h3 id=the-setup>The setup<a hidden class=anchor aria-hidden=true href=#the-setup>#</a></h3><p>The first thing you will need to do is to have python3 installed and the two libraries that we need:</p><br><ul><li>pytorch - <code>sudo pip3 install torch</code></li><li>hugging face transformers - <code>sudo pip3 install transformers</code></li></ul><br><p>Right now, some of you may not want to proceed. You might have had a bad relationship with Python in the past. It&rsquo;s ok, remember that some of us had bad relationships with Java, but still lead a happy and fulfilled life with Clojure and still can enjoy it from interop. The same is true with Python. Keep an open mind.</p><br><p>There might be some others that don&rsquo;t want to have anything to do with Python and want to keep your Clojure pure. Well, that is a valid choice. But you are missing out on what the big, vibrant, and chaotic Python Deep Learning ecosystem has to offer.</p><br><p>For those of you that are still along for the ride, let&rsquo;s dive in.</p><br><p>Your deps file should have just a single extra dependency in it:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#e6db74>:deps</span> {org.clojure/clojure {<span style=color:#e6db74>:mvn/version</span> <span style=color:#e6db74>&#34;1.10.1&#34;</span>}
+</span></span><span style=display:flex><span>        cnuernber/libpython-clj {<span style=color:#e6db74>:mvn/version</span> <span style=color:#e6db74>&#34;1.30&#34;</span>}}
+</span></span></code></pre></div><h3 id=diving-into-interop>Diving Into Interop<a hidden class=anchor aria-hidden=true href=#diving-into-interop>#</a></h3><p>The first thing that we need to do is require the libpython library.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>ns </span>gigasquid.gpt2
+</span></span><span style=display:flex><span>  (<span style=color:#e6db74>:require</span> [libpython-clj.require <span style=color:#e6db74>:refer</span> [require-python]]
+</span></span><span style=display:flex><span>            [libpython-clj.python <span style=color:#e6db74>:as</span> py]))
+</span></span></code></pre></div><p>It has a very nice <code>require-python</code> syntax that we will use to load the python libraries so that we can use them in our Clojure code.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>(<span style=color:#a6e22e>transformers</span>))
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>(<span style=color:#a6e22e>torch</span>))
+</span></span></code></pre></div><p>Here we are going to follow along with the OpenAI GPT-2 tutorial and translate it into interop code.
+The original tutorial is <a href=https://huggingface.co/transformers/quickstart.html>here</a></p><br><p>Let&rsquo;s take the python side first:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> torch
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> transformers <span style=color:#f92672>import</span> GPT2Tokenizer, GPT2LMHeadModel
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Load pre-trained model tokenizer (vocabulary)</span>
+</span></span><span style=display:flex><span>tokenizer <span style=color:#f92672>=</span> GPT2Tokenizer<span style=color:#f92672>.</span>from_pretrained(<span style=color:#e6db74>&#39;gpt2&#39;</span>)
+</span></span></code></pre></div><p>This is going to translate in our interop code to:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>tokenizer (<span style=color:#a6e22e>py/$a</span> transformers/GPT2Tokenizer from_pretrained <span style=color:#e6db74>&#34;gpt2&#34;</span>))
+</span></span></code></pre></div><p>The <code>py/$a</code> function is used to call attributes on a Python object. We get the <code>transformers/GPTTokenizer</code> object that we have available to use and call <code>from_pretrained</code> on it with the string argument <code>"gpt2"</code></p><br><p>Next in the Python tutorial is:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># Encode a text inputs</span>
+</span></span><span style=display:flex><span>text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Who was Jim Henson ? Jim Henson was a&#34;</span>
+</span></span><span style=display:flex><span>indexed_tokens <span style=color:#f92672>=</span> tokenizer<span style=color:#f92672>.</span>encode(text)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Convert indexed tokens in a PyTorch tensor</span>
+</span></span><span style=display:flex><span>tokens_tensor <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([indexed_tokens])
+</span></span></code></pre></div><p>This is going to translate to Clojure:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>text <span style=color:#e6db74>&#34;Who was Jim Henson ? Jim Henson was a&#34;</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>;; encode text input</span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>indexed-tokens  (<span style=color:#a6e22e>py/$a</span> tokenizer encode text))
+</span></span><span style=display:flex><span>indexed-tokens <span style=color:#75715e>;=&gt;[8241, 373, 5395, 367, 19069, 5633, 5395, 367, 19069, 373, 257]</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; convert indexed tokens to pytorch tensor</span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>tokens-tensor (<span style=color:#a6e22e>torch/tensor</span> [indexed-tokens]))
+</span></span><span style=display:flex><span>tokens-tensor
+</span></span><span style=display:flex><span><span style=color:#75715e>;; ([[ 8241,   373,  5395,   367, 19069,  5633,  5395,   367, 19069,   373,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;    257]])</span>
+</span></span></code></pre></div><p>Here we are again using <code>py/$a</code> to call the <code>encode</code> method on the text. However, when we are just calling a function, we can do so directly with <code>(torch/tensor [indexed-tokens])</code>. We can even directly use vectors.</p><br><p>Again, you are doing this in the REPL, so you have full power for inspection and display of the python objects. It is a great interop experience - (cider even has doc information on the python functions in the minibuffer)!</p><br><p>The next part is to load the model itself. This will take a few minutes, since it has to download a big file from s3 and load it up.</p><br><p>In Python:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># Load pre-trained model (weights)</span>
+</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> GPT2LMHeadModel<span style=color:#f92672>.</span>from_pretrained(<span style=color:#e6db74>&#39;gpt2&#39;</span>)
+</span></span></code></pre></div><p>In Clojure:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#75715e>;;; Load pre-trained model (weights)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; Note: this will take a few minutes to download everything</span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>model (<span style=color:#a6e22e>py/$a</span> transformers/GPT2LMHeadModel from_pretrained <span style=color:#e6db74>&#34;gpt2&#34;</span>))
+</span></span></code></pre></div><p>The next part is to run the model with the tokens and make the predictions.</p><br><p>Here the code starts to diverge a tiny bit.</p><br><p>Python:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># Set the model in evaluation mode to deactivate the DropOut modules</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># This is IMPORTANT to have reproducible results during evaluation!</span>
+</span></span><span style=display:flex><span>model<span style=color:#f92672>.</span>eval()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># If you have a GPU, put everything on cuda</span>
+</span></span><span style=display:flex><span>tokens_tensor <span style=color:#f92672>=</span> tokens_tensor<span style=color:#f92672>.</span>to(<span style=color:#e6db74>&#39;cuda&#39;</span>)
+</span></span><span style=display:flex><span>model<span style=color:#f92672>.</span>to(<span style=color:#e6db74>&#39;cuda&#39;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Predict all tokens</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>no_grad():
+</span></span><span style=display:flex><span>    outputs <span style=color:#f92672>=</span> model(tokens_tensor)
+</span></span><span style=display:flex><span>    predictions <span style=color:#f92672>=</span> outputs[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># get the predicted next sub-word (in our case, the word &#39;man&#39;)</span>
+</span></span><span style=display:flex><span>predicted_index <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>argmax(predictions[<span style=color:#ae81ff>0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>, :])<span style=color:#f92672>.</span>item()
+</span></span><span style=display:flex><span>predicted_text <span style=color:#f92672>=</span> tokenizer<span style=color:#f92672>.</span>decode(indexed_tokens <span style=color:#f92672>+</span> [predicted_index])
+</span></span><span style=display:flex><span><span style=color:#66d9ef>assert</span> predicted_text <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;Who was Jim Henson? Jim Henson was a man&#39;</span>
+</span></span></code></pre></div><p>And Clojure</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#75715e>;;; Set the model in evaluation mode to deactivate the DropOut modules</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; This is IMPORTANT to have reproducible results during evaluation!</span>
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>py/$a</span> model eval)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; Predict all tokens</span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>predictions (<span style=color:#a6e22e>py/with</span> [r (<span style=color:#a6e22e>torch/no_grad</span>)]
+</span></span><span style=display:flex><span>                          (first (<span style=color:#a6e22e>model</span> tokens-tensor))))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;; get the predicted next sub-word&#34;</span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>predicted-index (<span style=color:#66d9ef>let </span>[last-word-predictions (-&gt; predictions first last)
+</span></span><span style=display:flex><span>                           arg-max (<span style=color:#a6e22e>torch/argmax</span> last-word-predictions)]
+</span></span><span style=display:flex><span>                       (<span style=color:#a6e22e>py/$a</span> arg-max item)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>predicted-index <span style=color:#75715e>;=&gt;582</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>py/$a</span> tokenizer decode (-&gt; (into [] indexed-tokens)
+</span></span><span style=display:flex><span>                            (conj predicted-index)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;=&gt; &#34;Who was Jim Henson? Jim Henson was a man&#34;</span>
+</span></span></code></pre></div><p>The main differences is that we are obviously not using the python array syntax in our code to manipulate the lists. For example, instead of using <code>outputs[0]</code>, we are going to use <code>(first outputs)</code>. But, other than that, it is a pretty good match, even with the <code>py/with</code>.</p><p>Also note that we are not making the call to configure it with GPU. This is intentionally left out to keep things simple for people to try it out. Sometimes, GPU configuration can be a bit tricky to set up depending on your system. For this example, you definitely won&rsquo;t need it since it runs fast enough on cpu. If you do want to do something more complicated later, like fine tuning, you will need to invest some time to get it set up.</p><h3 id=doing-longer-sequences>Doing Longer Sequences<a hidden class=anchor aria-hidden=true href=#doing-longer-sequences>#</a></h3><p>The next example in the tutorial goes on to cover generating longer text.</p><br><p>Python</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>tokenizer <span style=color:#f92672>=</span> GPT2Tokenizer<span style=color:#f92672>.</span>from_pretrained(<span style=color:#e6db74>&#34;gpt2&#34;</span>)
+</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> GPT2LMHeadModel<span style=color:#f92672>.</span>from_pretrained(<span style=color:#e6db74>&#39;gpt2&#39;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>generated <span style=color:#f92672>=</span> tokenizer<span style=color:#f92672>.</span>encode(<span style=color:#e6db74>&#34;The Manhattan bridge&#34;</span>)
+</span></span><span style=display:flex><span>context <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([generated])
+</span></span><span style=display:flex><span>past <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>100</span>):
+</span></span><span style=display:flex><span>    print(i)
+</span></span><span style=display:flex><span>    output, past <span style=color:#f92672>=</span> model(context, past<span style=color:#f92672>=</span>past)
+</span></span><span style=display:flex><span>    token <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>argmax(output[<span style=color:#ae81ff>0</span>, :])
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    generated <span style=color:#f92672>+=</span> [token<span style=color:#f92672>.</span>tolist()]
+</span></span><span style=display:flex><span>    context <span style=color:#f92672>=</span> token<span style=color:#f92672>.</span>unsqueeze(<span style=color:#ae81ff>0</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>sequence <span style=color:#f92672>=</span> tokenizer<span style=color:#f92672>.</span>decode(generated)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>print(sequence)
+</span></span></code></pre></div><p>And Clojure</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>tokenizer (<span style=color:#a6e22e>py/$a</span> transformers/GPT2Tokenizer from_pretrained <span style=color:#e6db74>&#34;gpt2&#34;</span>))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>model (<span style=color:#a6e22e>py/$a</span> transformers/GPT2LMHeadModel from_pretrained <span style=color:#e6db74>&#34;gpt2&#34;</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>generated (into [] (<span style=color:#a6e22e>py/$a</span> tokenizer encode <span style=color:#e6db74>&#34;The Manhattan bridge&#34;</span>)))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>context (<span style=color:#a6e22e>torch/tensor</span> [generated]))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>defn </span>generate-sequence-step [{<span style=color:#e6db74>:keys</span> [generated-tokens context past]}]
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>let </span>[[output past] (<span style=color:#a6e22e>model</span> context <span style=color:#e6db74>:past</span> past)
+</span></span><span style=display:flex><span>        token (-&gt; (<span style=color:#a6e22e>torch/argmax</span> (first output)))
+</span></span><span style=display:flex><span>        new-generated  (conj generated-tokens (<span style=color:#a6e22e>py/$a</span> token tolist))]
+</span></span><span style=display:flex><span>    {<span style=color:#e6db74>:generated-tokens</span> new-generated
+</span></span><span style=display:flex><span>     <span style=color:#e6db74>:context</span> (<span style=color:#a6e22e>py/$a</span> token unsqueeze <span style=color:#ae81ff>0</span>)
+</span></span><span style=display:flex><span>     <span style=color:#e6db74>:past</span> past
+</span></span><span style=display:flex><span>     <span style=color:#e6db74>:token</span> token}))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>defn </span>decode-sequence [{<span style=color:#e6db74>:keys</span> [generated-tokens]}]
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>py/$a</span> tokenizer decode generated-tokens))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>loop </span>[step {<span style=color:#e6db74>:generated-tokens</span> generated
+</span></span><span style=display:flex><span>             <span style=color:#e6db74>:context</span> context
+</span></span><span style=display:flex><span>             <span style=color:#e6db74>:past</span> nil}
+</span></span><span style=display:flex><span>       i <span style=color:#ae81ff>10</span>]
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>if </span>(pos? i)
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>recur</span> (<span style=color:#a6e22e>generate-sequence-step</span> step) (dec i))
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>decode-sequence</span> step)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;=&gt; &#34;The Manhattan bridge\n\nThe Manhattan bridge is a major artery for&#34;</span>
+</span></span></code></pre></div><p>The great thing is once we have it embedded in our code, there is no stopping. We can create a nice function:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>defn </span>generate-text [starting-text num-of-words-to-predict]
+</span></span><span style=display:flex><span>  (<span style=color:#66d9ef>let </span>[tokens (into [] (<span style=color:#a6e22e>py/$a</span> tokenizer encode starting-text))
+</span></span><span style=display:flex><span>        context (<span style=color:#a6e22e>torch/tensor</span> [tokens])
+</span></span><span style=display:flex><span>        result (<span style=color:#a6e22e>reduce</span>
+</span></span><span style=display:flex><span>                (<span style=color:#66d9ef>fn </span>[r i]
+</span></span><span style=display:flex><span>                  (println i)
+</span></span><span style=display:flex><span>                  (<span style=color:#a6e22e>generate-sequence-step</span> r))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                {<span style=color:#e6db74>:generated-tokens</span> tokens
+</span></span><span style=display:flex><span>                 <span style=color:#e6db74>:context</span> context
+</span></span><span style=display:flex><span>                 <span style=color:#e6db74>:past</span> nil}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                (range num-of-words-to-predict))]
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>decode-sequence</span> result)))
+</span></span></code></pre></div><p>And finally we can generate some fun text!</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>generate-text</span> <span style=color:#e6db74>&#34;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive&#34;</span> <span style=color:#ae81ff>20</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;=&gt; &#34;Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone&#34;</span>
+</span></span></code></pre></div><p><strong>Clojure is a dynamic, general purpose programming language, combining the approachability and interactive. It is a language that is easy to learn and use, and is easy to use for anyone</strong></p><br><p>So true GPT2! So true!</p><h3 id=wrap-up>Wrap-up<a hidden class=anchor aria-hidden=true href=#wrap-up>#</a></h3><p>libpython-clj is a really powerful tool that will allow Clojurists to better explore, leverage, and integrate Python libraries into their code.</p><br><p>I&rsquo;ve been really impressed with it so far and I encourage you to check it out.</p><br><p>There is a <a href=https://github.com/gigasquid/libpython-clj-examples>repo with the examples</a> out there if you want to check them out. There is also an example of doing MXNet MNIST classification there as well.</p></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2020/01/18/parens-for-pyplot/><span class=title>« Prev</span>
+<span>Parens for Pyplot</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2019/10/11/integrating-deep-learning-with-clojure.spec/><span class=title>Next »</span>
+<span>Integrating Deep Learning with clojure.spec</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

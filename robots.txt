@@ -1,4 +1,3 @@
 User-agent: *
-Disallow: 
-
-Sitemap: http://gigasquid.github.io/sitemap.xml 
+Disallow:
+Sitemap: https://gigasquidsoftware.com/sitemap.xml

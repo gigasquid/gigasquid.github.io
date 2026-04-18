@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>AR Drones on Squid's Blog</title><link>https://gigasquidsoftware.com/categories/ar-drones/</link><description>Recent content in AR Drones on Squid's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 05 Sep 2013 15:35:00 +0000</lastBuildDate><atom:link href="https://gigasquidsoftware.com/categories/ar-drones/atom.xml" rel="self" type="application/rss+xml"/><item><title>Controlling Multiple Drones with Clojure and Goals and Beliefs</title><link>https://gigasquidsoftware.com/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs/</link><pubDate>Thu, 05 Sep 2013 15:35:00 +0000</pubDate><guid>https://gigasquidsoftware.com/blog/2013/09/05/controlling-multiple-drones-with-clojure-and-goals-and-beliefs/</guid><description>&lt;h2 id="how-to-control-multiple-drones-with-clojure"&gt;How to Control Multiple Drones with Clojure&lt;/h2&gt;
+&lt;p&gt;The &lt;a href="https://github.com/gigasquid/clj-drone"&gt;clj-drone&lt;/a&gt; library now
+has multi-drone support! You can now send multiple drones commands,
+receive their navigation data, and even have them perform their
+actions autonomously with goals and beliefs.&lt;/p&gt;
+&lt;p&gt;It takes a bit of extra setup to control more than one drone. We need to assign them each an
+ip and get them talking as an adhoc network.
+&lt;a href="https://twitter.com/jimweirich"&gt;Jim Weirich&lt;/a&gt; creating a neat little
+script to run on the drone to do just this. Here are the
+instructions:&lt;/p&gt;</description></item></channel></rss>

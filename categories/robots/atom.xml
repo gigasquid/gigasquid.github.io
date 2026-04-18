@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Robots on Squid's Blog</title><link>https://gigasquidsoftware.com/categories/robots/</link><description>Recent content in Robots on Squid's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 20 Mar 2014 21:00:00 +0000</lastBuildDate><atom:link href="https://gigasquidsoftware.com/categories/robots/atom.xml" rel="self" type="application/rss+xml"/><item><title>World Domination with Hexapods and Clojure</title><link>https://gigasquidsoftware.com/blog/2014/03/20/world-domination-with-hexapods-and-clojure/</link><pubDate>Thu, 20 Mar 2014 21:00:00 +0000</pubDate><guid>https://gigasquidsoftware.com/blog/2014/03/20/world-domination-with-hexapods-and-clojure/</guid><description>&lt;p&gt;Once you have your &lt;a href="http://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/"&gt;hexapod assembled and running using the hand held
+controller&lt;/a&gt;,
+of course, your thoughts naturally turn to world domination.&lt;/p&gt;
+&lt;h2 id="the-most-powerful-tool-in-the-world-is-the-clojure-repl"&gt;The most powerful tool in the world is the Clojure REPL&lt;/h2&gt;
+&lt;p&gt;World domination requires the most powerful tools available. That of
+course calls for Clojure and the Clojure REPL. I recommend Emacs
+as the editor of choice of such an endeavor. However, it if you are
+content with city, state, or single country domination, other editors
+that support Clojure are also fine.&lt;/p&gt;</description></item><item><title>Walking with Hexapods</title><link>https://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/</link><pubDate>Wed, 19 Mar 2014 21:06:00 +0000</pubDate><guid>https://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/</guid><description>&lt;p&gt;&lt;img loading="lazy" src="http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Here we see the &lt;a href="http://www.trossenrobotics.com/phantomx-ax-hexapod.aspx"&gt;PhantomX Hexapod&lt;/a&gt; thriving in the natural habitat of a
+cozy, climate controlled, modern house. But there was a time before
+the hexapod. In particular, there was a time of many hexapod parts
+and a high level software developer that somehow, despite her natural
+lack of mechanical skills, managed to bring it to life. This blog post
+endeavors to chronicle the high and low points of this journey. And
+perhaps, will make it easier for any other brave souls that would like
+to bring the &lt;em&gt;Age of Hexapods&lt;/em&gt; into their homes.&lt;/p&gt;</description></item></channel></rss>

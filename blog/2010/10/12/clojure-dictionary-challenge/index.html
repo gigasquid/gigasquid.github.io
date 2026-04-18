@@ -1,376 +1,53 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Clojure Dictionary Challenge - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/">
-  <meta property="og:title" content="Clojure Dictionary Challenge - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-10-12T03:11:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 12 Oct 2010,  3:11 AM</time>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Clojure Dictionary Challenge
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p>There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file.  Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution.  Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.</p>
-
-<p>Armed with Stuart Halloway&rsquo;s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission.</p>
-
-<p>Starting small – I decided to tackle the issue of finding consecutive consonants in a word.  I found that re-seq handles regex very nicely</p>
-
-<pre><code>user=&gt;  (re-seq #"[^aeiou]{2,}" "batty") 
-("tty")
-</code></pre>
-
-<p>Building on … let&rsquo;s find the number of letters in this word.  Since we have a sequence – we need to get the first element off of it, convert it to a string and find the length of it</p>
-
-<pre><code>user=&gt;  (.length (str (first (re-seq #"[^aeiou]{2,}" "batty"))))
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Clojure Dictionary Challenge | Squid's Blog</title><meta name=keywords content="Clojure,Development"><meta name=description content="There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file.  Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution.  Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.
+Armed with Stuart Halloway&rsquo;s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission."><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2010/10/12/clojure-dictionary-challenge/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2010/10/12/clojure-dictionary-challenge/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2010/10/12/clojure-dictionary-challenge/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Clojure Dictionary Challenge"><meta property="og:description" content="There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file. Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution. Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.
+Armed with Stuart Halloway’s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2010-10-12T03:11:52+00:00"><meta property="article:modified_time" content="2010-10-12T03:11:52+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Clojure Dictionary Challenge"><meta name=twitter:description content="There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file. Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution. Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.
+Armed with Stuart Halloway’s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Clojure Dictionary Challenge","item":"https://gigasquidsoftware.com/blog/2010/10/12/clojure-dictionary-challenge/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Clojure Dictionary Challenge","name":"Clojure Dictionary Challenge","description":"There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file. Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution. Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.\nArmed with Stuart Halloway\u0026rsquo;s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission.\n","keywords":["Clojure","Development"],"articleBody":"There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file. Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution. Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.\nArmed with Stuart Halloway’s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission.\nStarting small – I decided to tackle the issue of finding consecutive consonants in a word. I found that re-seq handles regex very nicely\nuser=\u003e (re-seq #\"[^aeiou]{2,}\" \"batty\") (\"tty\") Building on … let’s find the number of letters in this word. Since we have a sequence – we need to get the first element off of it, convert it to a string and find the length of it\nuser=\u003e (.length (str (first (re-seq #\"[^aeiou]{2,}\" \"batty\")))) 3 Not bad – but let’s turn this into a function now\nuser=\u003e (defn count-cons [s] (.length (str (first (re-seq #\"[^aeiou]{2,}\" s)))) ) #'user/count-cons Now we can call the function directly\nuser=\u003e (count-cons \"batty\") 3 Alright – we are making progress. Next step, we need to be able to compare two words and see which has the bigger consonant count and return that. For this, we will need a little “if” magic.\nuser=\u003e (defn compare-words [s1,s2] (if (\u003e (count-cons s1) (count-cons s2)) s1 s2)) #'user/compare-words Let’s test it out\n#'user/compare-words user=\u003e (compare-words \"batty\" \"bat\") \"batty\" user=\u003e (compare-words \"bat\" \"batty\") \"batty\" Oh, yes, we are getting to the good part now. Since we have a function that we can call on two arguments and give us one back that we can work with – we are ready to pull out the big guns …. reduce!\nuser=\u003e (reduce compare-words [\"vat\", \"batty\", \"cars\"]) \"batty\" Yeah! Next we just need to feed it a file. For this, after doing some research, I used the duck-streams library – you need to load it in using\nuser=\u003e (use '[clojure.contrib.duck-streams :only (spit read-lines)]) nil We open the file and read the lines and feed it to our function\nuser=\u003e (reduce compare-words (read-lines \"/usr/share/dict/words\")) \"Ångström\" Yes, my regex needs some tweaking - but for this exercise, I am content.\nWhen you just have the working code. It is actually quite concise:\n;Counting consecutive consonants (use '[clojure.contrib.duck-streams :only (spit read-lines)]) (defn count-cons [s] (.length (str (first (re-seq #\"[^aeiou]{2,}\" s)))) ) (defn compare-words [s1,s2] (if (\u003e (count-cons s1) (count-cons s2)) s1 s2)) (reduce compare-words (read-lines \"/usr/share/dict/words\")) All in all, a fun evening trying to think functionally.\n","wordCount":"433","inLanguage":"en","datePublished":"2010-10-12T03:11:52Z","dateModified":"2010-10-12T03:11:52Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2010/10/12/clojure-dictionary-challenge/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Clojure Dictionary Challenge</h1><div class=post-meta><span title='2010-10-12 03:11:52 +0000 +0000'>October 12, 2010</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p>There was a question today on Twitter about how to go about finding the word with the most consecutive consonants in the dictionary file. Of course, being a typical developer, when presented with a problem – I am usually not satisfied until I find a solution. Since I am interested in learning Clojure, I thought I would try to solve this problem functionally.</p><p>Armed with Stuart Halloway&rsquo;s “Programming Clojure” and trusty Google by my side, I embarked on my first Clojure mission.</p><p>Starting small – I decided to tackle the issue of finding consecutive consonants in a word. I found that re-seq handles regex very nicely</p><pre><code>user=&gt;  (re-seq #&quot;[^aeiou]{2,}&quot; &quot;batty&quot;) 
+(&quot;tty&quot;)
+</code></pre><p>Building on … let&rsquo;s find the number of letters in this word. Since we have a sequence – we need to get the first element off of it, convert it to a string and find the length of it</p><pre><code>user=&gt;  (.length (str (first (re-seq #&quot;[^aeiou]{2,}&quot; &quot;batty&quot;))))
 3
-</code></pre>
-
-<p>Not bad – but let&rsquo;s turn this into a function now</p>
-
-<pre><code>user=&gt; (defn count-cons [s]
-   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+</code></pre><p>Not bad – but let&rsquo;s turn this into a function now</p><pre><code>user=&gt; (defn count-cons [s]
+   (.length (str (first  (re-seq #&quot;[^aeiou]{2,}&quot; s))))
  )
 #'user/count-cons
-</code></pre>
-
-<p>Now we can call the function directly</p>
-
-<pre><code>user=&gt; (count-cons "batty")
+</code></pre><p>Now we can call the function directly</p><pre><code>user=&gt; (count-cons &quot;batty&quot;)
 3
-</code></pre>
-
-<p>Alright – we are making progress.  Next step, we need to be able to compare two words and see which has the bigger consonant count and return that.  For this, we will need a little “if” magic.</p>
-
-<pre><code>user=&gt; (defn compare-words [s1,s2]
+</code></pre><p>Alright – we are making progress. Next step, we need to be able to compare two words and see which has the bigger consonant count and return that. For this, we will need a little “if” magic.</p><pre><code>user=&gt; (defn compare-words [s1,s2]
 (if (&gt; (count-cons s1) (count-cons s2))
   s1 s2))
 #'user/compare-words
-</code></pre>
-
-<p>Let&rsquo;s test it out</p>
-
-<pre><code>#'user/compare-words
-user=&gt; (compare-words "batty" "bat")
-"batty"
-user=&gt; (compare-words "bat" "batty")
-"batty"
-</code></pre>
-
-<p>Oh, yes, we are getting to the good part now.  Since we have a function that we can call on two arguments and give us one back that we can work with – we are ready to pull out the big guns …. reduce!</p>
-
-<pre><code>user=&gt; (reduce compare-words ["vat", "batty", "cars"])
-"batty"
-</code></pre>
-
-<p>Yeah!  Next we just need to feed it a file.  For this, after doing some research, I used the duck-streams library – you need to load it in using</p>
-
-<pre><code>user=&gt; (use '[clojure.contrib.duck-streams :only (spit read-lines)])
+</code></pre><p>Let&rsquo;s test it out</p><pre><code>#'user/compare-words
+user=&gt; (compare-words &quot;batty&quot; &quot;bat&quot;)
+&quot;batty&quot;
+user=&gt; (compare-words &quot;bat&quot; &quot;batty&quot;)
+&quot;batty&quot;
+</code></pre><p>Oh, yes, we are getting to the good part now. Since we have a function that we can call on two arguments and give us one back that we can work with – we are ready to pull out the big guns …. reduce!</p><pre><code>user=&gt; (reduce compare-words [&quot;vat&quot;, &quot;batty&quot;, &quot;cars&quot;])
+&quot;batty&quot;
+</code></pre><p>Yeah! Next we just need to feed it a file. For this, after doing some research, I used the duck-streams library – you need to load it in using</p><pre><code>user=&gt; (use '[clojure.contrib.duck-streams :only (spit read-lines)])
 
 nil
-</code></pre>
+</code></pre><p>We open the file and read the lines and feed it to our function</p><pre><code>user=&gt; (reduce compare-words (read-lines &quot;/usr/share/dict/words&quot;))
 
-<p>We open the file and read the lines and feed it to our function</p>
-
-<pre><code>user=&gt; (reduce compare-words (read-lines "/usr/share/dict/words"))
-
-"Ångström"
-</code></pre>
-
-<p>Yes, my regex needs some tweaking - but for this exercise, I am content.</p>
-
-<p>When you just have the working code.  It is actually quite concise:</p>
-
-<pre><code>;Counting consecutive consonants
+&quot;Ångström&quot;
+</code></pre><p>Yes, my regex needs some tweaking - but for this exercise, I am content.</p><p>When you just have the working code. It is actually quite concise:</p><pre><code>;Counting consecutive consonants
 
 (use '[clojure.contrib.duck-streams :only (spit read-lines)])
 
 (defn count-cons [s]
-   (.length (str (first  (re-seq #"[^aeiou]{2,}" s))))
+   (.length (str (first  (re-seq #&quot;[^aeiou]{2,}&quot; s))))
  )
 
 (defn compare-words [s1,s2]
 (if (&gt; (count-cons s1) (count-cons s2))
   s1 s2))
 
-(reduce compare-words (read-lines "/usr/share/dict/words"))
-</code></pre>
-
-<p>All in all, a fun evening trying to think functionally.</p>
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">gigasquid</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2010/10/12/clojure-dictionary-challenge/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-10-12T03:11:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">Tue 12 Oct 2010,  3:11 AM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/development/'>Development</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2010/09/13/agile-software-lessons-from-ballet/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Agile Software Lessons from Ballet"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Agile Software Lessons from Ballet</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2010/11/20/zen-and-zombies/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Zen and Zombies - Adventures in Ruby">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>Zen and Zombies - Adventures in Ruby</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+(reduce compare-words (read-lines &quot;/usr/share/dict/words&quot;))
+</code></pre><p>All in all, a fun evening trying to think functionally.</p></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2010/11/20/zen-and-zombies-adventures-in-ruby/><span class=title>« Prev</span>
+<span>Zen and Zombies - Adventures in Ruby</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2010/09/13/agile-software-lessons-from-ballet/><span class=title>Next »</span>
+<span>Agile Software Lessons from Ballet</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

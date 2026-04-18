@@ -1,268 +1,86 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>A Taste of the Star Programming Language - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language/">
-  <meta property="og:title" content="A Taste of the Star Programming Language - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-06-11T10:38:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 11 Jun 2014, 10:38 AM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        A Taste of the Star Programming Language
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p>A while ago, I was <a href="http://gigasquidsoftware.com/blog/2013/05/01/growing-a-language-with-haskell-and-instaparse/">exploring creating a programming language with
-Instaparse</a>.
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>A Taste of the Star Programming Language | Squid's Blog</title><meta name=keywords content><meta name=description content="A while ago, I was exploring creating a programming language with
+Instaparse.
 I ended up exploring some concepts of Speech Acts proposed by John
 McCarthy by creating my first toy language called
-<a href="http://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/">Babar</a>.
+Babar.
 Shortly after posting a blog about it, I got an email from someone
 saying that I might be interested in a full blown, real programming
 language that also incorporated Speech Acts.  I happily started
-composing an reply to the email that started off with</p>
-
-<pre><code>That is so cool! ...
-</code></pre>
-
-<p>Then I realized that the author of the email and language was none
+composing an reply to the email that started off with"><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2014/06/11/a-taste-of-the-star-programming-language/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2014/06/11/a-taste-of-the-star-programming-language/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2014/06/11/a-taste-of-the-star-programming-language/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="A Taste of the Star Programming Language"><meta property="og:description" content="A while ago, I was exploring creating a programming language with Instaparse. I ended up exploring some concepts of Speech Acts proposed by John McCarthy by creating my first toy language called Babar. Shortly after posting a blog about it, I got an email from someone saying that I might be interested in a full blown, real programming language that also incorporated Speech Acts. I happily started composing an reply to the email that started off with"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2014-06-11T10:38:00+00:00"><meta property="article:modified_time" content="2014-06-11T10:38:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="A Taste of the Star Programming Language"><meta name=twitter:description content="A while ago, I was exploring creating a programming language with Instaparse. I ended up exploring some concepts of Speech Acts proposed by John McCarthy by creating my first toy language called Babar. Shortly after posting a blog about it, I got an email from someone saying that I might be interested in a full blown, real programming language that also incorporated Speech Acts. I happily started composing an reply to the email that started off with"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"A Taste of the Star Programming Language","item":"https://gigasquidsoftware.com/blog/2014/06/11/a-taste-of-the-star-programming-language/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"A Taste of the Star Programming Language","name":"A Taste of the Star Programming Language","description":"A while ago, I was exploring creating a programming language with Instaparse. I ended up exploring some concepts of Speech Acts proposed by John McCarthy by creating my first toy language called Babar. Shortly after posting a blog about it, I got an email from someone saying that I might be interested in a full blown, real programming language that also incorporated Speech Acts. I happily started composing an reply to the email that started off with\n","keywords":[],"articleBody":"A while ago, I was exploring creating a programming language with Instaparse. I ended up exploring some concepts of Speech Acts proposed by John McCarthy by creating my first toy language called Babar. Shortly after posting a blog about it, I got an email from someone saying that I might be interested in a full blown, real programming language that also incorporated Speech Acts. I happily started composing an reply to the email that started off with\nThat is so cool! ... Then I realized that the author of the email and language was none other than Frank McCabe, one of the designers of the Go! programming language (not to be confused with Google Go). My brain froze while it was thinking\n\"OMG!!!! Frank McCabe, a real language designer, just emailed me!\". This unfortunately, made the rest of my email reply sound something like this\nFrank, That is so cool! herp derp derp Speech Acts herp derp John McCarthy derp... His programming language is the Star Programming Language. It was originally developed for use at a company that he worked at called Starview. It has since been open sourced and moved to git. I finally had a bit a spare time and I had been itching to give Star a look. To my pleasant surprise, despite my initial fumbling email impression, Frank was open a friendly to get me started in it. I have only scratched the surface in exploring the language, but I wanted to share my initial impressions, as well as point you to some beginner katas that I put together, so that you could join in the fun.\nCrash Overview Star is a strongly typed, functional language. It is not a pure functional language because is allows assignment and stateful objects, but the language is designed in a way that immutable functional programming is encouraged. The feel of the language is concise but human readable.\nStar is a coherent, general-purpose programming language that combines elements from a wide variety of existing languages as well as adding innovative elements of its own. Star inherits func- tional programming in general, a Haskell-style type system, an F#- style monad for parallel computations, and Concurrent ML for or- chestrating concurrent and parallel applications.\n– Feel different on the Java platform: the star programming language http://dl.acm.org/citation.cfm?id=2500837\u0026dl=ACM\u0026coll=DL\u0026CFID=354902651\u0026CFTOKEN=90319052\nHello World The best way to get a feel for it is to look at a few examples. Of course, let’s start off with Hello World.\nmain() do { logMsg(info, \"Hello World\"); } Another way of doing our Hello World is in a worksheet. This feature is still in the works, but it will likely turn into a replacement for a REPL, being integrated into the editor. The import statement will also soon not be required. But a nice feature of using the worksheeet is that is a combined module and transcript of the session.\nimport worksheet worksheet{ show \"hello world\" } Here is what the output looks like:\nJun 11, 2014 11:21:09 AM INFO: \"hello world\" -\u003e \"hello world\" at 4 info: execution took 0.053684428 Pattern Matching Let’s take a look at another example. This time a naive fib function with pattern matching.\nimport worksheet worksheet{ fib(0) is 0 fib(1) is 1 fib(n) is fib(n-1) + fib(n-2) assert fib(0)=0; assert fib(1)=1; assert fib(3)=2; assert fib(10)=55; } Notice how the fib function is defined with pattern matching. Also how the keyword “is” is used instead of an “=” to make the code flow more readable (IMO).\nThe output of running the program is:\nJun 11, 2014 3:32:38 PM INFO: fib(0) = 0 ok at 9 Jun 11, 2014 3:32:38 PM INFO: fib(1) = 1 ok at 10 Jun 11, 2014 3:32:38 PM INFO: fib(3) = 2 ok at 11 Jun 11, 2014 3:32:38 PM INFO: fib(10) = 55 ok at 12 info: execution took 0.039725132 Pattern Matching with Guards The declaration of pattern matching for functions can also include guards like in this fizzbuzz example\nfizzbuzz has type (integer) =\u003e string fizzbuzz(N) where N%3=0 and N%5=0 is \"fizzbuzz\" fizzbuzz(N) where N%3=0 is \"fizz\" fizzbuzz(N) where N%5=0 is \"buzz\" fizzbuzz(N) default is \"$N\" Also note the type declaration. The type declaration is optional. The complier is smart enough to figure it out. Sometimes it is more readable to include the type declaration. But, it can be left out for more concise code.\nCons Lists One of the important collection types are cons lists. These are lists that you add to the front of and are destructed as the first element and then the rest of the list. To construct a cons list:\ntestNumbers is cons of {1;2;3;4;5;6;7;8;9;10;11;12;13;14;15} To use a cons list in a function with pattern matching:\nlistFizzBuzz has type (cons of integer) =\u003e cons of string listFizzBuzz(nil) is nil listFizzBuzz(cons(x, xs)) is cons(fizzbuzz(x), listFizzBuzz(xs)) The function listFizzBuzz takes in a list of integers and turns it into a list of strings using the fizzbuzz function. If we evaluate:\ntestNumbers is cons of {1;2;3;4;5;6;7;8;9;10;11;12;13;14;15} result is listFizzBuzz(testNumbers) The result will look like\ncons of {\"1\";\"2\";\"fizz\";\"4\";\"buzz\";\"fizz\";\"7\";\"8\";\"fizz\";\"buzz\";\"11\";\"fizz\";\"13\";\"14\";\"fizzbuzz\"} There are other collection types such as arrays and relations, (which are really cool - you can do queries on them like a database), but I haven’t explored them well enough to really talk about yet.\nActors and Speech Acts Star has actors that use three Speech Acts: Notify, Request, and Query. The actors themselves can also be concurrent. I explored the Speech Act/ Actor model with an example from John McCarthy’s Elephant 2000 paper, which is a Airline Reservation system.\nTo use the notify speech act, you need to define what type the notifications are on the actors channel. In my case, the notifications are either going to be a book(string) method, or a cancel(string) method. To book a reservation for a person or cancel it.\ntype tx is book(string) or cancel(string); The actor is defined using:\nflight((FlightName has type string), (MaxPeople has type integer)) is actor{ var flightStatus := \"open\"; setFlightStatus(s) do { flightStatus := s }; on book(pname) on Tx do logMsg(info,\"booking $pname on #FlightName's flight: max #MaxPeople current $(size(plist))\"); on book(pname) on Tx where size(plist) \u003c MaxPeople do extend plist with pname; on book(pname) on Tx where size(plist) \u003e= MaxPeople do logMsg(info, \"sorry .. the flight is full\"); on book(pname) on Tx where flightStatus != \"open\" do logMsg(info, \"sorry .. the flight is no longer open\"); on cancel(pname) on Tx do delete (X where X = pname) in plist; getPassengerList has type () =\u003e list of string; getPassengerList() is plist; } There is some extra things in the code, but for right now, look at the book and cancel methods. These are the functions that will be called when the actor is notified like this:\nF is flight(\"flight123\", 5) notify F with book(\"Carin\") on Tx notify F with book(\"Bob\") on Tx To query the actor we use :\nx is query F's getPassengerList with getPassengerList() To use a request with the actor we use\nrequest F's setFlightStatus to setFlightStatus(\"closed\") Go Explore I have only scratched the surface of the language, but I have had a great time. I invite you to come take a look.\nWarning. Only the brave need apply. There is no StackOverflow. There is no user group or IRC channel yet. These are green fields to be discovered in the Open Source world. If it appeals to you as much as me, jump on in. Here are a few resources to get you going:\nStar-Lang Katas: Clone the repo or fork the repos. It has a shell script to compile and run the star programs. It also has a emacs mode plugin and a reference pdf. The most important part is that it has a template of katas ready for your to solve. Your challenge: uncomment the assertion and make the code pass. My solutions are in the solutions branch when you are done. If you finish all of them and want more, consider creating some and submitting a pull request :)\nI mentioned it earlier, but there is a great overview paper on the language itself here.\nFinally, here is the repo of the Star Language itself https://github.com/fmccabe/star. Checkout out the tests. There are tons of sample star programs that cover the language’s features.\n","wordCount":"1371","inLanguage":"en","datePublished":"2014-06-11T10:38:00Z","dateModified":"2014-06-11T10:38:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2014/06/11/a-taste-of-the-star-programming-language/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">A Taste of the Star Programming Language</h1><div class=post-meta><span title='2014-06-11 10:38:00 +0000 UTC'>June 11, 2014</span>&nbsp;·&nbsp;<span>7 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p>A while ago, I was <a href=http://gigasquidsoftware.com/blog/2013/05/01/growing-a-language-with-haskell-and-instaparse/>exploring creating a programming language with
+Instaparse</a>.
+I ended up exploring some concepts of Speech Acts proposed by John
+McCarthy by creating my first toy language called
+<a href=http://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/>Babar</a>.
+Shortly after posting a blog about it, I got an email from someone
+saying that I might be interested in a full blown, real programming
+language that also incorporated Speech Acts. I happily started
+composing an reply to the email that started off with</p><pre><code>That is so cool! ...
+</code></pre><p>Then I realized that the author of the email and language was none
 other than
 Frank McCabe,
 one of the designers of the
-<a href="http://bit.ly/1pJtG0x">Go! programming language</a>
-(not to be confused with Google Go).  My brain froze
-while it was thinking</p>
-
-<pre><code>"OMG!!!! Frank McCabe, a real language designer, just emailed me!".
-</code></pre>
-
-<p>This unfortunately, made the rest of my email reply sound something like
-this</p>
-
-<pre><code>Frank,
+<a href=http://bit.ly/1pJtG0x>Go! programming language</a>
+(not to be confused with Google Go). My brain froze
+while it was thinking</p><pre><code>&quot;OMG!!!! Frank McCabe, a real language designer, just emailed me!&quot;.
+</code></pre><p>This unfortunately, made the rest of my email reply sound something like
+this</p><pre><code>Frank,
 That is so cool!  herp derp derp Speech Acts herp derp John
 McCarthy derp...
-</code></pre>
-
-<p>His programming language is the Star
-Programming Language.  It was originally developed for use at a company that he
-worked at called Starview.  It has since been open sourced and moved
-to <a href="https://github.com/fmccabe/star">git</a>.  I finally had a bit a
+</code></pre><p>His programming language is the Star
+Programming Language. It was originally developed for use at a company that he
+worked at called Starview. It has since been open sourced and moved
+to <a href=https://github.com/fmccabe/star>git</a>. I finally had a bit a
 spare time and I had been itching to give
-Star a look.  To my pleasant surprise, despite my initial fumbling
-email impression,  Frank was open a friendly to
+Star a look. To my pleasant surprise, despite my initial fumbling
+email impression, Frank was open a friendly to
 get me started in it.
 I have only scratched the surface in exploring the language, but I
 wanted to share my initial impressions, as well as point you to some
-<a href="https://github.com/gigasquid/star-lang-katas">beginner katas</a> that I
-put together, so that you could join in the fun.</p>
-
-<h2>Crash Overview</h2>
-
-<p>Star is a strongly typed, functional language. It is not a pure
+<a href=https://github.com/gigasquid/star-lang-katas>beginner katas</a> that I
+put together, so that you could join in the fun.</p><h2 id=crash-overview>Crash Overview<a hidden class=anchor aria-hidden=true href=#crash-overview>#</a></h2><p>Star is a strongly typed, functional language. It is not a pure
 functional language because is allows assignment and stateful objects,
 but the language is designed in a way that immutable functional
 programming is encouraged. The feel of the language is concise but
-human readable.</p>
-
-<blockquote><p>Star is a coherent, general-purpose programming language that<br/>    combines elements from a wide variety of existing languages as<br/>    well as adding innovative elements of its own. Star inherits func-<br/>    tional programming in general, a Haskell-style type system, an F#-<br/>    style monad for parallel computations, and Concurrent ML for or-<br/>    chestrating concurrent and parallel applications.</p><footer><strong>Feel different on the Java platform: the star programming language</strong> <cite><a href='http://dl.acm.org/citation.cfm?id=2500837&dl=ACM&coll=DL&CFID=354902651&CFTOKEN=90319052'>dl.acm.org/&hellip;</a></cite></footer></blockquote>
-
-
-<h3>Hello World</h3>
-
-<p>The best way to get a feel for it is to look at a few examples.  Of
-course, let&rsquo;s start off with Hello World.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">main</span><span class="nb">()</span> <span class="kr">do</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s">&quot;Hello World&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Another way of doing our Hello World is in a worksheet.
+human readable.</p><blockquote><p>Star is a coherent, general-purpose programming language that
+combines elements from a wide variety of existing languages as
+well as adding innovative elements of its own. Star inherits func-
+tional programming in general, a Haskell-style type system, an F#-
+style monad for parallel computations, and Concurrent ML for or-
+chestrating concurrent and parallel applications.</p><p>&ndash; Feel different on the Java platform: the star programming language <a href="http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052">http://dl.acm.org/citation.cfm?id=2500837&amp;dl=ACM&amp;coll=DL&amp;CFID=354902651&amp;CFTOKEN=90319052</a></p></blockquote><h3 id=hello-world>Hello World<a hidden class=anchor aria-hidden=true href=#hello-world>#</a></h3><p>The best way to get a feel for it is to look at a few examples. Of
+course, let&rsquo;s start off with Hello World.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#a6e22e>main</span>() <span style=color:#66d9ef>do</span> {
+</span></span><span style=display:flex><span>  logMsg(info, <span style=color:#e6db74>&#34;Hello World&#34;</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Another way of doing our Hello World is in a worksheet.
 This feature is still in the works, but it will likely turn into a
-replacement for a REPL, being integrated into the editor.  The import
-statement will also soon not be required.  But a nice feature of using
+replacement for a REPL, being integrated into the editor. The import
+statement will also soon not be required. But a nice feature of using
 the worksheeet is that is a combined module and transcript of the
-session.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="kr">import</span> <span class="nn">worksheet</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">worksheet</span><span class="p">{</span>
-</span><span class='line'>  <span class="n">show</span> <span class="s">&quot;hello world&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here is what the output looks like:</p>
-
-<pre><code>Jun 11, 2014 11:21:09 AM  
-INFO: "hello world" -&gt; "hello world" at 4
+session.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#66d9ef>import</span> worksheet
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>worksheet</span>{
+</span></span><span style=display:flex><span>  show <span style=color:#e6db74>&#34;hello world&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Here is what the output looks like:</p><pre><code>Jun 11, 2014 11:21:09 AM  
+INFO: &quot;hello world&quot; -&gt; &quot;hello world&quot; at 4
 info: execution took 0.053684428
-</code></pre>
-
-<h3>Pattern Matching</h3>
-
-<p>Let&rsquo;s take a look at another example.  This time a naive fib function
-with pattern matching.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="kr">import</span> <span class="nn">worksheet</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">worksheet</span><span class="p">{</span>
-</span><span class='line'>  <span class="n">fib</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">is</span> <span class="mi">0</span>
-</span><span class='line'>  <span class="n">fib</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">is</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="n">is</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">fib</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="ow">=</span><span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">fib</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="ow">=</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">fib</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="ow">=</span><span class="mi">2</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">fib</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="ow">=</span><span class="mi">55</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice how the fib function is defined with pattern matching.  Also
+</code></pre><h3 id=pattern-matching>Pattern Matching<a hidden class=anchor aria-hidden=true href=#pattern-matching>#</a></h3><p>Let&rsquo;s take a look at another example. This time a naive fib function
+with pattern matching.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#66d9ef>import</span> worksheet
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>worksheet</span>{
+</span></span><span style=display:flex><span>  fib(<span style=color:#ae81ff>0</span>) is <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>  fib(<span style=color:#ae81ff>1</span>) is <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>  fib(n) is fib(n<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>) <span style=color:#f92672>+</span> fib(n<span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>)
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>  assert fib(<span style=color:#ae81ff>0</span>)<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>  assert fib(<span style=color:#ae81ff>1</span>)<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>;
+</span></span><span style=display:flex><span>  assert fib(<span style=color:#ae81ff>3</span>)<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>  assert fib(<span style=color:#ae81ff>10</span>)<span style=color:#f92672>=</span><span style=color:#ae81ff>55</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Notice how the fib function is defined with pattern matching. Also
 how the keyword &ldquo;is&rdquo; is used instead of an &ldquo;=&rdquo; to make the code flow
-more readable (IMO).</p>
-
-<p>The output of running the program is:</p>
-
-<pre><code>Jun 11, 2014 3:32:38 PM  
+more readable (IMO).</p><p>The output of running the program is:</p><pre><code>Jun 11, 2014 3:32:38 PM  
 INFO: fib(0) = 0 ok at 9
 Jun 11, 2014 3:32:38 PM  
 INFO: fib(1) = 1 ok at 10
@@ -271,375 +89,84 @@ INFO: fib(3) = 2 ok at 11
 Jun 11, 2014 3:32:38 PM  
 INFO: fib(10) = 55 ok at 12
 info: execution took 0.039725132
-</code></pre>
-
-<h3>Pattern Matching with Guards</h3>
-
-<p>The declaration of pattern matching for functions can also include
-guards like in this fizzbuzz example</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">fizzbuzz</span> <span class="n">has</span> <span class="kr">type</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">string</span>
-</span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">3</span><span class="ow">=</span><span class="mi">0</span> <span class="n">and</span> <span class="kt">N</span><span class="o">%</span><span class="mi">5</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;fizzbuzz&quot;</span>
-</span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">3</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;fizz&quot;</span>
-</span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">where</span> <span class="kt">N</span><span class="o">%</span><span class="mi">5</span><span class="ow">=</span><span class="mi">0</span> <span class="n">is</span> <span class="s">&quot;buzz&quot;</span>
-</span><span class='line'><span class="nf">fizzbuzz</span><span class="p">(</span><span class="kt">N</span><span class="p">)</span> <span class="kr">default</span> <span class="n">is</span> <span class="s">&quot;$N&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Also note the type declaration.  The type declaration is optional.
-The complier is smart enough to figure it out.  Sometimes it is more
-readable to include the type declaration.  But, it can be left out for
-more concise code.</p>
-
-<h3>Cons Lists</h3>
-
-<p>One of the important collection types are cons lists. These are lists
+</code></pre><h3 id=pattern-matching-with-guards>Pattern Matching with Guards<a hidden class=anchor aria-hidden=true href=#pattern-matching-with-guards>#</a></h3><p>The declaration of pattern matching for functions can also include
+guards like in this fizzbuzz example</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#a6e22e>fizzbuzz</span> has <span style=color:#66d9ef>type</span> (integer) <span style=color:#f92672>=&gt;</span> string
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fizzbuzz</span>(<span style=color:#66d9ef>N</span>) <span style=color:#66d9ef>where</span> <span style=color:#66d9ef>N</span><span style=color:#f92672>%</span><span style=color:#ae81ff>3</span><span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> and <span style=color:#66d9ef>N</span><span style=color:#f92672>%</span><span style=color:#ae81ff>5</span><span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> is <span style=color:#e6db74>&#34;fizzbuzz&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fizzbuzz</span>(<span style=color:#66d9ef>N</span>) <span style=color:#66d9ef>where</span> <span style=color:#66d9ef>N</span><span style=color:#f92672>%</span><span style=color:#ae81ff>3</span><span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> is <span style=color:#e6db74>&#34;fizz&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fizzbuzz</span>(<span style=color:#66d9ef>N</span>) <span style=color:#66d9ef>where</span> <span style=color:#66d9ef>N</span><span style=color:#f92672>%</span><span style=color:#ae81ff>5</span><span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> is <span style=color:#e6db74>&#34;buzz&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fizzbuzz</span>(<span style=color:#66d9ef>N</span>) <span style=color:#66d9ef>default</span> is <span style=color:#e6db74>&#34;$N&#34;</span>
+</span></span></code></pre></div><p>Also note the type declaration. The type declaration is optional.
+The complier is smart enough to figure it out. Sometimes it is more
+readable to include the type declaration. But, it can be left out for
+more concise code.</p><h3 id=cons-lists>Cons Lists<a hidden class=anchor aria-hidden=true href=#cons-lists>#</a></h3><p>One of the important collection types are cons lists. These are lists
 that you add to the front of and are destructed as the first element
-and then the rest of the list. To construct a cons list:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span> <span class="n">testNumbers</span> <span class="n">is</span> <span class="n">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">;</span><span class="mi">3</span><span class="p">;</span><span class="mi">4</span><span class="p">;</span><span class="mi">5</span><span class="p">;</span><span class="mi">6</span><span class="p">;</span><span class="mi">7</span><span class="p">;</span><span class="mi">8</span><span class="p">;</span><span class="mi">9</span><span class="p">;</span><span class="mi">10</span><span class="p">;</span><span class="mi">11</span><span class="p">;</span><span class="mi">12</span><span class="p">;</span><span class="mi">13</span><span class="p">;</span><span class="mi">14</span><span class="p">;</span><span class="mi">15</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To use a cons list in a function with pattern matching:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">listFizzBuzz</span> <span class="n">has</span> <span class="kr">type</span> <span class="p">(</span><span class="n">cons</span> <span class="kr">of</span> <span class="n">integer</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">cons</span> <span class="kr">of</span> <span class="n">string</span>
-</span><span class='line'><span class="nf">listFizzBuzz</span><span class="p">(</span><span class="n">nil</span><span class="p">)</span> <span class="n">is</span> <span class="n">nil</span>
-</span><span class='line'><span class="nf">listFizzBuzz</span><span class="p">(</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xs</span><span class="p">))</span> <span class="n">is</span> <span class="n">cons</span><span class="p">(</span><span class="n">fizzbuzz</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">listFizzBuzz</span><span class="p">(</span><span class="n">xs</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The function listFizzBuzz takes in a list of integers and turns it
-into a list of strings using the fizzbuzz function. If we evaluate:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">testNumbers</span> <span class="n">is</span> <span class="n">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="mi">1</span><span class="p">;</span><span class="mi">2</span><span class="p">;</span><span class="mi">3</span><span class="p">;</span><span class="mi">4</span><span class="p">;</span><span class="mi">5</span><span class="p">;</span><span class="mi">6</span><span class="p">;</span><span class="mi">7</span><span class="p">;</span><span class="mi">8</span><span class="p">;</span><span class="mi">9</span><span class="p">;</span><span class="mi">10</span><span class="p">;</span><span class="mi">11</span><span class="p">;</span><span class="mi">12</span><span class="p">;</span><span class="mi">13</span><span class="p">;</span><span class="mi">14</span><span class="p">;</span><span class="mi">15</span><span class="p">}</span>
-</span><span class='line'><span class="nf">result</span> <span class="n">is</span> <span class="n">listFizzBuzz</span><span class="p">(</span><span class="n">testNumbers</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The result will look like</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">cons</span> <span class="kr">of</span> <span class="p">{</span><span class="s">&quot;1&quot;</span><span class="p">;</span><span class="s">&quot;2&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;4&quot;</span><span class="p">;</span><span class="s">&quot;buzz&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;7&quot;</span><span class="p">;</span><span class="s">&quot;8&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;buzz&quot;</span><span class="p">;</span><span class="s">&quot;11&quot;</span><span class="p">;</span><span class="s">&quot;fizz&quot;</span><span class="p">;</span><span class="s">&quot;13&quot;</span><span class="p">;</span><span class="s">&quot;14&quot;</span><span class="p">;</span><span class="s">&quot;fizzbuzz&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are other collection types such as arrays and relations, (which
+and then the rest of the list. To construct a cons list:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span> testNumbers is cons <span style=color:#66d9ef>of</span> {<span style=color:#ae81ff>1</span>;<span style=color:#ae81ff>2</span>;<span style=color:#ae81ff>3</span>;<span style=color:#ae81ff>4</span>;<span style=color:#ae81ff>5</span>;<span style=color:#ae81ff>6</span>;<span style=color:#ae81ff>7</span>;<span style=color:#ae81ff>8</span>;<span style=color:#ae81ff>9</span>;<span style=color:#ae81ff>10</span>;<span style=color:#ae81ff>11</span>;<span style=color:#ae81ff>12</span>;<span style=color:#ae81ff>13</span>;<span style=color:#ae81ff>14</span>;<span style=color:#ae81ff>15</span>}
+</span></span></code></pre></div><p>To use a cons list in a function with pattern matching:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#a6e22e>listFizzBuzz</span> has <span style=color:#66d9ef>type</span> (cons <span style=color:#66d9ef>of</span> integer) <span style=color:#f92672>=&gt;</span> cons <span style=color:#66d9ef>of</span> string
+</span></span><span style=display:flex><span><span style=color:#a6e22e>listFizzBuzz</span>(nil) is nil
+</span></span><span style=display:flex><span><span style=color:#a6e22e>listFizzBuzz</span>(cons(x, xs)) is cons(fizzbuzz(x), listFizzBuzz(xs))
+</span></span></code></pre></div><p>The function listFizzBuzz takes in a list of integers and turns it
+into a list of strings using the fizzbuzz function. If we evaluate:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#a6e22e>testNumbers</span> is cons <span style=color:#66d9ef>of</span> {<span style=color:#ae81ff>1</span>;<span style=color:#ae81ff>2</span>;<span style=color:#ae81ff>3</span>;<span style=color:#ae81ff>4</span>;<span style=color:#ae81ff>5</span>;<span style=color:#ae81ff>6</span>;<span style=color:#ae81ff>7</span>;<span style=color:#ae81ff>8</span>;<span style=color:#ae81ff>9</span>;<span style=color:#ae81ff>10</span>;<span style=color:#ae81ff>11</span>;<span style=color:#ae81ff>12</span>;<span style=color:#ae81ff>13</span>;<span style=color:#ae81ff>14</span>;<span style=color:#ae81ff>15</span>}
+</span></span><span style=display:flex><span><span style=color:#a6e22e>result</span> is listFizzBuzz(testNumbers)
+</span></span></code></pre></div><p>The result will look like</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#a6e22e>cons</span> <span style=color:#66d9ef>of</span> {<span style=color:#e6db74>&#34;1&#34;</span>;<span style=color:#e6db74>&#34;2&#34;</span>;<span style=color:#e6db74>&#34;fizz&#34;</span>;<span style=color:#e6db74>&#34;4&#34;</span>;<span style=color:#e6db74>&#34;buzz&#34;</span>;<span style=color:#e6db74>&#34;fizz&#34;</span>;<span style=color:#e6db74>&#34;7&#34;</span>;<span style=color:#e6db74>&#34;8&#34;</span>;<span style=color:#e6db74>&#34;fizz&#34;</span>;<span style=color:#e6db74>&#34;buzz&#34;</span>;<span style=color:#e6db74>&#34;11&#34;</span>;<span style=color:#e6db74>&#34;fizz&#34;</span>;<span style=color:#e6db74>&#34;13&#34;</span>;<span style=color:#e6db74>&#34;14&#34;</span>;<span style=color:#e6db74>&#34;fizzbuzz&#34;</span>}
+</span></span></code></pre></div><p>There are other collection types such as arrays and relations, (which
 are really cool - you can do queries on them like a database), but I haven&rsquo;t explored them well enough to really
-talk about yet.</p>
-
-<h3>Actors and Speech Acts</h3>
-
-<p>Star has actors that use three Speech Acts: Notify, Request, and
-Query.  The actors themselves can also be concurrent. I explored the
+talk about yet.</p><h3 id=actors-and-speech-acts>Actors and Speech Acts<a hidden class=anchor aria-hidden=true href=#actors-and-speech-acts>#</a></h3><p>Star has actors that use three Speech Acts: Notify, Request, and
+Query. The actors themselves can also be concurrent. I explored the
 Speech Act/ Actor model with an example from John McCarthy&rsquo;s
-<a href="http://www-formal.stanford.edu/jmc/elephant/elephant.html">Elephant 2000 paper</a>,
-which is a Airline Reservation system.</p>
-
-<p>To use the notify speech act, you need to define what type the
-notifications are on the actors channel.  In my case, the
+<a href=http://www-formal.stanford.edu/jmc/elephant/elephant.html>Elephant 2000 paper</a>,
+which is a Airline Reservation system.</p><p>To use the notify speech act, you need to define what type the
+notifications are on the actors channel. In my case, the
 notifications are either going to be a book(string) method, or a
-cancel(string) method.  To book a reservation for a person or cancel
-it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="kr">type</span> <span class="n">tx</span> <span class="n">is</span> <span class="n">book</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="n">or</span> <span class="n">cancel</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The actor is defined using:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="nf">flight</span><span class="p">((</span><span class="kt">FlightName</span> <span class="n">has</span> <span class="kr">type</span> <span class="n">string</span><span class="p">),</span> <span class="p">(</span><span class="kt">MaxPeople</span> <span class="n">has</span> <span class="kr">type</span> <span class="n">integer</span><span class="p">))</span> <span class="n">is</span> <span class="n">actor</span><span class="p">{</span>
-</span><span class='line'>    <span class="n">var</span> <span class="n">flightStatus</span> <span class="kt">:=</span> <span class="s">&quot;open&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">setFlightStatus</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="kr">do</span> <span class="p">{</span> <span class="n">flightStatus</span> <span class="kt">:=</span> <span class="n">s</span> <span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">on</span> <span class="n">book</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">do</span>
-</span><span class='line'>        <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span><span class="s">&quot;booking $pname on #FlightName&#39;s flight: max #MaxPeople current $(size(plist))&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">on</span> <span class="n">book</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">where</span> <span class="n">size</span><span class="p">(</span><span class="n">plist</span><span class="p">)</span> <span class="o">&lt;</span> <span class="kt">MaxPeople</span> <span class="kr">do</span>
-</span><span class='line'>      <span class="n">extend</span> <span class="n">plist</span> <span class="n">with</span> <span class="n">pname</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">on</span> <span class="n">book</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">where</span> <span class="n">size</span><span class="p">(</span><span class="n">plist</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="kt">MaxPeople</span> <span class="kr">do</span>
-</span><span class='line'>      <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s">&quot;sorry .. the flight is full&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">on</span> <span class="n">book</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">where</span> <span class="n">flightStatus</span> <span class="o">!=</span> <span class="s">&quot;open&quot;</span> <span class="kr">do</span>
-</span><span class='line'>      <span class="n">logMsg</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s">&quot;sorry .. the flight is no longer open&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">on</span> <span class="n">cancel</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span> <span class="kr">do</span>
-</span><span class='line'>      <span class="n">delete</span> <span class="p">(</span><span class="kt">X</span> <span class="kr">where</span> <span class="kt">X</span> <span class="ow">=</span> <span class="n">pname</span><span class="p">)</span> <span class="kr">in</span> <span class="n">plist</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">getPassengerList</span> <span class="n">has</span> <span class="kr">type</span> <span class="nb">()</span> <span class="ow">=&gt;</span> <span class="n">list</span> <span class="kr">of</span> <span class="n">string</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">getPassengerList</span><span class="nb">()</span> <span class="n">is</span> <span class="n">plist</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There is some extra things in the code, but for right now, look at the
-book and cancel methods.  These are the functions that will be called
-when the actor is notified like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span><span class="kt">F</span> <span class="n">is</span> <span class="n">flight</span><span class="p">(</span><span class="s">&quot;flight123&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="nf">notify</span> <span class="kt">F</span> <span class="n">with</span> <span class="n">book</span><span class="p">(</span><span class="s">&quot;Carin&quot;</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span>
-</span><span class='line'><span class="nf">notify</span> <span class="kt">F</span> <span class="n">with</span> <span class="n">book</span><span class="p">(</span><span class="s">&quot;Bob&quot;</span><span class="p">)</span> <span class="n">on</span> <span class="kt">Tx</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To query the actor we use :</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span> <span class="n">x</span> <span class="n">is</span> <span class="n">query</span> <span class="kt">F&#39;s</span> <span class="n">getPassengerList</span> <span class="n">with</span> <span class="n">getPassengerList</span><span class="nb">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To use a request with the actor we use</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span></span> <span class="n">request</span> <span class="kt">F&#39;s</span> <span class="n">setFlightStatus</span> <span class="n">to</span> <span class="n">setFlightStatus</span><span class="p">(</span><span class="s">&quot;closed&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Go Explore</h2>
-
-<p>I have only scratched the surface of the language, but I have had a
-great time.  I invite you to come take a look.</p>
-
-<p>Warning.  Only the brave need apply.  There is no StackOverflow.
-There is no user group or IRC channel yet.  These are green fields to
-be discovered in the Open Source world.  If it appeals to you as much
-as me, jump on in.  Here are a few resources to get you going:</p>
-
-<ul>
-<li><p><a href="https://github.com/gigasquid/star-lang-katas">Star-Lang Katas</a>:
-Clone the repo or fork the repos.  It has a shell script
-to compile and run the star programs.  It also has a emacs mode
+cancel(string) method. To book a reservation for a person or cancel
+it.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#66d9ef>type</span> tx is book(string) or cancel(string);
+</span></span></code></pre></div><p>The actor is defined using:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#a6e22e>flight</span>((<span style=color:#66d9ef>FlightName</span> has <span style=color:#66d9ef>type</span> string), (<span style=color:#66d9ef>MaxPeople</span> has <span style=color:#66d9ef>type</span> integer)) is actor{
+</span></span><span style=display:flex><span>    var flightStatus <span style=color:#66d9ef>:=</span> <span style=color:#e6db74>&#34;open&#34;</span>;
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>    setFlightStatus(s) <span style=color:#66d9ef>do</span> { flightStatus <span style=color:#66d9ef>:=</span> s };
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    on book(pname) on <span style=color:#66d9ef>Tx</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>        logMsg(info,<span style=color:#e6db74>&#34;booking $pname on #FlightName&#39;s flight: max #MaxPeople current $(size(plist))&#34;</span>);
+</span></span><span style=display:flex><span>    on book(pname) on <span style=color:#66d9ef>Tx</span> <span style=color:#66d9ef>where</span> size(plist) <span style=color:#f92672>&lt;</span> <span style=color:#66d9ef>MaxPeople</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>      extend plist with pname;
+</span></span><span style=display:flex><span>    on book(pname) on <span style=color:#66d9ef>Tx</span> <span style=color:#66d9ef>where</span> size(plist) <span style=color:#f92672>&gt;=</span> <span style=color:#66d9ef>MaxPeople</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>      logMsg(info, <span style=color:#e6db74>&#34;sorry .. the flight is full&#34;</span>);
+</span></span><span style=display:flex><span>    on book(pname) on <span style=color:#66d9ef>Tx</span> <span style=color:#66d9ef>where</span> flightStatus <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;open&#34;</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>      logMsg(info, <span style=color:#e6db74>&#34;sorry .. the flight is no longer open&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    on cancel(pname) on <span style=color:#66d9ef>Tx</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>      delete (<span style=color:#66d9ef>X</span> <span style=color:#66d9ef>where</span> <span style=color:#66d9ef>X</span> <span style=color:#f92672>=</span> pname) <span style=color:#66d9ef>in</span> plist;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    getPassengerList has <span style=color:#66d9ef>type</span> () <span style=color:#f92672>=&gt;</span> list <span style=color:#66d9ef>of</span> string;
+</span></span><span style=display:flex><span>    getPassengerList() is plist;
+</span></span><span style=display:flex><span>    }
+</span></span></code></pre></div><p>There is some extra things in the code, but for right now, look at the
+book and cancel methods. These are the functions that will be called
+when the actor is notified like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span><span style=color:#66d9ef>F</span> is flight(<span style=color:#e6db74>&#34;flight123&#34;</span>, <span style=color:#ae81ff>5</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>notify</span> <span style=color:#66d9ef>F</span> with book(<span style=color:#e6db74>&#34;Carin&#34;</span>) on <span style=color:#66d9ef>Tx</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>notify</span> <span style=color:#66d9ef>F</span> with book(<span style=color:#e6db74>&#34;Bob&#34;</span>) on <span style=color:#66d9ef>Tx</span>
+</span></span></code></pre></div><p>To query the actor we use :</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span> x is query <span style=color:#66d9ef>F&#39;s</span> getPassengerList with getPassengerList()
+</span></span></code></pre></div><p>To use a request with the actor we use</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-haskell data-lang=haskell><span style=display:flex><span> request <span style=color:#66d9ef>F&#39;s</span> setFlightStatus to setFlightStatus(<span style=color:#e6db74>&#34;closed&#34;</span>)
+</span></span></code></pre></div><h2 id=go-explore>Go Explore<a hidden class=anchor aria-hidden=true href=#go-explore>#</a></h2><p>I have only scratched the surface of the language, but I have had a
+great time. I invite you to come take a look.</p><p>Warning. Only the brave need apply. There is no StackOverflow.
+There is no user group or IRC channel yet. These are green fields to
+be discovered in the Open Source world. If it appeals to you as much
+as me, jump on in. Here are a few resources to get you going:</p><ul><li><p><a href=https://github.com/gigasquid/star-lang-katas>Star-Lang Katas</a>:
+Clone the repo or fork the repos. It has a shell script
+to compile and run the star programs. It also has a emacs mode
 plugin and a reference pdf. The most important part is that it has a
-template of katas ready for your to solve.  Your challenge:
-uncomment the assertion and make the code pass.  My solutions are in
-the solutions branch when you are done.  If you finish all of them
-and want more, consider creating some and submitting a pull request :)</p></li>
-<li><p>I mentioned it earlier, but there is a great overview paper on the
+template of katas ready for your to solve. Your challenge:
+uncomment the assertion and make the code pass. My solutions are in
+the solutions branch when you are done. If you finish all of them
+and want more, consider creating some and submitting a pull request :)</p></li><li><p>I mentioned it earlier, but there is a great overview paper on the
 language itself
-<a href="http://www.deinprogramm.de/sperber/papers/star.pdf">here</a>.</p></li>
-<li><p>Finally, here is the repo of the Star Language itself
-<a href="https://github.com/fmccabe/star">https://github.com/fmccabe/star</a>.
-Checkout out the tests.  There are tons of sample star programs
-that cover the language&rsquo;s features.</p></li>
-</ul>
-
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-06-11T10:38:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 11 Jun 2014, 10:38 AM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/star/'>Star</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2014/03/20/world-domination-with-hexapods-and-clojure/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: World Domination with Hexapods and Clojure"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>World Domination with Hexapods and Clojure</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2014/07/06/love-songs-through-history-and-why-you-should-create/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Love Songs Through History and Why You Should Create">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>Love Songs Through History and Why You Should Create</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2014/06/11/a-taste-of-the-star-programming-language/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+<a href=http://www.deinprogramm.de/sperber/papers/star.pdf>here</a>.</p></li><li><p>Finally, here is the repo of the Star Language itself
+<a href=https://github.com/fmccabe/star>https://github.com/fmccabe/star</a>.
+Checkout out the tests. There are tons of sample star programs
+that cover the language&rsquo;s features.</p></li></ul></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2014/07/06/love-songs-through-history-and-why-you-should-create/><span class=title>« Prev</span>
+<span>Love Songs Through History and Why You Should Create</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2014/03/20/world-domination-with-hexapods-and-clojure/><span class=title>Next »</span>
+<span>World Domination with Hexapods and Clojure</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

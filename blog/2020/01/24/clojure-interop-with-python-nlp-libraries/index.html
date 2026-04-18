@@ -1,850 +1,196 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Clojure Interop With Python NLP Libraries - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/">
-  <meta property="og:title" content="Clojure Interop With Python NLP Libraries - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2020-01-24T15:34:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 24 Jan 2020,  3:34 PM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Clojure Interop With Python NLP Libraries
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p><img src="http:////live.staticflickr.com/65535/49435394578_400fdf1c7f_c.jpg" alt="clojure-python" /></p>
-
-<p>In this edition of the blog series of Clojure/Python interop with <a href="https://github.com/cnuernber/libpython-clj">libpython-clj</a>, we&rsquo;ll be taking a look at two popular Python NLP libraries: <a href="https://www.nltk.org/">NLTK</a> and <a href="https://spacy.io/">SpaCy</a>.</p>
-
-<h2>NLTK - Natural Language Toolkit</h2>
-
-<p>I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by <em>far</em> NLTK was the most requested library. After looking into it, I can see why. It&rsquo;s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching.</p>
-
-<h3>Installation</h3>
-
-<p>To use the NLTK toolkit you will need to install it. I use <code>sudo pip3 install nltk</code>, but libpython-clj now supports virtual environments with this <a href="https://github.com/cnuernber/libpython-clj/pull/53">PR</a>, so feel free to use whatever is best for you.</p>
-
-<h3>Features</h3>
-
-<p>We&rsquo;ll take a quick tour of the features of NLTK following along initially with the <a href="https://www.nltk.org/book/ch01.html">nltk official book</a> and then moving onto this more data task centered <a href="https://www.datacamp.com/community/tutorials/text-analytics-beginners-nltk">tutorial</a>.</p>
-
-<p>First, we need to require all of our things as usual:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">gigasquid.nltk</span>
-</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">libpython-clj.require</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">require-python</span><span class="p">]]</span>
-</span><span class='line'>            <span class="p">[</span><span class="nv">libpython-clj.python</span> <span class="ss">:as</span> <span class="nv">py</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">py.</span> <span class="nv">py..</span> <span class="nv">py.-</span><span class="p">]]))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">nltk</span> <span class="ss">:as</span> <span class="nv">nltk</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Downloading packages</h4>
-
-<p>There are all sorts of packages available to download from NLTK. To start out and tour the library, I would go with a small one that has basic data for the nltk book tutorial.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="nf">nltk/download</span> <span class="s">&quot;book&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">nltk.book</span> <span class="ss">:as</span> <span class="nv">book</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are all other sorts of downloads as well, such as <code>(nltk/download "popular")</code> for most used ones. You can also download <code>"all"</code>, but beware that it is big.</p>
-
-<p>You can check out some of the texts it downloaded with:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="nf">book/texts</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">;;; prints out in repl</span>
-</span><span class='line'>  <span class="c1">;; text1: Moby Dick by Herman Melville 1851</span>
-</span><span class='line'>  <span class="c1">;; text2: Sense and Sensibility by Jane Austen 1811</span>
-</span><span class='line'>  <span class="c1">;; text3: The Book of Genesis</span>
-</span><span class='line'>  <span class="c1">;; text4: Inaugural Address Corpus</span>
-</span><span class='line'>  <span class="c1">;; text5: Chat Corpus</span>
-</span><span class='line'>  <span class="c1">;; text6: Monty Python and the Holy Grail</span>
-</span><span class='line'>  <span class="c1">;; text7: Wall Street Journal</span>
-</span><span class='line'>  <span class="c1">;; text8: Personals Corpus</span>
-</span><span class='line'>  <span class="c1">;; text9: The Man Who Was Thursday by G . K . Chesterton 1908</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nv">book/text1</span> <span class="c1">;=&gt;  &lt;Text: Moby Dick by Herman Melville 1851&gt;</span>
-</span><span class='line'>  <span class="nv">book/text2</span> <span class="c1">;=&gt;  &lt;Text: Sense and Sensibility by Jane Austen 1811&gt;</span>
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>  You can do fun things like see how many tokens are in a text</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="nb">count </span><span class="p">(</span><span class="nf">py.-</span> <span class="nv">book/text3</span> <span class="nv">tokens</span><span class="p">))</span>  <span class="c1">;=&gt; 44764</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>  Or even see the lexical diversity, which is a measure of the richness of the text by looking at the unique set of word tokens against the total tokens.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span>  <span class="p">(</span><span class="kd">defn </span><span class="nv">lexical-diversity</span> <span class="p">[</span><span class="nv">text</span><span class="p">]</span>
-</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">tokens</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">text</span> <span class="nv">tokens</span><span class="p">)]</span>
-</span><span class='line'>      <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">tokens</span> <span class="nb">set </span><span class="nv">count</span><span class="p">)</span>
-</span><span class='line'>         <span class="p">(</span><span class="nb">* </span><span class="mf">1.0</span> <span class="p">(</span><span class="nb">count </span><span class="nv">tokens</span><span class="p">)))))</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="p">(</span><span class="nf">lexical-diversity</span> <span class="nv">book/text3</span><span class="p">)</span> <span class="c1">;=&gt; 0.06230453042623537</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">lexical-diversity</span> <span class="nv">book/text5</span><span class="p">)</span> <span class="c1">;=&gt; 0.13477005109975562</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p> This of course is all very interesting but I prefer to look at some more practical tasks, so we are going to look at some sentence tokenization.</p>
-
-<h4>Sentence Tokenization</h4>
-
-<p> Text can be broken up into individual word tokens or sentence tokens. Let&rsquo;s start off first with the token package</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">nltk.tokenize</span> <span class="ss">:as</span> <span class="nv">tokenize</span><span class="p">]))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">text</span> <span class="s">&quot;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.</span>
-</span><span class='line'><span class="s">The sky is pinkish-blue. You shouldn&#39;t eat cardboard&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To tokenize sentences, you take the text and use <code>tokenize/sent_tokenize</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="k">def </span><span class="nv">text</span> <span class="s">&quot;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.</span>
-</span><span class='line'><span class="s">The sky is pinkish-blue. You shouldn&#39;t eat cardboard&quot;</span><span class="p">)</span>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">tokenized-sent</span> <span class="p">(</span><span class="nf">tokenize/sent_tokenize</span> <span class="nv">text</span><span class="p">))</span>
-</span><span class='line'> <span class="nv">tokenized-sent</span>
-</span><span class='line'> <span class="c1">;;=&gt; [&#39;Hello Mr. Smith, how are you doing today?&#39;, &#39;The weather is great, and city is awesome.&#39;, &#39;The sky is pinkish-blue.&#39;, &quot;You shouldn&#39;t eat cardboard&quot;]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Likewise, to tokenize words, you use <code>tokenize/word_tokenize</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="k">def </span><span class="nv">text</span> <span class="s">&quot;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.</span>
-</span><span class='line'><span class="s">The sky is pinkish-blue. You shouldn&#39;t eat cardboard&quot;</span><span class="p">)</span>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">tokenized-sent</span> <span class="p">(</span><span class="nf">tokenize/sent_tokenize</span> <span class="nv">text</span><span class="p">))</span>
-</span><span class='line'> <span class="nv">tokenized-sent</span>
-</span><span class='line'> <span class="c1">;;=&gt; [&#39;Hello Mr. Smith, how are you doing today?&#39;, &#39;The weather is great, and city is awesome.&#39;, &#39;The sky is pinkish-blue.&#39;, &quot;You shouldn&#39;t eat cardboard&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">tokenized-word</span> <span class="p">(</span><span class="nf">tokenize/word_tokenize</span> <span class="nv">text</span><span class="p">))</span>
-</span><span class='line'> <span class="nv">tokenized-word</span>
-</span><span class='line'>  <span class="c1">;;=&gt; [&#39;Hello&#39;, &#39;Mr.&#39;, &#39;Smith&#39;, &#39;,&#39;, &#39;how&#39;, &#39;are&#39;, &#39;you&#39;, &#39;doing&#39;, &#39;today&#39;, &#39;?&#39;, &#39;The&#39;, &#39;weather&#39;, &#39;is&#39;, &#39;great&#39;, &#39;,&#39;, &#39;and&#39;, &#39;city&#39;, &#39;is&#39;, &#39;awesome&#39;, &#39;.&#39;, &#39;The&#39;, &#39;sky&#39;, &#39;is&#39;, &#39;pinkish-blue&#39;, &#39;.&#39;, &#39;You&#39;, &#39;should&#39;, &quot;n&#39;t&quot;, &#39;eat&#39;, &#39;cardboard&#39;]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Frequency Distribution</h4>
-
-<p> You can also look at the frequency distribution of the words with using the probability package.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span> <span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">nltk.probability</span> <span class="ss">:as</span> <span class="nv">probability</span><span class="p">]))</span>
-</span><span class='line'>
-</span><span class='line'> <span class="p">(</span><span class="k">def </span><span class="nv">fdist</span> <span class="p">(</span><span class="nf">probability/FreqDist</span> <span class="nv">tokenized-word</span><span class="p">))</span>
-</span><span class='line'> <span class="nv">fdist</span> <span class="c1">;=&gt; &lt;FreqDist with 25 samples and 30 outcomes&gt;</span>
-</span><span class='line'>
-</span><span class='line'> <span class="p">(</span><span class="nf">py.</span> <span class="nv">fdist</span> <span class="nv">most_common</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1">;=&gt; [(&#39;is&#39;, 3), (&#39;,&#39;, 2), (&#39;The&#39;, 2), (&#39;.&#39;, 2), (&#39;Hello&#39;, 1), (&#39;Mr.&#39;, 1), (&#39;Smith&#39;, 1), (&#39;how&#39;, 1), (&#39;are&#39;, 1), (&#39;you&#39;, 1), (&#39;doing&#39;, 1), (&#39;today&#39;, 1), (&#39;?&#39;, 1), (&#39;weather&#39;, 1), (&#39;great&#39;, 1), (&#39;and&#39;, 1), (&#39;city&#39;, 1), (&#39;awesome&#39;, 1), (&#39;sky&#39;, 1), (&#39;pinkish-blue&#39;, 1), (&#39;You&#39;, 1), (&#39;should&#39;, 1), (&quot;n&#39;t&quot;, 1), (&#39;eat&#39;, 1), (&#39;cardboard&#39;, 1)]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Stop Words</h4>
-
-<p>Stop words are considered noise in text and there are ways to use the library to remove them using the <code>nltk.corpus</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">stop-words</span> <span class="p">(</span><span class="nb">into </span><span class="o">#</span><span class="p">{}</span> <span class="p">(</span><span class="nf">py.</span> <span class="nv">corpus/stopwords</span> <span class="nv">words</span> <span class="s">&quot;english&quot;</span><span class="p">)))</span>
-</span><span class='line'> <span class="nv">stop-words</span>
-</span><span class='line'>  <span class="c1">;=&gt; #{&quot;d&quot; &quot;itself&quot; &quot;more&quot; &quot;didn&#39;t&quot; &quot;ain&quot; &quot;won&quot; &quot;hers&quot;....}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that we have a collection of the stop words, we can filter them out of our text in the normal way in Clojure.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">filtered-sent</span> <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">tokenized-sent</span>
-</span><span class='line'>                         <span class="p">(</span><span class="nb">map </span><span class="nv">tokenize/word_tokenize</span><span class="p">)</span>
-</span><span class='line'>                         <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">remove </span><span class="nv">stop-words</span> <span class="nv">%</span><span class="p">))))</span>
-</span><span class='line'> <span class="nv">filtered-sent</span>
-</span><span class='line'> <span class="c1">;; ((&quot;Hello&quot; &quot;Mr.&quot; &quot;Smith&quot; &quot;,&quot; &quot;today&quot; &quot;?&quot;)</span>
-</span><span class='line'> <span class="c1">;; (&quot;The&quot; &quot;weather&quot; &quot;great&quot; &quot;,&quot; &quot;city&quot; &quot;awesome&quot; &quot;.&quot;)</span>
-</span><span class='line'> <span class="c1">;; (&quot;The&quot; &quot;sky&quot; &quot;pinkish-blue&quot; &quot;.&quot;)</span>
-</span><span class='line'> <span class="c1">;; (&quot;You&quot; &quot;n&#39;t&quot; &quot;eat&quot; &quot;cardboard&quot;))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Lexion Normalization and Lemmatization</h4>
-
-<p>Stemming and Lemmatization allow ways for the text to be reduced to base words and normalized.
-For example, the word <code>flying</code> has a stemmed word of <code>fli</code> and a lemma of <code>fly</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">nltk.stem</span> <span class="ss">:as</span> <span class="nv">stem</span><span class="p">]))</span>
-</span><span class='line'><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">nltk.stem.wordnet</span> <span class="ss">:as</span> <span class="nv">wordnet</span><span class="p">]))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">lem</span> <span class="p">(</span><span class="nf">wordnet/WordNetLemmatizer</span><span class="p">)</span>
-</span><span class='line'>       <span class="nv">stem</span> <span class="p">(</span><span class="nf">stem/PorterStemmer</span><span class="p">)</span>
-</span><span class='line'>       <span class="nv">word</span> <span class="s">&quot;flying&quot;</span><span class="p">]</span>
-</span><span class='line'>   <span class="p">{</span><span class="ss">:lemmatized-word</span> <span class="p">(</span><span class="nf">py.</span> <span class="nv">lem</span> <span class="nv">lemmatize</span> <span class="nv">word</span> <span class="s">&quot;v&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="ss">:stemmed-word</span> <span class="p">(</span><span class="nf">py.</span> <span class="nv">stem</span> <span class="nv">stem</span> <span class="nv">word</span><span class="p">)})</span>
-</span><span class='line'> <span class="c1">;=&gt; {:lemmatized-word &quot;fly&quot;, :stemmed-word &quot;fli&quot;}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>POS Tagging</h4>
-
-<p>It also has support for Part-of-Speech (POS) Tagging. A quick example of that is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">sent</span> <span class="s">&quot;Albert Einstein was born in Ulm, Germany in 1879.&quot;</span>
-</span><span class='line'>       <span class="nv">tokens</span> <span class="p">(</span><span class="nf">nltk/word_tokenize</span> <span class="nv">sent</span><span class="p">)]</span>
-</span><span class='line'>   <span class="p">{</span><span class="ss">:tokens</span> <span class="nv">tokens</span>
-</span><span class='line'>    <span class="ss">:pos-tag</span> <span class="p">(</span><span class="nf">nltk/pos_tag</span> <span class="nv">tokens</span><span class="p">)})</span>
-</span><span class='line'> <span class="c1">;; {:tokens</span>
-</span><span class='line'> <span class="c1">;; [&#39;Albert&#39;, &#39;Einstein&#39;, &#39;was&#39;, &#39;born&#39;, &#39;in&#39;, &#39;Ulm&#39;, &#39;,&#39;, &#39;Germany&#39;, &#39;in&#39;, &#39;1879&#39;, &#39;.&#39;],</span>
-</span><span class='line'> <span class="c1">;; :pos-tag</span>
-</span><span class='line'> <span class="c1">;; [(&#39;Albert&#39;, &#39;NNP&#39;), (&#39;Einstein&#39;, &#39;NNP&#39;), (&#39;was&#39;, &#39;VBD&#39;), (&#39;born&#39;, &#39;VBN&#39;), (&#39;in&#39;, &#39;IN&#39;), (&#39;Ulm&#39;, &#39;NNP&#39;), (&#39;,&#39;, &#39;,&#39;), (&#39;Germany&#39;, &#39;NNP&#39;), (&#39;in&#39;, &#39;IN&#39;), (&#39;1879&#39;, &#39;CD&#39;), (&#39;.&#39;, &#39;.&#39;)]}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Phew! That&rsquo;s a brief overview of what NLTK can do, now what about the other library SpaCy?</p>
-
-<h2>SpaCy</h2>
-
-<p><a href="https://spacy.io/usage/spacy-101#whats-spacy">SpaCy</a> is the main competitor to NLTK. It has a more opinionated library which is more object oriented than NLTK which mainly processes text. It has better performance for tokenization and POS tagging and has support for word vectors, which NLTK does not.</p>
-
-<p>Let&rsquo;s dive in a take a look at it.</p>
-
-<h3>Installation</h3>
-
-<p>To install spaCy, you will need to do:</p>
-
-<ul>
-<li><code>pip3 install spacy</code></li>
-<li><code>python3 -m spacy download en_core_web_sm</code> to load up the small language model</li>
-</ul>
-
-
-<p>We&rsquo;ll be following along this <a href="https://spacy.io/usage/spacy-101#annotat">tutorial</a></p>
-
-<p>We will, of course, need to load up the library</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">spacy</span> <span class="ss">:as</span> <span class="nv">spacy</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>and its language model:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">nlp</span> <span class="p">(</span><span class="nf">spacy/load</span> <span class="s">&quot;en_core_web_sm&quot;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Linguistic Annotations</h4>
-
-<p>There are many linguistic annotations that are available, from POS, lemmas, and more:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nb">doc </span><span class="p">(</span><span class="nf">nlp</span> <span class="s">&quot;Apple is looking at buying U.K. startup for $1 billion&quot;</span><span class="p">)]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">token</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">[(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">text</span><span class="p">)</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">pos_</span><span class="p">)</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">dep_</span><span class="p">)])</span>
-</span><span class='line'>       <span class="nv">doc</span><span class="p">))</span>
-</span><span class='line'><span class="c1">;; ([&quot;Apple&quot; &quot;PROPN&quot; &quot;nsubj&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;is&quot; &quot;AUX&quot; &quot;aux&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;looking&quot; &quot;VERB&quot; &quot;ROOT&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;at&quot; &quot;ADP&quot; &quot;prep&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;buying&quot; &quot;VERB&quot; &quot;pcomp&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;U.K.&quot; &quot;PROPN&quot; &quot;compound&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;startup&quot; &quot;NOUN&quot; &quot;dobj&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;for&quot; &quot;ADP&quot; &quot;prep&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;$&quot; &quot;SYM&quot; &quot;quantmod&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;1&quot; &quot;NUM&quot; &quot;compound&quot;]</span>
-</span><span class='line'><span class="c1">;;  [&quot;billion&quot; &quot;NUM&quot; &quot;pobj&quot;])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here are some more:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nb">doc </span><span class="p">(</span><span class="nf">nlp</span> <span class="s">&quot;Apple is looking at buying U.K. startup for $1 billion&quot;</span><span class="p">)]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">token</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">{</span><span class="ss">:text</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">text</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:lemma</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">lemma_</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:pos</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">pos_</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:tag</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">tag_</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:dep</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">dep_</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:shape</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">shape_</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:alpha</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">is_alpha</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:is_stop</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">is_stop</span><span class="p">)}</span> <span class="p">)</span>
-</span><span class='line'>       <span class="nv">doc</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;; ({:text &quot;Apple&quot;,</span>
-</span><span class='line'><span class="c1">;;   :lemma &quot;Apple&quot;,</span>
-</span><span class='line'><span class="c1">;;   :pos &quot;PROPN&quot;,</span>
-</span><span class='line'><span class="c1">;;   :tag &quot;NNP&quot;,</span>
-</span><span class='line'><span class="c1">;;   :dep &quot;nsubj&quot;,</span>
-</span><span class='line'><span class="c1">;;   :shape &quot;Xxxxx&quot;,</span>
-</span><span class='line'><span class="c1">;;   :alpha true,</span>
-</span><span class='line'><span class="c1">;;   :is_stop false}</span>
-</span><span class='line'><span class="c1">;;  {:text &quot;is&quot;,</span>
-</span><span class='line'><span class="c1">;;   :lemma &quot;be&quot;,</span>
-</span><span class='line'><span class="c1">;;   :pos &quot;AUX&quot;,</span>
-</span><span class='line'><span class="c1">;;   :tag &quot;VBZ&quot;,</span>
-</span><span class='line'><span class="c1">;;   :dep &quot;aux&quot;,</span>
-</span><span class='line'><span class="c1">;;   :shape &quot;xx&quot;,</span>
-</span><span class='line'><span class="c1">;;   :alpha true,</span>
-</span><span class='line'><span class="c1">;;   :is_stop true}</span>
-</span><span class='line'><span class="c1">;;  ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Named Entities</h3>
-
-<p>It also handles named entities in the same fashion.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nb">doc </span><span class="p">(</span><span class="nf">nlp</span> <span class="s">&quot;Apple is looking at buying U.K. startup for $1 billion&quot;</span><span class="p">)]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">ent</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">{</span><span class="ss">:text</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">ent</span> <span class="nv">text</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:start-char</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">ent</span> <span class="nv">start_char</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:end-char</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">ent</span> <span class="nv">end_char</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:label</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">ent</span> <span class="nv">label_</span><span class="p">)}</span> <span class="p">)</span>
-</span><span class='line'>       <span class="p">(</span><span class="nf">py.-</span> <span class="nb">doc </span><span class="nv">ents</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;; ({:text &quot;Apple&quot;, :start-char 0, :end-char 5, :label &quot;ORG&quot;}</span>
-</span><span class='line'><span class="c1">;;  {:text &quot;U.K.&quot;, :start-char 27, :end-char 31, :label &quot;GPE&quot;}</span>
-</span><span class='line'><span class="c1">;;  {:text &quot;$1 billion&quot;, :start-char 44, :end-char 54, :label &quot;MONEY&quot;})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see, it can handle pretty much the same things as NLTK. But let&rsquo;s take a look at what it can do that NLTK and that is with word vectors.</p>
-
-<h4>Word Vectors</h4>
-
-<p>In order to use word vectors, you will have to load up a medium or large size data model because the small ones don&rsquo;t ship with word vectors. You can do that at the command line with:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">python3</span> <span class="nv">-m</span> <span class="nv">spacy</span> <span class="nv">download</span> <span class="nv">en_core_web_md</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You will need to restart your repl and then load it with:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">require-python</span> <span class="o">&#39;</span><span class="p">([</span><span class="nv">spacy</span> <span class="ss">:as</span> <span class="nv">spacy</span><span class="p">]))</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">nlp</span> <span class="p">(</span><span class="nf">spacy/load</span> <span class="s">&quot;en_core_web_md&quot;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you can see cool word vector stuff!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">tokens</span> <span class="p">(</span><span class="nf">nlp</span> <span class="s">&quot;dog cat banana afskfsd&quot;</span><span class="p">)]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">token</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">{</span><span class="ss">:text</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">text</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:has-vector</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">has_vector</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:vector_norm</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">vector_norm</span><span class="p">)</span>
-</span><span class='line'>          <span class="ss">:is_oov</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token</span> <span class="nv">is_oov</span><span class="p">)}</span> <span class="p">)</span>
-</span><span class='line'>       <span class="nv">tokens</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;; ({:text &quot;dog&quot;,</span>
-</span><span class='line'><span class="c1">;;   :has-vector true,</span>
-</span><span class='line'><span class="c1">;;   :vector_norm 7.033673286437988,</span>
-</span><span class='line'><span class="c1">;;   :is_oov false}</span>
-</span><span class='line'><span class="c1">;;  {:text &quot;cat&quot;,</span>
-</span><span class='line'><span class="c1">;;   :has-vector true,</span>
-</span><span class='line'><span class="c1">;;   :vector_norm 6.680818557739258,</span>
-</span><span class='line'><span class="c1">;;   :is_oov false}</span>
-</span><span class='line'><span class="c1">;;  {:text &quot;banana&quot;,</span>
-</span><span class='line'><span class="c1">;;   :has-vector true,</span>
-</span><span class='line'><span class="c1">;;   :vector_norm 6.700014114379883,</span>
-</span><span class='line'><span class="c1">;;   :is_oov false}</span>
-</span><span class='line'><span class="c1">;;  {:text &quot;afskfsd&quot;, :has-vector false, :vector_norm 0.0, :is_oov true})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And find similarity between different words.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">tokens</span> <span class="p">(</span><span class="nf">nlp</span> <span class="s">&quot;dog cat banana&quot;</span><span class="p">)]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">token1</span> <span class="nv">tokens</span>
-</span><span class='line'>        <span class="nv">token2</span> <span class="nv">tokens</span><span class="p">]</span>
-</span><span class='line'>    <span class="p">{</span><span class="ss">:token1</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token1</span> <span class="nv">text</span><span class="p">)</span>
-</span><span class='line'>     <span class="ss">:token2</span> <span class="p">(</span><span class="nf">py.-</span> <span class="nv">token2</span> <span class="nv">text</span><span class="p">)</span>
-</span><span class='line'>     <span class="ss">:similarity</span> <span class="p">(</span><span class="nf">py.</span> <span class="nv">token1</span> <span class="nv">similarity</span> <span class="nv">token2</span><span class="p">)}))</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;; ({:token1 &quot;dog&quot;, :token2 &quot;dog&quot;, :similarity 1.0}</span>
-</span><span class='line'><span class="c1">;;  {:token1 &quot;dog&quot;, :token2 &quot;cat&quot;, :similarity 0.8016854524612427}</span>
-</span><span class='line'><span class="c1">;;  {:token1 &quot;dog&quot;, :token2 &quot;banana&quot;, :similarity 0.2432764321565628}</span>
-</span><span class='line'><span class="c1">;;  {:token1 &quot;cat&quot;, :token2 &quot;dog&quot;, :similarity 0.8016854524612427}</span>
-</span><span class='line'><span class="c1">;;  {:token1 &quot;cat&quot;, :token2 &quot;cat&quot;, :similarity 1.0}</span>
-</span><span class='line'><span class="c1">;;  {:token1 &quot;cat&quot;, :token2 &quot;banana&quot;, :similarity 0.28154364228248596}</span>
-</span><span class='line'><span class="c1">;;  {:token1 &quot;banana&quot;, :token2 &quot;dog&quot;, :similarity 0.2432764321565628}</span>
-</span><span class='line'><span class="c1">;;  {:token1 &quot;banana&quot;, :token2 &quot;cat&quot;, :similarity 0.28154364228248596}</span>
-</span><span class='line'><span class="c1">;;  {:token1 &quot;banana&quot;, :token2 &quot;banana&quot;, :similarity 1.0})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Wrap up</h2>
-
-<p>We&rsquo;ve seen a grand tour of the two most popular natural language python libraries that you can now use through Clojure interop!</p>
-
-<p>I hope you&rsquo;ve enjoyed it and if you are interested in exploring yourself, the code examples are <a href="https://github.com/gigasquid/libpython-clj-examples">here</a></p>
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2020-01-24T15:34:00-05:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 24 Jan 2020,  3:34 PM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/python/'>Python</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2020/01/18/parens-for-pyplot/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Parens for Pyplot"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Parens for Pyplot</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2020/12/24/thoughts-on-ai-debate-2/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Thoughts on AI Debate 2">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>Thoughts on AI Debate 2</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Clojure Interop with Python NLP Libraries | Squid's Blog</title><meta name=keywords content><meta name=description content="
+In this edition of the blog series of Clojure/Python interop with libpython-clj, we&rsquo;ll be taking a look at two popular Python NLP libraries: NLTK and SpaCy.
+NLTK - Natural Language Toolkit
+I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by far NLTK was the most requested library. After looking into it, I can see why. It&rsquo;s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching."><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Clojure Interop with Python NLP Libraries"><meta property="og:description" content="In this edition of the blog series of Clojure/Python interop with libpython-clj, we’ll be taking a look at two popular Python NLP libraries: NLTK and SpaCy.
+NLTK - Natural Language Toolkit I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by far NLTK was the most requested library. After looking into it, I can see why. It’s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-01-24T15:34:00+00:00"><meta property="article:modified_time" content="2020-01-24T15:34:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Clojure Interop with Python NLP Libraries"><meta name=twitter:description content="In this edition of the blog series of Clojure/Python interop with libpython-clj, we’ll be taking a look at two popular Python NLP libraries: NLTK and SpaCy.
+NLTK - Natural Language Toolkit I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by far NLTK was the most requested library. After looking into it, I can see why. It’s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Clojure Interop with Python NLP Libraries","item":"https://gigasquidsoftware.com/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Clojure Interop with Python NLP Libraries","name":"Clojure Interop with Python NLP Libraries","description":"\nIn this edition of the blog series of Clojure/Python interop with libpython-clj, we\u0026rsquo;ll be taking a look at two popular Python NLP libraries: NLTK and SpaCy.\nNLTK - Natural Language Toolkit I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by far NLTK was the most requested library. After looking into it, I can see why. It\u0026rsquo;s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching.\n","keywords":[],"articleBody":"\nIn this edition of the blog series of Clojure/Python interop with libpython-clj, we’ll be taking a look at two popular Python NLP libraries: NLTK and SpaCy.\nNLTK - Natural Language Toolkit I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by far NLTK was the most requested library. After looking into it, I can see why. It’s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching.\nInstallation To use the NLTK toolkit you will need to install it. I use sudo pip3 install nltk, but libpython-clj now supports virtual environments with this PR, so feel free to use whatever is best for you.\nFeatures We’ll take a quick tour of the features of NLTK following along initially with the nltk official book and then moving onto this more data task centered tutorial.\nFirst, we need to require all of our things as usual:\n(ns gigasquid.nltk (:require [libpython-clj.require :refer [require-python]] [libpython-clj.python :as py :refer [py. py.. py.-]])) (require-python '([nltk :as nltk])) Downloading packages There are all sorts of packages available to download from NLTK. To start out and tour the library, I would go with a small one that has basic data for the nltk book tutorial.\n(nltk/download \"book\") (require-python '([nltk.book :as book])) There are all other sorts of downloads as well, such as (nltk/download \"popular\") for most used ones. You can also download \"all\", but beware that it is big.\nYou can check out some of the texts it downloaded with:\n(book/texts) ;;; prints out in repl ;; text1: Moby Dick by Herman Melville 1851 ;; text2: Sense and Sensibility by Jane Austen 1811 ;; text3: The Book of Genesis ;; text4: Inaugural Address Corpus ;; text5: Chat Corpus ;; text6: Monty Python and the Holy Grail ;; text7: Wall Street Journal ;; text8: Personals Corpus ;; text9: The Man Who Was Thursday by G . K . Chesterton 1908 book/text1 ;=\u003e book/text2 ;=\u003e You can do fun things like see how many tokens are in a text\n(count (py.- book/text3 tokens)) ;=\u003e 44764 Or even see the lexical diversity, which is a measure of the richness of the text by looking at the unique set of word tokens against the total tokens.\n(defn lexical-diversity [text] (let [tokens (py.- text tokens)] (/ (-\u003e tokens set count) (* 1.0 (count tokens))))) (lexical-diversity book/text3) ;=\u003e 0.06230453042623537 (lexical-diversity book/text5) ;=\u003e 0.13477005109975562 This of course is all very interesting but I prefer to look at some more practical tasks, so we are going to look at some sentence tokenization.\nSentence Tokenization Text can be broken up into individual word tokens or sentence tokens. Let’s start off first with the token package\n(require-python '([nltk.tokenize :as tokenize])) (def text \"Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome. The sky is pinkish-blue. You shouldn't eat cardboard\") To tokenize sentences, you take the text and use tokenize/sent_tokenize.\n(def text \"Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome. The sky is pinkish-blue. You shouldn't eat cardboard\") (def tokenized-sent (tokenize/sent_tokenize text)) tokenized-sent ;;=\u003e ['Hello Mr. Smith, how are you doing today?', 'The weather is great, and city is awesome.', 'The sky is pinkish-blue.', \"You shouldn't eat cardboard\"] Likewise, to tokenize words, you use tokenize/word_tokenize:\n(def text \"Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome. The sky is pinkish-blue. You shouldn't eat cardboard\") (def tokenized-sent (tokenize/sent_tokenize text)) tokenized-sent ;;=\u003e ['Hello Mr. Smith, how are you doing today?', 'The weather is great, and city is awesome.', 'The sky is pinkish-blue.', \"You shouldn't eat cardboard\"] (def tokenized-word (tokenize/word_tokenize text)) tokenized-word ;;=\u003e ['Hello', 'Mr.', 'Smith', ',', 'how', 'are', 'you', 'doing', 'today', '?', 'The', 'weather', 'is', 'great', ',', 'and', 'city', 'is', 'awesome', '.', 'The', 'sky', 'is', 'pinkish-blue', '.', 'You', 'should', \"n't\", 'eat', 'cardboard'] Frequency Distribution You can also look at the frequency distribution of the words with using the probability package.\n(require-python '([nltk.probability :as probability])) (def fdist (probability/FreqDist tokenized-word)) fdist ;=\u003e (py. fdist most_common) ;=\u003e [('is', 3), (',', 2), ('The', 2), ('.', 2), ('Hello', 1), ('Mr.', 1), ('Smith', 1), ('how', 1), ('are', 1), ('you', 1), ('doing', 1), ('today', 1), ('?', 1), ('weather', 1), ('great', 1), ('and', 1), ('city', 1), ('awesome', 1), ('sky', 1), ('pinkish-blue', 1), ('You', 1), ('should', 1), (\"n't\", 1), ('eat', 1), ('cardboard', 1)] Stop Words Stop words are considered noise in text and there are ways to use the library to remove them using the nltk.corpus.\n(def stop-words (into #{} (py. corpus/stopwords words \"english\"))) stop-words ;=\u003e #{\"d\" \"itself\" \"more\" \"didn't\" \"ain\" \"won\" \"hers\"....} Now that we have a collection of the stop words, we can filter them out of our text in the normal way in Clojure.\n(def filtered-sent (-\u003e\u003e tokenized-sent (map tokenize/word_tokenize) (map #(remove stop-words %)))) filtered-sent ;; ((\"Hello\" \"Mr.\" \"Smith\" \",\" \"today\" \"?\") ;; (\"The\" \"weather\" \"great\" \",\" \"city\" \"awesome\" \".\") ;; (\"The\" \"sky\" \"pinkish-blue\" \".\") ;; (\"You\" \"n't\" \"eat\" \"cardboard\")) Lexion Normalization and Lemmatization Stemming and Lemmatization allow ways for the text to be reduced to base words and normalized. For example, the word flying has a stemmed word of fli and a lemma of fly.\n(require-python '([nltk.stem :as stem])) (require-python '([nltk.stem.wordnet :as wordnet])) (let [lem (wordnet/WordNetLemmatizer) stem (stem/PorterStemmer) word \"flying\"] {:lemmatized-word (py. lem lemmatize word \"v\") :stemmed-word (py. stem stem word)}) ;=\u003e {:lemmatized-word \"fly\", :stemmed-word \"fli\"} POS Tagging It also has support for Part-of-Speech (POS) Tagging. A quick example of that is:\n(let [sent \"Albert Einstein was born in Ulm, Germany in 1879.\" tokens (nltk/word_tokenize sent)] {:tokens tokens :pos-tag (nltk/pos_tag tokens)}) ;; {:tokens ;; ['Albert', 'Einstein', 'was', 'born', 'in', 'Ulm', ',', 'Germany', 'in', '1879', '.'], ;; :pos-tag ;; [('Albert', 'NNP'), ('Einstein', 'NNP'), ('was', 'VBD'), ('born', 'VBN'), ('in', 'IN'), ('Ulm', 'NNP'), (',', ','), ('Germany', 'NNP'), ('in', 'IN'), ('1879', 'CD'), ('.', '.')]} Phew! That’s a brief overview of what NLTK can do, now what about the other library SpaCy?\nSpaCy SpaCy is the main competitor to NLTK. It has a more opinionated library which is more object oriented than NLTK which mainly processes text. It has better performance for tokenization and POS tagging and has support for word vectors, which NLTK does not.\nLet’s dive in a take a look at it.\nInstallation To install spaCy, you will need to do:\npip3 install spacy python3 -m spacy download en_core_web_sm to load up the small language model We’ll be following along this tutorial\nWe will, of course, need to load up the library\n(require-python '([spacy :as spacy])) and its language model:\n(def nlp (spacy/load \"en_core_web_sm\")) Linguistic Annotations There are many linguistic annotations that are available, from POS, lemmas, and more:\n(let [doc (nlp \"Apple is looking at buying U.K. startup for $1 billion\")] (map (fn [token] [(py.- token text) (py.- token pos_) (py.- token dep_)]) doc)) ;; ([\"Apple\" \"PROPN\" \"nsubj\"] ;; [\"is\" \"AUX\" \"aux\"] ;; [\"looking\" \"VERB\" \"ROOT\"] ;; [\"at\" \"ADP\" \"prep\"] ;; [\"buying\" \"VERB\" \"pcomp\"] ;; [\"U.K.\" \"PROPN\" \"compound\"] ;; [\"startup\" \"NOUN\" \"dobj\"] ;; [\"for\" \"ADP\" \"prep\"] ;; [\"$\" \"SYM\" \"quantmod\"] ;; [\"1\" \"NUM\" \"compound\"] ;; [\"billion\" \"NUM\" \"pobj\"]) Here are some more:\n(let [doc (nlp \"Apple is looking at buying U.K. startup for $1 billion\")] (map (fn [token] {:text (py.- token text) :lemma (py.- token lemma_) :pos (py.- token pos_) :tag (py.- token tag_) :dep (py.- token dep_) :shape (py.- token shape_) :alpha (py.- token is_alpha) :is_stop (py.- token is_stop)} ) doc)) ;; ({:text \"Apple\", ;; :lemma \"Apple\", ;; :pos \"PROPN\", ;; :tag \"NNP\", ;; :dep \"nsubj\", ;; :shape \"Xxxxx\", ;; :alpha true, ;; :is_stop false} ;; {:text \"is\", ;; :lemma \"be\", ;; :pos \"AUX\", ;; :tag \"VBZ\", ;; :dep \"aux\", ;; :shape \"xx\", ;; :alpha true, ;; :is_stop true} ;; ... Named Entities It also handles named entities in the same fashion.\n(let [doc (nlp \"Apple is looking at buying U.K. startup for $1 billion\")] (map (fn [ent] {:text (py.- ent text) :start-char (py.- ent start_char) :end-char (py.- ent end_char) :label (py.- ent label_)} ) (py.- doc ents))) ;; ({:text \"Apple\", :start-char 0, :end-char 5, :label \"ORG\"} ;; {:text \"U.K.\", :start-char 27, :end-char 31, :label \"GPE\"} ;; {:text \"$1 billion\", :start-char 44, :end-char 54, :label \"MONEY\"}) As you can see, it can handle pretty much the same things as NLTK. But let’s take a look at what it can do that NLTK and that is with word vectors.\nWord Vectors In order to use word vectors, you will have to load up a medium or large size data model because the small ones don’t ship with word vectors. You can do that at the command line with:\npython3 -m spacy download en_core_web_md You will need to restart your repl and then load it with:\n(require-python '([spacy :as spacy])) (def nlp (spacy/load \"en_core_web_md\")) Now you can see cool word vector stuff!\n(let [tokens (nlp \"dog cat banana afskfsd\")] (map (fn [token] {:text (py.- token text) :has-vector (py.- token has_vector) :vector_norm (py.- token vector_norm) :is_oov (py.- token is_oov)} ) tokens)) ;; ({:text \"dog\", ;; :has-vector true, ;; :vector_norm 7.033673286437988, ;; :is_oov false} ;; {:text \"cat\", ;; :has-vector true, ;; :vector_norm 6.680818557739258, ;; :is_oov false} ;; {:text \"banana\", ;; :has-vector true, ;; :vector_norm 6.700014114379883, ;; :is_oov false} ;; {:text \"afskfsd\", :has-vector false, :vector_norm 0.0, :is_oov true}) And find similarity between different words.\n(let [tokens (nlp \"dog cat banana\")] (for [token1 tokens token2 tokens] {:token1 (py.- token1 text) :token2 (py.- token2 text) :similarity (py. token1 similarity token2)})) ;; ({:token1 \"dog\", :token2 \"dog\", :similarity 1.0} ;; {:token1 \"dog\", :token2 \"cat\", :similarity 0.8016854524612427} ;; {:token1 \"dog\", :token2 \"banana\", :similarity 0.2432764321565628} ;; {:token1 \"cat\", :token2 \"dog\", :similarity 0.8016854524612427} ;; {:token1 \"cat\", :token2 \"cat\", :similarity 1.0} ;; {:token1 \"cat\", :token2 \"banana\", :similarity 0.28154364228248596} ;; {:token1 \"banana\", :token2 \"dog\", :similarity 0.2432764321565628} ;; {:token1 \"banana\", :token2 \"cat\", :similarity 0.28154364228248596} ;; {:token1 \"banana\", :token2 \"banana\", :similarity 1.0}) Wrap up We’ve seen a grand tour of the two most popular natural language python libraries that you can now use through Clojure interop!\nI hope you’ve enjoyed it and if you are interested in exploring yourself, the code examples are here\n","wordCount":"1695","inLanguage":"en","datePublished":"2020-01-24T15:34:00Z","dateModified":"2020-01-24T15:34:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2020/01/24/clojure-interop-with-python-nlp-libraries/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Clojure Interop with Python NLP Libraries</h1><div class=post-meta><span title='2020-01-24 15:34:00 +0000 UTC'>January 24, 2020</span>&nbsp;·&nbsp;<span>8 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p><img alt=clojure-python loading=lazy src=http:////live.staticflickr.com/65535/49435394578_400fdf1c7f_c.jpg></p><p>In this edition of the blog series of Clojure/Python interop with <a href=https://github.com/cnuernber/libpython-clj>libpython-clj</a>, we&rsquo;ll be taking a look at two popular Python NLP libraries: <a href=https://www.nltk.org/>NLTK</a> and <a href=https://spacy.io/>SpaCy</a>.</p><h2 id=nltk---natural-language-toolkit>NLTK - Natural Language Toolkit<a hidden class=anchor aria-hidden=true href=#nltk---natural-language-toolkit>#</a></h2><p>I was taking requests for doing examples of python-clojure interop libraries on twitter the other day, and by <em>far</em> NLTK was the most requested library. After looking into it, I can see why. It&rsquo;s the most popular natural language processing library in Python and you will see it everywhere there is text someone is touching.</p><h3 id=installation>Installation<a hidden class=anchor aria-hidden=true href=#installation>#</a></h3><p>To use the NLTK toolkit you will need to install it. I use <code>sudo pip3 install nltk</code>, but libpython-clj now supports virtual environments with this <a href=https://github.com/cnuernber/libpython-clj/pull/53>PR</a>, so feel free to use whatever is best for you.</p><h3 id=features>Features<a hidden class=anchor aria-hidden=true href=#features>#</a></h3><p>We&rsquo;ll take a quick tour of the features of NLTK following along initially with the <a href=https://www.nltk.org/book/ch01.html>nltk official book</a> and then moving onto this more data task centered <a href=https://www.datacamp.com/community/tutorials/text-analytics-beginners-nltk>tutorial</a>.</p><p>First, we need to require all of our things as usual:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>ns </span>gigasquid.nltk
+</span></span><span style=display:flex><span>  (<span style=color:#e6db74>:require</span> [libpython-clj.require <span style=color:#e6db74>:refer</span> [require-python]]
+</span></span><span style=display:flex><span>            [libpython-clj.python <span style=color:#e6db74>:as</span> py <span style=color:#e6db74>:refer</span> [py. py.. py.-]]))
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>([nltk <span style=color:#e6db74>:as</span> nltk]))
+</span></span></code></pre></div><h4 id=downloading-packages>Downloading packages<a hidden class=anchor aria-hidden=true href=#downloading-packages>#</a></h4><p>There are all sorts of packages available to download from NLTK. To start out and tour the library, I would go with a small one that has basic data for the nltk book tutorial.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span> (<span style=color:#a6e22e>nltk/download</span> <span style=color:#e6db74>&#34;book&#34;</span>)
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>([nltk.book <span style=color:#e6db74>:as</span> book]))
+</span></span></code></pre></div><p>There are all other sorts of downloads as well, such as <code>(nltk/download "popular")</code> for most used ones. You can also download <code>"all"</code>, but beware that it is big.</p><p>You can check out some of the texts it downloaded with:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>  (<span style=color:#a6e22e>book/texts</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;;; prints out in repl</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text1: Moby Dick by Herman Melville 1851</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text2: Sense and Sensibility by Jane Austen 1811</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text3: The Book of Genesis</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text4: Inaugural Address Corpus</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text5: Chat Corpus</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text6: Monty Python and the Holy Grail</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text7: Wall Street Journal</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text8: Personals Corpus</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;; text9: The Man Who Was Thursday by G . K . Chesterton 1908</span>
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  book/text1 <span style=color:#75715e>;=&gt;  &lt;Text: Moby Dick by Herman Melville 1851&gt;</span>
+</span></span><span style=display:flex><span>  book/text2 <span style=color:#75715e>;=&gt;  &lt;Text: Sense and Sensibility by Jane Austen 1811&gt;</span>
+</span></span><span style=display:flex><span>  
+</span></span></code></pre></div><p>You can do fun things like see how many tokens are in a text</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>  (count (<span style=color:#a6e22e>py.-</span> book/text3 tokens))  <span style=color:#75715e>;=&gt; 44764</span>
+</span></span></code></pre></div><p>Or even see the lexical diversity, which is a measure of the richness of the text by looking at the unique set of word tokens against the total tokens.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>  (<span style=color:#66d9ef>defn </span>lexical-diversity [text]
+</span></span><span style=display:flex><span>    (<span style=color:#66d9ef>let </span>[tokens (<span style=color:#a6e22e>py.-</span> text tokens)]
+</span></span><span style=display:flex><span>      (/ (-&gt; tokens set count)
+</span></span><span style=display:flex><span>         (* <span style=color:#ae81ff>1.0</span> (count tokens)))))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>lexical-diversity</span> book/text3) <span style=color:#75715e>;=&gt; 0.06230453042623537</span>
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>lexical-diversity</span> book/text5) <span style=color:#75715e>;=&gt; 0.13477005109975562</span>
+</span></span></code></pre></div><p>This of course is all very interesting but I prefer to look at some more practical tasks, so we are going to look at some sentence tokenization.</p><h4 id=sentence-tokenization>Sentence Tokenization<a hidden class=anchor aria-hidden=true href=#sentence-tokenization>#</a></h4><p>Text can be broken up into individual word tokens or sentence tokens. Let&rsquo;s start off first with the token package</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>([nltk.tokenize <span style=color:#e6db74>:as</span> tokenize]))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>text <span style=color:#e6db74>&#34;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>The sky is pinkish-blue. You shouldn&#39;t eat cardboard&#34;</span>)
+</span></span></code></pre></div><p>To tokenize sentences, you take the text and use <code>tokenize/sent_tokenize</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span> (<span style=color:#66d9ef>def </span>text <span style=color:#e6db74>&#34;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>The sky is pinkish-blue. You shouldn&#39;t eat cardboard&#34;</span>)
+</span></span><span style=display:flex><span> (<span style=color:#66d9ef>def </span>tokenized-sent (<span style=color:#a6e22e>tokenize/sent_tokenize</span> text))
+</span></span><span style=display:flex><span> tokenized-sent
+</span></span><span style=display:flex><span> <span style=color:#75715e>;;=&gt; [&#39;Hello Mr. Smith, how are you doing today?&#39;, &#39;The weather is great, and city is awesome.&#39;, &#39;The sky is pinkish-blue.&#39;, &#34;You shouldn&#39;t eat cardboard&#34;]</span>
+</span></span></code></pre></div><p>Likewise, to tokenize words, you use <code>tokenize/word_tokenize</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span> (<span style=color:#66d9ef>def </span>text <span style=color:#e6db74>&#34;Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>The sky is pinkish-blue. You shouldn&#39;t eat cardboard&#34;</span>)
+</span></span><span style=display:flex><span> (<span style=color:#66d9ef>def </span>tokenized-sent (<span style=color:#a6e22e>tokenize/sent_tokenize</span> text))
+</span></span><span style=display:flex><span> tokenized-sent
+</span></span><span style=display:flex><span> <span style=color:#75715e>;;=&gt; [&#39;Hello Mr. Smith, how are you doing today?&#39;, &#39;The weather is great, and city is awesome.&#39;, &#39;The sky is pinkish-blue.&#39;, &#34;You shouldn&#39;t eat cardboard&#34;]</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> (<span style=color:#66d9ef>def </span>tokenized-word (<span style=color:#a6e22e>tokenize/word_tokenize</span> text))
+</span></span><span style=display:flex><span> tokenized-word
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;;=&gt; [&#39;Hello&#39;, &#39;Mr.&#39;, &#39;Smith&#39;, &#39;,&#39;, &#39;how&#39;, &#39;are&#39;, &#39;you&#39;, &#39;doing&#39;, &#39;today&#39;, &#39;?&#39;, &#39;The&#39;, &#39;weather&#39;, &#39;is&#39;, &#39;great&#39;, &#39;,&#39;, &#39;and&#39;, &#39;city&#39;, &#39;is&#39;, &#39;awesome&#39;, &#39;.&#39;, &#39;The&#39;, &#39;sky&#39;, &#39;is&#39;, &#39;pinkish-blue&#39;, &#39;.&#39;, &#39;You&#39;, &#39;should&#39;, &#34;n&#39;t&#34;, &#39;eat&#39;, &#39;cardboard&#39;]</span>
+</span></span></code></pre></div><h4 id=frequency-distribution>Frequency Distribution<a hidden class=anchor aria-hidden=true href=#frequency-distribution>#</a></h4><p>You can also look at the frequency distribution of the words with using the probability package.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span> (<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>([nltk.probability <span style=color:#e6db74>:as</span> probability]))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> (<span style=color:#66d9ef>def </span>fdist (<span style=color:#a6e22e>probability/FreqDist</span> tokenized-word))
+</span></span><span style=display:flex><span> fdist <span style=color:#75715e>;=&gt; &lt;FreqDist with 25 samples and 30 outcomes&gt;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> (<span style=color:#a6e22e>py.</span> fdist most_common)
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;=&gt; [(&#39;is&#39;, 3), (&#39;,&#39;, 2), (&#39;The&#39;, 2), (&#39;.&#39;, 2), (&#39;Hello&#39;, 1), (&#39;Mr.&#39;, 1), (&#39;Smith&#39;, 1), (&#39;how&#39;, 1), (&#39;are&#39;, 1), (&#39;you&#39;, 1), (&#39;doing&#39;, 1), (&#39;today&#39;, 1), (&#39;?&#39;, 1), (&#39;weather&#39;, 1), (&#39;great&#39;, 1), (&#39;and&#39;, 1), (&#39;city&#39;, 1), (&#39;awesome&#39;, 1), (&#39;sky&#39;, 1), (&#39;pinkish-blue&#39;, 1), (&#39;You&#39;, 1), (&#39;should&#39;, 1), (&#34;n&#39;t&#34;, 1), (&#39;eat&#39;, 1), (&#39;cardboard&#39;, 1)]</span>
+</span></span></code></pre></div><h4 id=stop-words>Stop Words<a hidden class=anchor aria-hidden=true href=#stop-words>#</a></h4><p>Stop words are considered noise in text and there are ways to use the library to remove them using the <code>nltk.corpus</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>stop-words (into <span style=color:#f92672>#</span>{} (<span style=color:#a6e22e>py.</span> corpus/stopwords words <span style=color:#e6db74>&#34;english&#34;</span>)))
+</span></span><span style=display:flex><span> stop-words
+</span></span><span style=display:flex><span>  <span style=color:#75715e>;=&gt; #{&#34;d&#34; &#34;itself&#34; &#34;more&#34; &#34;didn&#39;t&#34; &#34;ain&#34; &#34;won&#34; &#34;hers&#34;....}</span>
+</span></span></code></pre></div><p>Now that we have a collection of the stop words, we can filter them out of our text in the normal way in Clojure.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>filtered-sent (<span style=color:#a6e22e>-&gt;&gt;</span> tokenized-sent
+</span></span><span style=display:flex><span>                         (map tokenize/word_tokenize)
+</span></span><span style=display:flex><span>                         (map <span style=color:#f92672>#</span>(remove stop-words %))))
+</span></span><span style=display:flex><span> filtered-sent
+</span></span><span style=display:flex><span> <span style=color:#75715e>;; ((&#34;Hello&#34; &#34;Mr.&#34; &#34;Smith&#34; &#34;,&#34; &#34;today&#34; &#34;?&#34;)</span>
+</span></span><span style=display:flex><span> <span style=color:#75715e>;; (&#34;The&#34; &#34;weather&#34; &#34;great&#34; &#34;,&#34; &#34;city&#34; &#34;awesome&#34; &#34;.&#34;)</span>
+</span></span><span style=display:flex><span> <span style=color:#75715e>;; (&#34;The&#34; &#34;sky&#34; &#34;pinkish-blue&#34; &#34;.&#34;)</span>
+</span></span><span style=display:flex><span> <span style=color:#75715e>;; (&#34;You&#34; &#34;n&#39;t&#34; &#34;eat&#34; &#34;cardboard&#34;))</span>
+</span></span></code></pre></div><h4 id=lexion-normalization-and-lemmatization>Lexion Normalization and Lemmatization<a hidden class=anchor aria-hidden=true href=#lexion-normalization-and-lemmatization>#</a></h4><p>Stemming and Lemmatization allow ways for the text to be reduced to base words and normalized.
+For example, the word <code>flying</code> has a stemmed word of <code>fli</code> and a lemma of <code>fly</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>([nltk.stem <span style=color:#e6db74>:as</span> stem]))
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>([nltk.stem.wordnet <span style=color:#e6db74>:as</span> wordnet]))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>let </span>[lem (<span style=color:#a6e22e>wordnet/WordNetLemmatizer</span>)
+</span></span><span style=display:flex><span>       stem (<span style=color:#a6e22e>stem/PorterStemmer</span>)
+</span></span><span style=display:flex><span>       word <span style=color:#e6db74>&#34;flying&#34;</span>]
+</span></span><span style=display:flex><span>   {<span style=color:#e6db74>:lemmatized-word</span> (<span style=color:#a6e22e>py.</span> lem lemmatize word <span style=color:#e6db74>&#34;v&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>:stemmed-word</span> (<span style=color:#a6e22e>py.</span> stem stem word)})
+</span></span><span style=display:flex><span> <span style=color:#75715e>;=&gt; {:lemmatized-word &#34;fly&#34;, :stemmed-word &#34;fli&#34;}</span>
+</span></span></code></pre></div><h4 id=pos-tagging>POS Tagging<a hidden class=anchor aria-hidden=true href=#pos-tagging>#</a></h4><p>It also has support for Part-of-Speech (POS) Tagging. A quick example of that is:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>let </span>[sent <span style=color:#e6db74>&#34;Albert Einstein was born in Ulm, Germany in 1879.&#34;</span>
+</span></span><span style=display:flex><span>       tokens (<span style=color:#a6e22e>nltk/word_tokenize</span> sent)]
+</span></span><span style=display:flex><span>   {<span style=color:#e6db74>:tokens</span> tokens
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>:pos-tag</span> (<span style=color:#a6e22e>nltk/pos_tag</span> tokens)})
+</span></span><span style=display:flex><span> <span style=color:#75715e>;; {:tokens</span>
+</span></span><span style=display:flex><span> <span style=color:#75715e>;; [&#39;Albert&#39;, &#39;Einstein&#39;, &#39;was&#39;, &#39;born&#39;, &#39;in&#39;, &#39;Ulm&#39;, &#39;,&#39;, &#39;Germany&#39;, &#39;in&#39;, &#39;1879&#39;, &#39;.&#39;],</span>
+</span></span><span style=display:flex><span> <span style=color:#75715e>;; :pos-tag</span>
+</span></span><span style=display:flex><span> <span style=color:#75715e>;; [(&#39;Albert&#39;, &#39;NNP&#39;), (&#39;Einstein&#39;, &#39;NNP&#39;), (&#39;was&#39;, &#39;VBD&#39;), (&#39;born&#39;, &#39;VBN&#39;), (&#39;in&#39;, &#39;IN&#39;), (&#39;Ulm&#39;, &#39;NNP&#39;), (&#39;,&#39;, &#39;,&#39;), (&#39;Germany&#39;, &#39;NNP&#39;), (&#39;in&#39;, &#39;IN&#39;), (&#39;1879&#39;, &#39;CD&#39;), (&#39;.&#39;, &#39;.&#39;)]}</span>
+</span></span></code></pre></div><p>Phew! That&rsquo;s a brief overview of what NLTK can do, now what about the other library SpaCy?</p><h2 id=spacy>SpaCy<a hidden class=anchor aria-hidden=true href=#spacy>#</a></h2><p><a href=https://spacy.io/usage/spacy-101#whats-spacy>SpaCy</a> is the main competitor to NLTK. It has a more opinionated library which is more object oriented than NLTK which mainly processes text. It has better performance for tokenization and POS tagging and has support for word vectors, which NLTK does not.</p><p>Let&rsquo;s dive in a take a look at it.</p><h3 id=installation-1>Installation<a hidden class=anchor aria-hidden=true href=#installation-1>#</a></h3><p>To install spaCy, you will need to do:</p><ul><li><code>pip3 install spacy</code></li><li><code>python3 -m spacy download en_core_web_sm</code> to load up the small language model</li></ul><p>We&rsquo;ll be following along this <a href=https://spacy.io/usage/spacy-101#annotat>tutorial</a></p><p>We will, of course, need to load up the library</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>([spacy <span style=color:#e6db74>:as</span> spacy]))
+</span></span></code></pre></div><p>and its language model:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>nlp (<span style=color:#a6e22e>spacy/load</span> <span style=color:#e6db74>&#34;en_core_web_sm&#34;</span>))
+</span></span></code></pre></div><h4 id=linguistic-annotations>Linguistic Annotations<a hidden class=anchor aria-hidden=true href=#linguistic-annotations>#</a></h4><p>There are many linguistic annotations that are available, from POS, lemmas, and more:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>let </span>[doc (<span style=color:#a6e22e>nlp</span> <span style=color:#e6db74>&#34;Apple is looking at buying U.K. startup for $1 billion&#34;</span>)]
+</span></span><span style=display:flex><span>  (map (<span style=color:#66d9ef>fn </span>[token]
+</span></span><span style=display:flex><span>         [(<span style=color:#a6e22e>py.-</span> token text) (<span style=color:#a6e22e>py.-</span> token pos_) (<span style=color:#a6e22e>py.-</span> token dep_)])
+</span></span><span style=display:flex><span>       doc))
+</span></span><span style=display:flex><span><span style=color:#75715e>;; ([&#34;Apple&#34; &#34;PROPN&#34; &#34;nsubj&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;is&#34; &#34;AUX&#34; &#34;aux&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;looking&#34; &#34;VERB&#34; &#34;ROOT&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;at&#34; &#34;ADP&#34; &#34;prep&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;buying&#34; &#34;VERB&#34; &#34;pcomp&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;U.K.&#34; &#34;PROPN&#34; &#34;compound&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;startup&#34; &#34;NOUN&#34; &#34;dobj&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;for&#34; &#34;ADP&#34; &#34;prep&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;$&#34; &#34;SYM&#34; &#34;quantmod&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;1&#34; &#34;NUM&#34; &#34;compound&#34;]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  [&#34;billion&#34; &#34;NUM&#34; &#34;pobj&#34;])</span>
+</span></span></code></pre></div><p>Here are some more:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>let </span>[doc (<span style=color:#a6e22e>nlp</span> <span style=color:#e6db74>&#34;Apple is looking at buying U.K. startup for $1 billion&#34;</span>)]
+</span></span><span style=display:flex><span>  (map (<span style=color:#66d9ef>fn </span>[token]
+</span></span><span style=display:flex><span>         {<span style=color:#e6db74>:text</span> (<span style=color:#a6e22e>py.-</span> token text)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:lemma</span> (<span style=color:#a6e22e>py.-</span> token lemma_)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:pos</span> (<span style=color:#a6e22e>py.-</span> token pos_)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:tag</span> (<span style=color:#a6e22e>py.-</span> token tag_)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:dep</span> (<span style=color:#a6e22e>py.-</span> token dep_)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:shape</span> (<span style=color:#a6e22e>py.-</span> token shape_)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:alpha</span> (<span style=color:#a6e22e>py.-</span> token is_alpha)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:is_stop</span> (<span style=color:#a6e22e>py.-</span> token is_stop)} )
+</span></span><span style=display:flex><span>       doc))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; ({:text &#34;Apple&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :lemma &#34;Apple&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :pos &#34;PROPN&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :tag &#34;NNP&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :dep &#34;nsubj&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :shape &#34;Xxxxx&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :alpha true,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :is_stop false}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:text &#34;is&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :lemma &#34;be&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :pos &#34;AUX&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :tag &#34;VBZ&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :dep &#34;aux&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :shape &#34;xx&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :alpha true,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :is_stop true}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  ...</span>
+</span></span></code></pre></div><h3 id=named-entities>Named Entities<a hidden class=anchor aria-hidden=true href=#named-entities>#</a></h3><p>It also handles named entities in the same fashion.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>let </span>[doc (<span style=color:#a6e22e>nlp</span> <span style=color:#e6db74>&#34;Apple is looking at buying U.K. startup for $1 billion&#34;</span>)]
+</span></span><span style=display:flex><span>  (map (<span style=color:#66d9ef>fn </span>[ent]
+</span></span><span style=display:flex><span>         {<span style=color:#e6db74>:text</span> (<span style=color:#a6e22e>py.-</span> ent text)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:start-char</span> (<span style=color:#a6e22e>py.-</span> ent start_char)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:end-char</span> (<span style=color:#a6e22e>py.-</span> ent end_char)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:label</span> (<span style=color:#a6e22e>py.-</span> ent label_)} )
+</span></span><span style=display:flex><span>       (<span style=color:#a6e22e>py.-</span> doc ents)))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; ({:text &#34;Apple&#34;, :start-char 0, :end-char 5, :label &#34;ORG&#34;}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:text &#34;U.K.&#34;, :start-char 27, :end-char 31, :label &#34;GPE&#34;}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:text &#34;$1 billion&#34;, :start-char 44, :end-char 54, :label &#34;MONEY&#34;})</span>
+</span></span></code></pre></div><p>As you can see, it can handle pretty much the same things as NLTK. But let&rsquo;s take a look at what it can do that NLTK and that is with word vectors.</p><h4 id=word-vectors>Word Vectors<a hidden class=anchor aria-hidden=true href=#word-vectors>#</a></h4><p>In order to use word vectors, you will have to load up a medium or large size data model because the small ones don&rsquo;t ship with word vectors. You can do that at the command line with:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-gdscript3 data-lang=gdscript3><span style=display:flex><span>python3 <span style=color:#f92672>-</span>m spacy download en_core_web_md
+</span></span></code></pre></div><p>You will need to restart your repl and then load it with:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>require-python</span> <span style=color:#f92672>&#39;</span>([spacy <span style=color:#e6db74>:as</span> spacy]))
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>nlp (<span style=color:#a6e22e>spacy/load</span> <span style=color:#e6db74>&#34;en_core_web_md&#34;</span>))
+</span></span></code></pre></div><p>Now you can see cool word vector stuff!</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>let </span>[tokens (<span style=color:#a6e22e>nlp</span> <span style=color:#e6db74>&#34;dog cat banana afskfsd&#34;</span>)]
+</span></span><span style=display:flex><span>  (map (<span style=color:#66d9ef>fn </span>[token]
+</span></span><span style=display:flex><span>         {<span style=color:#e6db74>:text</span> (<span style=color:#a6e22e>py.-</span> token text)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:has-vector</span> (<span style=color:#a6e22e>py.-</span> token has_vector)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:vector_norm</span> (<span style=color:#a6e22e>py.-</span> token vector_norm)
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>:is_oov</span> (<span style=color:#a6e22e>py.-</span> token is_oov)} )
+</span></span><span style=display:flex><span>       tokens))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; ({:text &#34;dog&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :has-vector true,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :vector_norm 7.033673286437988,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :is_oov false}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:text &#34;cat&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :has-vector true,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :vector_norm 6.680818557739258,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :is_oov false}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:text &#34;banana&#34;,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :has-vector true,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :vector_norm 6.700014114379883,</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;   :is_oov false}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:text &#34;afskfsd&#34;, :has-vector false, :vector_norm 0.0, :is_oov true})</span>
+</span></span></code></pre></div><p>And find similarity between different words.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>let </span>[tokens (<span style=color:#a6e22e>nlp</span> <span style=color:#e6db74>&#34;dog cat banana&#34;</span>)]
+</span></span><span style=display:flex><span>  (for [token1 tokens
+</span></span><span style=display:flex><span>        token2 tokens]
+</span></span><span style=display:flex><span>    {<span style=color:#e6db74>:token1</span> (<span style=color:#a6e22e>py.-</span> token1 text)
+</span></span><span style=display:flex><span>     <span style=color:#e6db74>:token2</span> (<span style=color:#a6e22e>py.-</span> token2 text)
+</span></span><span style=display:flex><span>     <span style=color:#e6db74>:similarity</span> (<span style=color:#a6e22e>py.</span> token1 similarity token2)}))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;; ({:token1 &#34;dog&#34;, :token2 &#34;dog&#34;, :similarity 1.0}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:token1 &#34;dog&#34;, :token2 &#34;cat&#34;, :similarity 0.8016854524612427}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:token1 &#34;dog&#34;, :token2 &#34;banana&#34;, :similarity 0.2432764321565628}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:token1 &#34;cat&#34;, :token2 &#34;dog&#34;, :similarity 0.8016854524612427}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:token1 &#34;cat&#34;, :token2 &#34;cat&#34;, :similarity 1.0}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:token1 &#34;cat&#34;, :token2 &#34;banana&#34;, :similarity 0.28154364228248596}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:token1 &#34;banana&#34;, :token2 &#34;dog&#34;, :similarity 0.2432764321565628}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:token1 &#34;banana&#34;, :token2 &#34;cat&#34;, :similarity 0.28154364228248596}</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>;;  {:token1 &#34;banana&#34;, :token2 &#34;banana&#34;, :similarity 1.0})</span>
+</span></span></code></pre></div><h2 id=wrap-up>Wrap up<a hidden class=anchor aria-hidden=true href=#wrap-up>#</a></h2><p>We&rsquo;ve seen a grand tour of the two most popular natural language python libraries that you can now use through Clojure interop!</p><p>I hope you&rsquo;ve enjoyed it and if you are interested in exploring yourself, the code examples are <a href=https://github.com/gigasquid/libpython-clj-examples>here</a></p></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2020/12/24/thoughts-on-ai-debate-2/><span class=title>« Prev</span>
+<span>Thoughts on AI Debate 2</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2020/01/18/parens-for-pyplot/><span class=title>Next »</span>
+<span>Parens for Pyplot</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Star on Squid's Blog</title><link>https://gigasquidsoftware.com/categories/star/</link><description>Recent content in Star on Squid's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 11 Jun 2014 10:38:00 +0000</lastBuildDate><atom:link href="https://gigasquidsoftware.com/categories/star/atom.xml" rel="self" type="application/rss+xml"/><item><title>A Taste of the Star Programming Language</title><link>https://gigasquidsoftware.com/blog/2014/06/11/a-taste-of-the-star-programming-language/</link><pubDate>Wed, 11 Jun 2014 10:38:00 +0000</pubDate><guid>https://gigasquidsoftware.com/blog/2014/06/11/a-taste-of-the-star-programming-language/</guid><description>&lt;p&gt;A while ago, I was &lt;a href="http://gigasquidsoftware.com/blog/2013/05/01/growing-a-language-with-haskell-and-instaparse/"&gt;exploring creating a programming language with
+Instaparse&lt;/a&gt;.
+I ended up exploring some concepts of Speech Acts proposed by John
+McCarthy by creating my first toy language called
+&lt;a href="http://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/"&gt;Babar&lt;/a&gt;.
+Shortly after posting a blog about it, I got an email from someone
+saying that I might be interested in a full blown, real programming
+language that also incorporated Speech Acts. I happily started
+composing an reply to the email that started off with&lt;/p&gt;</description></item></channel></rss>

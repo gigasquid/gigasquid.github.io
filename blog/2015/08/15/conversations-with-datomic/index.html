@@ -1,778 +1,138 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Conversations With Datomic - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/">
-  <meta property="og:title" content="Conversations With Datomic - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-08-15T10:29:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 15 Aug 2015, 10:29 AM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Conversations With Datomic
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p><img src="https://avatars0.githubusercontent.com/u/1478702?v=3&amp;s=200"></p>
-
-<p><strong>Human:</strong> Hi <a href="http://www.datomic.com/">Datomic</a>.   I have been hearing good things about you.  I would like to talk to you and get to know you.  Is that alright?</p>
-
-<p><strong>Datomic:</strong> Sure!  I would be happy to talk with you.  What language would you like to converse in?</p>
-
-<p><strong>Human:</strong>  I like Clojure.</p>
-
-<p><strong>Datomic:</strong>  That is one of my favorites too.  You know how to setup a Leiningen project right?</p>
-
-<p><strong>Human:</strong> Oh yes.  What dependency should I use?</p>
-
-<p><strong>Datomic:</strong> Just use <code>[com.datomic/datomic-free "0.9.5206"]</code>.</p>
-
-<p><strong>Human:</strong> Got it.  Do you mind if I record our conversation in a namespaced file, so that I can refer back to it later?</p>
-
-<p><strong>Datomic:</strong>  Not a problem.  Make sure to require <code>datomic.api</code> when you set it up.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">conversations.datomic</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">require</span> <span class="p">[</span><span class="nv">datomic.api</span> <span class="ss">:as</span> <span class="nv">d</span><span class="p">]))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  All right.  I am all setup up.  I don&rsquo;t really know where to start, so maybe you can tell me a little about yourself.</p>
-
-<p><strong>Datomic:</strong>  I would be happy to.  I am a database of facts.  Would you like to create a database with me?</p>
-
-<p><strong>Human:</strong>  Sure.  How do I do that?</p>
-
-<p><strong>Datomic:</strong> For a casual conversation like this, we can use a in memory database with a uri like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">uri</span> <span class="s">&quot;datomic:mem://first-conversation&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then we can create the database and simply connect to it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/create-database</span> <span class="nv">uri</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">conn</span> <span class="p">(</span><span class="nf">d/connect</span> <span class="nv">uri</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong> So, being a database, obviously you store things.  What sort of things to you store?</p>
-
-<p><strong>Datomic:</strong>  I store facts about things, which I call <em>datoms</em>.</p>
-
-<p><strong>Human:</strong>  That sound neat.  How do I tell you a fact to store?  For example, what if I want you to store a fact about a dog, like its name?</p>
-
-<p><strong>Datomic:</strong>  Ah.  Well the name of a dog is an attribute.  First, you need to tell me about the name attribute, so that I can use it to store the fact for you .  You can describe the attribute in the form of a map like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/name</span>
-</span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'> <span class="ss">:db/unique</span> <span class="ss">:db.unique/identity</span>
-</span><span class='line'> <span class="ss">:db/doc</span> <span class="s">&quot;Name of the Dog&quot;</span>
-</span><span class='line'> <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p> This map is a set of facts, (called <em>datoms</em>),  about an entity.  In this
- case, the entity is an attribute. Attributes, in turn, can be used to describe other entities, like a dog. I will explain the different parts to you.</p>
-
-<ul>
-<li><code>db/id</code> is the internal id of the fact. With <code>(d/tempid :db.part/db)</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li>
-<li><code>db/ident</code> is the human readable reference for it. While I am fine just referring to the attribute by an id, humans prefer text.  This says that you can refer to this attribute by the namespaced keyword <code>:dog/name</code>.</li>
-<li><code>db/valueType</code> tells me the type of the attribute.  The dog&rsquo;s name is a string.</li>
-<li><code>db/cardinality</code> lets me know if there is a one-to-one relationship with the entity or not. In our case, a dog has only one name.</li>
-<li><code>db/unique</code> is if that attribute is unique for an entity.  In our example case, we are saying that a dog can be uniquely identified by its name.</li>
-<li><code>db/doc</code> is some documentation for humans that explains a bit more about the attribute.</li>
-<li><code>db.install/_attribute</code> tells me that this is an schema attribute that I should store with the other things like it.</li>
-</ul>
-
-
-<p><strong>Human:</strong> I think I understand. Let me try one out for myself.  So dog breed would be this?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/breed</span>
-</span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'> <span class="ss">:db/doc</span> <span class="s">&quot;Breed of the Dog&quot;</span>
-</span><span class='line'> <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  Yes!  I think you got it.  Let&rsquo;s try one more.</p>
-
-<p><strong>Human:</strong> Ok.  How about the dog&rsquo;s favorite treat?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'> <span class="ss">:db/ident</span> <span class="ss">:dog/favorite-treat</span>
-</span><span class='line'> <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'> <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'> <span class="ss">:db/doc</span> <span class="s">&quot;Dog&#39;s Favorite Treat to Eat&quot;</span>
-</span><span class='line'> <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong> You got it.  Now, that you have these attributes, you can give them to me using a transaction with the connection.</p>
-
-<p><strong>Human:</strong> Ok.  Do you want that in a specific format?</p>
-
-<p><strong>Datomic:</strong>  Yes.  Please send it to me using the form:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[</span><span class="nv">....facts....</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong> Sounds good.  I will put the dog schema datoms we discussed in a vector and call it <code>dog-schema</code> and then send it to you.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">dog-schema</span>  <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/name</span>
-</span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'>                   <span class="ss">:db/unique</span> <span class="ss">:db.unique/identity</span>
-</span><span class='line'>                   <span class="ss">:db/doc</span> <span class="s">&quot;Name of the Dog&quot;</span>
-</span><span class='line'>                   <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/breed</span>
-</span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'>                   <span class="ss">:db/doc</span> <span class="s">&quot;Breed of the Dog&quot;</span>
-</span><span class='line'>                   <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:db/ident</span> <span class="ss">:dog/favorite-treat</span>
-</span><span class='line'>                   <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'>                   <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'>                   <span class="ss">:db/doc</span> <span class="s">&quot;Dog&#39;s Favorite Treat to Eat&quot;</span>
-</span><span class='line'>                   <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}])</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="nv">dog-schema</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong> The transaction was fine.  I know all about those dog attributes now.</p>
-
-<p><strong>Human:</strong>  I would like to also add a schema for owners for the dogs now.  I think I know how to describe the name of the owner, but I don&rsquo;t know how to express how the owner has dogs.</p>
-
-<p><strong>Datomic:</strong> Ah. I that case you can specify the <code>db:valueType</code> as a <code>ref</code> type.  This lets me know that it references another entity.</p>
-
-<p><strong>Human:</strong>  Do I need to tell you that is a type of dog somehow?</p>
-
-<p><strong>Datomic:</strong> No.  I am pretty smart that way.  I will figure it out
-  once you try to tell me about some real entities.  In fact, entities don&rsquo;t have types. A ref attribute can reference <em>any</em> entity.</p>
-
-<p><strong>Human:</strong>  Cool.  Well, in that case, here is the owner schema.  The owner has a name and some dogs.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="k">def </span><span class="nv">owner-schema</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                    <span class="ss">:db/ident</span> <span class="ss">:owner/name</span>
-</span><span class='line'>                    <span class="ss">:db/valueType</span> <span class="ss">:db.type/string</span>
-</span><span class='line'>                    <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/one</span>
-</span><span class='line'>                    <span class="ss">:db/unique</span> <span class="ss">:db.unique/identity</span>
-</span><span class='line'>                    <span class="ss">:db/doc</span> <span class="s">&quot;Name of the Owner&quot;</span>
-</span><span class='line'>                    <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}</span>
-</span><span class='line'>                   <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/db</span><span class="p">)</span>
-</span><span class='line'>                    <span class="ss">:db/ident</span> <span class="ss">:owner/dogs</span>
-</span><span class='line'>                    <span class="ss">:db/valueType</span> <span class="ss">:db.type/ref</span>
-</span><span class='line'>                    <span class="ss">:db/cardinality</span> <span class="ss">:db.cardinality/many</span>
-</span><span class='line'>                    <span class="ss">:db/doc</span> <span class="s">&quot;Dogs of the Owner&quot;</span>
-</span><span class='line'>                    <span class="ss">:db.install/_attribute</span> <span class="ss">:db.part/db</span><span class="p">}])</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="nv">owner-schema</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  The transaction is fine.  I now know about the attributes that dogs and owners have.  Would you like to tell me some facts about specific dogs and owners?</p>
-
-<p><strong>Human:</strong>  Yes. Bob is an owner.  He has two dogs. Fluffy is a poodle whose favorite treat is cheese, and Fido is a mixed breed, whose favorite treat is a bone.  Lucy is also an owner who has one dog named Tiny.  Tiny is a Great Dane whose favorite treat is cheese.</p>
-
-<p>I am a bit confused how to represent the dogs of the owners. How do I do that?</p>
-
-<p><strong>Datomic:</strong>  That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them.  Each dog or owner will by its own map.  Use <code>:db/id</code> set to <code>(d/tempid :db.part/user)</code> so I can generate it for you.  Then use each attribute from the schema as the key and let me know the value.</p>
-
-<p><strong>Human:</strong>  Like this?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/transact</span> <span class="nv">conn</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:owner/name</span> <span class="s">&quot;Bob&quot;</span>
-</span><span class='line'>                   <span class="ss">:owner/dogs</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Fluffy&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Poodle&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
-</span><span class='line'>                                <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Fido&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Mix&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Bone&quot;</span><span class="p">}]}</span>
-</span><span class='line'>                  <span class="p">{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                   <span class="ss">:owner/name</span> <span class="s">&quot;Lucy&quot;</span>
-</span><span class='line'>                   <span class="ss">:owner/dogs</span> <span class="p">[{</span><span class="ss">:db/id</span> <span class="p">(</span><span class="nf">d/tempid</span> <span class="ss">:db.part/user</span><span class="p">)</span>
-</span><span class='line'>                                 <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
-</span><span class='line'>                                 <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}]}])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  Exactly right.  I now know the facts about Bob and Lucy and their dogs.</p>
-
-<p><strong>Human:</strong>  Umm, how do I query you about the facts that your know?  For example, how do I ask you about the dog named Tiny?</p>
-
-<p><strong>Datomic:</strong>  There are a couple a ways to inquire about facts I know.  To find out about the attributes of a specific dog, or entity, I would recommend using <code>d/pull</code>.  You can ask me in the form of this to get all the attributes for a given dog name.  Note that this works since the dog name is a way to uniquely identify the dog:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  What is the <code>(d/db conn)</code> all about?</p>
-
-<p><strong>Datomic:</strong>  That function returns the current database value of the connection. The facts I know change during time.  Every time there is a transaction, I consider the time to be different and there is a new database value.  The <code>d/db</code> function gives you the most recent value that I know about.</p>
-
-<p><strong>Human:</strong> I am assuming the <code>[*]</code> is a wildcard that means give me all the attributes for that dog?</p>
-
-<p><strong>Datomic:</strong>  Exactly right.</p>
-
-<p><strong>Human:</strong> Ok.  Tell me about Tiny.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/pull</span> <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">*</span><span class="p">]</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">{</span><span class="ss">:db/id</span> <span class="mi">17592186045424</span>
-</span><span class='line'> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>
-</span><span class='line'> <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span>
-</span><span class='line'> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Tiny is a Great Dane that has a favorite treat of Cheese.</p>
-
-<p><strong>Human:</strong>  This is fun.  What about more complicated questions.  How do I ask about the name of the owner of the dog &ldquo;Tiny&rdquo;?</p>
-
-<p><strong>Datomic:</strong>  For that I would ask using the <em>datalog</em> query <code>d/q</code>.  It uses logic to unify your query with all of my facts and give you the result.  The query itself would be a vector with logic statements inside like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
-</span><span class='line'>  <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>         <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  Whoa.  What is the deal with those question marks?</p>
-
-<p><strong>Datomic:</strong> The things with the question marks are considered as variables that we will <em>unify</em> to find the answer.  For example, we are looking for something that we are going to call <code>?owner-name</code>. I am going the use the following constraints with my facts to try to find the answer:</p>
-
-<ul>
-<li>There is an entity that we are going to call <code>?dog</code> that has the attribute <code>:dog/name</code> that is &ldquo;Tiny&rdquo;</li>
-<li>There is an entity that we are going to call <code>?owner</code> that has an attribute <code>:owner/dogs</code> that is the same as the <code>?dog</code> entity</li>
-<li>That same <code>?owner</code> entity also has an attribute <code>:owner/name</code> that has the value <code>?owner-name</code></li>
-</ul>
-
-
-<p><strong>Human:</strong>  Alright, so when I ask for this query, do I need to give you a database value too?</p>
-
-<p><strong>Datomic:</strong>  Yes.  They should have the form of:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">datalog-query</span><span class="p">]</span> <span class="nv">db-value</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Remember, to get the current db value use <code>(d/db conn)</code>.</p>
-
-<p><strong>Human:</strong>  Ok.  Here we go.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong></p>
-
-<p>The answer is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">#</span><span class="p">{[</span><span class="s">&quot;Lucy&quot;</span><span class="p">]}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  What if I want to pass the dog name as a parameter?  How do I communicate that to you?</p>
-
-<p><strong>Datomic:</strong>  You will need to use an <code>in</code> clause in the query like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="p">[</span><span class="nv">blah</span><span class="p">]</span>
-</span><span class='line'>   <span class="ss">:in</span> <span class="nv">$</span> <span class="nv">?dog-name</span>
-</span><span class='line'>   <span class="ss">:where</span> <span class="p">[</span><span class="nv">blah</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The $ is shorthand for the database value and the <code>?dog-name</code> is what you will pass in as a parameter in the query after the db-value.</p>
-
-<p><strong>Human:</strong>  Like this?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="nv">?owner-name</span>
-</span><span class='line'>       <span class="ss">:in</span> <span class="nv">$</span> <span class="nv">?dog-name</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/name</span> <span class="nv">?dog-name</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/dogs</span> <span class="nv">?dog</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">[</span><span class="nv">?owner</span> <span class="ss">:owner/name</span> <span class="nv">?owner-name</span><span class="p">]]</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">)</span> <span class="s">&quot;Tiny&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong>  Exactly right.  The answer is Lucy again.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">#</span><span class="p">{[</span><span class="s">&quot;Lucy&quot;</span><span class="p">]}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  I think I am getting the hang of this!  Another quick question.  How would I go about asking you which dogs have cheese as their favorite treat?  I would want the dog&rsquo;s name and breed back.</p>
-
-<p><strong>Datomic:</strong>  You would simply construct another datalog query.  This time I would recommend that you combine the <code>pull</code> syntax within the <code>find</code> part of the query.  The <code>pull</code> syntax is great at selecting attributes from an entity.  So the <code>find</code> part would look something like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[(</span><span class="nf">pull</span> <span class="nv">?dog</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="ss">:dog/breed</span><span class="p">])</span> <span class="nv">...</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will return the attributes of the <code>:dog/name</code> and the <code>:dog/breed</code>.  The three dots on the end will let me know that you want a collection returned, so I will give you back a simple vector with the entity attributes requested, instead of the set of vectors I normally give back.</p>
-
-<p>The <code>where</code> section of the query is going to look for the <code>?dog</code> entity that matches the <code>:dog/favorite-treat</code> attribute with &ldquo;Cheese&rdquo;.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="p">[(</span><span class="nf">pull</span> <span class="nv">?dog</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="ss">:dog/breed</span><span class="p">])</span> <span class="nv">...</span><span class="p">]</span>
-</span><span class='line'>  <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  Then I put it together with the current database value in a <code>d/q</code> function?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">d/q</span> <span class="o">&#39;</span><span class="p">[</span><span class="ss">:find</span> <span class="p">[(</span><span class="nf">pull</span> <span class="nv">?dog</span> <span class="p">[</span><span class="ss">:dog/name</span> <span class="ss">:dog/breed</span><span class="p">])</span> <span class="nv">...</span><span class="p">]</span>
-</span><span class='line'>       <span class="ss">:where</span> <span class="p">[</span><span class="nv">?dog</span> <span class="ss">:dog/favorite-treat</span> <span class="s">&quot;Cheese&quot;</span><span class="p">]]</span>
-</span><span class='line'>     <span class="p">(</span><span class="nf">d/db</span> <span class="nv">conn</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Datomic:</strong> Yup.  The answer is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">[{</span><span class="ss">:dog/name</span> <span class="s">&quot;Fluffy&quot;</span>, <span class="ss">:dog/breed</span> <span class="s">&quot;Poodle&quot;</span><span class="p">}</span>
-</span><span class='line'> <span class="p">{</span><span class="ss">:dog/name</span> <span class="s">&quot;Tiny&quot;</span>, <span class="ss">:dog/breed</span> <span class="s">&quot;Great Dane&quot;</span><span class="p">}]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Human:</strong>  Thanks so much.  I think I beginning to get the hang of schemas and queries.  What other things do I need to know about you?</p>
-
-<p><strong>Datomic:</strong>  Well, you have just scratched the surface really.  One of the most interesting things about me is that I never forget facts.  You can add new facts, like Tiny&rsquo;s favorite food is now hotdogs, but I won&rsquo;t forget that he liked cheese at another point in time.</p>
-
-<p><strong>Human:</strong> That sounds really interesting.  I think I need some tea and cookies before I delve into that.  Let&rsquo;s take a short break and talk again soon.</p>
-
-<p><strong>Datomic:</strong>  My pleasure.  I look forward to it.</p>
-
-<p><em>Special thanks to <a href="https://twitter.com/ohpauleez">Paul deGrandis</a> for
-the conversation idea :)</em></p>
-
-<p><em>(P.S. Humans, there are some great <a href="http://www.datomic.com/training.html">Datomic Training Videos</a> if you want to learn more)</em></p>
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-08-15T10:29:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Sat 15 Aug 2015, 10:29 AM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/datomic/'>Datomic</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2015/05/30/wilds-horses-things-and-creativity/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Wild Horses, Things, and Creativity"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Wild Horses, Things, and Creativity</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2015/08/19/conversations-with-datomic-part-2/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Conversations with Datomic Part 2">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>Conversations with Datomic Part 2</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2015/08/15/conversations-with-datomic/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Conversations with Datomic | Squid's Blog</title><meta name=keywords content><meta name=description content="
+Human: Hi Datomic.   I have been hearing good things about you.  I would like to talk to you and get to know you.  Is that alright?
+Datomic: Sure!  I would be happy to talk with you.  What language would you like to converse in?
+Human:  I like Clojure.
+Datomic:  That is one of my favorites too.  You know how to setup a Leiningen project right?
+Human: Oh yes.  What dependency should I use?"><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Conversations with Datomic"><meta property="og:description" content="Human: Hi Datomic. I have been hearing good things about you. I would like to talk to you and get to know you. Is that alright?
+Datomic: Sure! I would be happy to talk with you. What language would you like to converse in?
+Human: I like Clojure.
+Datomic: That is one of my favorites too. You know how to setup a Leiningen project right?
+Human: Oh yes. What dependency should I use?"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2015-08-15T10:29:00+00:00"><meta property="article:modified_time" content="2015-08-15T10:29:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Conversations with Datomic"><meta name=twitter:description content="Human: Hi Datomic. I have been hearing good things about you. I would like to talk to you and get to know you. Is that alright?
+Datomic: Sure! I would be happy to talk with you. What language would you like to converse in?
+Human: I like Clojure.
+Datomic: That is one of my favorites too. You know how to setup a Leiningen project right?
+Human: Oh yes. What dependency should I use?"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Conversations with Datomic","item":"https://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Conversations with Datomic","name":"Conversations with Datomic","description":"\nHuman: Hi Datomic. I have been hearing good things about you. I would like to talk to you and get to know you. Is that alright?\nDatomic: Sure! I would be happy to talk with you. What language would you like to converse in?\nHuman: I like Clojure.\nDatomic: That is one of my favorites too. You know how to setup a Leiningen project right?\nHuman: Oh yes. What dependency should I use?\n","keywords":[],"articleBody":"\nHuman: Hi Datomic. I have been hearing good things about you. I would like to talk to you and get to know you. Is that alright?\nDatomic: Sure! I would be happy to talk with you. What language would you like to converse in?\nHuman: I like Clojure.\nDatomic: That is one of my favorites too. You know how to setup a Leiningen project right?\nHuman: Oh yes. What dependency should I use?\nDatomic: Just use [com.datomic/datomic-free \"0.9.5206\"].\nHuman: Got it. Do you mind if I record our conversation in a namespaced file, so that I can refer back to it later?\nDatomic: Not a problem. Make sure to require datomic.api when you set it up.\n(ns conversations.datomic (require [datomic.api :as d])) Human: All right. I am all setup up. I don’t really know where to start, so maybe you can tell me a little about yourself.\nDatomic: I would be happy to. I am a database of facts. Would you like to create a database with me?\nHuman: Sure. How do I do that?\nDatomic: For a casual conversation like this, we can use a in memory database with a uri like this:\n(def uri \"datomic:mem://first-conversation\") Then we can create the database and simply connect to it.\n(d/create-database uri) (def conn (d/connect uri)) Human: So, being a database, obviously you store things. What sort of things to you store?\nDatomic: I store facts about things, which I call datoms.\nHuman: That sound neat. How do I tell you a fact to store? For example, what if I want you to store a fact about a dog, like its name?\nDatomic: Ah. Well the name of a dog is an attribute. First, you need to tell me about the name attribute, so that I can use it to store the fact for you . You can describe the attribute in the form of a map like this:\n{:db/id (d/tempid :db.part/db) :db/ident :dog/name :db/valueType :db.type/string :db/cardinality :db.cardinality/one :db/unique :db.unique/identity :db/doc \"Name of the Dog\" :db.install/_attribute :db.part/db} This map is a set of facts, (called datoms), about an entity. In this case, the entity is an attribute. Attributes, in turn, can be used to describe other entities, like a dog. I will explain the different parts to you.\ndb/id is the internal id of the fact. With (d/tempid :db.part/db), I will generate it for you, so you don’t have to worry about it. db/ident is the human readable reference for it. While I am fine just referring to the attribute by an id, humans prefer text. This says that you can refer to this attribute by the namespaced keyword :dog/name. db/valueType tells me the type of the attribute. The dog’s name is a string. db/cardinality lets me know if there is a one-to-one relationship with the entity or not. In our case, a dog has only one name. db/unique is if that attribute is unique for an entity. In our example case, we are saying that a dog can be uniquely identified by its name. db/doc is some documentation for humans that explains a bit more about the attribute. db.install/_attribute tells me that this is an schema attribute that I should store with the other things like it. Human: I think I understand. Let me try one out for myself. So dog breed would be this?\n{:db/id (d/tempid :db.part/db) :db/ident :dog/breed :db/valueType :db.type/string :db/cardinality :db.cardinality/one :db/doc \"Breed of the Dog\" :db.install/_attribute :db.part/db} Datomic: Yes! I think you got it. Let’s try one more.\nHuman: Ok. How about the dog’s favorite treat?\n{:db/id (d/tempid :db.part/db) :db/ident :dog/favorite-treat :db/valueType :db.type/string :db/cardinality :db.cardinality/one :db/doc \"Dog's Favorite Treat to Eat\" :db.install/_attribute :db.part/db} Datomic: You got it. Now, that you have these attributes, you can give them to me using a transaction with the connection.\nHuman: Ok. Do you want that in a specific format?\nDatomic: Yes. Please send it to me using the form:\n(d/transact conn [....facts....]) Human: Sounds good. I will put the dog schema datoms we discussed in a vector and call it dog-schema and then send it to you.\n(def dog-schema [{:db/id (d/tempid :db.part/db) :db/ident :dog/name :db/valueType :db.type/string :db/cardinality :db.cardinality/one :db/unique :db.unique/identity :db/doc \"Name of the Dog\" :db.install/_attribute :db.part/db} {:db/id (d/tempid :db.part/db) :db/ident :dog/breed :db/valueType :db.type/string :db/cardinality :db.cardinality/one :db/doc \"Breed of the Dog\" :db.install/_attribute :db.part/db} {:db/id (d/tempid :db.part/db) :db/ident :dog/favorite-treat :db/valueType :db.type/string :db/cardinality :db.cardinality/one :db/doc \"Dog's Favorite Treat to Eat\" :db.install/_attribute :db.part/db}]) (d/transact conn dog-schema) Datomic: The transaction was fine. I know all about those dog attributes now.\nHuman: I would like to also add a schema for owners for the dogs now. I think I know how to describe the name of the owner, but I don’t know how to express how the owner has dogs.\nDatomic: Ah. I that case you can specify the db:valueType as a ref type. This lets me know that it references another entity.\nHuman: Do I need to tell you that is a type of dog somehow?\nDatomic: No. I am pretty smart that way. I will figure it out once you try to tell me about some real entities. In fact, entities don’t have types. A ref attribute can reference any entity.\nHuman: Cool. Well, in that case, here is the owner schema. The owner has a name and some dogs.\n(def owner-schema [{:db/id (d/tempid :db.part/db) :db/ident :owner/name :db/valueType :db.type/string :db/cardinality :db.cardinality/one :db/unique :db.unique/identity :db/doc \"Name of the Owner\" :db.install/_attribute :db.part/db} {:db/id (d/tempid :db.part/db) :db/ident :owner/dogs :db/valueType :db.type/ref :db/cardinality :db.cardinality/many :db/doc \"Dogs of the Owner\" :db.install/_attribute :db.part/db}]) (d/transact conn owner-schema) Datomic: The transaction is fine. I now know about the attributes that dogs and owners have. Would you like to tell me some facts about specific dogs and owners?\nHuman: Yes. Bob is an owner. He has two dogs. Fluffy is a poodle whose favorite treat is cheese, and Fido is a mixed breed, whose favorite treat is a bone. Lucy is also an owner who has one dog named Tiny. Tiny is a Great Dane whose favorite treat is cheese.\nI am a bit confused how to represent the dogs of the owners. How do I do that?\nDatomic: That is easy, just nest the datoms for dogs under the :owner/dogs attribute. You just need to create datoms for them. Each dog or owner will by its own map. Use :db/id set to (d/tempid :db.part/user) so I can generate it for you. Then use each attribute from the schema as the key and let me know the value.\nHuman: Like this?\n(d/transact conn [{:db/id (d/tempid :db.part/user) :owner/name \"Bob\" :owner/dogs [{:db/id (d/tempid :db.part/user) :dog/name \"Fluffy\" :dog/breed \"Poodle\" :dog/favorite-treat \"Cheese\"} {:db/id (d/tempid :db.part/user) :dog/name \"Fido\" :dog/breed \"Mix\" :dog/favorite-treat \"Bone\"}]} {:db/id (d/tempid :db.part/user) :owner/name \"Lucy\" :owner/dogs [{:db/id (d/tempid :db.part/user) :dog/name \"Tiny\" :dog/breed \"Great Dane\" :dog/favorite-treat \"Cheese\"}]}]) Datomic: Exactly right. I now know the facts about Bob and Lucy and their dogs.\nHuman: Umm, how do I query you about the facts that your know? For example, how do I ask you about the dog named Tiny?\nDatomic: There are a couple a ways to inquire about facts I know. To find out about the attributes of a specific dog, or entity, I would recommend using d/pull. You can ask me in the form of this to get all the attributes for a given dog name. Note that this works since the dog name is a way to uniquely identify the dog:\n(d/pull (d/db conn) '[*] [:dog/name \"Tiny\"]) Human: What is the (d/db conn) all about?\nDatomic: That function returns the current database value of the connection. The facts I know change during time. Every time there is a transaction, I consider the time to be different and there is a new database value. The d/db function gives you the most recent value that I know about.\nHuman: I am assuming the [*] is a wildcard that means give me all the attributes for that dog?\nDatomic: Exactly right.\nHuman: Ok. Tell me about Tiny.\n(d/pull (d/db conn) '[*] [:dog/name \"Tiny\"]) Datomic:\n{:db/id 17592186045424 :dog/name \"Tiny\" :dog/breed \"Great Dane\" :dog/favorite-treat \"Cheese\"} Tiny is a Great Dane that has a favorite treat of Cheese.\nHuman: This is fun. What about more complicated questions. How do I ask about the name of the owner of the dog “Tiny”?\nDatomic: For that I would ask using the datalog query d/q. It uses logic to unify your query with all of my facts and give you the result. The query itself would be a vector with logic statements inside like:\n'[:find ?owner-name :where [?dog :dog/name \"Tiny\"] [?owner :owner/dogs ?dog] [?owner :owner/name ?owner-name]] Human: Whoa. What is the deal with those question marks?\nDatomic: The things with the question marks are considered as variables that we will unify to find the answer. For example, we are looking for something that we are going to call ?owner-name. I am going the use the following constraints with my facts to try to find the answer:\nThere is an entity that we are going to call ?dog that has the attribute :dog/name that is “Tiny” There is an entity that we are going to call ?owner that has an attribute :owner/dogs that is the same as the ?dog entity That same ?owner entity also has an attribute :owner/name that has the value ?owner-name Human: Alright, so when I ask for this query, do I need to give you a database value too?\nDatomic: Yes. They should have the form of:\n(d/q '[datalog-query] db-value) Remember, to get the current db value use (d/db conn).\nHuman: Ok. Here we go.\n(d/q '[:find ?owner-name :where [?dog :dog/name \"Tiny\"] [?owner :owner/dogs ?dog] [?owner :owner/name ?owner-name]] (d/db conn)) Datomic:\nThe answer is:\n#{[\"Lucy\"]} Human: What if I want to pass the dog name as a parameter? How do I communicate that to you?\nDatomic: You will need to use an in clause in the query like this:\n'[:find [blah] :in $ ?dog-name :where [blah]] The $ is shorthand for the database value and the ?dog-name is what you will pass in as a parameter in the query after the db-value.\nHuman: Like this?\n(d/q '[:find ?owner-name :in $ ?dog-name :where [?dog :dog/name ?dog-name] [?owner :owner/dogs ?dog] [?owner :owner/name ?owner-name]] (d/db conn) \"Tiny\") Datomic: Exactly right. The answer is Lucy again.\n#{[\"Lucy\"]} Human: I think I am getting the hang of this! Another quick question. How would I go about asking you which dogs have cheese as their favorite treat? I would want the dog’s name and breed back.\nDatomic: You would simply construct another datalog query. This time I would recommend that you combine the pull syntax within the find part of the query. The pull syntax is great at selecting attributes from an entity. So the find part would look something like this:\n[(pull ?dog [:dog/name :dog/breed]) ...] This will return the attributes of the :dog/name and the :dog/breed. The three dots on the end will let me know that you want a collection returned, so I will give you back a simple vector with the entity attributes requested, instead of the set of vectors I normally give back.\nThe where section of the query is going to look for the ?dog entity that matches the :dog/favorite-treat attribute with “Cheese”.\n'[:find [(pull ?dog [:dog/name :dog/breed]) ...] :where [?dog :dog/favorite-treat \"Cheese\"]] Human: Then I put it together with the current database value in a d/q function?\n(d/q '[:find [(pull ?dog [:dog/name :dog/breed]) ...] :where [?dog :dog/favorite-treat \"Cheese\"]] (d/db conn)) Datomic: Yup. The answer is:\n[{:dog/name \"Fluffy\", :dog/breed \"Poodle\"} {:dog/name \"Tiny\", :dog/breed \"Great Dane\"}] Human: Thanks so much. I think I beginning to get the hang of schemas and queries. What other things do I need to know about you?\nDatomic: Well, you have just scratched the surface really. One of the most interesting things about me is that I never forget facts. You can add new facts, like Tiny’s favorite food is now hotdogs, but I won’t forget that he liked cheese at another point in time.\nHuman: That sounds really interesting. I think I need some tea and cookies before I delve into that. Let’s take a short break and talk again soon.\nDatomic: My pleasure. I look forward to it.\nSpecial thanks to Paul deGrandis for the conversation idea :)\n(P.S. Humans, there are some great Datomic Training Videos if you want to learn more)\n","wordCount":"2046","inLanguage":"en","datePublished":"2015-08-15T10:29:00Z","dateModified":"2015-08-15T10:29:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2015/08/15/conversations-with-datomic/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Conversations with Datomic</h1><div class=post-meta><span title='2015-08-15 10:29:00 +0000 UTC'>August 15, 2015</span>&nbsp;·&nbsp;<span>10 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p><img loading=lazy src="https://avatars0.githubusercontent.com/u/1478702?v=3&s=200"></p><p><strong>Human:</strong> Hi <a href=http://www.datomic.com/>Datomic</a>. I have been hearing good things about you. I would like to talk to you and get to know you. Is that alright?</p><p><strong>Datomic:</strong> Sure! I would be happy to talk with you. What language would you like to converse in?</p><p><strong>Human:</strong> I like Clojure.</p><p><strong>Datomic:</strong> That is one of my favorites too. You know how to setup a Leiningen project right?</p><p><strong>Human:</strong> Oh yes. What dependency should I use?</p><p><strong>Datomic:</strong> Just use <code>[com.datomic/datomic-free "0.9.5206"]</code>.</p><p><strong>Human:</strong> Got it. Do you mind if I record our conversation in a namespaced file, so that I can refer back to it later?</p><p><strong>Datomic:</strong> Not a problem. Make sure to require <code>datomic.api</code> when you set it up.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>ns </span>conversations.datomic
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>require</span> [datomic.api <span style=color:#e6db74>:as</span> d]))
+</span></span></code></pre></div><p><strong>Human:</strong> All right. I am all setup up. I don&rsquo;t really know where to start, so maybe you can tell me a little about yourself.</p><p><strong>Datomic:</strong> I would be happy to. I am a database of facts. Would you like to create a database with me?</p><p><strong>Human:</strong> Sure. How do I do that?</p><p><strong>Datomic:</strong> For a casual conversation like this, we can use a in memory database with a uri like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>uri <span style=color:#e6db74>&#34;datomic:mem://first-conversation&#34;</span>)
+</span></span></code></pre></div><p>Then we can create the database and simply connect to it.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/create-database</span> uri)
+</span></span><span style=display:flex><span>(<span style=color:#66d9ef>def </span>conn (<span style=color:#a6e22e>d/connect</span> uri))
+</span></span></code></pre></div><p><strong>Human:</strong> So, being a database, obviously you store things. What sort of things to you store?</p><p><strong>Datomic:</strong> I store facts about things, which I call <em>datoms</em>.</p><p><strong>Human:</strong> That sound neat. How do I tell you a fact to store? For example, what if I want you to store a fact about a dog, like its name?</p><p><strong>Datomic:</strong> Ah. Well the name of a dog is an attribute. First, you need to tell me about the name attribute, so that I can use it to store the fact for you . You can describe the attribute in the form of a map like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>{<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/db</span>)
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/ident</span> <span style=color:#e6db74>:dog/name</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/valueType</span> <span style=color:#e6db74>:db.type/string</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/cardinality</span> <span style=color:#e6db74>:db.cardinality/one</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/unique</span> <span style=color:#e6db74>:db.unique/identity</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/doc</span> <span style=color:#e6db74>&#34;Name of the Dog&#34;</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db.install/_attribute</span> <span style=color:#e6db74>:db.part/db</span>}
+</span></span></code></pre></div><p>This map is a set of facts, (called <em>datoms</em>), about an entity. In this
+case, the entity is an attribute. Attributes, in turn, can be used to describe other entities, like a dog. I will explain the different parts to you.</p><ul><li><code>db/id</code> is the internal id of the fact. With <code>(d/tempid :db.part/db)</code>, I will generate it for you, so you don&rsquo;t have to worry about it.</li><li><code>db/ident</code> is the human readable reference for it. While I am fine just referring to the attribute by an id, humans prefer text. This says that you can refer to this attribute by the namespaced keyword <code>:dog/name</code>.</li><li><code>db/valueType</code> tells me the type of the attribute. The dog&rsquo;s name is a string.</li><li><code>db/cardinality</code> lets me know if there is a one-to-one relationship with the entity or not. In our case, a dog has only one name.</li><li><code>db/unique</code> is if that attribute is unique for an entity. In our example case, we are saying that a dog can be uniquely identified by its name.</li><li><code>db/doc</code> is some documentation for humans that explains a bit more about the attribute.</li><li><code>db.install/_attribute</code> tells me that this is an schema attribute that I should store with the other things like it.</li></ul><p><strong>Human:</strong> I think I understand. Let me try one out for myself. So dog breed would be this?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>{<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/db</span>)
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/ident</span> <span style=color:#e6db74>:dog/breed</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/valueType</span> <span style=color:#e6db74>:db.type/string</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/cardinality</span> <span style=color:#e6db74>:db.cardinality/one</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/doc</span> <span style=color:#e6db74>&#34;Breed of the Dog&#34;</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db.install/_attribute</span> <span style=color:#e6db74>:db.part/db</span>}
+</span></span></code></pre></div><p><strong>Datomic:</strong> Yes! I think you got it. Let&rsquo;s try one more.</p><p><strong>Human:</strong> Ok. How about the dog&rsquo;s favorite treat?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>{<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/db</span>)
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/ident</span> <span style=color:#e6db74>:dog/favorite-treat</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/valueType</span> <span style=color:#e6db74>:db.type/string</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/cardinality</span> <span style=color:#e6db74>:db.cardinality/one</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db/doc</span> <span style=color:#e6db74>&#34;Dog&#39;s Favorite Treat to Eat&#34;</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:db.install/_attribute</span> <span style=color:#e6db74>:db.part/db</span>}
+</span></span></code></pre></div><p><strong>Datomic:</strong> You got it. Now, that you have these attributes, you can give them to me using a transaction with the connection.</p><p><strong>Human:</strong> Ok. Do you want that in a specific format?</p><p><strong>Datomic:</strong> Yes. Please send it to me using the form:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/transact</span> conn [....facts....])
+</span></span></code></pre></div><p><strong>Human:</strong> Sounds good. I will put the dog schema datoms we discussed in a vector and call it <code>dog-schema</code> and then send it to you.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>dog-schema  [{<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/db</span>)
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/ident</span> <span style=color:#e6db74>:dog/name</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/valueType</span> <span style=color:#e6db74>:db.type/string</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/cardinality</span> <span style=color:#e6db74>:db.cardinality/one</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/unique</span> <span style=color:#e6db74>:db.unique/identity</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/doc</span> <span style=color:#e6db74>&#34;Name of the Dog&#34;</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db.install/_attribute</span> <span style=color:#e6db74>:db.part/db</span>}
+</span></span><span style=display:flex><span>                  {<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/db</span>)
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/ident</span> <span style=color:#e6db74>:dog/breed</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/valueType</span> <span style=color:#e6db74>:db.type/string</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/cardinality</span> <span style=color:#e6db74>:db.cardinality/one</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/doc</span> <span style=color:#e6db74>&#34;Breed of the Dog&#34;</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db.install/_attribute</span> <span style=color:#e6db74>:db.part/db</span>}
+</span></span><span style=display:flex><span>                  {<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/db</span>)
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/ident</span> <span style=color:#e6db74>:dog/favorite-treat</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/valueType</span> <span style=color:#e6db74>:db.type/string</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/cardinality</span> <span style=color:#e6db74>:db.cardinality/one</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db/doc</span> <span style=color:#e6db74>&#34;Dog&#39;s Favorite Treat to Eat&#34;</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:db.install/_attribute</span> <span style=color:#e6db74>:db.part/db</span>}])
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>d/transact</span> conn dog-schema)
+</span></span></code></pre></div><p><strong>Datomic:</strong> The transaction was fine. I know all about those dog attributes now.</p><p><strong>Human:</strong> I would like to also add a schema for owners for the dogs now. I think I know how to describe the name of the owner, but I don&rsquo;t know how to express how the owner has dogs.</p><p><strong>Datomic:</strong> Ah. I that case you can specify the <code>db:valueType</code> as a <code>ref</code> type. This lets me know that it references another entity.</p><p><strong>Human:</strong> Do I need to tell you that is a type of dog somehow?</p><p><strong>Datomic:</strong> No. I am pretty smart that way. I will figure it out
+once you try to tell me about some real entities. In fact, entities don&rsquo;t have types. A ref attribute can reference <em>any</em> entity.</p><p><strong>Human:</strong> Cool. Well, in that case, here is the owner schema. The owner has a name and some dogs.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#66d9ef>def </span>owner-schema [{<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/db</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/ident</span> <span style=color:#e6db74>:owner/name</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/valueType</span> <span style=color:#e6db74>:db.type/string</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/cardinality</span> <span style=color:#e6db74>:db.cardinality/one</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/unique</span> <span style=color:#e6db74>:db.unique/identity</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/doc</span> <span style=color:#e6db74>&#34;Name of the Owner&#34;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db.install/_attribute</span> <span style=color:#e6db74>:db.part/db</span>}
+</span></span><span style=display:flex><span>                   {<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/db</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/ident</span> <span style=color:#e6db74>:owner/dogs</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/valueType</span> <span style=color:#e6db74>:db.type/ref</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/cardinality</span> <span style=color:#e6db74>:db.cardinality/many</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db/doc</span> <span style=color:#e6db74>&#34;Dogs of the Owner&#34;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>:db.install/_attribute</span> <span style=color:#e6db74>:db.part/db</span>}])
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>(<span style=color:#a6e22e>d/transact</span> conn owner-schema)
+</span></span></code></pre></div><p><strong>Datomic:</strong> The transaction is fine. I now know about the attributes that dogs and owners have. Would you like to tell me some facts about specific dogs and owners?</p><p><strong>Human:</strong> Yes. Bob is an owner. He has two dogs. Fluffy is a poodle whose favorite treat is cheese, and Fido is a mixed breed, whose favorite treat is a bone. Lucy is also an owner who has one dog named Tiny. Tiny is a Great Dane whose favorite treat is cheese.</p><p>I am a bit confused how to represent the dogs of the owners. How do I do that?</p><p><strong>Datomic:</strong> That is easy, just nest the datoms for dogs under the <code>:owner/dogs</code> attribute. You just need to create datoms for them. Each dog or owner will by its own map. Use <code>:db/id</code> set to <code>(d/tempid :db.part/user)</code> so I can generate it for you. Then use each attribute from the schema as the key and let me know the value.</p><p><strong>Human:</strong> Like this?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/transact</span> conn [{<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/user</span>)
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:owner/name</span> <span style=color:#e6db74>&#34;Bob&#34;</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:owner/dogs</span> [{<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/user</span>)
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Fluffy&#34;</span>
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/breed</span> <span style=color:#e6db74>&#34;Poodle&#34;</span>
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/favorite-treat</span> <span style=color:#e6db74>&#34;Cheese&#34;</span>}
+</span></span><span style=display:flex><span>                                {<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/user</span>)
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Fido&#34;</span>
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/breed</span> <span style=color:#e6db74>&#34;Mix&#34;</span>
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/favorite-treat</span> <span style=color:#e6db74>&#34;Bone&#34;</span>}]}
+</span></span><span style=display:flex><span>                  {<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/user</span>)
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:owner/name</span> <span style=color:#e6db74>&#34;Lucy&#34;</span>
+</span></span><span style=display:flex><span>                   <span style=color:#e6db74>:owner/dogs</span> [{<span style=color:#e6db74>:db/id</span> (<span style=color:#a6e22e>d/tempid</span> <span style=color:#e6db74>:db.part/user</span>)
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Tiny&#34;</span>
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/breed</span> <span style=color:#e6db74>&#34;Great Dane&#34;</span>
+</span></span><span style=display:flex><span>                                 <span style=color:#e6db74>:dog/favorite-treat</span> <span style=color:#e6db74>&#34;Cheese&#34;</span>}]}])
+</span></span></code></pre></div><p><strong>Datomic:</strong> Exactly right. I now know the facts about Bob and Lucy and their dogs.</p><p><strong>Human:</strong> Umm, how do I query you about the facts that your know? For example, how do I ask you about the dog named Tiny?</p><p><strong>Datomic:</strong> There are a couple a ways to inquire about facts I know. To find out about the attributes of a specific dog, or entity, I would recommend using <code>d/pull</code>. You can ask me in the form of this to get all the attributes for a given dog name. Note that this works since the dog name is a way to uniquely identify the dog:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/pull</span> (<span style=color:#a6e22e>d/db</span> conn) <span style=color:#f92672>&#39;</span>[*] [<span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Tiny&#34;</span>])
+</span></span></code></pre></div><p><strong>Human:</strong> What is the <code>(d/db conn)</code> all about?</p><p><strong>Datomic:</strong> That function returns the current database value of the connection. The facts I know change during time. Every time there is a transaction, I consider the time to be different and there is a new database value. The <code>d/db</code> function gives you the most recent value that I know about.</p><p><strong>Human:</strong> I am assuming the <code>[*]</code> is a wildcard that means give me all the attributes for that dog?</p><p><strong>Datomic:</strong> Exactly right.</p><p><strong>Human:</strong> Ok. Tell me about Tiny.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/pull</span> (<span style=color:#a6e22e>d/db</span> conn) <span style=color:#f92672>&#39;</span>[*] [<span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Tiny&#34;</span>])
+</span></span></code></pre></div><p><strong>Datomic:</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>{<span style=color:#e6db74>:db/id</span> <span style=color:#ae81ff>17592186045424</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Tiny&#34;</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:dog/breed</span> <span style=color:#e6db74>&#34;Great Dane&#34;</span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>:dog/favorite-treat</span> <span style=color:#e6db74>&#34;Cheese&#34;</span>}
+</span></span></code></pre></div><p>Tiny is a Great Dane that has a favorite treat of Cheese.</p><p><strong>Human:</strong> This is fun. What about more complicated questions. How do I ask about the name of the owner of the dog &ldquo;Tiny&rdquo;?</p><p><strong>Datomic:</strong> For that I would ask using the <em>datalog</em> query <code>d/q</code>. It uses logic to unify your query with all of my facts and give you the result. The query itself would be a vector with logic statements inside like:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#f92672>&#39;</span>[<span style=color:#e6db74>:find</span> ?owner-name
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>:where</span> [?dog <span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Tiny&#34;</span>]
+</span></span><span style=display:flex><span>         [?owner <span style=color:#e6db74>:owner/dogs</span> ?dog]
+</span></span><span style=display:flex><span>         [?owner <span style=color:#e6db74>:owner/name</span> ?owner-name]]
+</span></span></code></pre></div><p><strong>Human:</strong> Whoa. What is the deal with those question marks?</p><p><strong>Datomic:</strong> The things with the question marks are considered as variables that we will <em>unify</em> to find the answer. For example, we are looking for something that we are going to call <code>?owner-name</code>. I am going the use the following constraints with my facts to try to find the answer:</p><ul><li>There is an entity that we are going to call <code>?dog</code> that has the attribute <code>:dog/name</code> that is &ldquo;Tiny&rdquo;</li><li>There is an entity that we are going to call <code>?owner</code> that has an attribute <code>:owner/dogs</code> that is the same as the <code>?dog</code> entity</li><li>That same <code>?owner</code> entity also has an attribute <code>:owner/name</code> that has the value <code>?owner-name</code></li></ul><p><strong>Human:</strong> Alright, so when I ask for this query, do I need to give you a database value too?</p><p><strong>Datomic:</strong> Yes. They should have the form of:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/q</span> <span style=color:#f92672>&#39;</span>[datalog-query] db-value)
+</span></span></code></pre></div><p>Remember, to get the current db value use <code>(d/db conn)</code>.</p><p><strong>Human:</strong> Ok. Here we go.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/q</span> <span style=color:#f92672>&#39;</span>[<span style=color:#e6db74>:find</span> ?owner-name
+</span></span><span style=display:flex><span>       <span style=color:#e6db74>:where</span> [?dog <span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Tiny&#34;</span>]
+</span></span><span style=display:flex><span>              [?owner <span style=color:#e6db74>:owner/dogs</span> ?dog]
+</span></span><span style=display:flex><span>              [?owner <span style=color:#e6db74>:owner/name</span> ?owner-name]]
+</span></span><span style=display:flex><span>     (<span style=color:#a6e22e>d/db</span> conn))
+</span></span></code></pre></div><p><strong>Datomic:</strong></p><p>The answer is:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#f92672>#</span>{[<span style=color:#e6db74>&#34;Lucy&#34;</span>]}
+</span></span></code></pre></div><p><strong>Human:</strong> What if I want to pass the dog name as a parameter? How do I communicate that to you?</p><p><strong>Datomic:</strong> You will need to use an <code>in</code> clause in the query like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#f92672>&#39;</span>[<span style=color:#e6db74>:find</span> [blah]
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>:in</span> $ ?dog-name
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>:where</span> [blah]]
+</span></span></code></pre></div><p>The $ is shorthand for the database value and the <code>?dog-name</code> is what you will pass in as a parameter in the query after the db-value.</p><p><strong>Human:</strong> Like this?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/q</span> <span style=color:#f92672>&#39;</span>[<span style=color:#e6db74>:find</span> ?owner-name
+</span></span><span style=display:flex><span>       <span style=color:#e6db74>:in</span> $ ?dog-name
+</span></span><span style=display:flex><span>       <span style=color:#e6db74>:where</span> [?dog <span style=color:#e6db74>:dog/name</span> ?dog-name]
+</span></span><span style=display:flex><span>              [?owner <span style=color:#e6db74>:owner/dogs</span> ?dog]
+</span></span><span style=display:flex><span>              [?owner <span style=color:#e6db74>:owner/name</span> ?owner-name]]
+</span></span><span style=display:flex><span>     (<span style=color:#a6e22e>d/db</span> conn) <span style=color:#e6db74>&#34;Tiny&#34;</span>)
+</span></span></code></pre></div><p><strong>Datomic:</strong> Exactly right. The answer is Lucy again.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#f92672>#</span>{[<span style=color:#e6db74>&#34;Lucy&#34;</span>]}
+</span></span></code></pre></div><p><strong>Human:</strong> I think I am getting the hang of this! Another quick question. How would I go about asking you which dogs have cheese as their favorite treat? I would want the dog&rsquo;s name and breed back.</p><p><strong>Datomic:</strong> You would simply construct another datalog query. This time I would recommend that you combine the <code>pull</code> syntax within the <code>find</code> part of the query. The <code>pull</code> syntax is great at selecting attributes from an entity. So the <code>find</code> part would look something like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>[(<span style=color:#a6e22e>pull</span> ?dog [<span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>:dog/breed</span>]) ...]
+</span></span></code></pre></div><p>This will return the attributes of the <code>:dog/name</code> and the <code>:dog/breed</code>. The three dots on the end will let me know that you want a collection returned, so I will give you back a simple vector with the entity attributes requested, instead of the set of vectors I normally give back.</p><p>The <code>where</code> section of the query is going to look for the <code>?dog</code> entity that matches the <code>:dog/favorite-treat</code> attribute with &ldquo;Cheese&rdquo;.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span><span style=color:#f92672>&#39;</span>[<span style=color:#e6db74>:find</span> [(<span style=color:#a6e22e>pull</span> ?dog [<span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>:dog/breed</span>]) ...]
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>:where</span> [?dog <span style=color:#e6db74>:dog/favorite-treat</span> <span style=color:#e6db74>&#34;Cheese&#34;</span>]]
+</span></span></code></pre></div><p><strong>Human:</strong> Then I put it together with the current database value in a <code>d/q</code> function?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>d/q</span> <span style=color:#f92672>&#39;</span>[<span style=color:#e6db74>:find</span> [(<span style=color:#a6e22e>pull</span> ?dog [<span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>:dog/breed</span>]) ...]
+</span></span><span style=display:flex><span>       <span style=color:#e6db74>:where</span> [?dog <span style=color:#e6db74>:dog/favorite-treat</span> <span style=color:#e6db74>&#34;Cheese&#34;</span>]]
+</span></span><span style=display:flex><span>     (<span style=color:#a6e22e>d/db</span> conn))
+</span></span></code></pre></div><p><strong>Datomic:</strong> Yup. The answer is:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>[{<span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Fluffy&#34;</span>, <span style=color:#e6db74>:dog/breed</span> <span style=color:#e6db74>&#34;Poodle&#34;</span>}
+</span></span><span style=display:flex><span> {<span style=color:#e6db74>:dog/name</span> <span style=color:#e6db74>&#34;Tiny&#34;</span>, <span style=color:#e6db74>:dog/breed</span> <span style=color:#e6db74>&#34;Great Dane&#34;</span>}]
+</span></span></code></pre></div><p><strong>Human:</strong> Thanks so much. I think I beginning to get the hang of schemas and queries. What other things do I need to know about you?</p><p><strong>Datomic:</strong> Well, you have just scratched the surface really. One of the most interesting things about me is that I never forget facts. You can add new facts, like Tiny&rsquo;s favorite food is now hotdogs, but I won&rsquo;t forget that he liked cheese at another point in time.</p><p><strong>Human:</strong> That sounds really interesting. I think I need some tea and cookies before I delve into that. Let&rsquo;s take a short break and talk again soon.</p><p><strong>Datomic:</strong> My pleasure. I look forward to it.</p><p><em>Special thanks to <a href=https://twitter.com/ohpauleez>Paul deGrandis</a> for
+the conversation idea :)</em></p><p><em>(P.S. Humans, there are some great <a href=http://www.datomic.com/training.html>Datomic Training Videos</a> if you want to learn more)</em></p></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2015/08/19/conversations-with-datomic-part-2/><span class=title>« Prev</span>
+<span>Conversations with Datomic Part 2</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2015/05/30/wild-horses-things-and-creativity/><span class=title>Next »</span>
+<span>Wild Horses, Things, and Creativity</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

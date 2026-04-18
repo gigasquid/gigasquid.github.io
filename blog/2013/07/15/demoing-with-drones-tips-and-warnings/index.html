@@ -1,373 +1,61 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Demoing With Drones: Tips and Warnings - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/">
-  <meta property="og:title" content="Demoing With Drones: Tips and Warnings - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-07-15T15:42:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 15 Jul 2013,  3:42 PM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Demoing With Drones: Tips and Warnings
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p>Lately, I have had the pleasure of speaking and sharing my experience
-of programming <a href="http://ardrone2.parrot.com/">AR Drones</a> with Clojure.  However, doing live hardware
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Demoing with Drones: Tips and Warnings | Squid's Blog</title><meta name=keywords content><meta name=description content="Lately, I have had the pleasure of speaking and sharing my experience
+of programming AR Drones with Clojure.  However, doing live hardware
 demos has not always been a smooth ride.  In fact, it can be fraught
 with peril.  I thought that I would share some of the tips and tricks
 that have helped me, as well as help make you
-aware of some potential pitfalls.</p>
+aware of some potential pitfalls.
+Traveling with the AR Drone
 
-<h2>Traveling with the AR Drone</h2>
+     
 
-<p><img class="left" src="http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg"></p>
 
-<p>Do you need to take your drone with you on the plane to the demo?
+Do you need to take your drone with you on the plane to the demo?
 The box that the drone comes in is a very nice carrying case, however it
 is too big to take on as a carry-on.  I found that taking the hull
 off, and packing it into a plastic box worked well.  It was small
 enough to pack under the seat of even the smaller planes.  I took the
-battery out and packed it in my checked luggage.</p>
-
-<h2>Before the Demo</h2>
-
-<ul>
-<li><p><strong>Put colored masking tape on the floor</strong> : If the floor is
-  featureless, the drone will have a hard time staying in one place
-  while it is hovering.  Put down some strips of colored masking
-  tape in the area that you want to demo the drone.</p></li>
-<li><p><strong>Charge the spare battery</strong>:  Make sure that you have at least 2
-  batteries charged and ready to go.  If there is an extra plug
-  nearby, just plug in the battery and charger until you are ready
-  to present.</p></li>
-<li><p><strong>Beware the network interference</strong>:  In some larger venues, like
-  hotels, the network traffic will make things break.  In
-  particular, receiving navigation data back from the drone. There
-  are possible strategies for mitigating this - the only one I have
-  tried so far is to bump up the timeout on the UDP connection.
-  Other things that you may want to try would be to auto-reconnect
-  after timeout.  Also limiting the amount navdata you need might
-  also work.</p></li>
-<li><p><strong>Backup videos</strong> - Having backup videos of your demo actually
-  working is essential.  It is safety net that will allow you to
-  sleep the night before.  Like they say, &ldquo;Hope for the best, but
-  plan for the worst&rdquo;.</p></li>
-<li><p><strong>Rehearse</strong> - If possible, go through your drone demos in the space
-  sometime before the talk.  You will get a feeling for issues that
-  might occur - like network troubles.</p></li>
-</ul>
-
-
-<h2>Demo Time!</h2>
-
-<ul>
-<li><p><strong>Front row drone catchers</strong> - Enlist the aid of your audience.
-  Show the people in the front row how to catch a drone safely and
-  hold it at a 90 degree angle so the engine cuts out.  That way, if
-  the drone starts going off in unplanned ways, you will have help.</p></li>
-<li><p><strong>Cross your fingers and have fun</strong> - Good luck.  Hardware demos are
-  a lot of fun.  Hopefully, everything we work as planned, but if
-  not - at least it was interesting.</p></li>
-</ul>
-
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-07-15T15:42:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Mon 15 Jul 2013,  3:42 PM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/drone/'>Drone</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Babar - A Little Language with Speech Acts for Machines"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Babar - A Little Language with Speech Acts for Machines</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2013/07/22/5-whys-of-community/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: My 5 Whys of Community">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>My 5 Whys of Community</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2013/07/15/demoing-with-drones-tips-and-warnings/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+battery out and packed it in my checked luggage."><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2013/07/15/demoing-with-drones-tips-and-warnings/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2013/07/15/demoing-with-drones-tips-and-warnings/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2013/07/15/demoing-with-drones-tips-and-warnings/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Demoing with Drones: Tips and Warnings"><meta property="og:description" content="Lately, I have had the pleasure of speaking and sharing my experience of programming AR Drones with Clojure. However, doing live hardware demos has not always been a smooth ride. In fact, it can be fraught with peril. I thought that I would share some of the tips and tricks that have helped me, as well as help make you aware of some potential pitfalls.
+Traveling with the AR Drone Do you need to take your drone with you on the plane to the demo? The box that the drone comes in is a very nice carrying case, however it is too big to take on as a carry-on. I found that taking the hull off, and packing it into a plastic box worked well. It was small enough to pack under the seat of even the smaller planes. I took the battery out and packed it in my checked luggage."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2013-07-15T15:42:00+00:00"><meta property="article:modified_time" content="2013-07-15T15:42:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Demoing with Drones: Tips and Warnings"><meta name=twitter:description content="Lately, I have had the pleasure of speaking and sharing my experience of programming AR Drones with Clojure. However, doing live hardware demos has not always been a smooth ride. In fact, it can be fraught with peril. I thought that I would share some of the tips and tricks that have helped me, as well as help make you aware of some potential pitfalls.
+Traveling with the AR Drone Do you need to take your drone with you on the plane to the demo? The box that the drone comes in is a very nice carrying case, however it is too big to take on as a carry-on. I found that taking the hull off, and packing it into a plastic box worked well. It was small enough to pack under the seat of even the smaller planes. I took the battery out and packed it in my checked luggage."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Demoing with Drones: Tips and Warnings","item":"https://gigasquidsoftware.com/blog/2013/07/15/demoing-with-drones-tips-and-warnings/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Demoing with Drones: Tips and Warnings","name":"Demoing with Drones: Tips and Warnings","description":"Lately, I have had the pleasure of speaking and sharing my experience of programming AR Drones with Clojure. However, doing live hardware demos has not always been a smooth ride. In fact, it can be fraught with peril. I thought that I would share some of the tips and tricks that have helped me, as well as help make you aware of some potential pitfalls.\nTraveling with the AR Drone Do you need to take your drone with you on the plane to the demo? The box that the drone comes in is a very nice carrying case, however it is too big to take on as a carry-on. I found that taking the hull off, and packing it into a plastic box worked well. It was small enough to pack under the seat of even the smaller planes. I took the battery out and packed it in my checked luggage.\n","keywords":[],"articleBody":"Lately, I have had the pleasure of speaking and sharing my experience of programming AR Drones with Clojure. However, doing live hardware demos has not always been a smooth ride. In fact, it can be fraught with peril. I thought that I would share some of the tips and tricks that have helped me, as well as help make you aware of some potential pitfalls.\nTraveling with the AR Drone Do you need to take your drone with you on the plane to the demo? The box that the drone comes in is a very nice carrying case, however it is too big to take on as a carry-on. I found that taking the hull off, and packing it into a plastic box worked well. It was small enough to pack under the seat of even the smaller planes. I took the battery out and packed it in my checked luggage.\nBefore the Demo Put colored masking tape on the floor : If the floor is featureless, the drone will have a hard time staying in one place while it is hovering. Put down some strips of colored masking tape in the area that you want to demo the drone.\nCharge the spare battery: Make sure that you have at least 2 batteries charged and ready to go. If there is an extra plug nearby, just plug in the battery and charger until you are ready to present.\nBeware the network interference: In some larger venues, like hotels, the network traffic will make things break. In particular, receiving navigation data back from the drone. There are possible strategies for mitigating this - the only one I have tried so far is to bump up the timeout on the UDP connection. Other things that you may want to try would be to auto-reconnect after timeout. Also limiting the amount navdata you need might also work.\nBackup videos - Having backup videos of your demo actually working is essential. It is safety net that will allow you to sleep the night before. Like they say, “Hope for the best, but plan for the worst”.\nRehearse - If possible, go through your drone demos in the space sometime before the talk. You will get a feeling for issues that might occur - like network troubles.\nDemo Time! Front row drone catchers - Enlist the aid of your audience. Show the people in the front row how to catch a drone safely and hold it at a 90 degree angle so the engine cuts out. That way, if the drone starts going off in unplanned ways, you will have help.\nCross your fingers and have fun - Good luck. Hardware demos are a lot of fun. Hopefully, everything we work as planned, but if not - at least it was interesting.\n","wordCount":"467","inLanguage":"en","datePublished":"2013-07-15T15:42:00Z","dateModified":"2013-07-15T15:42:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2013/07/15/demoing-with-drones-tips-and-warnings/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Demoing with Drones: Tips and Warnings</h1><div class=post-meta><span title='2013-07-15 15:42:00 +0000 UTC'>July 15, 2013</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p>Lately, I have had the pleasure of speaking and sharing my experience
+of programming <a href=http://ardrone2.parrot.com/>AR Drones</a> with Clojure. However, doing live hardware
+demos has not always been a smooth ride. In fact, it can be fraught
+with peril. I thought that I would share some of the tips and tricks
+that have helped me, as well as help make you
+aware of some potential pitfalls.</p><h2 id=traveling-with-the-ar-drone>Traveling with the AR Drone<a hidden class=anchor aria-hidden=true href=#traveling-with-the-ar-drone>#</a></h2><figure class=left><img loading=lazy src=http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg></figure><p>Do you need to take your drone with you on the plane to the demo?
+The box that the drone comes in is a very nice carrying case, however it
+is too big to take on as a carry-on. I found that taking the hull
+off, and packing it into a plastic box worked well. It was small
+enough to pack under the seat of even the smaller planes. I took the
+battery out and packed it in my checked luggage.</p><h2 id=before-the-demo>Before the Demo<a hidden class=anchor aria-hidden=true href=#before-the-demo>#</a></h2><ul><li><p><strong>Put colored masking tape on the floor</strong> : If the floor is
+featureless, the drone will have a hard time staying in one place
+while it is hovering. Put down some strips of colored masking
+tape in the area that you want to demo the drone.</p></li><li><p><strong>Charge the spare battery</strong>: Make sure that you have at least 2
+batteries charged and ready to go. If there is an extra plug
+nearby, just plug in the battery and charger until you are ready
+to present.</p></li><li><p><strong>Beware the network interference</strong>: In some larger venues, like
+hotels, the network traffic will make things break. In
+particular, receiving navigation data back from the drone. There
+are possible strategies for mitigating this - the only one I have
+tried so far is to bump up the timeout on the UDP connection.
+Other things that you may want to try would be to auto-reconnect
+after timeout. Also limiting the amount navdata you need might
+also work.</p></li><li><p><strong>Backup videos</strong> - Having backup videos of your demo actually
+working is essential. It is safety net that will allow you to
+sleep the night before. Like they say, &ldquo;Hope for the best, but
+plan for the worst&rdquo;.</p></li><li><p><strong>Rehearse</strong> - If possible, go through your drone demos in the space
+sometime before the talk. You will get a feeling for issues that
+might occur - like network troubles.</p></li></ul><h2 id=demo-time>Demo Time!<a hidden class=anchor aria-hidden=true href=#demo-time>#</a></h2><ul><li><p><strong>Front row drone catchers</strong> - Enlist the aid of your audience.
+Show the people in the front row how to catch a drone safely and
+hold it at a 90 degree angle so the engine cuts out. That way, if
+the drone starts going off in unplanned ways, you will have help.</p></li><li><p><strong>Cross your fingers and have fun</strong> - Good luck. Hardware demos are
+a lot of fun. Hopefully, everything we work as planned, but if
+not - at least it was interesting.</p></li></ul></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2013/07/22/my-5-whys-of-community/><span class=title>« Prev</span>
+<span>My 5 Whys of Community</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/><span class=title>Next »</span>
+<span>Babar - A Little Language with Speech Acts for Machines</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

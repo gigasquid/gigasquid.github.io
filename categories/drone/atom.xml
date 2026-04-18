@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Drone on Squid's Blog</title><link>https://gigasquidsoftware.com/categories/drone/</link><description>Recent content in Drone on Squid's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 15 Jul 2013 15:42:00 +0000</lastBuildDate><atom:link href="https://gigasquidsoftware.com/categories/drone/atom.xml" rel="self" type="application/rss+xml"/><item><title>Demoing with Drones: Tips and Warnings</title><link>https://gigasquidsoftware.com/blog/2013/07/15/demoing-with-drones-tips-and-warnings/</link><pubDate>Mon, 15 Jul 2013 15:42:00 +0000</pubDate><guid>https://gigasquidsoftware.com/blog/2013/07/15/demoing-with-drones-tips-and-warnings/</guid><description>&lt;p&gt;Lately, I have had the pleasure of speaking and sharing my experience
+of programming &lt;a href="http://ardrone2.parrot.com/"&gt;AR Drones&lt;/a&gt; with Clojure. However, doing live hardware
+demos has not always been a smooth ride. In fact, it can be fraught
+with peril. I thought that I would share some of the tips and tricks
+that have helped me, as well as help make you
+aware of some potential pitfalls.&lt;/p&gt;
+&lt;h2 id="traveling-with-the-ar-drone"&gt;Traveling with the AR Drone&lt;/h2&gt;
+&lt;figure class="left"&gt;
+&lt;img loading="lazy" src="http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg"/&gt;
+&lt;/figure&gt;
+&lt;p&gt;Do you need to take your drone with you on the plane to the demo?
+The box that the drone comes in is a very nice carrying case, however it
+is too big to take on as a carry-on. I found that taking the hull
+off, and packing it into a plastic box worked well. It was small
+enough to pack under the seat of even the smaller planes. I took the
+battery out and packed it in my checked luggage.&lt;/p&gt;</description></item></channel></rss>

@@ -1,454 +1,59 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Clojure MXNet April Update - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/">
-  <meta property="og:title" content="Clojure MXNet April Update - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-04-26T15:51:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 26 Apr 2019,  3:51 PM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Clojure MXNet April Update
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p>Spring is bringing some beautiful new things to the  <a href="http://mxnet.incubator.apache.org/">Clojure MXNet</a>. Here are some highlights for the month of April.</p>
-
-<h2>Shipped</h2>
-
-<p>We&rsquo;ve merged <a href="https://github.com/apache/incubator-mxnet/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Aclosed+clojure">10 PRs</a> over the last month. Many of them focus on core improvements to documentation and usability which is very important.</p>
-
-<p>The MXNet project is also preparing a new release <code>1.4.1</code>, so keep on the lookout for that to hit in the near future.</p>
-
-<h2>Clojure MXNet Made Simple Article Series</h2>
-
-<p><a href="https://arthurcaillau.com/about/">Arthur Caillau</a> added another post to his fantastic series - <a href="https://arthurcaillau.com/mxnet-made-simple-pretrained-models/">MXNet made simple: Pretrained Models for image classification - Inception and VGG</a></p>
-
-<h2>Cool Stuff in Development</h2>
-
-<h3>New APIs</h3>
-
-<p>Great progress was made on the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> by <a href="https://github.com/kedarbellare">Kedar Bellare</a>. We now have an experimental new version of the apis that are generated more directly from the C code so that we can have more control over the output.</p>
-
-<p>For example the new version of the generated api for NDArray looks like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">defn</span>
-</span><span class='line'> <span class="nv">activation</span>
-</span><span class='line'> <span class="s">&quot;Applies an activation function element-wise to the input.</span>
-</span><span class='line'><span class="s">  </span>
-</span><span class='line'><span class="s">  The following activation functions are supported:</span>
-</span><span class='line'><span class="s">  </span>
-</span><span class='line'><span class="s">  - `relu`: Rectified Linear Unit, :math:`y = max(x, 0)`</span>
-</span><span class='line'><span class="s">  - `sigmoid`: :math:`y = \\frac{1}{1 + exp(-x)}`</span>
-</span><span class='line'><span class="s">  - `tanh`: Hyperbolic tangent, :math:`y = \\frac{exp(x) - exp(-x)}{exp(x) + exp(-x)}`</span>
-</span><span class='line'><span class="s">  - `softrelu`: Soft ReLU, or SoftPlus, :math:`y = log(1 + exp(x))`</span>
-</span><span class='line'><span class="s">  - `softsign`: :math:`y = \\frac{x}{1 + abs(x)}`</span>
-</span><span class='line'><span class="s">  </span>
-</span><span class='line'><span class="s">  </span>
-</span><span class='line'><span class="s">  </span>
-</span><span class='line'><span class="s">  Defined in src/operator/nn/activation.cc:L167</span>
-</span><span class='line'><span class="s">  </span>
-</span><span class='line'><span class="s">  `data`: The input array.</span>
-</span><span class='line'><span class="s">  `act-type`: Activation function to be applied.</span>
-</span><span class='line'><span class="s">  `out`: Output array. (optional)&quot;</span>
-</span><span class='line'> <span class="p">([</span><span class="nv">data</span> <span class="nv">act-type</span><span class="p">]</span> <span class="p">(</span><span class="nf">activation</span> <span class="p">{</span><span class="ss">:data</span> <span class="nv">data</span>, <span class="ss">:act-type</span> <span class="nv">act-type</span><span class="p">}))</span>
-</span><span class='line'> <span class="p">([{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">data</span> <span class="nv">act-type</span> <span class="nv">out</span><span class="p">]</span>, <span class="ss">:or</span> <span class="p">{</span><span class="nv">out</span> <span class="nv">nil</span><span class="p">}</span>, <span class="ss">:as</span> <span class="nv">opts</span><span class="p">}]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">util/coerce-return</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">NDArrayAPI/Activation</span> <span class="nv">data</span> <span class="nv">act-type</span> <span class="p">(</span><span class="nf">util/-&gt;option</span> <span class="nv">out</span><span class="p">)))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>as opposed to:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="p">(</span><span class="nf">defn</span>
-</span><span class='line'> <span class="nv">activation</span>
-</span><span class='line'> <span class="p">([</span><span class="o">&amp;</span> <span class="nv">nd-array-and-params</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">util/coerce-return</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">NDArray/Activation</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">util/coerce-param</span>
-</span><span class='line'>     <span class="nv">nd-array-and-params</span>
-</span><span class='line'>     <span class="o">#</span><span class="p">{</span><span class="s">&quot;scala.collection.Seq&quot;</span><span class="p">})))))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So much nicer!!!</p>
-
-<h3>BERT (State of the Art for NLP)</h3>
-
-<p>We also have some really exciting examples for BERT in a <a href="https://github.com/apache/incubator-mxnet/pull/14769">PR</a> that will be merged soon. If you are not familiar with BERT, this <a href="http://jalammar.github.io/illustrated-bert/">blog post</a> is a good overview. Basically, it&rsquo;s the state of the art in NLP right now. With the help of exported models from <a href="https://github.com/dmlc/gluon-nlp">GluonNLP</a>, we can do both inference and fine tuning of BERT models in MXNet with Clojure! This is an excellent example of cross fertilization across the GluonNLP, Scala, and Clojure MXNet projects.</p>
-
-<p>There are two examples.</p>
-
-<p>1) BERT question and answer inference based off of a fine tuned model of the <a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD Dataset</a> in GluonNLP which is then exported. It allows one to actually do some natural language question and answering like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span></span><span class="nv">Question</span> <span class="nv">Answer</span> <span class="nv">Data</span>
-</span><span class='line'><span class="p">{</span><span class="ss">:input-answer</span>
-</span><span class='line'> <span class="s">&quot;Rich Hickey is the creator of the Clojure language. Before Clojure, he developed dotLisp, a similar project based on the .NET platform, and three earlier attempts to provide interoperability between Lisp and Java: a Java foreign language interface for Common Lisp, A Foreign Object Interface for Lisp, and a Lisp-friendly interface to Java Servlets.&quot;</span>,
-</span><span class='line'> <span class="ss">:input-question</span> <span class="s">&quot;Who created Clojure?&quot;</span>,
-</span><span class='line'> <span class="ss">:ground-truth-answers</span> <span class="p">[</span><span class="s">&quot;rich&quot;</span> <span class="s">&quot;hickey&quot;</span><span class="p">]}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nv">Predicted</span> <span class="nv">Answer</span><span class="err">:</span>  <span class="p">[</span><span class="nv">rich</span> <span class="nv">hickey</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>2) The second example is using the exported BERT base model and then fine tuning it in Clojure to do a task with sentence pair classification to see if two sentences are equivalent or not.</p>
-
-<p>The nice thing about this is that we were able to convert the existing <a href="https://gluon-nlp.mxnet.io/examples/sentence_embedding/bert.html">tutorial in GluonNLP</a> over to a Clojure Jupyter notebook with the <code>lein-jupyter</code> plugin. I didn&rsquo;t realize that there is a nifty <code>save-as</code> command in Jupyter that can generate a markdown file, which makes for very handy documentation. Take a peek at the tutorial <a href="https://github.com/apache/incubator-mxnet/blob/d062d46f1c351dc9b70a038511b564dab5c43266/contrib/clojure-package/examples/bert/fine-tune-bert.md">here</a>. It might make its way into a blog post on its own in the next week or two.</p>
-
-<h2>Upcoming Events</h2>
-
-<ul>
-<li><p>I&rsquo;ll be speaking about Clojure MXNet at the next <a href="https://twitter.com/scicloj">Scicloj Event</a> on May 15th at 10PM UTC. Please join us and get involved in making Clojure a great place for Data Science.</p></li>
-<li><p>I&rsquo;m also really excited to attend <a href="https://iclr.cc/">ICLR</a> in a couple weeks. It is a <em>huge conference</em> that I&rsquo;m sure will melt my mind with the latest research in Deep Learning. If anyone else is planning to attend, please say hi :)</p></li>
-</ul>
-
-
-<h2>Get Involved</h2>
-
-<p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip</p>
-
-<h2>Cat Picture of the Month</h2>
-
-<p>To close out, let&rsquo;s take a lesson from my cats and don&rsquo;t forget the importance of naps.</p>
-
-<p><img src="https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg"></p>
-
-<p>Have a great rest of April!</p>
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2019-04-26T15:51:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Fri 26 Apr 2019,  3:51 PM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/deep-learning/'>Deep Learning</a>, <a class='category' href='/blog/categories/mxnet/'>MXNet</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2019/03/22/clojure-mxnet-march-update/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Clojure MXNet March Update"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Clojure MXNet March Update</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2019/08/16/simple-autoencoder/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: Simple Autoencoder">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>Simple Autoencoder</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2019/04/26/clojure-mxnet-april-update/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Clojure MXNet April Update | Squid's Blog</title><meta name=keywords content><meta name=description content="Spring is bringing some beautiful new things to the  Clojure MXNet. Here are some highlights for the month of April.
+Shipped
+We&rsquo;ve merged 10 PRs over the last month. Many of them focus on core improvements to documentation and usability which is very important.
+The MXNet project is also preparing a new release 1.4.1, so keep on the lookout for that to hit in the near future.
+Clojure MXNet Made Simple Article Series
+Arthur Caillau added another post to his fantastic series - MXNet made simple: Pretrained Models for image classification - Inception and VGG"><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2019/04/26/clojure-mxnet-april-update/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2019/04/26/clojure-mxnet-april-update/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2019/04/26/clojure-mxnet-april-update/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Clojure MXNet April Update"><meta property="og:description" content="Spring is bringing some beautiful new things to the Clojure MXNet. Here are some highlights for the month of April.
+Shipped We’ve merged 10 PRs over the last month. Many of them focus on core improvements to documentation and usability which is very important.
+The MXNet project is also preparing a new release 1.4.1, so keep on the lookout for that to hit in the near future.
+Clojure MXNet Made Simple Article Series Arthur Caillau added another post to his fantastic series - MXNet made simple: Pretrained Models for image classification - Inception and VGG"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-04-26T15:51:00+00:00"><meta property="article:modified_time" content="2019-04-26T15:51:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Clojure MXNet April Update"><meta name=twitter:description content="Spring is bringing some beautiful new things to the Clojure MXNet. Here are some highlights for the month of April.
+Shipped We’ve merged 10 PRs over the last month. Many of them focus on core improvements to documentation and usability which is very important.
+The MXNet project is also preparing a new release 1.4.1, so keep on the lookout for that to hit in the near future.
+Clojure MXNet Made Simple Article Series Arthur Caillau added another post to his fantastic series - MXNet made simple: Pretrained Models for image classification - Inception and VGG"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Clojure MXNet April Update","item":"https://gigasquidsoftware.com/blog/2019/04/26/clojure-mxnet-april-update/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Clojure MXNet April Update","name":"Clojure MXNet April Update","description":"Spring is bringing some beautiful new things to the Clojure MXNet. Here are some highlights for the month of April.\nShipped We\u0026rsquo;ve merged 10 PRs over the last month. Many of them focus on core improvements to documentation and usability which is very important.\nThe MXNet project is also preparing a new release 1.4.1, so keep on the lookout for that to hit in the near future.\nClojure MXNet Made Simple Article Series Arthur Caillau added another post to his fantastic series - MXNet made simple: Pretrained Models for image classification - Inception and VGG\n","keywords":[],"articleBody":"Spring is bringing some beautiful new things to the Clojure MXNet. Here are some highlights for the month of April.\nShipped We’ve merged 10 PRs over the last month. Many of them focus on core improvements to documentation and usability which is very important.\nThe MXNet project is also preparing a new release 1.4.1, so keep on the lookout for that to hit in the near future.\nClojure MXNet Made Simple Article Series Arthur Caillau added another post to his fantastic series - MXNet made simple: Pretrained Models for image classification - Inception and VGG\nCool Stuff in Development New APIs Great progress was made on the new version of the API for the Clojure NDArray and Symbol APIs by Kedar Bellare. We now have an experimental new version of the apis that are generated more directly from the C code so that we can have more control over the output.\nFor example the new version of the generated api for NDArray looks like:\n(defn activation \"Applies an activation function element-wise to the input. The following activation functions are supported: - `relu`: Rectified Linear Unit, :math:`y = max(x, 0)` - `sigmoid`: :math:`y = \\\\frac{1}{1 + exp(-x)}` - `tanh`: Hyperbolic tangent, :math:`y = \\\\frac{exp(x) - exp(-x)}{exp(x) + exp(-x)}` - `softrelu`: Soft ReLU, or SoftPlus, :math:`y = log(1 + exp(x))` - `softsign`: :math:`y = \\\\frac{x}{1 + abs(x)}` Defined in src/operator/nn/activation.cc:L167 `data`: The input array. `act-type`: Activation function to be applied. `out`: Output array. (optional)\" ([data act-type] (activation {:data data, :act-type act-type})) ([{:keys [data act-type out], :or {out nil}, :as opts}] (util/coerce-return (NDArrayAPI/Activation data act-type (util/-\u003eoption out))))) as opposed to:\n(defn activation ([\u0026 nd-array-and-params] (util/coerce-return (NDArray/Activation (util/coerce-param nd-array-and-params #{\"scala.collection.Seq\"}))))) So much nicer!!!\nBERT (State of the Art for NLP) We also have some really exciting examples for BERT in a PR that will be merged soon. If you are not familiar with BERT, this blog post is a good overview. Basically, it’s the state of the art in NLP right now. With the help of exported models from GluonNLP, we can do both inference and fine tuning of BERT models in MXNet with Clojure! This is an excellent example of cross fertilization across the GluonNLP, Scala, and Clojure MXNet projects.\nThere are two examples.\nBERT question and answer inference based off of a fine tuned model of the SQuAD Dataset in GluonNLP which is then exported. It allows one to actually do some natural language question and answering like: Question Answer Data {:input-answer \"Rich Hickey is the creator of the Clojure language. Before Clojure, he developed dotLisp, a similar project based on the .NET platform, and three earlier attempts to provide interoperability between Lisp and Java: a Java foreign language interface for Common Lisp, A Foreign Object Interface for Lisp, and a Lisp-friendly interface to Java Servlets.\", :input-question \"Who created Clojure?\", :ground-truth-answers [\"rich\" \"hickey\"]} Predicted Answer: [rich hickey] The second example is using the exported BERT base model and then fine tuning it in Clojure to do a task with sentence pair classification to see if two sentences are equivalent or not. The nice thing about this is that we were able to convert the existing tutorial in GluonNLP over to a Clojure Jupyter notebook with the lein-jupyter plugin. I didn’t realize that there is a nifty save-as command in Jupyter that can generate a markdown file, which makes for very handy documentation. Take a peek at the tutorial here. It might make its way into a blog post on its own in the next week or two.\nUpcoming Events I’ll be speaking about Clojure MXNet at the next Scicloj Event on May 15th at 10PM UTC. Please join us and get involved in making Clojure a great place for Data Science.\nI’m also really excited to attend ICLR in a couple weeks. It is a huge conference that I’m sure will melt my mind with the latest research in Deep Learning. If anyone else is planning to attend, please say hi :)\nGet Involved As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian’s slack and Zulip\nCat Picture of the Month To close out, let’s take a lesson from my cats and don’t forget the importance of naps.\nHave a great rest of April!\n","wordCount":"728","inLanguage":"en","datePublished":"2019-04-26T15:51:00Z","dateModified":"2019-04-26T15:51:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2019/04/26/clojure-mxnet-april-update/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Clojure MXNet April Update</h1><div class=post-meta><span title='2019-04-26 15:51:00 +0000 UTC'>April 26, 2019</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p>Spring is bringing some beautiful new things to the <a href=http://mxnet.incubator.apache.org/>Clojure MXNet</a>. Here are some highlights for the month of April.</p><h2 id=shipped>Shipped<a hidden class=anchor aria-hidden=true href=#shipped>#</a></h2><p>We&rsquo;ve merged <a href="https://github.com/apache/incubator-mxnet/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Aclosed+clojure">10 PRs</a> over the last month. Many of them focus on core improvements to documentation and usability which is very important.</p><p>The MXNet project is also preparing a new release <code>1.4.1</code>, so keep on the lookout for that to hit in the near future.</p><h2 id=clojure-mxnet-made-simple-article-series>Clojure MXNet Made Simple Article Series<a hidden class=anchor aria-hidden=true href=#clojure-mxnet-made-simple-article-series>#</a></h2><p><a href=https://arthurcaillau.com/about/>Arthur Caillau</a> added another post to his fantastic series - <a href=https://arthurcaillau.com/mxnet-made-simple-pretrained-models/>MXNet made simple: Pretrained Models for image classification - Inception and VGG</a></p><h2 id=cool-stuff-in-development>Cool Stuff in Development<a hidden class=anchor aria-hidden=true href=#cool-stuff-in-development>#</a></h2><h3 id=new-apis>New APIs<a hidden class=anchor aria-hidden=true href=#new-apis>#</a></h3><p>Great progress was made on the <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=103092678">new version of the API for the Clojure NDArray and Symbol APIs</a> by <a href=https://github.com/kedarbellare>Kedar Bellare</a>. We now have an experimental new version of the apis that are generated more directly from the C code so that we can have more control over the output.</p><p>For example the new version of the generated api for NDArray looks like:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>defn</span>
+</span></span><span style=display:flex><span> activation
+</span></span><span style=display:flex><span> <span style=color:#e6db74>&#34;Applies an activation function element-wise to the input.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  The following activation functions are supported:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  - `relu`: Rectified Linear Unit, :math:`y = max(x, 0)`
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  - `sigmoid`: :math:`y = \\frac{1}{1 + exp(-x)}`
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  - `tanh`: Hyperbolic tangent, :math:`y = \\frac{exp(x) - exp(-x)}{exp(x) + exp(-x)}`
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  - `softrelu`: Soft ReLU, or SoftPlus, :math:`y = log(1 + exp(x))`
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  - `softsign`: :math:`y = \\frac{x}{1 + abs(x)}`
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  Defined in src/operator/nn/activation.cc:L167
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  `data`: The input array.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  `act-type`: Activation function to be applied.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  `out`: Output array. (optional)&#34;</span>
+</span></span><span style=display:flex><span> ([data act-type] (<span style=color:#a6e22e>activation</span> {<span style=color:#e6db74>:data</span> data, <span style=color:#e6db74>:act-type</span> act-type}))
+</span></span><span style=display:flex><span> ([{<span style=color:#e6db74>:keys</span> [data act-type out], <span style=color:#e6db74>:or</span> {out nil}, <span style=color:#e6db74>:as</span> opts}]
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>util/coerce-return</span>
+</span></span><span style=display:flex><span>   (<span style=color:#a6e22e>NDArrayAPI/Activation</span> data act-type (<span style=color:#a6e22e>util/-&gt;option</span> out)))))
+</span></span></code></pre></div><p>as opposed to:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#a6e22e>defn</span>
+</span></span><span style=display:flex><span> activation
+</span></span><span style=display:flex><span> ([<span style=color:#f92672>&amp;</span> nd-array-and-params]
+</span></span><span style=display:flex><span>  (<span style=color:#a6e22e>util/coerce-return</span>
+</span></span><span style=display:flex><span>   (<span style=color:#a6e22e>NDArray/Activation</span>
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>util/coerce-param</span>
+</span></span><span style=display:flex><span>     nd-array-and-params
+</span></span><span style=display:flex><span>     <span style=color:#f92672>#</span>{<span style=color:#e6db74>&#34;scala.collection.Seq&#34;</span>})))))
+</span></span></code></pre></div><p>So much nicer!!!</p><h3 id=bert-state-of-the-art-for-nlp>BERT (State of the Art for NLP)<a hidden class=anchor aria-hidden=true href=#bert-state-of-the-art-for-nlp>#</a></h3><p>We also have some really exciting examples for BERT in a <a href=https://github.com/apache/incubator-mxnet/pull/14769>PR</a> that will be merged soon. If you are not familiar with BERT, this <a href=http://jalammar.github.io/illustrated-bert/>blog post</a> is a good overview. Basically, it&rsquo;s the state of the art in NLP right now. With the help of exported models from <a href=https://github.com/dmlc/gluon-nlp>GluonNLP</a>, we can do both inference and fine tuning of BERT models in MXNet with Clojure! This is an excellent example of cross fertilization across the GluonNLP, Scala, and Clojure MXNet projects.</p><p>There are two examples.</p><ol><li>BERT question and answer inference based off of a fine tuned model of the <a href=https://rajpurkar.github.io/SQuAD-explorer/>SQuAD Dataset</a> in GluonNLP which is then exported. It allows one to actually do some natural language question and answering like:</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>Question Answer Data
+</span></span><span style=display:flex><span>{:input-answer
+</span></span><span style=display:flex><span> &#34;Rich Hickey is the creator of the Clojure language. Before Clojure, he developed dotLisp, a similar project based on the .NET platform, and three earlier attempts to provide interoperability between Lisp and Java: a Java foreign language interface for Common Lisp, A Foreign Object Interface for Lisp, and a Lisp-friendly interface to Java Servlets.&#34;,
+</span></span><span style=display:flex><span> :input-question &#34;Who created Clojure?&#34;,
+</span></span><span style=display:flex><span> :ground-truth-answers [&#34;rich&#34; &#34;hickey&#34;]}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  Predicted Answer:  [rich hickey]
+</span></span></code></pre></div><ol start=2><li>The second example is using the exported BERT base model and then fine tuning it in Clojure to do a task with sentence pair classification to see if two sentences are equivalent or not.</li></ol><p>The nice thing about this is that we were able to convert the existing <a href=https://gluon-nlp.mxnet.io/examples/sentence_embedding/bert.html>tutorial in GluonNLP</a> over to a Clojure Jupyter notebook with the <code>lein-jupyter</code> plugin. I didn&rsquo;t realize that there is a nifty <code>save-as</code> command in Jupyter that can generate a markdown file, which makes for very handy documentation. Take a peek at the tutorial <a href=https://github.com/apache/incubator-mxnet/blob/d062d46f1c351dc9b70a038511b564dab5c43266/contrib/clojure-package/examples/bert/fine-tune-bert.md>here</a>. It might make its way into a blog post on its own in the next week or two.</p><h2 id=upcoming-events>Upcoming Events<a hidden class=anchor aria-hidden=true href=#upcoming-events>#</a></h2><ul><li><p>I&rsquo;ll be speaking about Clojure MXNet at the next <a href=https://twitter.com/scicloj>Scicloj Event</a> on May 15th at 10PM UTC. Please join us and get involved in making Clojure a great place for Data Science.</p></li><li><p>I&rsquo;m also really excited to attend <a href=https://iclr.cc/>ICLR</a> in a couple weeks. It is a <em>huge conference</em> that I&rsquo;m sure will melt my mind with the latest research in Deep Learning. If anyone else is planning to attend, please say hi :)</p></li></ul><h2 id=get-involved>Get Involved<a hidden class=anchor aria-hidden=true href=#get-involved>#</a></h2><p>As always, we welcome involvement in the true Apache tradition. If you have questions or want to say hi, head on over the the closest #mxnet room on your preferred server. We are on Clojurian&rsquo;s slack and Zulip</p><h2 id=cat-picture-of-the-month>Cat Picture of the Month<a hidden class=anchor aria-hidden=true href=#cat-picture-of-the-month>#</a></h2><p>To close out, let&rsquo;s take a lesson from my cats and don&rsquo;t forget the importance of naps.</p><p><img loading=lazy src=https://live.staticflickr.com/65535/47707608431_5c5d0c73f8_c.jpg></p><p>Have a great rest of April!</p></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/><span class=title>« Prev</span>
+<span>Simple Autoencoder</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2019/03/22/clojure-mxnet-march-update/><span class=title>Next »</span>
+<span>Clojure MXNet March Update</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

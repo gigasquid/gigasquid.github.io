@@ -1,469 +1,59 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Walking With Hexapods - Squid's Blog</title>
-  <meta name="author" content="Carin Meier">
-
-  
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/">
-  <link href="/favicon.png" type="image/png" rel="icon">
-  <link href="/atom.xml" rel="alternate" title="Squid's Blog" type="application/atom+xml">
-
-  <!-- http://opengraphprotocol.org/ -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/">
-  <meta property="og:title" content="Walking With Hexapods - Squid's Blog">
-  
-
-  <script src="/javascripts/libs/jquery/jquery-2.1.3.min.js"></script>
-
-<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-  
-  <link href="/stylesheets/screen.css" media="screen, projection, print" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-  <body   >
-    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
-    <div id="wrap">
-      
-        <header role="banner">
-          <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" title="toggle navbar" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Squid's Blog</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="/blog/archives">Archives</a></li>
-<li ><a href="/about">About</a></li>
-<li ><a href="/books">Books</a></li>
-<li ><a href="/speaking">Speaking</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
-                        <span class="visible-xs">RSS</span>
-                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
-                    </a>
-                </li>
-                
-            </ul>
-            
-                <form class="navbar-form navbar-right" action="http://google.com/search" method="GET">
-                    <input type="hidden" name="sitesearch" value="gigasquid.github.io">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Search">
-                    </div>
-                </form>
-            
-        </div>
-    </div>
-</nav>
-
-
-        </header>
-      
-      <div id="main" role="main" class="container">
-        <div id="content">
-          <div class="row">
-  <div class="page-content" itemscope itemtype="http://schema.org/Blog">
-    <meta itemprop="name" content="Squid's Blog" />
-    
-    <meta itemprop="url" content="http://gigasquid.github.io" />
-    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-      
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-03-19T21:06:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 19 Mar 2014,  9:06 PM</time>
-        
-           | <a href="#disqus_thread" itemprop="discussionUrl"
-             data-disqus-identifier="http://gigasquid.github.io">Comments</a>
-        
-      </p>
-    
-    
-    <h1 class="entry-title" itemprop="name headline">
-        Walking With Hexapods
-        
-    </h1>
-    
-  </header>
-
-
-<div class="entry-content clearfix" itemprop="articleBody description"><p><img src="http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg"></p>
-
-<p>Here we see the <a href="http://www.trossenrobotics.com/phantomx-ax-hexapod.aspx">PhantomX Hexapod</a> thriving in the natural habitat of a
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Walking with Hexapods | Squid's Blog</title><meta name=keywords content><meta name=description content="
+Here we see the PhantomX Hexapod thriving in the natural habitat of a
 cozy, climate controlled, modern house. But there was a time before
 the hexapod.  In particular, there was a time of many hexapod parts
 and a high level software developer that somehow, despite her natural
 lack of mechanical skills, managed to bring it to life. This blog post
 endeavors to chronicle the high and low points of this journey. And
 perhaps, will make it easier for any other brave souls that would like
-to bring the <em>Age of Hexapods</em> into their homes.</p>
-
-<h2>Oh My! So Many Parts</h2>
-
-<p>I wasn&rsquo;t really mentally prepared for the vast amounts of parts in the
-kit.  Here is a sampling:</p>
-
-<ul>
-<li>18 AX-12A Servos</li>
-<li>Top/ Bottom Body Plate</li>
-<li>20 Brackets</li>
-<li>Arbotix Board</li>
-<li>2 Xbees</li>
-<li>Lipo Battery &amp; Charger</li>
-<li>Arbotix programmer</li>
-<li>19 Cables</li>
-<li><strong>50,000 nuts and screws </strong> (Really only about 850 - but you get my
- point)</li>
-</ul>
-
-
-<h2>First Things First</h2>
-
-<p>The very first thing to do is to make sure that you have all the
-parts.  Once I went through the checklist and double counted all my
+to bring the Age of Hexapods into their homes."><meta name=author content="Carin Meier"><link rel=canonical href=https://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/><link crossorigin=anonymous href=/assets/css/stylesheet.47e51c7d8489b002361bac156ce9a0a8776d08c5462c2cee95801efafdd90d35.css integrity="sha256-R+UcfYSJsAI2G6wVbOmgqHdtCMVGLCzulYAe+v3ZDTU=" rel="preload stylesheet" as=style><link rel=icon href=https://gigasquidsoftware.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://gigasquidsoftware.com/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://gigasquidsoftware.com/favicon-32x32.png><link rel=apple-touch-icon href=https://gigasquidsoftware.com/apple-touch-icon.png><link rel=mask-icon href=https://gigasquidsoftware.com/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/"><meta property="og:site_name" content="Squid's Blog"><meta property="og:title" content="Walking with Hexapods"><meta property="og:description" content="Here we see the PhantomX Hexapod thriving in the natural habitat of a cozy, climate controlled, modern house. But there was a time before the hexapod. In particular, there was a time of many hexapod parts and a high level software developer that somehow, despite her natural lack of mechanical skills, managed to bring it to life. This blog post endeavors to chronicle the high and low points of this journey. And perhaps, will make it easier for any other brave souls that would like to bring the Age of Hexapods into their homes."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2014-03-19T21:06:00+00:00"><meta property="article:modified_time" content="2014-03-19T21:06:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Walking with Hexapods"><meta name=twitter:description content="Here we see the PhantomX Hexapod thriving in the natural habitat of a cozy, climate controlled, modern house. But there was a time before the hexapod. In particular, there was a time of many hexapod parts and a high level software developer that somehow, despite her natural lack of mechanical skills, managed to bring it to life. This blog post endeavors to chronicle the high and low points of this journey. And perhaps, will make it easier for any other brave souls that would like to bring the Age of Hexapods into their homes."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":6,"name":"Walking with Hexapods","item":"https://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Walking with Hexapods","name":"Walking with Hexapods","description":"\nHere we see the PhantomX Hexapod thriving in the natural habitat of a cozy, climate controlled, modern house. But there was a time before the hexapod. In particular, there was a time of many hexapod parts and a high level software developer that somehow, despite her natural lack of mechanical skills, managed to bring it to life. This blog post endeavors to chronicle the high and low points of this journey. And perhaps, will make it easier for any other brave souls that would like to bring the Age of Hexapods into their homes.\n","keywords":[],"articleBody":"\nHere we see the PhantomX Hexapod thriving in the natural habitat of a cozy, climate controlled, modern house. But there was a time before the hexapod. In particular, there was a time of many hexapod parts and a high level software developer that somehow, despite her natural lack of mechanical skills, managed to bring it to life. This blog post endeavors to chronicle the high and low points of this journey. And perhaps, will make it easier for any other brave souls that would like to bring the Age of Hexapods into their homes.\nOh My! So Many Parts I wasn’t really mentally prepared for the vast amounts of parts in the kit. Here is a sampling:\n18 AX-12A Servos Top/ Bottom Body Plate 20 Brackets Arbotix Board 2 Xbees Lipo Battery \u0026 Charger Arbotix programmer 19 Cables **50,000 nuts and screws ** (Really only about 850 - but you get my point) First Things First The very first thing to do is to make sure that you have all the parts. Once I went through the checklist and double counted all my screws, I was relieved to go onto the next task of programming the Arbotix and assign ids to servos and center them. These steps consisted of:\nGetting the Arduino IDE going Loading the Drivers and Libraries Loading the ROS (Robot Operating System) on the Arbotix Board, so that it could be used to program the servos. Each of the servos have to be assigned a number. This will let the program know which part of the leg is which, so that it will eventually - hopefully, be able to walk. Once the id is given, a sticker is labeled on the servo for future use. Centering the servos is a VERY important step not to overlook. If you do not center the servos, you will get into the unfortunate circumstance of having to dissemble the robot, cry, recenter the servos, and then reassemble the robot. Please avoid.\nPutting It Together The assembly starts with the feet and legs first. I was so pleased when I got the feet assembled, that I considered knitting little baby hexapod booties.\nNext a servo and the tibia is added\nAnother servo and the tibia and femur is assembled\nFinally, another servo and the whole leg is assembled\nNewbie Advice I would like to pause for a minute to share some advice from my trial and errors in assembly thus far:\n**Don’t overtighten screws ** - More is not better. It makes things like plexiglass frames crack and break. Seating nuts in servos is hard - This isn’t really advice. Just moral support in your struggle. There are 18 servos and up to 20 nuts to seat in each servo. Assembling the body The body is where the board, battery and and cables go.\nAt long last, the legs can be attached to the body - with 120 screws of course.\nRound two of Newbie Advice For those who have never stripped wires and attached them to power supplies, like me, please mind that the wires are twisted so that the edges don’t fray out and short out everything requiring you to re-assign all the servos that lost their ids and much unscrewing, crying, and reassembling. When programming the Arbotix board. You must remove the Xbee, or it will not work. Also, did I mention not over-tightening screws? Also, the order in which you tighten the screws is important too. Try to tighten them all loosely in order, so you don’t stress the fiberglass parts and have something like this happen. It is Alive! Finally, the moment of truth. The hexapod is assembled and it is time to upload a test check on the board to make sure that everything is working alright.\nWalking with Hexapods The kit comes with a commander that you assemble of course. You can use it to control the hexapod with hand-held joysticks.\nThe moment of truth, when it finally took its very first steps, and the Age of Hexapods began.\nStay tuned for the next post of how to control the hexapod with your Clojure code and loading the Phoenix firmware that gives it a life-like moves\n","wordCount":"701","inLanguage":"en","datePublished":"2014-03-19T21:06:00Z","dateModified":"2014-03-19T21:06:00Z","author":{"@type":"Person","name":"Carin Meier"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://gigasquidsoftware.com/blog/2014/03/19/walking-with-hexapods/"},"publisher":{"@type":"Organization","name":"Squid's Blog","logo":{"@type":"ImageObject","url":"https://gigasquidsoftware.com/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://gigasquidsoftware.com/ accesskey=h title="Squid's Blog (Alt + H)">Squid's Blog</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://gigasquidsoftware.com/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://gigasquidsoftware.com/about/ title=About><span>About</span></a></li><li><a href=https://gigasquidsoftware.com/books/ title=Books><span>Books</span></a></li><li><a href=https://gigasquidsoftware.com/speaking/ title=Speaking><span>Speaking</span></a></li><li><a href=https://gigasquidsoftware.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://gigasquidsoftware.com/>Home</a></nav><h1 class="post-title entry-hint-parent">Walking with Hexapods</h1><div class=post-meta><span title='2014-03-19 21:06:00 +0000 UTC'>March 19, 2014</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>Carin Meier</span></div></header><div class="post-content md-content"><p><img loading=lazy src=http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg></p><p>Here we see the <a href=http://www.trossenrobotics.com/phantomx-ax-hexapod.aspx>PhantomX Hexapod</a> thriving in the natural habitat of a
+cozy, climate controlled, modern house. But there was a time before
+the hexapod. In particular, there was a time of many hexapod parts
+and a high level software developer that somehow, despite her natural
+lack of mechanical skills, managed to bring it to life. This blog post
+endeavors to chronicle the high and low points of this journey. And
+perhaps, will make it easier for any other brave souls that would like
+to bring the <em>Age of Hexapods</em> into their homes.</p><h2 id=oh-my-so-many-parts>Oh My! So Many Parts<a hidden class=anchor aria-hidden=true href=#oh-my-so-many-parts>#</a></h2><p>I wasn&rsquo;t really mentally prepared for the vast amounts of parts in the
+kit. Here is a sampling:</p><ul><li>18 AX-12A Servos</li><li>Top/ Bottom Body Plate</li><li>20 Brackets</li><li>Arbotix Board</li><li>2 Xbees</li><li>Lipo Battery & Charger</li><li>Arbotix programmer</li><li>19 Cables</li><li>**50,000 nuts and screws ** (Really only about 850 - but you get my
+point)</li></ul><h2 id=first-things-first>First Things First<a hidden class=anchor aria-hidden=true href=#first-things-first>#</a></h2><p>The very first thing to do is to make sure that you have all the
+parts. Once I went through the checklist and double counted all my
 screws, I was relieved to go onto the next task of programming the
 Arbotix and assign ids to servos and center them. These steps
-consisted of:</p>
-
-<ul>
-<li>Getting the Arduino IDE going</li>
-<li>Loading the Drivers and Libraries</li>
-<li>Loading the ROS (Robot Operating System) on the Arbotix Board, so
-that it could be used to program the servos.</li>
-</ul>
-
-
-<p>Each of the servos have to be assigned a number. This will let the
+consisted of:</p><ul><li>Getting the Arduino IDE going</li><li>Loading the Drivers and Libraries</li><li>Loading the ROS (Robot Operating System) on the Arbotix Board, so
+that it could be used to program the servos.</li></ul><p>Each of the servos have to be assigned a number. This will let the
 program know which part of the leg is which, so that it will
 eventually - hopefully, be able to walk. Once the id is given, a
 sticker is labeled on the servo for future use. Centering the servos
-is a VERY important step not to overlook.  If you do not center the
+is a VERY important step not to overlook. If you do not center the
 servos, you will get into the unfortunate circumstance of having to
 dissemble the robot, cry, recenter the servos, and then reassemble the
-robot. Please avoid.</p>
-
-<h2>Putting It Together</h2>
-
-<p>The assembly starts with the feet and legs first.
+robot. Please avoid.</p><h2 id=putting-it-together>Putting It Together<a hidden class=anchor aria-hidden=true href=#putting-it-together>#</a></h2><p>The assembly starts with the feet and legs first.
 I was so pleased when I got the feet assembled, that I considered
-knitting little baby hexapod booties.</p>
-
-<p><img src="http://farm8.staticflickr.com/7298/13278059445_562bb9ce4b.jpg"></p>
-
-<p>Next a servo and the tibia is added</p>
-
-<p><img src="http://farm8.staticflickr.com/7311/13278197583_599f030bab.jpg"></p>
-
-<p>Another servo and the tibia and femur is assembled</p>
-
-<p><img src="http://farm8.staticflickr.com/7185/13278392294_8986c14e5b.jpg"></p>
-
-<p>Finally, another servo and the whole leg is assembled</p>
-
-<p><img src="http://farm8.staticflickr.com/7033/13278197683_cfd9a4870f.jpg"></p>
-
-<h2>Newbie Advice</h2>
-
-<p>I would like to pause for a minute to share some advice from my trial
-and errors in assembly thus far:</p>
-
-<ul>
-<li><strong>Don&rsquo;t overtighten screws </strong> - More is not better. It makes things
-like plexiglass frames crack and break.</li>
-<li><strong>Seating nuts in servos is hard</strong> - This isn&rsquo;t really advice. Just
-moral support in your struggle.  There are 18 servos and up to 20
-nuts to seat in each servo.</li>
-</ul>
-
-
-<p><img src="http://farm4.staticflickr.com/3833/13278059175_91699a9704_n.jpg"></p>
-
-<h2>Assembling the body</h2>
-
-<p>The body is where the board, battery and and cables go.</p>
-
-<p><img src="http://farm4.staticflickr.com/3755/13278197953_44717aea96.jpg"></p>
-
-<p>At long last, the legs can be attached to the body - with 120 screws
-of course.</p>
-
-<h2>Round two of Newbie Advice</h2>
-
-<ul>
-<li>For those who have never stripped wires and attached them to power
+knitting little baby hexapod booties.</p><p><img loading=lazy src=http://farm8.staticflickr.com/7298/13278059445_562bb9ce4b.jpg></p><p>Next a servo and the tibia is added</p><p><img loading=lazy src=http://farm8.staticflickr.com/7311/13278197583_599f030bab.jpg></p><p>Another servo and the tibia and femur is assembled</p><p><img loading=lazy src=http://farm8.staticflickr.com/7185/13278392294_8986c14e5b.jpg></p><p>Finally, another servo and the whole leg is assembled</p><p><img loading=lazy src=http://farm8.staticflickr.com/7033/13278197683_cfd9a4870f.jpg></p><h2 id=newbie-advice>Newbie Advice<a hidden class=anchor aria-hidden=true href=#newbie-advice>#</a></h2><p>I would like to pause for a minute to share some advice from my trial
+and errors in assembly thus far:</p><ul><li>**Don&rsquo;t overtighten screws ** - More is not better. It makes things
+like plexiglass frames crack and break.</li><li><strong>Seating nuts in servos is hard</strong> - This isn&rsquo;t really advice. Just
+moral support in your struggle. There are 18 servos and up to 20
+nuts to seat in each servo.</li></ul><p><img loading=lazy src=http://farm4.staticflickr.com/3833/13278059175_91699a9704_n.jpg></p><h2 id=assembling-the-body>Assembling the body<a hidden class=anchor aria-hidden=true href=#assembling-the-body>#</a></h2><p>The body is where the board, battery and and cables go.</p><p><img loading=lazy src=http://farm4.staticflickr.com/3755/13278197953_44717aea96.jpg></p><p>At long last, the legs can be attached to the body - with 120 screws
+of course.</p><h2 id=round-two-of-newbie-advice>Round two of Newbie Advice<a hidden class=anchor aria-hidden=true href=#round-two-of-newbie-advice>#</a></h2><ul><li>For those who have never stripped wires and attached them to power
 supplies, like me, please mind that the wires are twisted so that
 the edges don&rsquo;t fray out and short out everything requiring you to
 re-assign all the servos that lost their ids and much unscrewing,
-crying, and reassembling.</li>
-<li>When programming the Arbotix board.  You must remove the Xbee, or it
-will not work.</li>
-<li>Also, did I mention not over-tightening screws? Also, the order in
-which you tighten the screws is important too.  Try to tighten them
+crying, and reassembling.</li><li>When programming the Arbotix board. You must remove the Xbee, or it
+will not work.</li><li>Also, did I mention not over-tightening screws? Also, the order in
+which you tighten the screws is important too. Try to tighten them
 all loosely in order, so you don&rsquo;t stress the fiberglass parts and
-have something like this happen.</li>
-</ul>
-
-
-<p><img src="http://farm4.staticflickr.com/3749/13278392754_cde8d9e10f_n.jpg"></p>
-
-<h2>It is Alive!</h2>
-
-<p>Finally, the moment of truth. The hexapod is assembled and it is time
+have something like this happen.</li></ul><p><img loading=lazy src=http://farm4.staticflickr.com/3749/13278392754_cde8d9e10f_n.jpg></p><h2 id=it-is-alive>It is Alive!<a hidden class=anchor aria-hidden=true href=#it-is-alive>#</a></h2><p>Finally, the moment of truth. The hexapod is assembled and it is time
 to upload a test check on the board to make sure that everything is
-working alright.</p>
-
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('i9St8kDuyqU');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/i9St8kDuyqU?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/i9St8kDuyqU/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=i9St8kDuyqU" id="i9St8kDuyqU" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info"></div>
-</a>
-<div class="video-info" ></div>
-</div>
-
-
-<h2>Walking with Hexapods</h2>
-
-<p>The kit comes with a commander that you assemble of course.  You can
-use it to control the hexapod with hand-held joysticks.</p>
-
-<p><img src="http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg"></p>
-
-<p>The moment of truth, when it finally took its very first steps, and the Age of Hexapods began.</p>
-
-<div class="ratio-4-3 embed-video-container" onclick="var myAnchor = document.getElementById('pUrZeJ39xjs');var tmpDiv = document.createElement('div');tmpDiv.innerHTML = '&lt;iframe style=&quot;vertical-align:top;width:100%;height:100%;position:absolute;&quot; src=&quot;http://www.youtube.com/embed/pUrZeJ39xjs?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;';myAnchor.parentNode.replaceChild(tmpDiv.firstChild, myAnchor);return false;" title="click here to play">
-<a class="youtube-lazy-link" style="width:100%;height:100%;background:#000 url(http://i2.ytimg.com/vi/pUrZeJ39xjs/0.jpg) center center no-repeat;background-size:contain;position:absolute" href="http://www.youtube.com/watch?v=pUrZeJ39xjs" id="pUrZeJ39xjs" onclick="return false;">
-<div class="youtube-lazy-link-div"></div>
-<div class="youtube-lazy-link-info"></div>
-</a>
-<div class="video-info" ></div>
-</div>
-
-
-<p><em>Stay tuned for the next post of how to control the hexapod with your
+working alright.</p><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading=eager referrerpolicy=strict-origin-when-cross-origin src="https://www.youtube.com/embed/i9St8kDuyqU?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 title="YouTube video"></iframe></div><h2 id=walking-with-hexapods>Walking with Hexapods<a hidden class=anchor aria-hidden=true href=#walking-with-hexapods>#</a></h2><p>The kit comes with a commander that you assemble of course. You can
+use it to control the hexapod with hand-held joysticks.</p><p><img loading=lazy src=http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg></p><p>The moment of truth, when it finally took its very first steps, and the Age of Hexapods began.</p><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading=eager referrerpolicy=strict-origin-when-cross-origin src="https://www.youtube.com/embed/pUrZeJ39xjs?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 title="YouTube video"></iframe></div><p><em>Stay tuned for the next post of how to control the hexapod with your
 Clojure code and loading the Phoenix firmware that gives it a
-life-like moves</em></p>
-</div>
-
-
-      <footer class="post-footer">
-        <p class="meta text-muted">
-          
-
-
-<figure class="author-image">
-    <span class="img" href="/about" style="background-image: url(/images/avatar.jpg)"><span class="hidden">Picture</span></span>
-</figure>
-
-<section class="author">
-    <h4><span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="fn" itemprop="name">Carin Meier</span></span></h4>
-
-    <div class="author-meta">
-        <span class="author-link icon-link"><i class="fa fa-link" aria-hidden="true"></i> <a href="http://gigasquid.github.io">http://gigasquid.github.io</a></span>
-    </div>
-</section>
-
-<hr>
-
-<section class="share">
-    
-    <h4>Share this post</h4>
-    
-    <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?url=http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/;" 
-        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-    
-</section>
-
-
-
-
-<!--
-<footer class="post-footer">
-
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Instant%20Movie%20Streamer%20v3%20Release&amp;url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://iyask.me/instant-movie-streamer-v3-release/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-
-        </footer>
-
-
--->
-          
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-03-19T21:06:00-04:00"  data-updated="true" itemprop="datePublished dateCreated">Wed 19 Mar 2014,  9:06 PM</time>
-          <br>
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/all/'>All</a>, <a class='category' href='/blog/categories/robots/'>Robots</a>
-  
-</span>
-
-
-        </p>
-        
-          <div class="pager">
-            
-            
-              
-                <a href="/blog/2014/02/22/remembering-jim/" class="col-xs-12 col-md-4 btn btn-default" title="Previous Post: Remembering Jim"> 
-                  <div class="text-muted">
-                    <small>Previous Post</small>
-                  </div>
-                  <div class="pager-title">
-                    <h4>Remembering Jim</h4>
-                  </div>
-                </a>
-              
-            
-            
-            
-              
-              <a href="/blog/2014/03/20/world-domination-with-hexapods-and-clojure/" class="col-xs-12 col-md-4 btn btn-default pull-right" title="Next Post: World Domination with Hexapods and Clojure">
-                <div class="text-muted">
-                  <small>Next Post</small>
-                </div>
-                <div class="pager-title">
-                  <h4>World Domination with Hexapods and Clojure</h4>
-                </div>
-              </a>
-              
-            
-            
-          </div>
-        
-      </footer>
-    </article>
-    
-      <section>
-        <h2>Comments</h2>
-        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-      </section>
-    
-  </div>
-</div>
-
-        </div>
-      </div>
-    </div>
-    <footer role="contentinfo"><div class="container">
-    <p class="text-muted credits">
-  Copyright &copy; 2026 - Carin Meier<br>
-  <small>
-      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
-      <span class="credit">customized with <a href="https://github.com/bhrigu123/abacus">abacus theme</a></span>.
-  </small>
-</p>
-
-</div>
-</footer>
-    
-
-<script type="text/javascript">
-      var disqus_shortname = 'squidsblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/';
-        var disqus_url = 'http://gigasquid.github.io/blog/2014/03/19/walking-with-hexapods/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr.js"></script>
-
-
-  </body>
-</html>
+life-like moves</em></p></div><footer class=post-footer><ul class=post-tags></ul><nav class=paginav><a class=prev href=https://gigasquidsoftware.com/blog/2014/03/20/world-domination-with-hexapods-and-clojure/><span class=title>« Prev</span>
+<span>World Domination with Hexapods and Clojure</span>
+</a><a class=next href=https://gigasquidsoftware.com/blog/2014/02/22/remembering-jim/><span class=title>Next »</span>
+<span>Remembering Jim</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://gigasquidsoftware.com/>Squid's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
