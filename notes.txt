@@ -1,2 +1,0 @@
-eval "$(rbenv init - zsh)"
-then do bundle install

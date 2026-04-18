@@ -1,0 +1,70 @@
+baseURL = "https://gigasquidsoftware.com/"
+languageCode = "en-us"
+title = "Squid's Blog"
+theme = "PaperMod"
+paginate = 10
+enableRobotsTXT = true
+
+[params]
+  author = "Carin Meier"
+  description = "Random and Sometimes Useful Thoughts About Technology."
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  defaultTheme = "auto"
+  disableSpecial1stPost = true
+
+
+[permalinks]
+  [permalinks.page]
+    posts = "/blog/:year/:month/:day/:title/"
+  [permalinks.section]
+    posts = "/blog/:year/:month/:day/:title/"
+
+[taxonomies]
+  category = "categories"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.highlight]
+  style = "monokai"
+  lineNos = false
+  guessSyntax = true
+
+[outputs]
+  home = ["HTML", "RSS"]
+
+[outputFormats.RSS]
+  mediatype = "application/rss+xml"
+  baseName = "atom"
+
+[[menu.main]]
+  name = "Archives"
+  url = "/archives/"
+  weight = 1
+
+[[menu.main]]
+  name = "About"
+  url = "/about/"
+  weight = 2
+
+[[menu.main]]
+  name = "Books"
+  url = "/books/"
+  weight = 3
+
+[[menu.main]]
+  name = "Speaking"
+  url = "/speaking/"
+  weight = 4
+
+[[menu.main]]
+  name = "Categories"
+  url = "/categories/"
+  weight = 5
+
+[services.disqus]
+  shortname = "squidsblog"
