@@ -1,3 +1,6 @@
 [submodule ".themes/blanket"]
 	path = .themes/blanket
 	url = git://github.com/octothemes/blanket.git
+[submodule "hugo-site/themes/PaperMod"]
+	path = hugo-site/themes/PaperMod
+	url = https://github.com/adityatelange/hugo-PaperMod.git
