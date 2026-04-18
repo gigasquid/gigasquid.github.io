@@ -6,7 +6,7 @@ sharing: true
 footer: true
 ---
 
-[{% img http://akamaicovers.oreilly.com/images/0636920034292/cat.gif  %}](http://shop.oreilly.com/product/0636920034292.do?sortby=publicationDate)
+[{% img /images/living-clojure-cover.gif  %}](http://shop.oreilly.com/product/0636920034292.do?sortby=publicationDate)
 
 I am the author of [Living Clojure](http://shop.oreilly.com/product/0636920034292.do?sortby=publicationDate) by O'Reilly.  It is both an introduction and
 training plan for developers to learn Clojure.
