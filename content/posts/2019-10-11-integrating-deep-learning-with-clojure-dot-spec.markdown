@@ -70,7 +70,7 @@ For further information on clojure.spec, I whole-heartedly recommend the [spec G
 
 In previous posts, we covered making [simple autoencoders for handwritten digits](https://gigasquidsoftware.com/blog/2019/08/16/simple-autoencoder/).
 
-![handwritten digits](http://live.staticflickr.com/65535/48647524478_ca35bef78f_n.jpg)
+![handwritten digits](/images/posts/4d8117f4-48647524478_ca35bef78f_n.jpg)
 
 Then, we made models that would:
 
@@ -100,7 +100,7 @@ With the help of the trained discriminator model, we can make a function that ta
 
 Let's test it out with a test-image:
 
-![test-discriminator-image](http://live.staticflickr.com/65535/48881532151_251e30840e_s.jpg)
+![test-discriminator-image](/images/posts/818c3c2b-48881532151_251e30840e_s.jpg)
 
 ```clojure
 (discriminate my-test-image) ;=> 6
@@ -125,7 +125,7 @@ Giving it a test drive as well:
 			 :x (ndarray/reshape generated-test-image [batch-size 1 28 28])})
 ```
 
-![generated-test-image](http://live.staticflickr.com/65535/48881532451_023de68ddb_s.jpg)
+![generated-test-image](/images/posts/2e89d713-48881532451_023de68ddb_s.jpg)
 
 
 Great! Let's go ahead and start writing specs. First let's make a quick spec to describe a MNIST number - which is a single digit between 0 and 9.
@@ -164,7 +164,7 @@ It will also write an image of all the sample images to a file named `sample-spe
 
 Let's try it on our test image: 
 
-![test-discriminator-image](http://live.staticflickr.com/65535/48881532151_251e30840e_s.jpg)
+![test-discriminator-image](/images/posts/818c3c2b-48881532151_251e30840e_s.jpg)
 
 
 ```clojure
@@ -177,7 +177,7 @@ Let's try it on our test image:
 ;;  :sample-values [0 0 0 1 3 1 0 2 7 3]}
 ```
 
-![sample-mnist-image](http://live.staticflickr.com/65535/48882235262_1e0dd7b758_q.jpg)
+![sample-mnist-image](/images/posts/a8675c76-48882235262_1e0dd7b758_q.jpg)
 
 
 Pretty cool!
@@ -212,7 +212,7 @@ This time let's define an even mnist image spec
   ;;  :sample-values [0 0 2 0 8 2 2 2 0 0]}
 ```
 
-![sample-even-mnist-image](http://live.staticflickr.com/65535/48882253157_02e45d3132_q.jpg)
+![sample-even-mnist-image](/images/posts/ed478f70-48882253157_02e45d3132_q.jpg)
 
 
 And Odds
@@ -229,7 +229,7 @@ And Odds
   ;;  :valid? false
   ;;  :sample-values [5 1 5 1 3 3 3 1 1 1]}
 ```
-![sample-odd-mnist-image](http://live.staticflickr.com/65535/48881548138_c18850f806_q.jpg)
+![sample-odd-mnist-image](/images/posts/828611ce-48881548138_c18850f806_q.jpg)
 
 
 Finally, let's do Odds that are over 2!
@@ -247,7 +247,7 @@ Finally, let's do Odds that are over 2!
   ;;  :sample-values [3 3 3 5 3 5 7 7 7 3]}
 ```
 
-![sample-odd-over-2-mnist-image](http://live.staticflickr.com/65535/48882089776_6f55416418_q.jpg)
+![sample-odd-over-2-mnist-image](/images/posts/8a23f77c-48882089776_6f55416418_q.jpg)
 
 ## Conclusion
 

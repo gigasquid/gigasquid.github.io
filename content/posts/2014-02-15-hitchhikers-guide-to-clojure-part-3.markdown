@@ -23,7 +23,7 @@ Frank smiled, pulled out the _Hitchhiker's Guide to Clojure_ and
 pulled up a page with the heading _Locked Doors and Other Small
 Bothers_.
 
-![](http://farm4.staticflickr.com/3346/3191331375_a773bff1b7_n.jpg)
+![](/images/posts/6e9bf24b-3191331375_a773bff1b7_n.jpg)
 
 
 
@@ -76,7 +76,7 @@ relieved to be distracted by the sight of two really adorable otters.  They were
 contentedly around the pool, occasionally stopping to crack an Abalone
 shell on their fuzzy tummies.
 
-![](http://cdn.zmescience.com/wp-content/uploads/2012/09/sea-otters.jpg)
+![](/images/posts/d2ef75e4-sea-otters.jpg)
 
 Her rational brain, after having a nice breather, finally re-asserted
 itself and made Amy ask Frank:

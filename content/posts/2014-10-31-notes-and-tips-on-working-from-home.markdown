@@ -4,7 +4,7 @@ date: 2014-10-31T08:16:00
 categories:
 ---
 
-![](http://c4.staticflickr.com/8/7538/15671394561_261bf74b95.jpg)
+![](/images/posts/d99e385e-15671394561_261bf74b95.jpg)
 
 Recently, I switched from a traditional, "go to an office"
 job, 

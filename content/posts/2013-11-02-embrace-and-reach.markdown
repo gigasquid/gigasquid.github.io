@@ -8,7 +8,7 @@ categories:
 
 
 
-![](http://farm1.staticflickr.com/99/290760357_01392a3f51_n.jpg)
+![](/images/posts/ba1fbc99-290760357_01392a3f51_n.jpg)
 
 One of the wonderful things about being a technologist today, is
 to be part of an industry that is bubbling over with new and

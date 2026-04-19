@@ -127,7 +127,7 @@ The training of the model is pretty straight forward. Just being mindful that we
   ;=> (6.0 1.0 0.0 0.0 3.0 1.0 4.0 8.0 0.0 9.0)
 ```
 
-![before training](http://live.staticflickr.com/65535/48689304281_a41bf39353.jpg)
+![before training](/images/posts/a0938480-48689304281_a41bf39353.jpg)
 
 Not very impressive... Let's train
 

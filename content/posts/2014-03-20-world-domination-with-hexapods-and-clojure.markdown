@@ -29,11 +29,11 @@ that uses the paired XBee from the handheld commander.
 
 Take the XBee from the handheld commander
 
-![](http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg)
+![](/images/posts/0c655096-13278059985_f5b5c01819_n.jpg)
 
 and move it to the USB to serial adapter
 
-![](http://farm8.staticflickr.com/7067/13298779543_f69a14b42c_n.jpg)
+![](/images/posts/b4022732-13298779543_f69a14b42c_n.jpg)
 
 Now plug the usb into your computer.
 

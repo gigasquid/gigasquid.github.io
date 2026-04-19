@@ -106,7 +106,7 @@ time he got there and stopped the rain, there was not much left to
 work with. Thankfully, he was quite versed in lazy and infinite
 aspects of Clojure. For instance, take this vector of 2 chickens:_
 
-![](http://farm4.staticflickr.com/3352/3556879530_089814192c_m.jpg)
+![](/images/posts/da312f43-3556879530_089814192c_m.jpg)
 
 ```clojure
 [:hen :rooster]

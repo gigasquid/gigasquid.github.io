@@ -5,7 +5,7 @@ categories:
 - Clojure
 ---
 
-![](http://c2.staticflickr.com/8/7238/7188420611_a99f936971_n.jpg)
+![](/images/posts/f03495f5-7188420611_a99f936971_n.jpg)
 
 The nature of computing in hyperdimensions is a strange and wonderful place.   I have only started to scratch the surface by reading a paper by [Kanerva](http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf). Not only is it interesting from a computer science standpoint, it's also interesting from a cognitive science point of view.  In fact, it could hold the key to better model AI and general reasoning.  This blog is a casual stroll through some of the main points of Kanerva's paper along with examples in Clojure to make it tangible.  First things first, what is a hyperdimension?
 

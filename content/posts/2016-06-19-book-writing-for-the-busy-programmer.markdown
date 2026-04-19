@@ -4,7 +4,7 @@ date: 2016-06-19T09:22:00
 categories:
 ---
 
-![](http://c5.staticflickr.com/8/7302/27492453220_eecdf6dee1.jpg)
+![](/images/posts/4cb0b445-27492453220_eecdf6dee1.jpg)
 
 So you want to write a book?  Awesome.  I've been working on one too for the last year.
 

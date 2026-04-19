@@ -4,7 +4,7 @@ date: 2015-12-20T11:16:00
 categories:
 ---
 
-![](http://c1.staticflickr.com/1/34/118425909_86f332f075_z.jpg?zz=1)
+![](/images/posts/4ea49f2a-118425909_86f332f075_z.jpg)
 
 All programming languages are not created equal.  Some clearly excel at solving different problems.  There are languages that are great for scalability and others that are great for proving correctness.  But what about one that that will make you smarter?  To look for this answer, I am going to turn to a different language, our human language, and research from the field of linguistics and cognitive development.
 

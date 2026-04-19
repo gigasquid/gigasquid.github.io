@@ -5,7 +5,7 @@ categories:
 - Clojure
 ---
 
-![](http://c1.staticflickr.com/9/8815/28320682816_44780d1b75.jpg)
+![](/images/posts/61dafbcb-28320682816_44780d1b75.jpg)
 
 
 [Clojure.spec](http://blog.cognitect.com/blog/2016/5/23/introducing-clojurespec) is a new library for Clojure that enables you to write specifications for your program.  In an earlier [post](http://gigasquidsoftware.com/blog/2016/05/29/one-fish-spec-fish/), I showed off some of it's power to generate test data from your specifications.  It's a pretty cool feature.  Given some clojure.spec code, you can generate sample data for you based off of the specifications.  But what if you could write a program that would _generate_ your clojure.spec program based off of data so that you could generate more test data?
@@ -66,7 +66,7 @@ This function tries to run the spec against the data.  If there are no problems,
 
 Now that we have a fitness function to evaluate our creatures, we need a way to generate a random clojure.spec creature.
 
-![](http:////c1.staticflickr.com/9/8781/28071856800_0477b25fcc.jpg)
+![](/images/posts/d83d27ef-28071856800_0477b25fcc.jpg)
 
 
 ### Create a random creature
@@ -148,7 +148,7 @@ We can make a batch of new creatures for our initial population using this funct
 
 Great! Now we have a way to make new random spec creatures.  But, we need a way to alter them and let them evolve.  The first way to do this is with _mutation_.
 
-![](http://c2.staticflickr.com/9/8807/28275661121_94361d2fc4.jpg)
+![](/images/posts/e01b8538-28275661121_94361d2fc4.jpg)
 
 ### Mutating a creature
 
@@ -184,7 +184,7 @@ Trying it on one of our creatures.
 
 We can change our creatures via mutation, but what about breeding it with other creatures?
 
-![](http://c8.staticflickr.com/9/8670/28354279095_25661401c0_z.jpg)
+![](/images/posts/a18cc200-28354279095_25661401c0_z.jpg)
 
 ### Crossovers with creatures
 
@@ -230,7 +230,7 @@ Taking two creatures and putting them together.
 We have our ways to change our creatures to let them evolve and we have a way to rank them.  What we need now is to put it together in a way that will let them evolve to the solution.
 
 
-![](http://c5.staticflickr.com/9/8570/28320682956_2a301eea70_z.jpg)
+![](/images/posts/ef9140b1-28320682956_2a301eea70_z.jpg)
 
 ### Evolving creatures
 

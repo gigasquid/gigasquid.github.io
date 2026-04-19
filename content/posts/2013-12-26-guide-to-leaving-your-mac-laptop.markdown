@@ -3,7 +3,7 @@ title: "Guide to Leaving your Mac Laptop"
 categories: all
 ---
 
-![](http://farm4.staticflickr.com/3795/11572063123_6baf3b35c2.jpg)
+![](/images/posts/0b962d76-11572063123_6baf3b35c2.jpg)
 
 I felt like I was in a controlling relationship headed downhill.
 After two custom laptops returned for defective hardware, I wanted to
@@ -28,7 +28,7 @@ It arrived a couple of days before Christmas. The packaging itself
 was quite nice.  Here is a picture next
 to my 13 inch Mac Air.
 
-![](http://farm8.staticflickr.com/7334/11572078553_7efe0e609e.jpg)
+![](/images/posts/19ad530f-11572078553_7efe0e609e.jpg)
 
 The best was that everything just "worked" out of the box.
 I had no problems configuring Ubuntu and getting the wireless network
@@ -37,7 +37,7 @@ just like the Mac Air.  The keyboard is enjoyable to use and nicely
 backlit.  The sleek design and light weight of the laptop is very
 comparable to the Mac Air.
 
-![](http://farm4.staticflickr.com/3753/11571869965_06975d698c.jpg)
+![](/images/posts/7f95d290-11571869965_06975d698c.jpg)
 
 ## Hop on the Bus, Gus
 

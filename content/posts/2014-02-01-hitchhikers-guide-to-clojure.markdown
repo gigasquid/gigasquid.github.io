@@ -5,7 +5,7 @@ categories:
 - Clojure
 - Hitchhiker's Guide to Clojure
 ---
-![](http://farm6.staticflickr.com/5480/12258585125_36e8fdee1e.jpg)
+![](/images/posts/c6aad747-12258585125_36e8fdee1e.jpg)
 
 _The following is a cautionary example of the unpredictable
 combination of Clojure, a marathon viewing of the BBC's series "The
@@ -46,7 +46,7 @@ things. The fact that no course of action available to her in the next
 5 minutes would help her employment situation, agitated Amy so much
 that she was violently shelling and eating pistachio nuts.
 
-![](http://farm4.staticflickr.com/3331/3659226924_fbf336379e_n.jpg)
+![](/images/posts/df0f5706-3659226924_fbf336379e_n.jpg)
 
 The "Hitchhiker's Guide to Clojure" says that
 _pistachios are Nature's

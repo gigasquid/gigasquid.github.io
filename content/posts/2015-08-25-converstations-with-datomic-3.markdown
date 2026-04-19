@@ -21,7 +21,7 @@ I am interested in having you work with me every day, but first I want to unders
 
 **Datomic:** I would be happy to explain my architecture to you.  Perhaps showing you this picture is the best way to start.
 
-![](http://c2.staticflickr.com/6/5723/20819693686_f9ec3852c3_z.jpg)
+![](/images/posts/12502c5b-20819693686_f9ec3852c3_z.jpg)
 
 I am made of three main parts: my _transactors_, my _peers_, and my _storage_.
 
@@ -73,7 +73,7 @@ The final D in _ACID_ is for Durability.  Once a transaction has been committed 
 
 **Datomic:** Certainly.  It is even worth another picture.
 
-![](http://c2.staticflickr.com/6/5630/20852217305_90506481fe.jpg)
+![](/images/posts/27e0f297-20852217305_90506481fe.jpg)
 
 Each peer has a its own _working set_ of recent datoms along with a index to all the rest of the datoms in storage in memory.  When the peer has a query for a datom, it first checks to see if it has it locally in its memory cache.  If it can't find it there, then it will ask for a segment of that datom from storage.  Storage will return that datom along with other related datoms in that segment so that the peer can cache that in memory to make it faster for the next query.
 

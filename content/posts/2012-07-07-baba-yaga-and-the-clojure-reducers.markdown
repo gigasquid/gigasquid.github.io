@@ -5,7 +5,7 @@ categories:
 - Clojure
 ---
 
-![Baba Yaga's House](http://www.thebells.net/Halloween/BabaYaga/BabaYaga3.GIF)
+![Baba Yaga's House](/images/posts/d912a829-BabaYaga3.GIF)
 
 Once upon a time, a young girl decided to take a break from her code and stroll in the forest.  It was quite a pleasant day, she packed her lunch in her bag and set off.  While she was walking, she started thinking about a concurrency bug that her OO project was having.  As she pondered the complexities of mutablilty, state, and threads, she must of strayed from the trail and lost track of time.  By the time she looked around, she realized that she was totally lost.
 

@@ -9,7 +9,7 @@ tags:
 - Development
 ---
 
-![Swan Lake](http://lh3.ggpht.com/_ebGqcJ7qdjk/SimNpSOosaI/AAAAAAAACcI/lr-4YdYyz3E/kirov-swan-lopatkina.jpg)
+![Swan Lake](/images/posts/cae5d4d5-kirov-swan-lopatkina.jpg)
 _Photo by Valentin Baranovsky - Uliana Lopatkina and Danila Korsuntsev. _
 
 Many moons ago, I spent a couple of years dancing with a ballet company.  You wouldn't think that much of that experience would transfer to development projects, but I give you an example in partnership, the can be applicable straight from the ballet world to the software world.  The partnership in question is the one between the lead ballerina and the lead male dancer called a “pas de deux.”  In many ballets, this dance involves the ballerina being a swan/princess and the male dancer being a prince/sorcerer.  But in my example, it really doesn't matter that much.  The only important point is that they are the best dancers in the whole company.

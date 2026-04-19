@@ -12,7 +12,7 @@ tags:
 ---
 
 
-![](http://farm4.staticflickr.com/3833/9925947563_50031edb46_o.jpg)
+![](/images/posts/78e4b58f-9925947563_50031edb46_o.jpg)
 
 I have been attending talks on functional programming languages at NFJS over the past couple of days.  I have to admit it, I am really taken with the power of Scala and Clojure to tackle problems that Java cannot handle.  I even purchased a Clojure book to add to my "languages to take a good hard look at" stack.   I really believe that it is true that the functional languages have a lot to offer. 
 

@@ -6,7 +6,7 @@ categories:
 - Python
 ---
 
-![clojure-python](http:////live.staticflickr.com/65535/49435394578_400fdf1c7f_c.jpg)
+![clojure-python](/images/posts/1c0727cd-49435394578_400fdf1c7f_c.jpg)
 
 
 In this edition of the blog series of Clojure/Python interop with [libpython-clj](https://github.com/cnuernber/libpython-clj), we'll be taking a look at two popular Python NLP libraries: [NLTK](https://www.nltk.org/) and [SpaCy](https://spacy.io/).

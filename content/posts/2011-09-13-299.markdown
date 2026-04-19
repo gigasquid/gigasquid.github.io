@@ -7,7 +7,7 @@ categories:
 
 #  
 
-{{< figure src="http://farm3.staticflickr.com/2843/9925803956_c92c63045e_o.jpg" class="left" >}}
+{{< figure src="/images/posts/1a289219-9925803956_c92c63045e_o.jpg" class="left" >}}
 
 
 White: a Blank Page or Canvas.

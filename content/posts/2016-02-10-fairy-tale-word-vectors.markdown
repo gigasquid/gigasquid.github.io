@@ -5,7 +5,7 @@ categories:
 - Clojure
 ---
 
-![](http://c2.staticflickr.com/2/1558/24654386380_bda44419a8_n.jpg)
+![](/images/posts/606aa6f7-24654386380_bda44419a8_n.jpg)
 
 This post continues our exploration from the last blog post [Why Hyperdimensional Socks Never Match](http://gigasquidsoftware.com/blog/2016/02/06/why-hyperdimensional-socks-never-match/).  We are still working our way through [Kanerva's paper](http://redwood.berkeley.edu/pkanerva/papers/kanerva09-hyperdimensional.pdf).  This time, with the basics of hypervectors under our belts, we're ready to explore how words can be expressed as context vectors.  Once in a high dimensional form, you can compare two words to see how similar they are and even perform reasoning.
 

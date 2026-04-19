@@ -5,7 +5,7 @@ categories:
 - Robots
 ---
 
-![](http://farm4.staticflickr.com/3804/13278398783_0bedfa7b40.jpg)
+![](/images/posts/f70c0d04-13278398783_0bedfa7b40.jpg)
 
 Here we see the [PhantomX Hexapod](http://www.trossenrobotics.com/phantomx-ax-hexapod.aspx) thriving in the natural habitat of a
 cozy, climate controlled, modern house. But there was a time before
@@ -60,19 +60,19 @@ The assembly starts with the feet and legs first.
 I was so pleased when I got the feet assembled, that I considered
 knitting little baby hexapod booties.
 
-![](http://farm8.staticflickr.com/7298/13278059445_562bb9ce4b.jpg)
+![](/images/posts/287d7261-13278059445_562bb9ce4b.jpg)
 
 Next a servo and the tibia is added
 
-![](http://farm8.staticflickr.com/7311/13278197583_599f030bab.jpg)
+![](/images/posts/c8835576-13278197583_599f030bab.jpg)
 
 Another servo and the tibia and femur is assembled
 
-![](http://farm8.staticflickr.com/7185/13278392294_8986c14e5b.jpg)
+![](/images/posts/8cafd2d4-13278392294_8986c14e5b.jpg)
 
 Finally, another servo and the whole leg is assembled
 
-![](http://farm8.staticflickr.com/7033/13278197683_cfd9a4870f.jpg)
+![](/images/posts/99a37137-13278197683_cfd9a4870f.jpg)
 
 ## Newbie Advice
 
@@ -85,14 +85,14 @@ and errors in assembly thus far:
   moral support in your struggle.  There are 18 servos and up to 20
   nuts to seat in each servo.
 
-![](http://farm4.staticflickr.com/3833/13278059175_91699a9704_n.jpg)
+![](/images/posts/c2d5ba66-13278059175_91699a9704_n.jpg)
 
 
 ## Assembling the body
 
 The body is where the board, battery and and cables go.
 
-![](http://farm4.staticflickr.com/3755/13278197953_44717aea96.jpg)
+![](/images/posts/dee7aaf2-13278197953_44717aea96.jpg)
 
 At long last, the legs can be attached to the body - with 120 screws
 of course.
@@ -111,7 +111,7 @@ of course.
   all loosely in order, so you don't stress the fiberglass parts and
   have something like this happen.
 
-![](http://farm4.staticflickr.com/3749/13278392754_cde8d9e10f_n.jpg)
+![](/images/posts/c906735c-13278392754_cde8d9e10f_n.jpg)
 
 
 ## It is Alive!
@@ -127,7 +127,7 @@ working alright.
 The kit comes with a commander that you assemble of course.  You can
 use it to control the hexapod with hand-held joysticks.
 
-![](http://farm4.staticflickr.com/3698/13278059985_f5b5c01819_n.jpg)
+![](/images/posts/0c655096-13278059985_f5b5c01819_n.jpg)
 
 The moment of truth, when it finally took its very first steps, and the Age of Hexapods began.
 

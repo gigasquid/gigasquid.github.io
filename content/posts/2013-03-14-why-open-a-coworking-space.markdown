@@ -6,7 +6,7 @@ categories:
 
 So I am in the midst of doing something a bit crazy and a bit wonderful at the same time. I am opening a coworking space in Loveland, OH called [Locolo](http://locolo.us/). It is a bit crazy because it has very little chance of being profitable, I have very little free time in my life to devote to such an undertaking, and I work full-time with awesome folks so I wouldn't even be there during the day. Despite these very pragmatic reasons for not doing it, somewhere along the way I said F*** IT, I am doing it anyway. This blog post is an attempt to explain why.
 
-![Locolo](http://lovelandcolo.files.wordpress.com/2013/03/cropped-gallery.jpg)
+![Locolo](/images/posts/b12bc78b-cropped-gallery.jpg)
 
 
 ## I want a coworking space to exist.

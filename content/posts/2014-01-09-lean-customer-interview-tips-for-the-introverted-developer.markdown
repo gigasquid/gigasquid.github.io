@@ -5,7 +5,7 @@ categories:
 - Lean
 ---
 
-![](http://farm5.staticflickr.com/4029/4356643150_9b26a637e9.jpg)
+![](/images/posts/cbc0d253-4356643150_9b26a637e9.jpg)
 
 After attending a local Lean Startup Circle meetup, I decided to write
 about some of my experiences with the

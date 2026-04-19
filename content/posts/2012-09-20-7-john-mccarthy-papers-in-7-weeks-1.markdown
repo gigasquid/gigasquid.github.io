@@ -6,7 +6,7 @@ categories:
 - John McCarthy Papers
 ---
 
-![](http://farm1.staticflickr.com/199/447335691_8a933251ab_n.jpg)
+![](/images/posts/6f1191f2-447335691_8a933251ab_n.jpg)
 
 
 ## Ascribing Mental Qualities to Machines or How My Thermostat has Beliefs and Goals

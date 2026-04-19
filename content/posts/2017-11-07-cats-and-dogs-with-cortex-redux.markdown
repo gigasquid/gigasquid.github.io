@@ -91,7 +91,7 @@ For me locally, with `(cats-dogs/kaggle-results 100)` it took me 28 minutes loca
 
 ### Compare the results
 
-![](http://c1.staticflickr.com/5/4518/26477015609_1af781b8da_b.jpg)
+![](/images/posts/56799595-26477015609_1af781b8da_b.jpg)
 
 My one epoch of fine tuning beat my best results of going through the Practical Deep Learning exercise with the fine tuning the VGG16 model. Not bad at all.
 

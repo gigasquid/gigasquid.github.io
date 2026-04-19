@@ -4,7 +4,7 @@ date: 2015-12-08T17:36:00
 categories:
 ---
 
-![](http://c1.staticflickr.com/1/627/23249736219_dfa625309b_c.jpg)
+![](/images/posts/139be10b-23249736219_dfa625309b_c.jpg)
 
 It's that time of the year again for _radars_.  Since I made [one last year](http://gigasquidsoftware.com/blog/2014/12/17/gigasquids-radar-2014/), I decided to continue the tradition and make one this year.
 

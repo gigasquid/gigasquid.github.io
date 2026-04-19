@@ -4,7 +4,7 @@ date: 2015-12-19T14:06:00
 categories:
 ---
 
-![](http://c1.staticflickr.com/3/2205/1809288965_c84080f2d3_n.jpg)
+![](/images/posts/fa6ce410-1809288965_c84080f2d3_n.jpg)
 
 The last time I went to the dentist to get a cavity filled, I got a shot of Novocain as a local anesthetic to numb the area.  After I emerged from the dental chair, I still had no feeling in my lip and mouth area.
 Trying to talk and smile was comical.  Trying to drink tea resulting in dribbles down my face.  Luckily, the loss of feeling only lasted a couple hours.  Soon, I was back to normal.  Even in this small and common scenario, we can see the close link between motion and sensory perception.  What would happen if you couldn't feel your whole body?

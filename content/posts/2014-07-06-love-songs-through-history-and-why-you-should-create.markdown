@@ -4,7 +4,7 @@ date: 2014-07-06T19:52:00
 categories:
 ---
 
-![](http://news.nationalgeographic.com/news/2001/02/lovesong.gif)
+![](/images/posts/817554ca-lovesong.gif)
 
 ## The Earliest Known Love Song
 
@@ -17,7 +17,7 @@ fragment found in the 4,300 year old tomb read:
 
 ## Medieval Love Songs
 
-![](http://www.luminarium.org/medlit/manasseh.jpg)
+![](/images/posts/31a6d86f-manasseh.jpg)
 
 Moving forward in history to Medieval times, there are many examples
 of love songs. One of them from a great composer in the 14th century,
@@ -33,7 +33,7 @@ this:
 
 ## Love Songs from this Summer
 
-![](http://upload.wikimedia.org/wikipedia/en/8/8d/Coldplay_-_A_Sky_Full_of_Stars_%28Single%29.png)
+![](/images/posts/d5105ec5-Coldplay_-_A_Sky_Full_of_Stars__28Single_29.png)
 
 Love songs abound on the radio and internet today. One was
 released by Coldplay recently, called "A Sky Full of Stars".

@@ -24,7 +24,7 @@ After spending some time reading and researching, I felt like a had some idea of
 
 An Eodermdrome program creates graphs from a string of letters.  For example the graph of _abcdae_ would produce
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/abcdae.png?raw=true)
+![](/images/posts/eodermdrome/abcdae.png)
 
 The program itself consists of series of commands or rules.  The command will be executed if the following prereqs are met:
 
@@ -50,7 +50,7 @@ Comments are also allowed as text in between commas.  In this implementation, th
 
 The initial state of the graph with a program is the denoted by the graph string _thequickbrownfoxjumpsoverthelazydog_.
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/thequickbrownfoxjumpsoverthelazydog.png?raw=true)
+![](/images/posts/eodermdrome/thequickbrownfoxjumpsoverthelazydog.png)
 
 
 We now have all we need to walk through an example program in the Kolmogorov-Uspensky machine.
@@ -70,31 +70,31 @@ Given a system input of "101", it will print out "11".  Let's walk through what 
 
 **Step 1** - The program starts with our graph in the initial state of our beloved _thequickbrownfoxjumpsoverthelazydog_ configuration.
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/step-1.png?raw=true)
+![](/images/posts/eodermdrome/step-1.png)
 
 **Step 2** - The first instruction matches `,takes input of ones separated by zeros and adds the ones, thequickbrownfoxjumpsoverthelazydog a` with he active subgraph being the whole graph. It is replaced by the single graph node _a_.
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/step-2.png?raw=true)
+![](/images/posts/eodermdrome/step-2.png)
 
 **Step 3** - The next instruction set `(1) a ab` _a_ subgraph matches and takes a 1 off the input and transforms the graph to _ab_.
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true)
+![](/images/posts/eodermdrome/step-3.png)
 
 **Step 4** - The instruction set `(0) a a` also matches (since a is a subgraph of ab) and it takes a zero off the input and transforms back the _a_ to _a_ so the graph is still _ab_.
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/step-4.png?raw=true)
+![](/images/posts/eodermdrome/step-4.png)
 
 **Step 5** -  The instruction set `ab (1) a` now matches and a one prints out and the _ab_ graph changes to _a_.
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true)
+![](/images/posts/eodermdrome/step-5.png)
 
 **Step 6** - Now, the `(1) a ab` instruction matches, it takes another 1 off the input (our last one) and transforms to _ab_
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/step-3.png?raw=true)
+![](/images/posts/eodermdrome/step-3.png)
 
 **Step 7** - Finally, `ab (1) a` matches and it prints out a 1 and rewrites the graph to back to _a_
 
-![](https://github.com/gigasquid/eodermdrome/blob/master/images/step-5.png?raw=true)
+![](/images/posts/eodermdrome/step-5.png)
 
 There are no more matching subgraphs without input required for instructions, so the program ends.
 

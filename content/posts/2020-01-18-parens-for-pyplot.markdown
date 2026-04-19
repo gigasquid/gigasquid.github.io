@@ -113,7 +113,7 @@ Let's get a bit more complicated now and and plot both the sin and cosine as wel
       (matplotlib.pyplot/legend ["Sine" "Cosine"])))
 ```
 
-![sin and cos](http:////live.staticflickr.com/65535/49405284806_1d04957bce_z.jpg)
+![sin and cos](/images/posts/fd355b33-49405284806_1d04957bce_z.jpg)
 
 
 We can also add subplots. Subplots are when you divide the plots into different portions.
@@ -136,7 +136,7 @@ It is a bit stateful and involves making one subplot _active_ and making changes
       (matplotlib.pyplot/title "Cosine")))
 ```
 
-![sin and cos subplots](http:////live.staticflickr.com/65535/49405284836_8e49e4a6b8_z.jpg)
+![sin and cos subplots](/images/posts/77e60a83-49405284836_8e49e4a6b8_z.jpg)
 
 
 ### Plotting with Images
@@ -153,7 +153,7 @@ Pyplot also has functions for working directly with images as well. Here we take
       (matplotlib.pyplot/imshow (numpy/uint8 img-tinted))))
 ```
 
-![cat tinted](http://live.staticflickr.com/65535/49404801993_ed398d5768_n.jpg)
+![cat tinted](/images/posts/feafb4a1-49404801993_ed398d5768_n.jpg)
 
 ### Pie charts
 
@@ -174,7 +174,7 @@ The original code for this example came from this [tutorial](https://matplotlib.
       ))
 ```
 
-![pie chart](http://live.staticflickr.com/65535/49404802008_7e84ceff76_z.jpg)
+![pie chart](/images/posts/3fdad3e5-49404802008_7e84ceff76_z.jpg)
 
 
 ### Onwards and Upwards!

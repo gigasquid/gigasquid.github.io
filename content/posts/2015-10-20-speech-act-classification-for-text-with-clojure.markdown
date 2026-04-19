@@ -109,7 +109,7 @@ Now that we have our input file to training our machine learning algorithms, we 
 
 ### Choosing the Classifier
 
-![](http://c2.staticflickr.com/6/5794/22338401315_1abf0ffb2d_z.jpg)
+![](/images/posts/5b185c82-22338401315_1abf0ffb2d_z.jpg)
 
 Using the weka explorer, we can try out different classification models.  For this data, the best one seems to be the [Random Forest](https://en.wikipedia.org/wiki/Random_forest).  In the explorer, it beat out Naive Bayes and J48.  It is also worth mentioning that we are not using a separate source of test data, we are cross validating on the original training set.  If we wanted to be more rigorous, we could collect more data and cut it in half, using one set for the training and one set for the testing.
 

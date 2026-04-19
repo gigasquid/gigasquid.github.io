@@ -44,7 +44,7 @@ From there, my process looked like:
 * Push the commit to github, which is registered with the Leanpub project
 * Log onto the Leanpub project and hit the _preview_ button. This would generate a pdf and ebook that I could share with my daughter for feedback.
 
-![](http://c1.staticflickr.com/5/4274/34768029762_3bbae300f0.jpg)
+![](/images/posts/aa2e3a15-34768029762_3bbae300f0.jpg)
 
 
 ### Advantages of Leanpub for development.
@@ -79,13 +79,13 @@ That was nice, but I really wanted a print copy too.
 
 Amazon's [CreateSpace](https://www.createspace.com/) provides and excellent platform for on-demand print copies of books. This is where Leanpub comes in handy again. There is an `Export Option` that provides and unbranded pdf copy of your manuscript with all the correct formatting and margins required for CreateSpace. I simply exported the file and then uploaded it up to the project.
 
-![](http://c1.staticflickr.com/5/4203/34121511063_b63d283086_b.jpg)
+![](/images/posts/0f5b4bd0-34121511063_b63d283086_b.jpg)
 
 The other thing that you will want is a nice cover. There are services through CreateSpace for cover creation that you can buy or you can upload your own file. I was lucky enough to have a talented graphic designer as sister, Kristin Allmyer,  who made me an awesome cover.
 
 One of the confusing things was picking an ISBN for the print copy. You don't need to worry about this for ebook versions but you do for a physical copy. Your choices through CreateSpace are using a provided one for free or buying your own for $99. I chose my own so I could have flexibility of working with another publisher other than Amazon if I want. If you choose that option, you can also make up your own publisher name. Mine is _Gigasquid Books_.
 
-![](http://c1.staticflickr.com/5/4244/34121511083_15027c4571.jpg)
+![](/images/posts/eeede944-34121511083_15027c4571.jpg)
 
 Once you have completed all the setup, they will send you a physical copy in the mail to approve. The moment you get to hold it in your hands is really magical.
 

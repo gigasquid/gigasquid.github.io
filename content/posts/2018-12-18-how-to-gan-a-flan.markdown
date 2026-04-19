@@ -123,7 +123,7 @@ Next, we iterate through all of our training images in our `flan-iter` with `red
 
 The whole code is [here](https://github.com/gigasquid/mxnet-gan-flan) for reference, but let's skip forward and run it and see what happens.
 
-![]({{ site.url }}/images/gout-96-0.jpg)
+![](/images/gout-96-0.jpg)
 
 FLANS!! Well, they could be flans if you squint a bit.
 
@@ -138,38 +138,38 @@ Here comes the fun part, watching it train and learn:
 
 ### Epoch 0
 
-![]({{ site.url }}/images/flan-random-128-0-0.jpg)
+![](/images/flan-random-128-0-0.jpg)
 
 In the beginning there was nothing but random noise.
 
 
 ### Epoch 10
 
-![]({{ site.url }}/images/flan-random-128-10-0.jpg)
+![](/images/flan-random-128-10-0.jpg)
 
 It's beginning to learn colors! Red, yellow, brown seem to be important to flans.
 
 ### Epoch 23
 
-![]({{ site.url }}/images/flan-random-128-23-0.jpg)
+![](/images/flan-random-128-23-0.jpg)
 
 It's learning shapes! It has learned that flans seem to be blob shaped.
 
 ### Epoch 33
 
-![]({{ site.url }}/images/flan-random-128-33-0.jpg)
+![](/images/flan-random-128-33-0.jpg)
 
 It is moving into its surreal phase. Salvidor Dali would be proud of these flans.
 
 ### Epoch 45
 
-![]({{ site.url }}/images/flan-random-128-45.jpg)
+![](/images/flan-random-128-45.jpg)
 
 Things take a weird turn. Does that flan have eyes?
 
 ### Epoch 68
 
-![]({{ site.url }}/images/flan-random-128-68-0.jpg)
+![](/images/flan-random-128-68-0.jpg)
 
 Even worse. Are those demonic flans? Should we even continue down this path? 
 
@@ -177,20 +177,20 @@ Answer: Yes - **the training must go on..**
 
 ### Epoch 161
 
-![]({{ site.url }}/images/flan-random-161-0.jpg)
+![](/images/flan-random-161-0.jpg)
 
 Big moment here. It looks like something that could possibly be edible.
 
 ### Epoch 170
 
-![]({{ site.url }}/images/flan-random-170-0.jpg)
+![](/images/flan-random-170-0.jpg)
 
 Ick! Green Flans! No one is going to want that.
 
 
 ### Epoch 195
 
-![]({{ site.url }}/images/explore-195.jpg)
+![](/images/explore-195.jpg)
 
 We've achieved maximum flan, (for the time being).
 

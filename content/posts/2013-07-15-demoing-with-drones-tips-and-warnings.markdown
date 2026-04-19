@@ -14,7 +14,7 @@ aware of some potential pitfalls.
 
 
 ## Traveling with the AR Drone
-{{< figure src="http://farm6.staticflickr.com/5332/9301848814_1633857d6d.jpg" class="left" >}}
+{{< figure src="/images/posts/4537bc03-9301848814_1633857d6d.jpg" class="left" >}}
 
 Do you need to take your drone with you on the plane to the demo?
 The box that the drone comes in is a very nice carrying case, however it

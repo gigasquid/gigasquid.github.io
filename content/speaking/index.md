@@ -3,7 +3,7 @@ title: "Speaking"
 date: 2013-06-05T13:53:00
 ---
 
-![](https://c3.staticflickr.com/3/2949/15385040871_622db8b77d.jpg)
+![](/images/speaking-photo.jpg)
 
 _Photo by Mike Bridge [@michaelbridge](https://twitter.com/michaelbridge)_
 

@@ -35,7 +35,7 @@ enableRobotsTXT = true
   guessSyntax = true
 
 [outputs]
-  home = ["HTML", "RSS"]
+  home = ["HTML", "RSS", "JSON"]
 
 [outputFormats.RSS]
   mediatype = "application/rss+xml"
@@ -62,9 +62,14 @@ enableRobotsTXT = true
   weight = 4
 
 [[menu.main]]
+  name = "Search"
+  url = "/search/"
+  weight = 5
+
+[[menu.main]]
   name = "Categories"
   url = "/categories/"
-  weight = 5
+  weight = 6
 
 [services.disqus]
   shortname = "squidsblog"

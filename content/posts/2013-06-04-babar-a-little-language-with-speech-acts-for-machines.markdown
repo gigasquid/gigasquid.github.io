@@ -8,7 +8,7 @@ categories:
 - Language
 ---
 
-![](http://farm8.staticflickr.com/7352/9925781735_77dfa3157b_o.jpg)
+![](/images/posts/0adcb141-9925781735_77dfa3157b_o.jpg)
 
 
 ## Preface: A Gentle Obsession

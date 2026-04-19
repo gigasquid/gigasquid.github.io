@@ -5,6 +5,6 @@ categories:
 - Clojure
 ---
 
-![](http://farm6.staticflickr.com/5539/9925781235_e80904a961_o.jpg)
+![](/images/posts/f141cdbc-9925781235_e80904a961_o.jpg)
 
 (*Sketch By My Awesome Husband)

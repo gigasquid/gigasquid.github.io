@@ -128,17 +128,17 @@ It's time to test it out. Using `lein run`, we'll launch the `train-forever` fun
 
 This opens a port to a localhost webpage where we can view the progress `http://localhost:8091/`
 
-![](http://c3.staticflickr.com/1/599/31877481106_ab49402b71_b.jpg)
+![](/images/posts/7326b5ae-31877481106_ab49402b71_b.jpg)
 
 Below the confusion matrix is shown. This tracks the progress of the training in the classification. In particular, how many times it thought a cat was really a cat and how many times it got it wrong.
 
-![](http://c7.staticflickr.com/1/371/31541533750_69d80cc7fa.jpg)
+![](/images/posts/ccb72120-31541533750_69d80cc7fa.jpg)
 
 As we are training the data, the loss for each epoch is shown on the console as well as when it saves the network to the external file.
 
 After only thirty minutes of training on my Mac Book Pro, we get to some pretty good results, with the correct percentage in the 99s :
 
-![](http://c1.staticflickr.com/1/707/31541538600_8e61134375.jpg)
+![](/images/posts/c9f8563b-31541538600_8e61134375.jpg)
 
 It's time to do some inference on our trained network.
 
@@ -168,7 +168,7 @@ Firing up a REPL we can connect to our namespace and use the `label-one` functio
 
 Running `(label-one)` gives us the picture:
 
-![](http://c2.staticflickr.com/1/423/31105658073_b6143b2f00.jpg)
+![](/images/posts/4b430100-31105658073_b6143b2f00.jpg)
 
 and classifies it as a cat. Yipee!
 
@@ -178,7 +178,7 @@ and classifies it as a cat. Yipee!
 
 Not bad, but let's try it with something harder. Personally, I'm not even sure whether this is a cat or a dog.
 
-![](http://c6.staticflickr.com/1/596/31105666133_223dc2f04e_c.jpg)
+![](/images/posts/62862283-31105666133_223dc2f04e_c.jpg)
 
 
 Feeding it through the program - it says it is a cat.

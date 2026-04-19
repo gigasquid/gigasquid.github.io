@@ -4,7 +4,7 @@ title: Nyan Cat Country Technology Index
 categories:
 ---
 
-![](http://farm3.staticflickr.com/2845/9925780995_b507b30d9a_o.png)
+![](/images/posts/a49f0e36-9925780995_b507b30d9a_o.png)
 
 One important measure of a country's economy is it's technology. Most current technology indexes for countries rely on boring statistics like R&D spending and internet availability. I think that these measures are totally inadequate. To really gauge whether a country is technologically advanced, you need to take a hard look at stupid, pointless, and amusing things produced on the internet.
 
