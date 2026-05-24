@@ -26,7 +26,7 @@ Rushing to make the long now linger
 
 The symmetries have broken, turned upside down
 
-And we watch the waters charge by, fractals breaking every wave
+And we watch the waters race by, fractals breaking every wave
 
 <br>
 
