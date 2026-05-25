@@ -39,3 +39,9 @@ Waiting for you to imagine the end
 So we can begin again, together
 
 
+<hr>
+
+#### AI disclaimer
+_No AI was used in this post. It contains 100% awkward human programmer prose, and 200% awkward human programmer feels._
+
+
