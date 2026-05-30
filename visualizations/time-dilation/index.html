@@ -392,7 +392,6 @@ function drawLane(y, color, icon, name) {
   svg.append('rect').attr('x', laneX0).attr('y', y - 18).attr('width', laneW).attr('height', 36)
     .attr('rx', 18).attr('fill','rgba(255,255,255,0.05)')
     .attr('stroke', color).attr('stroke-width', 1).attr('stroke-opacity', 0.4);
-  svg.append('text').attr('x', laneX0 - 28).attr('y', y + 6).attr('font-size', 22).text(icon);
   svg.append('text').attr('x', laneX1 + 10).attr('y', y + 8).attr('font-size', 22).text('🏁');
   svg.append('text').attr('x', laneX0).attr('y', y - 26)
     .attr('fill', color).attr('font-size', 12).attr('font-weight', 600).text(name);
