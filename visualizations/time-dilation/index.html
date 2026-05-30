@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cincinnati vs. Everest vs. GEO — Relativistic Compute Race</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: radial-gradient(ellipse at top, #1a1f4a 0%, #0a0e27 100%);
+    color: #e8ecff;
+    min-height: 100vh;
+  }
+  .container { max-width: 1040px; margin: 0 auto; padding: 24px; }
+  h1 {
+    text-align: center;
+    font-size: 1.85em;
+    margin: 0 0 6px;
+    background: linear-gradient(90deg, #fbbf24, #f472b6, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle { text-align: center; opacity: 0.65; margin-bottom: 22px; font-size: 0.92em; }
+
+  .panel {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 18px;
+    backdrop-filter: blur(8px);
+  }
+
+  .slider-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .slider-row label { font-weight: 600; min-width: 130px; }
+  .slider-wrap { flex: 1; min-width: 280px; position: relative; }
+  input[type=range] { width: 100%; accent-color: #a855f7; }
+  .runtime-display {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 1.1em;
+    color: #fbbf24;
+    min-width: 130px;
+    text-align: right;
+  }
+  .zones {
+    display: flex;
+    height: 16px;
+    border-radius: 4px;
+    margin-top: 6px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    font-size: 0.62em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .zones > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+  .zone-loss    { background: rgba(220,38,38,0.55); }
+  .zone-partial { background: rgba(234,179,8,0.45); }
+  .zone-win     { background: rgba(16,185,129,0.55); }
+  .ticks {
+    position: relative;
+    height: 42px;
+    margin-top: 2px;
+    font-size: 0.72em;
+  }
+  .tick {
+    position: absolute;
+    transform: translateX(-50%);
+    text-align: center;
+    white-space: nowrap;
+    line-height: 1.25;
+  }
+  .tick .tick-mark {
+    width: 1px;
+    height: 6px;
+    background: rgba(255,255,255,0.45);
+    margin: 0 auto 3px;
+  }
+  .tick .tick-icon { font-size: 1.1em; }
+  .tick .tick-val { opacity: 0.75; font-family: 'SF Mono', Menlo, monospace; }
+  .zone-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78em;
+    opacity: 0.85;
+    margin-top: 4px;
+    padding: 0 2px;
+  }
+
+  button {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border: none;
+    color: white;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+  }
+  button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(99,102,241,0.5); }
+  button:active { transform: translateY(0); }
+
+  .stat-section { margin-top: 18px; }
+  .stat-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    margin-bottom: 8px;
+    border-left: 4px solid;
+  }
+  @media (max-width: 720px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .stat-row .label-cell { grid-column: 1 / -1; }
+  }
+  .stat-row .label-cell { font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .stat-row .stat-mini { font-size: 0.85em; }
+  .stat-row .stat-mini-label { opacity: 0.55; font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.06em; }
+  .stat-row .stat-mini-value { font-family: 'SF Mono', Menlo, monospace; font-size: 1em; font-weight: 600; }
+  .runtime-row { padding: 12px; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25); border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+
+  .verdict {
+    text-align: center;
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(110,231,183,0.10), rgba(168,85,247,0.10));
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 1.0em;
+    line-height: 1.6;
+  }
+  .verdict .big { font-weight: 700; font-size: 1.15em; }
+
+  .info-box {
+    margin-top: 16px;
+    padding: 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    font-size: 0.83em;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+  code { background: rgba(168,85,247,0.18); padding: 1px 5px; border-radius: 4px; font-size: 0.95em; }
+
+  .cow-panel { display: flex; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+  .cow-art { flex: 0 0 auto; text-align: center; }
+  .cow-caption {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 0.78em;
+    opacity: 0.75;
+    margin-top: 4px;
+    font-style: italic;
+  }
+  .cow-text { flex: 1; min-width: 280px; font-size: 0.88em; line-height: 1.55; }
+  .cow-text h3 { margin: 0 0 8px; font-size: 1.05em; color: #fbbf24; }
+  .cow-text ul { margin: 8px 0; padding-left: 20px; }
+  .cow-text li { margin-bottom: 6px; }
+  .cow-text .closer { opacity: 0.7; font-style: italic; margin-top: 10px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏁 Relativistic Compute Race ⛰️📡</h1>
+    <p class="subtitle">Three programs start at the same moment — Cincinnati, Mt. Everest, and a GEO satellite. Which one delivers its answer back to Cincinnati first?</p>
+
+    <div class="panel">
+      <div class="slider-row">
+        <label>Program run time:</label>
+        <div class="slider-wrap">
+          <input type="range" id="runtime" min="0" max="5000" step="1" value="1077">
+          <div class="zones" title="Slider zones (cubic-scaled by year)">
+            <div class="zone-loss"    style="flex: 559">LOSE</div>
+            <div class="zone-partial" style="flex: 2959">GEO ONLY</div>
+            <div class="zone-win"     style="flex: 1482">BOTH WIN</div>
+          </div>
+          <div class="ticks">
+            <div class="tick" style="left: 11.18%">
+              <div class="tick-mark"></div>
+              <div><span class="tick-icon">📡</span> GEO</div>
+              <div class="tick-val">7 yr</div>
+            </div>
+            <div class="tick" style="left: 70.36%">
+              <div class="tick-mark"></div>
+              <div><span class="tick-icon">⛰️</span> Everest</div>
+              <div class="tick-val">1,736 yr</div>
+            </div>
+          </div>
+          <div class="zone-legend">
+            <span style="color:#fca5a5">both lose</span>
+            <span style="color:#fde047">GEO only</span>
+            <span style="color:#6ee7b7">both win</span>
+          </div>
+        </div>
+        <div class="runtime-display" id="runtime-display">1,000 years</div>
+      </div>
+      <div style="text-align:center; margin-top: 14px;">
+        <button id="run-btn">▶ Run the race</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <svg id="race" width="100%" viewBox="0 0 900 440" style="display:block"></svg>
+
+      <div class="stat-section">
+        <div class="runtime-row">
+          <div><strong>Run time (N):</strong></div>
+          <div style="font-family:'SF Mono',Menlo,monospace; font-size:1.1em; color:#fbbf24" id="stat-N">—</div>
+        </div>
+
+        <div class="stat-row" style="border-left-color:#60a5fa">
+          <div class="label-cell">⛰️ Mt. Everest</div>
+          <div class="stat-mini">
+            <div class="stat-mini-label">Time gain (N·ε)</div>
+            <div class="stat-mini-value" id="eve-gain" style="color:#6ee7b7">—</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-label">Signal back</div>
+            <div class="stat-mini-value" style="color:#fca5a5">−40.0 ms</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-label">Net margin</div>
+            <div class="stat-mini-value" id="eve-margin">—</div>
+          </div>
+        </div>
+
+        <div class="stat-row" style="border-left-color:#c084fc">
+          <div class="label-cell">📡 GEO satellite</div>
+          <div class="stat-mini">
+            <div class="stat-mini-label">Time gain (N·ε)</div>
+            <div class="stat-mini-value" id="geo-gain" style="color:#6ee7b7">—</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-label">Signal back</div>
+            <div class="stat-mini-value" style="color:#fca5a5">−120.0 ms</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-label">Net margin</div>
+            <div class="stat-mini-value" id="geo-margin">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="verdict" id="verdict">
+        Press <strong>Run the race</strong> to watch the answers race back to Cincinnati.
+      </div>
+    </div>
+
+    <div class="info-box panel">
+      <strong>The math:</strong> Each location's clock runs at a slightly different rate vs. Cincinnati. Over a calculation of length <code>N</code>, each racer finishes <code>N·ε</code> seconds earlier (from Cincinnati's frame), then loses time sending the answer back.
+      <ul style="margin: 6px 0 8px 18px; padding: 0;">
+        <li><strong>Mt. Everest:</strong> net <code>ε ≈ 7.3×10⁻¹³</code> (gravitational +9.5 minus rotational −2.2, both ×10⁻¹³). Signal back: ~40 ms. Break-even: <strong>~1,736 years</strong>.</li>
+        <li><strong>GEO satellite:</strong> net <code>ε ≈ 5.4×10⁻¹⁰</code> (~740× bigger than Everest — much higher gravitational potential dominates). Signal back: ~120 ms. Break-even: <strong>~7 years</strong>.</li>
+      </ul>
+      The race animation exaggerates each lead for visibility; the numbers above are real. Each racer's signal duration is scaled so it exactly reaches Cincinnati's finish line at that racer's own break-even.
+    </div>
+
+    <div class="cow-panel panel">
+      <div class="cow-art">
+        <svg width="180" height="160" viewBox="0 0 180 160" aria-label="spherical cow">
+          <ellipse cx="90" cy="138" rx="50" ry="5" fill="rgba(0,0,0,0.35)"/>
+          <line x1="62"  y1="118" x2="56"  y2="135" stroke="#0a0e27" stroke-width="3" stroke-linecap="round"/>
+          <line x1="80"  y1="124" x2="78"  y2="135" stroke="#0a0e27" stroke-width="3" stroke-linecap="round"/>
+          <line x1="104" y1="124" x2="106" y2="135" stroke="#0a0e27" stroke-width="3" stroke-linecap="round"/>
+          <line x1="122" y1="118" x2="128" y2="135" stroke="#0a0e27" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="92" cy="80" r="50" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+          <ellipse cx="72" cy="62" rx="14" ry="20" fill="rgba(255,255,255,0.55)"/>
+          <ellipse cx="68" cy="98" rx="11" ry="7"  fill="#0a0e27" transform="rotate(-15 68 98)"/>
+          <ellipse cx="108" cy="70" rx="9"  ry="13" fill="#0a0e27" transform="rotate(20 108 70)"/>
+          <ellipse cx="118" cy="100" rx="7" ry="5"  fill="#0a0e27"/>
+          <ellipse cx="33" cy="52" rx="5.5" ry="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" transform="rotate(-15 33 52)"/>
+          <ellipse cx="71" cy="52" rx="5.5" ry="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" transform="rotate(15 71 52)"/>
+          <circle cx="52" cy="48" r="14" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+          <path d="M 44 36 L 41 24 L 48 35 Z" fill="#c9a878" stroke="#7c6440" stroke-width="0.6" stroke-linejoin="round"/>
+          <path d="M 60 36 L 63 24 L 56 35 Z" fill="#c9a878" stroke="#7c6440" stroke-width="0.6" stroke-linejoin="round"/>
+          <ellipse cx="49" cy="46" rx="1.6" ry="2" fill="#0a0e27"/>
+          <ellipse cx="55" cy="46" rx="1.6" ry="2" fill="#0a0e27"/>
+          <circle cx="49.4" cy="45.5" r="0.5" fill="#ffffff"/>
+          <circle cx="55.4" cy="45.5" r="0.5" fill="#ffffff"/>
+          <ellipse cx="52" cy="57" rx="7.5" ry="5" fill="#e8d5c4" stroke="#94a3b8" stroke-width="0.7"/>
+          <ellipse cx="49" cy="56" rx="1.1" ry="1.5" fill="#0a0e27"/>
+          <ellipse cx="55" cy="56" rx="1.1" ry="1.5" fill="#0a0e27"/>
+          <path d="M 52 59 Q 50 62 52 63" stroke="#0a0e27" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+          <path d="M 138 92 Q 146 100 150 122" stroke="#0a0e27" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="151" cy="125" rx="3" ry="3.5" fill="#0a0e27"/>
+          <line x1="149" y1="123" x2="145" y2="129" stroke="#0a0e27" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="153" y1="123" x2="157" y2="129" stroke="#0a0e27" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="151" y1="127" x2="151" y2="132" stroke="#0a0e27" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="92" y1="80" x2="132" y2="80" stroke="#a855f7" stroke-width="1" stroke-dasharray="3,3" opacity="0.85"/>
+          <circle cx="92" cy="80" r="1.6" fill="#a855f7"/>
+          <text x="108" y="76" font-size="11" fill="#a855f7" font-family="'SF Mono', Menlo, monospace" font-style="italic">r</text>
+        </svg>
+        <div class="cow-caption">Assume a spherical cow.</div>
+      </div>
+      <div class="cow-text">
+        <h3>🐄 The fine print: simplifying assumptions</h3>
+        <p>Like every back-of-envelope physics problem, this one assumes a few cows are spherical. Things this viz pretends don't exist:</p>
+        <ul>
+          <li><strong>Vacuum signal paths.</strong> The 40 ms Everest figure is the theoretical chord <em>through</em> Earth — impossible with photons. Real fiber is ~60 ms; via satellite relay, longer.</li>
+          <li><strong>Idealized clocks.</strong> Each location is one perfect clock at one elevation. Real atomic clocks drift, vibrate, and care about temperature far more than they care about relativity.</li>
+          <li><strong>Identical compute.</strong> Same CPU, same workload, no thermal throttling, no GC pauses, no cosmic-ray bit flips.</li>
+          <li><strong>No protocol overhead.</strong> <code>T<sub>comm</sub></code> is bare light-time. The real world has TCP handshakes, error correction, and queuing latency that swamp the relativistic effect.</li>
+          <li><strong>Frozen Earth.</strong> Tides flex the crust, the geoid wobbles, the atmosphere refracts — none of which the viz models.</li>
+        </ul>
+        <p class="closer">The math is sound to ~3 sig figs. But it's still a cow-shaped sphere.</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+// --- Physics constants ---
+const SEC_PER_YEAR = 365.25 * 86400;
+
+const RACERS = [
+  {
+    id: 'eve',
+    name: 'Mt. Everest',
+    icon: '⛰️',
+    color: '#60a5fa',
+    gradStart: '#3b82f6',
+    gradEnd:   '#7dd3fc',
+    epsilon: 7.3e-13,
+    tComm: 0.040,        // 40 ms one-way (light through ~12,300 km)
+    visualLead: 0.20,    // visual head-start fraction (modest, since Everest's ε is small)
+    laneY: 230,
+    badgeOffset: -38     // place "ANSWER" badge above Cincinnati lane
+  },
+  {
+    id: 'geo',
+    name: 'GEO satellite',
+    icon: '📡',
+    color: '#c084fc',
+    gradStart: '#9333ea',
+    gradEnd:   '#e9d5ff',
+    epsilon: 5.38e-10,
+    tComm: 0.120,        // 120 ms one-way (~36,000 km)
+    visualLead: 0.55,    // visual head-start fraction (large — GEO's ε is much bigger)
+    laneY: 350,
+    badgeOffset: 38      // place "ANSWER" badge below Cincinnati lane
+  }
+];
+RACERS.forEach(r => { r.nBreak = r.tComm / r.epsilon; });
+
+// --- Animation visual constants ---
+const ANIM_DURATION = 7.0;            // animation seconds for Cincinnati to finish
+const SIGNAL_VISUAL_CAP = 2.5;        // cap visual signal duration at 2.5× the lead
+const SIGNAL_VISUAL_MAX_SEC = 4.0;    // hard upper limit on signal time (sec) — preserves GEO's tie length (3.85s) while bounding extreme losses
+const SLIDER_MAX = 5000;              // slider raw position range; years = (pos/MAX)^3 * MAX (cubic)
+
+// --- Scene ---
+const svg = d3.select('#race');
+const W = 900, H = 440;
+const laneX0 = 80, laneX1 = 820;
+const laneW = laneX1 - laneX0;
+const cinY = 110;
+
+const defs = svg.append('defs');
+function addGradient(id, c0, c1) {
+  const g = defs.append('linearGradient').attr('id', id).attr('x1','0%').attr('x2','100%');
+  g.append('stop').attr('offset','0%').attr('stop-color', c0);
+  g.append('stop').attr('offset','100%').attr('stop-color', c1);
+}
+addGradient('cinGrad', '#f59e0b', '#fde047');
+RACERS.forEach(r => addGradient(`grad-${r.id}`, r.gradStart, r.gradEnd));
+
+// Stars
+const stars = svg.append('g');
+for (let i = 0; i < 50; i++) {
+  stars.append('circle')
+    .attr('cx', Math.random() * W)
+    .attr('cy', Math.random() * H)
+    .attr('r', Math.random() * 1 + 0.3)
+    .attr('fill','white').attr('opacity', Math.random()*0.5 + 0.1);
+}
+
+function drawLane(y, color, icon, name) {
+  svg.append('rect').attr('x', laneX0).attr('y', y - 18).attr('width', laneW).attr('height', 36)
+    .attr('rx', 18).attr('fill','rgba(255,255,255,0.05)')
+    .attr('stroke', color).attr('stroke-width', 1).attr('stroke-opacity', 0.4);
+  svg.append('text').attr('x', laneX0 - 28).attr('y', y + 6).attr('font-size', 22).text(icon);
+  svg.append('text').attr('x', laneX1 + 10).attr('y', y + 8).attr('font-size', 22).text('🏁');
+  svg.append('text').attr('x', laneX0).attr('y', y - 26)
+    .attr('fill', color).attr('font-size', 12).attr('font-weight', 600).text(name);
+}
+drawLane(cinY, '#fbbf24', '🏙️', 'Cincinnati');
+RACERS.forEach(r => drawLane(r.laneY, r.color, r.icon, r.name));
+
+// Progress bars + runner dots for each lane
+const cinBar = svg.append('rect')
+  .attr('x', laneX0).attr('y', cinY - 16).attr('height', 32).attr('width', 0)
+  .attr('rx', 16).attr('fill', 'url(#cinGrad)');
+const cinDot = svg.append('circle').attr('cy', cinY).attr('cx', laneX0).attr('r', 9)
+  .attr('fill', '#fde047').attr('stroke', 'white').attr('stroke-width', 1.5);
+
+RACERS.forEach(r => {
+  r.bar = svg.append('rect')
+    .attr('x', laneX0).attr('y', r.laneY - 16).attr('height', 32).attr('width', 0)
+    .attr('rx', 16).attr('fill', `url(#grad-${r.id})`);
+  r.dot = svg.append('circle').attr('cy', r.laneY).attr('cx', laneX0).attr('r', 9)
+    .attr('fill', r.gradEnd).attr('stroke', 'white').attr('stroke-width', 1.5);
+});
+
+// Signal layer
+const signalLayer = svg.append('g');
+
+// Per-racer arrival badge (added on demand each run)
+function makeBadge(racer) {
+  const g = svg.append('g').attr('opacity', 0);
+  g.append('rect')
+    .attr('x', -85).attr('y', -14).attr('width', 170).attr('height', 28)
+    .attr('rx', 14).attr('fill', racer.color).attr('opacity', 0.95)
+    .attr('class','badge-rect');
+  g.append('text')
+    .attr('x', 0).attr('y', 4).attr('text-anchor','middle')
+    .attr('fill', '#0a0e27').attr('font-size', 12).attr('font-weight', 700)
+    .attr('class','badge-text').text('📦');
+  return g;
+}
+RACERS.forEach(r => { r.badge = makeBadge(r); });
+
+// Status text
+const statusText = svg.append('text')
+  .attr('x', W/2).attr('y', 50).attr('text-anchor','middle')
+  .attr('fill', '#e8ecff').attr('font-size', 16).attr('font-weight', 600);
+
+// --- Controls ---
+const runtimeSlider = document.getElementById('runtime');
+const runtimeDisplay = document.getElementById('runtime-display');
+const runBtn = document.getElementById('run-btn');
+
+function sliderPosToYears(pos) {
+  // Cubic transform: fine resolution near 0 (loss zone), coarse near max (deep-win zone).
+  const r = pos / SLIDER_MAX;
+  return r * r * r * SLIDER_MAX;
+}
+function getNYears() { return sliderPosToYears(parseFloat(runtimeSlider.value)); }
+function formatYears(y) {
+  if (y < 1)  return y.toFixed(2) + ' years';
+  if (y < 10) return y.toFixed(1) + ' years';
+  return Math.round(y).toLocaleString() + ' years';
+}
+function formatMs(ms) {
+  const a = Math.abs(ms);
+  if (a < 1)      return (ms*1000).toFixed(1) + ' µs';
+  if (a < 1000)   return ms.toFixed(1) + ' ms';
+  if (a < 60000)  return (ms/1000).toFixed(2) + ' s';
+  return (ms/60000).toFixed(2) + ' min';
+}
+
+function updateStats() {
+  const yrs = getNYears();
+  const N = yrs * SEC_PER_YEAR;
+  runtimeDisplay.textContent = formatYears(yrs);
+  document.getElementById('stat-N').textContent = formatYears(yrs);
+
+  RACERS.forEach(r => {
+    const gainMs = N * r.epsilon * 1000;
+    const marginMs = gainMs - r.tComm * 1000;
+    document.getElementById(`${r.id}-gain`).textContent = '+' + formatMs(gainMs);
+    const marginEl = document.getElementById(`${r.id}-margin`);
+    marginEl.textContent = (marginMs >= 0 ? '+' : '') + formatMs(marginMs);
+    marginEl.style.color = marginMs > 0 ? '#6ee7b7' : (marginMs < 0 ? '#fca5a5' : '#fde047');
+  });
+}
+runtimeSlider.addEventListener('input', () => { updateStats(); reset(); });
+updateStats();
+
+// --- Animation ---
+let animState = 'idle';
+let animStart = 0;
+
+function reset() {
+  animState = 'idle';
+  cinBar.attr('width', 0);
+  cinDot.attr('cx', laneX0);
+  RACERS.forEach(r => {
+    r.bar.attr('width', 0);
+    r.dot.attr('cx', laneX0);
+    r.signalLaunched = false;
+    r.signalDuration = 0;
+    r.signalLaunchT = 0;
+    r.badge.attr('opacity', 0);
+  });
+  signalLayer.selectAll('*').remove();
+  statusText.text('');
+  runBtn.textContent = '▶ Run the race';
+}
+
+runBtn.addEventListener('click', () => {
+  if (animState === 'idle' || animState === 'done') startRace();
+  else reset();
+});
+
+function startRace() {
+  reset();
+  animState = 'running';
+  animStart = performance.now();
+  runBtn.textContent = '↻ Reset';
+  statusText.text('Computing…').attr('fill', '#e8ecff');
+  requestAnimationFrame(animTick);
+}
+
+function getRacerSignalDur(racer) {
+  const N = getNYears() * SEC_PER_YEAR;
+  if (N <= 0) return SIGNAL_VISUAL_MAX_SEC;
+  const ratio = Math.min(racer.nBreak / N, SIGNAL_VISUAL_CAP);
+  return Math.min(racer.visualLead * ANIM_DURATION * ratio, SIGNAL_VISUAL_MAX_SEC);
+}
+
+function getEffectiveVisualLead(racer) {
+  // Below break-even, shrink the visual lead so the racer's bar doesn't finish way ahead of Cincinnati
+  // when it's actually losing. At and above break-even, full visualLead.
+  const N = getNYears() * SEC_PER_YEAR;
+  if (N <= 0) return 0;
+  return racer.visualLead * Math.min(1, N / racer.nBreak);
+}
+
+function animTick(now) {
+  const t = (now - animStart) / 1000;
+
+  // Cincinnati bar
+  const cinP = Math.min(1, t / ANIM_DURATION);
+  cinBar.attr('width', cinP * laneW);
+  cinDot.attr('cx', laneX0 + cinP * laneW);
+
+  // Each racer's bar + signal launch
+  RACERS.forEach(r => {
+    const tDone = ANIM_DURATION * (1 - getEffectiveVisualLead(r));
+    const p = Math.min(1, t / tDone);
+    r.bar.attr('width', p * laneW);
+    r.dot.attr('cx', laneX0 + p * laneW);
+
+    if (!r.signalLaunched && t >= tDone) {
+      r.signalLaunched = true;
+      r.signalLaunchT = t;
+      r.signalDuration = getRacerSignalDur(r);
+
+      const arriveT = t + r.signalDuration;
+      const arriveP = Math.min(1, arriveT / ANIM_DURATION);
+      const endX = laneX0 + arriveP * laneW;
+      const endY = cinY;
+
+      // Determine win/loss from real margin (not visual)
+      const N = getNYears() * SEC_PER_YEAR;
+      const marginMs = (N * r.epsilon - r.tComm) * 1000;
+
+      launchSignal(r, laneX1, r.laneY, endX, endY, r.signalDuration, marginMs);
+    }
+  });
+
+  // Mark Cincinnati done visually when bar tops out
+  if (t >= ANIM_DURATION) {
+    cinBar.attr('width', laneW);
+    cinDot.attr('cx', laneX1);
+  }
+
+  // End when all signals have arrived AND Cincinnati is done
+  const allDone = RACERS.every(r => r.signalLaunched && t >= r.signalLaunchT + r.signalDuration);
+  if (allDone && t >= ANIM_DURATION) {
+    if (animState !== 'done') {
+      animState = 'done';
+      runBtn.textContent = '▶ Run again';
+      showVerdict();
+    }
+    return;
+  }
+  requestAnimationFrame(animTick);
+}
+
+function launchSignal(racer, x0, y0, x1, y1, duration, marginMs) {
+  const cx = (x0 + x1) / 2;
+  const cy = (y0 + y1) / 2 - 50;
+  const pathStr = `M ${x0} ${y0} Q ${cx} ${cy} ${x1} ${y1}`;
+
+  const trail = signalLayer.append('path')
+    .attr('d', pathStr)
+    .attr('fill','none').attr('stroke', racer.color).attr('stroke-width', 1.5)
+    .attr('stroke-dasharray', '4,4').attr('opacity', 0);
+  const pulse = signalLayer.append('circle')
+    .attr('cx', x0).attr('cy', y0).attr('r', 7)
+    .attr('fill', racer.color)
+    .style('filter', `drop-shadow(0 0 6px ${racer.color})`);
+
+  trail.transition().duration(200).attr('opacity', 0.55);
+
+  const pathNode = trail.node();
+  const totalLen = pathNode.getTotalLength();
+  pulse.transition()
+    .duration(duration * 1000)
+    .ease(d3.easeQuadInOut)
+    .tween('motion', () => (progress) => {
+      const pt = pathNode.getPointAtLength(progress * totalLen);
+      pulse.attr('cx', pt.x).attr('cy', pt.y);
+    })
+    .on('end', () => {
+      const isWin = marginMs > 0;
+      const winColor = '#34d399', lossColor = '#dc2626';
+      const burstColor = isWin ? winColor : lossColor;
+      const badgeColor = isWin ? winColor : lossColor;
+      const badgeTextColor = isWin ? '#022c22' : '#ffffff';
+      const deltaTxt = formatMs(Math.abs(marginMs));
+      const badgeLabel = isWin
+        ? `${racer.icon} ANSWER  +${deltaTxt}`
+        : `${racer.icon} TOO LATE  −${deltaTxt}`;
+
+      const burst = signalLayer.append('circle')
+        .attr('cx', x1).attr('cy', y1).attr('r', 6)
+        .attr('fill','none').attr('stroke', burstColor).attr('stroke-width', 3);
+      burst.transition().duration(700).ease(d3.easeCubicOut)
+        .attr('r', 32).attr('opacity', 0).attr('stroke-width', 0.5).remove();
+      pulse.remove();
+
+      racer.badge.select('.badge-rect').attr('fill', badgeColor);
+      racer.badge.select('.badge-text')
+        .attr('fill', badgeTextColor)
+        .text(badgeLabel);
+      racer.badge.attr('transform', `translate(${x1}, ${cinY + racer.badgeOffset})`);
+      racer.badge.transition().duration(250).attr('opacity', 1);
+
+      trail.transition().delay(400).duration(600).attr('opacity', 0.15);
+    });
+}
+
+function showVerdict() {
+  const N = getNYears() * SEC_PER_YEAR;
+  const verdict = document.getElementById('verdict');
+  const parts = RACERS.map(r => {
+    const marginMs = (N * r.epsilon - r.tComm) * 1000;
+    if (marginMs > 0.5) {
+      return `<span style="color:#6ee7b7"><strong>🏆 ${r.icon} ${r.name}</strong> wins by ${formatMs(marginMs)}</span>`;
+    } else if (marginMs < -0.5) {
+      return `<span style="color:#fca5a5"><strong>❌ ${r.icon} ${r.name}</strong> loses by ${formatMs(-marginMs)}</span>`;
+    } else {
+      return `<span style="color:#fde047"><strong>${r.icon} ${r.name}</strong>: effective tie</span>`;
+    }
+  });
+  const winners = RACERS.filter(r => (N * r.epsilon - r.tComm) * 1000 > 0.5);
+  let headline;
+  if (winners.length === 0) {
+    headline = '<div class="big" style="color:#fca5a5">❌ Cincinnati wins — all remote answers arrived too late.</div>';
+    statusText.text('❌ All answers arrived too late.').attr('fill', '#fca5a5');
+  } else if (winners.length === RACERS.length) {
+    headline = '<div class="big" style="color:#6ee7b7">🏆 Both Everest and GEO beat the local run.</div>';
+    statusText.text('✅ Both Everest and GEO beat the local run!').attr('fill', '#6ee7b7');
+  } else {
+    headline = `<div class="big" style="color:#fde047">🏆 Winner: ${winners[0].icon} ${winners[0].name}</div>`;
+    statusText.text(`🏆 Winner is ${winners[0].name}`).attr('fill', '#fde047');
+  }
+  verdict.innerHTML = headline + '<div style="margin-top:8px">' + parts.join('<br>') + '</div>';
+}
+
+setTimeout(startRace, 400);
+</script>
+</body>
+</html>
