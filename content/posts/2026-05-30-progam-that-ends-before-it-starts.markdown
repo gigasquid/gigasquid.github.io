@@ -1,7 +1,6 @@
 ---
 title: "A Program that Ends Before it Starts"
 date: 2026-05-30T08:59:29-04:00
-draft: true
 ---
 
 ### Impossible Programs - A Program that Ends Before it Starts
