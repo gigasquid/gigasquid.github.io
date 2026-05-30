@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Squid's Blog</title><link>https://gigasquidsoftware.com/</link><description>Recent content on Squid's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 30 May 2026 08:59:29 -0400</lastBuildDate><atom:link href="https://gigasquidsoftware.com/atom.xml" rel="self" type="application/rss+xml"/><item><title>A Program that Ends Before it Starts</title><link>https://gigasquidsoftware.com/blog/2026/05/30/a-program-that-ends-before-it-starts/</link><pubDate>Sat, 30 May 2026 08:59:29 -0400</pubDate><guid>https://gigasquidsoftware.com/blog/2026/05/30/a-program-that-ends-before-it-starts/</guid><description>&lt;h3 id="impossible-programs---a-program-that-ends-before-it-starts"&gt;Impossible Programs - A Program that Ends Before it Starts&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on Squid's Blog</title><link>https://gigasquidsoftware.com/blog/2026/05/30/posts/</link><description>Recent content in Posts on Squid's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 30 May 2026 08:59:29 -0400</lastBuildDate><atom:link href="https://gigasquidsoftware.com/blog/2026/05/30/posts/atom.xml" rel="self" type="application/rss+xml"/><item><title>A Program that Ends Before it Starts</title><link>https://gigasquidsoftware.com/blog/2026/05/30/a-program-that-ends-before-it-starts/</link><pubDate>Sat, 30 May 2026 08:59:29 -0400</pubDate><guid>https://gigasquidsoftware.com/blog/2026/05/30/a-program-that-ends-before-it-starts/</guid><description>&lt;h3 id="impossible-programs---a-program-that-ends-before-it-starts"&gt;Impossible Programs - A Program that Ends Before it Starts&lt;/h3&gt;
 &lt;img src="https://gigasquidsoftware.com/images/posts/alicethroughtheglass.jpg" alt="Alice Through the Looking Glass" style="display: block; max-width: 50%; height: auto; margin: 0 auto 24px;" /&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Alice laughed. “There’s no use trying,” she said: “one can’t believe impossible things.”&lt;/p&gt;
@@ -436,63 +436,7 @@ The box that the drone comes in is a very nice carrying case, however it
 is too big to take on as a carry-on. I found that taking the hull
 off, and packing it into a plastic box worked well. It was small
 enough to pack under the seat of even the smaller planes. I took the
-battery out and packed it in my checked luggage.&lt;/p&gt;</description></item><item><title>About</title><link>https://gigasquidsoftware.com/about/</link><pubDate>Wed, 05 Jun 2013 13:53:00 +0000</pubDate><guid>https://gigasquidsoftware.com/about/</guid><description>&lt;p&gt;&lt;img loading="lazy" src="https://gigasquidsoftware.com/images/about-photo.jpg"&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;Photo by Mike Bridge &lt;a href="https://twitter.com/michaelbridge"&gt;@michaelbridge&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;I started off as a professional ballet dancer, studied Physics in college, and ended up as a Software Developer.&lt;/p&gt;
-&lt;p&gt;My current tech interests are Clojure, AI, and Robots.&lt;/p&gt;
-&lt;p&gt;When I am left to daydream, I think of the dynamics of flocks of birds, what the Giant Squids might really be doing down there in the deep, and maybe opening a first-rate cheese shop one day.&lt;/p&gt;</description></item><item><title>Books</title><link>https://gigasquidsoftware.com/books/</link><pubDate>Wed, 05 Jun 2013 13:53:00 +0000</pubDate><guid>https://gigasquidsoftware.com/books/</guid><description>&lt;figure&gt;&lt;a href="http://shop.oreilly.com/product/0636920034292.do?sortby=publicationDate"&gt;
-&lt;img loading="lazy" src="https://gigasquidsoftware.com/images/living-clojure-cover.gif"/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-&lt;p&gt;I am the author of &lt;a href="http://shop.oreilly.com/product/0636920034292.do?sortby=publicationDate"&gt;Living Clojure&lt;/a&gt; by O&amp;rsquo;Reilly. It is both an introduction and
-training plan for developers to learn Clojure.&lt;/p&gt;
-&lt;p&gt;The writing of the booking was inspired
-after being introduced to a running program called &lt;em&gt;Ease into 5K&lt;/em&gt;.
-Before trying the program, I had tried running on my own. Each time,
-I ended up quitting before too long. I thought that I just wasn&amp;rsquo;t cut
-out for running. But in reality, I tried to do &lt;em&gt;too much too
-fast&lt;/em&gt;. After hearing someone say that they had tried to pick up
-Clojure over the weekend, didn&amp;rsquo;t get too far, and didn&amp;rsquo;t think Clojure
-was for them, I made the connection. Doing &lt;em&gt;too much too fast&lt;/em&gt;,
-isn&amp;rsquo;t only a problem with learning to run, but also a problem with
-learning programming languages. The reason I had finally succeeded
-with running was that I gradually worked myself up over a course of
-seven weeks. The book also follows this methodology. The first half
-of the book is a guided introduction to Clojure and some of its key
-libraries. The second half of the book is a structured set of daily
-exercises over a course of seven weeks that will give your brain a
-gradual doses of functional programming that will have you &lt;em&gt;living&lt;/em&gt;
-Clojure at the end.&lt;/p&gt;</description></item><item><title>Speaking</title><link>https://gigasquidsoftware.com/speaking/</link><pubDate>Wed, 05 Jun 2013 13:53:00 +0000</pubDate><guid>https://gigasquidsoftware.com/speaking/</guid><description>&lt;p&gt;&lt;img loading="lazy" src="https://gigasquidsoftware.com/images/speaking-photo.jpg"&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;Photo by Mike Bridge &lt;a href="https://twitter.com/michaelbridge"&gt;@michaelbridge&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;I also enjoy talking and sharing my various enthusiams, which seem to
-be Clojure, Robots, and AI lately.&lt;/p&gt;
-&lt;h2 id="upcoming-talks"&gt;Upcoming Talks&lt;/h2&gt;
-&lt;h2 id="past-talks"&gt;Past Talks&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=oXlb1mITJHA"&gt;Clojure Conj 2024 - Real World AI Integration&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=ByzaFEVlaq0&amp;amp;t=8s"&gt;Clojure Conj 2023 - Vector Symbolic Architectures in Clojure&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=yzfnlcHtwiY"&gt;Clojure Conj 2018 - Can you GAN?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://craft-conf.com/"&gt;Craft Conf 2018 - Unconvential Programming with Chemical Computing&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=eLl6_k_fZn4"&gt;Clojure Conj 2017 - Deep Learning Needs Clojure&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://conferences.oreilly.com/velocity/vl-ny"&gt;Velocity Conf NY 2017 - Unconventional Programming Paradigms for the Future Now&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://joyofcoding.org/"&gt;Joy of Coding - June 2017&lt;/a&gt; The Joy of Gradient Descent&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://ohiodevfest.com/"&gt;Ohio DevFest 2016&lt;/a&gt; How to Train Your Computer to Talk To You&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://euroclojure.org/"&gt;EuroClojure 2016&lt;/a&gt; &lt;a href="https://www.youtube.com/watch?v=xvk-Gnydn54&amp;amp;t=7s"&gt;Genetic Programming and Beyond with clojure.spec&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://2016.geecon.cz"&gt;GeeCon 2016&lt;/a&gt; Clojure, clojure.spec, and Beyond&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://thestrangeloop.com/"&gt;Strange Loop 2015&lt;/a&gt;: &lt;a href="https://www.youtube.com/watch?v=cHoYNStQOEc"&gt;Unconventional Programming with Chemical Computing&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://www.oscon.com/open-source-2015"&gt;OSCON 2015&lt;/a&gt; - A workshop &lt;em&gt;Solving the Concurrency Problem with Clojure&lt;/em&gt; and also a talk &lt;em&gt;Unconventional Programming with Chemical Computing&lt;/em&gt;. The schedule details are &lt;a href="http://www.oscon.com/open-source-2015/public/schedule/speaker/154757"&gt;here&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://thestrangeloop.com/"&gt;Strange Loop 2014&lt;/a&gt;: &lt;a href="https://www.youtube.com/watch?v=3_zW63dcZB0"&gt;Our Shared Joy of Programming&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Solid Con 2014 Keynote: &lt;a href="https://www.youtube.com/watch?v=sHK4v5MimJs"&gt;Real Time Robot Dance Party&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://codemesh.io/"&gt;Code Mesh 2013&lt;/a&gt;: The Joy of Flying Robots with Clojure&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://skillsmatter.com/event/java-jee/clojure-exchange-2013"&gt;Clojure Exchange 2013&lt;/a&gt;: Learning to talk to machines with speech acts - a shipwreck adventure&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://clojure-conj.org/"&gt;Clojure Conj 2013&lt;/a&gt;: Learning to talk to
-machines with speech acts - a shipwreck adventure&lt;/li&gt;
-&lt;li&gt;OSCON 2013 Keynote: [The Joy of Flying Robots with Clojure](&lt;a href="https://www.youtube.com/watch?v="&gt;https://www.youtube.com/watch?v=&lt;/a&gt; Ty9QDqV-_Ak)&lt;/li&gt;
-&lt;li&gt;Lambda Jam 2013: &lt;a href="http://www.infoq.com/presentations/clojure-robots"&gt;The Joy of Flying Robots with Clojure&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Clojure West 2012: &lt;a href="http://www.infoq.com/presentations/Why-is-a-Monad-Like-a-Writing-Desk"&gt;Why is a Monad like a Writing Desk?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;CodeMash 2012: &lt;a href="http://www.slideshare.net/gigasquidcm/fairy-taleclojure"&gt;A Fairy Tale in Clojure&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;JRubyConf 2011:
-&lt;a href="https://github.com/gigasquid/Presentations/blob/master/SemanticWebJRuby.pdf"&gt;Semantic Web with JRuby&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Babar - A Little Language with Speech Acts for Machines</title><link>https://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/</link><pubDate>Tue, 04 Jun 2013 18:57:52 +0000</pubDate><guid>https://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/</guid><description>&lt;p&gt;&lt;img loading="lazy" src="https://gigasquidsoftware.com/images/posts/0adcb141-9925781735_77dfa3157b_o.jpg"&gt;&lt;/p&gt;
+battery out and packed it in my checked luggage.&lt;/p&gt;</description></item><item><title>Babar - A Little Language with Speech Acts for Machines</title><link>https://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/</link><pubDate>Tue, 04 Jun 2013 18:57:52 +0000</pubDate><guid>https://gigasquidsoftware.com/blog/2013/06/04/babar-a-little-language-with-speech-acts-for-machines/</guid><description>&lt;p&gt;&lt;img loading="lazy" src="https://gigasquidsoftware.com/images/posts/0adcb141-9925781735_77dfa3157b_o.jpg"&gt;&lt;/p&gt;
 &lt;h2 id="preface-a-gentle-obsession"&gt;Preface: A Gentle Obsession&lt;/h2&gt;
 &lt;p&gt;About a year ago, I picked up John McCarthy&amp;rsquo;s paper on &lt;a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/elephant/elephant.html"&gt;Elephant 2000&lt;/a&gt;. I have to admit that I only understood about 10% of it. But I was so intrigued by the ideas that it sent me on a quest. I re-read it numerous times, slept with it under my pillow, and finally decided that I needed to read his other papers to get an insight into his thoughts. I began a considered effort with &lt;a href="http://gigasquidsoftware.com/blog/2012/09/18/7-john-mccarthy-papers-in-7-days-prologue/"&gt;Seven McCarthy Papers in Seven Weeks&lt;/a&gt;. It ended up taking about three months, rather than seven 7 weeks. Again I came back to Elephant 2000. I began to understand more as other ideas and concepts sunk in, like &lt;a href="http://web.archive.org/web/20131014084908/http://www-formal.stanford.edu/jmc/ascribing/ascribing.html"&gt;ascribing beliefs and goals to machines&lt;/a&gt;. But to really explore the ideas, I really wanted to try to implement parts of Elephant in my own programming language. The problem was, having no formal training in computer science, (my background is Physics), I had never created a programming language before. The stars aligned and I found the &lt;a href="https://github.com/Engelberg/instaparse"&gt;Instaparse&lt;/a&gt; Clojure library. The result is &lt;a href="https://github.com/gigasquid/babar"&gt;Babar&lt;/a&gt;, a language designed to explore communication with machines via &lt;a href="http://en.wikipedia.org/wiki/Speech_act"&gt;Speech Acts&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>Growing a Language with Clojure and Instaparse</title><link>https://gigasquidsoftware.com/blog/2013/05/02/growing-a-language-with-clojure-and-instaparse/</link><pubDate>Thu, 02 May 2013 02:08:18 +0000</pubDate><guid>https://gigasquidsoftware.com/blog/2013/05/02/growing-a-language-with-clojure-and-instaparse/</guid><description>&lt;p&gt;Creating your own programming language with Clojure and &lt;a href="https://github.com/Engelberg/instaparse"&gt;Instaparse&lt;/a&gt; is like building rainbows with s-expressions.  The Instaparse library is an elegant way of building executable parsers trees with pattern matching and &lt;a href="http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_Form"&gt;&lt;em&gt;standard EBNF notation&lt;/em&gt;&lt;/a&gt; for context-free grammars. Since this is my first foray into parser trees and grammars, I thought I would share my learnings in this post.&lt;/p&gt;
 &lt;h2 id="starting-with-a-single-word"&gt;Starting with a Single Word&lt;/h2&gt;
