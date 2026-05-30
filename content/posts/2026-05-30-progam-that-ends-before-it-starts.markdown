@@ -43,7 +43,7 @@ If we think about time itself, it is not the same everywhere thanks to the [Time
 
 
 - On Mt Everest ~ 2.3 ms (faster than Cincinnati)
- - On Satellite ~ 1.7 (faster than Cincinnati)
+ - On Satellite ~ 1.7 s (faster than Cincinnati)
 
 In theory, we could kick off the same programs running at the same time where I am sitting, Mt Everest, and in the satellite. If the program is long enough for it to have enough time dilation shift from my perspective AND send a message back, it could give me the answer to my program here before it ends!!!
 
