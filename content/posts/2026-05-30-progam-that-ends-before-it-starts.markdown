@@ -6,6 +6,8 @@ draft: true
 
 ### Impossible Programs - A Program that Ends Before it Starts
 
+<img src="/images/posts/alicethroughtheglass.jpg" alt="Alice Through the Looking Glass" style="display: block; max-width: 50%; height: auto; margin: 0 auto 24px;" />
+
 >Alice laughed. “There’s no use trying,” she said: “one can’t believe impossible things.”
 >
 >“I daresay you haven’t had much practice,” said the Queen. “When I was your age, I always did it for half-an-hour a day. Why, sometimes I’ve believed as many as six impossible things before breakfast. There goes the shawl again!”
