@@ -63,11 +63,37 @@ _All the crazy ideas and prose are mine. I did have Claude help me with the math
     <span style="opacity: 0.65; font-weight: normal; font-size: 0.9em;">— D3 visualization of Time Dialation Programs</span>
   </summary>
   <iframe
+    id="viz-iframe"
     src="/visualizations/time-dilation/"
     width="100%"
-    height="1400"
-    style="border: 0; border-radius: 8px; background: #0a0e27; margin-top: 16px;"
+    style="border: 0; border-radius: 8px; background: #0a0e27; margin-top: 16px; min-height: 600px; display: block;"
     loading="lazy"
     title="Time dilation visualization">
   </iframe>
+  <div style="text-align: right; margin-top: 8px; font-size: 0.85em;">
+    <a href="/visualizations/time-dilation/" target="_blank" rel="noopener" style="color: #a855f7; opacity: 0.8; text-decoration: none;">Open standalone ↗</a>
+  </div>
 </details>
+<script>
+(function() {
+  const f = document.getElementById('viz-iframe');
+  if (!f) return;
+  function resize() {
+    try {
+      const doc = f.contentDocument;
+      if (doc && doc.body) {
+        const h = Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight);
+        f.style.height = h + 'px';
+      }
+    } catch (e) {}
+  }
+  f.addEventListener('load', function() {
+    resize();
+    try {
+      const ro = new ResizeObserver(resize);
+      ro.observe(f.contentDocument.body);
+    } catch (e) {}
+  });
+  window.addEventListener('resize', resize);
+})();
+</script>
