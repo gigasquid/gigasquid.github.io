@@ -53,7 +53,7 @@
     margin-top: 6px;
     overflow: hidden;
     background: rgba(255,255,255,0.05);
-    font-size: 0.62em;
+    font-size: 0.7em;
     font-weight: 700;
     letter-spacing: 0.06em;
   }
@@ -103,9 +103,10 @@
     background: linear-gradient(135deg, #6366f1, #a855f7);
     border: none;
     color: white;
-    padding: 10px 22px;
+    padding: 12px 26px;
     border-radius: 10px;
     font-size: 0.95em;
+    min-height: 44px;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.1s, box-shadow 0.2s;
@@ -174,6 +175,10 @@
   .cow-text li { margin-bottom: 6px; }
   .cow-text .closer { opacity: 0.7; font-style: italic; margin-top: 10px; }
 
+  @media (max-width: 640px) {
+    .cow-panel { flex-direction: column; align-items: center; }
+    .cow-text { width: 100%; min-width: 0; text-align: left; }
+  }
   @media (max-width: 480px) {
     .container { padding: 12px; }
     .panel { padding: 14px; border-radius: 14px; }
@@ -181,7 +186,6 @@
     .slider-row label { min-width: 0; }
     .slider-wrap { min-width: 0; }
     .runtime-display { min-width: 0; text-align: center; }
-    .cow-text { min-width: 0; }
     .stat-row .stat-mini-value,
     .runtime-display,
     .verdict { overflow-wrap: anywhere; }
@@ -286,7 +290,7 @@
 
     <div class="cow-panel panel">
       <div class="cow-art">
-        <svg width="180" height="160" viewBox="0 0 180 160" aria-label="spherical cow">
+        <svg viewBox="0 0 180 160" aria-label="spherical cow" style="width: 180px; max-width: 100%; height: auto; display: block;">
           <ellipse cx="90" cy="138" rx="50" ry="5" fill="rgba(0,0,0,0.35)"/>
           <line x1="62"  y1="118" x2="56"  y2="135" stroke="#0a0e27" stroke-width="3" stroke-linecap="round"/>
           <line x1="80"  y1="124" x2="78"  y2="135" stroke="#0a0e27" stroke-width="3" stroke-linecap="round"/>
