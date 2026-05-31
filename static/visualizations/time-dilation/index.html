@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cincinnati vs. Everest vs. GEO — Relativistic Compute Race</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
@@ -367,6 +368,7 @@ const svg = d3.select('#race');
 const W = 900, H = 440;
 const laneX0 = 80, laneX1 = 820;
 const laneW = laneX1 - laneX0;
+const dotR = 9, dotX0 = laneX0 + dotR, dotX1 = laneX1 - dotR, dotW = dotX1 - dotX0;
 const cinY = 110;
 
 const defs = svg.append('defs');
@@ -403,14 +405,14 @@ RACERS.forEach(r => drawLane(r.laneY, r.color, r.icon, r.name));
 const cinBar = svg.append('rect')
   .attr('x', laneX0).attr('y', cinY - 16).attr('height', 32).attr('width', 0)
   .attr('rx', 16).attr('fill', 'url(#cinGrad)');
-const cinDot = svg.append('circle').attr('cy', cinY).attr('cx', laneX0).attr('r', 9)
+const cinDot = svg.append('circle').attr('cy', cinY).attr('cx', dotX0).attr('r', dotR)
   .attr('fill', '#fde047').attr('stroke', 'white').attr('stroke-width', 1.5);
 
 RACERS.forEach(r => {
   r.bar = svg.append('rect')
     .attr('x', laneX0).attr('y', r.laneY - 16).attr('height', 32).attr('width', 0)
     .attr('rx', 16).attr('fill', `url(#grad-${r.id})`);
-  r.dot = svg.append('circle').attr('cy', r.laneY).attr('cx', laneX0).attr('r', 9)
+  r.dot = svg.append('circle').attr('cy', r.laneY).attr('cx', dotX0).attr('r', dotR)
     .attr('fill', r.gradEnd).attr('stroke', 'white').attr('stroke-width', 1.5);
 });
 
@@ -486,10 +488,10 @@ let animStart = 0;
 function reset() {
   animState = 'idle';
   cinBar.attr('width', 0);
-  cinDot.attr('cx', laneX0);
+  cinDot.attr('cx', dotX0);
   RACERS.forEach(r => {
     r.bar.attr('width', 0);
-    r.dot.attr('cx', laneX0);
+    r.dot.attr('cx', dotX0);
     r.signalLaunched = false;
     r.signalDuration = 0;
     r.signalLaunchT = 0;
@@ -535,14 +537,14 @@ function animTick(now) {
   // Cincinnati bar
   const cinP = Math.min(1, t / ANIM_DURATION);
   cinBar.attr('width', cinP * laneW);
-  cinDot.attr('cx', laneX0 + cinP * laneW);
+  cinDot.attr('cx', dotX0 + cinP * dotW);
 
   // Each racer's bar + signal launch
   RACERS.forEach(r => {
     const tDone = ANIM_DURATION * (1 - getEffectiveVisualLead(r));
     const p = Math.min(1, t / tDone);
     r.bar.attr('width', p * laneW);
-    r.dot.attr('cx', laneX0 + p * laneW);
+    r.dot.attr('cx', dotX0 + p * dotW);
 
     if (!r.signalLaunched && t >= tDone) {
       r.signalLaunched = true;
@@ -551,7 +553,7 @@ function animTick(now) {
 
       const arriveT = t + r.signalDuration;
       const arriveP = Math.min(1, arriveT / ANIM_DURATION);
-      const endX = laneX0 + arriveP * laneW;
+      const endX = dotX0 + arriveP * dotW;
       const endY = cinY;
 
       // Determine win/loss from real margin (not visual)
@@ -565,7 +567,7 @@ function animTick(now) {
   // Mark Cincinnati done visually when bar tops out
   if (t >= ANIM_DURATION) {
     cinBar.attr('width', laneW);
-    cinDot.attr('cx', laneX1);
+    cinDot.attr('cx', dotX1);
   }
 
   // End when all signals have arrived AND Cincinnati is done
